@@ -2,17 +2,13 @@
 
 export default function PlainStaticPage() {
   return (
-    <div className="p-8 max-w-xl mx-auto bg-slate-900 border border-slate-800 rounded-xl shadow-xl">
-      <h1 className="text-lg font-bold mb-4 text-white">Fixture 1: Plain Static</h1>
-      <div
-        id="target"
-        data-source-file="fixtures/1-plain-static.tsx"
-        data-source-line="7"
-        className="ml-2 mt-10"
-        style={{ display: 'inline-flex', alignItems: 'center', padding: '10px 20px', background: 'linear-gradient(135deg, #4f46e5, #6366f1)', color: '#ffffff', borderRadius: '8px', fontWeight: 600, fontSize: '14px', cursor: 'pointer', boxShadow: '0 4px 14px rgba(79, 70, 229, 0.35)' }}
-      >
-        ✦ Nudge Target Button
-      </div>
-    </div>
+    <main className="sn-playground-page">
+      <nav className="sn-playground-nav"><a className="sn-playground-logo" href="#overview"><span>n</span> northstar</a><div><a href="#features">Product</a><a href="#pricing">Pricing</a><a href="#resources">Resources</a></div><a className="sn-playground-nav-cta" href="#start">Log in <span>↗</span></a></nav>
+      <section className="sn-playground-hero" id="overview">
+        <div className="sn-playground-content"><p className="sn-playground-eyebrow"><span/> A calmer way to work</p><h1 id="target" data-source-file="fixtures/1-plain-static.tsx" data-source-line="8" className="ml-2 mt-1">Make room for your best work.</h1><p className="sn-playground-description">One thoughtful workspace for the people, projects, and plans that move your business forward.</p><a href="#start" className="sn-playground-primary">Get started <span>→</span></a><span className="sn-playground-note">Free to start · Set up in minutes</span></div>
+        <div className="sn-playground-visual"><div className="sn-playground-window"><div className="sn-playground-window-head"><span/><span/><span/><i>northstar.app/workspace</i></div><div className="sn-playground-window-body"><div className="sn-playground-sidebar"><span/><span/><span/><span/></div><div className="sn-playground-main"><span className="sn-playground-skeleton short"/><span className="sn-playground-skeleton title"/><div className="sn-playground-cards"><i/><i/><i/></div><div className="sn-playground-chart"><b/><b/><b/><b/><b/><b/><b/></div></div></div></div><div className="sn-playground-floating-card"><span className="sn-playground-check">✓</span><div><strong>Focus time protected</strong><span>Your team is in flow</span></div></div></div>
+      </section>
+      <section className="sn-playground-trust" id="features"><span>Designed for the work that matters</span><div><i>Team planning</i><i>Clear priorities</i><i>One calm workspace</i></div></section>
+    </main>
   );
 }
