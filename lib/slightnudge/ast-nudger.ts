@@ -1,10 +1,11 @@
 import { Project, SyntaxKind, Node, JsxOpeningElement, JsxSelfClosingElement, StringLiteral } from 'ts-morph';
+import {
+  TAILWIND_SPACING_SCALE,
+  getNextSpacingValue,
+  computeNudgedClass,
+} from './nudge-calculator';
 
-export const TAILWIND_SPACING_SCALE = [
-  '0', '0.5', '1', '1.5', '2', '2.5', '3', '3.5', '4', '5', '6', '7', '8', '9',
-  '10', '11', '12', '14', '16', '20', '24', '28', '32', '36', '40', '44', '48',
-  '52', '56', '60', '64', '72', '80', '96'
-];
+export { TAILWIND_SPACING_SCALE, getNextSpacingValue, computeNudgedClass };
 
 export interface NudgeOptions {
   filePath: string;
@@ -79,31 +80,6 @@ function isComponentUsedMultipleTimes(targetNode: JsxOpeningElement | JsxSelfClo
   }
 
   return false;
-}
-
-/**
- * Finds the next Tailwind spacing value.
- */
-export function getNextSpacingValue(
-  currentVal: string,
-  direction: 'increase' | 'decrease',
-  stepSize: 'normal' | 'big' = 'normal'
-): string {
-  const index = TAILWIND_SPACING_SCALE.indexOf(currentVal);
-  const delta = stepSize === 'big' ? 4 : 1;
-
-  if (index === -1) {
-    // If not found in standard scale, start from '1'
-    return direction === 'increase' ? '1' : '0';
-  }
-
-  if (direction === 'increase') {
-    const nextIdx = Math.min(index + delta, TAILWIND_SPACING_SCALE.length - 1);
-    return TAILWIND_SPACING_SCALE[nextIdx];
-  } else {
-    const prevIdx = Math.max(index - delta, 0);
-    return TAILWIND_SPACING_SCALE[prevIdx];
-  }
 }
 
 /**
@@ -266,43 +242,17 @@ export function nudgeElement(options: NudgeOptions): NudgeResult {
   }
 
   const rawValue = stringLiteralNode.getLiteralValue();
-  const classTokens = rawValue.split(/\s+/).filter(Boolean);
 
-  // 4. Determine property prefix to nudge
-  // For nudging right: target margin-left (ml-), or horizontal spacing
-  const prefixMatch = breakpoint ? `${breakpoint}:ml-` : 'ml-';
-
-  let foundTokenIndex = -1;
-  let oldClass = '';
-  let currentVal = '';
-
-  for (let i = 0; i < classTokens.length; i++) {
-    const token = classTokens[i];
-    if (token.startsWith(prefixMatch)) {
-      foundTokenIndex = i;
-      oldClass = token;
-      currentVal = token.slice(prefixMatch.length);
-      break;
-    }
-  }
-
-  let newClass = '';
-  if (foundTokenIndex !== -1) {
-    const directionType = (direction === 'right' || direction === 'down') ? 'increase' : 'decrease';
-    const nextVal = getNextSpacingValue(currentVal, directionType, stepSize);
-    newClass = `${prefixMatch}${nextVal}`;
-    classTokens[foundTokenIndex] = newClass;
-  } else {
-    // If no ml- class exists, add ml-1 (or ml-0.5 / ml-4 depending on direction/step)
-    const initialVal = stepSize === 'big' ? '4' : '1';
-    newClass = `${prefixMatch}${initialVal}`;
-    classTokens.push(newClass);
-  }
-
-  const newClassNameValue = classTokens.join(' ');
+  // 4. Compute updated class safely
+  const computed = computeNudgedClass({
+    currentClassName: rawValue,
+    direction,
+    stepSize,
+    breakpoint,
+  });
 
   // 5. Apply the edit strictly to the string literal node ONLY
-  stringLiteralNode.setLiteralValue(newClassNameValue);
+  stringLiteralNode.setLiteralValue(computed.newClassName);
 
   // Save changes to disk
   sourceFile.saveSync();
@@ -310,10 +260,10 @@ export function nudgeElement(options: NudgeOptions): NudgeResult {
   return {
     success: true,
     refusedSafely: false,
-    oldClass,
-    newClass,
+    oldClass: computed.oldClass,
+    newClass: computed.newClass,
     oldClassNameValue: rawValue,
-    newClassNameValue,
+    newClassNameValue: computed.newClassName,
     filePath,
     line: targetElement.getStartLineNumber(),
   };

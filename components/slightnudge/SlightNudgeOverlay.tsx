@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
+import { computeNudgedClass } from '@/lib/slightnudge/nudge-calculator';
 
 interface SelectedElementInfo {
   tagName: string;
@@ -18,18 +19,19 @@ export function SlightNudgeOverlay() {
   const [hoveredRect, setHoveredRect] = useState<{ top: number; left: number; width: number; height: number } | null>(null);
   const [selected, setSelected] = useState<SelectedElementInfo | null>(null);
   const [loadingInspection, setLoadingInspection] = useState(false);
+  const [nudgeNotice, setNudgeNotice] = useState<string | null>(null);
+  const [warningPulse, setWarningPulse] = useState(false);
   const selectedNodeRef = useRef<HTMLElement | null>(null);
 
   // Fallback map based on fixture routes
   const routeFixtureMap: Record<string, { file: string; line: number }> = {
     '/fixtures/1': { file: 'fixtures/1-plain-static.tsx', line: 7 },
     '/fixtures/2': { file: 'fixtures/2-several-utilities.tsx', line: 7 },
-    '/fixtures/3': { file: 'fixtures/3-conditional-cn.tsx', line: 11 },
+    '/fixtures/3': { file: 'fixtures/3-conditional-cn.tsx', line: 13 },
     '/fixtures/4': { file: 'fixtures/4-shared-component.tsx', line: 11 },
     '/fixtures/5': { file: 'fixtures/5-responsive-classes.tsx', line: 7 },
   };
 
-  // Resolve source file and line from element or pathname
   const resolveSource = (el: HTMLElement) => {
     let file = el.getAttribute('data-source-file');
     let line = el.getAttribute('data-source-line');
@@ -133,6 +135,7 @@ export function SlightNudgeOverlay() {
 
       setSelected(selInfo);
       setHoveredRect(null);
+      setNudgeNotice(null);
 
       // Inspect via AST engine
       if (file !== 'unknown file') {
@@ -169,7 +172,64 @@ export function SlightNudgeOverlay() {
       if (e.key === 'Escape') {
         setSelected(null);
         selectedNodeRef.current = null;
+        setNudgeNotice(null);
+        return;
       }
+
+      if (!selected || !selectedNodeRef.current) return;
+
+      const isArrow = ['ArrowRight', 'ArrowLeft', 'ArrowUp', 'ArrowDown'].includes(e.key);
+      if (!isArrow) return;
+
+      e.preventDefault();
+
+      // Safety Guard: if marked unsafe, refuse to edit!
+      if (selected.safeToEdit === false) {
+        setWarningPulse(true);
+        setNudgeNotice("⚠️ Can't edit this safely");
+        setTimeout(() => setWarningPulse(false), 1200);
+        return;
+      }
+
+      const direction: 'right' | 'left' | 'up' | 'down' =
+        e.key === 'ArrowRight' ? 'right' :
+        e.key === 'ArrowLeft' ? 'left' :
+        e.key === 'ArrowDown' ? 'down' : 'up';
+
+      const stepSize = e.shiftKey ? 'big' : 'normal';
+
+      // Nudge class computation
+      const nudge = computeNudgedClass({
+        currentClassName: selected.className,
+        direction,
+        stepSize,
+      });
+
+      // Update DOM element directly
+      selectedNodeRef.current.className = nudge.newClassName;
+
+      // Update state
+      setSelected((prev) =>
+        prev
+          ? {
+              ...prev,
+              className: nudge.newClassName,
+            }
+          : null
+      );
+
+      const arrowSymbol =
+        direction === 'right' ? '→' :
+        direction === 'left' ? '←' :
+        direction === 'down' ? '↓' : '↑';
+
+      const notice = `${arrowSymbol} ${stepSize === 'big' ? '+4 steps (Shift)' : '+1 step'} [${nudge.newClass}]`;
+      setNudgeNotice(notice);
+
+      // Re-measure bounding box
+      requestAnimationFrame(() => {
+        updateSelectedRect();
+      });
     };
 
     document.addEventListener('mouseover', handlePointerOver, true);
@@ -183,7 +243,7 @@ export function SlightNudgeOverlay() {
       document.removeEventListener('click', handleClick, true);
       document.removeEventListener('keydown', handleKeyDown);
     };
-  }, [active]);
+  }, [active, selected]);
 
   return (
     <div id="slightnudge-ui" className="pointer-events-none">
@@ -235,11 +295,14 @@ export function SlightNudgeOverlay() {
             left: `${selected.rect.left}px`,
             width: `${selected.rect.width}px`,
             height: `${selected.rect.height}px`,
-            border: '2px solid #4f46e5',
-            backgroundColor: 'rgba(79, 70, 229, 0.08)',
+            border: warningPulse ? '2px solid #ef4444' : '2px solid #4f46e5',
+            backgroundColor: warningPulse ? 'rgba(239, 68, 68, 0.1)' : 'rgba(79, 70, 229, 0.08)',
             pointerEvents: 'none',
             zIndex: 9999,
-            boxShadow: '0 0 0 1px rgba(255,255,255,0.4), 0 4px 12px rgba(79,70,229,0.25)',
+            boxShadow: warningPulse
+              ? '0 0 0 2px rgba(239, 68, 68, 0.4)'
+              : '0 0 0 1px rgba(255,255,255,0.4), 0 4px 12px rgba(79,70,229,0.25)',
+            transition: 'border-color 0.15s, background-color 0.15s',
           }}
         >
           {/* Corner Anchor Handles */}
@@ -271,11 +334,23 @@ export function SlightNudgeOverlay() {
               </>
             )}
 
+            {/* Nudge Notice Indicator */}
+            {nudgeNotice && (
+              <span
+                id="slightnudge-nudge-notice"
+                className="bg-indigo-900/90 text-indigo-200 border border-indigo-500/50 px-1.5 py-0.5 rounded text-[11px] font-mono animate-fade"
+              >
+                {nudgeNotice}
+              </span>
+            )}
+
             {/* Safety status indication */}
             {selected.safeToEdit === false && (
               <span
                 id="slightnudge-safety-warning"
-                className="bg-amber-900/80 text-amber-200 border border-amber-600/50 px-1.5 py-0.5 rounded text-[11px] font-semibold"
+                className={`bg-amber-900/80 text-amber-200 border border-amber-600/50 px-1.5 py-0.5 rounded text-[11px] font-semibold ${
+                  warningPulse ? 'ring-2 ring-amber-400 animate-pulse' : ''
+                }`}
               >
                 ⚠️ {selected.refusalReason || "can't edit this safely"}
               </span>
@@ -285,7 +360,7 @@ export function SlightNudgeOverlay() {
                 id="slightnudge-safety-ok"
                 className="bg-emerald-950/80 text-emerald-300 border border-emerald-600/50 px-1.5 py-0.5 rounded text-[10px]"
               >
-                ✓ safe to nudge
+                ✓ safe to nudge (arrow keys)
               </span>
             )}
             {loadingInspection && (

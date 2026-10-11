@@ -14,6 +14,7 @@
     "test:integration": "tsx test/pipeline-integration.test.ts",
     "test:fixtures": "tsx test/fixtures.test.ts",
     "test:step1": "tsx test/step1-selection.test.ts",
+    "test:step2": "tsx test/step2-nudging.test.ts",
     "spike": "tsx spikes/phase1-spike.ts"
   },
   "keywords": [],
