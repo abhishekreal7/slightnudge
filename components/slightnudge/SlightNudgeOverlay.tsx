@@ -57,6 +57,7 @@ const styleOptions = {
 const propertyNames = {
   fontSize: 'Text size', fontWeight: 'Weight', fontFamily: 'Font family', lineHeight: 'Line height', letterSpacing: 'Letter spacing', textTransform: 'Case', textColor: 'Text color',
   alignment: 'Alignment', backgroundColor: 'Fill color', padding: 'Padding', display: 'Display', flexDirection: 'Direction', alignItems: 'Align items', justifyContent: 'Justify content', width: 'Width', maxWidth: 'Max width', gap: 'Gap', borderRadius: 'Corner radius',
+  margin: 'Margin',
 } as const;
 const breakpoints = [['', 'Base'], ['sm', '≥640'], ['md', '≥768'], ['lg', '≥1024'], ['xl', '≥1280'], ['2xl', '≥1536']] as const;
 
@@ -79,7 +80,39 @@ const utilityPatterns: Record<string, RegExp> = {
   justifyContent: /^justify-(?:start|end|center|between|around|evenly)$/,
   alignItems: /^items-(?:start|end|center|baseline|stretch)$/,
   flexDirection: /^flex-(?:row|col)(?:-reverse)?$/,
+  margin: /^(-?)m[trblxy]?-(?:\d+(?:\.\d+)?|\[)/,
 };
+
+function applyMarginInline(element: HTMLElement, className: string) {
+  if (!element || !element.style) return;
+  const tokens = (className || '').split(/\s+/).filter(Boolean);
+  let foundMt = false;
+  let foundMl = false;
+
+  for (const t of tokens) {
+    const mtMatch = t.match(/^(-?)mt-([0-9.]+)$/);
+    if (mtMatch) {
+      foundMt = true;
+      const sign = mtMatch[1] ? -1 : 1;
+      const num = parseFloat(mtMatch[2]);
+      element.style.marginTop = `${sign * num * 4}px`;
+    }
+    const mlMatch = t.match(/^(-?)ml-([0-9.]+)$/);
+    if (mlMatch) {
+      foundMl = true;
+      const sign = mlMatch[1] ? -1 : 1;
+      const num = parseFloat(mlMatch[2]);
+      element.style.marginLeft = `${sign * num * 4}px`;
+    }
+  }
+
+  if (!foundMt && element.style.marginTop) {
+    element.style.marginTop = '';
+  }
+  if (!foundMl && element.style.marginLeft) {
+    element.style.marginLeft = '';
+  }
+}
 
 function applyOptimisticInlineStyle(element: HTMLElement, property: keyof typeof propertyNames, value: string) {
   switch (property) {
@@ -231,6 +264,10 @@ function applyOptimisticInlineStyle(element: HTMLElement, property: keyof typeof
       if (justifyMap[value]) element.style.justifyContent = justifyMap[value];
       break;
     }
+    case 'margin': {
+      applyMarginInline(element, value);
+      break;
+    }
   }
 }
 
@@ -242,6 +279,12 @@ function computeOptimisticClassName(currentClass: string, property: keyof typeof
 
   if (property === 'padding') {
     const remaining = tokens.filter((t) => !(t.startsWith(prefix) && /^p[trblxy]?-/.test(t.slice(prefix.length))));
+    remaining.push(nextToken);
+    return remaining.join(' ');
+  }
+
+  if (property === 'margin') {
+    const remaining = tokens.filter((t) => !(t.startsWith(prefix) && /^(-?)m[trblxy]?-/.test(t.slice(prefix.length))));
     remaining.push(nextToken);
     return remaining.join(' ');
   }
@@ -362,7 +405,9 @@ export function SlightNudgeOverlay({ defaultFilePath }: { defaultFilePath?: stri
         animateSelectionRect(260);
       } else if (selectedNodeRef.current && typeof preview.newValue === 'string') {
         selectedNodeRef.current.className = preview.newValue;
+        applyMarginInline(selectedNodeRef.current, preview.newValue);
         setSelected((current) => current ? { ...current, className: preview.newValue } : current);
+        animateSelectionRect(260);
       }
       setPendingEdit(preview);
     } catch (error) {
@@ -405,6 +450,7 @@ export function SlightNudgeOverlay({ defaultFilePath }: { defaultFilePath?: stri
         }
       } else {
         selectedNodeRef.current.className = pending.oldValue;
+        applyMarginInline(selectedNodeRef.current, pending.oldValue);
         setSelected((current) => current ? { ...current, className: pending.oldValue } : current);
       }
       if (originalStyleRef.current !== null) {
@@ -447,7 +493,10 @@ export function SlightNudgeOverlay({ defaultFilePath }: { defaultFilePath?: stri
       } else if (selectedNodeRef.current && result.previewType === 'reorder') {
         animateSelectionRect(260);
       } else {
-        if (selectedNodeRef.current && typeof result.className === 'string') selectedNodeRef.current.className = result.className;
+        if (selectedNodeRef.current && typeof result.className === 'string') {
+          selectedNodeRef.current.className = result.className;
+          applyMarginInline(selectedNodeRef.current, result.className);
+        }
         setSelected((current) => current ? { ...current, className: result.className || current.className } : null);
       }
       if (selectedNodeRef.current) {
@@ -455,6 +504,9 @@ export function SlightNudgeOverlay({ defaultFilePath }: { defaultFilePath?: stri
           selectedNodeRef.current.setAttribute('style', originalStyleRef.current);
         } else {
           selectedNodeRef.current.removeAttribute('style');
+        }
+        if (selectedNodeRef.current.className) {
+          applyMarginInline(selectedNodeRef.current, selectedNodeRef.current.className);
         }
       }
       originalStyleRef.current = selectedNodeRef.current?.getAttribute('style') || '';
@@ -487,16 +539,21 @@ export function SlightNudgeOverlay({ defaultFilePath }: { defaultFilePath?: stri
         }),
       });
       const result = await response.json();
-      if (typeof result.className === 'string' && element.isConnected) element.className = result.className;
-      setSelected((current) => current ? {
-        ...current,
-        ...(typeof result.className === 'string' ? { className: result.className } : {}),
-        safeToEdit: Boolean(result.safeToEdit),
-        refusalReason: result.reason,
-        textEditable: result.textEditable,
-        textReason: result.textReason,
-        propSource: result.propSource,
-      } : null);
+      if (typeof result.className === 'string' && element.isConnected) {
+        element.className = result.className;
+        applyMarginInline(element, result.className);
+      }
+      setSelected((current) => {
+        return current ? {
+          ...current,
+          ...(typeof result.className === 'string' ? { className: result.className } : {}),
+          safeToEdit: Boolean(result.safeToEdit),
+          refusalReason: result.reason,
+          textEditable: result.textEditable,
+          textReason: result.textReason,
+          propSource: result.propSource,
+        } : null;
+      });
       setCanUndo(Boolean(result.canUndo));
       requestAnimationFrame(updateSelectedRect);
     } catch {
@@ -646,7 +703,8 @@ export function SlightNudgeOverlay({ defaultFilePath }: { defaultFilePath?: stri
       setHoveredRect({ top: rect.top + scrollY, left: rect.left + scrollX, width: rect.width, height: rect.height });
     };
     const onClick = (event: MouseEvent) => {
-      const target = event.target as HTMLElement | null;
+      const rawTarget = event.target as HTMLElement | null;
+      const target = rawTarget;
       if (!target || target.closest('#slightnudge-ui') || !target.closest('.sn-preview-content')) return;
       if (isInlineEditing) {
         if (selectedNodeRef.current && (target === selectedNodeRef.current || selectedNodeRef.current.contains(target))) {
@@ -682,6 +740,9 @@ export function SlightNudgeOverlay({ defaultFilePath }: { defaultFilePath?: stri
         safeToEdit: isPlayground ? true : undefined,
       };
       selectedNodeRef.current = sourceNode;
+      try {
+        applyMarginInline(sourceNode, typeof target.className === 'string' ? target.className : '');
+      } catch { /* fallback */ }
       originalStyleRef.current = sourceNode.getAttribute('style') || '';
       editGroupIdRef.current = crypto.randomUUID();
       setDraftText(sourceNode.textContent || '');
@@ -713,7 +774,6 @@ export function SlightNudgeOverlay({ defaultFilePath }: { defaultFilePath?: stri
         startInlineEditing();
         return;
       }
-      if (pendingEdit) return;
       if (!selected || !selectedNodeRef.current || !['ArrowRight', 'ArrowLeft', 'ArrowUp', 'ArrowDown'].includes(event.key)) return;
       event.preventDefault();
       if (selected.safeToEdit !== true) { setWarning(true); setNotice(selected.refusalReason || 'Select an editable element first.'); window.setTimeout(() => setWarning(false), 900); return; }
@@ -934,7 +994,7 @@ export function SlightNudgeOverlay({ defaultFilePath }: { defaultFilePath?: stri
     }
 
     let activeTransformedSibling: HTMLElement | null = null;
-    let currentDropDirection: 'earlier' | 'later' | null = null;
+    let currentDropDirection: 'earlier' | 'later' | 'nudge-up' | 'nudge-down' | 'nudge-left' | 'nudge-right' | null = null;
 
     const resetTransforms = () => {
       el.style.transform = '';
@@ -1040,9 +1100,67 @@ export function SlightNudgeOverlay({ defaultFilePath }: { defaultFilePath?: stri
         return;
       }
 
-      // 3. Determine intended movement based on layout orientation
-      const movingEarlier = isHorizontal ? dx < -28 : dy < -20;
-      const movingLater = isHorizontal ? dx > 28 : dy > 20;
+      // 3. Check for micro-drag / spacing nudge (small drag: 4px to 22px)
+      if (!isHorizontal && dy >= -22 && dy <= -4) {
+        if (activeTransformedSibling) {
+          activeTransformedSibling.style.transform = '';
+          activeTransformedSibling.style.transition = '';
+          activeTransformedSibling = null;
+        }
+        currentDropDirection = 'nudge-up';
+        el.style.transform = `translate3d(0, ${dy}px, 0)`;
+        el.style.transition = 'none';
+        setMoveShift({ x: 0, y: dy });
+        setDropIndicator(null);
+        setMoveNotice('Nudge: release to delete space above');
+        return;
+      }
+      if (!isHorizontal && dy >= 4 && dy <= 22) {
+        if (activeTransformedSibling) {
+          activeTransformedSibling.style.transform = '';
+          activeTransformedSibling.style.transition = '';
+          activeTransformedSibling = null;
+        }
+        currentDropDirection = 'nudge-down';
+        el.style.transform = `translate3d(0, ${dy}px, 0)`;
+        el.style.transition = 'none';
+        setMoveShift({ x: 0, y: dy });
+        setDropIndicator(null);
+        setMoveNotice('Nudge: release to add space above');
+        return;
+      }
+      if (isHorizontal && dx >= -22 && dx <= -4) {
+        if (activeTransformedSibling) {
+          activeTransformedSibling.style.transform = '';
+          activeTransformedSibling.style.transition = '';
+          activeTransformedSibling = null;
+        }
+        currentDropDirection = 'nudge-left';
+        el.style.transform = `translate3d(${dx}px, 0, 0)`;
+        el.style.transition = 'none';
+        setMoveShift({ x: dx, y: 0 });
+        setDropIndicator(null);
+        setMoveNotice('Nudge: release to move left');
+        return;
+      }
+      if (isHorizontal && dx >= 4 && dx <= 22) {
+        if (activeTransformedSibling) {
+          activeTransformedSibling.style.transform = '';
+          activeTransformedSibling.style.transition = '';
+          activeTransformedSibling = null;
+        }
+        currentDropDirection = 'nudge-right';
+        el.style.transform = `translate3d(${dx}px, 0, 0)`;
+        el.style.transition = 'none';
+        setMoveShift({ x: dx, y: 0 });
+        setDropIndicator(null);
+        setMoveNotice('Nudge: release to move right');
+        return;
+      }
+
+      // 4. Large drag (>22px): structural reorder with siblings
+      const movingEarlier = isHorizontal ? dx < -22 : dy < -22;
+      const movingLater = isHorizontal ? dx > 22 : dy > 22;
 
       if (movingEarlier) {
         if (prevEl && prevRect) {
@@ -1192,17 +1310,33 @@ export function SlightNudgeOverlay({ defaultFilePath }: { defaultFilePath?: stri
       }
 
       if (directionToApply && selected) {
-        void previewChange({
-          kind: 'reorder',
-          filePath: selected.filePath,
-          line: Number(selected.line) || undefined,
-          column: Number(selected.column) || undefined,
-          elementId: selected.id,
-          direction: directionToApply,
-        }).finally(() => {
-          resetTransforms();
-          requestAnimationFrame(updateSelectedRect);
-        });
+        if (directionToApply === 'nudge-up' || directionToApply === 'nudge-down' || directionToApply === 'nudge-left' || directionToApply === 'nudge-right') {
+          const dir = directionToApply === 'nudge-up' ? 'up' : directionToApply === 'nudge-down' ? 'down' : directionToApply === 'nudge-left' ? 'left' : 'right';
+          void previewChange({
+            kind: 'nudge',
+            filePath: selected.filePath,
+            line: Number(selected.line) || undefined,
+            column: Number(selected.column) || undefined,
+            elementId: selected.id,
+            direction: dir,
+            stepSize: 'normal',
+          }).finally(() => {
+            resetTransforms();
+            requestAnimationFrame(updateSelectedRect);
+          });
+        } else {
+          void previewChange({
+            kind: 'reorder',
+            filePath: selected.filePath,
+            line: Number(selected.line) || undefined,
+            column: Number(selected.column) || undefined,
+            elementId: selected.id,
+            direction: directionToApply,
+          }).finally(() => {
+            resetTransforms();
+            requestAnimationFrame(updateSelectedRect);
+          });
+        }
       } else {
         requestAnimationFrame(updateSelectedRect);
       }
@@ -1412,6 +1546,56 @@ export function SlightNudgeOverlay({ defaultFilePath }: { defaultFilePath?: stri
                       </button>
                     </div>
                     <div className="sn-hud-divider" />
+                    <div className="sn-hud-stepper" title="Space to text above (delete or add gap)">
+                      <span className="sn-hud-stepper-label">SPACE</span>
+                      <button
+                        type="button"
+                        title="Delete space above (nudge up)"
+                        aria-label="Delete space above"
+                        disabled={selected.safeToEdit !== true}
+                        onClick={() => {
+                          void previewChange({
+                            kind: 'nudge',
+                            filePath: selected.filePath,
+                            line: Number(selected.line) || undefined,
+                            column: Number(selected.column) || undefined,
+                            elementId: selected.id,
+                            direction: 'up',
+                            stepSize: 'normal',
+                          });
+                        }}
+                        className="sn-hud-step-btn"
+                      >
+                        −
+                      </button>
+                      <span className="sn-hud-step-value" style={{ minWidth: 26, fontSize: 10 }}>
+                        {(() => {
+                          const match = selected.className.match(/(-?mt-[0-9.]+)/);
+                          return match ? match[1].replace('mt-', '') : 'auto';
+                        })()}
+                      </span>
+                      <button
+                        type="button"
+                        title="Add space above (nudge down)"
+                        aria-label="Add space above"
+                        disabled={selected.safeToEdit !== true}
+                        onClick={() => {
+                          void previewChange({
+                            kind: 'nudge',
+                            filePath: selected.filePath,
+                            line: Number(selected.line) || undefined,
+                            column: Number(selected.column) || undefined,
+                            elementId: selected.id,
+                            direction: 'down',
+                            stepSize: 'normal',
+                          });
+                        }}
+                        className="sn-hud-step-btn"
+                      >
+                        +
+                      </button>
+                    </div>
+                    <div className="sn-hud-divider" />
                     <div className="sn-hud-swatch-group" title="Surface fill color">
                       {styleOptions.backgroundColor.map((bgVal) => {
                         const hex = bgVal.match(/#([0-9a-f]{6})/i)?.[0] || '#ffffff';
@@ -1594,6 +1778,56 @@ export function SlightNudgeOverlay({ defaultFilePath }: { defaultFilePath?: stri
                         onClick={() => void updateStyle('alignment', 'text-right')}
                       >
                         <AlignRight size={13} />
+                      </button>
+                    </div>
+                    <div className="sn-hud-divider" />
+                    <div className="sn-hud-stepper" title="Space to previous element (Margin top)">
+                      <span className="sn-hud-stepper-label">SPACE</span>
+                      <button
+                        type="button"
+                        title="Delete space above (nudge up)"
+                        aria-label="Delete space above"
+                        disabled={selected.safeToEdit !== true}
+                        onClick={() => {
+                          void previewChange({
+                            kind: 'nudge',
+                            filePath: selected.filePath,
+                            line: Number(selected.line) || undefined,
+                            column: Number(selected.column) || undefined,
+                            elementId: selected.id,
+                            direction: 'up',
+                            stepSize: 'normal',
+                          });
+                        }}
+                        className="sn-hud-step-btn"
+                      >
+                        −
+                      </button>
+                      <span className="sn-hud-step-value" style={{ minWidth: 26, fontSize: 10 }}>
+                        {(() => {
+                          const match = selected.className.match(/(-?mt-[0-9.]+)/);
+                          return match ? match[1].replace('mt-', '') : 'auto';
+                        })()}
+                      </span>
+                      <button
+                        type="button"
+                        title="Add space above (nudge down)"
+                        aria-label="Add space above"
+                        disabled={selected.safeToEdit !== true}
+                        onClick={() => {
+                          void previewChange({
+                            kind: 'nudge',
+                            filePath: selected.filePath,
+                            line: Number(selected.line) || undefined,
+                            column: Number(selected.column) || undefined,
+                            elementId: selected.id,
+                            direction: 'down',
+                            stepSize: 'normal',
+                          });
+                        }}
+                        className="sn-hud-step-btn"
+                      >
+                        +
                       </button>
                     </div>
                   </>
@@ -1825,6 +2059,79 @@ export function SlightNudgeOverlay({ defaultFilePath }: { defaultFilePath?: stri
                           disabled={selected.safeToEdit !== true}
                           onChange={updateStyle}
                         />
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="sn-control-group">
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '6px' }}>
+                      <span>Space to Text Above (Margin)</span>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                        <button
+                          type="button"
+                          className="sn-hud-step-btn"
+                          title="Delete space above (nudge up)"
+                          disabled={selected.safeToEdit !== true}
+                          style={{ border: '1px solid #e2e7e3', borderRadius: '4px', width: '22px', height: '22px', fontSize: '13px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                          onClick={() => {
+                            void previewChange({
+                              kind: 'nudge',
+                              filePath: selected.filePath,
+                              line: Number(selected.line) || undefined,
+                              column: Number(selected.column) || undefined,
+                              elementId: selected.id,
+                              direction: 'up',
+                              stepSize: 'normal',
+                            });
+                          }}
+                        >
+                          −
+                        </button>
+                        <span style={{ fontSize: '10px', minWidth: '32px', textAlign: 'center', lineHeight: '22px', color: '#68756d', fontFamily: 'monospace' }}>
+                          {(() => {
+                            const match = selected.className.match(/(-?mt-[0-9.]+)/);
+                            return match ? match[1] : 'default';
+                          })()}
+                        </span>
+                        <button
+                          type="button"
+                          className="sn-hud-step-btn"
+                          title="Add space above (nudge down)"
+                          disabled={selected.safeToEdit !== true}
+                          style={{ border: '1px solid #e2e7e3', borderRadius: '4px', width: '22px', height: '22px', fontSize: '13px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                          onClick={() => {
+                            void previewChange({
+                              kind: 'nudge',
+                              filePath: selected.filePath,
+                              line: Number(selected.line) || undefined,
+                              column: Number(selected.column) || undefined,
+                              elementId: selected.id,
+                              direction: 'down',
+                              stepSize: 'normal',
+                            });
+                          }}
+                        >
+                          +
+                        </button>
+                      </div>
+                    </div>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '5px' }}>
+                      {[
+                        { label: 'Flush (-16px)', val: '-mt-4' },
+                        { label: 'Tight (-8px)', val: '-mt-2' },
+                        { label: 'Zero (0px)', val: 'mt-0' },
+                        { label: 'Normal (+8px)', val: 'mt-2' },
+                        { label: 'Spacious (+24px)', val: 'mt-6' },
+                      ].map(({ label, val }) => (
+                        <button
+                          key={val}
+                          type="button"
+                          className={`sn-style-chip ${hasBreakpointClass(selected.className, val, activeBreakpoint) ? 'is-selected' : ''}`}
+                          disabled={selected.safeToEdit !== true}
+                          onClick={() => void updateStyle('margin', val)}
+                        >
+                          {label}
+                        </button>
                       ))}
                     </div>
                   </div>
