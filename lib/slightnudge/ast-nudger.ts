@@ -127,8 +127,8 @@ export function nudgeElement(options: NudgeOptions): NudgeResult {
 
   let targetElement: JsxOpeningElement | JsxSelfClosingElement | undefined;
 
-  for (const el of jsxElements) {
-    if (elementId) {
+  if (elementId) {
+    for (const el of jsxElements) {
       const idAttr = el.getAttribute('id');
       if (idAttr && Node.isJsxAttribute(idAttr)) {
         const init = idAttr.getInitializer();
@@ -138,8 +138,10 @@ export function nudgeElement(options: NudgeOptions): NudgeResult {
         }
       }
     }
+  }
 
-    if (line !== undefined) {
+  if (!targetElement && line !== undefined) {
+    for (const el of jsxElements) {
       const startLine = el.getStartLineNumber();
       if (startLine === line) {
         targetElement = el;
@@ -314,5 +316,183 @@ export function nudgeElement(options: NudgeOptions): NudgeResult {
     newClassNameValue,
     filePath,
     line: targetElement.getStartLineNumber(),
+  };
+}
+
+export interface InspectResult {
+  found: boolean;
+  safeToEdit: boolean;
+  reason?: string;
+  filePath: string;
+  line?: number;
+  tagName?: string;
+  className?: string;
+}
+
+/**
+ * Inspects a JSX element in source code without modifying it.
+ * Verifies safety constraints (variables, conditions, shared component usages).
+ */
+export function inspectElement(options: {
+  filePath: string;
+  line?: number;
+  elementId?: string;
+}): InspectResult {
+  const { filePath, line, elementId } = options;
+
+  const project = new Project({
+    skipAddingFilesFromTsConfig: true,
+  });
+
+  const sourceFile = project.addSourceFileAtPath(filePath);
+
+  const jsxElements = [
+    ...sourceFile.getDescendantsOfKind(SyntaxKind.JsxOpeningElement),
+    ...sourceFile.getDescendantsOfKind(SyntaxKind.JsxSelfClosingElement),
+  ];
+
+  let targetElement: JsxOpeningElement | JsxSelfClosingElement | undefined;
+
+  if (elementId) {
+    for (const el of jsxElements) {
+      const idAttr = el.getAttribute('id');
+      if (idAttr && Node.isJsxAttribute(idAttr)) {
+        const init = idAttr.getInitializer();
+        if (init && Node.isStringLiteral(init) && init.getLiteralValue() === elementId) {
+          targetElement = el;
+          break;
+        }
+      }
+    }
+  }
+
+  if (!targetElement && line !== undefined) {
+    for (const el of jsxElements) {
+      const startLine = el.getStartLineNumber();
+      if (startLine === line) {
+        targetElement = el;
+        break;
+      }
+    }
+  }
+
+  if (!targetElement) {
+    return {
+      found: false,
+      safeToEdit: false,
+      reason: `element not found at ${line ? `line ${line}` : `id ${elementId}`}`,
+      filePath,
+    };
+  }
+
+  const tagName = targetElement.getTagNameNode().getText();
+  const actualLine = targetElement.getStartLineNumber();
+
+  // Safety check 1: component used in several places
+  if (isComponentUsedMultipleTimes(targetElement, project)) {
+    return {
+      found: true,
+      safeToEdit: false,
+      reason: "can't edit this safely: component used in several places",
+      filePath,
+      line: actualLine,
+      tagName,
+    };
+  }
+
+  const classAttr = targetElement.getAttribute('className');
+  if (!classAttr || !Node.isJsxAttribute(classAttr)) {
+    return {
+      found: true,
+      safeToEdit: false,
+      reason: "can't edit this safely: no className attribute found",
+      filePath,
+      line: actualLine,
+      tagName,
+    };
+  }
+
+  const initializer = classAttr.getInitializer();
+  if (!initializer) {
+    return {
+      found: true,
+      safeToEdit: false,
+      reason: "can't edit this safely: empty className attribute",
+      filePath,
+      line: actualLine,
+      tagName,
+    };
+  }
+
+  if (Node.isJsxExpression(initializer)) {
+    const expr = initializer.getExpression();
+    if (!expr) {
+      return {
+        found: true,
+        safeToEdit: false,
+        reason: "can't edit this safely: empty JSX expression",
+        filePath,
+        line: actualLine,
+        tagName,
+      };
+    }
+
+    if (Node.isCallExpression(expr)) {
+      return {
+        found: true,
+        safeToEdit: false,
+        reason: "can't edit this safely: class built from a condition (call expression)",
+        filePath,
+        line: actualLine,
+        tagName,
+      };
+    }
+
+    if (Node.isConditionalExpression(expr) || Node.isBinaryExpression(expr)) {
+      return {
+        found: true,
+        safeToEdit: false,
+        reason: "can't edit this safely: class built from a condition",
+        filePath,
+        line: actualLine,
+        tagName,
+      };
+    }
+
+    if (Node.isIdentifier(expr) || Node.isTemplateExpression(expr)) {
+      return {
+        found: true,
+        safeToEdit: false,
+        reason: "can't edit this safely: class built from a variable",
+        filePath,
+        line: actualLine,
+        tagName,
+      };
+    }
+  }
+
+  let classNameValue = '';
+  if (Node.isStringLiteral(initializer)) {
+    classNameValue = initializer.getLiteralValue();
+  } else if (Node.isJsxExpression(initializer) && initializer.getExpression() && Node.isStringLiteral(initializer.getExpression()!)) {
+    classNameValue = (initializer.getExpression() as StringLiteral).getLiteralValue();
+  } else {
+    return {
+      found: true,
+      safeToEdit: false,
+      reason: "can't edit this safely: dynamic className",
+      filePath,
+      line: actualLine,
+      tagName,
+    };
+  }
+
+  return {
+    found: true,
+    safeToEdit: true,
+    filePath,
+    line: actualLine,
+    tagName,
+    className: classNameValue,
   };
 }

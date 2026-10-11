@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
+import { SlightNudgeOverlay } from '@/components/slightnudge/SlightNudgeOverlay';
 
 export const metadata: Metadata = {
   title: {
@@ -58,6 +59,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geist.variable} ${geistMono.variable} flex min-h-screen flex-col`}>
+        <SlightNudgeOverlay />
         <Header />
         <main className="flex-1">{children}</main>
         <Footer />

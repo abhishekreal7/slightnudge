@@ -6,6 +6,8 @@ export default function ResponsiveClassesPage() {
       <h1 className="text-xl font-bold mb-4">Fixture 5: Responsive Classes</h1>
       <div
         id="target"
+        data-source-file="fixtures/5-responsive-classes.tsx"
+        data-source-line="7"
         className="ml-2 md:ml-4 lg:ml-8 p-4 bg-purple-600 text-white rounded"
       >
         Responsive Element

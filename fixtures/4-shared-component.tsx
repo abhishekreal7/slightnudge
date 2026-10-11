@@ -10,6 +10,8 @@ function Card({ id, title, variant }: CardProps) {
   return (
     <div
       id={id}
+      data-source-file="fixtures/4-shared-component.tsx"
+      data-source-line="11"
       className="ml-2 p-4 rounded border border-slate-300"
     >
       <span className="font-semibold">{title}</span> ({variant})
