@@ -8,7 +8,7 @@ export default function PlainStaticPage() {
         id="target"
         data-source-file="fixtures/1-plain-static.tsx"
         data-source-line="7"
-        className="ml-2 mt-3.5"
+        className="ml-2 mt-4"
         style={{ display: 'inline-flex', alignItems: 'center', padding: '10px 20px', background: 'linear-gradient(135deg, #4f46e5, #6366f1)', color: '#ffffff', borderRadius: '8px', fontWeight: 600, fontSize: '14px', cursor: 'pointer', boxShadow: '0 4px 14px rgba(79, 70, 229, 0.35)' }}
       >
         ✦ Nudge Target Button
