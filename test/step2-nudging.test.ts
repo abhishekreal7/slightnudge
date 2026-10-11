@@ -1,3 +1,4 @@
+import { execSync } from 'child_process';
 import { chromium, Browser, Page } from 'playwright';
 import { computeNudgedClass, getNextSpacingValue, TAILWIND_SPACING_SCALE } from '../lib/slightnudge/nudge-calculator';
 
@@ -64,6 +65,7 @@ async function runStep2Tests() {
   // PART B: Live Browser End-to-End Arrow Key Interactions
   // -------------------------------------------------------------------------
   console.log('\n--- Part B: Live Browser Arrow Key Interactions ---');
+  const initialGitHash = execSync('git rev-parse HEAD').toString().trim();
   const browser: Browser = await chromium.launch({ headless: true });
   const page: Page = await browser.newPage();
 
@@ -166,6 +168,7 @@ async function runStep2Tests() {
     console.log('====================================================\n');
   } finally {
     await browser.close();
+    execSync(`git reset --hard ${initialGitHash}`, { stdio: 'pipe' });
   }
 }
 
