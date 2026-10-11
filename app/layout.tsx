@@ -2,44 +2,30 @@ import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 import { Header } from '@/components/Header';
-import { Footer } from '@/components/Footer';
-import { SlightNudgeOverlay } from '@/components/slightnudge/SlightNudgeOverlay';
 
 export const metadata: Metadata = {
   title: {
-    default: 'ShipCheck — AI QA Tester for Vibecoded Apps',
-    template: '%s | ShipCheck',
+    default: 'SlightNudge — Make the change. Keep the code.',
+    template: '%s | SlightNudge',
   },
   description:
-    'Find the bugs before your users do. Real cloud Chromium browser testing on desktop and mobile with ready-to-paste fix prompts for Cursor, Claude Code, and Lovable.',
-  keywords: [
-    'AI QA tester',
-    'vibecoded apps',
-    'browser automation',
-    'cursor fix prompt',
-    'claude code QA',
-    'end to end testing',
-    'playwright cloud',
-    'indie hacker testing',
-  ],
-  authors: [{ name: 'ShipCheck' }],
-  creator: 'ShipCheck',
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'https://shipcheck.ai'),
+    'Refine a real interface in context. Select what feels off, make a focused adjustment, and review the source change before it lands in your project.',
+  authors: [{ name: 'SlightNudge' }],
+  creator: 'SlightNudge',
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'),
   openGraph: {
-    title: 'ShipCheck — AI QA Tester for Vibecoded Apps',
-    description:
-      'Autonomous cloud browsers test your web app on desktop and mobile. Get concrete bug repro steps and instant fix prompts for Cursor & Claude Code.',
-    url: 'https://shipcheck.ai',
-    siteName: 'ShipCheck',
+    title: 'SlightNudge — Make the change. Keep the code.',
+    description: 'Refine a real interface in context and review the source change before it lands in your project.',
+    url: 'https://slightnudge.app',
+    siteName: 'SlightNudge',
     locale: 'en_US',
     type: 'website',
-    images: [{ url: '/opengraph-image.png', width: 1200, height: 630, alt: 'ShipCheck browser QA report with evidence-backed findings' }],
+    images: [{ url: '/opengraph-image.png', width: 1200, height: 630, alt: 'SlightNudge visual design workspace' }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'ShipCheck — AI QA Tester for Vibecoded Apps',
-    description:
-      'Find the bugs before your users do. Real cloud Chromium browser testing with ready-to-paste fix prompts.',
+    title: 'SlightNudge — Make the change. Keep the code.',
+    description: 'Make a focused visual adjustment and review the source change.',
     images: ['/opengraph-image.png'],
   },
   robots: {
@@ -57,12 +43,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${geist.variable} ${geistMono.variable}`}>
       <body className={`${geist.variable} ${geistMono.variable} flex min-h-screen flex-col`}>
-        <SlightNudgeOverlay />
         <Header />
-        <main className="flex-1">{children}</main>
-        <Footer />
+        <div className="sn-main-content">{children}</div>
       </body>
     </html>
   );

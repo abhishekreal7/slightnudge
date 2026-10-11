@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Ramp HQ - Task Board</title>
+<!-- Tailwind CSS CDN -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Phosphor Icons for precise modern interface icons -->
+<script src="https://unpkg.com/@phosphor-icons/web"></script>
+<style data-purpose="custom-fonts">
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+  </style>
+<style data-purpose="scrollbar-styling">
+    /* Subtle custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #e2e8f0;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #cbd5e1;
+    }
+  </style>
+</head>
+<body class="bg-[#e9ecef] flex items-center justify-center p-3 md:p-6 min-h-screen text-[#191919] select-none text-sm antialiased">
+<!-- BEGIN: ApplicationWindowFrame -->
+<div class="w-full max-w-[1360px] h-[920px] bg-white rounded-2xl shadow-2xl border border-gray-200/80 flex flex-col overflow-hidden relative">
+<!-- Top Window Titlebar / Browser Chrome -->
+<header class="h-10 bg-[#fbfbfa] border-b border-gray-200/80 flex items-center justify-between px-4 shrink-0 text-gray-500 text-xs">
+<!-- Left controls: macOS Traffic Lights & Nav -->
+<div class="flex items-center space-x-3">
+<!-- Traffic lights -->
+<div class="flex items-center space-x-1.5 mr-2">
+<span class="w-2.5 h-2.5 rounded-full bg-[#ff5f56] inline-block border border-black/10"></span>
+<span class="w-2.5 h-2.5 rounded-full bg-[#ffbd2e] inline-block border border-black/10"></span>
+<span class="w-2.5 h-2.5 rounded-full bg-[#27c93f] inline-block border border-black/10"></span>
+</div>
+<!-- Workspace dropdown -->
+<div class="flex items-center space-x-1.5 hover:bg-gray-200/60 px-2 py-0.5 rounded cursor-pointer transition">
+<i class="ph ph-globe text-sm text-gray-600"></i>
+<span class="font-medium text-gray-700">Ramp</span>
+</div>
+<!-- Back / Forward history -->
+<div class="flex items-center space-x-1 text-gray-400 pl-1">
+<i class="ph ph-caret-left cursor-pointer hover:text-gray-700 text-xs"></i>
+<i class="ph ph-caret-right cursor-pointer hover:text-gray-700 text-xs"></i>
+</div>
+</div>
+<!-- Center Tab: Ramp HQ -->
+<div class="flex items-center space-x-2 -ml-28">
+<div class="flex items-center space-x-2 bg-white px-3 py-1 rounded-t-md border-t border-x border-gray-200/90 shadow-xs text-gray-800 font-medium">
+<svg class="w-3.5 h-3.5 text-black" fill="currentColor" viewbox="0 0 24 24">
+<path d="M12 2C6.477 2 2 6.477 2 12c0 4.237 2.636 7.855 6.356 9.312-.03-.42-.047-.852-.047-1.291 0-5.523 4.477-10 10-10 .439 0 .871.017 1.291.047C18.145 4.636 14.527 2 12 2z"></path>
+</svg>
+<span class="text-xs">Ramp HQ</span>
+</div>
+<button class="text-gray-400 hover:text-gray-700 p-1" title="New Tab">
+<i class="ph ph-plus text-xs"></i>
+</button>
+</div>
+<!-- Right Window Utilities -->
+<div class="flex items-center space-x-3 text-gray-500">
+<button class="hover:text-gray-800 text-xs font-medium">Share</button>
+<button class="hover:text-gray-800"><i class="ph ph-chat-teardrop-dots text-sm"></i></button>
+<button class="hover:text-gray-800"><i class="ph ph-star text-sm"></i></button>
+<button class="hover:text-gray-800"><i class="ph ph-dots-three-outline-fill text-xs"></i></button>
+</div>
+</header>
+<!-- Main App Body (Sidebar + Content Workspace) -->
+<div class="flex flex-1 overflow-hidden relative">
+<!-- BEGIN: Sidebar -->
+<aside class="w-56 bg-[#fbfbfa] border-r border-gray-200/70 flex flex-col justify-between shrink-0 select-none text-[12.5px] text-[#474747] relative z-10">
+<div class="overflow-y-auto px-3 py-3 space-y-4">
+<!-- Top Navigation Quick Actions -->
+<div class="flex items-center justify-between text-gray-600 px-1">
+<div class="flex items-center space-x-1.5 bg-gray-200/70 text-gray-800 px-2 py-1 rounded-md cursor-pointer font-medium text-xs">
+<i class="ph ph-house text-sm"></i>
+<span>Home</span>
+</div>
+<div class="flex items-center space-x-2 text-gray-500">
+<button class="hover:text-gray-800"><i class="ph ph-chat-circle text-base"></i></button>
+<button class="hover:text-gray-800"><i class="ph ph-calendar text-base"></i></button>
+<div class="relative cursor-pointer hover:text-gray-800">
+<i class="ph ph-tray text-base"></i>
+<span class="absolute -top-1 -right-1.5 bg-[#e03e3e] text-white text-[9px] font-bold px-1 rounded-full scale-75">9</span>
+</div>
+<button class="hover:text-gray-800"><i class="ph ph-magnifying-glass text-base"></i></button>
+</div>
+</div>
+<!-- Section: Upcoming events -->
+<div class="space-y-1">
+<span class="text-[11px] font-semibold text-gray-400 tracking-wider block px-1">Upcoming events</span>
+<div class="flex items-center justify-between px-1 py-1 rounded hover:bg-gray-100 cursor-pointer">
+<div class="flex items-center space-x-2 truncate">
+<span class="w-2.5 h-2.5 rounded-xs bg-[#2f80ed]"></span>
+<span class="truncate">Design Weekly</span>
+</div>
+<span class="text-[10px] text-gray-400 shrink-0">10 – 11AM</span>
+</div>
+<div class="flex items-center justify-between px-1 py-1 rounded hover:bg-gray-100 cursor-pointer">
+<div class="flex items-center space-x-2 truncate">
+<span class="w-2.5 h-2.5 rounded-xs bg-[#2f80ed]"></span>
+<span class="truncate">Eng Kickoff</span>
+</div>
+<span class="text-[10px] text-gray-400 shrink-0">12 – 1PM</span>
+</div>
+<div class="flex items-center justify-between px-1 py-1 rounded hover:bg-gray-100 cursor-pointer">
+<div class="flex items-center space-x-2 truncate">
+<span class="w-2.5 h-2.5 rounded-xs bg-[#2f80ed]"></span>
+<span class="truncate">Product Updates</span>
+</div>
+<span class="text-[10px] text-gray-400 shrink-0">4 – 5PM</span>
+</div>
+</div>
+<!-- Section: Agents -->
+<div class="space-y-1">
+<span class="text-[11px] font-semibold text-gray-400 tracking-wider block px-1">Agents</span>
+<div class="flex items-center space-x-2 px-1 py-1 rounded hover:bg-gray-100 cursor-pointer">
+<span class="w-4 h-4 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center text-[10px] font-bold">⚡</span>
+<span>Task routing agent</span>
+</div>
+<div class="flex items-center space-x-2 px-1 py-1 rounded hover:bg-gray-100 cursor-pointer">
+<span class="w-4 h-4 rounded-full bg-red-100 text-red-600 flex items-center justify-center text-[10px] font-bold">💡</span>
+<span>Q&amp;A agent</span>
+</div>
+<div class="flex items-center space-x-2 px-1 py-1 rounded hover:bg-gray-100 cursor-pointer">
+<span class="w-4 h-4 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center text-[10px] font-bold">📊</span>
+<span>Reporting agent</span>
+</div>
+<div class="flex items-center space-x-2 px-1 py-1 rounded hover:bg-gray-100 cursor-pointer">
+<span class="w-4 h-4 rounded-full bg-pink-100 text-pink-600 flex items-center justify-center text-[10px] font-bold">🎧</span>
+<span>IT help desk</span>
+</div>
+<div class="flex items-center space-x-2 px-1 py-1 rounded hover:bg-gray-100 cursor-pointer">
+<span class="w-4 h-4 rounded-full bg-teal-100 text-teal-600 flex items-center justify-center text-[10px] font-bold">🤝</span>
+<span>Onboarding buddy</span>
+</div>
+<div class="flex items-center space-x-2 px-1 py-0.5 text-gray-400 hover:text-gray-700 cursor-pointer">
+<i class="ph ph-dots-three text-sm"></i>
+<span>More</span>
+</div>
+</div>
+<!-- Section: Teamspaces -->
+<div class="space-y-1">
+<span class="text-[11px] font-semibold text-gray-400 tracking-wider block px-1">Teamspaces</span>
+<div class="flex items-center space-x-2 px-1 py-1 rounded hover:bg-gray-100 cursor-pointer">
+<i class="ph ph-users text-[#eb5757] text-sm"></i>
+<span>Company HQ</span>
+</div>
+<div class="flex items-center space-x-2 px-1 py-1 rounded hover:bg-gray-100 cursor-pointer">
+<i class="ph ph-television text-[#eb5757] text-sm"></i>
+<span>Product</span>
+</div>
+<div class="flex items-center space-x-2 px-1 py-1 rounded hover:bg-gray-100 cursor-pointer">
+<i class="ph ph-gear text-[#eb5757] text-sm"></i>
+<span>Engineering</span>
+</div>
+<div class="flex items-center space-x-2 px-1 py-0.5 text-gray-400 hover:text-gray-700 cursor-pointer">
+<i class="ph ph-dots-three text-sm"></i>
+<span>More</span>
+</div>
+</div>
+<!-- Section: Private -->
+<div class="space-y-1">
+<span class="text-[11px] font-semibold text-gray-400 tracking-wider block px-1">Private</span>
+<div class="flex items-center space-x-2 px-1 py-1 rounded hover:bg-gray-100 cursor-pointer">
+<i class="ph ph-user text-gray-400 text-sm"></i>
+<span>My OS</span>
+</div>
+<div class="flex items-center space-x-2 px-1 py-1 rounded hover:bg-gray-100 cursor-pointer">
+<i class="ph ph-notebook text-gray-400 text-sm"></i>
+<span>1:1 Notes</span>
+</div>
+<div class="flex items-center space-x-2 px-1 py-1 rounded hover:bg-gray-100 cursor-pointer">
+<i class="ph ph-scissors text-gray-400 text-sm"></i>
+<span>Tasks</span>
+</div>
+<div class="flex items-center space-x-2 px-1 py-0.5 text-gray-400 hover:text-gray-700 cursor-pointer">
+<i class="ph ph-dots-three text-sm"></i>
+<span>More</span>
+</div>
+</div>
+</div>
+<!-- Sidebar Bottom: New chat pill -->
+<div class="p-3 border-t border-gray-100 flex items-center justify-between">
+<button class="flex items-center space-x-2 bg-gray-100 hover:bg-gray-200/80 px-2.5 py-1.5 rounded-full text-xs font-medium text-gray-700 transition">
+<span class="w-4 h-4 rounded-full bg-black text-white flex items-center justify-center text-[9px] font-bold">▌▌</span>
+<span>New chat</span>
+<span class="text-[10px] text-gray-400 font-mono tracking-tighter">⌘O</span>
+</button>
+<button class="w-7 h-7 flex items-center justify-center border border-gray-200 rounded-lg text-gray-500 hover:text-gray-800 hover:bg-gray-50 transition">
+<i class="ph ph-pencil-simple-line text-sm"></i>
+</button>
+</div>
+</aside>
+<!-- END: Sidebar -->
+<!-- BEGIN: MainContent -->
+<main class="flex-1 flex flex-col bg-white overflow-hidden relative">
+<!-- Board Header Area -->
+<div class="pt-8 px-10 pb-5">
+<!-- Logo & Workspace Title -->
+<div class="flex items-center space-x-4 mb-6">
+<div class="w-12 h-12 rounded-full bg-[#f4f4f2] flex items-center justify-center shadow-xs">
+<svg class="w-7 h-7 text-black transform -rotate-12" fill="currentColor" viewbox="0 0 24 24">
+<path d="M12 2C6.477 2 2 6.477 2 12c0 4.237 2.636 7.855 6.356 9.312-.03-.42-.047-.852-.047-1.291 0-5.523 4.477-10 10-10 .439 0 .871.017 1.291.047C18.145 4.636 14.527 2 12 2z"></path>
+</svg>
+</div>
+<h1 class="text-3xl font-bold tracking-tight text-gray-900">Ramp HQ</h1>
+</div>
+<!-- Views Navigation & Toolbar Controls -->
+<div class="flex items-center justify-between border-b border-gray-100 pb-3">
+<!-- Left Tabs -->
+<div class="flex items-center space-x-3 text-xs font-medium">
+<button class="flex items-center space-x-1.5 bg-[#f0f0ee] text-gray-900 px-2.5 py-1.2 rounded-md shadow-2xs">
+<i class="ph ph-kanban text-sm"></i>
+<span class="font-semibold">Company tasks</span>
+</button>
+<button class="flex items-center space-x-1.5 text-gray-500 hover:text-gray-900 px-2 py-1 transition">
+<i class="ph ph-user text-sm"></i>
+<span>My tasks</span>
+</button>
+<button class="flex items-center space-x-1.5 text-gray-500 hover:text-gray-900 px-2 py-1 transition">
+<i class="ph ph-person-simple-run text-sm"></i>
+<span>Current sprint</span>
+</button>
+<button class="flex items-center space-x-1.5 text-gray-500 hover:text-gray-900 px-2 py-1 transition">
+<i class="ph ph-calendar text-sm"></i>
+<span>Timeline</span>
+</button>
+<button class="text-gray-400 hover:text-gray-700 px-1">
+<i class="ph ph-plus text-xs"></i>
+</button>
+</div>
+<!-- Right Toolbar Utilities & 'New' action -->
+<div class="flex items-center space-x-3 text-gray-400">
+<button class="hover:text-gray-700"><i class="ph ph-arrows-down-up text-sm"></i></button>
+<button class="hover:text-gray-700"><i class="ph ph-funnel-simple text-sm"></i></button>
+<button class="hover:text-gray-700"><i class="ph ph-lightning text-sm"></i></button>
+<button class="hover:text-gray-700"><i class="ph ph-magnifying-glass text-sm"></i></button>
+<button class="hover:text-gray-700"><i class="ph ph-arrows-out text-sm"></i></button>
+<button class="hover:text-gray-700"><i class="ph ph-sliders text-sm"></i></button>
+<!-- Blue dropdown button -->
+<div class="flex items-center bg-[#1d70e2] hover:bg-[#155ebd] text-white rounded-md text-xs font-medium pl-2.5 pr-1.5 py-1 cursor-pointer transition shadow-xs">
+<span>New</span>
+<i class="ph ph-caret-down ml-1 text-[10px]"></i>
+</div>
+</div>
+</div>
+</div>
+<!-- BEGIN: KanbanBoardColumns -->
+<div class="flex-1 overflow-x-auto px-10 pb-10 flex space-x-5 items-start select-none">
+<!-- Column 1: Unlabeled / Backlog (White / Clear) -->
+<div class="w-60 shrink-0 flex flex-col space-y-2.5 pt-7">
+<!-- Cards -->
+<div class="bg-white border border-gray-200/80 rounded-lg p-2.5 text-xs text-gray-800 font-medium shadow-2xs hover:shadow-xs cursor-pointer">
+              Review performance metrics
+            </div>
+<div class="bg-white border border-gray-200/80 rounded-lg p-2.5 text-xs text-gray-800 font-medium shadow-2xs hover:shadow-xs cursor-pointer">
+              Respond to beta test questions
+            </div>
+<div class="bg-white border border-gray-200/80 rounded-lg p-2.5 text-xs text-gray-800 font-medium shadow-2xs hover:shadow-xs cursor-pointer">
+              Plan upcoming sprint goals
+            </div>
+<div class="bg-white border border-gray-200/80 rounded-lg p-2.5 text-xs text-gray-800 font-medium shadow-2xs hover:shadow-xs cursor-pointer">
+              Update help center and office documentation
+            </div>
+<div class="bg-white border border-gray-200/80 rounded-lg p-2.5 text-xs text-gray-800 font-medium shadow-2xs hover:shadow-xs cursor-pointer">
+              Review campaign assets
+            </div>
+<div class="bg-white border border-gray-200/80 rounded-lg p-2.5 text-xs text-gray-800 font-medium shadow-2xs hover:shadow-xs cursor-pointer">
+              Customer stories
+            </div>
+<div class="bg-white border border-gray-200/80 rounded-lg p-2.5 text-xs text-gray-800 font-medium shadow-2xs hover:shadow-xs cursor-pointer">
+              Refresh product color palette
+            </div>
+<div class="bg-white border border-gray-200/80 rounded-lg p-2.5 text-xs text-gray-800 font-medium shadow-2xs hover:shadow-xs cursor-pointer">
+              Review latest marketing approach and sprints
+            </div>
+<div class="bg-white border border-gray-200/80 rounded-lg p-2.5 text-xs text-gray-800 font-medium shadow-2xs hover:shadow-xs cursor-pointer">
+              Code review for authentication service updates
+            </div>
+</div>
+<!-- Column 2: In progress (Warm Cream/Beige Tint) -->
+<div class="w-60 shrink-0 bg-[#fbf6ee] rounded-xl p-2.5 flex flex-col space-y-2.5">
+<!-- Header Pill -->
+<div class="flex items-center space-x-1.5 px-0.5">
+<span class="inline-flex items-center space-x-1 bg-[#fae8c8] text-[#8e5c14] text-[11px] font-semibold px-2 py-0.5 rounded-md">
+<span class="w-1.5 h-1.5 rounded-full bg-[#d97706]"></span>
+<span>In progress</span>
+</span>
+<span class="text-xs text-gray-400 font-medium ml-1">4</span>
+</div>
+<!-- Cards -->
+<div class="bg-white border border-gray-200/70 rounded-lg p-2.5 text-xs text-gray-800 font-medium shadow-2xs hover:shadow-xs cursor-pointer">
+              Sales demo sync
+            </div>
+<div class="bg-white border border-gray-200/70 rounded-lg p-2.5 text-xs text-gray-800 font-medium shadow-2xs hover:shadow-xs cursor-pointer">
+              Launch demo video
+            </div>
+<div class="bg-white border border-gray-200/70 rounded-lg p-2.5 text-xs text-gray-800 font-medium shadow-2xs hover:shadow-xs cursor-pointer flex items-center justify-between relative">
+<span>Headcount planning</span>
+<!-- Bulb Sticker Badge -->
+<span class="absolute -right-3 -bottom-3 w-8 h-8 rounded-full bg-[#fa7051] border-2 border-white flex items-center justify-center text-sm shadow-md">
+                💡
+              </span>
+</div>
+<div class="bg-white border border-gray-200/70 rounded-lg p-2.5 text-xs text-gray-800 font-medium shadow-2xs hover:shadow-xs cursor-pointer">
+              Engineering sync
+            </div>
+<button class="flex items-center space-x-1.5 text-xs text-gray-400 hover:text-gray-700 py-1 px-1 transition text-left">
+<i class="ph ph-plus text-xs"></i>
+<span>New page</span>
+</button>
+</div>
+<!-- Column 3: In review (Soft Blue Tint) -->
+<div class="w-60 shrink-0 bg-[#f1f6fb] rounded-xl p-2.5 flex flex-col space-y-2.5">
+<!-- Header Pill -->
+<div class="flex items-center space-x-1.5 px-0.5">
+<span class="inline-flex items-center space-x-1 bg-[#dbe8f9] text-[#1c64ca] text-[11px] font-semibold px-2 py-0.5 rounded-md">
+<span class="w-1.5 h-1.5 rounded-full bg-[#1c64ca]"></span>
+<span>In review</span>
+</span>
+<span class="text-xs text-gray-400 font-medium ml-1">4</span>
+</div>
+<!-- Cards -->
+<div class="bg-white border border-gray-200/70 rounded-lg p-2.5 text-xs text-gray-800 font-medium shadow-2xs hover:shadow-xs cursor-pointer flex items-center justify-between">
+<span class="truncate">Weekly sales status report</span>
+<div class="w-5 h-5 rounded-full bg-indigo-100 border border-gray-300 flex items-center justify-center overflow-hidden shrink-0">
+<svg class="w-4 h-4 text-gray-600" fill="currentColor" viewbox="0 0 20 20">
+<path clip-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" fill-rule="evenodd"></path>
+</svg>
+</div>
+</div>
+<div class="bg-white border border-gray-200/70 rounded-lg p-2.5 text-xs text-gray-800 font-medium shadow-2xs hover:shadow-xs cursor-pointer">
+              Marketing campaign designs
+            </div>
+<div class="bg-white border border-gray-200/70 rounded-lg p-2.5 text-xs text-gray-800 font-medium shadow-2xs hover:shadow-xs cursor-pointer">
+              Latest features customer emails
+            </div>
+<div class="bg-white border border-gray-200/70 rounded-lg p-2.5 text-xs text-gray-800 font-medium shadow-2xs hover:shadow-xs cursor-pointer">
+              New features documentation
+            </div>
+<div class="flex items-center justify-between py-1 px-1">
+<button class="flex items-center space-x-1.5 text-xs text-[#2b71d9] hover:text-blue-800 font-medium transition">
+<i class="ph ph-plus text-xs"></i>
+<span>New page</span>
+</button>
+<!-- Folder badge sticker -->
+<span class="w-6 h-6 rounded-md bg-[#5897ea] flex items-center justify-center text-white text-[11px] shadow-xs">
+                📁
+              </span>
+</div>
+</div>
+<!-- Column 4: Complete (Soft Mint Green Tint) -->
+<div class="w-60 shrink-0 bg-[#f3f9f4] rounded-xl p-2.5 flex flex-col space-y-2.5">
+<!-- Header Pill -->
+<div class="flex items-center space-x-1.5 px-0.5">
+<span class="inline-flex items-center space-x-1 bg-[#d8f0dc] text-[#1e7e34] text-[11px] font-semibold px-2 py-0.5 rounded-md">
+<span class="w-1.5 h-1.5 rounded-full bg-[#1e7e34]"></span>
+<span>Complete</span>
+</span>
+<span class="text-xs text-gray-400 font-medium ml-1">34</span>
+</div>
+<!-- Cards -->
+<div class="bg-white border border-gray-200/70 rounded-lg p-2.5 text-xs text-gray-800 font-medium shadow-2xs hover:shadow-xs cursor-pointer">
+              Project onboarding
+            </div>
+<div class="bg-white border border-gray-200/70 rounded-lg p-2.5 text-xs text-gray-800 font-medium shadow-2xs hover:shadow-xs cursor-pointer">
+              Finalize launch timeline
+            </div>
+<div class="bg-white border border-gray-200/70 rounded-lg p-2.5 text-xs text-gray-800 font-medium shadow-2xs hover:shadow-xs cursor-pointer">
+              All hands alignment
+            </div>
+<div class="bg-white border border-gray-200/70 rounded-lg p-2.5 text-xs text-gray-800 font-medium shadow-2xs hover:shadow-xs cursor-pointer">
+              Draft press release
+            </div>
+<div class="bg-white border border-gray-200/70 rounded-lg p-2.5 text-xs text-gray-800 font-medium shadow-2xs hover:shadow-xs cursor-pointer">
+              Report daily performance summaries
+            </div>
+<div class="bg-white border border-gray-200/70 rounded-lg p-2.5 text-xs text-gray-800 font-medium shadow-2xs hover:shadow-xs cursor-pointer">
+              Product launch weekly report
+            </div>
+<div class="bg-white border border-gray-200/70 rounded-lg p-2.5 text-xs text-gray-800 font-medium shadow-2xs hover:shadow-xs cursor-pointer">
+              Project kickoff
+            </div>
+<div class="bg-white border border-gray-200/70 rounded-lg p-2.5 text-xs text-gray-800 font-medium shadow-2xs hover:shadow-xs cursor-pointer">
+              Marketing team status report
+            </div>
+<div class="bg-white border border-gray-200/70 rounded-lg p-2.5 text-xs text-gray-800 font-medium shadow-2xs hover:shadow-xs cursor-pointer">
+              Financial planning
+            </div>
+<div class="bg-white border border-gray-200/70 rounded-lg p-2.5 text-xs text-gray-800 font-medium shadow-2xs hover:shadow-xs cursor-pointer">
+              Pixelation of hero image
+            </div>
+</div>
+</div>
+<!-- END: KanbanBoardColumns -->
+<!-- Playful stickers / badges matching reference -->
+<!-- Clock sticker on column boundary -->
+<div class="absolute left-[388px] top-[500px] pointer-events-none transform -translate-x-1/2">
+<div class="w-7 h-7 rounded-full bg-[#f97316] text-white flex items-center justify-center text-xs shadow-md border-2 border-white">
+            ⏰
+          </div>
+</div>
+<!-- Purple check sticker -->
+<div class="absolute left-[416px] top-[476px] pointer-events-none">
+<div class="w-6 h-6 rounded-md bg-[#a855f7] text-white flex items-center justify-center text-xs shadow-md border border-white font-bold">
+            ✓
+          </div>
+</div>
+<!-- Bottom right duck doodle badge -->
+<div class="absolute right-12 bottom-6 pointer-events-none flex flex-col items-center">
+<span class="text-xl">🦆</span>
+<span class="text-xs font-mono -mt-1 text-gray-600 font-bold">~</span>
+</div>
+</main>
+<!-- END: MainContent -->
+</div>
+</div>
+<!-- END: ApplicationWindowFrame -->
+</body></html>

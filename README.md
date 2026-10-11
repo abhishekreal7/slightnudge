@@ -1,112 +1,35 @@
-# ShipCheck 🚢
+# SlightNudge
 
-> **AI QA Tester for Vibecoded Apps**  
-> *"Find the bugs before your users do. One scan, one price, no subscription."*
+> A visual editing workspace for making product changes directly against a project’s source.
 
-ShipCheck automates end-to-end exploratory testing on desktop and mobile cloud browsers (Hyperbrowser + Playwright over CDP), generates evidence-backed bug reports with exact reproduction steps, console/network captures, video replays, and **ready-to-paste fix prompts for Cursor, Claude Code, and Lovable**.
+SlightNudge is evolving from the earlier ShipCheck prototype into a visual editor for SaaS interfaces. The current workspace includes a guided playground, a source-aware element inspector, a source-change review step, safe static Tailwind edits, local before/after edit history, and public GitHub repository import. Changes are previewed first, then written to the local source file when applied. SlightNudge does not stage or commit repository files. The imported-repository flow currently prepares source files for inspection; live previews and editing across arbitrary project frameworks are still being built.
 
----
+## Product direction
 
-## Architecture Overview
+The goal is to let a product builder select an element in a running page, adjust its layout or visual style, and see the change reflected in source without hand-editing CSS for every small refinement. Longer term this includes text, color, images, reusable elements, and motion controls. The current implementation is an early foundation, not a finished general-purpose website editor.
 
-- **Web Shell**: Next.js (App Router), TypeScript (Strict), Tailwind CSS.
-- **Database & Storage**: Supabase (Postgres with RLS on all tables, Auth, Object Storage).
-- **Browser Automation**: Hyperbrowser Cloud Chromium sessions connected via Playwright over CDP (`BrowserProvider` interface).
-- **Intelligence**: Anthropic Claude API (model configurable via `ANTHROPIC_MODEL`).
-- **Payments**: Dodo Payments (one-time checkout, webhook signature verification with `standardwebhooks`).
-- **Worker**: Autonomous Node background worker polling Supabase `jobs` queue.
+## Stack
 
----
+- Next.js App Router, TypeScript, Tailwind CSS
+- React-based visual playground
+- Local Git repository handling for import and source edits
+- Existing Supabase, browser automation, Anthropic, and Dodo Payments modules from the previous ShipCheck prototype
 
-## Directory Structure
+## Run locally
 
-```text
-vibecheck/
-├── demo-app/               # Buggy benchmark test application for regression benchmarks
-├── lib/
-│   ├── browser/            # BrowserProvider interface, Hyperbrowser & local providers
-│   ├── pipeline/           # Stages A-F (Preflight, Discovery, Planning, Execution, Analysis, Report)
-│   ├── llm/                # Anthropic client & structured prompt engines with Zod schemas
-│   ├── payments/           # Dodo Payments checkout, webhooks, refund flows
-│   └── security/           # Ownership verification, SSRF blocking, AES-GCM credential encryption
-├── spikes/                 # Standalone spike scripts (Phase 1, etc.)
-├── worker/                 # Dedicated background job worker
-├── .env.example            # Canonical environment variables template
-└── README.md
-```
-
----
-
-## Setup & Running
-
-### 1. Prerequisites
-- Node.js 20+ (Node 24 tested)
-- npm or pnpm
-- Playwright Chromium (`npx playwright install chromium`)
-
-### 2. Configure Environment
-Copy `.env.example` to `.env` and fill in your keys:
 ```bash
-cp .env.example .env
-```
-
-Key variables:
-- `HYPERBROWSER_API_KEY`: Your Hyperbrowser API key.
-- `ANTHROPIC_API_KEY`: Anthropic Claude API key.
-- `NEXT_PUBLIC_SUPABASE_URL` & `SUPABASE_SERVICE_ROLE_KEY`: Supabase credentials.
-- `DODO_PAYMENTS_API_KEY` & `DODO_PAYMENTS_WEBHOOK_KEY`: Dodo Payments credentials.
-- `CREDENTIALS_ENCRYPTION_KEY`: 32-byte (64 hex characters) AES-GCM secret.
-
-### 3. Running All Tests & Verification Suites
-ShipCheck features comprehensive unit, payments, security, analytics, and end-to-end integration benchmark test suites:
-```bash
-# Run all unit, payment idempotency, SSRF hardening, and funnel analytics tests (72 tests)
-npm test
-
-# Run end-to-end pipeline against the buggy benchmark app (verifies 4/4 defects, 100% precision)
-npm run test:integration
-
-# Run full combined suite
-npm run test:all
-
-# Production build validation (Next.js Turbopack)
-npm run build
-```
-
-### 4. Running the Background Worker
-```bash
-npm run worker
-```
-
-### 5. Running the Development Server
-```bash
+npm install
 npm run dev
 ```
 
----
+Open `http://localhost:3000` for the public product overview. Visit `/workspace` to open the project workspace, try the local playground, or use **Add repository** to clone a public GitHub repository. Private repository authorization is not connected yet. Imported projects are cloned under `.slightnudge/repositories` and listed in `.slightnudge/repositories.json`; this local state is ignored by Git. `/how-it-works` describes the current editing flow and support limits; `/pricing` is explicit that hosted plans are not available yet.
 
-## Admin Telemetry Dashboard
+The local Next.js development build uses a small webpack loader to attach file, line, and column metadata to JSX host elements. Imported Next.js repositories can opt in to a reversible source adapter that adds the same metadata to their local development preview. Both run only in development. The imported repository studio can start supported Next.js and Vite apps in Docker with a read-only source mount, resource limits, and temporary dependency/build volumes. Starting a preview runs the repository's dependency install scripts and dev server inside the container; Docker network access remains enabled. Stop the preview from the studio to remove its container and temporary volumes. Click-to-source is currently available for the supported Next.js adapter. Imported source edits are limited to static Tailwind class strings: each change is previewed, explicitly applied, and recorded for undo. Dynamic classes remain read only.
 
-ShipCheck includes a protected internal metrics dashboard accessible at `/admin`.
-- Authenticate via `x-admin-key` matching `ADMIN_METRICS_KEY` in `.env`.
-- Displays active scans, daily spend vs spend caps, conversion funnel ratios, and automated refund logs.
+## Build
 
----
+```bash
+npm run build
+```
 
-## Deployment Checklist
-
-- [ ] **Vercel (Web Frontend)**:
-  - Configure Next.js environment variables.
-  - Set `NEXT_PUBLIC_APP_URL` to the production domain.
-- [ ] **Worker Host (Railway, Fly.io, or VPS)**:
-  - Run `worker/index.ts` as an always-on background process.
-  - Ensure outbound network access to Hyperbrowser WebSocket endpoints and Anthropic API.
-  - Verify `SUPABASE_SERVICE_ROLE_KEY` is present on the worker environment only (never client-exposed).
-- [ ] **Supabase**:
-  - Apply migrations in `supabase/migrations/`.
-  - Enable RLS policies across all 9 tables.
-  - Create Storage bucket `shipcheck-artifacts` with private read/write policies.
-- [ ] **Dodo Payments**:
-  - Configure webhook URL: `https://your-domain.com/api/webhooks/dodo`
-  - Set events: `payment.succeeded`, `payment.failed`, `refund.succeeded`.
-  - Confirm webhook secret matches `DODO_PAYMENTS_WEBHOOK_KEY`.
+The legacy ShipCheck scanning and report modules remain in the codebase for now, but they are not the main SlightNudge product experience. Do not use their old landing copy, route assumptions, or visual language when extending the editor.

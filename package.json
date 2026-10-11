@@ -1,11 +1,11 @@
 {
-  "name": "vibecheck",
+  "name": "slightnudge",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
+    "dev": "next dev --webpack",
+    "build": "next build --webpack",
     "start": "next start",
     "worker": "tsx worker/index.ts",
     "test": "tsx test/unit.test.ts && tsx test/payments.test.ts && tsx test/security-hardening.test.ts && tsx test/analytics-funnel.test.ts",
@@ -16,6 +16,8 @@
     "test:step1": "tsx test/step1-selection.test.ts",
     "test:step2": "tsx test/step2-nudging.test.ts",
     "test:step3": "tsx test/step3-file-git.test.ts",
+    "test:m0": "tsx test/m0-regression.test.ts",
+    "test:overfit": "tsx test/m0-overfit.test.ts",
     "spike": "tsx spikes/phase1-spike.ts"
   },
   "keywords": [],

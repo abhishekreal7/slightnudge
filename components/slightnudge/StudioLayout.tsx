@@ -3,129 +3,59 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { ArrowLeft, ArrowUpRight, Check, ChevronDown, Code2, Columns2, Laptop2, PanelRight, Smartphone, Tablet, Undo2 } from 'lucide-react';
+import { SlightNudgeOverlay } from './SlightNudgeOverlay';
 
-export function StudioLayout({ children }: { children: React.ReactNode }) {
+const demoPages = [
+  { id: '1', title: 'Product overview', path: '/fixtures/1', file: 'fixtures/1-plain-static.tsx' },
+  { id: '2', title: 'Feature section', path: '/fixtures/2', file: 'fixtures/2-several-utilities.tsx' },
+  { id: '3', title: 'Pricing panel', path: '/fixtures/3', file: 'fixtures/3-conditional-cn.tsx' },
+  { id: '4', title: 'Customer cards', path: '/fixtures/4', file: 'fixtures/4-shared-component.tsx' },
+  { id: '5', title: 'Responsive layout', path: '/fixtures/5', file: 'fixtures/5-responsive-classes.tsx' },
+];
+
+type Viewport = 'desktop' | 'tablet' | 'mobile';
+
+export function StudioLayout({ children, projectName = 'SlightNudge Playground', activeFile, inspectorEnabled = true, previewConnected = false }: { children: React.ReactNode; projectName?: string; activeFile?: string; inspectorEnabled?: boolean; previewConnected?: boolean }) {
   const pathname = usePathname();
-  const [viewport, setViewport] = useState<'desktop' | 'tablet' | 'mobile'>('desktop');
+  const [viewport, setViewport] = useState<Viewport>('desktop');
+  const currentPage = demoPages.find((item) => item.path === pathname) || demoPages[0];
+  const width = viewport === 'mobile' ? 390 : viewport === 'tablet' ? 768 : 1120;
+  const selectViewport = (value: Viewport) => {
+    setViewport(value);
+    window.dispatchEvent(new CustomEvent('slightnudge:viewport', { detail: { viewport: value } }));
+  };
 
-  const navItems = [
-    { id: '1', title: '1. Plain Static', path: '/fixtures/1', file: 'fixtures/1-plain-static.tsx' },
-    { id: '2', title: '2. Multi-Utility', path: '/fixtures/2', file: 'fixtures/2-several-utilities.tsx' },
-    { id: '3', title: '3. Conditional cn()', path: '/fixtures/3', file: 'fixtures/3-conditional-cn.tsx' },
-    { id: '4', title: '4. Shared Component', path: '/fixtures/4', file: 'fixtures/4-shared-component.tsx' },
-    { id: '5', title: '5. Responsive', path: '/fixtures/5', file: 'fixtures/5-responsive-classes.tsx' },
-  ];
-
-  const viewportWidth =
-    viewport === 'mobile' ? 'max-w-[390px]' :
-    viewport === 'tablet' ? 'max-w-[768px]' : 'max-w-[1100px]';
-
-  return (
-    <div className="flex flex-col h-screen w-full bg-slate-950 text-slate-100 overflow-hidden font-sans">
-      {/* Top Studio Control Bar */}
-      <header className="h-14 border-b border-slate-800 bg-slate-900/90 backdrop-blur px-4 flex items-center justify-between z-40 shrink-0">
-        <div className="flex items-center gap-3">
-          <div className="flex items-center gap-2">
-            <span className="flex h-3 w-3 rounded-full bg-indigo-500 animate-pulse" />
-            <span className="font-extrabold text-sm tracking-wider text-white">slightnudge</span>
-            <span className="text-[10px] bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 px-1.5 py-0.5 rounded font-mono font-medium">
-              studio
-            </span>
-          </div>
-
-          <span className="text-slate-700">|</span>
-
-          {/* Project / Target Indicator */}
-          <div className="hidden sm:flex items-center gap-1.5 text-xs text-slate-400">
-            <span>Target:</span>
-            <span className="font-semibold text-slate-200">Customer SaaS App</span>
-            <span className="text-slate-600 font-mono text-[11px]">(Next.js 16 + Tailwind)</span>
-          </div>
+  return <div className="sn-editor-shell">
+    {inspectorEnabled && <SlightNudgeOverlay defaultFilePath={activeFile || currentPage?.file} />}
+    <header className="sn-editor-header">
+      <Link className="sn-editor-brand" href="/workspace" aria-label="Back to projects"><span className="sn-brand-icon"><Code2 size={17}/></span><span>SlightNudge</span></Link>
+      <span className="sn-editor-divider"/>
+      <div className="sn-editor-project"><Link href="/workspace" aria-label="Back to projects"><ArrowLeft size={15}/></Link><div><strong>{projectName}</strong><span>{inspectorEnabled ? 'Local playground' : 'Imported project'}</span></div>{inspectorEnabled && <ChevronDown size={14}/>}</div>
+      <div className="sn-editor-header-right"><span className="sn-save-state"><Check size={14}/> {inspectorEnabled ? 'Local source · no commit created' : 'Repository files · read only'}</span><Link className="sn-editor-add-repo" href="/workspace">Projects <ArrowUpRight size={14}/></Link></div>
+    </header>
+    <div className="sn-editor-toolbar">
+      <div className="sn-breadcrumb"><span>{projectName}</span><span>/</span><strong>{inspectorEnabled ? currentPage.title : 'Source files'}</strong></div>
+      {(inspectorEnabled || previewConnected) && <div className="sn-editor-controls">
+        <div className="sn-viewport-control" role="group" aria-label="Preview viewport">
+          <button type="button" aria-label="Desktop preview" title="Desktop" aria-pressed={viewport === 'desktop'} onClick={() => selectViewport('desktop')}><Laptop2 size={16}/></button>
+          <button type="button" aria-label="Tablet preview" title="Tablet" aria-pressed={viewport === 'tablet'} onClick={() => selectViewport('tablet')}><Tablet size={16}/></button>
+          <button type="button" aria-label="Mobile preview" title="Mobile" aria-pressed={viewport === 'mobile'} onClick={() => selectViewport('mobile')}><Smartphone size={16}/></button>
         </div>
-
-        {/* Page / Fixture Switcher Tabs */}
-        <nav className="flex items-center gap-1 bg-slate-950 border border-slate-800 p-1 rounded-lg">
-          {navItems.map((item) => {
-            const isActive = pathname === item.path;
-            return (
-              <Link
-                key={item.id}
-                href={item.path}
-                className={`px-2.5 py-1 text-xs font-medium rounded-md transition ${
-                  isActive
-                    ? 'bg-indigo-600 text-white shadow-sm'
-                    : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900'
-                }`}
-              >
-                {item.title}
-              </Link>
-            );
-          })}
-        </nav>
-
-        {/* Viewport & Actions Controls */}
-        <div className="flex items-center gap-2">
-          {/* Viewport Switcher */}
-          <div className="hidden md:flex items-center bg-slate-950 border border-slate-800 rounded-lg p-0.5 text-xs">
-            <button
-              onClick={() => setViewport('desktop')}
-              className={`px-2 py-1 rounded transition ${
-                viewport === 'desktop' ? 'bg-slate-800 text-white font-semibold' : 'text-slate-400 hover:text-white'
-              }`}
-            >
-              Desktop
-            </button>
-            <button
-              onClick={() => setViewport('tablet')}
-              className={`px-2 py-1 rounded transition ${
-                viewport === 'tablet' ? 'bg-slate-800 text-white font-semibold' : 'text-slate-400 hover:text-white'
-              }`}
-            >
-              Tablet
-            </button>
-            <button
-              onClick={() => setViewport('mobile')}
-              className={`px-2 py-1 rounded transition ${
-                viewport === 'mobile' ? 'bg-slate-800 text-white font-semibold' : 'text-slate-400 hover:text-white'
-              }`}
-            >
-              Mobile
-            </button>
-          </div>
-
-          {/* Git Branch Badge */}
-          <div className="hidden lg:flex items-center gap-1.5 px-2.5 py-1 bg-emerald-950/60 border border-emerald-700/50 rounded-md text-[11px] text-emerald-300 font-mono">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-            <span>git: slightnudge</span>
-          </div>
-        </div>
-      </header>
-
-      {/* Main Studio Canvas Area */}
-      <div className="flex-1 flex overflow-hidden relative bg-[radial-gradient(#1e293b_1px,transparent_1px)] [background-size:20px_20px] bg-slate-950">
-        {/* Central Workspace / Framed Preview Window */}
-        <main className="flex-1 overflow-auto p-6 md:p-10 flex flex-col items-center justify-start">
-          <div className={`w-full ${viewportWidth} transition-all duration-200 rounded-xl border border-slate-800 bg-slate-900 shadow-2xl overflow-hidden`}>
-            {/* macOS Chrome Browser Title Bar */}
-            <div className="h-9 bg-slate-900/90 border-b border-slate-800/80 px-3 flex items-center gap-2">
-              <div className="flex items-center gap-1.5">
-                <div className="w-2.5 h-2.5 rounded-full bg-red-500/80" />
-                <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/80" />
-                <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/80" />
-              </div>
-              <div className="mx-auto flex-1 max-w-sm px-3 py-0.5 bg-slate-950/80 border border-slate-800/80 rounded-md text-[11px] text-slate-400 font-mono text-center truncate">
-                https://app.customer-saas.com{pathname}
-              </div>
-              <div className="text-[10px] text-slate-500 font-mono">100%</div>
-            </div>
-
-            {/* Target Webpage Canvas Container */}
-            <div id="slightnudge-canvas-viewport" className="p-6 md:p-8 bg-slate-950/50 min-h-[480px]">
-              {children}
-            </div>
-          </div>
-        </main>
-      </div>
+        {inspectorEnabled && <button type="button" className="sn-undo-button" title="Undo last visual edit (Ctrl+Z)" onClick={() => window.dispatchEvent(new Event('slightnudge:undo'))}><Undo2 size={15}/><span>Undo</span></button>}
+      </div>}
     </div>
-  );
+    <div className={`sn-editor-body ${inspectorEnabled ? '' : 'sn-readonly-repository'}`}>
+      <aside className="sn-page-sidebar">
+        {inspectorEnabled ? <><div className="sn-sidebar-heading"><span>PAGES</span><button type="button" disabled title="Page management is not available in the playground yet">+</button></div>
+        <nav aria-label="Demo pages">{demoPages.map((page) => <Link className={page.path === pathname ? 'is-active' : ''} href={page.path} key={page.id}><span className="sn-page-glyph">{page.id}</span><span>{page.title}</span></Link>)}</nav></> : <div className="sn-sidebar-heading"><span>REPOSITORY</span></div>}
+        <div className="sn-file-location"><span className="sn-sidebar-heading">SOURCE</span><div><Code2 size={14}/><span>{activeFile || currentPage.file}</span></div><p>{inspectorEnabled ? 'Changes are written to this local source file.' : 'Source inspection only. Files stay unchanged.'}</p></div>
+        <Link href="/workspace" className="sn-sidebar-back"><ArrowLeft size={15}/> All projects</Link>
+      </aside>
+      <main className={`sn-canvas-area ${inspectorEnabled ? '' : 'sn-canvas-no-inspector'}`}>
+        <div className="sn-canvas-note"><span><PanelRight size={15}/> {inspectorEnabled ? 'Select an element to inspect it' : 'Repository source inspection'}</span><span>{inspectorEnabled ? <>Preview width <strong>{width}px</strong></> : 'Read-only'}</span></div>
+        <div className="sn-canvas-stage"><div className={`sn-preview-frame sn-preview-${viewport}`} style={{ width: `min(${width}px, 100%)` }}><div className="sn-preview-topline"><span className="sn-preview-origin"><span className="sn-lock-mark">⌑</span> {inspectorEnabled ? `playground.slightnudge.local${pathname}` : `${projectName} · source`}</span>{inspectorEnabled && <span>100%</span>}</div><div className="sn-preview-content">{children}</div></div></div>
+      </main>
+    </div>
+  </div>;
 }
