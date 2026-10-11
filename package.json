@@ -15,6 +15,7 @@
     "test:fixtures": "tsx test/fixtures.test.ts",
     "test:step1": "tsx test/step1-selection.test.ts",
     "test:step2": "tsx test/step2-nudging.test.ts",
+    "test:step3": "tsx test/step3-file-git.test.ts",
     "spike": "tsx spikes/phase1-spike.ts"
   },
   "keywords": [],

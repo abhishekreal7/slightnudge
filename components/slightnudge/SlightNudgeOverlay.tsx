@@ -23,7 +23,6 @@ export function SlightNudgeOverlay() {
   const [warningPulse, setWarningPulse] = useState(false);
   const selectedNodeRef = useRef<HTMLElement | null>(null);
 
-  // Fallback map based on fixture routes
   const routeFixtureMap: Record<string, { file: string; line: number }> = {
     '/fixtures/1': { file: 'fixtures/1-plain-static.tsx', line: 7 },
     '/fixtures/2': { file: 'fixtures/2-several-utilities.tsx', line: 7 },
@@ -85,7 +84,6 @@ export function SlightNudgeOverlay() {
     };
   }, []);
 
-  // Handle pointer interactions
   useEffect(() => {
     if (!active) return;
 
@@ -168,11 +166,48 @@ export function SlightNudgeOverlay() {
       }
     };
 
-    const handleKeyDown = (e: KeyboardEvent) => {
+    const handleKeyDown = async (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         setSelected(null);
         selectedNodeRef.current = null;
         setNudgeNotice(null);
+        return;
+      }
+
+      // Handle Ctrl+Z / Cmd+Z Undo
+      if ((e.ctrlKey || e.metaKey) && (e.key === 'z' || e.key === 'Z')) {
+        e.preventDefault();
+        try {
+          const res = await fetch('/api/slightnudge/undo', { method: 'POST' });
+          const data = await res.json();
+          if (data.success) {
+            setNudgeNotice(`↩️ Undo: ${data.commitHash}`);
+            // Re-sync element by re-inspecting
+            if (selectedNodeRef.current && selected) {
+              const inspectRes = await fetch('/api/slightnudge/inspect', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  filePath: selected.filePath,
+                  line: Number(selected.line),
+                  elementId: selectedNodeRef.current.id || undefined,
+                }),
+              });
+              const inspectData = await inspectRes.json();
+              if (inspectData.className) {
+                selectedNodeRef.current.className = inspectData.className;
+                setSelected((prev) =>
+                  prev ? { ...prev, className: inspectData.className } : null
+                );
+                requestAnimationFrame(() => updateSelectedRect());
+              }
+            }
+          } else {
+            setNudgeNotice(data.error || 'Nothing to undo');
+          }
+        } catch (err) {
+          console.error('[slightnudge] undo failed:', err);
+        }
         return;
       }
 
@@ -183,7 +218,7 @@ export function SlightNudgeOverlay() {
 
       e.preventDefault();
 
-      // Safety Guard: if marked unsafe, refuse to edit!
+      // Safety check: if marked unsafe, refuse!
       if (selected.safeToEdit === false) {
         setWarningPulse(true);
         setNudgeNotice("⚠️ Can't edit this safely");
@@ -197,39 +232,57 @@ export function SlightNudgeOverlay() {
         e.key === 'ArrowDown' ? 'down' : 'up';
 
       const stepSize = e.shiftKey ? 'big' : 'normal';
+      const prevClass = selected.className;
 
-      // Nudge class computation
+      // Optimistic local update
       const nudge = computeNudgedClass({
-        currentClassName: selected.className,
+        currentClassName: prevClass,
         direction,
         stepSize,
       });
 
-      // Update DOM element directly
       selectedNodeRef.current.className = nudge.newClassName;
-
-      // Update state
       setSelected((prev) =>
-        prev
-          ? {
-              ...prev,
-              className: nudge.newClassName,
-            }
-          : null
+        prev ? { ...prev, className: nudge.newClassName } : null
       );
+      requestAnimationFrame(() => updateSelectedRect());
 
-      const arrowSymbol =
-        direction === 'right' ? '→' :
-        direction === 'left' ? '←' :
-        direction === 'down' ? '↓' : '↑';
+      // Persist to source code file via AST & Git commit
+      try {
+        const res = await fetch('/api/slightnudge/nudge', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            filePath: selected.filePath,
+            line: selected.line ? Number(selected.line) : undefined,
+            elementId: selected.id || undefined,
+            direction,
+            stepSize,
+          }),
+        });
+        const data = await res.json();
 
-      const notice = `${arrowSymbol} ${stepSize === 'big' ? '+4 steps (Shift)' : '+1 step'} [${nudge.newClass}]`;
-      setNudgeNotice(notice);
+        if (data.success) {
+          const arrowSymbol =
+            direction === 'right' ? '→' :
+            direction === 'left' ? '←' :
+            direction === 'down' ? '↓' : '↑';
 
-      // Re-measure bounding box
-      requestAnimationFrame(() => {
-        updateSelectedRect();
-      });
+          const notice = `${arrowSymbol} [${data.newClass}] • committed ${data.commitHash}`;
+          setNudgeNotice(notice);
+        } else {
+          // Revert optimistic update if backend refused
+          if (selectedNodeRef.current) selectedNodeRef.current.className = prevClass;
+          setSelected((prev) =>
+            prev ? { ...prev, className: prevClass, safeToEdit: false, refusalReason: data.reason } : null
+          );
+          setWarningPulse(true);
+          setNudgeNotice(`⚠️ ${data.reason || "Can't edit safely"}`);
+          setTimeout(() => setWarningPulse(false), 1200);
+        }
+      } catch (err: any) {
+        console.error('[slightnudge] nudge api failed:', err);
+      }
     };
 
     document.addEventListener('mouseover', handlePointerOver, true);
@@ -251,6 +304,8 @@ export function SlightNudgeOverlay() {
       <div className="fixed bottom-4 right-4 pointer-events-auto z-50 flex items-center gap-2 px-3 py-1.5 bg-slate-900/90 text-white rounded-full shadow-lg border border-slate-700/60 backdrop-blur-md text-xs font-medium">
         <span className="flex h-2 w-2 rounded-full bg-indigo-400 animate-pulse" />
         <span className="font-semibold tracking-wide text-indigo-300">slightnudge</span>
+        <span className="text-slate-400">|</span>
+        <span className="text-[11px] text-slate-300">Arrows to nudge • Shift for big • Ctrl+Z undo</span>
         <span className="text-slate-400">|</span>
         <button
           id="slightnudge-toggle"
@@ -285,7 +340,7 @@ export function SlightNudgeOverlay() {
         />
       )}
 
-      {/* Selected Element Bounding Box (AutoCAD / Figma style) */}
+      {/* Selected Element Bounding Box */}
       {selected && (
         <div
           id="slightnudge-selected-box"
@@ -311,7 +366,7 @@ export function SlightNudgeOverlay() {
           <div className="absolute -bottom-1.5 -left-1.5 w-3 h-3 bg-white border-2 border-indigo-600 rounded-sm" />
           <div className="absolute -bottom-1.5 -right-1.5 w-3 h-3 bg-white border-2 border-indigo-600 rounded-sm" />
 
-          {/* Floating Info Pill / Source Inspector Badge */}
+          {/* Floating Info Pill */}
           <div
             id="slightnudge-info-badge"
             className="absolute -top-9 left-0 pointer-events-auto bg-slate-900 text-white text-xs px-2.5 py-1 rounded-md shadow-md border border-slate-700 flex items-center gap-2 whitespace-nowrap z-50"
@@ -334,11 +389,11 @@ export function SlightNudgeOverlay() {
               </>
             )}
 
-            {/* Nudge Notice Indicator */}
+            {/* Live Commit / Nudge Notice */}
             {nudgeNotice && (
               <span
                 id="slightnudge-nudge-notice"
-                className="bg-indigo-900/90 text-indigo-200 border border-indigo-500/50 px-1.5 py-0.5 rounded text-[11px] font-mono animate-fade"
+                className="bg-indigo-900/90 text-indigo-200 border border-indigo-500/50 px-1.5 py-0.5 rounded text-[11px] font-mono"
               >
                 {nudgeNotice}
               </span>
@@ -355,12 +410,12 @@ export function SlightNudgeOverlay() {
                 ⚠️ {selected.refusalReason || "can't edit this safely"}
               </span>
             )}
-            {selected.safeToEdit === true && (
+            {selected.safeToEdit === true && !nudgeNotice && (
               <span
                 id="slightnudge-safety-ok"
                 className="bg-emerald-950/80 text-emerald-300 border border-emerald-600/50 px-1.5 py-0.5 rounded text-[10px]"
               >
-                ✓ safe to nudge (arrow keys)
+                ✓ safe to nudge
               </span>
             )}
             {loadingInspection && (
