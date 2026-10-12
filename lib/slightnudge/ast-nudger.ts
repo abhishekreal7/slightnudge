@@ -808,7 +808,10 @@ export interface ReorderOptions {
   line?: number;
   column?: number;
   elementId?: string;
-  direction: 'earlier' | 'later';
+  tagName?: string;
+  className?: string;
+  direction?: 'earlier' | 'later' | 'top' | 'bottom';
+  targetIndex?: number;
   dryRun?: boolean;
 }
 
@@ -845,7 +848,42 @@ export function reorderElement(options: ReorderOptions): ReorderResult {
     });
   }
   if (!targetElement && line !== undefined) {
-    targetElement = elements.find((el) => el.getStartLineNumber() === line);
+    const matchingLine = elements.filter((el) => el.getStartLineNumber() === line);
+    if (matchingLine.length === 1) {
+      targetElement = matchingLine[0];
+    } else if (matchingLine.length > 1) {
+      if (options.tagName && options.className) {
+        targetElement = matchingLine.find((el) => {
+          const name = el.getTagNameNode().getText().toLowerCase();
+          if (name !== options.tagName?.toLowerCase()) return false;
+          const cls = el.getAttribute('className');
+          if (cls && Node.isJsxAttribute(cls) && cls.getInitializer() && Node.isStringLiteral(cls.getInitializer()!)) {
+            const val = (cls.getInitializer() as StringLiteral).getLiteralValue();
+            return val.split(/\s+/).some((t) => options.className?.split(/\s+/).includes(t));
+          }
+          return false;
+        });
+      }
+      if (!targetElement && options.className) {
+        targetElement = matchingLine.find((el) => {
+          const cls = el.getAttribute('className');
+          if (cls && Node.isJsxAttribute(cls) && cls.getInitializer() && Node.isStringLiteral(cls.getInitializer()!)) {
+            const val = (cls.getInitializer() as StringLiteral).getLiteralValue();
+            return val.split(/\s+/).some((t) => options.className?.split(/\s+/).includes(t));
+          }
+          return false;
+        });
+      }
+      if (!targetElement && options.tagName) {
+        targetElement = matchingLine.find((el) => {
+          const name = el.getTagNameNode().getText().toLowerCase();
+          return name === options.tagName?.toLowerCase();
+        });
+      }
+      if (!targetElement) {
+        targetElement = matchingLine[0];
+      }
+    }
   }
 
   if (!targetElement) {
@@ -878,34 +916,48 @@ export function reorderElement(options: ReorderOptions): ReorderResult {
     return { success: false, refusedSafely: true, reason: 'Could not find element in parent child list.', filePath };
   }
 
-  if (direction === 'earlier') {
-    if (targetIdx === 0) {
-      return { success: false, refusedSafely: true, reason: 'This element is already the first child in its container.', filePath };
-    }
-  } else {
-    if (targetIdx === elementChildren.length - 1) {
-      return { success: false, refusedSafely: true, reason: 'This element is already the last child in its container.', filePath };
-    }
+  let destIdx = targetIdx;
+  if (options.targetIndex !== undefined) {
+    destIdx = Math.max(0, Math.min(elementChildren.length - 1, options.targetIndex));
+  } else if (direction === 'top') {
+    destIdx = 0;
+  } else if (direction === 'bottom') {
+    destIdx = elementChildren.length - 1;
+  } else if (direction === 'earlier') {
+    destIdx = targetIdx - 1;
+  } else if (direction === 'later') {
+    destIdx = targetIdx + 1;
   }
 
-  const siblingIdx = direction === 'earlier' ? targetIdx - 1 : targetIdx + 1;
-  const siblingNode = elementChildren[siblingIdx];
+  if (destIdx === targetIdx) {
+    const reason =
+      destIdx === 0
+        ? 'This element is already the first child in its container.'
+        : destIdx === elementChildren.length - 1
+        ? 'This element is already the last child in its container.'
+        : 'This element is already at that position.';
+    return { success: false, refusedSafely: true, reason, filePath, line: targetLine };
+  }
 
-  const siblingOpening = Node.isJsxElement(siblingNode) ? siblingNode.getOpeningElement() : siblingNode;
-  if (isElementInsideLoop(siblingOpening)) {
+  if (destIdx < 0 || destIdx >= elementChildren.length) {
+    return { success: false, refusedSafely: true, reason: 'Target position is out of range.', filePath, line: targetLine };
+  }
+
+  const destNode = elementChildren[destIdx];
+  const destOpening = Node.isJsxElement(destNode) ? destNode.getOpeningElement() : destNode;
+  if (isElementInsideLoop(destOpening)) {
     return { success: false, refusedSafely: true, reason: "Adjacent element repeats from a list and cannot be swapped.", filePath };
   }
 
   const originalSource = sourceFile.getFullText();
 
-  const firstNode = fullTargetNode.getStart() < siblingNode.getStart() ? fullTargetNode : siblingNode;
-  const secondNode = fullTargetNode.getStart() < siblingNode.getStart() ? siblingNode : fullTargetNode;
+  const texts = elementChildren.map((c) => c.getText());
+  const [movedItem] = texts.splice(targetIdx, 1);
+  texts.splice(destIdx, 0, movedItem);
 
-  const firstText = firstNode.getText();
-  const secondText = secondNode.getText();
-
-  secondNode.replaceWithText(firstText);
-  firstNode.replaceWithText(secondText);
+  elementChildren.forEach((child, i) => {
+    child.replaceWithText(texts[i]);
+  });
 
   const updatedSource = sourceFile.getFullText();
   if (!dryRun) sourceFile.saveSync();
@@ -1060,15 +1112,17 @@ export function updateStaticTailwindClass(options: { filePath: string; line?: nu
 
   const original = literal.getLiteralValue();
   const originalSource = sourceFile.getFullText();
-  const tokens = original.split(/\s+/).filter(Boolean);
   const prefix = breakpoint ? `${breakpoint}:` : '';
+  const tokens = original.split(/\s+/).filter(Boolean);
   const index = tokens.findIndex((token) => token.startsWith(prefix) && rule.pattern.test(token.slice(prefix.length)));
   const nextToken = `${prefix}${value}`;
+  const oldToken = index >= 0 ? tokens[index] : '';
+  const newToken = nextToken;
   if (index >= 0) tokens[index] = nextToken;
   else tokens.push(nextToken);
   const updated = tokens.join(' ');
   literal.setLiteralValue(updated);
   const updatedSource = sourceFile.getFullText();
   if (!dryRun) sourceFile.saveSync();
-  return { success: true as const, oldClassName: original, newClassName: updated, filePath, line: target.getStartLineNumber(), updatedSource: dryRun ? updatedSource : undefined, originalSource: dryRun ? originalSource : undefined };
+  return { success: true as const, oldClassName: original, newClassName: updated, oldToken, newToken, filePath, line: target.getStartLineNumber(), updatedSource: dryRun ? updatedSource : undefined, originalSource: dryRun ? originalSource : undefined };
 }
