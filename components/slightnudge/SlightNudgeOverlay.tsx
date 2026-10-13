@@ -511,6 +511,7 @@ export function SlightNudgeOverlay({ defaultFilePath }: { defaultFilePath?: stri
       }
       originalStyleRef.current = selectedNodeRef.current?.getAttribute('style') || '';
       setPendingEdit(null);
+      setCanUndo(true);
       setNotice(`${result.message} Further tweaks to this selection will undo together.`);
       animateSelectionRect(260);
     } catch (error) {
@@ -660,7 +661,7 @@ export function SlightNudgeOverlay({ defaultFilePath }: { defaultFilePath?: stri
     try {
       const response = await fetch('/api/slightnudge/undo', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ filePath: selected?.filePath }),
+        body: JSON.stringify({ filePath: selected?.filePath || defaultFilePath }),
       });
       const result = await response.json();
       if (!response.ok || !result.success) throw new Error(result.error || 'There is no visual edit to undo.');
@@ -670,7 +671,7 @@ export function SlightNudgeOverlay({ defaultFilePath }: { defaultFilePath?: stri
       if (selectedNodeRef.current && selected) await inspect(selectedNodeRef.current, selected);
     } catch (error) { setNotice(error instanceof Error ? error.message : 'Could not undo this edit.'); }
     finally { setBusy(false); }
-  }, [discardPreview, inspect, pendingEdit, selected]);
+  }, [defaultFilePath, discardPreview, inspect, pendingEdit, selected]);
 
   useEffect(() => {
     const onResizeOrScroll = () => updateSelectedRect();
