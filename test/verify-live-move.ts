@@ -30,8 +30,8 @@ async function main() {
   await page.mouse.move(moveBox.x + moveBox.width / 2, moveBox.y + moveBox.height / 2);
   await page.mouse.down();
 
-  // Move down by 60px (towards primary CTA sibling)
-  await page.mouse.move(moveBox.x + moveBox.width / 2, moveBox.y + moveBox.height / 2 + 60);
+  // Move down by 100px (towards primary CTA sibling)
+  await page.mouse.move(moveBox.x + moveBox.width / 2, moveBox.y + moveBox.height / 2 + 100);
   await page.waitForTimeout(200);
 
   const validSwapState = await page.evaluate(() => {

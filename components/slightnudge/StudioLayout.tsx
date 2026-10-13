@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { ArrowLeft, ArrowUpRight, Check, ChevronDown, Code2, Columns2, Laptop2, PanelRight, Smartphone, Tablet, Undo2 } from 'lucide-react';
+import { ArrowLeft, ArrowUpRight, Check, ChevronDown, Code2, Laptop2, PanelRight, Smartphone, Tablet, Undo2 } from 'lucide-react';
 import { SlightNudgeOverlay } from './SlightNudgeOverlay';
 
 const demoPages = [
@@ -19,6 +19,7 @@ type Viewport = 'desktop' | 'tablet' | 'mobile';
 export function StudioLayout({ children, projectName = 'SlightNudge Playground', activeFile, inspectorEnabled = true, previewConnected = false }: { children: React.ReactNode; projectName?: string; activeFile?: string; inspectorEnabled?: boolean; previewConnected?: boolean }) {
   const pathname = usePathname();
   const [viewport, setViewport] = useState<Viewport>('desktop');
+  const [zoom, setZoom] = useState<number>(100);
   const currentPage = demoPages.find((item) => item.path === pathname) || demoPages[0];
   const width = viewport === 'mobile' ? 390 : viewport === 'tablet' ? 768 : 1120;
   const selectViewport = (value: Viewport) => {
@@ -27,7 +28,7 @@ export function StudioLayout({ children, projectName = 'SlightNudge Playground',
   };
 
   return <div className="sn-editor-shell">
-    {inspectorEnabled && <SlightNudgeOverlay defaultFilePath={activeFile || currentPage?.file} />}
+    {inspectorEnabled && <SlightNudgeOverlay defaultFilePath={activeFile || currentPage?.file} zoom={zoom} />}
     <header className="sn-editor-header">
       <Link className="sn-editor-brand" href="/workspace" aria-label="Back to projects"><span className="sn-brand-icon"><Code2 size={17}/></span><span>SlightNudge</span></Link>
       <span className="sn-editor-divider"/>
@@ -42,6 +43,11 @@ export function StudioLayout({ children, projectName = 'SlightNudge Playground',
           <button type="button" aria-label="Tablet preview" title="Tablet" aria-pressed={viewport === 'tablet'} onClick={() => selectViewport('tablet')}><Tablet size={16}/></button>
           <button type="button" aria-label="Mobile preview" title="Mobile" aria-pressed={viewport === 'mobile'} onClick={() => selectViewport('mobile')}><Smartphone size={16}/></button>
         </div>
+        <div className="sn-zoom-control" role="group" aria-label="Canvas zoom">
+          <button type="button" className="sn-zoom-btn" title="Zoom out" aria-label="Zoom out" disabled={zoom <= 50} onClick={() => setZoom((z) => Math.max(50, z - 10))}>−</button>
+          <button type="button" className="sn-zoom-val" title="Reset zoom (100%)" aria-label="Reset zoom" onClick={() => setZoom(100)}>{zoom}%</button>
+          <button type="button" className="sn-zoom-btn" title="Zoom in" aria-label="Zoom in" disabled={zoom >= 150} onClick={() => setZoom((z) => Math.min(150, z + 10))}>+</button>
+        </div>
         {inspectorEnabled && <button type="button" className="sn-undo-button" title="Undo last visual edit (Ctrl+Z)" onClick={() => window.dispatchEvent(new Event('slightnudge:undo'))}><Undo2 size={15}/><span>Undo</span></button>}
       </div>}
     </div>
@@ -54,7 +60,20 @@ export function StudioLayout({ children, projectName = 'SlightNudge Playground',
       </aside>
       <main className={`sn-canvas-area ${inspectorEnabled ? '' : 'sn-canvas-no-inspector'}`}>
         <div className="sn-canvas-note"><span><PanelRight size={15}/> {inspectorEnabled ? 'Select an element to inspect it' : 'Repository source inspection'}</span><span>{inspectorEnabled ? <>Preview width <strong>{width}px</strong></> : 'Read-only'}</span></div>
-        <div className="sn-canvas-stage"><div className={`sn-preview-frame sn-preview-${viewport}`} style={{ width: `min(${width}px, 100%)` }}><div className="sn-preview-topline"><span className="sn-preview-origin"><span className="sn-lock-mark">⌑</span> {inspectorEnabled ? `playground.slightnudge.local${pathname}` : `${projectName} · source`}</span>{inspectorEnabled && <span>100%</span>}</div><div className="sn-preview-content">{children}</div></div></div>
+        <div className="sn-canvas-stage">
+          <div
+            className={`sn-preview-frame sn-preview-${viewport}`}
+            style={{
+              width: `min(${width}px, 100%)`,
+              transform: zoom !== 100 ? `scale(${zoom / 100})` : undefined,
+              transformOrigin: 'top center',
+              transition: 'width 0.25s var(--ease), transform 0.16s ease',
+            }}
+          >
+            <div className="sn-preview-topline"><span className="sn-preview-origin"><span className="sn-lock-mark">⌑</span> {inspectorEnabled ? `playground.slightnudge.local${pathname}` : `${projectName} · source`}</span>{inspectorEnabled && <span>{zoom}%</span>}</div>
+            <div className="sn-preview-content">{children}</div>
+          </div>
+        </div>
       </main>
     </div>
   </div>;

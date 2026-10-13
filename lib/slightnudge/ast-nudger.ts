@@ -808,7 +808,10 @@ export interface ReorderOptions {
   line?: number;
   column?: number;
   elementId?: string;
-  direction: 'earlier' | 'later';
+  tagName?: string;
+  className?: string;
+  direction?: 'earlier' | 'later' | 'top' | 'bottom';
+  targetIndex?: number;
   dryRun?: boolean;
 }
 
@@ -838,14 +841,29 @@ export function reorderElement(options: ReorderOptions): ReorderResult {
       return idAttr && Node.isJsxAttribute(idAttr) && idAttr.getInitializer() && Node.isStringLiteral(idAttr.getInitializer()!) && (idAttr.getInitializer() as StringLiteral).getLiteralValue() === elementId;
     });
   }
-  if (!targetElement && column !== undefined) {
-    targetElement = elements.find((el) => {
-      const pos = sourceFile.getLineAndColumnAtPos(el.getStart());
-      return pos.line === line && pos.column === column;
-    });
-  }
   if (!targetElement && line !== undefined) {
-    targetElement = elements.find((el) => el.getStartLineNumber() === line);
+    const matchingLine = elements.filter((el) => el.getStartLineNumber() === line);
+    if (matchingLine.length === 1) {
+      if (!options.tagName || matchingLine[0].getTagNameNode().getText().toLowerCase() === options.tagName.toLowerCase()) {
+        targetElement = matchingLine[0];
+      }
+    } else if (matchingLine.length > 1) {
+      if (column !== undefined && options.tagName) {
+        targetElement = matchingLine.find((el) => {
+          const pos = sourceFile.getLineAndColumnAtPos(el.getStart());
+          return pos.column === column && el.getTagNameNode().getText().toLowerCase() === options.tagName!.toLowerCase();
+        });
+      }
+      if (!targetElement) {
+        return {
+          success: false,
+          refusedSafely: true,
+          reason: "I can't tell which element on this line you mean. Nothing was changed.",
+          filePath,
+          line,
+        };
+      }
+    }
   }
 
   if (!targetElement) {
@@ -878,34 +896,100 @@ export function reorderElement(options: ReorderOptions): ReorderResult {
     return { success: false, refusedSafely: true, reason: 'Could not find element in parent child list.', filePath };
   }
 
-  if (direction === 'earlier') {
-    if (targetIdx === 0) {
-      return { success: false, refusedSafely: true, reason: 'This element is already the first child in its container.', filePath };
-    }
-  } else {
-    if (targetIdx === elementChildren.length - 1) {
-      return { success: false, refusedSafely: true, reason: 'This element is already the last child in its container.', filePath };
-    }
+  let destIdx = targetIdx;
+  if (options.targetIndex !== undefined) {
+    destIdx = Math.max(0, Math.min(elementChildren.length - 1, options.targetIndex));
+  } else if (direction === 'top') {
+    destIdx = 0;
+  } else if (direction === 'bottom') {
+    destIdx = elementChildren.length - 1;
+  } else if (direction === 'earlier') {
+    destIdx = targetIdx - 1;
+  } else if (direction === 'later') {
+    destIdx = targetIdx + 1;
   }
 
-  const siblingIdx = direction === 'earlier' ? targetIdx - 1 : targetIdx + 1;
-  const siblingNode = elementChildren[siblingIdx];
+  if (destIdx === targetIdx) {
+    const reason =
+      destIdx === 0
+        ? 'This element is already the first child in its container.'
+        : destIdx === elementChildren.length - 1
+        ? 'This element is already the last child in its container.'
+        : 'This element is already at that position.';
+    return { success: false, refusedSafely: true, reason, filePath, line: targetLine };
+  }
 
-  const siblingOpening = Node.isJsxElement(siblingNode) ? siblingNode.getOpeningElement() : siblingNode;
-  if (isElementInsideLoop(siblingOpening)) {
-    return { success: false, refusedSafely: true, reason: "Adjacent element repeats from a list and cannot be swapped.", filePath };
+  if (destIdx < 0 || destIdx >= elementChildren.length) {
+    return { success: false, refusedSafely: true, reason: 'Target position is out of range.', filePath, line: targetLine };
+  }
+
+  const destNode = elementChildren[destIdx];
+
+  // Multi-slot reorder safety: inspect moved element and all siblings/children between source and destination
+  const rawTargetIdx = allChildren.indexOf(fullTargetNode);
+  const rawDestIdx = allChildren.indexOf(destNode);
+  const minRaw = Math.min(rawTargetIdx, rawDestIdx);
+  const maxRaw = Math.max(rawTargetIdx, rawDestIdx);
+
+  const isDynamicOrUnsafe = (node: Node): { unsafe: boolean; reason?: string } => {
+    if (Node.isJsxExpression(node)) {
+      const expr = node.getExpression();
+      if (expr) {
+        return { unsafe: true, reason: 'Adjacent element repeats from a list and cannot be swapped.' };
+      }
+    }
+    if (Node.isJsxText(node) && !node.containsOnlyTriviaWhiteSpaces()) {
+      return { unsafe: true, reason: 'Cannot reorder across text content.' };
+    }
+    const opening = Node.isJsxElement(node) ? node.getOpeningElement() : node;
+    if (isElementInsideLoop(opening)) {
+      return { unsafe: true, reason: 'Adjacent element repeats from a list and cannot be swapped.' };
+    }
+    const descendants = node.getDescendants();
+    const hasLoop = descendants.some((d) => {
+      if (Node.isCallExpression(d)) {
+        const callExpr = d.getExpression();
+        if (Node.isPropertyAccessExpression(callExpr)) {
+          return ['map', 'flatMap', 'forEach', 'filter', 'reduce'].includes(callExpr.getName());
+        }
+      }
+      return Node.isForStatement(d) || Node.isForOfStatement(d) || Node.isForInStatement(d) || Node.isWhileStatement(d);
+    });
+    if (hasLoop) {
+      return { unsafe: true, reason: 'Adjacent element repeats from a list and cannot be swapped.' };
+    }
+    const hasConditional = descendants.some((d) => {
+      return (
+        Node.isConditionalExpression(d) ||
+        (Node.isBinaryExpression(d) && ['&&', '||', '??'].includes(d.getOperatorToken().getText())) ||
+        Node.isIfStatement(d)
+      );
+    });
+    if (hasConditional) {
+      return { unsafe: true, reason: 'Cannot reorder across conditional elements.' };
+    }
+    return { unsafe: false };
+  };
+
+  for (let r = minRaw; r <= maxRaw; r++) {
+    const child = allChildren[r];
+    const check = isDynamicOrUnsafe(child);
+    if (check.unsafe) {
+      return { success: false, refusedSafely: true, reason: check.reason || 'Cannot reorder across dynamic or conditional content.', filePath, line: targetLine };
+    }
   }
 
   const originalSource = sourceFile.getFullText();
 
-  const firstNode = fullTargetNode.getStart() < siblingNode.getStart() ? fullTargetNode : siblingNode;
-  const secondNode = fullTargetNode.getStart() < siblingNode.getStart() ? siblingNode : fullTargetNode;
+  const texts = elementChildren.map((c) => c.getText());
+  const [movedItem] = texts.splice(targetIdx, 1);
+  texts.splice(destIdx, 0, movedItem);
 
-  const firstText = firstNode.getText();
-  const secondText = secondNode.getText();
-
-  secondNode.replaceWithText(firstText);
-  firstNode.replaceWithText(secondText);
+  elementChildren.forEach((child, i) => {
+    if (child.getText() !== texts[i]) {
+      child.replaceWithText(texts[i]);
+    }
+  });
 
   const updatedSource = sourceFile.getFullText();
   if (!dryRun) sourceFile.saveSync();
@@ -1060,15 +1144,17 @@ export function updateStaticTailwindClass(options: { filePath: string; line?: nu
 
   const original = literal.getLiteralValue();
   const originalSource = sourceFile.getFullText();
-  const tokens = original.split(/\s+/).filter(Boolean);
   const prefix = breakpoint ? `${breakpoint}:` : '';
+  const tokens = original.split(/\s+/).filter(Boolean);
   const index = tokens.findIndex((token) => token.startsWith(prefix) && rule.pattern.test(token.slice(prefix.length)));
   const nextToken = `${prefix}${value}`;
+  const oldToken = index >= 0 ? tokens[index] : '';
+  const newToken = nextToken;
   if (index >= 0) tokens[index] = nextToken;
   else tokens.push(nextToken);
   const updated = tokens.join(' ');
   literal.setLiteralValue(updated);
   const updatedSource = sourceFile.getFullText();
   if (!dryRun) sourceFile.saveSync();
-  return { success: true as const, oldClassName: original, newClassName: updated, filePath, line: target.getStartLineNumber(), updatedSource: dryRun ? updatedSource : undefined, originalSource: dryRun ? originalSource : undefined };
+  return { success: true as const, oldClassName: original, newClassName: updated, oldToken, newToken, filePath, line: target.getStartLineNumber(), updatedSource: dryRun ? updatedSource : undefined, originalSource: dryRun ? originalSource : undefined };
 }

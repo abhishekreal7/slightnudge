@@ -30,14 +30,27 @@ export async function POST(request: Request) {
       line: body.line ? Number(body.line) : undefined,
       column: body.column ? Number(body.column) : undefined,
       elementId: typeof body.elementId === 'string' ? body.elementId : undefined,
+      tagName: typeof body.tagName === 'string' ? body.tagName : undefined,
+      className: typeof body.className === 'string' ? body.className : undefined,
       dryRun: true,
     };
 
     if (body.kind === 'reorder') {
-      if (body.direction !== 'earlier' && body.direction !== 'later') {
-        return NextResponse.json({ error: 'Choose a valid direction: earlier or later.' }, { status: 400 });
+      const validDirections = new Set(['earlier', 'later', 'top', 'bottom']);
+      if (body.targetIndex !== undefined) {
+        if (typeof body.targetIndex !== 'number' || !Number.isInteger(body.targetIndex) || body.targetIndex < 0 || body.targetIndex > 10000) {
+          return NextResponse.json({ error: 'targetIndex must be a valid non-negative integer.' }, { status: 400 });
+        }
+      } else if (!body.direction || !validDirections.has(body.direction)) {
+        return NextResponse.json({ error: 'Choose a valid direction: top, bottom, earlier, or later.' }, { status: 400 });
       }
-      const result = reorderElement({ ...target, direction: body.direction });
+      const result = reorderElement({
+        ...target,
+        direction: body.direction,
+        targetIndex: body.targetIndex,
+        tagName: target.tagName,
+        className: target.className,
+      });
       if (!result.success || !result.updatedSource || !result.originalSource) {
         return NextResponse.json({ error: result.reason || 'This element cannot be reordered safely.' }, { status: 422 });
       }
@@ -45,7 +58,7 @@ export async function POST(request: Request) {
         filePath,
         before: result.originalSource,
         after: result.updatedSource,
-        summary: `reorder element ${body.direction}`,
+        summary: body.targetIndex !== undefined ? `reorder element to slot ${body.targetIndex}` : `reorder element ${body.direction || 'swap'}`,
         oldValue: '',
         newValue: '',
         line: result.line,
@@ -53,14 +66,15 @@ export async function POST(request: Request) {
         repositoryId,
         sourcePath,
       });
-      return NextResponse.json(preview.changed ? { ...preview, success: true } : { success: true, changed: false, message: 'Element position is already unchanged.' });
+      return NextResponse.json(preview.changed ? { ...preview, success: true, targetIndex: body.targetIndex } : { success: true, changed: false, message: 'Element position is already unchanged.' });
     }
 
     if (body.kind === 'nudge') {
       if (!allowedDirections.has(body.direction)) return NextResponse.json({ error: 'Choose a valid direction.' }, { status: 400 });
       const result = nudgeElement({ ...target, direction: body.direction, stepSize: body.stepSize === 'big' ? 'big' : 'normal', breakpoint: typeof body.breakpoint === 'string' ? body.breakpoint : '' });
       if (!result.success || !result.updatedSource || !result.originalSource) return NextResponse.json({ error: result.reason || 'This change cannot be previewed safely.' }, { status: 422 });
-      const preview = createPendingSourceEdit({ filePath, before: result.originalSource, after: result.updatedSource, summary: `move ${body.direction}`, oldValue: result.oldClassNameValue || '', newValue: result.newClassNameValue || '', line: result.line, repositoryId, sourcePath });
+      const summary = result.oldClass && result.newClass ? `${result.oldClass} → ${result.newClass}` : (result.newClass ? `none → ${result.newClass}` : `move ${body.direction}`);
+      const preview = createPendingSourceEdit({ filePath, before: result.originalSource, after: result.updatedSource, summary, oldValue: result.oldClass || result.oldClassNameValue || '', newValue: result.newClass || result.newClassNameValue || '', line: result.line, repositoryId, sourcePath });
       return NextResponse.json(preview.changed ? { ...preview, success: true } : { success: true, changed: false, message: 'That spacing value is already applied.' });
     }
 
@@ -70,7 +84,8 @@ export async function POST(request: Request) {
       if (body.breakpoint !== undefined && !['', 'sm', 'md', 'lg', 'xl', '2xl'].includes(body.breakpoint)) return NextResponse.json({ error: 'Choose a supported responsive breakpoint.' }, { status: 400 });
       const result = updateStaticTailwindClass({ ...target, property: body.property as EditableStyleProperty, value: body.value, breakpoint: typeof body.breakpoint === 'string' ? body.breakpoint : '' });
       if (!result.success || !result.updatedSource || !result.originalSource) return NextResponse.json({ error: 'This change cannot be previewed safely.' }, { status: 422 });
-      const preview = createPendingSourceEdit({ filePath, before: result.originalSource, after: result.updatedSource, summary: `update ${body.property}${body.breakpoint ? ` at ${body.breakpoint}` : ''}`, oldValue: result.oldClassName, newValue: result.newClassName, line: result.line, repositoryId, sourcePath });
+      const summary = `${result.oldToken || 'none'} → ${result.newToken}`;
+      const preview = createPendingSourceEdit({ filePath, before: result.originalSource, after: result.updatedSource, summary, oldValue: result.oldToken || result.oldClassName, newValue: result.newToken || result.newClassName, line: result.line, repositoryId, sourcePath });
       return NextResponse.json(preview.changed ? { ...preview, success: true } : { success: true, changed: false, message: 'That style is already applied.' });
     }
 
@@ -78,7 +93,10 @@ export async function POST(request: Request) {
       if (typeof body.value !== 'string') return NextResponse.json({ error: 'Enter the text you want to preview.' }, { status: 400 });
       const result = updateStaticJsxText({ ...target, value: body.value });
       if (!result.success || !result.updatedSource || !result.originalSource) return NextResponse.json({ error: result.reason || 'This text cannot be edited safely.' }, { status: 422 });
-      const preview = createPendingSourceEdit({ filePath, before: result.originalSource, after: result.updatedSource, summary: 'update text', oldValue: result.oldValue, newValue: result.newValue, line: result.line, previewType: 'textContent', repositoryId, sourcePath });
+      const oldSnippet = result.oldValue.length > 18 ? `${result.oldValue.slice(0, 16)}…` : result.oldValue;
+      const newSnippet = result.newValue.length > 18 ? `${result.newValue.slice(0, 16)}…` : result.newValue;
+      const summary = `"${oldSnippet}" → "${newSnippet}"`;
+      const preview = createPendingSourceEdit({ filePath, before: result.originalSource, after: result.updatedSource, summary, oldValue: result.oldValue, newValue: result.newValue, line: result.line, previewType: 'textContent', repositoryId, sourcePath });
       return NextResponse.json(preview.changed ? { ...preview, success: true } : { success: true, changed: false, message: 'That text is already applied.' });
     }
 

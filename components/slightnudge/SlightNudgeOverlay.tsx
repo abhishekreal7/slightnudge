@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { AlignCenter, AlignLeft, AlignRight, ArrowDown, ArrowUp, ArrowUpDown, Check, ChevronDown, CircleAlert, Columns2, GripVertical, Layers, LoaderCircle, MousePointer2, Pencil, RotateCcw, Sparkles, Type } from 'lucide-react';
+import { AlignCenter, AlignLeft, AlignRight, ArrowDown, ArrowUp, ArrowUpDown, Check, ChevronDown, ChevronsDown, ChevronsUp, CircleAlert, Code2, Columns2, GripVertical, Layers, LoaderCircle, MousePointer2, Pencil, RotateCcw, Sparkles, Type, Undo2, X } from 'lucide-react';
 
 interface SelectedElementInfo {
   tagName: string;
@@ -28,6 +28,7 @@ interface PendingEdit {
   newValue: string;
   previewType?: 'className' | 'textContent' | 'imageSource' | 'reorder';
   originalDomValue?: string;
+  targetIndex?: number;
 }
 
 function isTextElement(tagName?: string) {
@@ -304,7 +305,71 @@ function hasBreakpointClass(className: string, value: string, breakpoint: string
   return className.split(/\s+/).includes(breakpoint ? `${breakpoint}:${value}` : value);
 }
 
-export function SlightNudgeOverlay({ defaultFilePath }: { defaultFilePath?: string } = {}) {
+const fontSizePixelMap: Record<string, string> = {
+  xs: '12px',
+  sm: '14px',
+  base: '16px',
+  lg: '18px',
+  xl: '20px',
+  '2xl': '24px',
+  '3xl': '30px',
+  '4xl': '36px',
+  '5xl': '48px',
+  '6xl': '60px',
+  '7xl': '72px',
+  '8xl': '96px',
+  '9xl': '128px',
+};
+
+const spacingPixelMap: Record<string, string> = {
+  '0': '0px',
+  '0.5': '2px',
+  '1': '4px',
+  '1.5': '6px',
+  '2': '8px',
+  '2.5': '10px',
+  '3': '12px',
+  '3.5': '14px',
+  '4': '16px',
+  '5': '20px',
+  '6': '24px',
+  '7': '28px',
+  '8': '32px',
+  '9': '36px',
+  '10': '40px',
+  '11': '44px',
+  '12': '48px',
+  '14': '56px',
+  '16': '64px',
+  '20': '80px',
+  '24': '96px',
+};
+
+export function SlightNudgeOverlay({
+  defaultFilePath,
+  zoom = 100,
+}: {
+  defaultFilePath?: string;
+  zoom?: number;
+} = {}) {
+  const getPreviewScale = useCallback((): number => {
+    if (typeof zoom === 'number' && zoom > 0 && zoom !== 100) {
+      return zoom / 100;
+    }
+    const frame = document.querySelector('.sn-preview-frame') as HTMLElement | null;
+    if (frame) {
+      const transform = window.getComputedStyle(frame).transform;
+      if (transform && transform !== 'none') {
+        try {
+          const matrix = new DOMMatrix(transform);
+          if (matrix.a && matrix.a > 0) return matrix.a;
+        } catch {
+          // ignore
+        }
+      }
+    }
+    return 1;
+  }, [zoom]);
   const [active, setActive] = useState(true);
   const [hoveredRect, setHoveredRect] = useState<SelectedElementInfo['rect'] | null>(null);
   const [selected, setSelected] = useState<SelectedElementInfo | null>(null);
@@ -314,7 +379,7 @@ export function SlightNudgeOverlay({ defaultFilePath }: { defaultFilePath?: stri
   const [pendingEdit, setPendingEdit] = useState<PendingEdit | null>(null);
   const [openSection, setOpenSection] = useState<'text' | 'arrange' | 'spacing' | 'layout' | 'type' | 'color' | 'surface'>('spacing');
   const [draftText, setDraftText] = useState('');
-  const [activeBreakpoint, setActiveBreakpoint] = useState('');
+  const [activeBreakpoint, setActiveBreakpoint] = useState('lg');
   const [canUndo, setCanUndo] = useState(false);
   const [isInlineEditing, setIsInlineEditing] = useState(false);
   const [buttonMode, setButtonMode] = useState<'shell' | 'content'>('shell');
@@ -327,7 +392,7 @@ export function SlightNudgeOverlay({ defaultFilePath }: { defaultFilePath?: stri
   const [moveNotice, setMoveNotice] = useState<string | null>(null);
   const [moveShift, setMoveShift] = useState<{ x: number; y: number } | null>(null);
   const [dropIndicator, setDropIndicator] = useState<{
-    direction: 'earlier' | 'later' | 'invalid';
+    direction: 'earlier' | 'later' | 'top' | 'bottom' | 'invalid';
     top: number;
     left: number;
     width?: number;
@@ -338,6 +403,7 @@ export function SlightNudgeOverlay({ defaultFilePath }: { defaultFilePath?: stri
   const selectedNodeRef = useRef<HTMLElement | null>(null);
   const editGroupIdRef = useRef<string | null>(null);
   const originalStyleRef = useRef<string | null>(null);
+  const originalPositionRef = useRef<{ parent: HTMLElement; nextSibling: HTMLElement | null } | null>(null);
 
   const updateSelectedRect = useCallback(() => {
     if (!selectedNodeRef.current) return;
@@ -397,10 +463,78 @@ export function SlightNudgeOverlay({ defaultFilePath }: { defaultFilePath?: stri
       if (selectedNodeRef.current && preview.previewType === 'textContent') {
         selectedNodeRef.current.textContent = preview.newValue;
       } else if (selectedNodeRef.current && preview.previewType === 'reorder') {
-        if (preview.summary.includes('earlier')) {
-          selectedNodeRef.current.previousElementSibling?.before(selectedNodeRef.current);
-        } else {
-          selectedNodeRef.current.nextElementSibling?.after(selectedNodeRef.current);
+        const el = selectedNodeRef.current;
+        const parent = el.parentElement;
+        if (parent) {
+          if (!originalPositionRef.current) {
+            originalPositionRef.current = {
+              parent,
+              nextSibling: el.nextElementSibling as HTMLElement | null,
+            };
+          }
+
+          // FLIP First: record visual bounding rects before DOM swap
+          const scale = getPreviewScale();
+          const allChildren = Array.from(parent.children) as HTMLElement[];
+          const firstRects = new Map<HTMLElement, DOMRect>();
+          allChildren.forEach((child) => {
+            firstRects.set(child, child.getBoundingClientRect());
+          });
+
+          const slotMatch = preview.summary.match(/to slot (\d+)/);
+          const targetIdx = preview.targetIndex !== undefined
+            ? preview.targetIndex
+            : (slotMatch ? parseInt(slotMatch[1], 10) : undefined);
+          if (targetIdx !== undefined) {
+            const allKids = Array.from(parent.children) as HTMLElement[];
+            const curIdx = allKids.indexOf(el);
+            if (curIdx >= 0) {
+              const order = [...allKids];
+              const [moved] = order.splice(curIdx, 1);
+              order.splice(targetIdx, 0, moved);
+              order.forEach((c) => parent.appendChild(c));
+            }
+          } else if (preview.summary.includes('top')) {
+            const first = parent.firstElementChild;
+            if (first && first !== el) first.before(el);
+          } else if (preview.summary.includes('bottom')) {
+            const last = parent.lastElementChild;
+            if (last && last !== el) last.after(el);
+          } else if (preview.summary.includes('earlier')) {
+            el.previousElementSibling?.before(el);
+          } else if (preview.summary.includes('later')) {
+            el.nextElementSibling?.after(el);
+          }
+
+          // FLIP Invert: instantaneously cancel visual displacement with transition none
+          const updatedChildren = Array.from(parent.children) as HTMLElement[];
+          const invertMap = new Map<HTMLElement, { x: number; y: number }>();
+          updatedChildren.forEach((child) => {
+            const firstR = firstRects.get(child);
+            if (firstR) {
+              // Clear previous drag transform so lastR reflects true resting DOM position
+              child.style.transition = 'none';
+              child.style.transform = '';
+              const lastR = child.getBoundingClientRect();
+              const invertX = (firstR.left - lastR.left) / scale;
+              const invertY = (firstR.top - lastR.top) / scale;
+              invertMap.set(child, { x: invertX, y: invertY });
+              if (Math.abs(invertX) > 0.5 || Math.abs(invertY) > 0.5) {
+                child.style.transform = `translate3d(${invertX}px, ${invertY}px, 0)`;
+              }
+            }
+          });
+
+          // FLIP Play: glide smoothly to final resting places over ~220ms (capped to <=8px per frame)
+          requestAnimationFrame(() => {
+            updatedChildren.forEach((child) => {
+              const inv = invertMap.get(child);
+              const dist = inv ? Math.hypot(inv.x, inv.y) * scale : 0;
+              const dur = Math.max(220, Math.round(dist / 0.06));
+              child.style.transition = `transform ${dur}ms cubic-bezier(0.25, 0.1, 0.25, 1)`;
+              child.style.transform = '';
+            });
+          });
         }
         animateSelectionRect(260);
       } else if (selectedNodeRef.current && typeof preview.newValue === 'string') {
@@ -443,11 +577,17 @@ export function SlightNudgeOverlay({ defaultFilePath }: { defaultFilePath?: stri
         selectedNodeRef.current.textContent = pending.originalDomValue ?? pending.oldValue;
         setDraftText(pending.originalDomValue ?? pending.oldValue);
       } else if (pending.previewType === 'reorder') {
-        if (pending.summary.includes('earlier')) {
-          selectedNodeRef.current.nextElementSibling?.after(selectedNodeRef.current);
-        } else {
-          selectedNodeRef.current.previousElementSibling?.before(selectedNodeRef.current);
+        const el = selectedNodeRef.current;
+        if (originalPositionRef.current) {
+          const { parent, nextSibling } = originalPositionRef.current;
+          if (nextSibling && nextSibling.parentElement === parent) {
+            nextSibling.before(el);
+          } else if (parent.isConnected) {
+            parent.appendChild(el);
+          }
+          originalPositionRef.current = null;
         }
+        animateSelectionRect(260);
       } else {
         selectedNodeRef.current.className = pending.oldValue;
         applyMarginInline(selectedNodeRef.current, pending.oldValue);
@@ -510,6 +650,7 @@ export function SlightNudgeOverlay({ defaultFilePath }: { defaultFilePath?: stri
         }
       }
       originalStyleRef.current = selectedNodeRef.current?.getAttribute('style') || '';
+      originalPositionRef.current = null;
       setPendingEdit(null);
       setCanUndo(true);
       setNotice(`${result.message} Further tweaks to this selection will undo together.`);
@@ -778,6 +919,28 @@ export function SlightNudgeOverlay({ defaultFilePath }: { defaultFilePath?: stri
       if (!selected || !selectedNodeRef.current || !['ArrowRight', 'ArrowLeft', 'ArrowUp', 'ArrowDown'].includes(event.key)) return;
       event.preventDefault();
       if (selected.safeToEdit !== true) { setWarning(true); setNotice(selected.refusalReason || 'Select an editable element first.'); window.setTimeout(() => setWarning(false), 900); return; }
+
+      // Alt+Shift+ArrowUp / Alt+Shift+ArrowDown: Move directly to top or bottom
+      if (event.altKey && event.shiftKey && event.key === 'ArrowUp') {
+        await previewChange({ kind: 'reorder', filePath: selected.filePath, line: Number(selected.line) || undefined, column: Number(selected.column) || undefined, elementId: selected.id, direction: 'top' });
+        return;
+      }
+      if (event.altKey && event.shiftKey && event.key === 'ArrowDown') {
+        await previewChange({ kind: 'reorder', filePath: selected.filePath, line: Number(selected.line) || undefined, column: Number(selected.column) || undefined, elementId: selected.id, direction: 'bottom' });
+        return;
+      }
+
+      // Alt+Arrow: Reorder earlier / later
+      if (event.altKey && (event.key === 'ArrowUp' || event.key === 'ArrowLeft')) {
+        await previewChange({ kind: 'reorder', filePath: selected.filePath, line: Number(selected.line) || undefined, column: Number(selected.column) || undefined, elementId: selected.id, direction: 'earlier' });
+        return;
+      }
+      if (event.altKey && (event.key === 'ArrowDown' || event.key === 'ArrowRight')) {
+        await previewChange({ kind: 'reorder', filePath: selected.filePath, line: Number(selected.line) || undefined, column: Number(selected.column) || undefined, elementId: selected.id, direction: 'later' });
+        return;
+      }
+
+      // Regular Arrow keys: Spacing nudge
       const direction = event.key === 'ArrowRight' ? 'right' : event.key === 'ArrowLeft' ? 'left' : event.key === 'ArrowDown' ? 'down' : 'up';
       await previewChange({ kind: 'nudge', filePath: selected.filePath, line: Number(selected.line) || undefined, column: Number(selected.column) || undefined, elementId: selected.id, direction, stepSize: event.shiftKey ? 'big' : 'normal' });
     };
@@ -972,38 +1135,92 @@ export function SlightNudgeOverlay({ defaultFilePath }: { defaultFilePath?: stri
     const startY = e.clientY;
     const el = selectedNodeRef.current;
     const parent = el.parentElement;
-    const prevEl = el.previousElementSibling as HTMLElement | null;
-    const nextEl = el.nextElementSibling as HTMLElement | null;
+    if (!parent) return;
+
+    const allSiblings = Array.from(parent.children) as HTMLElement[];
+    const currentIndex = allSiblings.indexOf(el);
+    if (currentIndex === -1 || allSiblings.length <= 1) {
+      setMoveNotice(`Cannot reorder: this element is the only child in <${parent.tagName.toLowerCase()}>.`);
+      const cleanupOnly = () => {
+        window.removeEventListener('pointermove', cleanupOnly);
+        window.removeEventListener('pointerup', cleanupOnly);
+        window.removeEventListener('pointercancel', cleanupOnly);
+        setIsDraggingMove(false);
+        setDragCursor(null);
+        setDropIndicator(null);
+        setMoveNotice(null);
+      };
+      window.addEventListener('pointerup', cleanupOnly);
+      window.addEventListener('pointercancel', cleanupOnly);
+      return;
+    }
 
     const elRect = el.getBoundingClientRect();
-    const prevRect = prevEl ? prevEl.getBoundingClientRect() : null;
-    const nextRect = nextEl ? nextEl.getBoundingClientRect() : null;
-    const parentRect = parent ? parent.getBoundingClientRect() : null;
+    const parentRect = parent.getBoundingClientRect();
+    const siblingRects = allSiblings.map((s) => s.getBoundingClientRect());
 
-    // Detect layout orientation:
-    // If adjacent siblings are offset horizontally by more than vertically, or parent is flex row / grid
+    // Detect layout orientation and 2D layouts:
     let isHorizontal = false;
-    if (prevRect && Math.abs(prevRect.left - elRect.left) > Math.abs(prevRect.top - elRect.top)) {
+    const pStyle = window.getComputedStyle(parent);
+    const isGrid = pStyle.display.includes('grid') || pStyle.display === 'inline-grid';
+    const isFlexWrap = pStyle.display.includes('flex') && pStyle.flexWrap !== 'nowrap';
+
+    if (pStyle.display.includes('flex') && !pStyle.flexDirection.startsWith('column')) {
       isHorizontal = true;
-    } else if (nextRect && Math.abs(nextRect.left - elRect.left) > Math.abs(nextRect.top - elRect.top)) {
-      isHorizontal = true;
-    } else if (parent) {
-      const pStyle = window.getComputedStyle(parent);
-      if (pStyle.display.includes('flex') && !pStyle.flexDirection.startsWith('column')) {
+    } else if (allSiblings.length >= 2) {
+      const s0 = siblingRects[0];
+      const s1 = siblingRects[1];
+      if (Math.abs(s1.left - s0.left) > Math.abs(s1.top - s0.top) + 20) {
         isHorizontal = true;
       }
     }
 
-    let activeTransformedSibling: HTMLElement | null = null;
-    let currentDropDirection: 'earlier' | 'later' | 'nudge-up' | 'nudge-down' | 'nudge-left' | 'nudge-right' | null = null;
+    // Pre-calculate exact resting slot rects for all permutation slots in page coordinates
+    const slotRestingRects = new Map<number, { top: number; left: number; width: number; height: number }>();
+    const startScrollX = window.scrollX;
+    const startScrollY = window.scrollY;
+    for (let k = 0; k < allSiblings.length; k++) {
+      const order = [...allSiblings];
+      const [moved] = order.splice(currentIndex, 1);
+      order.splice(k, 0, moved);
+      order.forEach((c) => parent.appendChild(c));
+      const r = el.getBoundingClientRect();
+      slotRestingRects.set(k, {
+        top: r.top + startScrollY,
+        left: r.left + startScrollX,
+        width: r.width,
+        height: r.height,
+      });
+    }
+    // Restore original DOM order immediately
+    allSiblings.forEach((c) => parent.appendChild(c));
 
-    const resetTransforms = () => {
-      el.style.transform = '';
-      el.style.transition = '';
-      if (activeTransformedSibling) {
-        activeTransformedSibling.style.transform = '';
-        activeTransformedSibling.style.transition = '';
-        activeTransformedSibling = null;
+    // Initialize FLIP smooth transitions on all siblings and dragged element (220ms)
+    allSiblings.forEach((s) => {
+      s.style.transition = 'transform 220ms cubic-bezier(0.25, 0.1, 0.25, 1)';
+    });
+    el.style.transition = 'transform 220ms cubic-bezier(0.25, 0.1, 0.25, 1)';
+
+    let currentDropDirection: 'earlier' | 'later' | 'top' | 'bottom' | 'nudge-up' | 'nudge-down' | 'nudge-left' | 'nudge-right' | null = null;
+    let currentDropTargetIndex: number | undefined = undefined;
+    let lastAppliedSlot = currentIndex;
+
+    const resetTransforms = (smooth = true) => {
+      lastAppliedSlot = currentIndex;
+      if (smooth) {
+        el.style.transition = 'transform 220ms cubic-bezier(0.25, 0.1, 0.25, 1)';
+        el.style.transform = '';
+        allSiblings.forEach((s) => {
+          s.style.transition = 'transform 220ms cubic-bezier(0.25, 0.1, 0.25, 1)';
+          s.style.transform = '';
+        });
+      } else {
+        el.style.transition = '';
+        el.style.transform = '';
+        allSiblings.forEach((s) => {
+          s.style.transition = '';
+          s.style.transform = '';
+        });
       }
       setMoveShift(null);
     };
@@ -1013,39 +1230,49 @@ export function SlightNudgeOverlay({ defaultFilePath }: { defaultFilePath?: stri
       const cursorY = moveEvent.clientY;
       setDragCursor({ x: cursorX, y: cursorY });
 
-      const dx = cursorX - startX;
-      const dy = cursorY - startY;
+      const scale = getPreviewScale();
+      const rawDx = cursorX - startX;
+      const rawDy = cursorY - startY;
+      const dx = rawDx / scale;
+      const dy = rawDy / scale;
 
-      // 1. Check if cursor is dragged completely outside parent container boundary
-      if (parentRect && parent) {
-        const isOutsideParent =
-          cursorX < parentRect.left - 24 ||
-          cursorX > parentRect.right + 24 ||
-          cursorY < parentRect.top - 24 ||
-          cursorY > parentRect.bottom + 24;
+      // STEP 1e: Refuse 2D grid and wrapping layouts cleanly
+      if (isGrid || isFlexWrap) {
+        resetTransforms(false);
+        currentDropDirection = null;
+        currentDropTargetIndex = undefined;
+        setDropIndicator(null);
+        setMoveNotice('Grid and wrapping layouts do not support drag reordering yet.');
+        return;
+      }
 
-        if (isOutsideParent) {
-          resetTransforms();
+      // 1. Container boundary check with comfortable tolerance (120-160px)
+      if (!isHorizontal) {
+        const isFarOutsideX = cursorX < parentRect.left - 100 || cursorX > parentRect.right + 100;
+        const isFarOutsideY = cursorY < parentRect.top - 160 || cursorY > parentRect.bottom + 160;
+        if (isFarOutsideX || isFarOutsideY) {
+          resetTransforms(false);
           currentDropDirection = null;
+          currentDropTargetIndex = undefined;
           let redTop = elRect.top + window.scrollY;
           let redLeft = elRect.left + window.scrollX;
           let redWidth: number | undefined = elRect.width;
           let redHeight: number | undefined = 3;
           let orientation: 'horizontal' | 'vertical' = 'horizontal';
 
-          if (cursorX < parentRect.left) {
+          if (cursorX < parentRect.left - 100) {
             orientation = 'vertical';
             redLeft = parentRect.left + window.scrollX - 2;
             redTop = parentRect.top + window.scrollY;
             redWidth = undefined;
             redHeight = parentRect.height;
-          } else if (cursorX > parentRect.right) {
+          } else if (cursorX > parentRect.right + 100) {
             orientation = 'vertical';
             redLeft = parentRect.right + window.scrollX + 2;
             redTop = parentRect.top + window.scrollY;
             redWidth = undefined;
             redHeight = parentRect.height;
-          } else if (cursorY < parentRect.top) {
+          } else if (cursorY < parentRect.top - 160) {
             redTop = parentRect.top + window.scrollY - 2;
             redLeft = parentRect.left + window.scrollX;
             redWidth = parentRect.width;
@@ -1067,12 +1294,32 @@ export function SlightNudgeOverlay({ defaultFilePath }: { defaultFilePath?: stri
           setMoveNotice(`Cannot move outside <${parent.tagName.toLowerCase()}>`);
           return;
         }
+      } else {
+        const isFarOutsideY = cursorY < parentRect.top - 100 || cursorY > parentRect.bottom + 100;
+        const isFarOutsideX = cursorX < parentRect.left - 160 || cursorX > parentRect.right + 160;
+        if (isFarOutsideX || isFarOutsideY) {
+          resetTransforms(false);
+          currentDropDirection = null;
+          currentDropTargetIndex = undefined;
+          setDropIndicator({
+            direction: 'invalid',
+            isInvalid: true,
+            orientation: isFarOutsideX ? 'vertical' : 'horizontal',
+            top: elRect.top + window.scrollY,
+            left: elRect.left + window.scrollX,
+            width: elRect.width,
+            height: elRect.height,
+          });
+          setMoveNotice(`Cannot move outside <${parent.tagName.toLowerCase()}>`);
+          return;
+        }
       }
 
-      // 2. Check if dragging orthogonally to layout direction where no slot exists
-      if (!isHorizontal && Math.abs(dx) > Math.abs(dy) + 12 && Math.abs(dx) > 24) {
-        resetTransforms();
+      // 2. Orthogonal drag warning only when gesture is predominantly perpendicular (>1.8x and >60px)
+      if (!isHorizontal && Math.abs(dx) > Math.abs(dy) * 1.8 && Math.abs(dx) > 60) {
+        resetTransforms(false);
         currentDropDirection = null;
+        currentDropTargetIndex = undefined;
         const isLeft = dx < 0;
         setDropIndicator({
           direction: 'invalid',
@@ -1085,9 +1332,10 @@ export function SlightNudgeOverlay({ defaultFilePath }: { defaultFilePath?: stri
         setMoveNotice(isLeft ? 'No space: cannot move left in vertical layout' : 'No space: cannot move right in vertical layout');
         return;
       }
-      if (isHorizontal && Math.abs(dy) > Math.abs(dx) + 12 && Math.abs(dy) > 24) {
-        resetTransforms();
+      if (isHorizontal && Math.abs(dy) > Math.abs(dx) * 1.8 && Math.abs(dy) > 60) {
+        resetTransforms(false);
         currentDropDirection = null;
+        currentDropTargetIndex = undefined;
         const isUp = dy < 0;
         setDropIndicator({
           direction: 'invalid',
@@ -1101,197 +1349,215 @@ export function SlightNudgeOverlay({ defaultFilePath }: { defaultFilePath?: stri
         return;
       }
 
-      // 3. Check for micro-drag / spacing nudge (small drag: 4px to 22px)
-      if (!isHorizontal && dy >= -22 && dy <= -4) {
-        if (activeTransformedSibling) {
-          activeTransformedSibling.style.transform = '';
-          activeTransformedSibling.style.transition = '';
-          activeTransformedSibling = null;
-        }
-        currentDropDirection = 'nudge-up';
-        el.style.transform = `translate3d(0, ${dy}px, 0)`;
-        el.style.transition = 'none';
-        setMoveShift({ x: 0, y: dy });
-        setDropIndicator(null);
-        setMoveNotice('Nudge: release to delete space above');
-        return;
-      }
-      if (!isHorizontal && dy >= 4 && dy <= 22) {
-        if (activeTransformedSibling) {
-          activeTransformedSibling.style.transform = '';
-          activeTransformedSibling.style.transition = '';
-          activeTransformedSibling = null;
-        }
-        currentDropDirection = 'nudge-down';
-        el.style.transform = `translate3d(0, ${dy}px, 0)`;
-        el.style.transition = 'none';
-        setMoveShift({ x: 0, y: dy });
-        setDropIndicator(null);
-        setMoveNotice('Nudge: release to add space above');
-        return;
-      }
-      if (isHorizontal && dx >= -22 && dx <= -4) {
-        if (activeTransformedSibling) {
-          activeTransformedSibling.style.transform = '';
-          activeTransformedSibling.style.transition = '';
-          activeTransformedSibling = null;
-        }
-        currentDropDirection = 'nudge-left';
-        el.style.transform = `translate3d(${dx}px, 0, 0)`;
-        el.style.transition = 'none';
-        setMoveShift({ x: dx, y: 0 });
-        setDropIndicator(null);
-        setMoveNotice('Nudge: release to move left');
-        return;
-      }
-      if (isHorizontal && dx >= 4 && dx <= 22) {
-        if (activeTransformedSibling) {
-          activeTransformedSibling.style.transform = '';
-          activeTransformedSibling.style.transition = '';
-          activeTransformedSibling = null;
-        }
-        currentDropDirection = 'nudge-right';
-        el.style.transform = `translate3d(${dx}px, 0, 0)`;
-        el.style.transition = 'none';
-        setMoveShift({ x: dx, y: 0 });
-        setDropIndicator(null);
-        setMoveNotice('Nudge: release to move right');
-        return;
-      }
+      const isAltDrag = Boolean(moveEvent.altKey);
 
-      // 4. Large drag (>22px): structural reorder with siblings
-      const movingEarlier = isHorizontal ? dx < -22 : dy < -22;
-      const movingLater = isHorizontal ? dx > 22 : dy > 22;
-
-      if (movingEarlier) {
-        if (prevEl && prevRect) {
-          currentDropDirection = 'earlier';
-          const shiftX = prevRect.left - elRect.left;
-          const shiftY = prevRect.top - elRect.top;
-
-          el.style.transform = `translate3d(${shiftX}px, ${shiftY}px, 0)`;
-          el.style.transition = 'transform 0.22s cubic-bezier(0.16, 1, 0.3, 1)';
-          prevEl.style.transform = `translate3d(${-shiftX}px, ${-shiftY}px, 0)`;
-          prevEl.style.transition = 'transform 0.22s cubic-bezier(0.16, 1, 0.3, 1)';
-          if (activeTransformedSibling && activeTransformedSibling !== prevEl) {
-            activeTransformedSibling.style.transform = '';
-            activeTransformedSibling.style.transition = '';
-          }
-          activeTransformedSibling = prevEl;
-          setMoveShift({ x: shiftX, y: shiftY });
-
-          if (isHorizontal) {
-            setDropIndicator({
-              direction: 'earlier',
-              orientation: 'vertical',
-              isInvalid: false,
-              top: prevRect.top + window.scrollY,
-              left: prevRect.left + window.scrollX - 3,
-              height: prevRect.height,
-            });
+      if (isAltDrag) {
+        // Option A: Alt+Drag = Spacing nudge along gesture axis
+        const isPredominantlyHorizontal = Math.abs(dx) > Math.abs(dy);
+        const nudgeDisp = isPredominantlyHorizontal ? dx : dy;
+        if (Math.abs(nudgeDisp) >= 4) {
+          allSiblings.forEach((s) => {
+            if (s !== el) s.style.transform = '';
+          });
+          let dir: 'nudge-up' | 'nudge-down' | 'nudge-left' | 'nudge-right';
+          let noticeText = '';
+          if (!isPredominantlyHorizontal) {
+            dir = dy < 0 ? 'nudge-up' : 'nudge-down';
+            noticeText = dy < 0 ? 'Alt+Drag: release to decrease top spacing' : 'Alt+Drag: release to increase top spacing';
+            el.style.transform = `translate3d(0, ${dy}px, 0)`;
+            setMoveShift({ x: 0, y: rawDy });
           } else {
-            setDropIndicator({
-              direction: 'earlier',
-              orientation: 'horizontal',
-              isInvalid: false,
-              top: prevRect.top + window.scrollY - 3,
-              left: prevRect.left + window.scrollX,
-              width: prevRect.width,
-            });
+            dir = dx < 0 ? 'nudge-left' : 'nudge-right';
+            noticeText = dx < 0 ? 'Alt+Drag: release to decrease left spacing' : 'Alt+Drag: release to increase left spacing';
+            el.style.transform = `translate3d(${dx}px, 0, 0)`;
+            setMoveShift({ x: rawDx, y: 0 });
           }
-          setMoveNotice(null);
+          currentDropDirection = dir;
+          currentDropTargetIndex = undefined;
+          setDropIndicator(null);
+          setMoveNotice(noticeText);
+          return;
         } else {
-          resetTransforms();
+          resetTransforms(true);
           currentDropDirection = null;
-          if (isHorizontal) {
-            setDropIndicator({
-              direction: 'invalid',
-              orientation: 'vertical',
-              isInvalid: true,
-              top: elRect.top + window.scrollY,
-              left: elRect.left + window.scrollX - 3,
-              height: elRect.height,
-            });
-            setMoveNotice('No space: already leftmost element in container');
-          } else {
-            setDropIndicator({
-              direction: 'invalid',
-              orientation: 'horizontal',
-              isInvalid: true,
-              top: elRect.top + window.scrollY - 3,
-              left: elRect.left + window.scrollX,
-              width: elRect.width,
-            });
-            setMoveNotice('No space: already first element in container');
-          }
+          currentDropTargetIndex = undefined;
+          setDropIndicator(null);
+          setMoveNotice('Alt+Drag: drag to adjust spacing');
+          return;
         }
-      } else if (movingLater) {
-        if (nextEl && nextRect) {
-          currentDropDirection = 'later';
-          const shiftX = nextRect.left - elRect.left;
-          const shiftY = nextRect.top - elRect.top;
+      }
 
-          el.style.transform = `translate3d(${shiftX}px, ${shiftY}px, 0)`;
-          el.style.transition = 'transform 0.22s cubic-bezier(0.16, 1, 0.3, 1)';
-          nextEl.style.transform = `translate3d(${-shiftX}px, ${-shiftY}px, 0)`;
-          nextEl.style.transition = 'transform 0.22s cubic-bezier(0.16, 1, 0.3, 1)';
-          if (activeTransformedSibling && activeTransformedSibling !== nextEl) {
-            activeTransformedSibling.style.transform = '';
-            activeTransformedSibling.style.transition = '';
-          }
-          activeTransformedSibling = nextEl;
-          setMoveShift({ x: shiftX, y: shiftY });
-
-          if (isHorizontal) {
-            setDropIndicator({
-              direction: 'later',
-              orientation: 'vertical',
-              isInvalid: false,
-              top: nextRect.top + window.scrollY,
-              left: nextRect.right + window.scrollX + 2,
-              height: nextRect.height,
-            });
-          } else {
-            setDropIndicator({
-              direction: 'later',
-              orientation: 'horizontal',
-              isInvalid: false,
-              top: nextRect.bottom + window.scrollY + 3,
-              left: nextRect.left + window.scrollX,
-              width: nextRect.width,
-            });
-          }
-          setMoveNotice(null);
-        } else {
-          resetTransforms();
-          currentDropDirection = null;
-          if (isHorizontal) {
-            setDropIndicator({
-              direction: 'invalid',
-              orientation: 'vertical',
-              isInvalid: true,
-              top: elRect.top + window.scrollY,
-              left: elRect.right + window.scrollX + 2,
-              height: elRect.height,
-            });
-            setMoveNotice('No space: already rightmost element in container');
-          } else {
-            setDropIndicator({
-              direction: 'invalid',
-              orientation: 'horizontal',
-              isInvalid: true,
-              top: elRect.bottom + window.scrollY + 3,
-              left: elRect.left + window.scrollX,
-              width: elRect.width,
-            });
-            setMoveNotice('No space: already last element in container');
-          }
-        }
-      } else {
-        resetTransforms();
+      // Option A: Normal Drag = Reorder Only
+      const primaryDisp = isHorizontal ? dx : dy;
+      if (Math.abs(primaryDisp) < 4) {
+        resetTransforms(true);
         currentDropDirection = null;
+        currentDropTargetIndex = undefined;
         setDropIndicator(null);
         setMoveNotice(null);
+        return;
+      }
+
+      // STEP 1b: Boundary thresholding: <25px leaves unchanged, >=25px swaps by 1 place
+      let targetSlot = currentIndex;
+      const stepThreshold = 25;
+
+      if (!isHorizontal) {
+        if (rawDy >= stepThreshold) {
+          const steps = Math.min(allSiblings.length - 1 - currentIndex, Math.floor((rawDy - stepThreshold) / 120) + 1);
+          targetSlot = currentIndex + steps;
+        } else if (rawDy <= -stepThreshold) {
+          const steps = Math.min(currentIndex, Math.floor((-rawDy - stepThreshold) / 120) + 1);
+          targetSlot = currentIndex - steps;
+        }
+      } else {
+        if (rawDx >= stepThreshold) {
+          const steps = Math.min(allSiblings.length - 1 - currentIndex, Math.floor((rawDx - stepThreshold) / 220) + 1);
+          targetSlot = currentIndex + steps;
+        } else if (rawDx <= -stepThreshold) {
+          const steps = Math.min(currentIndex, Math.floor((-rawDx - stepThreshold) / 220) + 1);
+          targetSlot = currentIndex - steps;
+        }
+      }
+
+      if (targetSlot === currentIndex) {
+        // Dragging less than boundary: leaves order unchanged and no sibling moves
+        if (lastAppliedSlot !== currentIndex) {
+          lastAppliedSlot = currentIndex;
+          allSiblings.forEach((s) => {
+            if (s !== el) {
+              s.style.transition = 'transform 200ms linear';
+              s.style.transform = '';
+            }
+          });
+        }
+        if (isHorizontal) {
+          el.style.transform = `translate3d(${dx}px, 0, 0)`;
+          setMoveShift({ x: rawDx, y: 0 });
+        } else {
+          el.style.transform = `translate3d(0, ${dy}px, 0)`;
+          setMoveShift({ x: 0, y: rawDy });
+        }
+        currentDropDirection = null;
+        currentDropTargetIndex = undefined;
+        if (primaryDisp < -10 && currentIndex === 0) {
+          setDropIndicator({
+            direction: 'invalid',
+            orientation: isHorizontal ? 'vertical' : 'horizontal',
+            isInvalid: true,
+            top: isHorizontal ? elRect.top + window.scrollY : elRect.top + window.scrollY - 3,
+            left: isHorizontal ? elRect.left + window.scrollX - 3 : elRect.left + window.scrollX,
+            width: isHorizontal ? undefined : elRect.width,
+            height: isHorizontal ? elRect.height : undefined,
+          });
+          setMoveNotice(isHorizontal ? 'No space: already leftmost element in container' : 'No space: already first element in container');
+        } else if (primaryDisp > 10 && currentIndex === allSiblings.length - 1) {
+          setDropIndicator({
+            direction: 'invalid',
+            orientation: isHorizontal ? 'vertical' : 'horizontal',
+            isInvalid: true,
+            top: isHorizontal ? elRect.top + window.scrollY : elRect.bottom + window.scrollY + 3,
+            left: isHorizontal ? elRect.right + window.scrollX + 3 : elRect.left + window.scrollX,
+            width: isHorizontal ? undefined : elRect.width,
+            height: isHorizontal ? elRect.height : undefined,
+          });
+          setMoveNotice(isHorizontal ? 'No space: already rightmost element in container' : 'No space: already last element in container');
+        } else {
+          setDropIndicator(null);
+          setMoveNotice(null);
+        }
+        return;
+      }
+
+      let direction: 'earlier' | 'later' | 'top' | 'bottom';
+      if (targetSlot === 0) {
+        direction = 'top';
+      } else if (targetSlot === allSiblings.length - 1) {
+        direction = 'bottom';
+      } else if (targetSlot < currentIndex) {
+        direction = 'earlier';
+      } else {
+        direction = 'later';
+      }
+
+      // STEP 1c: FLIP smooth displacement of non-dragged siblings
+      if (targetSlot !== lastAppliedSlot) {
+        lastAppliedSlot = targetSlot;
+        for (let j = 0; j < allSiblings.length; j++) {
+          if (j === currentIndex) continue;
+          const sib = allSiblings[j];
+          if (targetSlot > currentIndex && j > currentIndex && j <= targetSlot) {
+            // Sibling j glides up/left into slot j - 1
+            const prevR = siblingRects[j - 1];
+            const currR = siblingRects[j];
+            const sX = isHorizontal ? (prevR.left - currR.left) / scale : 0;
+            const sY = isHorizontal ? 0 : (prevR.top - currR.top) / scale;
+            const dist = isHorizontal ? Math.abs(prevR.left - currR.left) : Math.abs(prevR.top - currR.top);
+            const dur = Math.max(220, Math.min(2500, Math.round(dist / 0.14)));
+            sib.style.transition = `transform ${dur}ms linear`;
+            sib.style.transform = `translate3d(${sX}px, ${sY}px, 0)`;
+          } else if (targetSlot < currentIndex && j >= targetSlot && j < currentIndex) {
+            // Sibling j glides down/right into slot j + 1
+            const nextR = siblingRects[j + 1];
+            const currR = siblingRects[j];
+            const sX = isHorizontal ? (nextR.left - currR.left) / scale : 0;
+            const sY = isHorizontal ? 0 : (nextR.top - currR.top) / scale;
+            const dist = isHorizontal ? Math.abs(nextR.left - currR.left) : Math.abs(nextR.top - currR.top);
+            const dur = Math.max(220, Math.min(2500, Math.round(dist / 0.14)));
+            sib.style.transition = `transform ${dur}ms linear`;
+            sib.style.transform = `translate3d(${sX}px, ${sY}px, 0)`;
+          } else {
+            sib.style.transition = 'transform 200ms linear';
+            sib.style.transform = 'translate3d(0, 0, 0)';
+          }
+        }
+      }
+
+      const targetRect = siblingRects[targetSlot];
+      if (isHorizontal) {
+        el.style.transform = `translate3d(${dx}px, 0, 0)`;
+        setMoveShift({ x: rawDx, y: 0 });
+      } else {
+        el.style.transform = `translate3d(0, ${dy}px, 0)`;
+        setMoveShift({ x: 0, y: rawDy });
+      }
+
+      // Drop line shows exactly where the element will land (within 2px)
+      const resting = slotRestingRects.get(targetSlot);
+      const topCoord = resting ? resting.top : targetRect.top + startScrollY;
+      const leftCoord = resting ? resting.left : targetRect.left + startScrollX;
+      const widthCoord = resting ? resting.width : targetRect.width;
+      const heightCoord = resting ? resting.height : targetRect.height;
+
+      if (!isHorizontal) {
+        setDropIndicator({
+          direction,
+          orientation: 'horizontal',
+          isInvalid: false,
+          top: topCoord,
+          left: leftCoord,
+          width: widthCoord,
+        });
+      } else {
+        setDropIndicator({
+          direction,
+          orientation: 'vertical',
+          isInvalid: false,
+          top: topCoord,
+          left: leftCoord,
+          height: heightCoord,
+        });
+      }
+
+      currentDropDirection = direction;
+      currentDropTargetIndex = targetSlot;
+
+      if (direction === 'top') {
+        setMoveNotice(`Move to top (slot 1 of ${allSiblings.length})`);
+      } else if (direction === 'bottom') {
+        setMoveNotice(`Move to bottom (slot ${allSiblings.length} of ${allSiblings.length})`);
+      } else {
+        setMoveNotice(`Move to slot ${targetSlot + 1} of ${allSiblings.length}`);
       }
     };
 
@@ -1299,6 +1565,7 @@ export function SlightNudgeOverlay({ defaultFilePath }: { defaultFilePath?: stri
       window.removeEventListener('pointermove', onPointerMove);
       window.removeEventListener('pointerup', cleanup);
       window.removeEventListener('pointercancel', cleanup);
+      window.removeEventListener('keydown', onKeyDown);
       setIsDraggingMove(false);
       setDragCursor(null);
       setDropIndicator(null);
@@ -1306,12 +1573,13 @@ export function SlightNudgeOverlay({ defaultFilePath }: { defaultFilePath?: stri
       setMoveShift(null);
 
       const directionToApply = currentDropDirection;
+      const targetIndexToApply = currentDropTargetIndex;
       if (!directionToApply) {
-        resetTransforms();
+        resetTransforms(true);
       }
 
       if (directionToApply && selected) {
-        if (directionToApply === 'nudge-up' || directionToApply === 'nudge-down' || directionToApply === 'nudge-left' || directionToApply === 'nudge-right') {
+        if (directionToApply.startsWith('nudge-')) {
           const dir = directionToApply === 'nudge-up' ? 'up' : directionToApply === 'nudge-down' ? 'down' : directionToApply === 'nudge-left' ? 'left' : 'right';
           void previewChange({
             kind: 'nudge',
@@ -1322,7 +1590,7 @@ export function SlightNudgeOverlay({ defaultFilePath }: { defaultFilePath?: stri
             direction: dir,
             stepSize: 'normal',
           }).finally(() => {
-            resetTransforms();
+            resetTransforms(false);
             requestAnimationFrame(updateSelectedRect);
           });
         } else {
@@ -1332,9 +1600,11 @@ export function SlightNudgeOverlay({ defaultFilePath }: { defaultFilePath?: stri
             line: Number(selected.line) || undefined,
             column: Number(selected.column) || undefined,
             elementId: selected.id,
+            tagName: selected.tagName,
+            className: selected.className,
             direction: directionToApply,
+            targetIndex: targetIndexToApply,
           }).finally(() => {
-            resetTransforms();
             requestAnimationFrame(updateSelectedRect);
           });
         }
@@ -1343,10 +1613,49 @@ export function SlightNudgeOverlay({ defaultFilePath }: { defaultFilePath?: stri
       }
     };
 
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        e.stopPropagation();
+        currentDropDirection = null;
+        currentDropTargetIndex = undefined;
+        cleanup();
+      }
+    };
+
     window.addEventListener('pointermove', onPointerMove);
     window.addEventListener('pointerup', cleanup);
     window.addEventListener('pointercancel', cleanup);
+    window.addEventListener('keydown', onKeyDown);
   }, [previewChange, selected, updateSelectedRect]);
+
+  const hudPlacement = useMemo(() => {
+    if (!selected || !selectedNodeRef.current) return { top: 12, left: 12 };
+    const el = selectedNodeRef.current;
+    const prevSibling = el.previousElementSibling as HTMLElement | null;
+    let shouldFlipBelow = selected.rect.top < 60;
+    if (prevSibling) {
+      const prevRect = prevSibling.getBoundingClientRect();
+      const gapAbove = selected.rect.top - (prevRect.bottom + window.scrollY);
+      if (gapAbove < 44) {
+        shouldFlipBelow = true;
+      }
+    } else {
+      const parent = el.parentElement;
+      if (parent) {
+        const parentRect = parent.getBoundingClientRect();
+        const gapFromParent = selected.rect.top - (parentRect.top + window.scrollY);
+        if (gapFromParent < 44) {
+          shouldFlipBelow = true;
+        }
+      }
+    }
+    const top = shouldFlipBelow
+      ? selected.rect.top + selected.rect.height + 10
+      : Math.max(12, selected.rect.top - 46);
+    const left = Math.max(12, selected.rect.left);
+    return { top, left };
+  }, [selected]);
 
   return <div id="slightnudge-ui">
     {active && hoveredRect && !selected && <div className="sn-hover-outline" style={{ top: hoveredRect.top, left: hoveredRect.left, width: hoveredRect.width, height: hoveredRect.height }} aria-hidden="true"/>}
@@ -1364,12 +1673,12 @@ export function SlightNudgeOverlay({ defaultFilePath }: { defaultFilePath?: stri
         }}
         aria-hidden="true"
       >
-        {!isInlineEditing && (
+        {!isInlineEditing && !isDraggingMove && (
           <button
             type="button"
             className="sn-corner-dismiss"
-            title="Deselect (Esc)"
-            aria-label="Deselect element"
+            title="Deselect element (Esc)"
+            aria-label="Deselect element (Esc)"
             onClick={(e) => {
               e.stopPropagation();
               if (pendingEdit) void discardPreview();
@@ -1378,7 +1687,7 @@ export function SlightNudgeOverlay({ defaultFilePath }: { defaultFilePath?: stri
               originalStyleRef.current = null;
             }}
           >
-            −
+            <X size={10} />
           </button>
         )}
         {selected.safeToEdit !== false && !isInlineEditing && (
@@ -1388,10 +1697,10 @@ export function SlightNudgeOverlay({ defaultFilePath }: { defaultFilePath?: stri
             title="Drag to swap order with siblings (or use Arrow keys to nudge margin)"
           >
             <GripVertical size={11} /> Move
-            {moveNotice && <span className={`sn-move-feedback-badge ${dropIndicator?.isInvalid ? 'is-invalid' : ''}`}>{moveNotice}</span>}
+            {moveNotice && !isDraggingMove && <span className={`sn-move-feedback-badge ${dropIndicator?.isInvalid ? 'is-invalid' : ''}`}>{moveNotice}</span>}
           </div>
         )}
-        {selected.safeToEdit !== false && !isInlineEditing && (
+        {selected.safeToEdit !== false && !isInlineEditing && !isDraggingMove && (
           <div
             className={`sn-corner-slider ${isResizing ? 'is-resizing' : ''}`}
             onPointerDown={handleResizeStart}
