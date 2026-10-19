@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import {
@@ -32,6 +32,11 @@ import {
   Trash2,
   Play,
   LayoutGrid,
+  X,
+  GripVertical,
+  Move,
+  Maximize2,
+  Sparkles,
 } from 'lucide-react';
 import {
   previewEditAPI,
@@ -385,20 +390,89 @@ export default function StudioPage() {
     setTimeout(() => setToastMessage(null), 3000);
   };
 
+  // Child layer ordering on artboard canvas (iOS style direct reordering)
+  const [childOrder, setChildOrder] = useState<string[]>(['text', 'paragraph', 'button']);
+  const [isDraggingMove, setIsDraggingMove] = useState<boolean>(false);
+  const [dragLayerKey, setDragLayerKey] = useState<string | null>(null);
+  const [dragStartY, setDragStartY] = useState<number>(0);
+  const [dragOffset, setDragOffset] = useState<number>(0);
+  const [dropSlotIndex, setDropSlotIndex] = useState<number | null>(null);
+
+  // Precision Drag to Resize State
+  const [isResizing, setIsResizing] = useState<boolean>(false);
+  const [resizeHandle, setResizeHandle] = useState<'e' | 'w' | 's' | 'se' | 'sw' | 'nw' | 'ne' | null>(null);
+  const [resizeStartX, setResizeStartX] = useState<number>(0);
+  const [resizeStartWidth, setResizeStartWidth] = useState<number>(0);
+  const [liveWidth, setLiveWidth] = useState<number | null>(null);
+  const [dimensionTooltip, setDimensionTooltip] = useState<string | null>(null);
+
+  // Dynamic DOM refs & element bounding dimensions
+  const elementRefs = useRef<Record<string, HTMLDivElement | null>>({});
+  const [elementDimensions, setElementDimensions] = useState<Record<string, { w: number; h: number }>>({
+    text: { w: 672, h: 114 },
+    paragraph: { w: 576, h: 48 },
+    button: { w: 146, h: 40 },
+    waitlist: { w: 260, h: 54 },
+    hero: { w: 780, h: 360 },
+  });
+
+  // Keep dimensions up-to-date
+  useEffect(() => {
+    const nextDims: Record<string, { w: number; h: number }> = {};
+    for (const key of ['text', 'paragraph', 'button', 'waitlist', 'hero']) {
+      const el = elementRefs.current[key];
+      if (el) {
+        nextDims[key] = {
+          w: Math.round(el.offsetWidth),
+          h: Math.round(el.offsetHeight),
+        };
+      }
+    }
+    setElementDimensions((prev) => ({ ...prev, ...nextDims }));
+  }, [selectedLayer, liveWidth, elements, childOrder]);
+
+  // Handler for iOS Style Drag to Move
+  const startDragMove = (layerKey: string, e: React.PointerEvent) => {
+    e.stopPropagation();
+    e.preventDefault();
+    setIsDraggingMove(true);
+    setDragLayerKey(layerKey);
+    setSelectedLayer(layerKey);
+    setDragStartY(e.clientY);
+    setDragOffset(0);
+    const initialIndex = childOrder.indexOf(layerKey);
+    setDropSlotIndex(initialIndex);
+  };
+
+  // Handler for Drag to Resize
+  const startResize = (handle: 'e' | 'w' | 's' | 'se' | 'sw' | 'nw' | 'ne', e: React.PointerEvent) => {
+    e.stopPropagation();
+    e.preventDefault();
+    setIsResizing(true);
+    setResizeHandle(handle);
+    setResizeStartX(e.clientX);
+    const key = selectedLayer || 'text';
+    const currentW = elementRefs.current[key]?.offsetWidth || 672;
+    setResizeStartWidth(currentW);
+    setLiveWidth(currentW);
+  };
+
   // Backend Integration: Trigger Preview on Style/Text/Nudge/Reorder
   const triggerBackendPreview = useCallback(
-    async (kind: 'style' | 'text' | 'nudge' | 'reorder', payload: Record<string, any>) => {
-      if (!selectedLayer) return;
+    async (kind: 'style' | 'text' | 'nudge' | 'reorder', payload: Record<string, any>, layerKeyOverride?: string) => {
+      const activeKey = layerKeyOverride || selectedLayer;
+      if (!activeKey) return;
+      const targetElem = elements[activeKey] || activeElement;
       setBusy(true);
       try {
         const result = await previewEditAPI({
           kind,
-          filePath: activeElement.filePath,
-          line: activeElement.line,
-          column: activeElement.column,
-          elementId: activeElement.id,
-          tagName: activeElement.tag.split('.')[0],
-          className: activeElement.classes,
+          filePath: targetElem.filePath,
+          line: targetElem.line,
+          column: targetElem.column,
+          elementId: targetElem.id,
+          tagName: targetElem.tag.split('.')[0],
+          className: targetElem.classes,
           breakpoint: activeBreakpoint,
           ...payload,
         });
@@ -410,7 +484,7 @@ export default function StudioPage() {
             oldValue: result.oldValue || '',
             newValue: result.newValue || '',
             filePath: result.filePath,
-            line: result.line || activeElement.line,
+            line: result.line || targetElem.line,
           });
         } else {
           // Backend refusal - never create fake client edits!
@@ -424,8 +498,113 @@ export default function StudioPage() {
         setBusy(false);
       }
     },
-    [activeBreakpoint, activeElement, selectedLayer]
+    [activeBreakpoint, activeElement, elements, selectedLayer]
   );
+
+  // Global listeners for direct manipulation gesture tracking
+  useEffect(() => {
+    if (!isDraggingMove && !isResizing) return;
+
+    const onPointerMove = (e: PointerEvent) => {
+      if (isDraggingMove && dragLayerKey) {
+        const dy = e.clientY - dragStartY;
+        setDragOffset(dy);
+
+        const currentIndex = childOrder.indexOf(dragLayerKey);
+        let targetSlot = currentIndex;
+        if (dy < -35 && currentIndex > 0) {
+          targetSlot = currentIndex - 1;
+        } else if (dy > 35 && currentIndex < childOrder.length - 1) {
+          targetSlot = currentIndex + 1;
+        }
+        setDropSlotIndex(targetSlot);
+      } else if (isResizing && resizeHandle) {
+        const deltaX = (resizeHandle === 'w' || resizeHandle === 'nw' || resizeHandle === 'sw' ? -1 : 1) * (e.clientX - resizeStartX) * 2;
+        const newW = Math.max(320, Math.min(960, Math.round(resizeStartWidth + deltaX)));
+        setLiveWidth(newW);
+
+        let twClass = 'max-w-2xl';
+        if (newW < 416) twClass = 'max-w-sm';
+        else if (newW < 480) twClass = 'max-w-md';
+        else if (newW < 544) twClass = 'max-w-lg';
+        else if (newW < 624) twClass = 'max-w-xl';
+        else if (newW < 720) twClass = 'max-w-2xl';
+        else if (newW < 832) twClass = 'max-w-3xl';
+        else twClass = 'max-w-4xl';
+
+        setDimensionTooltip(`${newW}px • ${twClass}`);
+      }
+    };
+
+    const onPointerUp = () => {
+      if (isDraggingMove && dragLayerKey) {
+        const currentIndex = childOrder.indexOf(dragLayerKey);
+        if (dropSlotIndex !== null && dropSlotIndex !== currentIndex) {
+          const nextOrder = [...childOrder];
+          const [moved] = nextOrder.splice(currentIndex, 1);
+          nextOrder.splice(dropSlotIndex, 0, moved);
+          setChildOrder(nextOrder);
+
+          // Trigger real backend reorder preview!
+          void triggerBackendPreview('reorder', {
+            targetIndex: dropSlotIndex,
+            direction: dropSlotIndex < currentIndex ? 'earlier' : 'later',
+          }, dragLayerKey);
+        }
+        setIsDraggingMove(false);
+        setDragLayerKey(null);
+        setDragOffset(0);
+        setDropSlotIndex(null);
+      } else if (isResizing && resizeHandle) {
+        if (dimensionTooltip) {
+          const twClass = dimensionTooltip.split('• ')[1]?.trim() || 'max-w-2xl';
+          const key = selectedLayer || 'text';
+          setElements((prev) => ({
+            ...prev,
+            [key]: { ...prev[key], maxWidth: twClass },
+          }));
+          void triggerBackendPreview('style', {
+            property: 'maxWidth',
+            value: twClass,
+          }, key);
+        }
+        setIsResizing(false);
+        setResizeHandle(null);
+        setDimensionTooltip(null);
+        setLiveWidth(null);
+      }
+    };
+
+    window.addEventListener('pointermove', onPointerMove);
+    window.addEventListener('pointerup', onPointerUp);
+    return () => {
+      window.removeEventListener('pointermove', onPointerMove);
+      window.removeEventListener('pointerup', onPointerUp);
+    };
+  }, [isDraggingMove, isResizing, dragLayerKey, dragStartY, childOrder, dropSlotIndex, resizeHandle, resizeStartX, resizeStartWidth, dimensionTooltip, selectedLayer, triggerBackendPreview]);
+
+  // Cancel manipulation or clear selection on Escape key
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        if (isDraggingMove) {
+          setIsDraggingMove(false);
+          setDragLayerKey(null);
+          setDragOffset(0);
+          setDropSlotIndex(null);
+        } else if (isResizing) {
+          setIsResizing(false);
+          setResizeHandle(null);
+          setLiveWidth(null);
+          setDimensionTooltip(null);
+        } else {
+          setSelectedLayer(null);
+        }
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isDraggingMove, isResizing]);
 
   // Apply Pending Edit to Source Disk
   const applySourceEdit = async () => {
@@ -1127,12 +1306,13 @@ export default function StudioPage() {
                 {/* ACTIVE VISUAL SELECTION BOX (Hero Content Block)         */}
                 {/* ======================================================== */}
                 <div
+                  ref={(el) => { elementRefs.current['hero'] = el; }}
                   onClick={(e) => {
                     e.stopPropagation();
                     if (inspectorActive) setSelectedLayer('hero');
                   }}
                   className={`relative w-full max-w-[780px] rounded-sm p-8 transition-all cursor-pointer bg-transparent ${
-                    selectedLayer === 'hero' ? 'border border-[#059669]' : 'border border-transparent hover:border-slate-200'
+                    selectedLayer === 'hero' ? 'border-2 border-[#059669] shadow-sm' : 'border border-transparent hover:border-slate-200'
                   }`}
                   style={{
                     paddingTop: `${elements.hero.paddingTop}px`,
@@ -1143,12 +1323,21 @@ export default function StudioPage() {
                 >
                   {/* Selection Badge Tag (Top-Left attached pill in SlightNudge Emerald) */}
                   {selectedLayer === 'hero' && (
-                    <div className="absolute -top-[19px] -left-[1px] bg-[#059669] text-white font-sans text-[10px] font-medium px-2 py-0.5 rounded-t-sm flex items-center space-x-1 shadow-sm">
-                      <svg className="w-2.5 h-2.5 text-white/90" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
-                        <rect x="3" y="3" width="18" height="18" rx="3" />
-                      </svg>
-                      <span>Hero Content Block</span>
-                    </div>
+                    <>
+                      <div className="absolute -top-[21px] -left-[1px] bg-[#059669] text-white font-mono text-[10px] font-bold px-2 py-0.5 rounded-t-[5px] flex items-center space-x-1 shadow-xs border-t border-l border-r border-emerald-400/30">
+                        <svg className="w-2.5 h-2.5 text-white/90" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
+                          <rect x="3" y="3" width="18" height="18" rx="3" />
+                        </svg>
+                        <span>HERO</span>
+                      </div>
+                      <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 bg-[#0F172A]/92 backdrop-blur-md text-[10px] font-mono text-slate-300 px-2.5 py-0.5 rounded-full shadow-lg border border-slate-700/70 select-none pointer-events-none z-20 flex items-center space-x-1.5 whitespace-nowrap animate-fade-in">
+                        <span className="text-emerald-400 font-semibold">W:</span>
+                        <span className="text-white font-bold">{elementDimensions.hero?.w || 780}px</span>
+                        <span className="text-slate-500">×</span>
+                        <span className="text-emerald-400 font-semibold">H:</span>
+                        <span className="text-white font-bold">{elementDimensions.hero?.h || 360}px</span>
+                      </div>
+                    </>
                   )}
 
                   {/* Floating In-Situ Canvas HUD Dock & Explore More Popover (Image 1 & Image 2) */}
@@ -1160,6 +1349,21 @@ export default function StudioPage() {
                     >
                       {/* Neatly arranged primary HUD bar (Image 1) */}
                       <div className="bg-[#0F172A]/95 backdrop-blur-md text-white rounded-full px-3 py-1.5 flex items-center space-x-2 shadow-2xl border border-slate-700/80 animate-fade-in">
+                        {/* iOS Clean Drag to Move Grabber Pill (in HUD) */}
+                        <div
+                          onPointerDown={(e) => {
+                            e.stopPropagation();
+                            if (selectedLayer) startDragMove(selectedLayer, e);
+                          }}
+                          className="flex items-center space-x-1.5 px-2.5 py-1 rounded-full bg-slate-800/80 hover:bg-slate-700/80 text-slate-300 hover:text-white cursor-grab active:cursor-grabbing border border-slate-700/60 transition group select-none mr-1"
+                          title="Reorder element"
+                        >
+                          <GripVertical size={12} className="text-emerald-400 group-hover:scale-110 transition-transform" />
+                          <span className="text-[11px] font-medium tracking-wide">Move</span>
+                        </div>
+
+                        <div className="h-3.5 w-[1px] bg-slate-700/80 mr-1" />
+
                         {isTextElement ? (
                           <>
                             <button
@@ -1300,6 +1504,21 @@ export default function StudioPage() {
                           aria-expanded={showExploreMore}
                         >
                           <MoreHorizontal size={14} />
+                        </button>
+
+                        <div className="h-3.5 w-[1px] bg-slate-700/80" />
+
+                        {/* Deselect (X) Button */}
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setSelectedLayer(null);
+                          }}
+                          className="p-1 rounded-full hover:bg-slate-800 text-slate-400 hover:text-white transition cursor-pointer"
+                          title="Deselect (Esc)"
+                        >
+                          <X size={13} />
                         </button>
                       </div>
 
@@ -1656,122 +1875,350 @@ export default function StudioPage() {
                     </div>
                   )}
 
-                  {/* Headline with soft ambient magenta/purple glow behind "business" */}
-                  <div
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      if (inspectorActive) setSelectedLayer('text');
-                    }}
-                    className={`relative cursor-pointer rounded p-1 transition ${
-                      selectedLayer === 'text' ? 'ring-2 ring-[#059669]' : ''
-                    }`}
-                  >
-                    {/* Pink/Magenta to Violet Radial Mesh Glow behind 'business' */}
-                    <div
-                      className="absolute top-0 right-14 w-64 h-24 rounded-full pointer-events-none opacity-80"
-                      style={{
-                        background: 'radial-gradient(circle, rgba(244, 114, 182, 0.45) 0%, rgba(192, 132, 252, 0.4) 40%, rgba(255, 255, 255, 0) 75%)',
-                        filter: 'blur(22px)',
-                      }}
-                    ></div>
+                  {/* Magnetic Drag Slot Drop Indicator (Before First Child) */}
+                  {isDraggingMove && dropSlotIndex === 0 && (
+                    <div className="w-full my-3 flex items-center justify-center relative animate-fade-in z-50 pointer-events-none">
+                      <div className="w-full h-1 bg-gradient-to-r from-emerald-400 via-teal-300 to-emerald-400 rounded-full shadow-[0_0_14px_rgba(16,185,129,0.9)] relative">
+                        <div className="absolute -left-1 -top-0.5 w-2 h-2 rounded-full bg-emerald-400 ring-2 ring-white shadow" />
+                        <div className="absolute -right-1 -top-0.5 w-2 h-2 rounded-full bg-emerald-400 ring-2 ring-white shadow" />
+                      </div>
+                      <div className="absolute -top-3 bg-emerald-600 text-white font-sans text-[10px] font-semibold px-2 py-0.5 rounded-full shadow-md flex items-center space-x-1">
+                        <Sparkles size={10} className="text-emerald-200" />
+                        <span>Drop here (Position 1 of {childOrder.length})</span>
+                      </div>
+                    </div>
+                  )}
 
-                    {/* Headline Text */}
-                    {isInlineEditing && selectedLayer === 'text' ? (
-                      <input
-                        type="text"
-                        autoFocus
-                        value={draftText}
-                        onChange={(e) => {
-                          setDraftText(e.target.value);
-                          setElements((prev) => ({
-                            ...prev,
-                            text: { ...prev.text, text: e.target.value },
-                          }));
-                        }}
-                        onBlur={() => {
-                          setIsInlineEditing(false);
-                          updateText(draftText);
-                        }}
-                        onKeyDown={(e) => {
-                          if (e.key === 'Enter') {
-                            setIsInlineEditing(false);
-                            updateText(draftText);
-                          } else if (e.key === 'Escape') {
-                            setIsInlineEditing(false);
-                          }
-                        }}
-                        className="relative font-manrope text-4xl sm:text-5xl font-extrabold tracking-tight leading-[1.14] max-w-2xl mx-auto bg-transparent border-b-2 border-emerald-500 text-center focus:outline-none w-full"
-                        style={{
-                          color: `#${elements.text.textColor}`,
-                        }}
-                      />
-                    ) : (
-                      <h1
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          if (inspectorActive) setSelectedLayer('text');
-                        }}
-                        onDoubleClick={() => setIsInlineEditing(true)}
-                        className="relative font-manrope text-4xl sm:text-5xl font-extrabold tracking-tight leading-[1.14] max-w-2xl mx-auto cursor-pointer"
-                        style={{
-                          color: `#${elements.text.textColor}`,
-                          fontFamily: elements.text.typeface === 'Manrope' ? 'Manrope, sans-serif' : 'Inter, sans-serif',
-                          fontWeight: elements.text.fontWeight === 'Bold' ? 700 : elements.text.fontWeight === 'Extra Bold' ? 800 : 600,
-                        }}
-                      >
-                        {elements.text.text || 'Make room for your best work.'}
-                      </h1>
-                    )}
-                  </div>
+                  {childOrder.map((layerKey, index) => {
+                    const isSelected = selectedLayer === layerKey;
+                    const isTargetOfMove = isDraggingMove && dragLayerKey === layerKey;
+                    const dim = elementDimensions[layerKey] || { w: 672, h: 100 };
 
-                  {/* Subtitle Paragraph */}
-                  <p
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      if (inspectorActive) setSelectedLayer('paragraph');
-                    }}
-                    className={`mt-5 text-[13.5px] max-w-xl mx-auto leading-relaxed cursor-pointer rounded p-1 transition ${
-                      selectedLayer === 'paragraph' ? 'ring-2 ring-[#059669]' : ''
-                    }`}
-                    style={{
-                      color: `#${elements.paragraph.textColor}`,
-                    }}
-                  >
-                    {elements.paragraph.text || 'Welcome to the future of business management! Our cutting-edge platform is here to revolutionize the way you run your company.'}
-                  </p>
+                    // Calculate dynamic transform if dragging
+                    let transformStyle: string | undefined = undefined;
+                    if (isTargetOfMove) {
+                      transformStyle = `translate3d(0, ${dragOffset}px, 0) scale(1.02)`;
+                    } else if (isDraggingMove && dragLayerKey) {
+                      const curIdx = childOrder.indexOf(dragLayerKey);
+                      if (dropSlotIndex !== null) {
+                        if (curIdx < dropSlotIndex && index > curIdx && index <= dropSlotIndex) {
+                          transformStyle = 'translate3d(0, -28px, 0)';
+                        } else if (curIdx > dropSlotIndex && index >= dropSlotIndex && index < curIdx) {
+                          transformStyle = 'translate3d(0, 28px, 0)';
+                        }
+                      }
+                    }
 
-                  {/* CTA Button inside block */}
-                  <div
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      if (inspectorActive) setSelectedLayer('button');
-                    }}
-                    className={`mt-7 inline-block rounded-lg p-0.5 transition cursor-pointer ${
-                      selectedLayer === 'button' ? 'ring-2 ring-[#059669]' : ''
-                    }`}
-                  >
-                    <button
-                      className="px-6 py-2.5 rounded-lg bg-slate-900 text-white font-medium text-xs shadow-md hover:bg-slate-800 transition"
-                      style={{
-                        backgroundColor: elements.button.bgFill === 'slate-900' ? '#0F172A' : `#${elements.button.bgFill}`,
-                        color: `#${elements.button.textColor}`,
-                      }}
-                    >
-                      {elements.button.text || 'Join the waitlist'}
-                    </button>
-                  </div>
+                    // Common interactive handles (Figma vector micro-handles, precision hardware sliders, centered dimension badge, flush corner tag)
+                    const interactiveHandles = isSelected && inspectorActive ? (
+                      <>
+                        {/* Flush Corner Tag / Move Grabber (Top Left - Figma / Framer style) */}
+                        {!isInlineEditing && (
+                          <div
+                            onPointerDown={(e) => startDragMove(layerKey, e)}
+                            className="absolute -top-[21px] -left-[1px] z-30 flex items-center space-x-1 px-2 py-0.5 rounded-t-[5px] bg-[#059669] text-white text-[10px] font-mono font-bold tracking-wider shadow-xs cursor-grab active:cursor-grabbing hover:bg-emerald-600 select-none transition-colors border-t border-l border-r border-emerald-400/30"
+                            title="Drag to reorder element (iOS style)"
+                          >
+                            <GripVertical size={10} className="text-emerald-200" />
+                            <span>{layerKey.toUpperCase()}</span>
+                            <span className="text-emerald-100/75 font-sans text-[9px] font-medium ml-0.5">MOVE</span>
+                          </div>
+                        )}
+
+                        {/* Figma / Apple Precision Vector Resize Handles */}
+                        {!isInlineEditing && !isDraggingMove && (
+                          <>
+                            {/* Northwest Corner Handle */}
+                            <div
+                              onPointerDown={(e) => startResize('nw', e)}
+                              className="absolute -top-[4px] -left-[4px] w-[7px] h-[7px] bg-white border-[1.5px] border-[#059669] rounded-[1.5px] shadow-[0_1px_3px_rgba(0,0,0,0.18)] cursor-nwse-resize hover:scale-150 hover:bg-emerald-50 transition-all z-30"
+                              title="Drag corner to resize"
+                            />
+                            {/* Northeast Corner Handle */}
+                            <div
+                              onPointerDown={(e) => startResize('ne', e)}
+                              className="absolute -top-[4px] -right-[4px] w-[7px] h-[7px] bg-white border-[1.5px] border-[#059669] rounded-[1.5px] shadow-[0_1px_3px_rgba(0,0,0,0.18)] cursor-nesw-resize hover:scale-150 hover:bg-emerald-50 transition-all z-30"
+                              title="Drag corner to resize"
+                            />
+                            {/* Southwest Corner Handle */}
+                            <div
+                              onPointerDown={(e) => startResize('sw', e)}
+                              className="absolute -bottom-[4px] -left-[4px] w-[7px] h-[7px] bg-white border-[1.5px] border-[#059669] rounded-[1.5px] shadow-[0_1px_3px_rgba(0,0,0,0.18)] cursor-nesw-resize hover:scale-150 hover:bg-emerald-50 transition-all z-30"
+                              title="Drag corner to resize"
+                            />
+                            {/* Southeast Corner Handle */}
+                            <div
+                              onPointerDown={(e) => startResize('se', e)}
+                              className="absolute -bottom-[4px] -right-[4px] w-[7px] h-[7px] bg-white border-[1.5px] border-[#059669] rounded-[1.5px] shadow-[0_1px_3px_rgba(0,0,0,0.18)] cursor-nwse-resize hover:scale-150 hover:bg-emerald-50 transition-all z-30"
+                              title="Drag corner to resize"
+                            />
+
+                            {/* West Edge (Left) Precision Slider */}
+                            <div
+                              onPointerDown={(e) => startResize('w', e)}
+                              className="absolute -left-[3px] top-1/2 -translate-y-1/2 w-[5px] h-[16px] bg-white border-[1.5px] border-[#059669] rounded-full shadow-[0_1px_3px_rgba(0,0,0,0.18)] flex items-center justify-center cursor-ew-resize hover:scale-125 hover:border-emerald-400 hover:shadow-[0_0_8px_rgba(16,185,129,0.35)] transition-all z-30"
+                              title="Drag side to resize width"
+                            >
+                              <div className="w-[1.5px] h-[6px] bg-[#059669] rounded-full" />
+                            </div>
+
+                            {/* East Edge (Right) Precision Slider */}
+                            <div
+                              onPointerDown={(e) => startResize('e', e)}
+                              className="absolute -right-[3px] top-1/2 -translate-y-1/2 w-[5px] h-[16px] bg-white border-[1.5px] border-[#059669] rounded-full shadow-[0_1px_3px_rgba(0,0,0,0.18)] flex items-center justify-center cursor-ew-resize hover:scale-125 hover:border-emerald-400 hover:shadow-[0_0_8px_rgba(16,185,129,0.35)] transition-all z-30"
+                              title="Drag side to resize width"
+                            >
+                              <div className="w-[1.5px] h-[6px] bg-[#059669] rounded-full" />
+                            </div>
+
+                            {/* South Edge (Bottom) Precision Slider */}
+                            <div
+                              onPointerDown={(e) => startResize('s', e)}
+                              className="absolute -bottom-[3px] left-1/2 -translate-x-1/2 w-[16px] h-[5px] bg-white border-[1.5px] border-[#059669] rounded-full shadow-[0_1px_3px_rgba(0,0,0,0.18)] flex items-center justify-center cursor-ns-resize hover:scale-125 hover:border-emerald-400 hover:shadow-[0_0_8px_rgba(16,185,129,0.35)] transition-all z-30"
+                              title="Drag edge to resize height"
+                            >
+                              <div className="w-[6px] h-[1.5px] bg-[#059669] rounded-full" />
+                            </div>
+
+                            {/* Sleek Centered Dimension Badge (Bottom Center) - Zero Collision! */}
+                            <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 bg-[#0F172A]/92 backdrop-blur-md text-[10.5px] font-mono text-emerald-400 px-3 py-0.5 rounded-full shadow-lg border border-slate-700/70 select-none pointer-events-none z-20 flex items-center space-x-1.5 whitespace-nowrap animate-fade-in">
+                              <span>W: {dim.w}px × H: {dim.h}px</span>
+                              {isResizing && dimensionTooltip && (
+                                <span className="text-emerald-300 font-semibold border-l border-slate-700/80 pl-1.5">{dimensionTooltip}</span>
+                              )}
+                            </div>
+                          </>
+                        )}
+                      </>
+                    ) : null;
+
+                    if (layerKey === 'text') {
+                      return (
+                        <React.Fragment key="text">
+                          <div
+                            ref={(el) => { elementRefs.current['text'] = el; }}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              if (inspectorActive) setSelectedLayer('text');
+                            }}
+                            className={`relative cursor-pointer rounded-lg p-1 transition-all ${
+                              isSelected
+                                ? 'border-[1.5px] border-[#059669] shadow-[0_0_0_1px_rgba(5,150,105,0.08)]'
+                                : 'border-[1.5px] border-transparent hover:border-slate-300'
+                            } ${isTargetOfMove ? 'scale-[1.02] shadow-2xl ring-2 ring-emerald-500/80 opacity-95 z-40' : ''}`}
+                            style={{
+                              maxWidth: isSelected && liveWidth ? `${liveWidth}px` : undefined,
+                              transform: transformStyle,
+                              transition: isDraggingMove ? 'transform 0.2s cubic-bezier(0.16, 1, 0.3, 1)' : 'max-width 0.1s ease-out',
+                            }}
+                          >
+                            {interactiveHandles}
+
+                            {/* Pink/Magenta to Violet Radial Mesh Glow behind 'business' */}
+                            <div
+                              className="absolute top-0 right-14 w-64 h-24 rounded-full pointer-events-none opacity-80"
+                              style={{
+                                background: 'radial-gradient(circle, rgba(244, 114, 182, 0.45) 0%, rgba(192, 132, 252, 0.4) 40%, rgba(255, 255, 255, 0) 75%)',
+                                filter: 'blur(22px)',
+                              }}
+                            />
+
+                            {/* Headline Text */}
+                            {isInlineEditing && isSelected ? (
+                              <input
+                                type="text"
+                                autoFocus
+                                value={draftText}
+                                onChange={(e) => {
+                                  setDraftText(e.target.value);
+                                  setElements((prev) => ({
+                                    ...prev,
+                                    text: { ...prev.text, text: e.target.value },
+                                  }));
+                                }}
+                                onBlur={() => {
+                                  setIsInlineEditing(false);
+                                  updateText(draftText);
+                                }}
+                                onKeyDown={(e) => {
+                                  if (e.key === 'Enter') {
+                                    setIsInlineEditing(false);
+                                    updateText(draftText);
+                                  } else if (e.key === 'Escape') {
+                                    setIsInlineEditing(false);
+                                  }
+                                }}
+                                className="relative font-manrope text-4xl sm:text-5xl font-extrabold tracking-tight leading-[1.14] max-w-2xl mx-auto bg-transparent border-b-2 border-emerald-500 text-center focus:outline-none w-full"
+                                style={{
+                                  color: `#${elements.text.textColor}`,
+                                }}
+                              />
+                            ) : (
+                              <h1
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  if (inspectorActive) setSelectedLayer('text');
+                                }}
+                                onDoubleClick={() => setIsInlineEditing(true)}
+                                className="relative font-manrope text-4xl sm:text-5xl font-extrabold tracking-tight leading-[1.14] max-w-2xl mx-auto cursor-pointer"
+                                style={{
+                                  color: `#${elements.text.textColor}`,
+                                  fontFamily: elements.text.typeface === 'Manrope' ? 'Manrope, sans-serif' : 'Inter, sans-serif',
+                                  fontWeight: elements.text.fontWeight === 'Bold' ? 700 : elements.text.fontWeight === 'Extra Bold' ? 800 : 600,
+                                }}
+                              >
+                                {elements.text.text || 'Make room for your best work.'}
+                              </h1>
+                            )}
+                          </div>
+
+                          {/* Magnetic Drop Slot Line between siblings */}
+                          {isDraggingMove && dropSlotIndex === index + 1 && (
+                            <div className="w-full my-3 flex items-center justify-center relative animate-fade-in z-50 pointer-events-none">
+                              <div className="w-full h-1 bg-gradient-to-r from-emerald-400 via-teal-300 to-emerald-400 rounded-full shadow-[0_0_14px_rgba(16,185,129,0.9)] relative">
+                                <div className="absolute -left-1 -top-0.5 w-2 h-2 rounded-full bg-emerald-400 ring-2 ring-white shadow" />
+                                <div className="absolute -right-1 -top-0.5 w-2 h-2 rounded-full bg-emerald-400 ring-2 ring-white shadow" />
+                              </div>
+                              <div className="absolute -top-3 bg-emerald-600 text-white font-sans text-[10px] font-semibold px-2 py-0.5 rounded-full shadow-md flex items-center space-x-1">
+                                <Sparkles size={10} className="text-emerald-200" />
+                                <span>Drop here (Position {index + 2} of {childOrder.length})</span>
+                              </div>
+                            </div>
+                          )}
+                        </React.Fragment>
+                      );
+                    }
+
+                    if (layerKey === 'paragraph') {
+                      return (
+                        <React.Fragment key="paragraph">
+                          <div
+                            ref={(el) => { elementRefs.current['paragraph'] = el; }}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              if (inspectorActive) setSelectedLayer('paragraph');
+                            }}
+                            className={`relative cursor-pointer rounded-lg p-1 transition-all ${
+                              isSelected
+                                ? 'border-[1.5px] border-[#059669] shadow-[0_0_0_1px_rgba(5,150,105,0.08)]'
+                                : 'border-[1.5px] border-transparent hover:border-slate-300'
+                            } ${isTargetOfMove ? 'scale-[1.02] shadow-2xl ring-2 ring-emerald-500/80 opacity-95 z-40' : ''}`}
+                            style={{
+                              maxWidth: isSelected && liveWidth ? `${liveWidth}px` : undefined,
+                              transform: transformStyle,
+                              transition: isDraggingMove ? 'transform 0.2s cubic-bezier(0.16, 1, 0.3, 1)' : 'max-width 0.1s ease-out',
+                            }}
+                          >
+                            {interactiveHandles}
+                            <p
+                              className="mt-5 text-[13.5px] max-w-xl mx-auto leading-relaxed cursor-pointer"
+                              style={{
+                                color: `#${elements.paragraph.textColor}`,
+                              }}
+                            >
+                              {elements.paragraph.text || 'Welcome to the future of business management! Our cutting-edge platform is here to revolutionize the way you run your company.'}
+                            </p>
+                          </div>
+
+                          {/* Magnetic Drop Slot Line between siblings */}
+                          {isDraggingMove && dropSlotIndex === index + 1 && (
+                            <div className="w-full my-3 flex items-center justify-center relative animate-fade-in z-50 pointer-events-none">
+                              <div className="w-full h-1 bg-gradient-to-r from-emerald-400 via-teal-300 to-emerald-400 rounded-full shadow-[0_0_14px_rgba(16,185,129,0.9)] relative">
+                                <div className="absolute -left-1 -top-0.5 w-2 h-2 rounded-full bg-emerald-400 ring-2 ring-white shadow" />
+                                <div className="absolute -right-1 -top-0.5 w-2 h-2 rounded-full bg-emerald-400 ring-2 ring-white shadow" />
+                              </div>
+                              <div className="absolute -top-3 bg-emerald-600 text-white font-sans text-[10px] font-semibold px-2 py-0.5 rounded-full shadow-md flex items-center space-x-1">
+                                <Sparkles size={10} className="text-emerald-200" />
+                                <span>Drop here (Position {index + 2} of {childOrder.length})</span>
+                              </div>
+                            </div>
+                          )}
+                        </React.Fragment>
+                      );
+                    }
+
+                    if (layerKey === 'button') {
+                      return (
+                        <React.Fragment key="button">
+                          <div
+                            ref={(el) => { elementRefs.current['button'] = el; }}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              if (inspectorActive) setSelectedLayer('button');
+                            }}
+                            className={`relative mt-7 inline-block rounded-lg p-0.5 transition-all cursor-pointer ${
+                              isSelected
+                                ? 'border-[1.5px] border-[#059669] shadow-[0_0_0_1px_rgba(5,150,105,0.08)]'
+                                : 'border-[1.5px] border-transparent hover:border-slate-300'
+                            } ${isTargetOfMove ? 'scale-[1.02] shadow-2xl ring-2 ring-emerald-500/80 opacity-95 z-40' : ''}`}
+                            style={{
+                              transform: transformStyle,
+                              transition: isDraggingMove ? 'transform 0.2s cubic-bezier(0.16, 1, 0.3, 1)' : undefined,
+                            }}
+                          >
+                            {interactiveHandles}
+                            <button
+                              className="px-6 py-2.5 rounded-lg bg-slate-900 text-white font-medium text-xs shadow-md hover:bg-slate-800 transition"
+                              style={{
+                                backgroundColor: elements.button.bgFill === 'slate-900' ? '#0F172A' : `#${elements.button.bgFill}`,
+                                color: `#${elements.button.textColor}`,
+                              }}
+                            >
+                              {elements.button.text || 'Join the waitlist'}
+                            </button>
+                          </div>
+
+                          {/* Magnetic Drop Slot Line between siblings */}
+                          {isDraggingMove && dropSlotIndex === index + 1 && (
+                            <div className="w-full my-3 flex items-center justify-center relative animate-fade-in z-50 pointer-events-none">
+                              <div className="w-full h-1 bg-gradient-to-r from-emerald-400 via-teal-300 to-emerald-400 rounded-full shadow-[0_0_14px_rgba(16,185,129,0.9)] relative">
+                                <div className="absolute -left-1 -top-0.5 w-2 h-2 rounded-full bg-emerald-400 ring-2 ring-white shadow" />
+                                <div className="absolute -right-1 -top-0.5 w-2 h-2 rounded-full bg-emerald-400 ring-2 ring-white shadow" />
+                              </div>
+                              <div className="absolute -top-3 bg-emerald-600 text-white font-sans text-[10px] font-semibold px-2 py-0.5 rounded-full shadow-md flex items-center space-x-1">
+                                <Sparkles size={10} className="text-emerald-200" />
+                                <span>Drop here (Position {index + 2} of {childOrder.length})</span>
+                              </div>
+                            </div>
+                          )}
+                        </React.Fragment>
+                      );
+                    }
+
+                    return null;
+                  })}
                 </div>
 
                 {/* Social Proof Stack under block */}
                 <div
+                  ref={(el) => { elementRefs.current['waitlist'] = el; }}
                   onClick={(e) => {
                     e.stopPropagation();
                     if (inspectorActive) setSelectedLayer('waitlist');
                   }}
-                  className={`mt-8 flex flex-col items-center space-y-2.5 cursor-pointer rounded p-2 transition ${
-                    selectedLayer === 'waitlist' ? 'ring-2 ring-[#059669]' : ''
+                  className={`relative mt-8 flex flex-col items-center space-y-2.5 cursor-pointer rounded-lg p-2.5 transition-all ${
+                    selectedLayer === 'waitlist'
+                      ? 'border-[1.5px] border-[#059669] shadow-[0_0_0_1px_rgba(5,150,105,0.08)]'
+                      : 'border-[1.5px] border-transparent hover:border-slate-300'
                   }`}
                 >
+                  {selectedLayer === 'waitlist' && inspectorActive && (
+                    <>
+                      {/* Flush Tag */}
+                      <div className="absolute -top-[21px] -left-[1px] bg-[#059669] text-white font-mono text-[10px] font-bold px-2 py-0.5 rounded-t-[5px] flex items-center space-x-1 shadow-xs border-t border-l border-r border-emerald-400/30">
+                        <span>WAITLIST</span>
+                      </div>
+
+                      {/* Micro Dimension Badge Centered */}
+                      <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 bg-[#0F172A]/92 backdrop-blur-md text-[10px] font-mono text-slate-300 px-2.5 py-0.5 rounded-full shadow-lg border border-slate-700/70 select-none pointer-events-none z-20 flex items-center space-x-1.5 whitespace-nowrap animate-fade-in">
+                        <span className="text-emerald-400 font-semibold">W:</span>
+                        <span className="text-white font-bold">{elementDimensions.waitlist?.w || 260}px</span>
+                        <span className="text-slate-500">×</span>
+                        <span className="text-emerald-400 font-semibold">H:</span>
+                        <span className="text-white font-bold">{elementDimensions.waitlist?.h || 54}px</span>
+                      </div>
+                    </>
+                  )}
                   {/* Overlapping member avatars */}
                   <div className="flex items-center -space-x-2">
                     <img
