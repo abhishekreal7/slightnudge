@@ -860,34 +860,12 @@ export default function StudioPage() {
 
     return (
       <div
-        className="absolute -top-14 left-1/2 -translate-x-1/2 z-40 flex flex-col items-center select-none"
+        className="absolute -top-16 left-1/2 -translate-x-1/2 z-40 flex flex-col items-center select-none"
         style={{ minWidth: 'max-content' }}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Precise Obsidian Pill HUD Bar Matching User Reference Exactly */}
-        <div className="relative bg-[#0A0F1D]/95 backdrop-blur-md text-white rounded-full pl-3 pr-2.5 py-1.5 flex items-center shadow-[0_12px_32px_rgba(0,0,0,0.45),0_2px_6px_rgba(0,0,0,0.25)] border border-slate-800/90 animate-fade-in select-none">
-          {/* 1. 6-Dot Grip Grid & Divider Group */}
-          <div className="flex items-center space-x-2 shrink-0 mr-2.5">
-            <div
-              onPointerDown={(e) => {
-                e.stopPropagation();
-                if (selectedLayer) startDragMove(selectedLayer, e);
-              }}
-              className="w-6 h-7 flex items-center justify-center rounded hover:bg-slate-800 text-slate-400 hover:text-white cursor-grab active:cursor-grabbing transition"
-              title="Drag to move element"
-            >
-              <svg className="w-3.5 h-2.5 text-slate-300" viewBox="0 0 14 10" fill="currentColor">
-                <circle cx="2" cy="2" r="1.3" />
-                <circle cx="7" cy="2" r="1.3" />
-                <circle cx="12" cy="2" r="1.3" />
-                <circle cx="2" cy="8" r="1.3" />
-                <circle cx="7" cy="8" r="1.3" />
-                <circle cx="12" cy="8" r="1.3" />
-              </svg>
-            </div>
-            <div className="h-4 w-[1px] bg-slate-800" />
-          </div>
-
+        <div className="relative bg-[#0A0F1D]/95 backdrop-blur-md text-white rounded-full px-2.5 py-1.5 flex items-center shadow-[0_12px_32px_rgba(0,0,0,0.45),0_2px_6px_rgba(0,0,0,0.25)] border border-slate-800/90 animate-fade-in select-none">
           {isTextElement ? (
             <>
               {/* 2. Emerald Gradient "Edit text ▾" Button */}
@@ -1987,26 +1965,20 @@ export default function StudioPage() {
                       <>
                         {/* Floating In-Situ Canvas HUD Dock attached directly to active child element */}
                         {renderHUDBar()}
-                        {/* 4-Way Move Square Badge (Top Left - User Reference Benchmark) */}
+                        {/* 4-Way Move Handle (Centered on Top Edge - User Benchmark) */}
                         {!isInlineEditing && (
                           <div
                             onPointerDown={(e) => startDragMove(layerKey, e)}
-                            className="absolute -top-[23px] -left-[1px] w-[23px] h-[23px] bg-[#10B981] hover:bg-emerald-600 rounded-t-[3px] flex items-center justify-center cursor-grab active:cursor-grabbing shadow-xs transition-colors z-30"
+                            className="absolute -top-[20px] left-1/2 -translate-x-1/2 w-[26px] h-[20px] bg-[#10B981] hover:bg-emerald-600 rounded-t-[5px] flex items-center justify-center cursor-grab active:cursor-grabbing shadow-xs transition-colors z-30"
                             title="Drag to reorder element (iOS style)"
                           >
-                            <Move size={13} className="text-white" strokeWidth={2.5} />
+                            <Move size={12} className="text-white" strokeWidth={2.5} />
                           </div>
                         )}
 
                         {/* Precision Solid Emerald Circular Handles */}
                         {!isInlineEditing && !isDraggingMove && (
                           <>
-                            {/* North Midpoint Handle */}
-                            <div
-                              onPointerDown={(e) => startResize('s', e)}
-                              className="absolute -top-[5px] left-1/2 -translate-x-1/2 w-2.5 h-2.5 rounded-full bg-[#10B981] ring-1 ring-white shadow-xs cursor-ns-resize hover:scale-125 transition-transform z-30"
-                              title="Drag edge to resize"
-                            />
                             {/* South Midpoint Handle */}
                             <div
                               onPointerDown={(e) => startResize('s', e)}

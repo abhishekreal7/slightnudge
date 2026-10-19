@@ -107,6 +107,7 @@ async function main() {
     console.log('   ✅ [PASS] Paragraph style preview generated:', previewBody2.summary);
 
     const applyToSourceBtn = page.locator('button:has-text("Apply to Source")');
+    await applyToSourceBtn.waitFor({ state: 'visible', timeout: 5000 });
     const isFloatingApplyVisible = await applyToSourceBtn.isVisible();
     if (!isFloatingApplyVisible) throw new Error('"Apply to Source" button was not visible!');
     console.log('   ✅ [PASS] "Apply to Source" button visible in bottom floating bar');
