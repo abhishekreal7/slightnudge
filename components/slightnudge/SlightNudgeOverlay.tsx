@@ -2238,6 +2238,243 @@ export function SlightNudgeOverlay({
       </div>
     )}
 
+    {showExploreMore && selected && selected.safeToEdit !== false && (
+      <div
+        className="sn-explore-card"
+        style={{
+          position: 'absolute',
+          top: `${hudPlacement.top + 42}px`,
+          left: `${hudLeft}px`,
+          zIndex: 9999,
+          width: '350px',
+          background: '#ffffff',
+          borderRadius: '12px',
+          boxShadow: '0 20px 40px rgba(0,0,0,0.18), 0 1px 3px rgba(0,0,0,0.1)',
+          border: '1px solid rgba(0,0,0,0.1)',
+          overflow: 'hidden',
+          fontSize: '12px',
+          color: '#1e293b',
+        }}
+      >
+        {/* Top Dark Header Bar with Icon Tabs */}
+        <div style={{ background: '#0B0F17', color: '#ffffff', padding: '8px 12px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', color: '#94a3b8' }}>
+            <button
+              type="button"
+              onClick={() => setExploreTab('text')}
+              style={{ padding: '4px', borderRadius: '4px', border: 0, background: 'transparent', cursor: 'pointer', color: exploreTab === 'text' ? '#ffffff' : '#94a3b8' }}
+              title="Typography & Text"
+            >
+              <Type size={14} />
+            </button>
+            <button
+              type="button"
+              onClick={() => setExploreTab('media')}
+              style={{ padding: '4px', borderRadius: '4px', border: 0, background: 'transparent', cursor: 'pointer', color: exploreTab === 'media' ? '#ffffff' : '#94a3b8' }}
+              title="Media & Actions"
+            >
+              <Play size={13} />
+            </button>
+            <button
+              type="button"
+              onClick={() => setExploreTab('columns')}
+              style={{ padding: '4px', borderRadius: '4px', border: 0, background: 'transparent', cursor: 'pointer', color: exploreTab === 'columns' ? '#ffffff' : '#94a3b8' }}
+              title="Columns & Layout"
+            >
+              <Columns2 size={13} />
+            </button>
+            <button
+              type="button"
+              onClick={() => setExploreTab('box')}
+              style={{ padding: '4px', borderRadius: '4px', border: 0, background: 'transparent', cursor: 'pointer', color: exploreTab === 'box' ? '#ffffff' : '#94a3b8' }}
+              title="Box Model"
+            >
+              <LayoutGrid size={13} />
+            </button>
+            <button
+              type="button"
+              onClick={() => setExploreTab('code')}
+              style={{ padding: '4px', borderRadius: '4px', border: 0, background: 'transparent', cursor: 'pointer', color: exploreTab === 'code' ? '#ffffff' : '#94a3b8' }}
+              title="JSX & Code"
+            >
+              <Code2 size={14} />
+            </button>
+            <button
+              type="button"
+              onClick={() => setExploreTab('inspect')}
+              style={{ padding: '4px', borderRadius: '4px', border: 0, background: 'transparent', cursor: 'pointer', color: exploreTab === 'inspect' ? '#ffffff' : '#94a3b8' }}
+              title="Inspect Element"
+            >
+              <Laptop2 size={13} />
+            </button>
+          </div>
+          <button
+            type="button"
+            onClick={() => setShowExploreMore(false)}
+            style={{ padding: '4px', borderRadius: '4px', border: 0, background: 'transparent', cursor: 'pointer', color: '#94a3b8', display: 'flex', alignItems: 'center' }}
+            title="Close explore inspector"
+          >
+            <X size={14} />
+          </button>
+        </div>
+
+        {/* Tab Body */}
+        {exploreTab === 'box' && (
+          <div style={{ padding: '12px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <span style={{ color: '#64748b', fontSize: '11px', fontWeight: 500 }}>Box Name</span>
+              <span style={{ fontFamily: 'monospace', fontSize: '11px', fontWeight: 600, color: '#0f172a' }}>#{selected.id || selected.tagName}</span>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <span style={{ color: '#64748b', fontSize: '11px', fontWeight: 500 }}>Tag</span>
+              <span style={{ fontFamily: 'monospace', fontSize: '11px', color: '#475569' }}>&lt;{selected.tagName}&gt;</span>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <span style={{ color: '#64748b', fontSize: '11px', fontWeight: 500 }}>Display</span>
+              <div style={{ display: 'flex', gap: '4px' }}>
+                {['block', 'flex', 'grid', 'hidden'].map((disp) => (
+                  <button
+                    key={disp}
+                    type="button"
+                    onClick={() => void updateStyle('display', disp)}
+                    style={{
+                      padding: '2px 6px',
+                      fontSize: '10px',
+                      borderRadius: '4px',
+                      border: '1px solid #e2e8f0',
+                      background: selected.className.includes(disp) ? '#059669' : '#f8fafc',
+                      color: selected.className.includes(disp) ? '#ffffff' : '#475569',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    {disp}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', opacity: 0.6 }}>
+              <span style={{ color: '#64748b', fontSize: '11px', fontWeight: 500 }}>Overflow</span>
+              <span style={{ fontSize: '10px', color: '#94a3b8' }} title="Overflow: not supported in source editor">Not supported</span>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', opacity: 0.6 }}>
+              <span style={{ color: '#64748b', fontSize: '11px', fontWeight: 500 }}>Opacity</span>
+              <span style={{ fontSize: '10px', color: '#94a3b8' }} title="Opacity: not supported in source editor">Not supported</span>
+            </div>
+          </div>
+        )}
+
+        {exploreTab === 'text' && (
+          <div style={{ padding: '12px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <span style={{ color: '#64748b', fontSize: '11px', fontWeight: 500 }}>Weight</span>
+              <div style={{ display: 'flex', gap: '4px' }}>
+                {['font-normal', 'font-medium', 'font-semibold', 'font-bold'].map((w) => (
+                  <button
+                    key={w}
+                    type="button"
+                    onClick={() => void updateStyle('fontWeight', w)}
+                    style={{
+                      padding: '2px 6px',
+                      fontSize: '10px',
+                      borderRadius: '4px',
+                      border: '1px solid #e2e8f0',
+                      background: selected.className.includes(w) ? '#059669' : '#f8fafc',
+                      color: selected.className.includes(w) ? '#ffffff' : '#475569',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    {w.replace('font-', '')}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <span style={{ color: '#64748b', fontSize: '11px', fontWeight: 500 }}>Align</span>
+              <div style={{ display: 'flex', gap: '4px' }}>
+                <button type="button" onClick={() => void updateStyle('alignment', 'text-left')} style={{ padding: '4px', borderRadius: '4px', border: '1px solid #e2e8f0', background: '#f8fafc', cursor: 'pointer' }} title="Left"><AlignLeft size={13} /></button>
+                <button type="button" onClick={() => void updateStyle('alignment', 'text-center')} style={{ padding: '4px', borderRadius: '4px', border: '1px solid #e2e8f0', background: '#f8fafc', cursor: 'pointer' }} title="Center"><AlignCenter size={13} /></button>
+                <button type="button" onClick={() => void updateStyle('alignment', 'text-right')} style={{ padding: '4px', borderRadius: '4px', border: '1px solid #e2e8f0', background: '#f8fafc', cursor: 'pointer' }} title="Right"><AlignRight size={13} /></button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {exploreTab === 'columns' && (
+          <div style={{ padding: '12px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <span style={{ color: '#64748b', fontSize: '11px', fontWeight: 500 }}>Direction</span>
+              <div style={{ display: 'flex', gap: '4px' }}>
+                {['flex-row', 'flex-col'].map((dir) => (
+                  <button
+                    key={dir}
+                    type="button"
+                    onClick={() => void updateStyle('flexDirection', dir)}
+                    style={{
+                      padding: '2px 6px',
+                      fontSize: '10px',
+                      borderRadius: '4px',
+                      border: '1px solid #e2e8f0',
+                      background: selected.className.includes(dir) ? '#059669' : '#f8fafc',
+                      color: selected.className.includes(dir) ? '#ffffff' : '#475569',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    {dir.replace('flex-', '')}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <span style={{ color: '#64748b', fontSize: '11px', fontWeight: 500 }}>Gap</span>
+              <div style={{ display: 'flex', gap: '4px' }}>
+                {['gap-1', 'gap-2', 'gap-4', 'gap-6'].map((g) => (
+                  <button
+                    key={g}
+                    type="button"
+                    onClick={() => void updateStyle('gap', g)}
+                    style={{
+                      padding: '2px 6px',
+                      fontSize: '10px',
+                      borderRadius: '4px',
+                      border: '1px solid #e2e8f0',
+                      background: selected.className.includes(g) ? '#059669' : '#f8fafc',
+                      color: selected.className.includes(g) ? '#ffffff' : '#475569',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    {g.replace('gap-', '')}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {exploreTab === 'code' && (
+          <div style={{ padding: '12px', display: 'flex', flexDirection: 'column', gap: '8px', fontFamily: 'monospace', fontSize: '10.5px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}><span style={{ color: '#64748b' }}>File:</span><span style={{ color: '#0f172a' }}>{selected.filePath}</span></div>
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}><span style={{ color: '#64748b' }}>Location:</span><span style={{ color: '#0f172a' }}>Line {selected.line}{selected.column ? `:${selected.column}` : ''}</span></div>
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}><span style={{ color: '#64748b' }}>Classes:</span><span style={{ color: '#0f172a', maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{selected.className}</span></div>
+          </div>
+        )}
+
+        {exploreTab === 'inspect' && (
+          <div style={{ padding: '12px', display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '11px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}><span style={{ color: '#64748b' }}>Width / Height:</span><span>{Math.round(selected.rect.width)} × {Math.round(selected.rect.height)} px</span></div>
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}><span style={{ color: '#64748b' }}>Position:</span><span>Top {Math.round(selected.rect.top)}, Left {Math.round(selected.rect.left)}</span></div>
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}><span style={{ color: '#64748b' }}>Safe to Edit:</span><span style={{ color: selected.safeToEdit ? '#059669' : '#dc2626' }}>{selected.safeToEdit ? 'Verified AST Target' : 'Refused Safely'}</span></div>
+          </div>
+        )}
+
+        {exploreTab === 'media' && (
+          <div style={{ padding: '12px', display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '11px' }}>
+            <div style={{ color: '#64748b' }}>Media controls for &lt;{selected.tagName}&gt;</div>
+            <div style={{ opacity: 0.6, fontSize: '10.5px', color: '#94a3b8' }}>Object styles are not supported in source editor.</div>
+          </div>
+        )}
+      </div>
+    )}
+
     <aside className="sn-inspector-panel" aria-label="Visual inspector">
       <div className="sn-inspector-header"><div className="sn-inspector-title"><span className="sn-inspector-icon"><MousePointer2 size={16}/></span><div><strong>Visual editor</strong><span>{active ? 'Select a page element' : 'Selection paused'}</span></div></div><button className={`sn-inspector-toggle ${active ? 'is-active' : ''}`} type="button" disabled={busy} onClick={() => { if (pendingEdit) void discardPreview(); setActive((value) => !value); setSelected(null); window.dispatchEvent(new CustomEvent('slightnudge:selection', { detail: null })); selectedNodeRef.current = null; editGroupIdRef.current = null; }} aria-pressed={active}>{active ? 'On' : 'Off'}</button></div>
 
