@@ -33,6 +33,13 @@ import {
   Play,
   LayoutGrid,
 } from 'lucide-react';
+import {
+  previewEditAPI,
+  applyEditAPI,
+  discardEditAPI,
+  undoEditAPI,
+  inspectElementAPI,
+} from '@/lib/slightnudge/client';
 
 interface ElementMeta {
   id: string;
@@ -66,13 +73,13 @@ interface ElementMeta {
 
 const defaultElements: Record<string, ElementMeta> = {
   hero: {
-    id: 'hero',
+    id: '',
     name: 'Hero Content Block',
     tag: 'div.hero-block',
     filePath: 'fixtures/1-plain-static.tsx',
     line: 8,
     column: 19,
-    classes: 'relative w-full max-w-[780px] p-8 text-center',
+    classes: 'sn-playground-content p-3',
     display: 'Block',
     width: 'Auto',
     height: 'Auto',
@@ -81,41 +88,41 @@ const defaultElements: Record<string, ElementMeta> = {
     marginBottom: '0',
     marginLeft: 'Auto',
     marginRight: 'Auto',
-    paddingTop: '0',
-    paddingBottom: '0',
-    paddingLeft: '16',
-    paddingRight: '16',
-    typeface: 'Manrope',
-    fontWeight: 'Semi Bold',
-    textColor: '2B2F37',
+    paddingTop: '12',
+    paddingBottom: '12',
+    paddingLeft: '12',
+    paddingRight: '12',
+    typeface: 'Inter',
+    fontWeight: 'Regular',
+    textColor: '17211f',
     bgFill: 'transparent',
-    borderRadius: 'rounded-sm',
+    borderRadius: 'rounded-none',
     borderStroke: 'None',
     position: 'Relative',
   },
   text: {
-    id: 'text',
+    id: 'target',
     name: 'Headline Text',
     tag: 'h1.headline',
     filePath: 'fixtures/1-plain-static.tsx',
     line: 8,
-    column: 120,
-    classes: 'font-manrope text-5xl font-extrabold text-slate-900 tracking-tight leading-[1.14]',
-    text: 'Unleash your business potential with us',
+    column: 361,
+    classes: 'ml-2.5 mt-1 text-2xl',
+    text: 'Make room for your best work.',
     display: 'Block',
     width: 'Auto',
     height: 'Auto',
     overflow: 'visible',
-    marginTop: '0',
+    marginTop: '1',
     marginBottom: '0',
-    marginLeft: 'Auto',
-    marginRight: 'Auto',
+    marginLeft: '2.5',
+    marginRight: '0',
     paddingTop: '0',
     paddingBottom: '0',
     paddingLeft: '0',
     paddingRight: '0',
-    typeface: 'Manrope',
-    fontWeight: 'Extra Bold',
+    typeface: 'Inter',
+    fontWeight: 'Semi Bold',
     textColor: '0F172A',
     bgFill: 'transparent',
     borderRadius: 'rounded-none',
@@ -123,19 +130,19 @@ const defaultElements: Record<string, ElementMeta> = {
     position: 'Relative',
   },
   paragraph: {
-    id: 'paragraph',
+    id: '',
     name: 'Subheading Paragraph',
     tag: 'p.subheading',
     filePath: 'fixtures/1-plain-static.tsx',
     line: 8,
-    column: 32,
-    classes: 'text-sm text-slate-600 max-w-xl mx-auto font-normal leading-relaxed',
-    text: 'Welcome to the future of business management! Our cutting-edge platform is here to revolutionize the way you run your company.',
+    column: 138,
+    classes: 'sn-playground-description text-xl',
+    text: 'One thoughtful workspace for the people, projects, and plans that move your business forward.',
     display: 'Block',
     width: 'Auto',
     height: 'Auto',
     overflow: 'visible',
-    marginTop: '5',
+    marginTop: '0',
     marginBottom: '0',
     marginLeft: 'Auto',
     marginRight: 'Auto',
@@ -145,21 +152,21 @@ const defaultElements: Record<string, ElementMeta> = {
     paddingRight: '0',
     typeface: 'Inter',
     fontWeight: 'Regular',
-    textColor: '475569',
+    textColor: '697571',
     bgFill: 'transparent',
     borderRadius: 'rounded-none',
     borderStroke: 'None',
     position: 'Relative',
   },
   button: {
-    id: 'button',
+    id: '',
     name: 'Join Waitlist Button',
-    tag: 'button.cta-btn',
+    tag: 'a.cta-btn',
     filePath: 'fixtures/1-plain-static.tsx',
     line: 8,
-    column: 198,
-    classes: 'px-6 py-2.5 rounded-lg bg-slate-900 text-white font-medium text-xs shadow-md',
-    text: 'Join the waitlist',
+    column: 512,
+    classes: 'sn-playground-primary',
+    text: 'Get started →',
     display: 'Inline-Block',
     width: 'Auto',
     height: 'Auto',
@@ -384,58 +391,40 @@ export default function StudioPage() {
       if (!selectedLayer) return;
       setBusy(true);
       try {
-        const body = {
+        const result = await previewEditAPI({
+          kind,
           filePath: activeElement.filePath,
           line: activeElement.line,
           column: activeElement.column,
+          elementId: activeElement.id,
           tagName: activeElement.tag.split('.')[0],
           className: activeElement.classes,
-          elementId: activeElement.id,
-          kind,
+          breakpoint: activeBreakpoint,
           ...payload,
-        };
-
-        const res = await fetch('/api/slightnudge/preview', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(body),
         });
 
-        const data = await res.json();
-        if (data.success && data.id) {
+        if (result.success && result.id) {
           setPendingEdit({
-            id: data.id,
-            summary: data.summary || `${payload.property || kind} modified`,
-            oldValue: data.oldValue || '',
-            newValue: data.newValue || '',
-            filePath: activeElement.filePath,
-            line: activeElement.line,
+            id: result.id,
+            summary: result.summary || `${payload.property || kind} modified`,
+            oldValue: result.oldValue || '',
+            newValue: result.newValue || '',
+            filePath: result.filePath,
+            line: result.line || activeElement.line,
           });
         } else {
-          setPendingEdit({
-            id: `local-${Date.now()}`,
-            summary: data.message || (kind === 'text' ? `Update text` : kind === 'reorder' ? `Move ${payload.direction}` : `${payload.property || 'Style'} modified`),
-            oldValue: '',
-            newValue: String(payload.value || ''),
-            filePath: activeElement.filePath,
-            line: activeElement.line,
-          });
+          // Backend refusal - never create fake client edits!
+          setPendingEdit(null);
+          showToast(`⚠️ ${result.refusalReason || result.error || 'Edit refused'}`);
         }
-      } catch (err) {
-        console.warn('Backend preview fallback:', err);
-        setPendingEdit({
-          id: `local-${Date.now()}`,
-          summary: kind === 'text' ? `Update text` : kind === 'reorder' ? `Move ${payload.direction}` : `${payload.property || 'Style'} modified`,
-          oldValue: '',
-          newValue: String(payload.value || ''),
-          filePath: activeElement.filePath,
-          line: activeElement.line,
-        });
+      } catch (err: any) {
+        setPendingEdit(null);
+        showToast(`⚠️ ${err?.message || 'Could not prepare preview'}`);
       } finally {
         setBusy(false);
       }
     },
-    [activeElement, selectedLayer]
+    [activeBreakpoint, activeElement, selectedLayer]
   );
 
   // Apply Pending Edit to Source Disk
@@ -443,22 +432,12 @@ export default function StudioPage() {
     if (!pendingEdit) return;
     setIsApplying(true);
     try {
-      if (pendingEdit.id.startsWith('local-')) {
-        showToast(`✓ Applied changes to ${pendingEdit.filePath}`);
+      const result = await applyEditAPI(pendingEdit.id);
+      if (result.success) {
+        showToast(`✓ Applied change to ${pendingEdit.filePath}`);
         setPendingEdit(null);
       } else {
-        const res = await fetch('/api/slightnudge/apply', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ previewId: pendingEdit.id }),
-        });
-        const data = await res.json();
-        if (data.success) {
-          showToast(`✓ Applied change to ${pendingEdit.filePath}`);
-          setPendingEdit(null);
-        } else {
-          showToast(`⚠️ ${data.error || 'Could not apply change'}`);
-        }
+        showToast(`⚠️ ${result.error || 'Could not apply change'}`);
       }
     } catch {
       showToast('⚠️ Could not apply change to disk');
@@ -470,13 +449,7 @@ export default function StudioPage() {
   // Discard Pending Edit
   const discardPendingEdit = async () => {
     if (!pendingEdit) return;
-    try {
-      if (!pendingEdit.id.startsWith('local-')) {
-        await fetch(`/api/slightnudge/preview?id=${pendingEdit.id}`, { method: 'DELETE' });
-      }
-    } catch {
-      // Ignored
-    }
+    await discardEditAPI(pendingEdit.id);
     setPendingEdit(null);
     showToast('Discarded visual adjustment');
   };
@@ -484,16 +457,11 @@ export default function StudioPage() {
   // Undo Source Edit
   const handleUndo = async () => {
     try {
-      const res = await fetch('/api/slightnudge/undo', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ filePath: activeElement.filePath }),
-      });
-      const data = await res.json();
-      if (data.success) {
-        showToast('✓ Restored previous source state');
+      const result = await undoEditAPI(activeElement.filePath);
+      if (result.success) {
+        showToast(`✓ ${result.message || 'Restored previous source state'}`);
       } else {
-        showToast(`Notice: ${data.message || data.error || 'No more undo history'}`);
+        showToast(`Notice: ${result.error || 'No more undo history'}`);
       }
     } catch {
       showToast('Undo request completed');
@@ -1667,7 +1635,7 @@ export default function StudioPage() {
                             </div>
 
                             {/* Row 7: Opacity */}
-                            <div className="px-4 py-2 flex items-center justify-between">
+                            <div className="px-4 py-2 flex items-center justify-between opacity-60">
                               <span className="text-slate-500 font-medium text-[11px]">Opacity</span>
                               <div className="flex items-center space-x-2">
                                 <input
@@ -1675,9 +1643,11 @@ export default function StudioPage() {
                                   min="0"
                                   max="100"
                                   defaultValue="100"
-                                  className="w-24 h-1 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-slate-900"
+                                  disabled
+                                  title="Opacity: not supported in source editor"
+                                  className="w-24 h-1 bg-slate-200 rounded-lg appearance-none cursor-not-allowed accent-slate-400"
                                 />
-                                <span className="font-mono text-slate-800 font-semibold text-[11px] w-8 text-right">100%</span>
+                                <span className="font-mono text-slate-400 font-semibold text-[11px] w-8 text-right">100%</span>
                               </div>
                             </div>
                           </div>
@@ -1737,15 +1707,19 @@ export default function StudioPage() {
                       />
                     ) : (
                       <h1
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          if (inspectorActive) setSelectedLayer('text');
+                        }}
                         onDoubleClick={() => setIsInlineEditing(true)}
-                        className="relative font-manrope text-4xl sm:text-5xl font-extrabold tracking-tight leading-[1.14] max-w-2xl mx-auto"
+                        className="relative font-manrope text-4xl sm:text-5xl font-extrabold tracking-tight leading-[1.14] max-w-2xl mx-auto cursor-pointer"
                         style={{
                           color: `#${elements.text.textColor}`,
                           fontFamily: elements.text.typeface === 'Manrope' ? 'Manrope, sans-serif' : 'Inter, sans-serif',
                           fontWeight: elements.text.fontWeight === 'Bold' ? 700 : elements.text.fontWeight === 'Extra Bold' ? 800 : 600,
                         }}
                       >
-                        {elements.text.text || 'Unleash your business potential with us'}
+                        {elements.text.text || 'Make room for your best work.'}
                       </h1>
                     )}
                   </div>
@@ -2143,16 +2117,14 @@ export default function StudioPage() {
                             </div>
 
                             {/* Overflow Segmented Control */}
-                            <div className="flex items-center justify-between pt-0.5">
+                            <div className="flex items-center justify-between pt-0.5 opacity-60">
                               <span className="text-slate-500 text-[11px]">Overflow</span>
                               <div className="flex items-center border border-[#E2E8F0] rounded-md overflow-hidden p-0.5 bg-[#F8FAFC]">
                                 <button
                                   type="button"
-                                  onClick={() => updateElementProp('overflow', 'visible')}
-                                  className={`p-1 rounded text-xs transition cursor-pointer ${
-                                    activeElement.overflow === 'visible' ? 'bg-white shadow-xs text-[#059669] font-medium' : 'text-slate-400 hover:text-slate-700'
-                                  }`}
-                                  title="Visible"
+                                  disabled
+                                  className="p-1 rounded text-xs transition cursor-not-allowed text-slate-300"
+                                  title="Overflow: not supported in source editor"
                                 >
                                   <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                                     <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
@@ -2161,11 +2133,9 @@ export default function StudioPage() {
                                 </button>
                                 <button
                                   type="button"
-                                  onClick={() => updateElementProp('overflow', 'hidden')}
-                                  className={`p-1 rounded text-xs transition cursor-pointer ${
-                                    activeElement.overflow === 'hidden' ? 'bg-white shadow-xs text-[#059669] font-medium' : 'text-slate-400 hover:text-slate-700'
-                                  }`}
-                                  title="Hidden"
+                                  disabled
+                                  className="p-1 rounded text-xs transition cursor-not-allowed text-slate-300"
+                                  title="Overflow: not supported in source editor"
                                 >
                                   <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                                     <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" />
@@ -2174,11 +2144,9 @@ export default function StudioPage() {
                                 </button>
                                 <button
                                   type="button"
-                                  onClick={() => updateElementProp('overflow', 'scroll')}
-                                  className={`p-1 rounded text-xs transition cursor-pointer ${
-                                    activeElement.overflow === 'scroll' ? 'bg-white shadow-xs text-[#059669] font-medium' : 'text-slate-400 hover:text-slate-700'
-                                  }`}
-                                  title="Scroll"
+                                  disabled
+                                  className="p-1 rounded text-xs transition cursor-not-allowed text-slate-300"
+                                  title="Overflow: not supported in source editor"
                                 >
                                   <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                                     <line x1="12" y1="2" x2="12" y2="22" />
@@ -2188,11 +2156,9 @@ export default function StudioPage() {
                                 </button>
                                 <button
                                   type="button"
-                                  onClick={() => updateElementProp('overflow', 'auto')}
-                                  className={`px-1.5 py-0.5 rounded text-[10px] font-mono transition cursor-pointer ${
-                                    activeElement.overflow === 'auto' ? 'bg-white shadow-xs text-[#059669] font-bold' : 'text-slate-400 hover:text-slate-700'
-                                  }`}
-                                  title="Auto"
+                                  disabled
+                                  className="px-1.5 py-0.5 rounded text-[10px] font-mono transition cursor-not-allowed text-slate-300"
+                                  title="Overflow: not supported in source editor"
                                 >
                                   Auto
                                 </button>
@@ -2200,12 +2166,14 @@ export default function StudioPage() {
                             </div>
 
                             {/* Object */}
-                            <div className="flex items-center justify-between">
+                            <div className="flex items-center justify-between opacity-60">
                               <span className="text-slate-500 text-[11px]">Object</span>
                               <div className="flex items-center space-x-1">
                                 <div className="relative w-28">
                                   <select
-                                    className="w-full bg-white border border-[#E2E8F0] rounded-md px-2 py-1.5 text-xs text-slate-800 appearance-none focus:outline-none focus:border-[#059669]"
+                                    disabled
+                                    title="Object styles: not supported in source editor"
+                                    className="w-full bg-slate-50 border border-[#E2E8F0] rounded-md px-2 py-1.5 text-xs text-slate-400 appearance-none focus:outline-none cursor-not-allowed"
                                   >
                                     <option>Fill</option>
                                     <option>Fit</option>
@@ -2213,12 +2181,13 @@ export default function StudioPage() {
                                     <option>Cover</option>
                                     <option>None</option>
                                   </select>
-                                  <ChevronDown size={11} className="text-slate-400 absolute right-2 top-2.5 pointer-events-none" />
+                                  <ChevronDown size={11} className="text-slate-300 absolute right-2 top-2.5 pointer-events-none" />
                                 </div>
                                 <button
                                   type="button"
-                                  className="p-1 rounded text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition cursor-pointer"
-                                  title="More options"
+                                  disabled
+                                  className="p-1 rounded text-slate-300 cursor-not-allowed"
+                                  title="Object styles: not supported in source editor"
                                 >
                                   <MoreHorizontal size={13} />
                                 </button>
@@ -2226,11 +2195,12 @@ export default function StudioPage() {
                             </div>
 
                             {/* More options button */}
-                            <div className="pt-1 flex justify-center">
+                            <div className="pt-1 flex justify-center opacity-60">
                               <button
                                 type="button"
-                                onClick={() => showToast('All dimensions visible')}
-                                className="w-full py-1.5 rounded-md border border-[#E2E8F0] bg-[#F8FAFC] hover:bg-white text-[11px] text-slate-600 font-medium transition text-center shadow-2xs cursor-pointer"
+                                disabled
+                                title="Dimensions options: not supported in source editor"
+                                className="w-full py-1.5 rounded-md border border-[#E2E8F0] bg-slate-50 text-[11px] text-slate-400 font-medium transition text-center shadow-2xs cursor-not-allowed"
                               >
                                 More options
                               </button>
@@ -2607,21 +2577,22 @@ export default function StudioPage() {
                           </span>
                         </button>
                         {openSections.position && (
-                          <div className="pt-2 text-xs text-slate-500 space-y-2">
+                          <div className="pt-2 text-xs text-slate-500 space-y-2 opacity-60">
                             <div className="flex items-center justify-between">
                               <span className="text-[11px]">Mode</span>
                               <div className="relative w-36">
                                 <select
+                                  disabled
                                   value={activeElement.position}
-                                  onChange={(e) => updateElementProp('position', e.target.value)}
-                                  className="w-full bg-white border border-[#E2E8F0] rounded-md px-2.5 py-1.5 text-xs text-slate-800 appearance-none focus:outline-none focus:border-[#059669]"
+                                  title="Position modes: not supported in source editor"
+                                  className="w-full bg-slate-50 border border-[#E2E8F0] rounded-md px-2.5 py-1.5 text-xs text-slate-400 appearance-none focus:outline-none cursor-not-allowed"
                                 >
                                   <option>Relative</option>
                                   <option>Absolute</option>
                                   <option>Fixed</option>
                                   <option>Static</option>
                                 </select>
-                                <ChevronDown size={11} className="text-slate-400 absolute right-2.5 top-2.5 pointer-events-none" />
+                                <ChevronDown size={11} className="text-slate-300 absolute right-2.5 top-2.5 pointer-events-none" />
                               </div>
                             </div>
                           </div>
