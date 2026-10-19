@@ -801,7 +801,7 @@ export function inspectElement(options: InspectOptions): InspectResult {
   };
 }
 
-export type EditableStyleProperty = 'fontSize' | 'fontWeight' | 'fontFamily' | 'lineHeight' | 'letterSpacing' | 'textTransform' | 'textColor' | 'alignment' | 'backgroundColor' | 'padding' | 'display' | 'width' | 'maxWidth' | 'gap' | 'borderRadius' | 'justifyContent' | 'alignItems' | 'flexDirection';
+export type EditableStyleProperty = 'fontSize' | 'fontWeight' | 'fontFamily' | 'lineHeight' | 'letterSpacing' | 'textTransform' | 'textColor' | 'alignment' | 'backgroundColor' | 'padding' | 'display' | 'width' | 'maxWidth' | 'gap' | 'borderRadius' | 'justifyContent' | 'alignItems' | 'flexDirection' | 'borderWidth' | 'borderColor' | 'fontStyle' | 'textDecoration';
 
 export interface ReorderOptions {
   filePath: string;
@@ -1089,9 +1089,9 @@ const editableUtilities: Record<EditableStyleProperty, { pattern: RegExp; values
   lineHeight: { pattern: /^leading-(?:none|tight|snug|normal|relaxed|loose)$/, values: new Set(['leading-none', 'leading-tight', 'leading-snug', 'leading-normal', 'leading-relaxed', 'leading-loose']) },
   letterSpacing: { pattern: /^tracking-(?:tighter|tight|normal|wide|wider|widest)$/, values: new Set(['tracking-tighter', 'tracking-tight', 'tracking-normal', 'tracking-wide', 'tracking-wider', 'tracking-widest']) },
   textTransform: { pattern: /^(?:uppercase|lowercase|capitalize|normal-case)$/, values: new Set(['uppercase', 'lowercase', 'capitalize', 'normal-case']) },
-  textColor: { pattern: /^text-\[/, values: new Set(['text-[#17211f]', 'text-[#697571]', 'text-[#176b55]', 'text-[#b43e35]', 'text-[#ffffff]']) },
+  textColor: { pattern: /^text-(?:\[|[a-z]+-\d{2,3}$|white|black|transparent)/, values: new Set(['text-[#17211f]', 'text-[#697571]', 'text-[#176b55]', 'text-[#b43e35]', 'text-[#ffffff]', 'text-slate-900', 'text-slate-800', 'text-slate-700', 'text-slate-600', 'text-slate-500', 'text-slate-400', 'text-white', 'text-black', 'text-transparent', 'text-emerald-600', 'text-emerald-700', 'text-blue-600', 'text-rose-600', 'text-amber-600']) },
   alignment: { pattern: /^text-(?:left|center|right|justify)$/, values: new Set(['text-left', 'text-center', 'text-right']) },
-  backgroundColor: { pattern: /^bg-(?:\[|[a-z]+-\d{2,3}$)/, values: new Set(['bg-[#ffffff]', 'bg-[#f1f3f1]', 'bg-[#176b55]', 'bg-[#17211f]']) },
+  backgroundColor: { pattern: /^bg-(?:\[|[a-z]+-\d{2,3}$|transparent|white|black)/, values: new Set(['bg-[#ffffff]', 'bg-[#f1f3f1]', 'bg-[#176b55]', 'bg-[#17211f]', 'bg-transparent', 'bg-white', 'bg-black', 'bg-slate-50', 'bg-slate-100', 'bg-slate-200', 'bg-slate-800', 'bg-slate-900', 'bg-emerald-500', 'bg-emerald-600', 'bg-emerald-700', 'bg-blue-500', 'bg-blue-600', 'bg-pink-500', 'bg-rose-500']) },
   padding: { pattern: /^p[trblxy]?-(?:\d+(?:\.\d+)?|\[)/, values: new Set(['p-0', 'p-1', 'p-2', 'p-3', 'p-4', 'p-6', 'p-8', 'p-10', 'p-12']) },
   display: { pattern: /^(?:block|inline-block|flex|inline-flex|grid|hidden)$/, values: new Set(['block', 'inline-block', 'flex', 'inline-flex', 'grid', 'hidden']) },
   width: { pattern: /^w-(?:auto|full|1\/2|1\/3|2\/3|1\/4|3\/4)$/, values: new Set(['w-auto', 'w-full', 'w-1/2', 'w-1/3', 'w-2/3', 'w-1/4', 'w-3/4']) },
@@ -1101,13 +1101,20 @@ const editableUtilities: Record<EditableStyleProperty, { pattern: RegExp; values
   justifyContent: { pattern: /^justify-(?:start|end|center|between|around|evenly)$/, values: new Set(['justify-start', 'justify-center', 'justify-between', 'justify-end', 'justify-around', 'justify-evenly']) },
   alignItems: { pattern: /^items-(?:start|end|center|baseline|stretch)$/, values: new Set(['items-start', 'items-center', 'items-end', 'items-stretch']) },
   flexDirection: { pattern: /^flex-(?:row|col)(?:-reverse)?$/, values: new Set(['flex-row', 'flex-col']) },
+  borderWidth: { pattern: /^border(?:-[0248])?$/, values: new Set(['border-0', 'border', 'border-2', 'border-4', 'border-8']) },
+  borderColor: { pattern: /^border-(?:transparent|current|black|white|slate-\d{2,3}|emerald-\d{2,3}|blue-\d{2,3}|rose-\d{2,3}|gray-\d{2,3})|border-\[/, values: new Set(['border-transparent', 'border-slate-200', 'border-slate-300', 'border-slate-400', 'border-slate-700', 'border-slate-900', 'border-emerald-500', 'border-emerald-600', 'border-blue-500', 'border-blue-600', 'border-rose-500', 'border-white', 'border-black']) },
+  fontStyle: { pattern: /^(?:italic|not-italic)$/, values: new Set(['italic', 'not-italic']) },
+  textDecoration: { pattern: /^(?:underline|line-through|no-underline)$/, values: new Set(['underline', 'line-through', 'no-underline']) },
 };
+
+/** Allowed variant and responsive prefixes */
+export const ALLOWED_UTILITY_VARIANTS = new Set(['', 'sm', 'md', 'lg', 'xl', '2xl', 'hover', 'focus', 'focus-visible', 'active']);
 
 /** Update one statically-defined Tailwind utility while preserving every other source token. */
 export function updateStaticTailwindClass(options: { filePath: string; line?: number; column?: number; elementId?: string; property: EditableStyleProperty; value: string; breakpoint?: string; dryRun?: boolean }) {
   const { filePath, line, column, elementId, property, value, breakpoint = '', dryRun = false } = options;
   const rule = editableUtilities[property];
-  if (!rule || !rule.values.has(value) || !['', 'sm', 'md', 'lg', 'xl', '2xl'].includes(breakpoint)) throw new Error('That style value or breakpoint is not supported.');
+  if (!rule || !rule.values.has(value) || !ALLOWED_UTILITY_VARIANTS.has(breakpoint)) throw new Error('That style value or breakpoint is not supported.');
 
   const inspected = inspectElement({ filePath, line, column, elementId });
   if (!inspected.found || !inspected.safeToEdit || !inspected.className) {

@@ -6,7 +6,13 @@ import { createPendingSourceEdit, discardPendingSourceEdit } from '@/lib/slightn
 import { resolveRepositoryRoot, resolveRepositorySourcePath, resolveWorkspaceSourcePath } from '@/lib/slightnudge/repository-store';
 import { corsHeaders, handleCorsPreflight, isAllowedOrigin } from '@/lib/slightnudge/cors';
 
-const allowedProperties = new Set<EditableStyleProperty>(['fontSize', 'fontWeight', 'fontFamily', 'lineHeight', 'letterSpacing', 'textTransform', 'textColor', 'alignment', 'backgroundColor', 'padding', 'display', 'width', 'maxWidth', 'gap', 'borderRadius', 'justifyContent', 'alignItems', 'flexDirection']);
+const allowedProperties = new Set<EditableStyleProperty>([
+  'fontSize', 'fontWeight', 'fontFamily', 'lineHeight', 'letterSpacing', 'textTransform',
+  'textColor', 'alignment', 'backgroundColor', 'padding', 'display', 'width', 'maxWidth',
+  'gap', 'borderRadius', 'justifyContent', 'alignItems', 'flexDirection',
+  'borderWidth', 'borderColor', 'fontStyle', 'textDecoration'
+]);
+const allowedVariants = new Set(['', 'sm', 'md', 'lg', 'xl', '2xl', 'hover', 'focus', 'focus-visible', 'active']);
 const allowedDirections = new Set(['right', 'left', 'up', 'down']);
 
 export async function OPTIONS(request: Request) {
@@ -84,7 +90,7 @@ export async function POST(request: Request) {
     if (body.kind === 'style') {
       if (typeof body.property !== 'string' || !allowedProperties.has(body.property)) return NextResponse.json({ error: 'That style property is not supported.' }, { status: 400 });
       if (typeof body.value !== 'string') return NextResponse.json({ error: 'Choose a valid style value.' }, { status: 400 });
-      if (body.breakpoint !== undefined && !['', 'sm', 'md', 'lg', 'xl', '2xl'].includes(body.breakpoint)) return NextResponse.json({ error: 'Choose a supported responsive breakpoint.' }, { status: 400 });
+      if (body.breakpoint !== undefined && !allowedVariants.has(body.breakpoint)) return NextResponse.json({ error: 'Choose a supported responsive breakpoint or state variant.' }, { status: 400 });
       const result = updateStaticTailwindClass({ ...target, property: body.property as EditableStyleProperty, value: body.value, breakpoint: typeof body.breakpoint === 'string' ? body.breakpoint : '' });
       if (!result.success || !result.updatedSource || !result.originalSource) return NextResponse.json({ error: 'This change cannot be previewed safely.' }, { status: 422 });
       const summary = `${result.oldToken || 'none'} → ${result.newToken}`;
