@@ -326,6 +326,7 @@ export default function StudioPage() {
   const [selectedPage, setSelectedPage] = useState<StudioPageItem>(defaultPages[0]);
   const [breakpoint, setBreakpoint] = useState<'desktop' | 'tablet' | 'mobile'>('desktop');
   const [activeBreakpoint, setActiveBreakpoint] = useState<string>('');
+  const [activeVariant, setActiveVariant] = useState<string>(''); // '', 'hover', 'focus-visible'
 
   const [activeTab, setActiveTab] = useState<'design' | 'settings'>('design');
 
@@ -352,8 +353,9 @@ export default function StudioPage() {
   const [draftText, setDraftText] = useState<string>(activeElement.text || '');
   const [isInlineEditing, setIsInlineEditing] = useState<boolean>(false);
   const [busy, setBusy] = useState<boolean>(false);
-  const [showExploreMore, setShowExploreMore] = useState<boolean>(false);
-  const [exploreTab, setExploreTab] = useState<'text' | 'media' | 'columns' | 'box' | 'code' | 'inspect'>('box');
+  const [showColorPicker, setShowColorPicker] = useState<boolean>(false);
+  const [showQuickActions, setShowQuickActions] = useState<boolean>(false);
+  const [showDiffPreview, setShowDiffPreview] = useState<boolean>(false);
 
   useEffect(() => {
     if (selectedLayer && elements[selectedLayer]) {
@@ -676,32 +678,77 @@ export default function StudioPage() {
       const el = prev[selectedLayer];
       if (!el) return prev;
       const updated = { ...el };
+      let newClasses = updated.classes;
       if (property === 'padding') {
         const padNum = value.replace('p-', '');
         updated.paddingLeft = padNum;
         updated.paddingRight = padNum;
         updated.paddingTop = padNum;
         updated.paddingBottom = padNum;
+        newClasses = newClasses.replace(/\bp-\d+\b/, '').trim();
+        newClasses = `${newClasses} ${value}`.trim();
       } else if (property === 'fontSize') {
-        updated.classes = updated.classes.replace(/text-(xs|sm|base|lg|xl|[2-7]xl)/, value);
+        newClasses = newClasses.replace(/\btext-(xs|sm|base|lg|xl|[2-7]xl)\b/, '').trim();
+        newClasses = `${newClasses} ${value}`.trim();
       } else if (property === 'fontWeight') {
         updated.fontWeight = value.replace('font-', '');
+        newClasses = newClasses.replace(/\bfont-(thin|extralight|light|normal|medium|semibold|bold|extrabold|black)\b/, '').trim();
+        newClasses = `${newClasses} ${value}`.trim();
+      } else if (property === 'textAlign') {
+        newClasses = newClasses.replace(/\btext-(left|center|right|justify)\b/, '').trim();
+        newClasses = `${newClasses} ${value}`.trim();
       } else if (property === 'textColor') {
-        const hex = value.match(/#([0-9a-f]{6})/i)?.[1] || '0F172A';
+        const hex = value.match(/#([0-9a-f]{6})/i)?.[1] || (value.includes('text-slate-900') ? '0F172A' : value.includes('text-white') ? 'FFFFFF' : value.includes('text-emerald-600') ? '059669' : value.includes('text-blue-600') ? '2563EB' : value.includes('text-rose-600') ? 'E11D48' : '0F172A');
         updated.textColor = hex;
+        newClasses = newClasses.replace(/\btext-(slate|gray|zinc|neutral|stone|red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose)-(50|100|200|300|400|500|600|700|800|900|950)\b|\btext-(white|black)\b|\btext-\[#[0-9a-fA-F]{3,8}\]\b/, '').trim();
+        newClasses = `${newClasses} ${value}`.trim();
       } else if (property === 'backgroundColor') {
-        const hex = value.match(/#([0-9a-f]{6})/i)?.[1] || 'transparent';
-        updated.bgFill = hex;
+        updated.bgFill = value.replace('bg-', '');
+        newClasses = newClasses.replace(/\bbg-(transparent|white|black|slate-\d+|emerald-\d+|blue-\d+|rose-\d+|pink-\d+)\b|\bbg-\[#[0-9a-fA-F]{3,8}\]\b/, '').trim();
+        newClasses = `${newClasses} ${value}`.trim();
       } else if (property === 'display') {
         updated.display = value;
-      } else if (property === 'width') {
-        updated.width = value;
+        newClasses = newClasses.replace(/\b(block|inline-block|inline|flex|inline-flex|grid|hidden)\b/, '').trim();
+        newClasses = `${newClasses} ${value}`.trim();
+      } else if (property === 'flexDirection') {
+        newClasses = newClasses.replace(/\b(flex-row|flex-col|flex-row-reverse|flex-col-reverse)\b/, '').trim();
+        newClasses = `${newClasses} ${value}`.trim();
+      } else if (property === 'justifyContent') {
+        newClasses = newClasses.replace(/\bjustify-(start|end|center|between|around|evenly)\b/, '').trim();
+        newClasses = `${newClasses} ${value}`.trim();
+      } else if (property === 'alignItems') {
+        newClasses = newClasses.replace(/\bitems-(start|end|center|baseline|stretch)\b/, '').trim();
+        newClasses = `${newClasses} ${value}`.trim();
+      } else if (property === 'gap') {
+        newClasses = newClasses.replace(/\bgap-\d+\b/, '').trim();
+        newClasses = `${newClasses} ${value}`.trim();
       } else if (property === 'borderRadius') {
         updated.borderRadius = value;
+        newClasses = newClasses.replace(/\brounded(-none|-sm|-md|-lg|-xl|-2xl|-3xl|-full)?\b/, '').trim();
+        newClasses = `${newClasses} ${value}`.trim();
+      } else if (property === 'borderWidth') {
+        newClasses = newClasses.replace(/\bborder(-[0248])?\b/, '').trim();
+        newClasses = `${newClasses} ${value}`.trim();
+      } else if (property === 'borderColor') {
+        newClasses = newClasses.replace(/\bborder-(slate|emerald|blue|rose|transparent)-\d+\b|\bborder-(transparent|white|black)\b/, '').trim();
+        newClasses = `${newClasses} ${value}`.trim();
+      } else if (property === 'fontFamily') {
+        updated.typeface = value === 'font-sans' ? 'Inter' : value === 'font-mono' ? 'Mono' : 'Inter';
+        newClasses = newClasses.replace(/\bfont-(sans|serif|mono)\b/, '').trim();
+        newClasses = `${newClasses} ${value}`.trim();
+      } else if (property === 'width') {
+        updated.width = value;
+        newClasses = newClasses.replace(/\bw-(auto|full|1\/2|1\/3|2\/3|1\/4|3\/4|fit)\b/, '').trim();
+        newClasses = `${newClasses} ${value}`.trim();
       }
+      updated.classes = newClasses;
       return { ...prev, [selectedLayer]: updated };
     });
-    void triggerBackendPreview('style', { property, value, breakpoint: activeBreakpoint });
+    void triggerBackendPreview('style', {
+      property,
+      value,
+      breakpoint: activeVariant || activeBreakpoint || '',
+    });
   };
 
   const updateElementProp = (
@@ -727,7 +774,7 @@ export default function StudioPage() {
         void triggerBackendPreview('style', {
           property: backendChange.prop,
           value: backendChange.val,
-          breakpoint: activeBreakpoint,
+          breakpoint: activeVariant || activeBreakpoint || '',
         });
       } else if (backendChange.kind === 'text') {
         void triggerBackendPreview('text', { value: val });
@@ -1010,10 +1057,13 @@ export default function StudioPage() {
           {/* 7. Droplet Color Capsule */}
           <button
             type="button"
-            onClick={() => setShowExploreMore((prev) => !prev)}
+            onClick={() => {
+              setShowColorPicker((prev) => !prev);
+              setShowQuickActions(false);
+            }}
             className="bg-[#131B2E] hover:bg-[#1C2740] border border-slate-800 px-2.5 py-1 rounded-full flex items-center space-x-1 text-slate-300 hover:text-white cursor-pointer transition shrink-0 mr-3"
-            title="Color & Contrast"
-            aria-expanded={showExploreMore}
+            title="Text / Background color"
+            aria-expanded={showColorPicker}
           >
             <svg className="w-3.5 h-3.5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z" />
@@ -1027,10 +1077,13 @@ export default function StudioPage() {
             {/* More Options "•••" */}
             <button
               type="button"
-              onClick={() => setShowExploreMore((prev) => !prev)}
+              onClick={() => {
+                setShowQuickActions((prev) => !prev);
+                setShowColorPicker(false);
+              }}
               className="w-7 h-7 rounded-full hover:bg-slate-800 flex items-center justify-center text-slate-400 hover:text-white cursor-pointer transition"
-              title="Explore more properties"
-              aria-expanded={showExploreMore}
+              title="More actions"
+              aria-expanded={showQuickActions}
             >
               <MoreHorizontal size={14} />
             </button>
@@ -1041,6 +1094,8 @@ export default function StudioPage() {
               onClick={(e) => {
                 e.stopPropagation();
                 setSelectedLayer(null);
+                setShowColorPicker(false);
+                setShowQuickActions(false);
               }}
               className="w-7 h-7 rounded-full hover:bg-slate-800 flex items-center justify-center text-slate-400 hover:text-white cursor-pointer transition"
               title="Deselect (Esc)"
@@ -1050,354 +1105,144 @@ export default function StudioPage() {
           </div>
         </div>
 
-        {/* Explore More Floating Card (Image 2 Style) */}
-        {showExploreMore && (
-          <div className="mt-2.5 w-[350px] bg-white rounded-xl shadow-2xl border border-slate-200/90 overflow-hidden text-slate-800 z-50 text-xs animate-in fade-in zoom-in-95 duration-150">
-            {/* Top Dark Header Bar with Icon Tabs (Image 2) */}
-            <div className="bg-[#0B0F17] text-white px-3 py-2 flex items-center justify-between">
-              <div className="flex items-center space-x-3 text-slate-400">
-                <button
-                  type="button"
-                  onClick={() => setExploreTab('text')}
-                  className={`p-1 rounded hover:text-white transition cursor-pointer ${
-                    exploreTab === 'text' ? 'text-white font-bold' : ''
-                  }`}
-                  title="Typography & Text"
-                >
-                  <Type size={14} />
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setExploreTab('media')}
-                  className={`p-1 rounded hover:text-white transition cursor-pointer ${
-                    exploreTab === 'media' ? 'text-white' : ''
-                  }`}
-                  title="Media & Actions"
-                >
-                  <Play size={13} />
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setExploreTab('columns')}
-                  className={`p-1 rounded hover:text-white transition cursor-pointer ${
-                    exploreTab === 'columns' ? 'text-white' : ''
-                  }`}
-                  title="Columns & Layout"
-                >
-                  <Columns2 size={13} />
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setExploreTab('box')}
-                  className={`p-1 rounded hover:text-white transition cursor-pointer ${
-                    exploreTab === 'box' ? 'text-white' : ''
-                  }`}
-                  title="Box Model"
-                >
-                  <LayoutGrid size={13} />
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setExploreTab('code')}
-                  className={`p-1 rounded hover:text-white transition cursor-pointer ${
-                    exploreTab === 'code' ? 'text-white' : ''
-                  }`}
-                  title="JSX & Code"
-                >
-                  <Code2 size={14} />
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setExploreTab('inspect')}
-                  className={`p-1 rounded hover:text-white transition cursor-pointer ${
-                    exploreTab === 'inspect' ? 'text-white' : ''
-                  }`}
-                  title="Inspect Element"
-                >
-                  <Laptop2 size={13} />
-                </button>
-              </div>
-
-              {/* Delete Element Action */}
+        {/* Sleek Color Swatch Popover */}
+        {showColorPicker && (
+          <div className="mt-2 w-72 bg-[#0A0F1D]/98 backdrop-blur-md rounded-xl shadow-2xl border border-slate-800 p-3 text-white z-50 text-xs animate-in fade-in zoom-in-95 duration-150">
+            <div className="flex items-center justify-between pb-2 mb-2 border-b border-slate-800">
+              <span className="font-semibold text-[11px] text-slate-300">Color Palette</span>
               <button
                 type="button"
-                onClick={() => {
-                  showToast(`Element ${activeElement.id} removed`);
-                  setSelectedLayer(null);
-                  setShowExploreMore(false);
-                }}
-                className="text-slate-400 hover:text-rose-400 p-1 transition cursor-pointer"
-                title="Delete element"
+                onClick={() => setShowColorPicker(false)}
+                className="text-slate-400 hover:text-white p-0.5 rounded cursor-pointer"
               >
-                <Trash2 size={13} />
+                <X size={12} />
               </button>
             </div>
 
-            {/* Body Content matching Image 2 */}
-            <div className="bg-white divide-y divide-slate-100">
-              {/* Row 1: Box Name */}
-              <div className="px-4 py-2 flex items-center justify-between">
-                <span className="text-slate-500 font-medium text-[11px]">Box Name</span>
-                <input
-                  type="text"
-                  value={activeElement.name || activeElement.tag}
-                  onChange={(e) => updateElementProp('name', e.target.value)}
-                  className="font-semibold text-slate-900 text-xs text-right bg-transparent border-0 p-0 focus:ring-0 cursor-text hover:bg-slate-50 rounded px-1 max-w-[190px] truncate"
-                />
-              </div>
-
-              {/* Row 2: Radius */}
-              <div className="px-4 py-2 flex items-center justify-between">
-                <span className="text-slate-500 font-medium text-[11px]">Radius</span>
-                <div className="flex items-center space-x-3">
-                  <input
-                    type="range"
-                    min="0"
-                    max="24"
-                    value={
-                      activeElement.borderRadius === 'rounded-none' ? 0 :
-                      activeElement.borderRadius === 'rounded-sm' ? 2 :
-                      activeElement.borderRadius === 'rounded-md' ? 6 :
-                      activeElement.borderRadius === 'rounded-lg' ? 8 :
-                      activeElement.borderRadius === 'rounded-xl' ? 12 :
-                      activeElement.borderRadius === 'rounded-full' ? 24 :
-                      parseInt(activeElement.borderRadius?.replace(/\D/g, '') || '6', 10) || 6
-                    }
-                    onChange={(e) => {
-                      const val = Number(e.target.value);
-                      const radClass = val === 0 ? 'rounded-none' : val <= 3 ? 'rounded-sm' : val <= 7 ? 'rounded-md' : val <= 10 ? 'rounded-lg' : val <= 16 ? 'rounded-xl' : 'rounded-full';
-                      updateElementProp('borderRadius', radClass, { kind: 'style', prop: 'borderRadius', val: radClass });
+            {/* Text Color Section */}
+            <div className="mb-3">
+              <span className="text-[10.5px] font-medium text-slate-400 block mb-1.5">Text Color</span>
+              <div className="grid grid-cols-4 gap-1.5">
+                {[
+                  { name: 'Slate 900', class: 'text-slate-900', color: '#0F172A' },
+                  { name: 'Slate 600', class: 'text-slate-600', color: '#475569' },
+                  { name: 'Emerald', class: 'text-emerald-600', color: '#059669' },
+                  { name: 'Blue', class: 'text-blue-600', color: '#2563EB' },
+                  { name: 'Rose', class: 'text-rose-600', color: '#E11D48' },
+                  { name: 'Amber', class: 'text-amber-500', color: '#F59E0B' },
+                  { name: 'Purple', class: 'text-purple-600', color: '#9333EA' },
+                  { name: 'White', class: 'text-white', color: '#FFFFFF' },
+                ].map((c) => (
+                  <button
+                    key={c.class}
+                    type="button"
+                    onClick={() => {
+                      updateStyle('textColor', c.class);
+                      setShowColorPicker(false);
                     }}
-                    className="w-28 h-1 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-slate-900"
-                  />
-                  <span className="font-mono text-slate-800 font-semibold text-[11px] w-4 text-right">
-                    {
-                      activeElement.borderRadius === 'rounded-none' ? 0 :
-                      activeElement.borderRadius === 'rounded-sm' ? 2 :
-                      activeElement.borderRadius === 'rounded-md' ? 6 :
-                      activeElement.borderRadius === 'rounded-lg' ? 8 :
-                      activeElement.borderRadius === 'rounded-xl' ? 12 :
-                      activeElement.borderRadius === 'rounded-full' ? 24 :
-                      parseInt(activeElement.borderRadius?.replace(/\D/g, '') || '6', 10) || 6
-                    }
-                  </span>
-                </div>
-              </div>
-
-              {/* Row 3: Width & Height */}
-              <div className="px-4 py-2 grid grid-cols-2 gap-4">
-                <div className="flex items-center justify-between">
-                  <span className="text-slate-500 font-medium text-[11px]">Width</span>
-                  <input
-                    type="text"
-                    value={activeElement.width || '540'}
-                    onChange={(e) => updateElementProp('width', e.target.value, { kind: 'style', prop: 'width', val: e.target.value })}
-                    className="font-semibold text-slate-900 text-xs text-right w-16 bg-transparent border-0 p-0 focus:ring-0 hover:bg-slate-50 rounded px-1"
-                  />
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-slate-500 font-medium text-[11px]">Height</span>
-                  <span className="font-semibold text-slate-900 text-xs">
-                    {activeElement.height || 'Relative'}
-                  </span>
-                </div>
-              </div>
-
-              {/* Row 4: Fills & Style */}
-              <div className="px-4 py-2.5 grid grid-cols-2 gap-4">
-                <div>
-                  <span className="text-slate-500 font-medium text-[11px] block mb-1.5">Fills</span>
-                  <div className="flex items-center space-x-1.5">
-                    {/* Transparent */}
-                    <button
-                      type="button"
-                      onClick={() => updateElementProp('bgFill', 'transparent', { kind: 'style', prop: 'backgroundColor', val: 'bg-transparent' })}
-                      className={`w-4 h-4 rounded-full border border-slate-300 relative overflow-hidden transition cursor-pointer ${
-                        activeElement.bgFill === 'transparent' ? 'ring-2 ring-emerald-500 ring-offset-1' : ''
-                      }`}
-                      title="Transparent"
-                    >
-                      <div className="w-full h-full bg-white relative">
-                        <div className="absolute inset-0 border-t border-rose-500 rotate-45 top-1.5" />
-                      </div>
-                    </button>
-                    {/* Black */}
-                    <button
-                      type="button"
-                      onClick={() => updateElementProp('bgFill', '000000', { kind: 'style', prop: 'backgroundColor', val: 'bg-slate-900' })}
-                      className={`w-4 h-4 rounded-full bg-slate-900 border border-slate-300 transition cursor-pointer ${
-                        activeElement.bgFill === '000000' || activeElement.bgFill === 'slate-900' ? 'ring-2 ring-emerald-500 ring-offset-1' : ''
-                      }`}
-                      title="Solid Black"
-                    />
-                    {/* White */}
-                    <button
-                      type="button"
-                      onClick={() => updateElementProp('bgFill', 'ffffff', { kind: 'style', prop: 'backgroundColor', val: 'bg-white' })}
-                      className={`w-4 h-4 rounded-full bg-white border border-slate-300 transition cursor-pointer ${
-                        activeElement.bgFill === 'ffffff' ? 'ring-2 ring-emerald-500 ring-offset-1' : ''
-                      }`}
-                      title="Solid White"
-                    />
-                    {/* Pink */}
-                    <button
-                      type="button"
-                      onClick={() => updateElementProp('bgFill', 'ec4899', { kind: 'style', prop: 'backgroundColor', val: 'bg-pink-500' })}
-                      className={`w-4 h-4 rounded-full bg-pink-500 transition cursor-pointer ${
-                        activeElement.bgFill === 'ec4899' ? 'ring-2 ring-emerald-500 ring-offset-1' : ''
-                      }`}
-                      title="Hot Pink"
-                    />
-                    {/* Blue */}
-                    <button
-                      type="button"
-                      onClick={() => updateElementProp('bgFill', '2563eb', { kind: 'style', prop: 'backgroundColor', val: 'bg-blue-600' })}
-                      className={`w-4 h-4 rounded-full bg-blue-600 transition cursor-pointer ${
-                        activeElement.bgFill === '2563eb' ? 'ring-2 ring-emerald-500 ring-offset-1' : ''
-                      }`}
-                      title="Electric Blue"
-                    />
-                    <ChevronDown size={10} className="text-slate-400" />
-                  </div>
-                </div>
-                <div>
-                  <span className="text-slate-500 font-medium text-[11px] block mb-1">Style</span>
-                  <div className="relative">
-                    <select
-                      value={activeElement.bgFill === 'transparent' ? 'None' : 'Flat Colour'}
-                      onChange={(e) => {
-                        if (e.target.value === 'None') {
-                          updateElementProp('bgFill', 'transparent', { kind: 'style', prop: 'backgroundColor', val: 'bg-transparent' });
-                        } else {
-                          updateElementProp('bgFill', 'ffffff', { kind: 'style', prop: 'backgroundColor', val: 'bg-white' });
-                        }
-                      }}
-                      className="w-full bg-slate-50 border border-slate-200 rounded px-2 py-1 text-[11px] font-medium text-slate-800 appearance-none focus:outline-none focus:border-emerald-500"
-                    >
-                      <option>Flat Colour</option>
-                      <option>Linear Gradient</option>
-                      <option>None</option>
-                    </select>
-                    <ChevronDown size={10} className="text-slate-400 absolute right-2 top-2 pointer-events-none" />
-                  </div>
-                </div>
-              </div>
-
-              {/* Row 5: Borders */}
-              <div className="px-4 py-2.5 grid grid-cols-3 gap-3 items-end">
-                <div>
-                  <span className="text-slate-500 font-medium text-[11px] block mb-1.5">Borders</span>
-                  <div className="flex items-center space-x-1.5">
-                    <div className="w-4 h-4 rounded-full border border-slate-300 bg-white relative">
-                      <div className="absolute inset-0 border-t border-rose-500 rotate-45 top-1.5" />
-                    </div>
-                    <ChevronDown size={10} className="text-slate-400" />
-                  </div>
-                </div>
-                <div>
-                  <span className="text-slate-500 font-medium text-[11px] block mb-1">Width</span>
-                  <span className="text-xs font-semibold text-slate-900">0 px</span>
-                </div>
-                <div>
-                  <span className="text-slate-500 font-medium text-[11px] block mb-1">Width</span>
-                  <div className="relative">
-                    <select className="w-full bg-slate-50 border border-slate-200 rounded px-2 py-1 text-[11px] font-medium text-slate-800 appearance-none focus:outline-none focus:border-emerald-500">
-                      <option>Solid</option>
-                      <option>Dashed</option>
-                      <option>Dotted</option>
-                    </select>
-                    <ChevronDown size={10} className="text-slate-400 absolute right-2 top-2 pointer-events-none" />
-                  </div>
-                </div>
-              </div>
-
-              {/* Row 6: Padding & Margin */}
-              <div className="px-4 py-2.5 grid grid-cols-2 gap-4">
-                <div>
-                  <span className="text-slate-500 font-medium text-[11px] block mb-1.5">Padding</span>
-                  <div className="grid grid-cols-4 gap-1">
-                    <input
-                      type="text"
-                      value={activeElement.paddingTop || '40'}
-                      onChange={(e) => updateElementProp('paddingTop', e.target.value)}
-                      className="w-full bg-slate-50 border border-slate-200 rounded py-1 text-center font-mono text-[10.5px] text-slate-700 focus:outline-none focus:border-emerald-500"
-                      title="Padding Top"
-                    />
-                    <input
-                      type="text"
-                      value={activeElement.paddingRight || '40'}
-                      onChange={(e) => updateElementProp('paddingRight', e.target.value)}
-                      className="w-full bg-slate-50 border border-slate-200 rounded py-1 text-center font-mono text-[10.5px] text-slate-700 focus:outline-none focus:border-emerald-500"
-                      title="Padding Right"
-                    />
-                    <input
-                      type="text"
-                      value={activeElement.paddingBottom || '40'}
-                      onChange={(e) => updateElementProp('paddingBottom', e.target.value)}
-                      className="w-full bg-slate-50 border border-slate-200 rounded py-1 text-center font-mono text-[10.5px] text-slate-700 focus:outline-none focus:border-emerald-500"
-                      title="Padding Bottom"
-                    />
-                    <input
-                      type="text"
-                      value={activeElement.paddingLeft || '40'}
-                      onChange={(e) => updateElementProp('paddingLeft', e.target.value)}
-                      className="w-full bg-slate-50 border border-slate-200 rounded py-1 text-center font-mono text-[10.5px] text-slate-700 focus:outline-none focus:border-emerald-500"
-                      title="Padding Left"
-                    />
-                  </div>
-                </div>
-                <div>
-                  <span className="text-slate-500 font-medium text-[11px] block mb-1.5">Margin</span>
-                  <div className="grid grid-cols-4 gap-1">
-                    <input
-                      type="text"
-                      value={activeElement.marginTop || '0'}
-                      onChange={(e) => updateElementProp('marginTop', e.target.value)}
-                      className="w-full bg-slate-50 border border-slate-200 rounded py-1 text-center font-mono text-[10.5px] text-slate-700 focus:outline-none focus:border-emerald-500"
-                      title="Margin Top"
-                    />
-                    <input
-                      type="text"
-                      value={activeElement.marginRight || '0'}
-                      onChange={(e) => updateElementProp('marginRight', e.target.value)}
-                      className="w-full bg-slate-50 border border-slate-200 rounded py-1 text-center font-mono text-[10.5px] text-slate-700 focus:outline-none focus:border-emerald-500"
-                      title="Margin Right"
-                    />
-                    <input
-                      type="text"
-                      value={activeElement.marginBottom || '0'}
-                      onChange={(e) => updateElementProp('marginBottom', e.target.value)}
-                      className="w-full bg-slate-50 border border-slate-200 rounded py-1 text-center font-mono text-[10.5px] text-slate-700 focus:outline-none focus:border-emerald-500"
-                      title="Margin Bottom"
-                    />
-                    <input
-                      type="text"
-                      value={activeElement.marginLeft || '0'}
-                      onChange={(e) => updateElementProp('marginLeft', e.target.value)}
-                      className="w-full bg-slate-50 border border-slate-200 rounded py-1 text-center font-mono text-[10.5px] text-slate-700 focus:outline-none focus:border-emerald-500"
-                      title="Margin Left"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* Row 7: Opacity */}
-              <div className="px-4 py-2 flex items-center justify-between opacity-60">
-                <span className="text-slate-500 font-medium text-[11px]">Opacity</span>
-                <div className="flex items-center space-x-2">
-                  <input
-                    type="range"
-                    min="0"
-                    max="100"
-                    defaultValue="100"
-                    disabled
-                    title="Opacity: not supported in source editor"
-                    className="w-24 h-1 bg-slate-200 rounded-lg appearance-none cursor-not-allowed accent-slate-400"
-                  />
-                  <span className="font-mono text-slate-400 font-semibold text-[11px] w-8 text-right">100%</span>
-                </div>
+                    className="flex items-center space-x-1.5 p-1 rounded-md bg-slate-900/80 hover:bg-slate-800 border border-slate-800/80 cursor-pointer transition text-left"
+                    title={c.name}
+                  >
+                    <span className="w-3.5 h-3.5 rounded-full border border-white/20 shrink-0" style={{ backgroundColor: c.color }} />
+                    <span className="text-[10px] text-slate-300 truncate">{c.name.split(' ')[0]}</span>
+                  </button>
+                ))}
               </div>
             </div>
+
+            {/* Background Fill Section */}
+            <div>
+              <span className="text-[10.5px] font-medium text-slate-400 block mb-1.5">Background Fill</span>
+              <div className="grid grid-cols-4 gap-1.5">
+                {[
+                  { name: 'None', class: 'bg-transparent', color: 'transparent', slash: true },
+                  { name: 'White', class: 'bg-white', color: '#FFFFFF' },
+                  { name: 'Slate 50', class: 'bg-slate-50', color: '#F8FAFC' },
+                  { name: 'Slate 900', class: 'bg-slate-900', color: '#0F172A' },
+                  { name: 'Emerald', class: 'bg-emerald-600', color: '#059669' },
+                  { name: 'Blue', class: 'bg-blue-600', color: '#2563EB' },
+                  { name: 'Rose', class: 'bg-rose-500', color: '#F43F5E' },
+                  { name: 'Pink', class: 'bg-pink-500', color: '#EC4899' },
+                ].map((c) => (
+                  <button
+                    key={c.class}
+                    type="button"
+                    onClick={() => {
+                      updateStyle('backgroundColor', c.class);
+                      setShowColorPicker(false);
+                    }}
+                    className="flex items-center space-x-1.5 p-1 rounded-md bg-slate-900/80 hover:bg-slate-800 border border-slate-800/80 cursor-pointer transition text-left"
+                    title={c.name}
+                  >
+                    <span
+                      className="w-3.5 h-3.5 rounded-full border border-white/20 shrink-0 relative overflow-hidden"
+                      style={{ backgroundColor: c.color }}
+                    >
+                      {c.slash && <span className="absolute inset-0 border-t border-rose-500 rotate-45 top-1.5" />}
+                    </span>
+                    <span className="text-[10px] text-slate-300 truncate">{c.name}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Sleek Quick Actions Popover */}
+        {showQuickActions && (
+          <div className="mt-2 w-52 bg-[#0A0F1D]/98 backdrop-blur-md rounded-xl shadow-2xl border border-slate-800 py-1.5 px-1 text-white z-50 text-xs animate-in fade-in zoom-in-95 duration-150">
+            <button
+              type="button"
+              onClick={() => {
+                if (typeof navigator !== 'undefined' && navigator.clipboard) {
+                  navigator.clipboard.writeText(activeElement.classes);
+                  showToast('✓ Copied className to clipboard');
+                }
+                setShowQuickActions(false);
+              }}
+              className="w-full flex items-center space-x-2 px-2.5 py-1.5 rounded-lg hover:bg-slate-800 text-slate-200 hover:text-white transition cursor-pointer text-left"
+            >
+              <Copy size={13} className="text-emerald-400" />
+              <span>Copy className</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => {
+                reorderSibling('earlier');
+                setShowQuickActions(false);
+              }}
+              className="w-full flex items-center space-x-2 px-2.5 py-1.5 rounded-lg hover:bg-slate-800 text-slate-200 hover:text-white transition cursor-pointer text-left"
+            >
+              <ArrowUp size={13} className="text-teal-400" />
+              <span>Move earlier</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => {
+                reorderSibling('later');
+                setShowQuickActions(false);
+              }}
+              className="w-full flex items-center space-x-2 px-2.5 py-1.5 rounded-lg hover:bg-slate-800 text-slate-200 hover:text-white transition cursor-pointer text-left"
+            >
+              <ArrowDown size={13} className="text-teal-400" />
+              <span>Move later</span>
+            </button>
+
+            <div className="my-1 border-t border-slate-800/80" />
+
+            <button
+              type="button"
+              onClick={() => {
+                setSelectedLayer(null);
+                setShowQuickActions(false);
+              }}
+              className="w-full flex items-center space-x-2 px-2.5 py-1.5 rounded-lg hover:bg-rose-950/40 text-slate-400 hover:text-rose-300 transition cursor-pointer text-left"
+            >
+              <X size={13} />
+              <span>Deselect (Esc)</span>
+            </button>
           </div>
         )}
       </div>
@@ -2319,31 +2164,70 @@ export default function StudioPage() {
 
             {/* Floating Source Review Bar (Appears when an edit is made) */}
             {pendingEdit && (
-              <div className="fixed bottom-12 left-1/2 -translate-x-1/2 z-40 bg-slate-900 text-white rounded-xl shadow-2xl px-4 py-3 flex items-center space-x-4 border border-slate-700 animate-slide-up">
-                <div className="flex items-center space-x-2">
-                  <span className="h-2 w-2 rounded-full bg-emerald-400 animate-ping"></span>
-                  <div>
-                    <div className="text-xs font-semibold text-emerald-300">Review Source Edit</div>
-                    <div className="text-[11px] text-slate-300 font-mono">{pendingEdit.summary}</div>
+              <div className="fixed bottom-12 left-1/2 -translate-x-1/2 z-40 flex flex-col items-center">
+                {showDiffPreview && (
+                  <div className="mb-2 w-[460px] bg-slate-950/95 backdrop-blur-md text-white rounded-xl shadow-2xl p-3 border border-slate-700/80 text-xs animate-in fade-in duration-150">
+                    <div className="flex items-center justify-between pb-1.5 border-b border-slate-800 font-mono text-[11px] text-slate-400">
+                      <span className="flex items-center space-x-1.5">
+                        <Code2 size={13} className="text-emerald-400" />
+                        <span className="text-slate-200">{pendingEdit.filePath}:{pendingEdit.line}</span>
+                      </span>
+                      <span className="text-emerald-400 font-semibold">{pendingEdit.summary}</span>
+                    </div>
+                    <div className="mt-2 space-y-1 font-mono text-[11px]">
+                      {pendingEdit.oldValue && (
+                        <div className="px-2 py-1 bg-rose-950/30 text-rose-300 rounded border border-rose-900/30 flex items-center space-x-2">
+                          <span className="font-bold text-rose-500 select-none">-</span>
+                          <span className="truncate">{pendingEdit.oldValue}</span>
+                        </div>
+                      )}
+                      {pendingEdit.newValue && (
+                        <div className="px-2 py-1 bg-emerald-950/30 text-emerald-300 rounded border border-emerald-900/30 flex items-center space-x-2">
+                          <span className="font-bold text-emerald-500 select-none">+</span>
+                          <span className="truncate">{pendingEdit.newValue}</span>
+                        </div>
+                      )}
+                    </div>
                   </div>
-                </div>
+                )}
 
-                <div className="h-6 w-[1px] bg-slate-700"></div>
+                <div className="bg-slate-900 text-white rounded-xl shadow-2xl px-4 py-3 flex items-center space-x-4 border border-slate-700 animate-slide-up">
+                  <div className="flex items-center space-x-2">
+                    <span className="h-2 w-2 rounded-full bg-emerald-400 animate-ping"></span>
+                    <div>
+                      <div className="text-xs font-semibold text-emerald-300">Review Source Edit</div>
+                      <div className="text-[11px] text-slate-300 font-mono">{pendingEdit.summary}</div>
+                    </div>
+                  </div>
 
-                <div className="flex items-center space-x-2">
-                  <button
-                    onClick={applySourceEdit}
-                    disabled={isApplying}
-                    className="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold shadow transition disabled:opacity-50"
-                  >
-                    {isApplying ? 'Applying...' : 'Apply to Source'}
-                  </button>
-                  <button
-                    onClick={discardPendingEdit}
-                    className="px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs transition"
-                  >
-                    Discard
-                  </button>
+                  <div className="h-6 w-[1px] bg-slate-700"></div>
+
+                  <div className="flex items-center space-x-2">
+                    <button
+                      type="button"
+                      onClick={() => setShowDiffPreview((prev) => !prev)}
+                      className={`px-2.5 py-1.5 rounded-lg text-xs font-medium transition cursor-pointer border ${
+                        showDiffPreview ? 'bg-emerald-950/60 border-emerald-500 text-emerald-300' : 'bg-slate-800 border-slate-700 text-slate-300 hover:text-white'
+                      }`}
+                    >
+                      {showDiffPreview ? 'Hide Diff' : 'View Diff'}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={applySourceEdit}
+                      disabled={isApplying}
+                      className="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold shadow transition disabled:opacity-50 cursor-pointer"
+                    >
+                      {isApplying ? 'Applying...' : 'Apply to Source'}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={discardPendingEdit}
+                      className="px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs transition cursor-pointer"
+                    >
+                      Discard
+                    </button>
+                  </div>
                 </div>
               </div>
             )}
@@ -2484,6 +2368,36 @@ export default function StudioPage() {
                   {activeTab === 'design' ? (
                     <div className="p-3.5 space-y-4 text-xs text-slate-700">
 
+                      {/* State Variant Selector: Base | hover: | focus: */}
+                      <div className="bg-slate-50 border border-slate-200/90 rounded-lg p-2 flex items-center justify-between shadow-2xs">
+                        <div className="flex items-center space-x-1.5 text-slate-600">
+                          <span className="text-[11px] font-semibold">State Variant</span>
+                          <span className="text-[10px] text-slate-400 font-mono">
+                            {activeVariant ? `${activeVariant}:` : 'base'}
+                          </span>
+                        </div>
+                        <div className="flex items-center space-x-1">
+                          {[
+                            { id: '', label: 'Base' },
+                            { id: 'hover', label: 'hover:' },
+                            { id: 'focus-visible', label: 'focus:' },
+                          ].map((v) => (
+                            <button
+                              key={v.id}
+                              type="button"
+                              onClick={() => setActiveVariant(v.id)}
+                              className={`px-2 py-0.5 rounded text-[10.5px] font-medium transition cursor-pointer ${
+                                activeVariant === v.id
+                                  ? 'bg-emerald-700 text-white font-semibold shadow-xs'
+                                  : 'bg-white text-slate-600 hover:text-slate-900 border border-slate-200/80 shadow-2xs'
+                              }`}
+                            >
+                              {v.label}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
                       {/* ---------------------------------------------------- */}
                       {/* Section: Layout                                      */}
                       {/* ---------------------------------------------------- */}
@@ -2509,25 +2423,96 @@ export default function StudioPage() {
                               <span className="text-slate-500 text-[11px]">Display</span>
                               <div className="relative w-36">
                                 <select
-                                  value={activeElement.display}
-                                  onChange={(e) =>
-                                    updateElementProp('display', e.target.value, {
-                                      kind: 'style',
-                                      prop: 'display',
-                                      val: e.target.value.toLowerCase(),
-                                    })
-                                  }
+                                  value={activeElement.display.toLowerCase()}
+                                  onChange={(e) => updateStyle('display', e.target.value)}
                                   className="w-full bg-white border border-[#E2E8F0] rounded-md px-2.5 py-1.5 text-xs text-slate-800 appearance-none focus:outline-none focus:border-[#059669] focus:ring-1 focus:ring-emerald-500/20"
                                 >
-                                  <option>Block</option>
-                                  <option>Flex</option>
-                                  <option>Grid</option>
-                                  <option>Inline-Block</option>
-                                  <option>None</option>
+                                  <option value="block">Block</option>
+                                  <option value="flex">Flex</option>
+                                  <option value="grid">Grid</option>
+                                  <option value="inline-block">Inline-Block</option>
+                                  <option value="hidden">Hidden</option>
                                 </select>
                                 <ChevronDown size={12} className="text-slate-400 absolute right-2.5 top-2.5 pointer-events-none" />
                               </div>
                             </div>
+
+                            {/* Flex sub-properties when display is flex */}
+                            {(activeElement.display.toLowerCase() === 'flex' || activeElement.classes.includes('flex')) && (
+                              <div className="space-y-2 pt-1 border-t border-slate-100">
+                                <div className="flex items-center justify-between">
+                                  <span className="text-slate-500 text-[11px]">Direction</span>
+                                  <div className="relative w-36">
+                                    <select
+                                      value={activeElement.classes.includes('flex-col') ? 'flex-col' : 'flex-row'}
+                                      onChange={(e) => updateStyle('flexDirection', e.target.value)}
+                                      className="w-full bg-white border border-[#E2E8F0] rounded-md px-2.5 py-1.5 text-xs text-slate-800 appearance-none focus:outline-none focus:border-[#059669]"
+                                    >
+                                      <option value="flex-row">Row</option>
+                                      <option value="flex-col">Column</option>
+                                    </select>
+                                    <ChevronDown size={12} className="text-slate-400 absolute right-2.5 top-2.5 pointer-events-none" />
+                                  </div>
+                                </div>
+
+                                <div className="flex items-center justify-between">
+                                  <span className="text-slate-500 text-[11px]">Justify</span>
+                                  <div className="relative w-36">
+                                    <select
+                                      value={
+                                        activeElement.classes.match(/justify-(start|center|between|end)/)?.[0] || 'justify-start'
+                                      }
+                                      onChange={(e) => updateStyle('justifyContent', e.target.value)}
+                                      className="w-full bg-white border border-[#E2E8F0] rounded-md px-2.5 py-1.5 text-xs text-slate-800 appearance-none focus:outline-none focus:border-[#059669]"
+                                    >
+                                      <option value="justify-start">Start</option>
+                                      <option value="justify-center">Center</option>
+                                      <option value="justify-between">Between</option>
+                                      <option value="justify-end">End</option>
+                                    </select>
+                                    <ChevronDown size={12} className="text-slate-400 absolute right-2.5 top-2.5 pointer-events-none" />
+                                  </div>
+                                </div>
+
+                                <div className="flex items-center justify-between">
+                                  <span className="text-slate-500 text-[11px]">Align Items</span>
+                                  <div className="relative w-36">
+                                    <select
+                                      value={
+                                        activeElement.classes.match(/items-(start|center|end|stretch)/)?.[0] || 'items-center'
+                                      }
+                                      onChange={(e) => updateStyle('alignItems', e.target.value)}
+                                      className="w-full bg-white border border-[#E2E8F0] rounded-md px-2.5 py-1.5 text-xs text-slate-800 appearance-none focus:outline-none focus:border-[#059669]"
+                                    >
+                                      <option value="items-start">Start</option>
+                                      <option value="items-center">Center</option>
+                                      <option value="items-end">End</option>
+                                      <option value="items-stretch">Stretch</option>
+                                    </select>
+                                    <ChevronDown size={12} className="text-slate-400 absolute right-2.5 top-2.5 pointer-events-none" />
+                                  </div>
+                                </div>
+
+                                <div className="flex items-center justify-between">
+                                  <span className="text-slate-500 text-[11px]">Gap</span>
+                                  <div className="relative w-36">
+                                    <select
+                                      value={activeElement.classes.match(/gap-(\d+)/)?.[0] || 'gap-2'}
+                                      onChange={(e) => updateStyle('gap', e.target.value)}
+                                      className="w-full bg-white border border-[#E2E8F0] rounded-md px-2.5 py-1.5 text-xs text-slate-800 appearance-none focus:outline-none focus:border-[#059669]"
+                                    >
+                                      <option value="gap-0">0 (0px)</option>
+                                      <option value="gap-1">1 (4px)</option>
+                                      <option value="gap-2">2 (8px)</option>
+                                      <option value="gap-4">4 (16px)</option>
+                                      <option value="gap-6">6 (24px)</option>
+                                      <option value="gap-8">8 (32px)</option>
+                                    </select>
+                                    <ChevronDown size={12} className="text-slate-400 absolute right-2.5 top-2.5 pointer-events-none" />
+                                  </div>
+                                </div>
+                              </div>
+                            )}
                           </div>
                         )}
                       </div>
@@ -2561,14 +2546,13 @@ export default function StudioPage() {
                               <div className="relative w-36">
                                 <select
                                   value={activeElement.width}
-                                  onChange={(e) => updateElementProp('width', e.target.value)}
+                                  onChange={(e) => updateStyle('width', e.target.value)}
                                   className="w-full bg-white border border-[#E2E8F0] rounded-md px-2.5 py-1.5 text-xs text-slate-800 appearance-none focus:outline-none focus:border-[#059669] focus:ring-1 focus:ring-emerald-500/20"
                                 >
-                                  <option>Auto</option>
-                                  <option>Full</option>
-                                  <option>1/2</option>
-                                  <option>Fit</option>
-                                  <option>Custom</option>
+                                  <option value="w-auto">Auto</option>
+                                  <option value="w-full">Full</option>
+                                  <option value="w-1/2">1/2</option>
+                                  <option value="w-fit">Fit</option>
                                 </select>
                                 <ChevronDown size={12} className="text-slate-400 absolute right-2.5 top-2.5 pointer-events-none" />
                               </div>
@@ -2586,7 +2570,6 @@ export default function StudioPage() {
                                   <option>Auto</option>
                                   <option>Fit</option>
                                   <option>Full</option>
-                                  <option>Custom</option>
                                 </select>
                                 <ChevronDown size={12} className="text-slate-400 absolute right-2.5 top-2.5 pointer-events-none" />
                               </div>
@@ -2668,18 +2651,6 @@ export default function StudioPage() {
                                   <MoreHorizontal size={13} />
                                 </button>
                               </div>
-                            </div>
-
-                            {/* More options button */}
-                            <div className="pt-1 flex justify-center opacity-60">
-                              <button
-                                type="button"
-                                disabled
-                                title="Dimensions options: not supported in source editor"
-                                className="w-full py-1.5 rounded-md border border-[#E2E8F0] bg-slate-50 text-[11px] text-slate-400 font-medium transition text-center shadow-2xs cursor-not-allowed"
-                              >
-                                More options
-                              </button>
                             </div>
                           </div>
                         )}
@@ -2859,7 +2830,7 @@ export default function StudioPage() {
                               </div>
                             </div>
 
-                            {/* Weight */}
+                            {/* Weight - Protected: Needed by test/studio-restore.test.ts */}
                             <div className="flex items-center justify-between">
                               <span className="text-slate-500 text-[11px]">Weight</span>
                               <div className="relative w-36">
@@ -2888,6 +2859,56 @@ export default function StudioPage() {
                                   <option>Extra Bold</option>
                                 </select>
                                 <ChevronDown size={12} className="text-slate-400 absolute right-2.5 top-2.5 pointer-events-none" />
+                              </div>
+                            </div>
+
+                            {/* Size */}
+                            <div className="flex items-center justify-between">
+                              <span className="text-slate-500 text-[11px]">Size</span>
+                              <div className="relative w-36">
+                                <select
+                                  value={activeElement.classes.match(/text-(xs|sm|base|lg|xl|[2-7]xl)/)?.[0] || 'text-base'}
+                                  onChange={(e) => updateStyle('fontSize', e.target.value)}
+                                  className="w-full bg-white border border-[#E2E8F0] rounded-md px-2.5 py-1.5 text-xs text-slate-800 appearance-none focus:outline-none focus:border-[#059669]"
+                                >
+                                  <option value="text-xs">XS (12px)</option>
+                                  <option value="text-sm">SM (14px)</option>
+                                  <option value="text-base">Base (16px)</option>
+                                  <option value="text-lg">LG (18px)</option>
+                                  <option value="text-xl">XL (20px)</option>
+                                  <option value="text-2xl">2XL (24px)</option>
+                                  <option value="text-3xl">3XL (30px)</option>
+                                  <option value="text-4xl">4XL (36px)</option>
+                                  <option value="text-5xl">5XL (48px)</option>
+                                  <option value="text-6xl">6XL (60px)</option>
+                                </select>
+                                <ChevronDown size={12} className="text-slate-400 absolute right-2.5 top-2.5 pointer-events-none" />
+                              </div>
+                            </div>
+
+                            {/* Alignment */}
+                            <div className="flex items-center justify-between">
+                              <span className="text-slate-500 text-[11px]">Align</span>
+                              <div className="flex items-center space-x-1 w-36 bg-slate-50 p-0.5 rounded-md border border-slate-200">
+                                {[
+                                  { id: 'text-left', label: 'Left', icon: <AlignLeft size={12} /> },
+                                  { id: 'text-center', label: 'Center', icon: <AlignCenter size={12} /> },
+                                  { id: 'text-right', label: 'Right', icon: <AlignRight size={12} /> },
+                                ].map((al) => (
+                                  <button
+                                    key={al.id}
+                                    type="button"
+                                    onClick={() => updateStyle('textAlign', al.id)}
+                                    className={`flex-1 py-1 flex items-center justify-center rounded text-xs transition cursor-pointer ${
+                                      activeElement.classes.includes(al.id) || (al.id === 'text-left' && !activeElement.classes.includes('text-center') && !activeElement.classes.includes('text-right'))
+                                        ? 'bg-white text-emerald-700 shadow-2xs font-semibold'
+                                        : 'text-slate-400 hover:text-slate-700'
+                                    }`}
+                                    title={al.label}
+                                  >
+                                    {al.icon}
+                                  </button>
+                                ))}
                               </div>
                             </div>
 
@@ -2960,20 +2981,16 @@ export default function StudioPage() {
                               <div className="relative w-36">
                                 <select
                                   value={activeElement.bgFill}
-                                  onChange={(e) =>
-                                    updateElementProp('bgFill', e.target.value, {
-                                      kind: 'style',
-                                      prop: 'backgroundColor',
-                                      val: `bg-${e.target.value}`,
-                                    })
-                                  }
+                                  onChange={(e) => updateStyle('backgroundColor', `bg-${e.target.value}`)}
                                   className="w-full bg-white border border-[#E2E8F0] rounded-md px-2.5 py-1.5 text-xs text-slate-800 appearance-none focus:outline-none focus:border-[#059669]"
                                 >
                                   <option value="transparent">Transparent</option>
                                   <option value="white">White</option>
                                   <option value="slate-50">Slate 50</option>
                                   <option value="slate-900">Slate 900</option>
-                                  <option value="emerald-50">Emerald 50</option>
+                                  <option value="emerald-600">Emerald 600</option>
+                                  <option value="blue-600">Blue 600</option>
+                                  <option value="rose-500">Rose 500</option>
                                 </select>
                                 <ChevronDown size={11} className="text-slate-400 absolute right-2.5 top-2.5 pointer-events-none" />
                               </div>
@@ -3009,13 +3026,7 @@ export default function StudioPage() {
                               <div className="relative w-36">
                                 <select
                                   value={activeElement.borderRadius}
-                                  onChange={(e) =>
-                                    updateElementProp('borderRadius', e.target.value, {
-                                      kind: 'style',
-                                      prop: 'borderRadius',
-                                      val: e.target.value,
-                                    })
-                                  }
+                                  onChange={(e) => updateStyle('borderRadius', e.target.value)}
                                   className="w-full bg-white border border-[#E2E8F0] rounded-md px-2.5 py-1.5 text-xs text-slate-800 appearance-none focus:outline-none focus:border-[#059669]"
                                 >
                                   <option value="rounded-none">Square (0)</option>
@@ -3024,6 +3035,40 @@ export default function StudioPage() {
                                   <option value="rounded-lg">Large (8px)</option>
                                   <option value="rounded-xl">Extra Large (12px)</option>
                                   <option value="rounded-full">Pill (Full)</option>
+                                </select>
+                                <ChevronDown size={11} className="text-slate-400 absolute right-2.5 top-2.5 pointer-events-none" />
+                              </div>
+                            </div>
+
+                            <div className="flex items-center justify-between">
+                              <span className="text-[11px]">Width</span>
+                              <div className="relative w-36">
+                                <select
+                                  value={activeElement.classes.match(/\bborder(-[0248])?\b/)?.[0] || 'border-0'}
+                                  onChange={(e) => updateStyle('borderWidth', e.target.value)}
+                                  className="w-full bg-white border border-[#E2E8F0] rounded-md px-2.5 py-1.5 text-xs text-slate-800 appearance-none focus:outline-none focus:border-[#059669]"
+                                >
+                                  <option value="border-0">None (0px)</option>
+                                  <option value="border">Thin (1px)</option>
+                                  <option value="border-2">Medium (2px)</option>
+                                  <option value="border-4">Thick (4px)</option>
+                                </select>
+                                <ChevronDown size={11} className="text-slate-400 absolute right-2.5 top-2.5 pointer-events-none" />
+                              </div>
+                            </div>
+
+                            <div className="flex items-center justify-between">
+                              <span className="text-[11px]">Color</span>
+                              <div className="relative w-36">
+                                <select
+                                  value={activeElement.classes.match(/\bborder-(slate|emerald|blue|rose|transparent)-\d+\b|\bborder-(transparent|white|black)\b/)?.[0] || 'border-transparent'}
+                                  onChange={(e) => updateStyle('borderColor', e.target.value)}
+                                  className="w-full bg-white border border-[#E2E8F0] rounded-md px-2.5 py-1.5 text-xs text-slate-800 appearance-none focus:outline-none focus:border-[#059669]"
+                                >
+                                  <option value="border-transparent">Transparent</option>
+                                  <option value="border-slate-200">Slate 200</option>
+                                  <option value="border-slate-900">Slate 900</option>
+                                  <option value="border-emerald-500">Emerald 500</option>
                                 </select>
                                 <ChevronDown size={11} className="text-slate-400 absolute right-2.5 top-2.5 pointer-events-none" />
                               </div>
