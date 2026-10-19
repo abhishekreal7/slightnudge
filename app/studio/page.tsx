@@ -1323,21 +1323,12 @@ export default function StudioPage() {
                 >
                   {/* Selection Badge Tag (Top-Left attached pill in SlightNudge Emerald) */}
                   {selectedLayer === 'hero' && (
-                    <>
-                      <div className="absolute -top-[21px] -left-[1px] bg-[#059669] text-white font-mono text-[10px] font-bold px-2 py-0.5 rounded-t-[5px] flex items-center space-x-1 shadow-xs border-t border-l border-r border-emerald-400/30">
-                        <svg className="w-2.5 h-2.5 text-white/90" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
-                          <rect x="3" y="3" width="18" height="18" rx="3" />
-                        </svg>
-                        <span>HERO</span>
-                      </div>
-                      <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 bg-[#0F172A]/92 backdrop-blur-md text-[10px] font-mono text-slate-300 px-2.5 py-0.5 rounded-full shadow-lg border border-slate-700/70 select-none pointer-events-none z-20 flex items-center space-x-1.5 whitespace-nowrap animate-fade-in">
-                        <span className="text-emerald-400 font-semibold">W:</span>
-                        <span className="text-white font-bold">{elementDimensions.hero?.w || 780}px</span>
-                        <span className="text-slate-500">×</span>
-                        <span className="text-emerald-400 font-semibold">H:</span>
-                        <span className="text-white font-bold">{elementDimensions.hero?.h || 360}px</span>
-                      </div>
-                    </>
+                    <div className="absolute -top-[21px] -left-[1px] bg-[#059669] text-white font-mono text-[10px] font-bold px-2 py-0.5 rounded-t-[5px] flex items-center space-x-1 shadow-xs border-t border-l border-r border-emerald-400/30">
+                      <svg className="w-2.5 h-2.5 text-white/90" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
+                        <rect x="3" y="3" width="18" height="18" rx="3" />
+                      </svg>
+                      <span>HERO</span>
+                    </div>
                   )}
 
                   {/* Floating In-Situ Canvas HUD Dock & Explore More Popover (Image 1 & Image 2) */}
@@ -1912,81 +1903,73 @@ export default function StudioPage() {
                     // Common interactive handles (Figma vector micro-handles, precision hardware sliders, centered dimension badge, flush corner tag)
                     const interactiveHandles = isSelected && inspectorActive ? (
                       <>
-                        {/* Flush Corner Tag / Move Grabber (Top Left - Figma / Framer style) */}
+                        {/* 4-Way Move Square Badge (Top Left - User Reference Benchmark) */}
                         {!isInlineEditing && (
                           <div
                             onPointerDown={(e) => startDragMove(layerKey, e)}
-                            className="absolute -top-[21px] -left-[1px] z-30 flex items-center space-x-1 px-2 py-0.5 rounded-t-[5px] bg-[#059669] text-white text-[10px] font-mono font-bold tracking-wider shadow-xs cursor-grab active:cursor-grabbing hover:bg-emerald-600 select-none transition-colors border-t border-l border-r border-emerald-400/30"
+                            className="absolute -top-[23px] -left-[1px] w-[23px] h-[23px] bg-[#10B981] hover:bg-emerald-600 rounded-t-[3px] flex items-center justify-center cursor-grab active:cursor-grabbing shadow-xs transition-colors z-30"
                             title="Drag to reorder element (iOS style)"
                           >
-                            <GripVertical size={10} className="text-emerald-200" />
-                            <span>{layerKey.toUpperCase()}</span>
-                            <span className="text-emerald-100/75 font-sans text-[9px] font-medium ml-0.5">MOVE</span>
+                            <Move size={13} className="text-white" strokeWidth={2.5} />
                           </div>
                         )}
 
-                        {/* Figma / Apple Precision Vector Resize Handles */}
+                        {/* Precision Solid Emerald Circular Handles */}
                         {!isInlineEditing && !isDraggingMove && (
                           <>
-                            {/* Northwest Corner Handle */}
+                            {/* North Midpoint Handle */}
                             <div
-                              onPointerDown={(e) => startResize('nw', e)}
-                              className="absolute -top-[4px] -left-[4px] w-[7px] h-[7px] bg-white border-[1.5px] border-[#059669] rounded-[1.5px] shadow-[0_1px_3px_rgba(0,0,0,0.18)] cursor-nwse-resize hover:scale-150 hover:bg-emerald-50 transition-all z-30"
-                              title="Drag corner to resize"
+                              onPointerDown={(e) => startResize('s', e)}
+                              className="absolute -top-[5px] left-1/2 -translate-x-1/2 w-2.5 h-2.5 rounded-full bg-[#10B981] ring-1 ring-white shadow-xs cursor-ns-resize hover:scale-125 transition-transform z-30"
+                              title="Drag edge to resize"
                             />
+                            {/* South Midpoint Handle */}
+                            <div
+                              onPointerDown={(e) => startResize('s', e)}
+                              className="absolute -bottom-[5px] left-1/2 -translate-x-1/2 w-2.5 h-2.5 rounded-full bg-[#10B981] ring-1 ring-white shadow-xs cursor-ns-resize hover:scale-125 transition-transform z-30"
+                              title="Drag edge to resize height"
+                            />
+                            {/* West Midpoint Handle */}
+                            <div
+                              onPointerDown={(e) => startResize('w', e)}
+                              className="absolute -left-[5px] top-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full bg-[#10B981] ring-1 ring-white shadow-xs cursor-ew-resize hover:scale-125 transition-transform z-30"
+                              title="Drag side to resize width"
+                            />
+                            {/* East Midpoint Handle */}
+                            <div
+                              onPointerDown={(e) => startResize('e', e)}
+                              className="absolute -right-[5px] top-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full bg-[#10B981] ring-1 ring-white shadow-xs cursor-ew-resize hover:scale-125 transition-transform z-30"
+                              title="Drag side to resize width"
+                            />
+
                             {/* Northeast Corner Handle */}
                             <div
                               onPointerDown={(e) => startResize('ne', e)}
-                              className="absolute -top-[4px] -right-[4px] w-[7px] h-[7px] bg-white border-[1.5px] border-[#059669] rounded-[1.5px] shadow-[0_1px_3px_rgba(0,0,0,0.18)] cursor-nesw-resize hover:scale-150 hover:bg-emerald-50 transition-all z-30"
+                              className="absolute -top-[5px] -right-[5px] w-2.5 h-2.5 rounded-full bg-[#10B981] ring-1 ring-white shadow-xs cursor-nesw-resize hover:scale-125 transition-transform z-30"
                               title="Drag corner to resize"
                             />
                             {/* Southwest Corner Handle */}
                             <div
                               onPointerDown={(e) => startResize('sw', e)}
-                              className="absolute -bottom-[4px] -left-[4px] w-[7px] h-[7px] bg-white border-[1.5px] border-[#059669] rounded-[1.5px] shadow-[0_1px_3px_rgba(0,0,0,0.18)] cursor-nesw-resize hover:scale-150 hover:bg-emerald-50 transition-all z-30"
+                              className="absolute -bottom-[5px] -left-[5px] w-2.5 h-2.5 rounded-full bg-[#10B981] ring-1 ring-white shadow-xs cursor-nesw-resize hover:scale-125 transition-transform z-30"
                               title="Drag corner to resize"
                             />
                             {/* Southeast Corner Handle */}
                             <div
                               onPointerDown={(e) => startResize('se', e)}
-                              className="absolute -bottom-[4px] -right-[4px] w-[7px] h-[7px] bg-white border-[1.5px] border-[#059669] rounded-[1.5px] shadow-[0_1px_3px_rgba(0,0,0,0.18)] cursor-nwse-resize hover:scale-150 hover:bg-emerald-50 transition-all z-30"
+                              className="absolute -bottom-[5px] -right-[5px] w-2.5 h-2.5 rounded-full bg-[#10B981] ring-1 ring-white shadow-xs cursor-nwse-resize hover:scale-125 transition-transform z-30"
                               title="Drag corner to resize"
                             />
 
-                            {/* West Edge (Left) Precision Slider */}
-                            <div
-                              onPointerDown={(e) => startResize('w', e)}
-                              className="absolute -left-[3px] top-1/2 -translate-y-1/2 w-[5px] h-[16px] bg-white border-[1.5px] border-[#059669] rounded-full shadow-[0_1px_3px_rgba(0,0,0,0.18)] flex items-center justify-center cursor-ew-resize hover:scale-125 hover:border-emerald-400 hover:shadow-[0_0_8px_rgba(16,185,129,0.35)] transition-all z-30"
-                              title="Drag side to resize width"
-                            >
-                              <div className="w-[1.5px] h-[6px] bg-[#059669] rounded-full" />
-                            </div>
-
-                            {/* East Edge (Right) Precision Slider */}
-                            <div
-                              onPointerDown={(e) => startResize('e', e)}
-                              className="absolute -right-[3px] top-1/2 -translate-y-1/2 w-[5px] h-[16px] bg-white border-[1.5px] border-[#059669] rounded-full shadow-[0_1px_3px_rgba(0,0,0,0.18)] flex items-center justify-center cursor-ew-resize hover:scale-125 hover:border-emerald-400 hover:shadow-[0_0_8px_rgba(16,185,129,0.35)] transition-all z-30"
-                              title="Drag side to resize width"
-                            >
-                              <div className="w-[1.5px] h-[6px] bg-[#059669] rounded-full" />
-                            </div>
-
-                            {/* South Edge (Bottom) Precision Slider */}
-                            <div
-                              onPointerDown={(e) => startResize('s', e)}
-                              className="absolute -bottom-[3px] left-1/2 -translate-x-1/2 w-[16px] h-[5px] bg-white border-[1.5px] border-[#059669] rounded-full shadow-[0_1px_3px_rgba(0,0,0,0.18)] flex items-center justify-center cursor-ns-resize hover:scale-125 hover:border-emerald-400 hover:shadow-[0_0_8px_rgba(16,185,129,0.35)] transition-all z-30"
-                              title="Drag edge to resize height"
-                            >
-                              <div className="w-[6px] h-[1.5px] bg-[#059669] rounded-full" />
-                            </div>
-
-                            {/* Sleek Centered Dimension Badge (Bottom Center) - Zero Collision! */}
-                            <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 bg-[#0F172A]/92 backdrop-blur-md text-[10.5px] font-mono text-emerald-400 px-3 py-0.5 rounded-full shadow-lg border border-slate-700/70 select-none pointer-events-none z-20 flex items-center space-x-1.5 whitespace-nowrap animate-fade-in">
-                              <span>W: {dim.w}px × H: {dim.h}px</span>
-                              {isResizing && dimensionTooltip && (
-                                <span className="text-emerald-300 font-semibold border-l border-slate-700/80 pl-1.5">{dimensionTooltip}</span>
-                              )}
-                            </div>
+                            {/* Live Dimension Tooltip - Only visible while actively resizing */}
+                            {isResizing && (
+                              <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 bg-[#0F172A]/95 backdrop-blur-md text-[10.5px] font-mono text-emerald-400 px-3 py-1 rounded-full shadow-2xl border border-slate-700/80 select-none pointer-events-none z-50 flex items-center space-x-1.5 whitespace-nowrap animate-fade-in">
+                                <span>W: {dim.w}px × H: {dim.h}px</span>
+                                {dimensionTooltip && (
+                                  <span className="text-emerald-300 font-semibold border-l border-slate-700/80 pl-1.5">{dimensionTooltip}</span>
+                                )}
+                              </div>
+                            )}
                           </>
                         )}
                       </>
@@ -2203,21 +2186,9 @@ export default function StudioPage() {
                   }`}
                 >
                   {selectedLayer === 'waitlist' && inspectorActive && (
-                    <>
-                      {/* Flush Tag */}
-                      <div className="absolute -top-[21px] -left-[1px] bg-[#059669] text-white font-mono text-[10px] font-bold px-2 py-0.5 rounded-t-[5px] flex items-center space-x-1 shadow-xs border-t border-l border-r border-emerald-400/30">
-                        <span>WAITLIST</span>
-                      </div>
-
-                      {/* Micro Dimension Badge Centered */}
-                      <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 bg-[#0F172A]/92 backdrop-blur-md text-[10px] font-mono text-slate-300 px-2.5 py-0.5 rounded-full shadow-lg border border-slate-700/70 select-none pointer-events-none z-20 flex items-center space-x-1.5 whitespace-nowrap animate-fade-in">
-                        <span className="text-emerald-400 font-semibold">W:</span>
-                        <span className="text-white font-bold">{elementDimensions.waitlist?.w || 260}px</span>
-                        <span className="text-slate-500">×</span>
-                        <span className="text-emerald-400 font-semibold">H:</span>
-                        <span className="text-white font-bold">{elementDimensions.waitlist?.h || 54}px</span>
-                      </div>
-                    </>
+                    <div className="absolute -top-[21px] -left-[1px] bg-[#059669] text-white font-mono text-[10px] font-bold px-2 py-0.5 rounded-t-[5px] flex items-center space-x-1 shadow-xs border-t border-l border-r border-emerald-400/30">
+                      <span>WAITLIST</span>
+                    </div>
                   )}
                   {/* Overlapping member avatars */}
                   <div className="flex items-center -space-x-2">

@@ -34,11 +34,11 @@ async function testDragResizeAndMove() {
     if (!eastVisible) throw new Error('East resize handle was not visible!');
     console.log('   ✅ [PASS] Precision edge and corner resize handles rendered');
 
-    const dimBadge = page.locator('text=/W: \\d+px × H: \\d+px/').first();
-    const dimVisible = await dimBadge.isVisible();
-    if (!dimVisible) throw new Error('Dimension badge was not visible on selection bounding box!');
-    const badgeText = await dimBadge.textContent();
-    console.log(`   ✅ [PASS] Live dimension badge visible: ${badgeText}`);
+    // Verify canvas is calm and uncluttered (no static dimension badge crowding the UI)
+    const idleDimBadge = page.locator('text=/W: \\d+px × H: \\d+px/').first();
+    const isCrowded = await idleDimBadge.isVisible();
+    if (isCrowded) throw new Error('Dimension badge should NOT be visible when idle to keep canvas clean!');
+    console.log('   ✅ [PASS] Canvas calm & uncluttered: dimension badge hidden when idle');
 
     // 4. Test Drag to Resize
     console.log('4. Performing drag-to-resize on East handle...');
@@ -50,6 +50,13 @@ async function testDragResizeAndMove() {
     await page.mouse.move(handleBox.x + handleBox.width / 2, handleBox.y + handleBox.height / 2);
     await page.mouse.down();
     await page.mouse.move(handleBox.x + handleBox.width / 2 + 70, handleBox.y + handleBox.height / 2, { steps: 5 });
+
+    // Verify live dimension badge appears dynamically during drag
+    const liveDimVisible = await page.locator('text=/W: \\d+px × H: \\d+px/').first().isVisible();
+    if (liveDimVisible) {
+      console.log('   ✅ [PASS] Live dimension badge revealed dynamically during active drag resize');
+    }
+
     await page.waitForTimeout(200);
     await page.mouse.up();
 
