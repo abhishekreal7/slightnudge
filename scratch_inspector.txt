@@ -1,0 +1,670 @@
+RIGHT INSPECTOR PANEL                                   */}
+          {/* ======================================================== */}
+          <aside className="w-72 bg-white border-l border-[#E5E7EB] flex flex-col shrink-0 z-20 overflow-y-auto">
+            {/* Top Tabs: Design | Settings */}
+            <div className="flex border-b border-[#E5E7EB] px-4 shrink-0 bg-white sticky top-0 z-10">
+              <button
+                onClick={() => setActiveTab('design')}
+                className={`py-2.5 px-3 text-xs font-semibold relative transition ${
+                  activeTab === 'design' ? 'text-[#7C3AED]' : 'text-slate-500 hover:text-slate-900'
+                }`}
+              >
+                Design
+                {activeTab === 'design' && (
+                  <span className="absolute bottom-0 left-3 right-3 h-[2px] bg-[#7C3AED] rounded-full"></span>
+                )}
+              </button>
+              <button
+                onClick={() => setActiveTab('settings')}
+                className={`py-2.5 px-3 text-xs font-medium relative transition ${
+                  activeTab === 'settings' ? 'text-[#7C3AED]' : 'text-slate-500 hover:text-slate-900'
+                }`}
+              >
+                Settings
+                {activeTab === 'settings' && (
+                  <span className="absolute bottom-0 left-3 right-3 h-[2px] bg-[#7C3AED] rounded-full"></span>
+                )}
+              </button>
+            </div>
+
+            {/* Inspector Sections Content */}
+            {activeTab === 'design' ? (
+              <div className="p-4 space-y-4 text-xs text-slate-700">
+
+                {/* ---------------------------------------------------- */}
+                {/* Section: Layout                                      */}
+                {/* ---------------------------------------------------- */}
+                <div className="space-y-2.5">
+                  <button
+                    onClick={() => toggleSection('layout')}
+                    className="w-full flex items-center justify-between text-left font-semibold text-xs text-slate-800"
+                  >
+                    <span className="flex items-center space-x-1.5">
+                      <span className="text-slate-400 text-xs leading-none">
+                        {openSections.layout ? '−' : '›'}
+                      </span>
+                      <span>Layout</span>
+                    </span>
+                  </button>
+
+                  {openSections.layout && (
+                    <div className="space-y-2 pt-1">
+                      <div className="flex items-center justify-between">
+                        <span className="text-slate-500 text-[11px]">Display</span>
+                        <div className="relative w-36">
+                          <select
+                            value={activeElement.display}
+                            onChange={(e) =>
+                              updateElementProp('display', e.target.value, {
+                                kind: 'style',
+                                prop: 'display',
+                                val: e.target.value.toLowerCase(),
+                              })
+                            }
+                            className="w-full bg-white border border-[#E2E8F0] rounded-md px-2.5 py-1.5 text-xs text-slate-800 appearance-none focus:outline-none focus:border-[#7C3AED]"
+                          >
+                            <option>Block</option>
+                            <option>Flex</option>
+                            <option>Grid</option>
+                            <option>None</option>
+                          </select>
+                          <svg className="w-3 h-3 text-slate-400 absolute right-2.5 top-2.5 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                            <polyline points="6 9 12 15 18 9" />
+                          </svg>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                <hr className="border-[#F1F5F9]" />
+
+                {/* ---------------------------------------------------- */}
+                {/* Section: Size                                        */}
+                {/* ---------------------------------------------------- */}
+                <div className="space-y-2.5">
+                  <button
+                    onClick={() => toggleSection('size')}
+                    className="w-full flex items-center justify-between text-left font-semibold text-xs text-slate-800"
+                  >
+                    <span className="flex items-center space-x-1.5">
+                      <span className="text-slate-400 text-xs leading-none">
+                        {openSections.size ? '−' : '›'}
+                      </span>
+                      <span>Size</span>
+                    </span>
+                  </button>
+
+                  {openSections.size && (
+                    <div className="space-y-2 pt-1 text-xs">
+                      {/* Width */}
+                      <div className="flex items-center justify-between">
+                        <span className="text-slate-500 text-[11px]">Width</span>
+                        <div className="relative w-36">
+                          <select
+                            value={activeElement.width}
+                            onChange={(e) => updateElementProp('width', e.target.value)}
+                            className="w-full bg-white border border-[#E2E8F0] rounded-md px-2.5 py-1.5 text-xs text-slate-800 appearance-none focus:outline-none focus:border-[#7C3AED]"
+                          >
+                            <option>Auto</option>
+                            <option>Full</option>
+                            <option>1/2</option>
+                            <option>Custom</option>
+                          </select>
+                          <svg className="w-3 h-3 text-slate-400 absolute right-2.5 top-2.5 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                            <polyline points="6 9 12 15 18 9" />
+                          </svg>
+                        </div>
+                      </div>
+
+                      {/* Height */}
+                      <div className="flex items-center justify-between">
+                        <span className="text-slate-500 text-[11px]">Height</span>
+                        <div className="relative w-36">
+                          <select
+                            value={activeElement.height}
+                            onChange={(e) => updateElementProp('height', e.target.value)}
+                            className="w-full bg-white border border-[#E2E8F0] rounded-md px-2.5 py-1.5 text-xs text-slate-800 appearance-none focus:outline-none focus:border-[#7C3AED]"
+                          >
+                            <option>Auto</option>
+                            <option>Fit</option>
+                            <option>Custom</option>
+                          </select>
+                          <svg className="w-3 h-3 text-slate-400 absolute right-2.5 top-2.5 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                            <polyline points="6 9 12 15 18 9" />
+                          </svg>
+                        </div>
+                      </div>
+
+                      {/* Overflow Segmented Control */}
+                      <div className="flex items-center justify-between pt-0.5">
+                        <span className="text-slate-500 text-[11px]">Overflow</span>
+                        <div className="flex items-center border border-[#E2E8F0] rounded-md overflow-hidden p-0.5 bg-[#F8FAFC]">
+                          <button
+                            onClick={() => updateElementProp('overflow', 'visible')}
+                            className={`p-1 rounded text-xs transition ${
+                              activeElement.overflow === 'visible' ? 'bg-white shadow-xs text-[#7C3AED]' : 'text-slate-400 hover:text-slate-700'
+                            }`}
+                            title="Visible"
+                          >
+                            <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                              <circle cx="12" cy="12" r="3" />
+                            </svg>
+                          </button>
+                          <button
+                            onClick={() => updateElementProp('overflow', 'hidden')}
+                            className={`p-1 rounded text-xs transition ${
+                              activeElement.overflow === 'hidden' ? 'bg-white shadow-xs text-[#7C3AED]' : 'text-slate-400 hover:text-slate-700'
+                            }`}
+                            title="Hidden"
+                          >
+                            <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                              <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" />
+                              <line x1="1" y1="1" x2="23" y2="23" />
+                            </svg>
+                          </button>
+                          <button
+                            onClick={() => updateElementProp('overflow', 'scroll')}
+                            className={`p-1 rounded text-xs transition ${
+                              activeElement.overflow === 'scroll' ? 'bg-white shadow-xs text-[#7C3AED]' : 'text-slate-400 hover:text-slate-700'
+                            }`}
+                            title="Scroll"
+                          >
+                            <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                              <line x1="12" y1="2" x2="12" y2="22" />
+                              <polyline points="8 6 12 2 16 6" />
+                              <polyline points="8 18 12 22 16 18" />
+                            </svg>
+                          </button>
+                          <button
+                            onClick={() => updateElementProp('overflow', 'auto')}
+                            className={`px-1.5 py-0.5 rounded text-[10px] font-mono transition ${
+                              activeElement.overflow === 'auto' ? 'bg-white shadow-xs text-[#7C3AED] font-semibold' : 'text-slate-400 hover:text-slate-700'
+                            }`}
+                            title="Auto"
+                          >
+                            Auto
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Object */}
+                      <div className="flex items-center justify-between">
+                        <span className="text-slate-500 text-[11px]">Object</span>
+                        <div className="flex items-center space-x-1">
+                          <div className="relative w-28">
+                            <select
+                              className="w-full bg-white border border-[#E2E8F0] rounded-md px-2.5 py-1.5 text-xs text-slate-800 appearance-none focus:outline-none focus:border-[#7C3AED]"
+                            >
+                              <option>Fill</option>
+                              <option>Contain</option>
+                              <option>Cover</option>
+                              <option>None</option>
+                            </select>
+                            <svg className="w-3 h-3 text-slate-400 absolute right-2 top-2.5 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                              <polyline points="6 9 12 15 18 9" />
+                            </svg>
+                          </div>
+                          <button className="p-1.5 rounded text-slate-400 hover:text-slate-700 hover:bg-slate-100">
+                            <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                              <circle cx="12" cy="12" r="1" />
+                              <circle cx="19" cy="12" r="1" />
+                              <circle cx="5" cy="12" r="1" />
+                            </svg>
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* More options button */}
+                      <div className="pt-1 flex justify-center">
+                        <button
+                          onClick={() => showToast('Expanded all Tailwind dimensions')}
+                          className="w-full py-1.5 rounded-md border border-[#E2E8F0] bg-[#F8FAFC] hover:bg-white text-[11px] text-slate-600 font-medium transition text-center shadow-xs"
+                        >
+                          More options
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                <hr className="border-[#F1F5F9]" />
+
+                {/* ---------------------------------------------------- */}
+                {/* Section: Spacing (The Box Model Diagram)             */}
+                {/* ---------------------------------------------------- */}
+                <div className="space-y-2.5">
+                  <button
+                    onClick={() => toggleSection('spacing')}
+                    className="w-full flex items-center justify-between text-left font-semibold text-xs text-slate-800"
+                  >
+                    <span className="flex items-center space-x-1.5">
+                      <span className="text-slate-400 text-xs leading-none">
+                        {openSections.spacing ? '−' : '›'}
+                      </span>
+                      <span>Spacing</span>
+                    </span>
+                  </button>
+
+                  {openSections.spacing && (
+                    <div className="pt-1">
+                      {/* Outer Box Model Canvas */}
+                      <div className="relative bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl p-3 flex flex-col items-center">
+                        
+                        {/* Margin Top */}
+                        <input
+                          type="text"
+                          value={activeElement.marginTop}
+                          onChange={(e) => updateElementProp('marginTop', e.target.value)}
+                          className="w-10 text-center bg-transparent border-0 p-0 text-slate-500 text-[11px] font-mono focus:ring-0 mb-1 hover:bg-slate-200/50 rounded"
+                        />
+
+                        <div className="w-full flex items-center justify-between">
+                          {/* Margin Left */}
+                          <input
+                            type="text"
+                            value={activeElement.marginLeft}
+                            onChange={(e) => updateElementProp('marginLeft', e.target.value)}
+                            className="w-10 text-center bg-transparent border-0 p-0 text-slate-500 text-[11px] font-mono focus:ring-0 hover:bg-slate-200/50 rounded"
+                          />
+
+                          {/* Inner Padding Dashed Box */}
+                          <div className="w-36 bg-white border border-dashed border-[#CBD5E1] rounded-lg p-2.5 relative flex flex-col items-center shadow-xs">
+                            {/* Padding Top */}
+                            <input
+                              type="text"
+                              value={activeElement.paddingTop}
+                              onChange={(e) =>
+                                updateElementProp('paddingTop', e.target.value, {
+                                  kind: 'style',
+                                  prop: 'padding',
+                                  val: `p-${Math.round(Number(e.target.value) / 4) || 0}`,
+                                })
+                              }
+                              className="w-8 text-center bg-transparent border-0 p-0 text-slate-600 text-[11px] font-mono font-medium focus:ring-0 mb-1 hover:bg-slate-100 rounded"
+                            />
+
+                            <div className="w-full flex items-center justify-between px-1">
+                              {/* Padding Left */}
+                              <input
+                                type="text"
+                                value={activeElement.paddingLeft}
+                                onChange={(e) =>
+                                  updateElementProp('paddingLeft', e.target.value, {
+                                    kind: 'style',
+                                    prop: 'padding',
+                                    val: `p-${Math.round(Number(e.target.value) / 4) || 0}`,
+                                  })
+                                }
+                                className="w-6 text-center bg-transparent border-0 p-0 text-slate-600 text-[11px] font-mono font-medium focus:ring-0 hover:bg-slate-100 rounded"
+                              />
+
+                              {/* Core Element Square */}
+                              <div className="h-5 w-6 bg-[#E2E8F0] rounded flex items-center justify-center"></div>
+
+                              {/* Padding Right */}
+                              <input
+                                type="text"
+                                value={activeElement.paddingRight}
+                                onChange={(e) =>
+                                  updateElementProp('paddingRight', e.target.value, {
+                                    kind: 'style',
+                                    prop: 'padding',
+                                    val: `p-${Math.round(Number(e.target.value) / 4) || 0}`,
+                                  })
+                                }
+                                className="w-6 text-center bg-transparent border-0 p-0 text-slate-600 text-[11px] font-mono font-medium focus:ring-0 hover:bg-slate-100 rounded"
+                              />
+                            </div>
+
+                            {/* Padding Bottom */}
+                            <input
+                              type="text"
+                              value={activeElement.paddingBottom}
+                              onChange={(e) =>
+                                updateElementProp('paddingBottom', e.target.value, {
+                                  kind: 'style',
+                                  prop: 'padding',
+                                  val: `p-${Math.round(Number(e.target.value) / 4) || 0}`,
+                                })
+                              }
+                              className="w-8 text-center bg-transparent border-0 p-0 text-slate-600 text-[11px] font-mono font-medium focus:ring-0 mt-1 hover:bg-slate-100 rounded"
+                            />
+                          </div>
+
+                          {/* Margin Right */}
+                          <input
+                            type="text"
+                            value={activeElement.marginRight}
+                            onChange={(e) => updateElementProp('marginRight', e.target.value)}
+                            className="w-10 text-center bg-transparent border-0 p-0 text-slate-500 text-[11px] font-mono focus:ring-0 hover:bg-slate-200/50 rounded"
+                          />
+                        </div>
+
+                        {/* Margin Bottom */}
+                        <input
+                          type="text"
+                          value={activeElement.marginBottom}
+                          onChange={(e) => updateElementProp('marginBottom', e.target.value)}
+                          className="w-10 text-center bg-transparent border-0 p-0 text-slate-500 text-[11px] font-mono focus:ring-0 mt-1 hover:bg-slate-200/50 rounded"
+                        />
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                <hr className="border-[#F1F5F9]" />
+
+                {/* ---------------------------------------------------- */}
+                {/* Section: Text                                        */}
+                {/* ---------------------------------------------------- */}
+                <div className="space-y-2.5">
+                  <button
+                    onClick={() => toggleSection('text')}
+                    className="w-full flex items-center justify-between text-left font-semibold text-xs text-slate-800"
+                  >
+                    <span className="flex items-center space-x-1.5">
+                      <span className="text-slate-400 text-xs leading-none">
+                        {openSections.text ? '−' : '›'}
+                      </span>
+                      <span>Text</span>
+                    </span>
+                  </button>
+
+                  {openSections.text && (
+                    <div className="space-y-2.5 pt-1 text-xs">
+                      {/* Typeface */}
+                      <div className="flex items-center justify-between">
+                        <span className="text-slate-500 text-[11px]">Typeface</span>
+                        <div className="relative w-36">
+                          <select
+                            value={activeElement.typeface}
+                            onChange={(e) =>
+                              updateElementProp('typeface', e.target.value, {
+                                kind: 'style',
+                                prop: 'fontFamily',
+                                val: e.target.value === 'Manrope' ? 'font-sans' : 'font-mono',
+                              })
+                            }
+                            className="w-full bg-white border border-[#E2E8F0] rounded-md px-2.5 py-1.5 text-xs text-slate-800 appearance-none focus:outline-none focus:border-[#7C3AED]"
+                          >
+                            <option>Manrope</option>
+                            <option>Inter</option>
+                            <option>System UI</option>
+                          </select>
+                          <svg className="w-3 h-3 text-slate-400 absolute right-2.5 top-2.5 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                            <polyline points="6 9 12 15 18 9" />
+                          </svg>
+                        </div>
+                      </div>
+
+                      {/* Weight */}
+                      <div className="flex items-center justify-between">
+                        <span className="text-slate-500 text-[11px]">Weight</span>
+                        <div className="relative w-36">
+                          <select
+                            value={activeElement.fontWeight}
+                            onChange={(e) => {
+                              const weightMap: Record<string, string> = {
+                                'Regular': 'font-normal',
+                                'Medium': 'font-medium',
+                                'Semi Bold': 'font-semibold',
+                                'Bold': 'font-bold',
+                                'Extra Bold': 'font-extrabold',
+                              };
+                              updateElementProp('fontWeight', e.target.value, {
+                                kind: 'style',
+                                prop: 'fontWeight',
+                                val: weightMap[e.target.value] || 'font-semibold',
+                              });
+                            }}
+                            className="w-full bg-white border border-[#E2E8F0] rounded-md px-2.5 py-1.5 text-xs text-slate-800 appearance-none focus:outline-none focus:border-[#7C3AED]"
+                          >
+                            <option>Regular</option>
+                            <option>Medium</option>
+                            <option>Semi Bold</option>
+                            <option>Bold</option>
+                            <option>Extra Bold</option>
+                          </select>
+                          <svg className="w-3 h-3 text-slate-400 absolute right-2.5 top-2.5 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                            <polyline points="6 9 12 15 18 9" />
+                          </svg>
+                        </div>
+                      </div>
+
+                      {/* Color */}
+                      <div className="flex items-center justify-between">
+                        <span className="text-slate-500 text-[11px]">Color</span>
+                        <div className="flex items-center space-x-1.5 w-36 bg-white border border-[#E2E8F0] rounded-md px-2 py-1 focus-within:border-[#7C3AED]">
+                          <div
+                            className="h-4 w-4 rounded-sm shadow-xs border border-black/10 shrink-0"
+                            style={{ backgroundColor: `#${activeElement.textColor}` }}
+                          ></div>
+                          <input
+                            type="text"
+                            value={activeElement.textColor}
+                            onChange={(e) =>
+                              updateElementProp('textColor', e.target.value.replace('#', ''), {
+                                kind: 'style',
+                                prop: 'textColor',
+                                val: `text-[#${e.target.value.replace('#', '')}]`,
+                              })
+                            }
+                            className="w-full bg-transparent p-0 border-none text-[11px] font-mono text-slate-800 focus:ring-0"
+                          />
+                        </div>
+                      </div>
+
+                      {/* Content (Direct Text Edit) */}
+                      <div className="flex items-center justify-between">
+                        <span className="text-slate-500 text-[11px]">Content</span>
+                        <input
+                          type="text"
+                          value={activeElement.text || ''}
+                          onChange={(e) =>
+                            updateElementProp('text', e.target.value, {
+                              kind: 'text',
+                            })
+                          }
+                          placeholder="Edit text content..."
+                          className="w-36 bg-white border border-[#E2E8F0] rounded-md px-2.5 py-1.5 text-xs text-slate-800 focus:outline-none focus:border-[#7C3AED]"
+                        />
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                <hr className="border-[#F1F5F9]" />
+
+                {/* ---------------------------------------------------- */}
+                {/* Section: Background (Collapsible)                    */}
+                {/* ---------------------------------------------------- */}
+                <div>
+                  <button
+                    onClick={() => toggleSection('background')}
+                    className="w-full flex items-center justify-between text-left font-semibold text-xs text-slate-800"
+                  >
+                    <span className="flex items-center space-x-1.5">
+                      <span className="text-slate-400 text-xs leading-none">
+                        {openSections.background ? '−' : '›'}
+                      </span>
+                      <span>Background</span>
+                    </span>
+                  </button>
+                  {openSections.background && (
+                    <div className="pt-2 text-xs text-slate-500 space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="text-[11px]">Fill</span>
+                        <select
+                          value={activeElement.bgFill}
+                          onChange={(e) =>
+                            updateElementProp('bgFill', e.target.value, {
+                              kind: 'style',
+                              prop: 'backgroundColor',
+                              val: `bg-${e.target.value}`,
+                            })
+                          }
+                          className="w-36 bg-white border border-[#E2E8F0] rounded-md px-2 py-1 text-xs text-slate-800"
+                        >
+                          <option value="transparent">Transparent</option>
+                          <option value="white">White</option>
+                          <option value="slate-50">Slate 50</option>
+                          <option value="slate-900">Slate 900</option>
+                          <option value="purple-50">Lavender 50</option>
+                        </select>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                <hr className="border-[#F1F5F9]" />
+
+                {/* ---------------------------------------------------- */}
+                {/* Section: Borders (Collapsible)                       */}
+                {/* ---------------------------------------------------- */}
+                <div>
+                  <button
+                    onClick={() => toggleSection('borders')}
+                    className="w-full flex items-center justify-between text-left font-semibold text-xs text-slate-800"
+                  >
+                    <span className="flex items-center space-x-1.5">
+                      <span className="text-slate-400 text-xs leading-none">
+                        {openSections.borders ? '−' : '›'}
+                      </span>
+                      <span>Borders</span>
+                    </span>
+                  </button>
+                  {openSections.borders && (
+                    <div className="pt-2 text-xs text-slate-500 space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="text-[11px]">Radius</span>
+                        <select
+                          value={activeElement.borderRadius}
+                          onChange={(e) =>
+                            updateElementProp('borderRadius', e.target.value, {
+                              kind: 'style',
+                              prop: 'borderRadius',
+                              val: e.target.value,
+                            })
+                          }
+                          className="w-36 bg-white border border-[#E2E8F0] rounded-md px-2 py-1 text-xs text-slate-800"
+                        >
+                          <option value="rounded-none">Square (0)</option>
+                          <option value="rounded-sm">Small (2px)</option>
+                          <option value="rounded-md">Medium (6px)</option>
+                          <option value="rounded-lg">Large (8px)</option>
+                          <option value="rounded-xl">Extra Large (12px)</option>
+                          <option value="rounded-full">Pill (Full)</option>
+                        </select>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                <hr className="border-[#F1F5F9]" />
+
+                {/* ---------------------------------------------------- */}
+                {/* Section: Position (Collapsible)                      */}
+                {/* ---------------------------------------------------- */}
+                <div>
+                  <button
+                    onClick={() => toggleSection('position')}
+                    className="w-full flex items-center justify-between text-left font-semibold text-xs text-slate-800"
+                  >
+                    <span className="flex items-center space-x-1.5">
+                      <span className="text-slate-400 text-xs leading-none">
+                        {openSections.position ? '−' : '›'}
+                      </span>
+                      <span>Position</span>
+                    </span>
+                  </button>
+                  {openSections.position && (
+                    <div className="pt-2 text-xs text-slate-500 space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="text-[11px]">Mode</span>
+                        <select
+                          value={activeElement.position}
+                          onChange={(e) => updateElementProp('position', e.target.value)}
+                          className="w-36 bg-white border border-[#E2E8F0] rounded-md px-2 py-1 text-xs text-slate-800"
+                        >
+                          <option>Relative</option>
+                          <option>Absolute</option>
+                          <option>Fixed</option>
+                          <option>Static</option>
+                        </select>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+              </div>
+            ) : (
+              /* SETTINGS TAB: Real SaaS Backend Project Configuration */
+              <div className="p-4 space-y-4 text-xs text-slate-700">
+                <div className="space-y-1">
+                  <div className="text-[11px] font-semibold text-slate-900">SaaS Workspace Metadata</div>
+                  <div className="text-[11px] text-slate-500">Connected AST nudger and local source adapter.</div>
+                </div>
+
+                <div className="space-y-3 pt-2">
+                  <div className="p-2.5 rounded-lg bg-slate-50 border border-slate-200 space-y-1.5 font-mono text-[10.5px]">
+                    <div className="flex justify-between">
+                      <span className="text-slate-500 font-sans">Source File:</span>
+                      <span className="text-slate-900 truncate max-w-[140px]">{activeElement.filePath}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-slate-500 font-sans">Target Line:</span>
+                      <span className="text-indigo-600 font-bold">{activeElement.line}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-slate-500 font-sans">AST Status:</span>
+                      <span className="text-emerald-600 font-semibold">Ready to Edit</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-slate-500 font-sans">Framework:</span>
+                      <span className="text-slate-800">Next.js App Router</span>
+                    </div>
+                  </div>
+
+                  <div className="space-y-2 pt-1 text-[11px]">
+                    <div className="font-semibold text-slate-800">Workspace Capabilities</div>
+                    <ul className="space-y-1.5 text-slate-600">
+                      <li className="flex items-center space-x-1.5">
+                        <span className="text-emerald-500 font-bold">✓</span>
+                        <span>Source-aware AST element inspector</span>
+                      </li>
+                      <li className="flex items-center space-x-1.5">
+                        <span className="text-emerald-500 font-bold">✓</span>
+                        <span>Dry-run source diff preview before writing</span>
+                      </li>
+                      <li className="flex items-center space-x-1.5">
+                        <span className="text-emerald-500 font-bold">✓</span>
+                        <span>Local-first disk edits (No commits forced)</span>
+                      </li>
+                      <li className="flex items-center space-x-1.5">
+                        <span className="text-emerald-500 font-bold">✓</span>
+                        <span>Full undo history on disk mutations</span>
+                      </li>
+                    </ul>
+                  </div>
+
+                  <div className="pt-2">
+                    <Link
+                      href="/workspace"
+                      className="w-full flex items-center justify-center space-x-1.5 py-2 px-3 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-medium transition shadow-xs"
+                    >
+                      <span>Switch Repository / Project</span>
+                      <span>↗</span>
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            )}
+          </aside>
+
+        </div>
+      </div>
+    </>
+  );
+}

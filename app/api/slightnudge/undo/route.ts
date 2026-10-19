@@ -1,12 +1,17 @@
 import { NextResponse } from 'next/server';
 import { undoSourceEdit } from '@/lib/slightnudge/edit-history';
 import { resolveRepositorySourcePath, resolveWorkspaceSourcePath } from '@/lib/slightnudge/repository-store';
+import { corsHeaders, handleCorsPreflight, isAllowedOrigin } from '@/lib/slightnudge/cors';
+
+export async function OPTIONS(request: Request) {
+  return handleCorsPreflight(request) || new NextResponse(null, { status: 204 });
+}
 
 export async function POST(request: Request) {
   try {
     const origin = request.headers.get('origin');
-    if (!origin || new URL(origin).origin !== new URL(request.url).origin) {
-      return NextResponse.json({ error: 'Undo requests must come from this SlightNudge workspace.' }, { status: 403 });
+    if (origin && !isAllowedOrigin(origin, request.url)) {
+      return NextResponse.json({ error: 'Undo requests must come from this SlightNudge workspace.' }, { status: 403, headers: corsHeaders(request) });
     }
     const body = await request.json().catch(() => ({}));
     const filePath = typeof body.repositoryId === 'string' && typeof body.sourcePath === 'string'
@@ -17,7 +22,7 @@ export async function POST(request: Request) {
     if (!result.success) {
       return NextResponse.json(
         { success: false, error: result.error },
-        { status: 400 }
+        { status: 400, headers: corsHeaders(request) }
       );
     }
 
@@ -25,11 +30,12 @@ export async function POST(request: Request) {
       success: true,
       editId: result.editId,
       message: result.message,
-    });
+    }, { headers: corsHeaders(request) });
   } catch (err: any) {
     return NextResponse.json(
       { error: err?.message || 'Undo request failed' },
-      { status: 500 }
+      { status: 500, headers: corsHeaders(request) }
     );
   }
 }
+

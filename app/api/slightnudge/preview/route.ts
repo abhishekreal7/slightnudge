@@ -4,21 +4,24 @@ import path from 'node:path';
 import { nudgeElement, reorderElement, updateStaticImageSource, updateStaticJsxText, updateStaticTailwindClass, type EditableStyleProperty } from '@/lib/slightnudge/ast-nudger';
 import { createPendingSourceEdit, discardPendingSourceEdit } from '@/lib/slightnudge/edit-history';
 import { resolveRepositoryRoot, resolveRepositorySourcePath, resolveWorkspaceSourcePath } from '@/lib/slightnudge/repository-store';
+import { corsHeaders, handleCorsPreflight, isAllowedOrigin } from '@/lib/slightnudge/cors';
 
 const allowedProperties = new Set<EditableStyleProperty>(['fontSize', 'fontWeight', 'fontFamily', 'lineHeight', 'letterSpacing', 'textTransform', 'textColor', 'alignment', 'backgroundColor', 'padding', 'display', 'width', 'maxWidth', 'gap', 'borderRadius', 'justifyContent', 'alignItems', 'flexDirection']);
 const allowedDirections = new Set(['right', 'left', 'up', 'down']);
 
-function sameOriginRequest(request: Request) {
-  const origin = request.headers.get('origin');
-  try { return Boolean(origin) && new URL(origin!).origin === new URL(request.url).origin; } catch { return false; }
+export async function OPTIONS(request: Request) {
+  return handleCorsPreflight(request) || new NextResponse(null, { status: 204 });
 }
 
 export async function POST(request: Request) {
   try {
-    if (!sameOriginRequest(request)) return NextResponse.json({ error: 'Edit previews must come from this SlightNudge workspace.' }, { status: 403 });
+    const origin = request.headers.get('origin');
+    if (origin && !isAllowedOrigin(origin, request.url)) {
+      return NextResponse.json({ error: 'Edit previews must come from this SlightNudge workspace.' }, { status: 403, headers: corsHeaders(request) });
+    }
     const body = await request.json();
     if (typeof body.kind !== 'string') {
-      return NextResponse.json({ error: 'A source file and edit type are required.' }, { status: 400 });
+      return NextResponse.json({ error: 'A source file and edit type are required.' }, { status: 400, headers: corsHeaders(request) });
     }
     const repositoryId = typeof body.repositoryId === 'string' ? body.repositoryId : undefined;
     const sourcePath = typeof body.sourcePath === 'string' ? body.sourcePath : undefined;
@@ -114,23 +117,27 @@ export async function POST(request: Request) {
       const result = updateStaticImageSource({ ...target, value: body.value });
       if (!result.success || !result.updatedSource || !result.originalSource) return NextResponse.json({ error: result.reason || 'This image cannot be replaced safely.' }, { status: 422 });
       const preview = createPendingSourceEdit({ filePath, before: result.originalSource, after: result.updatedSource, summary: 'replace image', oldValue: result.oldValue, newValue: result.newValue, line: result.line, previewType: 'imageSource', repositoryId, sourcePath });
-      return NextResponse.json(preview.changed ? { ...preview, success: true } : { success: true, changed: false, message: 'That image is already applied.' });
+      return NextResponse.json(preview.changed ? { ...preview, success: true } : { success: true, changed: false, message: 'That image is already applied.' }, { headers: corsHeaders(request) });
     }
 
-    return NextResponse.json({ error: 'Choose a supported edit type.' }, { status: 400 });
+    return NextResponse.json({ error: 'Choose a supported edit type.' }, { status: 400, headers: corsHeaders(request) });
   } catch (error) {
-    return NextResponse.json({ error: error instanceof Error ? error.message : 'Could not prepare this preview.' }, { status: 400 });
+    return NextResponse.json({ error: error instanceof Error ? error.message : 'Could not prepare this preview.' }, { status: 400, headers: corsHeaders(request) });
   }
 }
 
 export async function DELETE(request: Request) {
   try {
-    if (!sameOriginRequest(request)) return NextResponse.json({ error: 'Edit previews must come from this SlightNudge workspace.' }, { status: 403 });
+    const origin = request.headers.get('origin');
+    if (origin && !isAllowedOrigin(origin, request.url)) {
+      return NextResponse.json({ error: 'Edit previews must come from this SlightNudge workspace.' }, { status: 403, headers: corsHeaders(request) });
+    }
     const id = new URL(request.url).searchParams.get('id');
-    if (!id) return NextResponse.json({ error: 'A preview id is required.' }, { status: 400 });
+    if (!id) return NextResponse.json({ error: 'A preview id is required.' }, { status: 400, headers: corsHeaders(request) });
     discardPendingSourceEdit(id);
-    return NextResponse.json({ success: true });
+    return NextResponse.json({ success: true }, { headers: corsHeaders(request) });
   } catch (error) {
-    return NextResponse.json({ error: error instanceof Error ? error.message : 'Could not discard this preview.' }, { status: 400 });
+    return NextResponse.json({ error: error instanceof Error ? error.message : 'Could not discard this preview.' }, { status: 400, headers: corsHeaders(request) });
   }
 }
+

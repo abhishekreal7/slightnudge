@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { AlignCenter, AlignLeft, AlignRight, ArrowDown, ArrowUp, ArrowUpDown, Check, ChevronDown, ChevronsDown, ChevronsUp, CircleAlert, Code2, Columns2, GripVertical, Layers, LoaderCircle, MousePointer2, Pencil, RotateCcw, Sparkles, Type, Undo2, X } from 'lucide-react';
+import { AlignCenter, AlignLeft, AlignRight, ArrowDown, ArrowUp, ArrowUpDown, Check, ChevronDown, ChevronsDown, ChevronsUp, CircleAlert, Code2, Columns2, GripVertical, Laptop2, LayoutGrid, Layers, LoaderCircle, MoreHorizontal, MousePointer2, Pencil, Play, RotateCcw, Sparkles, Trash2, Type, Undo2, X } from 'lucide-react';
 
 interface SelectedElementInfo {
   tagName: string;
@@ -305,6 +305,15 @@ function hasBreakpointClass(className: string, value: string, breakpoint: string
   return className.split(/\s+/).includes(breakpoint ? `${breakpoint}:${value}` : value);
 }
 
+function getListedStyleValue(className: string, values: readonly string[], breakpoint: string) {
+  const activeIndex = breakpoints.findIndex(([value]) => value === breakpoint);
+  for (let index = activeIndex; index >= 0; index -= 1) {
+    const value = values.find((candidate) => hasBreakpointClass(className, candidate, breakpoints[index][0]));
+    if (value) return value;
+  }
+  return '';
+}
+
 const fontSizePixelMap: Record<string, string> = {
   xs: '12px',
   sm: '14px',
@@ -377,12 +386,14 @@ export function SlightNudgeOverlay({
   const [notice, setNotice] = useState<string | null>(null);
   const [warning, setWarning] = useState(false);
   const [pendingEdit, setPendingEdit] = useState<PendingEdit | null>(null);
-  const [openSection, setOpenSection] = useState<'text' | 'arrange' | 'spacing' | 'layout' | 'type' | 'color' | 'surface'>('spacing');
+  const [openSection, setOpenSection] = useState<'text' | 'arrange' | 'spacing' | 'layout' | 'type' | 'color' | 'surface'>('type');
   const [draftText, setDraftText] = useState('');
   const [activeBreakpoint, setActiveBreakpoint] = useState('lg');
   const [canUndo, setCanUndo] = useState(false);
   const [isInlineEditing, setIsInlineEditing] = useState(false);
   const [buttonMode, setButtonMode] = useState<'shell' | 'content'>('shell');
+  const [showExploreMore, setShowExploreMore] = useState(false);
+  const [exploreTab, setExploreTab] = useState<'text' | 'media' | 'columns' | 'box' | 'code' | 'inspect'>('box');
   const inlineInitialTextRef = useRef<string>('');
   const [isResizing, setIsResizing] = useState(false);
   const [resizeBadge, setResizeBadge] = useState<string | null>(null);
@@ -831,6 +842,49 @@ export function SlightNudgeOverlay({
   }, []);
 
   useEffect(() => {
+    const onLayerSelect = (event: Event) => {
+      const detail = (event as CustomEvent<{ filePath: string; line: string; column: string; tagName: string }>).detail;
+      if (!active || !detail || pendingEdit || busy) return;
+      const root = document.querySelector<HTMLElement>('.sn-preview-content');
+      const target = root && Array.from(root.querySelectorAll<HTMLElement>('[data-source-file][data-source-line]')).find((element) =>
+        element.tagName.toLowerCase() === detail.tagName &&
+        element.getAttribute('data-source-file') === detail.filePath &&
+        element.getAttribute('data-source-line') === detail.line &&
+        (element.getAttribute('data-source-column') || '') === detail.column,
+      );
+      if (!target) return;
+      const sourceNode = target.closest<HTMLElement>('[data-source-file]') || target;
+      const source = resolveSource(sourceNode);
+      const rect = sourceNode.getBoundingClientRect();
+      const info: SelectedElementInfo = {
+        tagName: target.tagName.toLowerCase(),
+        id: sourceNode.id || undefined,
+        className: typeof target.className === 'string' ? target.className : '',
+        textContent: sourceNode.textContent || '',
+        filePath: source.filePath,
+        line: source.line,
+        column: source.column,
+        rect: { top: rect.top + scrollY, left: rect.left + scrollX, width: rect.width, height: rect.height },
+        clickedRect: { top: rect.top + scrollY, left: rect.left + scrollX, width: rect.width, height: rect.height },
+        safeToEdit: defaultFilePath || source.filePath?.startsWith('fixtures/') ? true : undefined,
+      };
+      selectedNodeRef.current = sourceNode;
+      originalStyleRef.current = sourceNode.getAttribute('style') || '';
+      editGroupIdRef.current = crypto.randomUUID();
+      setDraftText(sourceNode.textContent || '');
+      setSelected(info);
+      setHoveredRect(null);
+      setNotice(null);
+      setButtonMode('shell');
+      setOpenSection(['p', 'span', 'a', 'button', 'label', 'li', 'blockquote', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'].includes(info.tagName) ? 'type' : 'layout');
+      window.dispatchEvent(new CustomEvent('slightnudge:selection', { detail: { filePath: info.filePath, line: info.line, column: info.column, tagName: info.tagName } }));
+      void inspect(sourceNode, info);
+    };
+    window.addEventListener('slightnudge:select-source', onLayerSelect);
+    return () => window.removeEventListener('slightnudge:select-source', onLayerSelect);
+  }, [active, busy, defaultFilePath, inspect, pendingEdit, resolveSource]);
+
+  useEffect(() => {
     const onUndo = () => { void undo(); };
     window.addEventListener('slightnudge:undo', onUndo);
     return () => window.removeEventListener('slightnudge:undo', onUndo);
@@ -889,8 +943,9 @@ export function SlightNudgeOverlay({
       editGroupIdRef.current = crypto.randomUUID();
       setDraftText(sourceNode.textContent || '');
       setPendingEdit(null); setSelected(info); setHoveredRect(null); setNotice(null);
+      window.dispatchEvent(new CustomEvent('slightnudge:selection', { detail: { filePath: info.filePath, line: info.line, column: info.column, tagName: info.tagName } }));
       setButtonMode('shell');
-      setOpenSection(['p', 'span', 'a', 'button', 'label', 'li', 'blockquote', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'].includes(info.tagName) ? 'text' : 'spacing');
+      setOpenSection(['p', 'span', 'a', 'button', 'label', 'li', 'blockquote', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'].includes(info.tagName) ? 'type' : 'layout');
       void inspect(sourceNode, info);
     };
     const onDoubleClick = (event: MouseEvent) => {
@@ -908,7 +963,7 @@ export function SlightNudgeOverlay({
       if (busy) { if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'z') event.preventDefault(); return; }
       if (event.key === 'Escape') {
         if (pendingEdit) { void discardPreview(); return; }
-        setSelected(null); selectedNodeRef.current = null; editGroupIdRef.current = null; originalStyleRef.current = null; setNotice(null); return;
+        setSelected(null); window.dispatchEvent(new CustomEvent('slightnudge:selection', { detail: null })); selectedNodeRef.current = null; editGroupIdRef.current = null; originalStyleRef.current = null; setNotice(null); return;
       }
       if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'z') { event.preventDefault(); void undo(); return; }
       if (event.key === 'Enter' && selected && isTextElement(selected.tagName) && selected.textEditable !== false) {
@@ -1633,29 +1688,36 @@ export function SlightNudgeOverlay({
     if (!selected || !selectedNodeRef.current) return { top: 12, left: 12 };
     const el = selectedNodeRef.current;
     const prevSibling = el.previousElementSibling as HTMLElement | null;
-    let shouldFlipBelow = selected.rect.top < 60;
+    let gapAbove = Number.NEGATIVE_INFINITY;
     if (prevSibling) {
       const prevRect = prevSibling.getBoundingClientRect();
-      const gapAbove = selected.rect.top - (prevRect.bottom + window.scrollY);
-      if (gapAbove < 44) {
-        shouldFlipBelow = true;
-      }
+      gapAbove = selected.rect.top - (prevRect.bottom + window.scrollY);
     } else {
       const parent = el.parentElement;
       if (parent) {
         const parentRect = parent.getBoundingClientRect();
-        const gapFromParent = selected.rect.top - (parentRect.top + window.scrollY);
-        if (gapFromParent < 44) {
-          shouldFlipBelow = true;
-        }
+        gapAbove = selected.rect.top - (parentRect.top + window.scrollY);
       }
     }
-    const top = shouldFlipBelow
-      ? selected.rect.top + selected.rect.height + 10
-      : Math.max(12, selected.rect.top - 46);
+    let top: number;
+    if (selected.rect.top >= 60 && gapAbove >= 48) {
+      top = selected.rect.top - 46;
+    } else {
+      const section = el.closest('section');
+      const safeTop = section ? section.getBoundingClientRect().top + window.scrollY + 12 : 12;
+      top = Math.max(12, Math.min(safeTop, selected.rect.top - 52));
+    }
     const left = Math.max(12, selected.rect.left);
     return { top, left };
   }, [selected]);
+
+  const viewportWidth = typeof window === 'undefined' ? 1280 : window.innerWidth;
+  const inspectorInset = viewportWidth <= 700 ? 0 : viewportWidth <= 1100 ? 294 : 326;
+  const hudWidthLimit = viewportWidth <= 700 ? Math.max(240, viewportWidth - 24) : Math.min(420, viewportWidth * 0.25);
+  const hudLeft = Math.min(
+    Math.max(12, selected?.rect.left ?? 12),
+    Math.max(12, viewportWidth - inspectorInset - hudWidthLimit - 12),
+  );
 
   return <div id="slightnudge-ui">
     {active && hoveredRect && !selected && <div className="sn-hover-outline" style={{ top: hoveredRect.top, left: hoveredRect.left, width: hoveredRect.width, height: hoveredRect.height }} aria-hidden="true"/>}
@@ -1683,6 +1745,7 @@ export function SlightNudgeOverlay({
               e.stopPropagation();
               if (pendingEdit) void discardPreview();
               setSelected(null);
+              window.dispatchEvent(new CustomEvent('slightnudge:selection', { detail: null }));
               selectedNodeRef.current = null;
               originalStyleRef.current = null;
             }}
@@ -1745,8 +1808,8 @@ export function SlightNudgeOverlay({
       <div
         className="sn-canvas-hud"
         style={{
-          top: `${Math.max(12, selected.rect.top - 46)}px`,
-          left: `${Math.max(12, selected.rect.left)}px`,
+          top: `${hudPlacement.top}px`,
+          left: `${hudLeft}px`,
           opacity: isDraggingMove ? 0 : 1,
           pointerEvents: isDraggingMove ? 'none' : 'auto',
           transition: isResizing || isDraggingMove ? 'none' : 'top 0.24s cubic-bezier(0.16, 1, 0.3, 1), left 0.24s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.15s',
@@ -2090,56 +2153,6 @@ export function SlightNudgeOverlay({
                         <AlignRight size={13} />
                       </button>
                     </div>
-                    <div className="sn-hud-divider" />
-                    <div className="sn-hud-stepper" title="Space to previous element (Margin top)">
-                      <span className="sn-hud-stepper-label">SPACE</span>
-                      <button
-                        type="button"
-                        title="Delete space above (nudge up)"
-                        aria-label="Delete space above"
-                        disabled={selected.safeToEdit !== true}
-                        onClick={() => {
-                          void previewChange({
-                            kind: 'nudge',
-                            filePath: selected.filePath,
-                            line: Number(selected.line) || undefined,
-                            column: Number(selected.column) || undefined,
-                            elementId: selected.id,
-                            direction: 'up',
-                            stepSize: 'normal',
-                          });
-                        }}
-                        className="sn-hud-step-btn"
-                      >
-                        −
-                      </button>
-                      <span className="sn-hud-step-value" style={{ minWidth: 26, fontSize: 10 }}>
-                        {(() => {
-                          const match = selected.className.match(/(-?mt-[0-9.]+)/);
-                          return match ? match[1].replace('mt-', '') : 'auto';
-                        })()}
-                      </span>
-                      <button
-                        type="button"
-                        title="Add space above (nudge down)"
-                        aria-label="Add space above"
-                        disabled={selected.safeToEdit !== true}
-                        onClick={() => {
-                          void previewChange({
-                            kind: 'nudge',
-                            filePath: selected.filePath,
-                            line: Number(selected.line) || undefined,
-                            column: Number(selected.column) || undefined,
-                            elementId: selected.id,
-                            direction: 'down',
-                            stepSize: 'normal',
-                          });
-                        }}
-                        className="sn-hud-step-btn"
-                      >
-                        +
-                      </button>
-                    </div>
                   </>
                 ) : (
                   <>
@@ -2192,29 +2205,6 @@ export function SlightNudgeOverlay({
                 )}
               </>
             )}
-            <div className="sn-hud-divider" />
-            <div className="sn-hud-group" title="Reorder with siblings">
-              <button
-                type="button"
-                title={hasPrevSibling ? "Move earlier / swap with previous sibling (↑)" : "Already first child in this section"}
-                aria-label="Move earlier"
-                disabled={!hasPrevSibling}
-                className="sn-hud-btn"
-                onClick={() => void previewChange({ kind: 'reorder', filePath: selected.filePath, line: Number(selected.line) || undefined, column: Number(selected.column) || undefined, elementId: selected.id, direction: 'earlier' })}
-              >
-                <ArrowUp size={13} />
-              </button>
-              <button
-                type="button"
-                title={hasNextSibling ? "Move later / swap with next sibling (↓)" : "Already last child in this section"}
-                aria-label="Move later"
-                disabled={!hasNextSibling}
-                className="sn-hud-btn"
-                onClick={() => void previewChange({ kind: 'reorder', filePath: selected.filePath, line: Number(selected.line) || undefined, column: Number(selected.column) || undefined, elementId: selected.id, direction: 'later' })}
-              >
-                <ArrowDown size={13} />
-              </button>
-            </div>
             {canUndo && (
               <>
                 <div className="sn-hud-divider" />
@@ -2230,13 +2220,26 @@ export function SlightNudgeOverlay({
                 </button>
               </>
             )}
+            <div className="sn-hud-divider" />
+            {/* Three Dot Button: Explore More (Image 2) */}
+            <button
+              type="button"
+              title="Explore more element properties"
+              aria-label="Explore more"
+              aria-expanded={showExploreMore}
+              className={`sn-hud-btn ${showExploreMore ? 'is-active' : ''}`}
+              onClick={() => setShowExploreMore((prev) => !prev)}
+              style={{ padding: '0 6px' }}
+            >
+              <MoreHorizontal size={14} />
+            </button>
           </>
         )}
       </div>
     )}
 
     <aside className="sn-inspector-panel" aria-label="Visual inspector">
-      <div className="sn-inspector-header"><div className="sn-inspector-title"><span className="sn-inspector-icon"><MousePointer2 size={16}/></span><div><strong>Visual editor</strong><span>{active ? 'Select a page element' : 'Selection paused'}</span></div></div><button className={`sn-inspector-toggle ${active ? 'is-active' : ''}`} type="button" disabled={busy} onClick={() => { if (pendingEdit) void discardPreview(); setActive((value) => !value); setSelected(null); selectedNodeRef.current = null; editGroupIdRef.current = null; }} aria-pressed={active}>{active ? 'On' : 'Off'}</button></div>
+      <div className="sn-inspector-header"><div className="sn-inspector-title"><span className="sn-inspector-icon"><MousePointer2 size={16}/></span><div><strong>Visual editor</strong><span>{active ? 'Select a page element' : 'Selection paused'}</span></div></div><button className={`sn-inspector-toggle ${active ? 'is-active' : ''}`} type="button" disabled={busy} onClick={() => { if (pendingEdit) void discardPreview(); setActive((value) => !value); setSelected(null); window.dispatchEvent(new CustomEvent('slightnudge:selection', { detail: null })); selectedNodeRef.current = null; editGroupIdRef.current = null; }} aria-pressed={active}>{active ? 'On' : 'Off'}</button></div>
 
       {!selected ? <div className="sn-inspector-empty"><span><MousePointer2 size={20}/></span><strong>Choose something to refine</strong><p>Click any element in the preview to inspect its source and adjust its styles.</p><div className="sn-shortcut"><kbd>Esc</kbd> clear selection <i/> <kbd>↑</kbd><kbd>↓</kbd><kbd>←</kbd><kbd>→</kbd> spacing</div></div> : <>
         <div className="sn-selected-summary"><div className="sn-element-name"><span>&lt;{selected.tagName}{selected.id ? `#${selected.id}` : ''}&gt;</span>{busy && <LoaderCircle className="sn-spinner" size={14}/>}</div><code>{selected.filePath || 'No source mapping'}{selected.line ? `:${selected.line}${selected.column ? `:${selected.column}` : ''}` : ''}</code>{selected.safeToEdit === false && <p className="sn-safety-warning" id="slightnudge-safety-warning"><CircleAlert size={14}/>{selected.refusalReason || 'This component cannot be edited safely.'}</p>}{selected.safeToEdit === true && <p className="sn-safety-safe" id="slightnudge-safety-ok"><Check size={14}/>Source mapping verified · select a control to preview</p>}
@@ -2261,277 +2264,6 @@ export function SlightNudgeOverlay({
           </div>
         )}
         <div className="sn-inspector-sections">
-          {isButtonElement && (
-            <div className="sn-button-studio-card">
-              <div className="sn-button-studio-header">
-                <div className="sn-button-studio-badge">
-                  <Sparkles size={12} />
-                  <span>Button Controller</span>
-                </div>
-                <div className="sn-button-mode-tabs">
-                  <button
-                    type="button"
-                    className={`sn-button-mode-tab ${buttonMode === 'shell' ? 'is-active' : ''}`}
-                    onClick={() => setButtonMode('shell')}
-                    aria-pressed={buttonMode === 'shell'}
-                  >
-                    <Layers size={11} />
-                    <span>Shell</span>
-                  </button>
-                  <button
-                    type="button"
-                    className={`sn-button-mode-tab ${buttonMode === 'content' ? 'is-active' : ''}`}
-                    onClick={() => setButtonMode('content')}
-                    aria-pressed={buttonMode === 'content'}
-                  >
-                    <Type size={11} />
-                    <span>Content</span>
-                  </button>
-                </div>
-              </div>
-
-              {buttonMode === 'shell' ? (
-                <div className="sn-button-studio-body">
-                  <div className="sn-control-group" style={{ marginTop: 0 }}>
-                    <span>Surface Fill (Background)</span>
-                    <div style={{ display: 'flex', gap: '5px' }}>
-                      {styleOptions.backgroundColor.map((value) => (
-                        <ColorSwatch
-                          key={value}
-                          value={value}
-                          property="backgroundColor"
-                          classes={selected.className}
-                          breakpoint={activeBreakpoint}
-                          disabled={selected.safeToEdit !== true}
-                          onChange={updateStyle}
-                        />
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="sn-control-group">
-                    <span>Corner Radius (Shape)</span>
-                    <div className="sn-button-shape-options">
-                      <button
-                        type="button"
-                        className={`sn-style-chip ${hasBreakpointClass(selected.className, 'rounded-none', activeBreakpoint) ? 'is-selected' : ''}`}
-                        disabled={selected.safeToEdit !== true}
-                        onClick={() => void updateStyle('borderRadius', 'rounded-none')}
-                      >
-                        Square
-                      </button>
-                      <button
-                        type="button"
-                        className={`sn-style-chip ${hasBreakpointClass(selected.className, 'rounded-lg', activeBreakpoint) || hasBreakpointClass(selected.className, 'rounded-md', activeBreakpoint) ? 'is-selected' : ''}`}
-                        disabled={selected.safeToEdit !== true}
-                        onClick={() => void updateStyle('borderRadius', 'rounded-lg')}
-                      >
-                        Rounded
-                      </button>
-                      <button
-                        type="button"
-                        className={`sn-style-chip ${hasBreakpointClass(selected.className, 'rounded-full', activeBreakpoint) ? 'is-selected' : ''}`}
-                        disabled={selected.safeToEdit !== true}
-                        onClick={() => void updateStyle('borderRadius', 'rounded-full')}
-                      >
-                        Pill
-                      </button>
-                    </div>
-                  </div>
-
-                  <div className="sn-control-group">
-                    <span>Inside Padding (Button Size)</span>
-                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '5px' }}>
-                      {['p-2', 'p-3', 'p-4', 'p-6'].map((value) => (
-                        <StyleChip
-                          key={value}
-                          value={value}
-                          property="padding"
-                          selectedClassName={selected.className}
-                          breakpoint={activeBreakpoint}
-                          disabled={selected.safeToEdit !== true}
-                          onChange={updateStyle}
-                        />
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="sn-control-group">
-                    <span>Width</span>
-                    <div style={{ display: 'flex', gap: '5px' }}>
-                      {['w-auto', 'w-full'].map((value) => (
-                        <StyleChip
-                          key={value}
-                          value={value}
-                          property="width"
-                          selectedClassName={selected.className}
-                          breakpoint={activeBreakpoint}
-                          disabled={selected.safeToEdit !== true}
-                          onChange={updateStyle}
-                        />
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="sn-control-group">
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '6px' }}>
-                      <span>Space to Text Above (Margin)</span>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                        <button
-                          type="button"
-                          className="sn-hud-step-btn"
-                          title="Delete space above (nudge up)"
-                          disabled={selected.safeToEdit !== true}
-                          style={{ border: '1px solid #e2e7e3', borderRadius: '4px', width: '22px', height: '22px', fontSize: '13px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-                          onClick={() => {
-                            void previewChange({
-                              kind: 'nudge',
-                              filePath: selected.filePath,
-                              line: Number(selected.line) || undefined,
-                              column: Number(selected.column) || undefined,
-                              elementId: selected.id,
-                              direction: 'up',
-                              stepSize: 'normal',
-                            });
-                          }}
-                        >
-                          −
-                        </button>
-                        <span style={{ fontSize: '10px', minWidth: '32px', textAlign: 'center', lineHeight: '22px', color: '#68756d', fontFamily: 'monospace' }}>
-                          {(() => {
-                            const match = selected.className.match(/(-?mt-[0-9.]+)/);
-                            return match ? match[1] : 'default';
-                          })()}
-                        </span>
-                        <button
-                          type="button"
-                          className="sn-hud-step-btn"
-                          title="Add space above (nudge down)"
-                          disabled={selected.safeToEdit !== true}
-                          style={{ border: '1px solid #e2e7e3', borderRadius: '4px', width: '22px', height: '22px', fontSize: '13px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-                          onClick={() => {
-                            void previewChange({
-                              kind: 'nudge',
-                              filePath: selected.filePath,
-                              line: Number(selected.line) || undefined,
-                              column: Number(selected.column) || undefined,
-                              elementId: selected.id,
-                              direction: 'down',
-                              stepSize: 'normal',
-                            });
-                          }}
-                        >
-                          +
-                        </button>
-                      </div>
-                    </div>
-                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '5px' }}>
-                      {[
-                        { label: 'Flush (-16px)', val: '-mt-4' },
-                        { label: 'Tight (-8px)', val: '-mt-2' },
-                        { label: 'Zero (0px)', val: 'mt-0' },
-                        { label: 'Normal (+8px)', val: 'mt-2' },
-                        { label: 'Spacious (+24px)', val: 'mt-6' },
-                      ].map(({ label, val }) => (
-                        <button
-                          key={val}
-                          type="button"
-                          className={`sn-style-chip ${hasBreakpointClass(selected.className, val, activeBreakpoint) ? 'is-selected' : ''}`}
-                          disabled={selected.safeToEdit !== true}
-                          onClick={() => void updateStyle('margin', val)}
-                        >
-                          {label}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              ) : (
-                <div className="sn-button-studio-body">
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <span style={{ fontSize: '10px', color: '#787774', fontWeight: 500 }}>Button Text Label</span>
-                    <button
-                      type="button"
-                      className="sn-text-canvas-btn"
-                      onClick={startInlineEditing}
-                      disabled={selected.safeToEdit !== true}
-                    >
-                      <Pencil size={10} /> Type on canvas
-                    </button>
-                  </div>
-                  <label className="sn-control-group sn-text-editor" style={{ marginTop: 0 }}>
-                    <textarea
-                      value={draftText}
-                      maxLength={2000}
-                      disabled={selected.safeToEdit !== true}
-                      onChange={(event) => setDraftText(event.target.value)}
-                      aria-label="Button label text"
-                    />
-                  </label>
-                  <button
-                    type="button"
-                    className="sn-button sn-button-primary sn-text-preview-button"
-                    style={{ width: '100%', marginTop: '4px' }}
-                    disabled={selected.safeToEdit !== true || !draftText.trim() || draftText === (selected.textContent || '')}
-                    onClick={() => void updateText()}
-                  >
-                    {busy ? <LoaderCircle className="sn-spinner" size={14} /> : <Check size={14} />} Update button text
-                  </button>
-
-                  <div className="sn-control-group" style={{ marginTop: '10px' }}>
-                    <span>Label Text Color</span>
-                    <div style={{ display: 'flex', gap: '5px' }}>
-                      {styleOptions.textColor.map((value) => (
-                        <ColorSwatch
-                          key={value}
-                          value={value}
-                          property="textColor"
-                          classes={selected.className}
-                          breakpoint={activeBreakpoint}
-                          disabled={selected.safeToEdit !== true}
-                          onChange={updateStyle}
-                        />
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="sn-control-group">
-                    <span>Text Size</span>
-                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '5px' }}>
-                      {['text-xs', 'text-sm', 'text-base', 'text-lg'].map((value) => (
-                        <button
-                          key={value}
-                          type="button"
-                          className={`sn-style-chip ${hasBreakpointClass(selected.className, value, activeBreakpoint) ? 'is-selected' : ''}`}
-                          disabled={selected.safeToEdit !== true}
-                          onClick={() => void updateStyle('fontSize', value)}
-                        >
-                          {value.replace('text-', '')}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="sn-control-group">
-                    <span>Font Weight</span>
-                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '5px' }}>
-                      {['font-normal', 'font-medium', 'font-semibold', 'font-bold'].map((value) => (
-                        <button
-                          key={value}
-                          type="button"
-                          className={`sn-style-chip ${hasBreakpointClass(selected.className, value, activeBreakpoint) ? 'is-selected' : ''}`}
-                          disabled={selected.safeToEdit !== true}
-                          onClick={() => void updateStyle('fontWeight', value)}
-                        >
-                          {value.replace('font-', '')}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
-          )}
           <InspectorSection title="Text" icon={<Type size={15}/>} open={openSection === 'text'} onClick={() => setOpenSection(openSection === 'text' ? 'type' : 'text')}>
             {selected.textEditable === false ? (
               <p className="sn-control-hint" style={{ color: '#b43e35', padding: '0.25rem 0' }}>
@@ -2600,45 +2332,56 @@ export function SlightNudgeOverlay({
               </div>
             </div>
           </InspectorSection>
+          <div className="sn-breakpoint-picker">
+            <span>Styles at</span>
+            <div className="sn-breakpoint-options">{breakpoints.map(([value, label]) => <button type="button" key={value || 'base'} className={activeBreakpoint === value ? 'is-selected' : ''} aria-pressed={activeBreakpoint === value} onClick={() => setActiveBreakpoint(value)}>{label}</button>)}</div>
+            <small className="sn-breakpoint-help">{activeBreakpoint ? 'Changes apply at this width and up.' : 'Changes apply at every width.'}</small>
+          </div>
           <InspectorSection title="Layout" icon={<Columns2 size={15}/>} open={openSection === 'layout'} onClick={() => setOpenSection(openSection === 'layout' ? 'type' : 'layout')}>
-            <ControlGroup label="Apply at breakpoint"><div className="sn-breakpoint-options">{breakpoints.map(([value, label]) => <button type="button" key={value || 'base'} className={activeBreakpoint === value ? 'is-selected' : ''} aria-pressed={activeBreakpoint === value} onClick={() => setActiveBreakpoint(value)}>{label}</button>)}</div></ControlGroup>
             <ControlGroup label="Display">{styleOptions.display.map((value) => <StyleChip key={value} value={value} property="display" selectedClassName={selected.className} breakpoint={activeBreakpoint} disabled={selected.safeToEdit !== true} onChange={updateStyle}/>)}</ControlGroup>
             <ControlGroup label="Flex direction">{styleOptions.flexDirection.map((value) => <StyleChip key={value} value={value} property="flexDirection" selectedClassName={selected.className} breakpoint={activeBreakpoint} disabled={selected.safeToEdit !== true} onChange={updateStyle}/>)}</ControlGroup>
             <ControlGroup label="Align items (cross-axis)">{styleOptions.alignItems.map((value) => <StyleChip key={value} value={value} property="alignItems" selectedClassName={selected.className} breakpoint={activeBreakpoint} disabled={selected.safeToEdit !== true} onChange={updateStyle}/>)}</ControlGroup>
             <ControlGroup label="Justify content (main-axis)">{styleOptions.justifyContent.map((value) => <StyleChip key={value} value={value} property="justifyContent" selectedClassName={selected.className} breakpoint={activeBreakpoint} disabled={selected.safeToEdit !== true} onChange={updateStyle}/>)}</ControlGroup>
             <ControlGroup label="Width">{styleOptions.width.map((value) => <StyleChip key={value} value={value} property="width" selectedClassName={selected.className} breakpoint={activeBreakpoint} disabled={selected.safeToEdit !== true} onChange={updateStyle}/>)}</ControlGroup>
             <ControlGroup label="Max width">{styleOptions.maxWidth.map((value) => <StyleChip key={value} value={value} property="maxWidth" selectedClassName={selected.className} breakpoint={activeBreakpoint} disabled={selected.safeToEdit !== true} onChange={updateStyle}/>)}</ControlGroup>
-            <ControlGroup label="Corner radius">{styleOptions.borderRadius.map((value) => <StyleChip key={value} value={value} property="borderRadius" selectedClassName={selected.className} breakpoint={activeBreakpoint} disabled={selected.safeToEdit !== true} onChange={updateStyle}/>)}</ControlGroup>
           </InspectorSection>
           <InspectorSection title="Typography" icon={<Type size={15}/>} open={openSection === 'type'} onClick={() => setOpenSection(openSection === 'type' ? 'spacing' : 'type')}>
-            <ControlGroup label="Text size">{styleOptions.fontSize.map((value) => <button key={value} type="button" className={`sn-style-chip ${hasBreakpointClass(selected.className, value, activeBreakpoint) ? 'is-selected' : ''}`} disabled={selected.safeToEdit !== true} onClick={() => void updateStyle('fontSize', value)}>{value.replace('text-', '')}</button>)}</ControlGroup>
-            <ControlGroup label="Weight">{styleOptions.fontWeight.map((value) => <button key={value} type="button" className={`sn-style-chip ${hasBreakpointClass(selected.className, value, activeBreakpoint) ? 'is-selected' : ''}`} disabled={selected.safeToEdit !== true} onClick={() => void updateStyle('fontWeight', value)}>{value.replace('font-', '')}</button>)}</ControlGroup>
-            <ControlGroup label="Font family">{styleOptions.fontFamily.map((value) => <button key={value} type="button" className={`sn-style-chip ${hasBreakpointClass(selected.className, value, activeBreakpoint) ? 'is-selected' : ''}`} disabled={selected.safeToEdit !== true} onClick={() => void updateStyle('fontFamily', value)}>{value.replace('font-', '')}</button>)}</ControlGroup>
-            <ControlGroup label="Line height">{styleOptions.lineHeight.map((value) => <button key={value} type="button" className={`sn-style-chip ${hasBreakpointClass(selected.className, value, activeBreakpoint) ? 'is-selected' : ''}`} disabled={selected.safeToEdit !== true} onClick={() => void updateStyle('lineHeight', value)}>{value.replace('leading-', '')}</button>)}</ControlGroup>
-            <ControlGroup label="Letter spacing">{styleOptions.letterSpacing.map((value) => <button key={value} type="button" className={`sn-style-chip ${hasBreakpointClass(selected.className, value, activeBreakpoint) ? 'is-selected' : ''}`} disabled={selected.safeToEdit !== true} onClick={() => void updateStyle('letterSpacing', value)}>{value.replace('tracking-', '')}</button>)}</ControlGroup>
-            <ControlGroup label="Text case">{styleOptions.textTransform.map((value) => <button key={value} type="button" className={`sn-style-chip ${hasBreakpointClass(selected.className, value, activeBreakpoint) ? 'is-selected' : ''}`} disabled={selected.safeToEdit !== true} onClick={() => void updateStyle('textTransform', value)}>{value.replace('-case', '')}</button>)}</ControlGroup>
+            <div className="sn-type-control-list">
+              <TypographySelect label="Size" property="fontSize" values={styleOptions.fontSize} selectedClassName={selected.className} breakpoint={activeBreakpoint} disabled={selected.safeToEdit !== true} onChange={updateStyle} format={(value) => value.replace('text-', '')} sample={(value) => <span className="sn-type-specimen" style={{ fontSize: value ? `${Math.min(22, 11 + styleOptions.fontSize.findIndex((item) => item === value) * 1.2)}px` : '15px' }}>Aa</span>} />
+              <TypographySelect label="Typeface" property="fontFamily" values={styleOptions.fontFamily} selectedClassName={selected.className} breakpoint={activeBreakpoint} disabled={selected.safeToEdit !== true} onChange={updateStyle} format={(value) => value.replace('font-', '')} sample={(value) => <span className={`sn-type-specimen ${value.replace('font-', 'is-')}`}>Aa</span>} />
+              <TypographySelect label="Weight" property="fontWeight" values={styleOptions.fontWeight} selectedClassName={selected.className} breakpoint={activeBreakpoint} disabled={selected.safeToEdit !== true} onChange={updateStyle} format={(value) => value.replace('font-', '')} sample={(value) => <span className="sn-type-specimen" style={{ fontWeight: value ? [100,200,300,400,500,600,700,800,900][styleOptions.fontWeight.findIndex((item) => item === value)] : 500 }}>Aa</span>} />
+              <TypographySelect label="Line height" property="lineHeight" values={styleOptions.lineHeight} selectedClassName={selected.className} breakpoint={activeBreakpoint} disabled={selected.safeToEdit !== true} onChange={updateStyle} format={(value) => value.replace('leading-', '')} />
+              <TypographySelect label="Letter spacing" property="letterSpacing" values={styleOptions.letterSpacing} selectedClassName={selected.className} breakpoint={activeBreakpoint} disabled={selected.safeToEdit !== true} onChange={updateStyle} format={(value) => value.replace('tracking-', '')} />
+              <TypographySelect label="Text case" property="textTransform" values={styleOptions.textTransform} selectedClassName={selected.className} breakpoint={activeBreakpoint} disabled={selected.safeToEdit !== true} onChange={updateStyle} format={(value) => value.replace('-case', '')} />
+            </div>
+            <ControlGroup label="Alignment"><div className="sn-align-group"><button type="button" className={hasBreakpointClass(selected.className, 'text-left', activeBreakpoint) ? 'is-selected' : ''} aria-pressed={hasBreakpointClass(selected.className, 'text-left', activeBreakpoint)} aria-label="Align left" disabled={selected.safeToEdit !== true} onClick={() => void updateStyle('alignment', 'text-left')}><AlignLeft size={16}/></button><button type="button" className={hasBreakpointClass(selected.className, 'text-center', activeBreakpoint) ? 'is-selected' : ''} aria-pressed={hasBreakpointClass(selected.className, 'text-center', activeBreakpoint)} aria-label="Align center" disabled={selected.safeToEdit !== true} onClick={() => void updateStyle('alignment', 'text-center')}><AlignCenter size={16}/></button><button type="button" className={hasBreakpointClass(selected.className, 'text-right', activeBreakpoint) ? 'is-selected' : ''} aria-pressed={hasBreakpointClass(selected.className, 'text-right', activeBreakpoint)} aria-label="Align right" disabled={selected.safeToEdit !== true} onClick={() => void updateStyle('alignment', 'text-right')}><AlignRight size={16}/></button></div></ControlGroup>
           </InspectorSection>
           <InspectorSection title="Color" icon={<span className="sn-color-glyph"/>} open={openSection === 'color'} onClick={() => setOpenSection(openSection === 'color' ? 'spacing' : 'color')}>
             <ControlGroup label="Text">{styleOptions.textColor.map((value) => <ColorSwatch key={value} value={value} property="textColor" classes={selected.className} breakpoint={activeBreakpoint} disabled={selected.safeToEdit !== true} onChange={updateStyle}/>)}</ControlGroup>
           </InspectorSection>
           <InspectorSection title="Surface" icon={<span className="sn-surface-glyph"/>} open={openSection === 'surface'} onClick={() => setOpenSection(openSection === 'surface' ? 'spacing' : 'surface')}>
             <ControlGroup label="Fill">{styleOptions.backgroundColor.map((value) => <ColorSwatch key={value} value={value} property="backgroundColor" classes={selected.className} breakpoint={activeBreakpoint} disabled={selected.safeToEdit !== true} onChange={updateStyle}/>)}</ControlGroup>
-            <ControlGroup label="Padding">{styleOptions.padding.map((value) => <StyleChip key={value} value={value} property="padding" selectedClassName={selected.className} breakpoint={activeBreakpoint} disabled={selected.safeToEdit !== true} onChange={updateStyle}/>)}</ControlGroup>
-            <ControlGroup label="Alignment"><div className="sn-align-group"><button type="button" className={hasBreakpointClass(selected.className, 'text-left', activeBreakpoint) ? 'is-selected' : ''} aria-pressed={hasBreakpointClass(selected.className, 'text-left', activeBreakpoint)} aria-label="Align left" disabled={selected.safeToEdit !== true} onClick={() => void updateStyle('alignment', 'text-left')}><AlignLeft size={16}/></button><button type="button" className={hasBreakpointClass(selected.className, 'text-center', activeBreakpoint) ? 'is-selected' : ''} aria-pressed={hasBreakpointClass(selected.className, 'text-center', activeBreakpoint)} aria-label="Align center" disabled={selected.safeToEdit !== true} onClick={() => void updateStyle('alignment', 'text-center')}><AlignCenter size={16}/></button><button type="button" className={hasBreakpointClass(selected.className, 'text-right', activeBreakpoint) ? 'is-selected' : ''} aria-pressed={hasBreakpointClass(selected.className, 'text-right', activeBreakpoint)} aria-label="Align right" disabled={selected.safeToEdit !== true} onClick={() => void updateStyle('alignment', 'text-right')}><AlignRight size={16}/></button></div></ControlGroup>
+            <ControlGroup label="Corner radius">{styleOptions.borderRadius.map((value) => <StyleChip key={value} value={value} property="borderRadius" selectedClassName={selected.className} breakpoint={activeBreakpoint} disabled={selected.safeToEdit !== true} onChange={updateStyle}/>)}</ControlGroup>
+
           </InspectorSection>
         </div>
-        <div className="sn-inspector-footer"><button type="button" disabled={busy} onClick={() => { if (pendingEdit) void discardPreview(); setSelected(null); selectedNodeRef.current = null; editGroupIdRef.current = null; originalStyleRef.current = null; setNotice(null); }}><RotateCcw size={14}/> Deselect</button><span id="slightnudge-nudge-notice">{notice || 'Changes require review before they reach source.'}</span></div>
+        <div className="sn-inspector-footer"><button type="button" disabled={busy} onClick={() => { if (pendingEdit) void discardPreview(); setSelected(null); window.dispatchEvent(new CustomEvent('slightnudge:selection', { detail: null })); selectedNodeRef.current = null; editGroupIdRef.current = null; originalStyleRef.current = null; setNotice(null); }}><RotateCcw size={14}/> Deselect</button><span id="slightnudge-nudge-notice">{notice || 'Changes require review before they reach source.'}</span></div>
       </>}
     </aside>
   </div>;
 }
 
 function InspectorSection({ title, icon, open, onClick, children }: { title: string; icon: React.ReactNode; open: boolean; onClick: () => void; children: React.ReactNode }) {
-  return <section className={`sn-inspector-section ${open ? 'is-open' : ''}`}><button type="button" className="sn-inspector-section-toggle" onClick={onClick}>{icon}<span>{title}</span><ChevronDown size={14}/></button>{open && <div className="sn-inspector-section-body">{children}</div>}</section>;
+  return <section className={`sn-inspector-section sn-inspector-section-${title.toLowerCase()} ${open ? 'is-open' : ''}`}><button type="button" className="sn-inspector-section-toggle" onClick={onClick} aria-expanded={open}>{icon}<span>{title}</span><ChevronDown size={14}/></button>{open && <div className="sn-inspector-section-body">{children}</div>}</section>;
 }
 
 function ControlGroup({ label, children }: { label: string; children: React.ReactNode }) {
   return <div className="sn-control-group"><span>{label}</span><div>{children}</div></div>;
+}
+
+function TypographySelect({ label, property, values, selectedClassName, breakpoint, disabled, onChange, format, sample }: { label: string; property: 'fontSize' | 'fontWeight' | 'fontFamily' | 'lineHeight' | 'letterSpacing' | 'textTransform'; values: readonly string[]; selectedClassName: string; breakpoint: string; disabled: boolean; onChange: (property: keyof typeof propertyNames, value: string) => void; format: (value: string) => string; sample?: (value: string) => React.ReactNode }) {
+  const selectedValue = getListedStyleValue(selectedClassName, values, breakpoint);
+  return <label className="sn-type-control-row"><span className="sn-type-control-label">{label}</span><span className="sn-type-select-shell">{sample?.(selectedValue)}<select aria-label={label} value={selectedValue} disabled={disabled} onChange={(event) => { if (event.target.value) onChange(property, event.target.value); }}><option value="" disabled>Default / custom</option>{values.map((value) => <option key={value} value={value}>{format(value)}</option>)}</select><ChevronDown size={14} aria-hidden="true" /></span></label>;
 }
 
 function StyleChip({ value, property, selectedClassName, breakpoint, disabled, onChange }: { value: string; property: keyof typeof propertyNames; selectedClassName: string; breakpoint: string; disabled: boolean; onChange: (property: keyof typeof propertyNames, value: string) => void }) {

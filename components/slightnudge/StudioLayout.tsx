@@ -1,9 +1,9 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { ArrowLeft, ArrowUpRight, Check, ChevronDown, Code2, Laptop2, PanelRight, Smartphone, Tablet, Undo2 } from 'lucide-react';
+import { ArrowLeft, ArrowUpRight, Check, ChevronDown, ChevronRight, Code2, FileCode2, Layers, Laptop2, PanelRight, Smartphone, Tablet, Undo2 } from 'lucide-react';
 import { SlightNudgeOverlay } from './SlightNudgeOverlay';
 
 const demoPages = [
@@ -15,16 +15,89 @@ const demoPages = [
 ];
 
 type Viewport = 'desktop' | 'tablet' | 'mobile';
+type LayerNode = { key: string; name: string; tag: string; file: string; line: string; column: string; children: LayerNode[] };
+
+function readPreviewLayers(root: HTMLElement): LayerNode[] {
+  const elements = Array.from(root.querySelectorAll<HTMLElement>('[data-source-file][data-source-line]'));
+  const included = elements.filter((element) => {
+    const tag = element.tagName.toLowerCase();
+    const parentTag = element.parentElement?.tagName.toLowerCase();
+    const hasDirectText = Array.from(element.childNodes).some((node) => node.nodeType === Node.TEXT_NODE && Boolean(node.textContent?.trim()));
+    const hasUsefulClass = Array.from(element.classList).some((name) => ['sn-playground-page', 'sn-playground-nav', 'sn-playground-hero', 'sn-playground-content', 'sn-playground-visual', 'sn-playground-window', 'sn-playground-main', 'sn-playground-trust'].includes(name));
+    const semantic = ['main', 'section', 'nav', 'header', 'footer', 'article', 'aside', 'form', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'button', 'a', 'input', 'img', 'li'].includes(tag);
+    const shortCopy = ['span', 'strong', 'em'].includes(tag) && hasDirectText && !['a', 'button'].includes(parentTag || '');
+    return semantic || shortCopy || hasUsefulClass;
+  });
+  const nodes = new Map<HTMLElement, LayerNode>();
+  const roots: LayerNode[] = [];
+  for (const element of included) {
+    const tag = element.tagName.toLowerCase();
+    const sourceFile = element.getAttribute('data-source-file') || '';
+    const line = element.getAttribute('data-source-line') || '';
+    const column = element.getAttribute('data-source-column') || '';
+    const copy = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'button', 'a', 'li', 'span', 'strong', 'em'].includes(tag)
+      ? (element.textContent || '').replace(/\s+/g, ' ').trim()
+      : '';
+    const friendlyClass = Array.from(element.classList).find((name) => name.startsWith('sn-playground-'))?.replace('sn-playground-', '').replace(/-/g, ' ');
+    const name = tag === 'main' ? 'Page' : copy || friendlyClass || (element.id ? `#${element.id}` : tag[0].toUpperCase() + tag.slice(1));
+    const node: LayerNode = { key: `${sourceFile}:${line}:${column}:${tag}`, name: name.length > 34 ? `${name.slice(0, 32)}…` : name, tag, file: sourceFile, line, column, children: [] };
+    nodes.set(element, node);
+    let parent = element.parentElement;
+    while (parent && parent !== root && !nodes.has(parent)) parent = parent.parentElement;
+    const parentNode = parent ? nodes.get(parent) : undefined;
+    if (parentNode) parentNode.children.push(node);
+    else roots.push(node);
+  }
+  return roots;
+}
+
+function LayerRows({ nodes, selectedKey, onSelect, depth = 0 }: { nodes: LayerNode[]; selectedKey: string; onSelect: (node: LayerNode) => void; depth?: number }) {
+  const [expanded, setExpanded] = useState<Set<string>>(() => new Set(nodes.filter((node) => node.children.length).map((node) => node.key)));
+  return <>{nodes.map((node) => {
+    const open = expanded.has(node.key);
+    return <React.Fragment key={node.key}>
+      <div className={`sn-layer-row ${selectedKey === node.key ? 'is-selected' : ''}`} style={{ '--layer-depth': depth } as React.CSSProperties}>
+        {node.children.length ? <button type="button" className="sn-layer-disclosure" aria-label={`${open ? 'Collapse' : 'Expand'} ${node.name}`} aria-expanded={open} onClick={() => setExpanded((value) => { const next = new Set(value); if (next.has(node.key)) next.delete(node.key); else next.add(node.key); return next; })}>{open ? <ChevronDown size={13}/> : <ChevronRight size={13}/>}</button> : <span className="sn-layer-disclosure-spacer"/>}
+        <button type="button" className="sn-layer-select" title={`${node.tag} · ${node.file}:${node.line}`} onClick={() => onSelect(node)}><span className="sn-layer-tag">{node.tag}</span><span>{node.name}</span></button>
+      </div>
+      {node.children.length > 0 && open && <LayerRows nodes={node.children} selectedKey={selectedKey} onSelect={onSelect} depth={depth + 1}/>}
+    </React.Fragment>;
+  })}</>;
+}
 
 export function StudioLayout({ children, projectName = 'SlightNudge Playground', activeFile, inspectorEnabled = true, previewConnected = false }: { children: React.ReactNode; projectName?: string; activeFile?: string; inspectorEnabled?: boolean; previewConnected?: boolean }) {
   const pathname = usePathname();
   const [viewport, setViewport] = useState<Viewport>('desktop');
   const [zoom, setZoom] = useState<number>(100);
+  const [sidebarTab, setSidebarTab] = useState<'pages' | 'layers'>('pages');
+  const [layers, setLayers] = useState<LayerNode[]>([]);
+  const [selectedLayer, setSelectedLayer] = useState('');
   const currentPage = demoPages.find((item) => item.path === pathname) || demoPages[0];
   const width = viewport === 'mobile' ? 390 : viewport === 'tablet' ? 768 : 1120;
   const selectViewport = (value: Viewport) => {
     setViewport(value);
     window.dispatchEvent(new CustomEvent('slightnudge:viewport', { detail: { viewport: value } }));
+  };
+
+  useEffect(() => {
+    if (!inspectorEnabled) return;
+    const root = document.querySelector<HTMLElement>('.sn-preview-content');
+    if (!root) return;
+    const updateLayers = () => setLayers(readPreviewLayers(root));
+    const updateSelection = (event: Event) => {
+      const detail = (event as CustomEvent<{ filePath?: string; line?: string | number; column?: string | number; tagName?: string } | null>).detail;
+      if (!detail) { setSelectedLayer(''); return; }
+      setSelectedLayer(`${detail.filePath || ''}:${detail.line || ''}:${detail.column || ''}:${detail.tagName || ''}`);
+    };
+    updateLayers();
+    const observer = new MutationObserver(updateLayers);
+    observer.observe(root, { childList: true, subtree: true, characterData: true });
+    window.addEventListener('slightnudge:selection', updateSelection);
+    return () => { observer.disconnect(); window.removeEventListener('slightnudge:selection', updateSelection); };
+  }, [inspectorEnabled, pathname]);
+
+  const selectLayer = (layer: LayerNode) => {
+    window.dispatchEvent(new CustomEvent('slightnudge:select-source', { detail: { filePath: layer.file, line: layer.line, column: layer.column, tagName: layer.tag } }));
   };
 
   return <div className="sn-editor-shell">
@@ -53,8 +126,17 @@ export function StudioLayout({ children, projectName = 'SlightNudge Playground',
     </div>
     <div className={`sn-editor-body ${inspectorEnabled ? '' : 'sn-readonly-repository'}`}>
       <aside className="sn-page-sidebar">
-        {inspectorEnabled ? <><div className="sn-sidebar-heading"><span>PAGES</span><button type="button" disabled title="Page management is not available in the playground yet">+</button></div>
-        <nav aria-label="Demo pages">{demoPages.map((page) => <Link className={page.path === pathname ? 'is-active' : ''} href={page.path} key={page.id}><span className="sn-page-glyph">{page.id}</span><span>{page.title}</span></Link>)}</nav></> : <div className="sn-sidebar-heading"><span>REPOSITORY</span></div>}
+        {inspectorEnabled ? <>
+          <div className="sn-sidebar-tabs" role="tablist" aria-label="Workspace panels">
+            <button type="button" role="tab" aria-selected={sidebarTab === 'pages'} className={sidebarTab === 'pages' ? 'is-active' : ''} onClick={() => setSidebarTab('pages')}><FileCode2 size={14}/> Pages</button>
+            <button type="button" role="tab" aria-selected={sidebarTab === 'layers'} className={sidebarTab === 'layers' ? 'is-active' : ''} onClick={() => setSidebarTab('layers')}><Layers size={14}/> Layers</button>
+          </div>
+          {sidebarTab === 'pages' ? <><div className="sn-sidebar-heading"><span>PROJECT PAGES</span><button type="button" disabled title="Page management is not available in the playground yet">+</button></div>
+            <nav aria-label="Demo pages">{demoPages.map((page) => <Link className={page.path === pathname ? 'is-active' : ''} href={page.path} key={page.id}><span className="sn-page-glyph">{page.id}</span><span>{page.title}</span></Link>)}</nav></> : <>
+            <div className="sn-sidebar-heading"><span>PAGE LAYERS</span><span className="sn-layer-count">Live source map</span></div>
+            <div className="sn-layer-tree" role="tree" aria-label="Page layers">{layers.length ? <LayerRows nodes={layers} selectedKey={selectedLayer} onSelect={selectLayer}/> : <p className="sn-layer-empty">Loading page structure…</p>}</div>
+          </>}
+        </> : <div className="sn-sidebar-heading"><span>REPOSITORY</span></div>}
         <div className="sn-file-location"><span className="sn-sidebar-heading">SOURCE</span><div><Code2 size={14}/><span>{activeFile || currentPage.file}</span></div><p>{inspectorEnabled ? 'Changes are written to this local source file.' : 'Source inspection only. Files stay unchanged.'}</p></div>
         <Link href="/workspace" className="sn-sidebar-back"><ArrowLeft size={15}/> All projects</Link>
       </aside>

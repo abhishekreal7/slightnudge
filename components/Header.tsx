@@ -19,7 +19,7 @@ export function Header() {
     window.addEventListener('scroll', updateScrollState, { passive: true });
     return () => window.removeEventListener('scroll', updateScrollState);
   }, [marketing]);
-  if (pathname === '/studio' || pathname.startsWith('/studio/') || pathname.startsWith('/fixtures')) return null;
+  if (pathname === '/studio' || pathname.startsWith('/studio/') || pathname.startsWith('/fixtures') || pathname === '/workspace' || pathname.startsWith('/workspace/')) return null;
 
   return <header className={`sn-app-header ${marketing ? `sn-marketing-header${scrolled ? ' is-scrolled' : ''}` : ''}`}>
     <div className="sn-header-inner">
