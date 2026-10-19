@@ -868,7 +868,7 @@ export default function StudioPage() {
         <div className="relative bg-[#0A0F1D]/95 backdrop-blur-md text-white rounded-full px-2.5 py-1.5 flex items-center shadow-[0_12px_32px_rgba(0,0,0,0.45),0_2px_6px_rgba(0,0,0,0.25)] border border-slate-800/90 animate-fade-in select-none">
           {isTextElement ? (
             <>
-              {/* 2. Emerald Gradient "Edit text ▾" Button */}
+              {/* 2. Emerald Gradient "Edit text" Button */}
               <button
                 type="button"
                 onClick={() => setIsInlineEditing(true)}
@@ -877,7 +877,6 @@ export default function StudioPage() {
               >
                 <Pencil size={12} className="text-white" />
                 <span className="tracking-wide">Edit text</span>
-                <ChevronDown size={11} className="text-white/80 ml-0.5" />
               </button>
 
               {/* 3. "Aa ▾" Typeface Pill */}
