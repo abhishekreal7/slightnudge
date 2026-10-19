@@ -37,6 +37,9 @@ import {
   Move,
   Maximize2,
   Sparkles,
+  Copy,
+  Palette,
+  ChevronsUpDown,
 } from 'lucide-react';
 import {
   previewEditAPI,
@@ -797,21 +800,630 @@ export default function StudioPage() {
     updateStyle('gap', nextVal);
   };
 
+  const FONT_SIZE_TO_PX: Record<string, number> = {
+    xs: 12,
+    sm: 14,
+    base: 16,
+    lg: 18,
+    xl: 20,
+    '2xl': 24,
+    '3xl': 30,
+    '4xl': 36,
+    '5xl': 48,
+    '6xl': 60,
+    '7xl': 72,
+  };
+
   const toggleBold = () => {
     const isBold = activeElement.fontWeight === 'Bold' || activeElement.fontWeight === 'Extra Bold' || activeElement.classes.includes('font-bold') || activeElement.classes.includes('font-extrabold');
     const nextVal = isBold ? 'font-normal' : 'font-bold';
     updateStyle('fontWeight', nextVal);
   };
 
+  const toggleItalic = () => {
+    const isItalic = activeElement.classes.includes('italic');
+    const nextClasses = isItalic
+      ? activeElement.classes.replace(/\bitalic\b/, '').trim()
+      : `${activeElement.classes} italic`.trim();
+    updateElementProp('classes', nextClasses, { kind: 'style', prop: 'fontStyle', val: isItalic ? 'normal' : 'italic' });
+  };
+
+  const toggleUnderline = () => {
+    const isUnderline = activeElement.classes.includes('underline');
+    const nextClasses = isUnderline
+      ? activeElement.classes.replace(/\bunderline\b/, '').trim()
+      : `${activeElement.classes} underline`.trim();
+    updateElementProp('classes', nextClasses, { kind: 'style', prop: 'textDecoration', val: isUnderline ? 'none' : 'underline' });
+  };
+
+  const toggleTypeface = () => {
+    const nextFont = activeElement.typeface === 'Manrope' ? 'Inter' : 'Manrope';
+    updateElementProp('typeface', nextFont, { kind: 'style', prop: 'fontFamily', val: nextFont });
+  };
+
   const isTextElement = ['text', 'paragraph', 'button', 'waitlist'].includes(selectedLayer || '') || activeElement.tag.startsWith('h') || activeElement.tag.startsWith('p') || activeElement.tag.startsWith('button');
   const currentFontSizeClass = activeElement.classes.match(/text-(xs|sm|base|lg|xl|[2-7]xl)/)?.[0] || 'text-base';
   const currentFontSizeLabel = currentFontSizeClass.replace('text-', '');
+  const currentPxSize = FONT_SIZE_TO_PX[currentFontSizeLabel] || 24;
   const currentGapClass = activeElement.classes.match(/gap-(\d+)/)?.[0] || 'gap-2';
   const currentGapLabel = currentGapClass.replace('gap-', '');
   const isBold = activeElement.fontWeight === 'Bold' || activeElement.fontWeight === 'Extra Bold' || activeElement.classes.includes('font-bold') || activeElement.classes.includes('font-extrabold');
+  const isItalic = activeElement.classes.includes('italic');
+  const isUnderline = activeElement.classes.includes('underline');
 
   // Responsive artboard width
   const artboardWidth = breakpoint === 'mobile' ? '375px' : breakpoint === 'tablet' ? '768px' : '940px';
+
+  // Floating In-Situ Canvas HUD Bar matching user benchmark reference exactly
+  const renderHUDBar = () => {
+    if (!selectedLayer) return null;
+
+    return (
+      <div
+        className="absolute -top-14 left-1/2 -translate-x-1/2 z-40 flex flex-col items-center select-none"
+        style={{ minWidth: 'max-content' }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Precise Obsidian Pill HUD Bar Matching User Reference Exactly */}
+        <div className="relative bg-[#0A0F1D]/95 backdrop-blur-md text-white rounded-full px-4 py-1.5 flex items-center space-x-2.5 shadow-[0_12px_32px_rgba(0,0,0,0.45),0_2px_6px_rgba(0,0,0,0.25)] border border-slate-800/90 animate-fade-in select-none">
+          {/* Non-text downward pointer fallback if B is not rendered */}
+          {!isTextElement && (
+            <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-3.5 h-3.5 bg-[#0A0F1D] border-b border-r border-slate-800/90 rotate-45 pointer-events-none" />
+          )}
+
+          {/* 1. 6-Dot Grip Grid */}
+          <div
+            onPointerDown={(e) => {
+              e.stopPropagation();
+              if (selectedLayer) startDragMove(selectedLayer, e);
+            }}
+            className="flex items-center justify-center p-1 rounded hover:bg-slate-800 text-slate-400 hover:text-white cursor-grab active:cursor-grabbing transition shrink-0"
+            title="Drag to move element"
+          >
+            <svg className="w-3.5 h-2.5 text-slate-300" viewBox="0 0 14 10" fill="currentColor">
+              <circle cx="2" cy="2" r="1.3" />
+              <circle cx="7" cy="2" r="1.3" />
+              <circle cx="12" cy="2" r="1.3" />
+              <circle cx="2" cy="8" r="1.3" />
+              <circle cx="7" cy="8" r="1.3" />
+              <circle cx="12" cy="8" r="1.3" />
+            </svg>
+          </div>
+
+          <div className="h-4 w-[1px] bg-slate-800 shrink-0" />
+
+          {isTextElement ? (
+            <>
+              {/* 2. Emerald Gradient "Edit text ▾" Button */}
+              <button
+                type="button"
+                onClick={() => setIsInlineEditing(true)}
+                title="Edit text directly on canvas"
+                className="px-3.5 py-1.5 rounded-full bg-gradient-to-r from-[#064E3B] to-[#047857] hover:from-[#047857] hover:to-[#059669] text-white border border-emerald-500/40 shadow-[0_0_12px_rgba(5,150,105,0.3)] text-xs font-semibold flex items-center space-x-1.5 transition cursor-pointer shrink-0"
+              >
+                <Pencil size={12} className="text-white" />
+                <span className="tracking-wide">Edit text</span>
+                <ChevronDown size={11} className="text-white/80 ml-0.5" />
+              </button>
+
+              {/* 3. "Aa ▾" Typeface Pill */}
+              <button
+                type="button"
+                onClick={toggleTypeface}
+                className="bg-[#131B2E] hover:bg-[#1C2740] border border-slate-800 px-3 py-1 rounded-full flex items-center space-x-1.5 text-xs font-semibold text-white cursor-pointer transition shrink-0"
+                title={`Font: ${activeElement.typeface || 'Inter'} (click to toggle)`}
+              >
+                <span>Aa</span>
+                <ChevronDown size={10} className="text-slate-400" />
+              </button>
+
+              {/* 4. "24 ⇅" Font Size Pill */}
+              <div
+                onClick={() => stepFontSize(1)}
+                className="bg-[#131B2E] hover:bg-[#1C2740] border border-slate-800 px-3 py-1 rounded-full flex items-center space-x-1.5 text-xs font-semibold text-white cursor-pointer transition select-none shrink-0"
+                title="Font size (click to step)"
+              >
+                <span className="min-w-[16px] text-center">{currentPxSize}</span>
+                <ChevronsUpDown size={11} className="text-slate-400" />
+              </div>
+
+              {/* 5. Bold "B" Button with Downward Pointer Centered Underneath */}
+              <div className="relative flex items-center justify-center shrink-0">
+                <button
+                  type="button"
+                  onClick={() => toggleBold()}
+                  className={`w-7 h-7 rounded-md flex items-center justify-center text-xs font-black transition cursor-pointer shrink-0 ${
+                    isBold
+                      ? 'bg-[#1E293B] text-white border border-slate-700/60 shadow-xs'
+                      : 'bg-[#1E293B] text-slate-200 hover:text-white border border-slate-700/60 shadow-xs'
+                  }`}
+                  title="Toggle bold"
+                >
+                  B
+                </button>
+                {/* Speech-Bubble Pointer Arrow pointing at selected element */}
+                <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 w-3.5 h-3.5 bg-[#0A0F1D] border-b border-r border-slate-800/90 rotate-45 pointer-events-none z-0" />
+              </div>
+
+              {/* 6. Italic "I" Button (Mint Emerald) */}
+              <button
+                type="button"
+                onClick={toggleItalic}
+                className={`w-6 h-6 rounded flex items-center justify-center text-xs font-serif italic cursor-pointer transition shrink-0 ${
+                  isItalic ? 'text-[#10B981] font-bold' : 'text-[#10B981] hover:text-emerald-300'
+                }`}
+                title="Toggle italic"
+              >
+                I
+              </button>
+
+              {/* 7. Underline "U" Button */}
+              <button
+                type="button"
+                onClick={toggleUnderline}
+                className={`w-6 h-6 rounded flex items-center justify-center text-xs underline decoration-1 underline-offset-2 font-medium cursor-pointer transition shrink-0 ${
+                  isUnderline ? 'text-emerald-400 font-bold' : 'text-slate-300 hover:text-white'
+                }`}
+                title="Toggle underline"
+              >
+                U
+              </button>
+
+              {/* 8. Alignment Segmented Group */}
+              <div className="flex items-center bg-[#131B2E] border border-slate-800 rounded-lg p-0.5 space-x-0.5 shrink-0">
+                <button
+                  type="button"
+                  onClick={() => updateStyle('alignment', 'text-left')}
+                  className={`p-1.5 rounded transition cursor-pointer ${
+                    activeElement.classes.includes('text-left') || (!activeElement.classes.includes('text-center') && !activeElement.classes.includes('text-right'))
+                      ? 'bg-[#1E293B] border border-slate-700/60 text-[#2DD4BF] shadow-xs'
+                      : 'text-slate-400 hover:text-white'
+                  }`}
+                  title="Align left"
+                >
+                  <AlignLeft size={13} />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => updateStyle('alignment', 'text-center')}
+                  className={`p-1.5 rounded transition cursor-pointer ${
+                    activeElement.classes.includes('text-center')
+                      ? 'bg-[#1E293B] border border-slate-700/60 text-[#2DD4BF] shadow-xs'
+                      : 'text-slate-400 hover:text-white'
+                  }`}
+                  title="Align center"
+                >
+                  <AlignCenter size={13} />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => updateStyle('alignment', 'text-right')}
+                  className={`p-1.5 rounded transition cursor-pointer ${
+                    activeElement.classes.includes('text-right')
+                      ? 'bg-[#1E293B] border border-slate-700/60 text-[#2DD4BF] shadow-xs'
+                      : 'text-slate-400 hover:text-white'
+                  }`}
+                  title="Align right"
+                >
+                  <AlignRight size={13} />
+                </button>
+              </div>
+            </>
+          ) : (
+            <>
+              {/* Non-Text Element Badge */}
+              <span className="px-2 py-0.5 rounded bg-slate-800 text-[10.5px] font-mono font-semibold text-emerald-400 border border-slate-700/60 shrink-0">
+                {activeElement.tag}
+              </span>
+
+              <div className="h-4 w-[1px] bg-slate-800 shrink-0" />
+
+              {/* Pad Stepper Capsule */}
+              <div
+                onClick={() => stepPadding(1)}
+                className="bg-[#131B2E] border border-slate-800 px-2.5 py-1 rounded-full flex items-center space-x-1.5 text-xs font-semibold text-white cursor-pointer hover:border-slate-500 transition select-none shrink-0"
+                title="Padding (click to step)"
+              >
+                <span className="text-slate-400 text-[10px] font-mono">PAD</span>
+                <span className="min-w-[16px] text-center">{activeElement.paddingLeft || '16'}</span>
+                <ChevronsUpDown size={11} className="text-slate-400" />
+              </div>
+            </>
+          )}
+
+          {/* 9. Droplet Color Capsule */}
+          <button
+            type="button"
+            onClick={() => setShowExploreMore((prev) => !prev)}
+            className="bg-[#131B2E] hover:bg-[#1C2740] border border-slate-800 px-2.5 py-1 rounded-full flex items-center space-x-1 text-slate-300 hover:text-white cursor-pointer transition shrink-0"
+            title="Color & Contrast"
+            aria-expanded={showExploreMore}
+          >
+            <svg className="w-3.5 h-3.5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z" />
+              <path d="M6.34 14a8 8 0 0 0 11.32 0" fill="white" />
+            </svg>
+            <ChevronDown size={11} className="text-slate-400" />
+          </button>
+
+          {/* 10. More Options "•••" */}
+          <button
+            type="button"
+            onClick={() => setShowExploreMore((prev) => !prev)}
+            className="p-1 rounded hover:bg-slate-800 text-slate-400 hover:text-white cursor-pointer transition shrink-0"
+            title="Explore more properties"
+            aria-expanded={showExploreMore}
+          >
+            <MoreHorizontal size={14} />
+          </button>
+
+          {/* 11. Deselect (X) */}
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              setSelectedLayer(null);
+            }}
+            className="p-1 rounded-full hover:bg-slate-800 text-slate-400 hover:text-white cursor-pointer transition shrink-0"
+            title="Deselect (Esc)"
+          >
+            <X size={14} />
+          </button>
+        </div>
+
+        {/* Explore More Floating Card (Image 2 Style) */}
+        {showExploreMore && (
+          <div className="mt-2.5 w-[350px] bg-white rounded-xl shadow-2xl border border-slate-200/90 overflow-hidden text-slate-800 z-50 text-xs animate-in fade-in zoom-in-95 duration-150">
+            {/* Top Dark Header Bar with Icon Tabs (Image 2) */}
+            <div className="bg-[#0B0F17] text-white px-3 py-2 flex items-center justify-between">
+              <div className="flex items-center space-x-3 text-slate-400">
+                <button
+                  type="button"
+                  onClick={() => setExploreTab('text')}
+                  className={`p-1 rounded hover:text-white transition cursor-pointer ${
+                    exploreTab === 'text' ? 'text-white font-bold' : ''
+                  }`}
+                  title="Typography & Text"
+                >
+                  <Type size={14} />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setExploreTab('media')}
+                  className={`p-1 rounded hover:text-white transition cursor-pointer ${
+                    exploreTab === 'media' ? 'text-white' : ''
+                  }`}
+                  title="Media & Actions"
+                >
+                  <Play size={13} />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setExploreTab('columns')}
+                  className={`p-1 rounded hover:text-white transition cursor-pointer ${
+                    exploreTab === 'columns' ? 'text-white' : ''
+                  }`}
+                  title="Columns & Layout"
+                >
+                  <Columns2 size={13} />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setExploreTab('box')}
+                  className={`p-1 rounded hover:text-white transition cursor-pointer ${
+                    exploreTab === 'box' ? 'text-white' : ''
+                  }`}
+                  title="Box Model"
+                >
+                  <LayoutGrid size={13} />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setExploreTab('code')}
+                  className={`p-1 rounded hover:text-white transition cursor-pointer ${
+                    exploreTab === 'code' ? 'text-white' : ''
+                  }`}
+                  title="JSX & Code"
+                >
+                  <Code2 size={14} />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setExploreTab('inspect')}
+                  className={`p-1 rounded hover:text-white transition cursor-pointer ${
+                    exploreTab === 'inspect' ? 'text-white' : ''
+                  }`}
+                  title="Inspect Element"
+                >
+                  <Laptop2 size={13} />
+                </button>
+              </div>
+
+              {/* Delete Element Action */}
+              <button
+                type="button"
+                onClick={() => {
+                  showToast(`Element ${activeElement.id} removed`);
+                  setSelectedLayer(null);
+                  setShowExploreMore(false);
+                }}
+                className="text-slate-400 hover:text-rose-400 p-1 transition cursor-pointer"
+                title="Delete element"
+              >
+                <Trash2 size={13} />
+              </button>
+            </div>
+
+            {/* Body Content matching Image 2 */}
+            <div className="bg-white divide-y divide-slate-100">
+              {/* Row 1: Box Name */}
+              <div className="px-4 py-2 flex items-center justify-between">
+                <span className="text-slate-500 font-medium text-[11px]">Box Name</span>
+                <input
+                  type="text"
+                  value={activeElement.name || activeElement.tag}
+                  onChange={(e) => updateElementProp('name', e.target.value)}
+                  className="font-semibold text-slate-900 text-xs text-right bg-transparent border-0 p-0 focus:ring-0 cursor-text hover:bg-slate-50 rounded px-1 max-w-[190px] truncate"
+                />
+              </div>
+
+              {/* Row 2: Radius */}
+              <div className="px-4 py-2 flex items-center justify-between">
+                <span className="text-slate-500 font-medium text-[11px]">Radius</span>
+                <div className="flex items-center space-x-3">
+                  <input
+                    type="range"
+                    min="0"
+                    max="24"
+                    value={
+                      activeElement.borderRadius === 'rounded-none' ? 0 :
+                      activeElement.borderRadius === 'rounded-sm' ? 2 :
+                      activeElement.borderRadius === 'rounded-md' ? 6 :
+                      activeElement.borderRadius === 'rounded-lg' ? 8 :
+                      activeElement.borderRadius === 'rounded-xl' ? 12 :
+                      activeElement.borderRadius === 'rounded-full' ? 24 :
+                      parseInt(activeElement.borderRadius?.replace(/\D/g, '') || '6', 10) || 6
+                    }
+                    onChange={(e) => {
+                      const val = Number(e.target.value);
+                      const radClass = val === 0 ? 'rounded-none' : val <= 3 ? 'rounded-sm' : val <= 7 ? 'rounded-md' : val <= 10 ? 'rounded-lg' : val <= 16 ? 'rounded-xl' : 'rounded-full';
+                      updateElementProp('borderRadius', radClass, { kind: 'style', prop: 'borderRadius', val: radClass });
+                    }}
+                    className="w-28 h-1 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-slate-900"
+                  />
+                  <span className="font-mono text-slate-800 font-semibold text-[11px] w-4 text-right">
+                    {
+                      activeElement.borderRadius === 'rounded-none' ? 0 :
+                      activeElement.borderRadius === 'rounded-sm' ? 2 :
+                      activeElement.borderRadius === 'rounded-md' ? 6 :
+                      activeElement.borderRadius === 'rounded-lg' ? 8 :
+                      activeElement.borderRadius === 'rounded-xl' ? 12 :
+                      activeElement.borderRadius === 'rounded-full' ? 24 :
+                      parseInt(activeElement.borderRadius?.replace(/\D/g, '') || '6', 10) || 6
+                    }
+                  </span>
+                </div>
+              </div>
+
+              {/* Row 3: Width & Height */}
+              <div className="px-4 py-2 grid grid-cols-2 gap-4">
+                <div className="flex items-center justify-between">
+                  <span className="text-slate-500 font-medium text-[11px]">Width</span>
+                  <input
+                    type="text"
+                    value={activeElement.width || '540'}
+                    onChange={(e) => updateElementProp('width', e.target.value, { kind: 'style', prop: 'width', val: e.target.value })}
+                    className="font-semibold text-slate-900 text-xs text-right w-16 bg-transparent border-0 p-0 focus:ring-0 hover:bg-slate-50 rounded px-1"
+                  />
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-slate-500 font-medium text-[11px]">Height</span>
+                  <span className="font-semibold text-slate-900 text-xs">
+                    {activeElement.height || 'Relative'}
+                  </span>
+                </div>
+              </div>
+
+              {/* Row 4: Fills & Style */}
+              <div className="px-4 py-2.5 grid grid-cols-2 gap-4">
+                <div>
+                  <span className="text-slate-500 font-medium text-[11px] block mb-1.5">Fills</span>
+                  <div className="flex items-center space-x-1.5">
+                    {/* Transparent */}
+                    <button
+                      type="button"
+                      onClick={() => updateElementProp('bgFill', 'transparent', { kind: 'style', prop: 'backgroundColor', val: 'bg-transparent' })}
+                      className={`w-4 h-4 rounded-full border border-slate-300 relative overflow-hidden transition cursor-pointer ${
+                        activeElement.bgFill === 'transparent' ? 'ring-2 ring-emerald-500 ring-offset-1' : ''
+                      }`}
+                      title="Transparent"
+                    >
+                      <div className="w-full h-full bg-white relative">
+                        <div className="absolute inset-0 border-t border-rose-500 rotate-45 top-1.5" />
+                      </div>
+                    </button>
+                    {/* Black */}
+                    <button
+                      type="button"
+                      onClick={() => updateElementProp('bgFill', '000000', { kind: 'style', prop: 'backgroundColor', val: 'bg-slate-900' })}
+                      className={`w-4 h-4 rounded-full bg-slate-900 border border-slate-300 transition cursor-pointer ${
+                        activeElement.bgFill === '000000' || activeElement.bgFill === 'slate-900' ? 'ring-2 ring-emerald-500 ring-offset-1' : ''
+                      }`}
+                      title="Solid Black"
+                    />
+                    {/* White */}
+                    <button
+                      type="button"
+                      onClick={() => updateElementProp('bgFill', 'ffffff', { kind: 'style', prop: 'backgroundColor', val: 'bg-white' })}
+                      className={`w-4 h-4 rounded-full bg-white border border-slate-300 transition cursor-pointer ${
+                        activeElement.bgFill === 'ffffff' ? 'ring-2 ring-emerald-500 ring-offset-1' : ''
+                      }`}
+                      title="Solid White"
+                    />
+                    {/* Pink */}
+                    <button
+                      type="button"
+                      onClick={() => updateElementProp('bgFill', 'ec4899', { kind: 'style', prop: 'backgroundColor', val: 'bg-pink-500' })}
+                      className={`w-4 h-4 rounded-full bg-pink-500 transition cursor-pointer ${
+                        activeElement.bgFill === 'ec4899' ? 'ring-2 ring-emerald-500 ring-offset-1' : ''
+                      }`}
+                      title="Hot Pink"
+                    />
+                    {/* Blue */}
+                    <button
+                      type="button"
+                      onClick={() => updateElementProp('bgFill', '2563eb', { kind: 'style', prop: 'backgroundColor', val: 'bg-blue-600' })}
+                      className={`w-4 h-4 rounded-full bg-blue-600 transition cursor-pointer ${
+                        activeElement.bgFill === '2563eb' ? 'ring-2 ring-emerald-500 ring-offset-1' : ''
+                      }`}
+                      title="Electric Blue"
+                    />
+                    <ChevronDown size={10} className="text-slate-400" />
+                  </div>
+                </div>
+                <div>
+                  <span className="text-slate-500 font-medium text-[11px] block mb-1">Style</span>
+                  <div className="relative">
+                    <select
+                      value={activeElement.bgFill === 'transparent' ? 'None' : 'Flat Colour'}
+                      onChange={(e) => {
+                        if (e.target.value === 'None') {
+                          updateElementProp('bgFill', 'transparent', { kind: 'style', prop: 'backgroundColor', val: 'bg-transparent' });
+                        } else {
+                          updateElementProp('bgFill', 'ffffff', { kind: 'style', prop: 'backgroundColor', val: 'bg-white' });
+                        }
+                      }}
+                      className="w-full bg-slate-50 border border-slate-200 rounded px-2 py-1 text-[11px] font-medium text-slate-800 appearance-none focus:outline-none focus:border-emerald-500"
+                    >
+                      <option>Flat Colour</option>
+                      <option>Linear Gradient</option>
+                      <option>None</option>
+                    </select>
+                    <ChevronDown size={10} className="text-slate-400 absolute right-2 top-2 pointer-events-none" />
+                  </div>
+                </div>
+              </div>
+
+              {/* Row 5: Borders */}
+              <div className="px-4 py-2.5 grid grid-cols-3 gap-3 items-end">
+                <div>
+                  <span className="text-slate-500 font-medium text-[11px] block mb-1.5">Borders</span>
+                  <div className="flex items-center space-x-1.5">
+                    <div className="w-4 h-4 rounded-full border border-slate-300 bg-white relative">
+                      <div className="absolute inset-0 border-t border-rose-500 rotate-45 top-1.5" />
+                    </div>
+                    <ChevronDown size={10} className="text-slate-400" />
+                  </div>
+                </div>
+                <div>
+                  <span className="text-slate-500 font-medium text-[11px] block mb-1">Width</span>
+                  <span className="text-xs font-semibold text-slate-900">0 px</span>
+                </div>
+                <div>
+                  <span className="text-slate-500 font-medium text-[11px] block mb-1">Width</span>
+                  <div className="relative">
+                    <select className="w-full bg-slate-50 border border-slate-200 rounded px-2 py-1 text-[11px] font-medium text-slate-800 appearance-none focus:outline-none focus:border-emerald-500">
+                      <option>Solid</option>
+                      <option>Dashed</option>
+                      <option>Dotted</option>
+                    </select>
+                    <ChevronDown size={10} className="text-slate-400 absolute right-2 top-2 pointer-events-none" />
+                  </div>
+                </div>
+              </div>
+
+              {/* Row 6: Padding & Margin */}
+              <div className="px-4 py-2.5 grid grid-cols-2 gap-4">
+                <div>
+                  <span className="text-slate-500 font-medium text-[11px] block mb-1.5">Padding</span>
+                  <div className="grid grid-cols-4 gap-1">
+                    <input
+                      type="text"
+                      value={activeElement.paddingTop || '40'}
+                      onChange={(e) => updateElementProp('paddingTop', e.target.value)}
+                      className="w-full bg-slate-50 border border-slate-200 rounded py-1 text-center font-mono text-[10.5px] text-slate-700 focus:outline-none focus:border-emerald-500"
+                      title="Padding Top"
+                    />
+                    <input
+                      type="text"
+                      value={activeElement.paddingRight || '40'}
+                      onChange={(e) => updateElementProp('paddingRight', e.target.value)}
+                      className="w-full bg-slate-50 border border-slate-200 rounded py-1 text-center font-mono text-[10.5px] text-slate-700 focus:outline-none focus:border-emerald-500"
+                      title="Padding Right"
+                    />
+                    <input
+                      type="text"
+                      value={activeElement.paddingBottom || '40'}
+                      onChange={(e) => updateElementProp('paddingBottom', e.target.value)}
+                      className="w-full bg-slate-50 border border-slate-200 rounded py-1 text-center font-mono text-[10.5px] text-slate-700 focus:outline-none focus:border-emerald-500"
+                      title="Padding Bottom"
+                    />
+                    <input
+                      type="text"
+                      value={activeElement.paddingLeft || '40'}
+                      onChange={(e) => updateElementProp('paddingLeft', e.target.value)}
+                      className="w-full bg-slate-50 border border-slate-200 rounded py-1 text-center font-mono text-[10.5px] text-slate-700 focus:outline-none focus:border-emerald-500"
+                      title="Padding Left"
+                    />
+                  </div>
+                </div>
+                <div>
+                  <span className="text-slate-500 font-medium text-[11px] block mb-1.5">Margin</span>
+                  <div className="grid grid-cols-4 gap-1">
+                    <input
+                      type="text"
+                      value={activeElement.marginTop || '0'}
+                      onChange={(e) => updateElementProp('marginTop', e.target.value)}
+                      className="w-full bg-slate-50 border border-slate-200 rounded py-1 text-center font-mono text-[10.5px] text-slate-700 focus:outline-none focus:border-emerald-500"
+                      title="Margin Top"
+                    />
+                    <input
+                      type="text"
+                      value={activeElement.marginRight || '0'}
+                      onChange={(e) => updateElementProp('marginRight', e.target.value)}
+                      className="w-full bg-slate-50 border border-slate-200 rounded py-1 text-center font-mono text-[10.5px] text-slate-700 focus:outline-none focus:border-emerald-500"
+                      title="Margin Right"
+                    />
+                    <input
+                      type="text"
+                      value={activeElement.marginBottom || '0'}
+                      onChange={(e) => updateElementProp('marginBottom', e.target.value)}
+                      className="w-full bg-slate-50 border border-slate-200 rounded py-1 text-center font-mono text-[10.5px] text-slate-700 focus:outline-none focus:border-emerald-500"
+                      title="Margin Bottom"
+                    />
+                    <input
+                      type="text"
+                      value={activeElement.marginLeft || '0'}
+                      onChange={(e) => updateElementProp('marginLeft', e.target.value)}
+                      className="w-full bg-slate-50 border border-slate-200 rounded py-1 text-center font-mono text-[10.5px] text-slate-700 focus:outline-none focus:border-emerald-500"
+                      title="Margin Left"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Row 7: Opacity */}
+              <div className="px-4 py-2 flex items-center justify-between opacity-60">
+                <span className="text-slate-500 font-medium text-[11px]">Opacity</span>
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="range"
+                    min="0"
+                    max="100"
+                    defaultValue="100"
+                    disabled
+                    title="Opacity: not supported in source editor"
+                    className="w-24 h-1 bg-slate-200 rounded-lg appearance-none cursor-not-allowed accent-slate-400"
+                  />
+                  <span className="font-mono text-slate-400 font-semibold text-[11px] w-8 text-right">100%</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  };
 
   return (
     <>
@@ -1331,540 +1943,8 @@ export default function StudioPage() {
                     </div>
                   )}
 
-                  {/* Floating In-Situ Canvas HUD Dock & Explore More Popover (Image 1 & Image 2) */}
-                  {selectedLayer && (
-                    <div
-                      className="absolute -top-14 left-1/2 -translate-x-1/2 z-40 flex flex-col items-center select-none"
-                      style={{ minWidth: 'max-content' }}
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      {/* Neatly arranged primary HUD bar (Image 1) */}
-                      <div className="bg-[#0F172A]/95 backdrop-blur-md text-white rounded-full px-3 py-1.5 flex items-center space-x-2 shadow-2xl border border-slate-700/80 animate-fade-in">
-                        {/* iOS Clean Drag to Move Grabber Pill (in HUD) */}
-                        <div
-                          onPointerDown={(e) => {
-                            e.stopPropagation();
-                            if (selectedLayer) startDragMove(selectedLayer, e);
-                          }}
-                          className="flex items-center space-x-1.5 px-2.5 py-1 rounded-full bg-slate-800/80 hover:bg-slate-700/80 text-slate-300 hover:text-white cursor-grab active:cursor-grabbing border border-slate-700/60 transition group select-none mr-1"
-                          title="Reorder element"
-                        >
-                          <GripVertical size={12} className="text-emerald-400 group-hover:scale-110 transition-transform" />
-                          <span className="text-[11px] font-medium tracking-wide">Move</span>
-                        </div>
-
-                        <div className="h-3.5 w-[1px] bg-slate-700/80 mr-1" />
-
-                        {isTextElement ? (
-                          <>
-                            <button
-                              type="button"
-                              onClick={() => setIsInlineEditing(true)}
-                              title="Edit text directly on canvas"
-                              className="px-2.5 py-1 rounded-full bg-emerald-500/15 text-emerald-400 hover:bg-emerald-500/25 text-xs font-semibold flex items-center space-x-1.5 transition cursor-pointer"
-                            >
-                              <Pencil size={12} className="text-emerald-400" />
-                              <span>Edit text</span>
-                            </button>
-
-                            <div className="h-3.5 w-[1px] bg-slate-700/80" />
-
-                            {/* Clean Size Stepper */}
-                            <div className="flex items-center space-x-1 text-xs">
-                              <span className="text-slate-400 font-mono text-[10px] tracking-wider font-semibold mr-0.5">SIZE</span>
-                              <button
-                                type="button"
-                                onClick={() => stepFontSize(-1)}
-                                className="w-5 h-5 rounded hover:bg-slate-800 text-slate-300 flex items-center justify-center font-bold text-xs cursor-pointer transition"
-                                title="Decrease font size"
-                              >−</button>
-                              <span className="px-1 text-xs font-mono font-bold text-white min-w-[32px] text-center">
-                                {currentFontSizeLabel}
-                              </span>
-                              <button
-                                type="button"
-                                onClick={() => stepFontSize(1)}
-                                className="w-5 h-5 rounded hover:bg-slate-800 text-slate-300 flex items-center justify-center font-bold text-xs cursor-pointer transition"
-                                title="Increase font size"
-                              >+</button>
-                            </div>
-
-                            <div className="h-3.5 w-[1px] bg-slate-700/80" />
-
-                            {/* Quick Bold Toggle */}
-                            <button
-                              type="button"
-                              onClick={() => toggleBold()}
-                              className={`w-6 h-6 rounded flex items-center justify-center text-xs font-extrabold transition cursor-pointer ${
-                                isBold ? 'bg-emerald-500 text-white shadow-xs' : 'hover:bg-slate-800 text-slate-300'
-                              }`}
-                              title="Toggle bold"
-                            >
-                              B
-                            </button>
-
-                            <div className="h-3.5 w-[1px] bg-slate-700/80" />
-
-                            {/* Clean Alignment */}
-                            <div className="flex items-center space-x-0.5">
-                              <button
-                                type="button"
-                                onClick={() => updateStyle('alignment', 'text-left')}
-                                className={`p-1 rounded hover:bg-slate-800 transition cursor-pointer ${
-                                  activeElement.classes.includes('text-left') ? 'text-emerald-400' : 'text-slate-400 hover:text-white'
-                                }`}
-                                title="Align left"
-                              >
-                                <AlignLeft size={13} />
-                              </button>
-                              <button
-                                type="button"
-                                onClick={() => updateStyle('alignment', 'text-center')}
-                                className={`p-1 rounded hover:bg-slate-800 transition cursor-pointer ${
-                                  activeElement.classes.includes('text-center') ? 'text-emerald-400' : 'text-slate-400 hover:text-white'
-                                }`}
-                                title="Align center"
-                              >
-                                <AlignCenter size={13} />
-                              </button>
-                              <button
-                                type="button"
-                                onClick={() => updateStyle('alignment', 'text-right')}
-                                className={`p-1 rounded hover:bg-slate-800 transition cursor-pointer ${
-                                  activeElement.classes.includes('text-right') ? 'text-emerald-400' : 'text-slate-400 hover:text-white'
-                                }`}
-                                title="Align right"
-                              >
-                                <AlignRight size={13} />
-                              </button>
-                            </div>
-                          </>
-                        ) : (
-                          <>
-                            {/* Element Badge */}
-                            <span className="px-2 py-0.5 rounded bg-slate-800 text-[10.5px] font-mono font-semibold text-emerald-400 border border-slate-700/60">
-                              {activeElement.tag}
-                            </span>
-
-                            <div className="h-3.5 w-[1px] bg-slate-700/80" />
-
-                            {/* Pad Stepper */}
-                            <div className="flex items-center space-x-1 text-xs">
-                              <span className="text-slate-400 font-mono text-[10px] tracking-wider font-semibold mr-0.5">PAD</span>
-                              <button
-                                type="button"
-                                onClick={() => stepPadding(-1)}
-                                className="w-5 h-5 rounded hover:bg-slate-800 text-slate-300 flex items-center justify-center font-bold text-xs cursor-pointer transition"
-                              >−</button>
-                              <span className="px-1 text-xs font-mono font-bold text-white min-w-[24px] text-center">
-                                {activeElement.paddingLeft || '16'}
-                              </span>
-                              <button
-                                type="button"
-                                onClick={() => stepPadding(1)}
-                                className="w-5 h-5 rounded hover:bg-slate-800 text-slate-300 flex items-center justify-center font-bold text-xs cursor-pointer transition"
-                              >+</button>
-                            </div>
-                          </>
-                        )}
-
-                        <div className="h-3.5 w-[1px] bg-slate-700/80" />
-
-                        {/* Undo button */}
-                        <button
-                          type="button"
-                          onClick={handleUndo}
-                          className="p-1 rounded-md hover:bg-slate-800 text-slate-400 hover:text-white transition cursor-pointer"
-                          title="Undo last change (Ctrl+Z)"
-                        >
-                          <RotateCcw size={12} />
-                        </button>
-
-                        <div className="h-3.5 w-[1px] bg-slate-700/80" />
-
-                        {/* Three Dots Button: Explore More (Image 2) */}
-                        <button
-                          type="button"
-                          onClick={() => setShowExploreMore((prev) => !prev)}
-                          className={`p-1.5 rounded-full transition cursor-pointer flex items-center justify-center ${
-                            showExploreMore
-                              ? 'bg-emerald-500 text-white shadow-xs'
-                              : 'hover:bg-slate-800 text-slate-300 hover:text-white'
-                          }`}
-                          title="Explore more properties"
-                          aria-expanded={showExploreMore}
-                        >
-                          <MoreHorizontal size={14} />
-                        </button>
-
-                        <div className="h-3.5 w-[1px] bg-slate-700/80" />
-
-                        {/* Deselect (X) Button */}
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setSelectedLayer(null);
-                          }}
-                          className="p-1 rounded-full hover:bg-slate-800 text-slate-400 hover:text-white transition cursor-pointer"
-                          title="Deselect (Esc)"
-                        >
-                          <X size={13} />
-                        </button>
-                      </div>
-
-                      {/* Explore More Floating Card (Image 2 Style) */}
-                      {showExploreMore && (
-                        <div className="mt-2.5 w-[350px] bg-white rounded-xl shadow-2xl border border-slate-200/90 overflow-hidden text-slate-800 z-50 text-xs animate-in fade-in zoom-in-95 duration-150">
-                          {/* Top Dark Header Bar with Icon Tabs (Image 2) */}
-                          <div className="bg-[#0B0F17] text-white px-3 py-2 flex items-center justify-between">
-                            <div className="flex items-center space-x-3 text-slate-400">
-                              <button
-                                type="button"
-                                onClick={() => setExploreTab('text')}
-                                className={`p-1 rounded hover:text-white transition cursor-pointer ${
-                                  exploreTab === 'text' ? 'text-white font-bold' : ''
-                                }`}
-                                title="Typography & Text"
-                              >
-                                <Type size={14} />
-                              </button>
-                              <button
-                                type="button"
-                                onClick={() => setExploreTab('media')}
-                                className={`p-1 rounded hover:text-white transition cursor-pointer ${
-                                  exploreTab === 'media' ? 'text-white' : ''
-                                }`}
-                                title="Media & Actions"
-                              >
-                                <Play size={13} />
-                              </button>
-                              <button
-                                type="button"
-                                onClick={() => setExploreTab('columns')}
-                                className={`p-1 rounded hover:text-white transition cursor-pointer ${
-                                  exploreTab === 'columns' ? 'text-white' : ''
-                                }`}
-                                title="Columns & Layout"
-                              >
-                                <Columns2 size={13} />
-                              </button>
-                              <button
-                                type="button"
-                                onClick={() => setExploreTab('box')}
-                                className={`p-1 rounded hover:text-white transition cursor-pointer ${
-                                  exploreTab === 'box' ? 'text-white' : ''
-                                }`}
-                                title="Box Model"
-                              >
-                                <LayoutGrid size={13} />
-                              </button>
-                              <button
-                                type="button"
-                                onClick={() => setExploreTab('code')}
-                                className={`p-1 rounded hover:text-white transition cursor-pointer ${
-                                  exploreTab === 'code' ? 'text-white' : ''
-                                }`}
-                                title="JSX & Code"
-                              >
-                                <Code2 size={14} />
-                              </button>
-                              <button
-                                type="button"
-                                onClick={() => setExploreTab('inspect')}
-                                className={`p-1 rounded hover:text-white transition cursor-pointer ${
-                                  exploreTab === 'inspect' ? 'text-white' : ''
-                                }`}
-                                title="Inspect Element"
-                              >
-                                <Laptop2 size={13} />
-                              </button>
-                            </div>
-
-                            {/* Delete Element Action */}
-                            <button
-                              type="button"
-                              onClick={() => {
-                                showToast(`Element ${activeElement.id} removed`);
-                                setSelectedLayer(null);
-                                setShowExploreMore(false);
-                              }}
-                              className="text-slate-400 hover:text-rose-400 p-1 transition cursor-pointer"
-                              title="Delete element"
-                            >
-                              <Trash2 size={13} />
-                            </button>
-                          </div>
-
-                          {/* Body Content matching Image 2 */}
-                          <div className="bg-white divide-y divide-slate-100">
-                            {/* Row 1: Box Name */}
-                            <div className="px-4 py-2 flex items-center justify-between">
-                              <span className="text-slate-500 font-medium text-[11px]">Box Name</span>
-                              <input
-                                type="text"
-                                value={activeElement.name || activeElement.tag}
-                                onChange={(e) => updateElementProp('name', e.target.value)}
-                                className="font-semibold text-slate-900 text-xs text-right bg-transparent border-0 p-0 focus:ring-0 cursor-text hover:bg-slate-50 rounded px-1 max-w-[190px] truncate"
-                              />
-                            </div>
-
-                            {/* Row 2: Radius */}
-                            <div className="px-4 py-2 flex items-center justify-between">
-                              <span className="text-slate-500 font-medium text-[11px]">Radius</span>
-                              <div className="flex items-center space-x-3">
-                                <input
-                                  type="range"
-                                  min="0"
-                                  max="24"
-                                  value={
-                                    activeElement.borderRadius === 'rounded-none' ? 0 :
-                                    activeElement.borderRadius === 'rounded-sm' ? 2 :
-                                    activeElement.borderRadius === 'rounded-md' ? 6 :
-                                    activeElement.borderRadius === 'rounded-lg' ? 8 :
-                                    activeElement.borderRadius === 'rounded-xl' ? 12 :
-                                    activeElement.borderRadius === 'rounded-full' ? 24 :
-                                    parseInt(activeElement.borderRadius?.replace(/\D/g, '') || '6', 10) || 6
-                                  }
-                                  onChange={(e) => {
-                                    const val = Number(e.target.value);
-                                    const radClass = val === 0 ? 'rounded-none' : val <= 3 ? 'rounded-sm' : val <= 7 ? 'rounded-md' : val <= 10 ? 'rounded-lg' : val <= 16 ? 'rounded-xl' : 'rounded-full';
-                                    updateElementProp('borderRadius', radClass, { kind: 'style', prop: 'borderRadius', val: radClass });
-                                  }}
-                                  className="w-28 h-1 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-slate-900"
-                                />
-                                <span className="font-mono text-slate-800 font-semibold text-[11px] w-4 text-right">
-                                  {
-                                    activeElement.borderRadius === 'rounded-none' ? 0 :
-                                    activeElement.borderRadius === 'rounded-sm' ? 2 :
-                                    activeElement.borderRadius === 'rounded-md' ? 6 :
-                                    activeElement.borderRadius === 'rounded-lg' ? 8 :
-                                    activeElement.borderRadius === 'rounded-xl' ? 12 :
-                                    activeElement.borderRadius === 'rounded-full' ? 24 :
-                                    parseInt(activeElement.borderRadius?.replace(/\D/g, '') || '6', 10) || 6
-                                  }
-                                </span>
-                              </div>
-                            </div>
-
-                            {/* Row 3: Width & Height */}
-                            <div className="px-4 py-2 grid grid-cols-2 gap-4">
-                              <div className="flex items-center justify-between">
-                                <span className="text-slate-500 font-medium text-[11px]">Width</span>
-                                <input
-                                  type="text"
-                                  value={activeElement.width || '540'}
-                                  onChange={(e) => updateElementProp('width', e.target.value, { kind: 'style', prop: 'width', val: e.target.value })}
-                                  className="font-semibold text-slate-900 text-xs text-right w-16 bg-transparent border-0 p-0 focus:ring-0 hover:bg-slate-50 rounded px-1"
-                                />
-                              </div>
-                              <div className="flex items-center justify-between">
-                                <span className="text-slate-500 font-medium text-[11px]">Height</span>
-                                <span className="font-semibold text-slate-900 text-xs">
-                                  {activeElement.height || 'Relative'}
-                                </span>
-                              </div>
-                            </div>
-
-                            {/* Row 4: Fills & Style */}
-                            <div className="px-4 py-2.5 grid grid-cols-2 gap-4">
-                              <div>
-                                <span className="text-slate-500 font-medium text-[11px] block mb-1.5">Fills</span>
-                                <div className="flex items-center space-x-1.5">
-                                  {/* Transparent */}
-                                  <button
-                                    type="button"
-                                    onClick={() => updateElementProp('bgFill', 'transparent', { kind: 'style', prop: 'backgroundColor', val: 'bg-transparent' })}
-                                    className={`w-4 h-4 rounded-full border border-slate-300 relative overflow-hidden transition cursor-pointer ${
-                                      activeElement.bgFill === 'transparent' ? 'ring-2 ring-emerald-500 ring-offset-1' : ''
-                                    }`}
-                                    title="Transparent"
-                                  >
-                                    <div className="w-full h-full bg-white relative">
-                                      <div className="absolute inset-0 border-t border-rose-500 rotate-45 top-1.5" />
-                                    </div>
-                                  </button>
-                                  {/* Black */}
-                                  <button
-                                    type="button"
-                                    onClick={() => updateElementProp('bgFill', '000000', { kind: 'style', prop: 'backgroundColor', val: 'bg-slate-900' })}
-                                    className={`w-4 h-4 rounded-full bg-slate-900 border border-slate-300 transition cursor-pointer ${
-                                      activeElement.bgFill === '000000' || activeElement.bgFill === 'slate-900' ? 'ring-2 ring-emerald-500 ring-offset-1' : ''
-                                    }`}
-                                    title="Solid Black"
-                                  />
-                                  {/* White */}
-                                  <button
-                                    type="button"
-                                    onClick={() => updateElementProp('bgFill', 'ffffff', { kind: 'style', prop: 'backgroundColor', val: 'bg-white' })}
-                                    className={`w-4 h-4 rounded-full bg-white border border-slate-300 transition cursor-pointer ${
-                                      activeElement.bgFill === 'ffffff' ? 'ring-2 ring-emerald-500 ring-offset-1' : ''
-                                    }`}
-                                    title="Solid White"
-                                  />
-                                  {/* Pink */}
-                                  <button
-                                    type="button"
-                                    onClick={() => updateElementProp('bgFill', 'ec4899', { kind: 'style', prop: 'backgroundColor', val: 'bg-pink-500' })}
-                                    className={`w-4 h-4 rounded-full bg-pink-500 transition cursor-pointer ${
-                                      activeElement.bgFill === 'ec4899' ? 'ring-2 ring-emerald-500 ring-offset-1' : ''
-                                    }`}
-                                    title="Hot Pink"
-                                  />
-                                  {/* Blue */}
-                                  <button
-                                    type="button"
-                                    onClick={() => updateElementProp('bgFill', '2563eb', { kind: 'style', prop: 'backgroundColor', val: 'bg-blue-600' })}
-                                    className={`w-4 h-4 rounded-full bg-blue-600 transition cursor-pointer ${
-                                      activeElement.bgFill === '2563eb' ? 'ring-2 ring-emerald-500 ring-offset-1' : ''
-                                    }`}
-                                    title="Electric Blue"
-                                  />
-                                  <ChevronDown size={10} className="text-slate-400" />
-                                </div>
-                              </div>
-                              <div>
-                                <span className="text-slate-500 font-medium text-[11px] block mb-1">Style</span>
-                                <div className="relative">
-                                  <select
-                                    value={activeElement.bgFill === 'transparent' ? 'None' : 'Flat Colour'}
-                                    onChange={(e) => {
-                                      if (e.target.value === 'None') {
-                                        updateElementProp('bgFill', 'transparent', { kind: 'style', prop: 'backgroundColor', val: 'bg-transparent' });
-                                      } else {
-                                        updateElementProp('bgFill', 'ffffff', { kind: 'style', prop: 'backgroundColor', val: 'bg-white' });
-                                      }
-                                    }}
-                                    className="w-full bg-slate-50 border border-slate-200 rounded px-2 py-1 text-[11px] font-medium text-slate-800 appearance-none focus:outline-none focus:border-emerald-500"
-                                  >
-                                    <option>Flat Colour</option>
-                                    <option>Linear Gradient</option>
-                                    <option>None</option>
-                                  </select>
-                                  <ChevronDown size={10} className="text-slate-400 absolute right-2 top-2 pointer-events-none" />
-                                </div>
-                              </div>
-                            </div>
-
-                            {/* Row 5: Borders */}
-                            <div className="px-4 py-2.5 grid grid-cols-3 gap-3 items-end">
-                              <div>
-                                <span className="text-slate-500 font-medium text-[11px] block mb-1.5">Borders</span>
-                                <div className="flex items-center space-x-1.5">
-                                  <div className="w-4 h-4 rounded-full border border-slate-300 bg-white relative">
-                                    <div className="absolute inset-0 border-t border-rose-500 rotate-45 top-1.5" />
-                                  </div>
-                                  <ChevronDown size={10} className="text-slate-400" />
-                                </div>
-                              </div>
-                              <div>
-                                <span className="text-slate-500 font-medium text-[11px] block mb-1">Width</span>
-                                <span className="text-xs font-semibold text-slate-900">0 px</span>
-                              </div>
-                              <div>
-                                <span className="text-slate-500 font-medium text-[11px] block mb-1">Width</span>
-                                <div className="relative">
-                                  <select className="w-full bg-slate-50 border border-slate-200 rounded px-2 py-1 text-[11px] font-medium text-slate-800 appearance-none focus:outline-none focus:border-emerald-500">
-                                    <option>Solid</option>
-                                    <option>Dashed</option>
-                                    <option>Dotted</option>
-                                  </select>
-                                  <ChevronDown size={10} className="text-slate-400 absolute right-2 top-2 pointer-events-none" />
-                                </div>
-                              </div>
-                            </div>
-
-                            {/* Row 6: Padding & Margin */}
-                            <div className="px-4 py-2.5 grid grid-cols-2 gap-4">
-                              <div>
-                                <span className="text-slate-500 font-medium text-[11px] block mb-1.5">Padding</span>
-                                <div className="grid grid-cols-4 gap-1">
-                                  <input
-                                    type="text"
-                                    value={activeElement.paddingTop || '40'}
-                                    onChange={(e) => updateElementProp('paddingTop', e.target.value)}
-                                    className="w-full bg-slate-50 border border-slate-200 rounded py-1 text-center font-mono text-[10.5px] text-slate-700 focus:outline-none focus:border-emerald-500"
-                                    title="Padding Top"
-                                  />
-                                  <input
-                                    type="text"
-                                    value={activeElement.paddingRight || '40'}
-                                    onChange={(e) => updateElementProp('paddingRight', e.target.value)}
-                                    className="w-full bg-slate-50 border border-slate-200 rounded py-1 text-center font-mono text-[10.5px] text-slate-700 focus:outline-none focus:border-emerald-500"
-                                    title="Padding Right"
-                                  />
-                                  <input
-                                    type="text"
-                                    value={activeElement.paddingBottom || '40'}
-                                    onChange={(e) => updateElementProp('paddingBottom', e.target.value)}
-                                    className="w-full bg-slate-50 border border-slate-200 rounded py-1 text-center font-mono text-[10.5px] text-slate-700 focus:outline-none focus:border-emerald-500"
-                                    title="Padding Bottom"
-                                  />
-                                  <input
-                                    type="text"
-                                    value={activeElement.paddingLeft || '40'}
-                                    onChange={(e) => updateElementProp('paddingLeft', e.target.value)}
-                                    className="w-full bg-slate-50 border border-slate-200 rounded py-1 text-center font-mono text-[10.5px] text-slate-700 focus:outline-none focus:border-emerald-500"
-                                    title="Padding Left"
-                                  />
-                                </div>
-                              </div>
-                              <div>
-                                <span className="text-slate-500 font-medium text-[11px] block mb-1.5">Margin</span>
-                                <div className="grid grid-cols-4 gap-1">
-                                  <input
-                                    type="text"
-                                    value={activeElement.marginTop || '0'}
-                                    onChange={(e) => updateElementProp('marginTop', e.target.value)}
-                                    className="w-full bg-slate-50 border border-slate-200 rounded py-1 text-center font-mono text-[10.5px] text-slate-700 focus:outline-none focus:border-emerald-500"
-                                    title="Margin Top"
-                                  />
-                                  <input
-                                    type="text"
-                                    value={activeElement.marginRight || '0'}
-                                    onChange={(e) => updateElementProp('marginRight', e.target.value)}
-                                    className="w-full bg-slate-50 border border-slate-200 rounded py-1 text-center font-mono text-[10.5px] text-slate-700 focus:outline-none focus:border-emerald-500"
-                                    title="Margin Right"
-                                  />
-                                  <input
-                                    type="text"
-                                    value={activeElement.marginBottom || '0'}
-                                    onChange={(e) => updateElementProp('marginBottom', e.target.value)}
-                                    className="w-full bg-slate-50 border border-slate-200 rounded py-1 text-center font-mono text-[10.5px] text-slate-700 focus:outline-none focus:border-emerald-500"
-                                    title="Margin Bottom"
-                                  />
-                                  <input
-                                    type="text"
-                                    value={activeElement.marginLeft || '0'}
-                                    onChange={(e) => updateElementProp('marginLeft', e.target.value)}
-                                    className="w-full bg-slate-50 border border-slate-200 rounded py-1 text-center font-mono text-[10.5px] text-slate-700 focus:outline-none focus:border-emerald-500"
-                                    title="Margin Left"
-                                  />
-                                </div>
-                              </div>
-                            </div>
-
-                            {/* Row 7: Opacity */}
-                            <div className="px-4 py-2 flex items-center justify-between opacity-60">
-                              <span className="text-slate-500 font-medium text-[11px]">Opacity</span>
-                              <div className="flex items-center space-x-2">
-                                <input
-                                  type="range"
-                                  min="0"
-                                  max="100"
-                                  defaultValue="100"
-                                  disabled
-                                  title="Opacity: not supported in source editor"
-                                  className="w-24 h-1 bg-slate-200 rounded-lg appearance-none cursor-not-allowed accent-slate-400"
-                                />
-                                <span className="font-mono text-slate-400 font-semibold text-[11px] w-8 text-right">100%</span>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  )}
+                  {/* Floating In-Situ Canvas HUD Dock when Hero is selected */}
+                  {selectedLayer === 'hero' && renderHUDBar()}
 
                   {/* Magnetic Drag Slot Drop Indicator (Before First Child) */}
                   {isDraggingMove && dropSlotIndex === 0 && (
@@ -1903,6 +1983,8 @@ export default function StudioPage() {
                     // Common interactive handles (Figma vector micro-handles, precision hardware sliders, centered dimension badge, flush corner tag)
                     const interactiveHandles = isSelected && inspectorActive ? (
                       <>
+                        {/* Floating In-Situ Canvas HUD Dock attached directly to active child element */}
+                        {renderHUDBar()}
                         {/* 4-Way Move Square Badge (Top Left - User Reference Benchmark) */}
                         {!isInlineEditing && (
                           <div
@@ -2186,9 +2268,12 @@ export default function StudioPage() {
                   }`}
                 >
                   {selectedLayer === 'waitlist' && inspectorActive && (
+                    <>
+                      {renderHUDBar()}
                     <div className="absolute -top-[21px] -left-[1px] bg-[#059669] text-white font-mono text-[10px] font-bold px-2 py-0.5 rounded-t-[5px] flex items-center space-x-1 shadow-xs border-t border-l border-r border-emerald-400/30">
                       <span>WAITLIST</span>
                     </div>
+                    </>
                   )}
                   {/* Overlapping member avatars */}
                   <div className="flex items-center -space-x-2">
