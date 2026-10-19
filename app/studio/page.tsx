@@ -865,32 +865,28 @@ export default function StudioPage() {
         onClick={(e) => e.stopPropagation()}
       >
         {/* Precise Obsidian Pill HUD Bar Matching User Reference Exactly */}
-        <div className="relative bg-[#0A0F1D]/95 backdrop-blur-md text-white rounded-full px-4 py-1.5 flex items-center space-x-2.5 shadow-[0_12px_32px_rgba(0,0,0,0.45),0_2px_6px_rgba(0,0,0,0.25)] border border-slate-800/90 animate-fade-in select-none">
-          {/* Non-text downward pointer fallback if B is not rendered */}
-          {!isTextElement && (
-            <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-3.5 h-3.5 bg-[#0A0F1D] border-b border-r border-slate-800/90 rotate-45 pointer-events-none" />
-          )}
-
-          {/* 1. 6-Dot Grip Grid */}
-          <div
-            onPointerDown={(e) => {
-              e.stopPropagation();
-              if (selectedLayer) startDragMove(selectedLayer, e);
-            }}
-            className="flex items-center justify-center p-1 rounded hover:bg-slate-800 text-slate-400 hover:text-white cursor-grab active:cursor-grabbing transition shrink-0"
-            title="Drag to move element"
-          >
-            <svg className="w-3.5 h-2.5 text-slate-300" viewBox="0 0 14 10" fill="currentColor">
-              <circle cx="2" cy="2" r="1.3" />
-              <circle cx="7" cy="2" r="1.3" />
-              <circle cx="12" cy="2" r="1.3" />
-              <circle cx="2" cy="8" r="1.3" />
-              <circle cx="7" cy="8" r="1.3" />
-              <circle cx="12" cy="8" r="1.3" />
-            </svg>
+        <div className="relative bg-[#0A0F1D]/95 backdrop-blur-md text-white rounded-full pl-3 pr-2.5 py-1.5 flex items-center shadow-[0_12px_32px_rgba(0,0,0,0.45),0_2px_6px_rgba(0,0,0,0.25)] border border-slate-800/90 animate-fade-in select-none">
+          {/* 1. 6-Dot Grip Grid & Divider Group */}
+          <div className="flex items-center space-x-2 shrink-0 mr-2.5">
+            <div
+              onPointerDown={(e) => {
+                e.stopPropagation();
+                if (selectedLayer) startDragMove(selectedLayer, e);
+              }}
+              className="w-6 h-7 flex items-center justify-center rounded hover:bg-slate-800 text-slate-400 hover:text-white cursor-grab active:cursor-grabbing transition"
+              title="Drag to move element"
+            >
+              <svg className="w-3.5 h-2.5 text-slate-300" viewBox="0 0 14 10" fill="currentColor">
+                <circle cx="2" cy="2" r="1.3" />
+                <circle cx="7" cy="2" r="1.3" />
+                <circle cx="12" cy="2" r="1.3" />
+                <circle cx="2" cy="8" r="1.3" />
+                <circle cx="7" cy="8" r="1.3" />
+                <circle cx="12" cy="8" r="1.3" />
+              </svg>
+            </div>
+            <div className="h-4 w-[1px] bg-slate-800" />
           </div>
-
-          <div className="h-4 w-[1px] bg-slate-800 shrink-0" />
 
           {isTextElement ? (
             <>
@@ -899,7 +895,7 @@ export default function StudioPage() {
                 type="button"
                 onClick={() => setIsInlineEditing(true)}
                 title="Edit text directly on canvas"
-                className="px-3.5 py-1.5 rounded-full bg-gradient-to-r from-[#064E3B] to-[#047857] hover:from-[#047857] hover:to-[#059669] text-white border border-emerald-500/40 shadow-[0_0_12px_rgba(5,150,105,0.3)] text-xs font-semibold flex items-center space-x-1.5 transition cursor-pointer shrink-0"
+                className="px-3 py-1.5 rounded-full bg-gradient-to-r from-[#064E3B] to-[#047857] hover:from-[#047857] hover:to-[#059669] text-white border border-emerald-500/40 shadow-[0_0_12px_rgba(5,150,105,0.3)] text-xs font-semibold flex items-center space-x-1.5 transition cursor-pointer shrink-0 mr-2"
               >
                 <Pencil size={12} className="text-white" />
                 <span className="tracking-wide">Edit text</span>
@@ -910,7 +906,7 @@ export default function StudioPage() {
               <button
                 type="button"
                 onClick={toggleTypeface}
-                className="bg-[#131B2E] hover:bg-[#1C2740] border border-slate-800 px-3 py-1 rounded-full flex items-center space-x-1.5 text-xs font-semibold text-white cursor-pointer transition shrink-0"
+                className="bg-[#131B2E] hover:bg-[#1C2740] border border-slate-800 px-3 py-1 rounded-full flex items-center space-x-1 text-xs font-semibold text-white cursor-pointer transition shrink-0 mr-2"
                 title={`Font: ${activeElement.typeface || 'Inter'} (click to toggle)`}
               >
                 <span>Aa</span>
@@ -920,19 +916,20 @@ export default function StudioPage() {
               {/* 4. "24 ⇅" Font Size Pill */}
               <div
                 onClick={() => stepFontSize(1)}
-                className="bg-[#131B2E] hover:bg-[#1C2740] border border-slate-800 px-3 py-1 rounded-full flex items-center space-x-1.5 text-xs font-semibold text-white cursor-pointer transition select-none shrink-0"
+                className="bg-[#131B2E] hover:bg-[#1C2740] border border-slate-800 px-3 py-1 rounded-full flex items-center space-x-1 text-xs font-semibold text-white cursor-pointer transition select-none shrink-0 mr-3"
                 title="Font size (click to step)"
               >
                 <span className="min-w-[16px] text-center">{currentPxSize}</span>
                 <ChevronsUpDown size={11} className="text-slate-400" />
               </div>
 
-              {/* 5. Bold "B" Button with Downward Pointer Centered Underneath */}
-              <div className="relative flex items-center justify-center shrink-0">
+              {/* 5. Typography Formatting Cluster (B, I, U) */}
+              <div className="flex items-center space-x-1 shrink-0 mr-3">
+                {/* Bold B Button */}
                 <button
                   type="button"
                   onClick={() => toggleBold()}
-                  className={`w-7 h-7 rounded-md flex items-center justify-center text-xs font-black transition cursor-pointer shrink-0 ${
+                  className={`w-7 h-7 rounded-lg flex items-center justify-center text-xs font-black transition cursor-pointer ${
                     isBold
                       ? 'bg-[#1E293B] text-white border border-slate-700/60 shadow-xs'
                       : 'bg-[#1E293B] text-slate-200 hover:text-white border border-slate-700/60 shadow-xs'
@@ -941,40 +938,42 @@ export default function StudioPage() {
                 >
                   B
                 </button>
-                {/* Speech-Bubble Pointer Arrow pointing at selected element */}
-                <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 w-3.5 h-3.5 bg-[#0A0F1D] border-b border-r border-slate-800/90 rotate-45 pointer-events-none z-0" />
+
+                {/* Italic I Button (Mint Emerald) */}
+                <button
+                  type="button"
+                  onClick={toggleItalic}
+                  className={`w-7 h-7 rounded-lg flex items-center justify-center text-xs font-serif italic transition cursor-pointer ${
+                    isItalic
+                      ? 'bg-[#1E293B] text-[#10B981] font-bold border border-slate-700/60 shadow-xs'
+                      : 'text-[#10B981] hover:bg-slate-800/80 hover:text-emerald-300'
+                  }`}
+                  title="Toggle italic"
+                >
+                  I
+                </button>
+
+                {/* Underline U Button */}
+                <button
+                  type="button"
+                  onClick={toggleUnderline}
+                  className={`w-7 h-7 rounded-lg flex items-center justify-center text-xs underline decoration-1 underline-offset-2 transition cursor-pointer ${
+                    isUnderline
+                      ? 'bg-[#1E293B] text-emerald-400 font-bold border border-slate-700/60 shadow-xs'
+                      : 'text-slate-300 hover:bg-slate-800/80 hover:text-white'
+                  }`}
+                  title="Toggle underline"
+                >
+                  U
+                </button>
               </div>
 
-              {/* 6. Italic "I" Button (Mint Emerald) */}
-              <button
-                type="button"
-                onClick={toggleItalic}
-                className={`w-6 h-6 rounded flex items-center justify-center text-xs font-serif italic cursor-pointer transition shrink-0 ${
-                  isItalic ? 'text-[#10B981] font-bold' : 'text-[#10B981] hover:text-emerald-300'
-                }`}
-                title="Toggle italic"
-              >
-                I
-              </button>
-
-              {/* 7. Underline "U" Button */}
-              <button
-                type="button"
-                onClick={toggleUnderline}
-                className={`w-6 h-6 rounded flex items-center justify-center text-xs underline decoration-1 underline-offset-2 font-medium cursor-pointer transition shrink-0 ${
-                  isUnderline ? 'text-emerald-400 font-bold' : 'text-slate-300 hover:text-white'
-                }`}
-                title="Toggle underline"
-              >
-                U
-              </button>
-
-              {/* 8. Alignment Segmented Group */}
-              <div className="flex items-center bg-[#131B2E] border border-slate-800 rounded-lg p-0.5 space-x-0.5 shrink-0">
+              {/* 6. Alignment Segmented Group */}
+              <div className="flex items-center bg-[#131B2E] border border-slate-800 rounded-lg p-0.5 space-x-0.5 shrink-0 mr-3">
                 <button
                   type="button"
                   onClick={() => updateStyle('alignment', 'text-left')}
-                  className={`p-1.5 rounded transition cursor-pointer ${
+                  className={`p-1.5 rounded-md transition cursor-pointer ${
                     activeElement.classes.includes('text-left') || (!activeElement.classes.includes('text-center') && !activeElement.classes.includes('text-right'))
                       ? 'bg-[#1E293B] border border-slate-700/60 text-[#2DD4BF] shadow-xs'
                       : 'text-slate-400 hover:text-white'
@@ -986,7 +985,7 @@ export default function StudioPage() {
                 <button
                   type="button"
                   onClick={() => updateStyle('alignment', 'text-center')}
-                  className={`p-1.5 rounded transition cursor-pointer ${
+                  className={`p-1.5 rounded-md transition cursor-pointer ${
                     activeElement.classes.includes('text-center')
                       ? 'bg-[#1E293B] border border-slate-700/60 text-[#2DD4BF] shadow-xs'
                       : 'text-slate-400 hover:text-white'
@@ -998,7 +997,7 @@ export default function StudioPage() {
                 <button
                   type="button"
                   onClick={() => updateStyle('alignment', 'text-right')}
-                  className={`p-1.5 rounded transition cursor-pointer ${
+                  className={`p-1.5 rounded-md transition cursor-pointer ${
                     activeElement.classes.includes('text-right')
                       ? 'bg-[#1E293B] border border-slate-700/60 text-[#2DD4BF] shadow-xs'
                       : 'text-slate-400 hover:text-white'
@@ -1010,32 +1009,32 @@ export default function StudioPage() {
               </div>
             </>
           ) : (
-            <>
+            <div className="flex items-center space-x-2 shrink-0 mr-3">
               {/* Non-Text Element Badge */}
-              <span className="px-2 py-0.5 rounded bg-slate-800 text-[10.5px] font-mono font-semibold text-emerald-400 border border-slate-700/60 shrink-0">
+              <span className="px-2 py-0.5 rounded bg-slate-800 text-[10.5px] font-mono font-semibold text-emerald-400 border border-slate-700/60">
                 {activeElement.tag}
               </span>
 
-              <div className="h-4 w-[1px] bg-slate-800 shrink-0" />
+              <div className="h-4 w-[1px] bg-slate-800" />
 
               {/* Pad Stepper Capsule */}
               <div
                 onClick={() => stepPadding(1)}
-                className="bg-[#131B2E] border border-slate-800 px-2.5 py-1 rounded-full flex items-center space-x-1.5 text-xs font-semibold text-white cursor-pointer hover:border-slate-500 transition select-none shrink-0"
+                className="bg-[#131B2E] border border-slate-800 px-2.5 py-1 rounded-full flex items-center space-x-1.5 text-xs font-semibold text-white cursor-pointer hover:border-slate-500 transition select-none"
                 title="Padding (click to step)"
               >
                 <span className="text-slate-400 text-[10px] font-mono">PAD</span>
                 <span className="min-w-[16px] text-center">{activeElement.paddingLeft || '16'}</span>
                 <ChevronsUpDown size={11} className="text-slate-400" />
               </div>
-            </>
+            </div>
           )}
 
-          {/* 9. Droplet Color Capsule */}
+          {/* 7. Droplet Color Capsule */}
           <button
             type="button"
             onClick={() => setShowExploreMore((prev) => !prev)}
-            className="bg-[#131B2E] hover:bg-[#1C2740] border border-slate-800 px-2.5 py-1 rounded-full flex items-center space-x-1 text-slate-300 hover:text-white cursor-pointer transition shrink-0"
+            className="bg-[#131B2E] hover:bg-[#1C2740] border border-slate-800 px-2.5 py-1 rounded-full flex items-center space-x-1 text-slate-300 hover:text-white cursor-pointer transition shrink-0 mr-3"
             title="Color & Contrast"
             aria-expanded={showExploreMore}
           >
@@ -1043,32 +1042,35 @@ export default function StudioPage() {
               <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z" />
               <path d="M6.34 14a8 8 0 0 0 11.32 0" fill="white" />
             </svg>
-            <ChevronDown size={11} className="text-slate-400" />
+            <ChevronDown size={10} className="text-slate-400" />
           </button>
 
-          {/* 10. More Options "•••" */}
-          <button
-            type="button"
-            onClick={() => setShowExploreMore((prev) => !prev)}
-            className="p-1 rounded hover:bg-slate-800 text-slate-400 hover:text-white cursor-pointer transition shrink-0"
-            title="Explore more properties"
-            aria-expanded={showExploreMore}
-          >
-            <MoreHorizontal size={14} />
-          </button>
+          {/* 8. Action Utilities Group (••• and ✕) */}
+          <div className="flex items-center space-x-1 shrink-0">
+            {/* More Options "•••" */}
+            <button
+              type="button"
+              onClick={() => setShowExploreMore((prev) => !prev)}
+              className="w-7 h-7 rounded-full hover:bg-slate-800 flex items-center justify-center text-slate-400 hover:text-white cursor-pointer transition"
+              title="Explore more properties"
+              aria-expanded={showExploreMore}
+            >
+              <MoreHorizontal size={14} />
+            </button>
 
-          {/* 11. Deselect (X) */}
-          <button
-            type="button"
-            onClick={(e) => {
-              e.stopPropagation();
-              setSelectedLayer(null);
-            }}
-            className="p-1 rounded-full hover:bg-slate-800 text-slate-400 hover:text-white cursor-pointer transition shrink-0"
-            title="Deselect (Esc)"
-          >
-            <X size={14} />
-          </button>
+            {/* Deselect (X) */}
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                setSelectedLayer(null);
+              }}
+              className="w-7 h-7 rounded-full hover:bg-slate-800 flex items-center justify-center text-slate-400 hover:text-white cursor-pointer transition"
+              title="Deselect (Esc)"
+            >
+              <X size={14} />
+            </button>
+          </div>
         </div>
 
         {/* Explore More Floating Card (Image 2 Style) */}
