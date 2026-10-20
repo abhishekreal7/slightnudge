@@ -284,6 +284,8 @@ interface PendingEdit {
   summary: string;
   oldValue: string;
   newValue: string;
+  oldClassName?: string;
+  newClassName?: string;
   filePath: string;
   line: number;
 }
@@ -488,6 +490,8 @@ export default function StudioPage() {
             summary: result.summary || `${payload.property || kind} modified`,
             oldValue: result.oldValue || '',
             newValue: result.newValue || '',
+            oldClassName: result.oldClassName,
+            newClassName: result.newClassName,
             filePath: result.filePath,
             line: result.line || targetElem.line,
           });
@@ -633,7 +637,24 @@ export default function StudioPage() {
   // Discard Pending Edit
   const discardPendingEdit = async () => {
     if (!pendingEdit) return;
-    await discardEditAPI(pendingEdit.id);
+    try {
+      await discardEditAPI(pendingEdit.id);
+    } catch {
+      // ignore
+    }
+    if (pendingEdit.oldClassName && selectedLayer) {
+      setElements((prev) => {
+        const cur = prev[selectedLayer];
+        if (!cur) return prev;
+        return {
+          ...prev,
+          [selectedLayer]: {
+            ...cur,
+            classes: pendingEdit.oldClassName || cur.classes,
+          },
+        };
+      });
+    }
     setPendingEdit(null);
     showToast('Discarded visual adjustment');
   };
@@ -674,6 +695,7 @@ export default function StudioPage() {
   // Update property helper
   const updateStyle = (property: string, value: string) => {
     if (!selectedLayer) return;
+    const propKey = property === 'textAlign' ? 'alignment' : property;
     setElements((prev) => {
       const el = prev[selectedLayer];
       if (!el) return prev;
@@ -694,7 +716,7 @@ export default function StudioPage() {
         updated.fontWeight = value.replace('font-', '');
         newClasses = newClasses.replace(/\bfont-(thin|extralight|light|normal|medium|semibold|bold|extrabold|black)\b/, '').trim();
         newClasses = `${newClasses} ${value}`.trim();
-      } else if (property === 'textAlign') {
+      } else if (propKey === 'alignment') {
         newClasses = newClasses.replace(/\btext-(left|center|right|justify)\b/, '').trim();
         newClasses = `${newClasses} ${value}`.trim();
       } else if (property === 'textColor') {
@@ -736,6 +758,12 @@ export default function StudioPage() {
         updated.typeface = value === 'font-sans' ? 'Inter' : value === 'font-mono' ? 'Mono' : 'Inter';
         newClasses = newClasses.replace(/\bfont-(sans|serif|mono)\b/, '').trim();
         newClasses = `${newClasses} ${value}`.trim();
+      } else if (property === 'fontStyle') {
+        newClasses = newClasses.replace(/\b(italic|not-italic)\b/, '').trim();
+        if (value === 'italic') newClasses = `${newClasses} italic`.trim();
+      } else if (property === 'textDecoration') {
+        newClasses = newClasses.replace(/\b(underline|no-underline|line-through)\b/, '').trim();
+        if (value === 'underline') newClasses = `${newClasses} underline`.trim();
       } else if (property === 'width') {
         updated.width = value;
         newClasses = newClasses.replace(/\bw-(auto|full|1\/2|1\/3|2\/3|1\/4|3\/4|fit)\b/, '').trim();
@@ -745,7 +773,7 @@ export default function StudioPage() {
       return { ...prev, [selectedLayer]: updated };
     });
     void triggerBackendPreview('style', {
-      property,
+      property: propKey,
       value,
       breakpoint: activeVariant || activeBreakpoint || '',
     });
@@ -869,18 +897,14 @@ export default function StudioPage() {
 
   const toggleItalic = () => {
     const isItalic = activeElement.classes.includes('italic');
-    const nextClasses = isItalic
-      ? activeElement.classes.replace(/\bitalic\b/, '').trim()
-      : `${activeElement.classes} italic`.trim();
-    updateElementProp('classes', nextClasses, { kind: 'style', prop: 'fontStyle', val: isItalic ? 'normal' : 'italic' });
+    const nextVal = isItalic ? 'not-italic' : 'italic';
+    updateStyle('fontStyle', nextVal);
   };
 
   const toggleUnderline = () => {
     const isUnderline = activeElement.classes.includes('underline');
-    const nextClasses = isUnderline
-      ? activeElement.classes.replace(/\bunderline\b/, '').trim()
-      : `${activeElement.classes} underline`.trim();
-    updateElementProp('classes', nextClasses, { kind: 'style', prop: 'textDecoration', val: isUnderline ? 'none' : 'underline' });
+    const nextVal = isUnderline ? 'no-underline' : 'underline';
+    updateStyle('textDecoration', nextVal);
   };
 
   const toggleTypeface = () => {
@@ -1141,7 +1165,7 @@ export default function StudioPage() {
                       setShowColorPicker(false);
                     }}
                     className="flex items-center space-x-1.5 p-1 rounded-md bg-slate-900/80 hover:bg-slate-800 border border-slate-800/80 cursor-pointer transition text-left"
-                    title={c.name}
+                    title={`Text ${c.name}`}
                   >
                     <span className="w-3.5 h-3.5 rounded-full border border-white/20 shrink-0" style={{ backgroundColor: c.color }} />
                     <span className="text-[10px] text-slate-300 truncate">{c.name.split(' ')[0]}</span>
@@ -1172,7 +1196,7 @@ export default function StudioPage() {
                       setShowColorPicker(false);
                     }}
                     className="flex items-center space-x-1.5 p-1 rounded-md bg-slate-900/80 hover:bg-slate-800 border border-slate-800/80 cursor-pointer transition text-left"
-                    title={c.name}
+                    title={`Fill ${c.name}`}
                   >
                     <span
                       className="w-3.5 h-3.5 rounded-full border border-white/20 shrink-0 relative overflow-hidden"
@@ -1195,7 +1219,11 @@ export default function StudioPage() {
               type="button"
               onClick={() => {
                 if (typeof navigator !== 'undefined' && navigator.clipboard) {
-                  navigator.clipboard.writeText(activeElement.classes);
+                  try {
+                    void navigator.clipboard.writeText(activeElement.classes).catch(() => {});
+                  } catch {
+                    // ignore
+                  }
                   showToast('✓ Copied className to clipboard');
                 }
                 setShowQuickActions(false);
@@ -2164,7 +2192,10 @@ export default function StudioPage() {
 
             {/* Floating Source Review Bar (Appears when an edit is made) */}
             {pendingEdit && (
-              <div className="fixed bottom-12 left-1/2 -translate-x-1/2 z-40 flex flex-col items-center">
+              <div
+                onClick={(e) => e.stopPropagation()}
+                className="fixed bottom-12 left-1/2 -translate-x-1/2 z-40 flex flex-col items-center"
+              >
                 {showDiffPreview && (
                   <div className="mb-2 w-[460px] bg-slate-950/95 backdrop-blur-md text-white rounded-xl shadow-2xl p-3 border border-slate-700/80 text-xs animate-in fade-in duration-150">
                     <div className="flex items-center justify-between pb-1.5 border-b border-slate-800 font-mono text-[11px] text-slate-400">

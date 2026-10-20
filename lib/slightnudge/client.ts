@@ -54,6 +54,8 @@ export interface PreviewResult {
   summary?: string;
   oldValue?: string;
   newValue?: string;
+  oldClassName?: string;
+  newClassName?: string;
   filePath: string;
   line?: number;
   changed?: boolean;
@@ -103,6 +105,8 @@ export async function previewEditAPI(params: PreviewParams): Promise<PreviewResu
       summary: data.summary || `${params.property || params.kind} modified`,
       oldValue: data.oldValue || '',
       newValue: data.newValue || '',
+      oldClassName: data.oldClassName,
+      newClassName: data.newClassName,
       filePath: data.filePath || params.filePath,
       line: data.line || params.line,
       changed: data.changed,

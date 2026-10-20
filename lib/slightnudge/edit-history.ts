@@ -67,7 +67,29 @@ function atomicWrite(filePath: string, contents: string) {
   })();
   writeFileSync(tempPath, contents, { encoding: 'utf8', mode: existingMode });
   if (existingMode !== undefined) chmodSync(tempPath, existingMode);
-  renameSync(tempPath, filePath);
+
+  // On Windows, dev file watchers can hold brief read locks during file change events.
+  let retries = 5;
+  while (retries > 0) {
+    try {
+      renameSync(tempPath, filePath);
+      return;
+    } catch (err: any) {
+      if ((err.code === 'EPERM' || err.code === 'EBUSY') && retries > 1) {
+        retries--;
+        const start = Date.now();
+        while (Date.now() - start < 50) {}
+      } else {
+        try {
+          writeFileSync(filePath, contents, { encoding: 'utf8', mode: existingMode });
+          try { unlinkSync(tempPath); } catch {}
+          return;
+        } catch {
+          throw err;
+        }
+      }
+    }
+  }
 }
 
 function writeHistory(records: EditRecord[]) {

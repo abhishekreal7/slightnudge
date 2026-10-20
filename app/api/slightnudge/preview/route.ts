@@ -95,7 +95,7 @@ export async function POST(request: Request) {
       if (!result.success || !result.updatedSource || !result.originalSource) return NextResponse.json({ error: 'This change cannot be previewed safely.' }, { status: 422 });
       const summary = `${result.oldToken || 'none'} → ${result.newToken}`;
       const preview = createPendingSourceEdit({ filePath, before: result.originalSource, after: result.updatedSource, summary, oldValue: result.oldToken || result.oldClassName, newValue: result.newToken || result.newClassName, line: result.line, repositoryId, sourcePath });
-      return NextResponse.json(preview.changed ? { ...preview, success: true } : { success: true, changed: false, message: 'That style is already applied.' });
+      return NextResponse.json(preview.changed ? { ...preview, oldClassName: result.oldClassName, newClassName: result.newClassName, success: true } : { success: true, changed: false, message: 'That style is already applied.' });
     }
 
     if (body.kind === 'text') {
