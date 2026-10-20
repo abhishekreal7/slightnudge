@@ -1933,72 +1933,48 @@ export default function StudioPage() {
                               title="Drag side to resize width"
                             />
 
-                            {/* Northeast Corner Handle: Smoothly transitions from green dot (Image 1) to curved arc pill (Image 2) */}
+                            {/* Northeast Corner Handle: Smoothly transitions from emerald dot to refined curved corner pill */}
                             <div
                               onPointerDown={(e) => startResize('ne', e)}
-                              className="absolute -top-[12px] -right-[12px] w-[34px] h-[34px] flex items-center justify-center cursor-nesw-resize select-none z-30 group"
+                              className="absolute -top-[7px] -right-[7px] w-[24px] h-[24px] flex items-center justify-center cursor-nesw-resize select-none z-30 group"
                               title="Drag corner to resize"
                             >
-                              {/* State 1: Idle Green Dot (Image 1) */}
+                              {/* State 1: Idle Emerald Dot */}
                               <div
-                                className={`absolute top-[7px] right-[7px] w-2.5 h-2.5 rounded-full bg-[#10B981] ring-1 ring-white shadow-xs transition-all duration-300 ease-out pointer-events-none ${
+                                className={`absolute top-[2px] right-[2px] w-2.5 h-2.5 rounded-full bg-[#10B981] ring-1 ring-white shadow-xs transition-all duration-200 ease-out pointer-events-none ${
                                   isResizing
                                     ? 'opacity-0 scale-50'
                                     : 'opacity-100 scale-100 group-hover:opacity-0 group-hover:scale-50'
                                 }`}
                               />
 
-                              {/* State 2: Curved Corner Arc Capsule (Image 2) */}
+                              {/* State 2: Sleek Curved Corner Pill (Refined Image 2 design) */}
                               <div
-                                className={`absolute top-0 right-0 w-[34px] h-[34px] transition-all duration-300 ease-out pointer-events-none ${
+                                className={`absolute top-0 right-0 w-[24px] h-[24px] transition-all duration-200 ease-out pointer-events-none ${
                                   isResizing
                                     ? 'opacity-100 scale-100'
                                     : 'opacity-0 scale-75 group-hover:opacity-100 group-hover:scale-100'
                                 }`}
                               >
                                 <svg
-                                  viewBox="0 0 34 34"
-                                  className="w-full h-full drop-shadow-[0_2px_6px_rgba(0,0,0,0.45)] drop-shadow-[0_0_8px_rgba(16,185,129,0.6)]"
+                                  viewBox="0 0 24 24"
+                                  className="w-full h-full drop-shadow-[0_2px_5px_rgba(0,0,0,0.25)] drop-shadow-[0_0_6px_rgba(16,185,129,0.35)]"
                                 >
-                                  <defs>
-                                    <linearGradient id="cornerPillGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                                      <stop offset="0%" stopColor="#10B981" />
-                                      <stop offset="40%" stopColor="#059669" />
-                                      <stop offset="100%" stopColor="#047857" />
-                                    </linearGradient>
-                                    <linearGradient id="cornerGlassRim" x1="0%" y1="0%" x2="100%" y2="100%">
-                                      <stop offset="0%" stopColor="rgba(255,255,255,0.95)" />
-                                      <stop offset="50%" stopColor="rgba(255,255,255,0.65)" />
-                                      <stop offset="100%" stopColor="rgba(255,255,255,0.3)" />
-                                    </linearGradient>
-                                  </defs>
-
-                                  {/* Outer Glass Bevel / Highlight Rim from Image 2 */}
+                                  {/* 1px crisp white glass rim */}
                                   <path
-                                    d="M 9.5 9.5 A 11 11 0 0 1 24.5 24.5"
+                                    d="M 5 6 A 9 9 0 0 1 18 19"
                                     fill="none"
-                                    stroke="url(#cornerGlassRim)"
-                                    strokeWidth="11"
+                                    stroke="#ffffff"
+                                    strokeWidth="4.5"
                                     strokeLinecap="round"
                                   />
-
-                                  {/* Core Sleek Emerald Pill Body */}
+                                  {/* Sleek emerald core */}
                                   <path
-                                    d="M 9.5 9.5 A 11 11 0 0 1 24.5 24.5"
+                                    d="M 5 6 A 9 9 0 0 1 18 19"
                                     fill="none"
-                                    stroke="url(#cornerPillGrad)"
-                                    strokeWidth="8.5"
+                                    stroke="#10B981"
+                                    strokeWidth="2.75"
                                     strokeLinecap="round"
-                                  />
-
-                                  {/* Specular White Crest Glint */}
-                                  <path
-                                    d="M 11 8.5 A 11.5 11.5 0 0 1 25.5 23"
-                                    fill="none"
-                                    stroke="rgba(255, 255, 255, 0.95)"
-                                    strokeWidth="1.5"
-                                    strokeLinecap="round"
-                                    strokeDasharray="14 30"
                                   />
                                 </svg>
                               </div>
