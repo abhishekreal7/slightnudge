@@ -1,17 +1,26 @@
 import { randomUUID } from 'node:crypto';
-import fs, { chmodSync, closeSync, fsyncSync, mkdirSync, openSync, readFileSync, readdirSync, realpathSync, statSync, unlinkSync, writeSync } from 'node:fs';
+import fs, { chmodSync, closeSync, existsSync, fsyncSync, mkdirSync, openSync, readFileSync, readdirSync, realpathSync, statSync, unlinkSync, writeSync } from 'node:fs';
 import path from 'node:path';
 import { verifyTailwindClass, verifySyntacticParse, findProjectRoot } from './tailwind-verifier';
 
-const historyDirectory = path.join(process.cwd(), '.slightnudge', 'history');
-const historyPath = path.join(historyDirectory, 'edits.json');
-const pendingDirectory = path.join(process.cwd(), '.slightnudge', 'pending');
+function getWorkspacePath(): string {
+  return process.env.SLIGHTNUDGE_WORKSPACE_ROOT || process.cwd();
+}
+
+function getHistoryPath(): string {
+  return process.env.SLIGHTNUDGE_HISTORY_PATH || path.join(getWorkspacePath(), '.slightnudge', 'history', 'edits.json');
+}
+
+function getPendingDirectory(): string {
+  return process.env.SLIGHTNUDGE_PENDING_DIR || path.join(getWorkspacePath(), '.slightnudge', 'pending');
+}
+
 const maxHistoryEntries = 100;
 const maxSnapshotBytes = 1024 * 1024;
 
-type EditStatus = 'applied' | 'undoing' | 'undone';
+export type EditStatus = 'applied' | 'undoing' | 'undone';
 
-interface EditRecord {
+export interface EditRecord {
   id: string;
   filePath: string;
   createdAt: string;
@@ -21,6 +30,7 @@ interface EditRecord {
   before: string;
   after: string;
   status: EditStatus;
+  missing?: boolean;
 }
 
 interface PendingEdit {
@@ -38,26 +48,78 @@ interface PendingEdit {
   sourcePath?: string;
 }
 
-function readHistory(): EditRecord[] {
+export function readHistory(): EditRecord[] {
   let contents: string;
   try {
-    contents = readFileSync(historyPath, 'utf8');
+    contents = readFileSync(getHistoryPath(), 'utf8');
   } catch (error) {
     if ((error as NodeJS.ErrnoException).code === 'ENOENT') return [];
     throw error;
   }
 
-  const records = JSON.parse(contents);
-  if (!Array.isArray(records)) throw new Error('The local edit history is invalid.');
-  for (const record of records) {
+  let rawRecords: any;
+  try {
+    rawRecords = JSON.parse(contents);
+  } catch (err: any) {
+    throw new Error(`The local edit history is invalid or corrupted: ${err.message}`);
+  }
+
+  if (!Array.isArray(rawRecords)) throw new Error('The local edit history is invalid.');
+
+  const workspaceRoot = getWorkspacePath();
+  let realWorkspacePath: string | null = null;
+  try {
+    realWorkspacePath = realpathSync(workspaceRoot);
+  } catch {}
+
+  const validRecords: EditRecord[] = [];
+
+  for (const record of rawRecords) {
     if (!record || typeof record.id !== 'string' || typeof record.filePath !== 'string' ||
         typeof record.before !== 'string' || typeof record.after !== 'string' ||
         typeof record.summary !== 'string' || !['applied', 'undoing', 'undone'].includes(record.status)) {
-      throw new Error('The local edit history is invalid.');
+      console.warn('Skipping malformed edit history record:', record);
+      continue;
     }
-    relativeFilePath(path.resolve(process.cwd(), record.filePath));
+
+    // Path safety check: ensure record.filePath cannot escape workspace root
+    const rawPath = record.filePath;
+    const normalized = path.normalize(rawPath);
+    if (path.isAbsolute(normalized) || normalized === '..' || normalized.startsWith(`..${path.sep}`)) {
+      console.warn(`Skipping history record whose path escapes workspace root: ${rawPath}`);
+      continue;
+    }
+
+    const resolvedPath = path.resolve(workspaceRoot, normalized);
+    const relFromWs = path.relative(workspaceRoot, resolvedPath);
+    if (!relFromWs || relFromWs === '..' || relFromWs.startsWith(`..${path.sep}`) || path.isAbsolute(relFromWs)) {
+      console.warn(`Skipping history record whose path escapes workspace root: ${rawPath}`);
+      continue;
+    }
+
+    // Check if the file currently exists on disk
+    if (existsSync(resolvedPath)) {
+      if (realWorkspacePath) {
+        try {
+          const realFile = realpathSync(resolvedPath);
+          const realRel = path.relative(realWorkspacePath, realFile);
+          if (!realRel || realRel === '..' || realRel.startsWith(`..${path.sep}`) || path.isAbsolute(realRel)) {
+            console.warn(`Skipping history record whose symlink escapes workspace root: ${rawPath}`);
+            continue;
+          }
+        } catch {
+          validRecords.push({ ...record, missing: true });
+          continue;
+        }
+      }
+      validRecords.push({ ...record, missing: false });
+    } else {
+      // File missing on disk: keep record in history, mark as missing so UI can show unavailable
+      validRecords.push({ ...record, missing: true });
+    }
   }
-  return records;
+
+  return validRecords;
 }
 
 function sleepSync(ms: number) {
@@ -114,11 +176,11 @@ export function atomicWrite(filePath: string, contents: string) {
 }
 
 function writeHistory(records: EditRecord[]) {
-  atomicWrite(historyPath, JSON.stringify(records.slice(-maxHistoryEntries), null, 2));
+  atomicWrite(getHistoryPath(), JSON.stringify(records.slice(-maxHistoryEntries), null, 2));
 }
 
 function relativeFilePath(filePath: string) {
-  const workspacePath = realpathSync(process.cwd());
+  const workspacePath = realpathSync(getWorkspacePath());
   const absolutePath = realpathSync(filePath);
   const relativePath = path.relative(workspacePath, absolutePath);
   if (!relativePath || relativePath === '..' || relativePath.startsWith(`..${path.sep}`) || path.isAbsolute(relativePath)) {
@@ -179,14 +241,15 @@ export function withRecordedSourceEdit<T extends { success: boolean }>(filePath:
 
 function pendingPath(id: string) {
   if (!/^[0-9a-f-]{36}$/i.test(id)) throw new Error('That preview is no longer available.');
-  return path.join(pendingDirectory, `${id}.json`);
+  return path.join(getPendingDirectory(), `${id}.json`);
 }
 
 function pruneExpiredPreviews() {
+  const dir = getPendingDirectory();
   try {
-    for (const entry of readdirSync(pendingDirectory)) {
+    for (const entry of readdirSync(dir)) {
       if (!/^[0-9a-f-]{36}\.json$/i.test(entry)) continue;
-      const entryPath = path.join(pendingDirectory, entry);
+      const entryPath = path.join(dir, entry);
       if (Date.now() - statSync(entryPath).mtimeMs > 30 * 60 * 1000) unlinkSync(entryPath);
     }
   } catch (error) {
@@ -230,7 +293,7 @@ function readPendingSourceEdit(id: string): PendingEdit {
   if (pending.id !== id || typeof pending.before !== 'string' || typeof pending.after !== 'string' || typeof pending.filePath !== 'string') {
     throw new Error('The preview data is invalid. Discard it and try again.');
   }
-  relativeFilePath(path.resolve(process.cwd(), pending.filePath));
+  relativeFilePath(path.resolve(getWorkspacePath(), pending.filePath));
   return pending;
 }
 
@@ -244,7 +307,7 @@ export async function applyPendingSourceEdit(id: string, groupId?: string, repos
   const pending = readPendingSourceEdit(id);
   if (pending.repositoryId !== repositoryId) return { success: false as const, error: 'This preview belongs to a different project. Review the change again.' };
   if (pending.repositoryId && (pending.sourcePath !== sourcePath || !validatedFilePath)) return { success: false as const, error: 'This preview belongs to a different source file. Review the change again.' };
-  const filePath = pending.repositoryId ? validatedFilePath! : path.resolve(process.cwd(), pending.filePath);
+  const filePath = pending.repositoryId ? validatedFilePath! : path.resolve(getWorkspacePath(), pending.filePath);
   const current = readFileSync(filePath, 'utf8');
   if (current !== pending.before) {
     return { success: false as const, error: 'This source changed after the preview. Review it again before applying.' };
@@ -303,13 +366,23 @@ export async function applyPendingSourceEdit(id: string, groupId?: string, repos
 
 /** Undo only the most recent SlightNudge edit, and refuse if the file changed afterward. */
 export function undoSourceEdit(filePath?: string) {
+  let wantedPath: string | undefined;
+  if (filePath) {
+    const resolvedPath = path.resolve(getWorkspacePath(), filePath);
+    if (!existsSync(resolvedPath)) {
+      return { success: false as const, error: 'That file no longer exists.' };
+    }
+    wantedPath = relativeFilePath(resolvedPath);
+  }
   const records = readHistory();
-  const wantedPath = filePath ? relativeFilePath(filePath) : undefined;
   const index = records.findLastIndex((record) => record.status !== 'undone' && (!wantedPath || record.filePath === wantedPath));
   if (index < 0) return { success: false as const, error: 'There is no visual edit to undo.' };
 
   const record = records[index];
-  const absolutePath = path.resolve(process.cwd(), record.filePath);
+  const absolutePath = path.resolve(getWorkspacePath(), record.filePath);
+  if (!existsSync(absolutePath)) {
+    return { success: false as const, error: 'That file no longer exists.' };
+  }
   const current = readFileSync(absolutePath, 'utf8');
 
   // Recover a partially completed undo after a process interruption.
@@ -340,9 +413,15 @@ export function undoSourceEdit(filePath?: string) {
 }
 
 export function canUndoSourceEdit(filePath: string) {
-  const wantedPath = relativeFilePath(filePath);
-  const records = readHistory();
-  const record = records.findLast((entry) => entry.status !== 'undone' && entry.filePath === wantedPath);
-  if (!record) return false;
-  try { return readFileSync(filePath, 'utf8') === record.after; } catch { return false; }
+  try {
+    const resolvedPath = path.resolve(getWorkspacePath(), filePath);
+    if (!existsSync(resolvedPath)) return false;
+    const wantedPath = relativeFilePath(resolvedPath);
+    const records = readHistory();
+    const record = records.findLast((entry) => entry.status !== 'undone' && entry.filePath === wantedPath);
+    if (!record || record.missing) return false;
+    return readFileSync(resolvedPath, 'utf8') === record.after;
+  } catch {
+    return false;
+  }
 }
