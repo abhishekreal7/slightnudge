@@ -3,16 +3,28 @@ import fs, { chmodSync, closeSync, existsSync, fsyncSync, mkdirSync, openSync, r
 import path from 'node:path';
 import { verifyTailwindClass, verifySyntacticParse, findProjectRoot } from './tailwind-verifier';
 
+function isTestMode(): boolean {
+  return process.env.SLIGHTNUDGE_TEST === '1';
+}
+
 function getWorkspacePath(): string {
-  return process.env.SLIGHTNUDGE_WORKSPACE_ROOT || process.cwd();
+  return (isTestMode() && process.env.SLIGHTNUDGE_WORKSPACE_ROOT) || process.cwd();
 }
 
 function getHistoryPath(): string {
-  return process.env.SLIGHTNUDGE_HISTORY_PATH || path.join(getWorkspacePath(), '.slightnudge', 'history', 'edits.json');
+  if (isTestMode() && process.env.SLIGHTNUDGE_HISTORY_PATH) {
+    return process.env.SLIGHTNUDGE_HISTORY_PATH;
+  }
+  const dataDir = (isTestMode() && process.env.SLIGHTNUDGE_DATA_DIR) || path.join(getWorkspacePath(), '.slightnudge');
+  return path.join(dataDir, 'history', 'edits.json');
 }
 
 function getPendingDirectory(): string {
-  return process.env.SLIGHTNUDGE_PENDING_DIR || path.join(getWorkspacePath(), '.slightnudge', 'pending');
+  if (isTestMode() && process.env.SLIGHTNUDGE_PENDING_DIR) {
+    return process.env.SLIGHTNUDGE_PENDING_DIR;
+  }
+  const dataDir = (isTestMode() && process.env.SLIGHTNUDGE_DATA_DIR) || path.join(getWorkspacePath(), '.slightnudge');
+  return path.join(dataDir, 'pending');
 }
 
 const maxHistoryEntries = 100;
