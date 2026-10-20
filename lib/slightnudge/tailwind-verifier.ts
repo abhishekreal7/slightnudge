@@ -34,6 +34,10 @@ export function findProjectRoot(filePath: string): string {
   return process.cwd();
 }
 
+import { createRequire } from 'node:module';
+
+const req = typeof require === 'function' ? require : createRequire(import.meta.url);
+
 function findInstalledPackage(packageName: string, startDir: string): { dir: string; pkg: any } | null {
   let curr = path.resolve(startDir);
   const root = path.parse(curr).root;
@@ -58,22 +62,21 @@ function findInstalledPackage(packageName: string, startDir: string): { dir: str
 }
 
 function loadPackage(installed: { dir: string; pkg: any }): any {
-  const nativeRequire = eval('require');
   const entryCandidate =
     (typeof installed.pkg.exports === 'object' && installed.pkg.exports?.['.']?.require) ||
     installed.pkg.main ||
     'index.js';
   const fullPath = path.resolve(installed.dir, entryCandidate);
   if (existsSync(fullPath)) {
-    return nativeRequire(fullPath);
+    return req(fullPath);
   }
   for (const alt of ['dist/index.js', 'dist/lib.js', 'lib/index.js', 'index.js']) {
     const altPath = path.resolve(installed.dir, alt);
     if (existsSync(altPath)) {
-      return nativeRequire(altPath);
+      return req(altPath);
     }
   }
-  return nativeRequire(installed.dir);
+  return req(installed.dir);
 }
 
 const v4Cache = new Map<string, any>();
@@ -160,7 +163,7 @@ export async function verifyTailwindClass(candidate: string, projectDir: string)
         const p = path.join(projectDir, configName);
         if (existsSync(p)) {
           try {
-            config = eval('require')(p);
+            config = req(p);
             break;
           } catch {}
         }

@@ -62,7 +62,7 @@ describe('S5: Verify Tailwind compilation and AST parse before write', () => {
 
     try {
       const res = await applyPendingSourceEdit(pending.id);
-      assert.strictEqual(res.success, true, 'Applying valid Tailwind classes must succeed');
+      assert.strictEqual(res.success, true, `Applying valid Tailwind classes must succeed: ${(res as any).error}`);
 
       const diskCode = fs.readFileSync(targetFile, 'utf8');
       assert.strictEqual(diskCode, updatedContent, 'File on disk must match updated content');
