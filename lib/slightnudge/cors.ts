@@ -14,7 +14,7 @@ export function isAllowedOrigin(origin: string | null, requestUrl: string): bool
 
     // Allow local development preview servers
     const host = originUrl.hostname.toLowerCase();
-    const isLocalhost = host === 'localhost' || host === '127.0.0.1' || host === '0.0.0.0' || host === '[::1]' || host === '::1';
+    const isLocalhost = host === 'localhost' || host === '127.0.0.1' || host === '[::1]' || host === '::1';
     const port = Number(originUrl.port);
     if (isLocalhost && originUrl.protocol === 'http:' && ((Number.isInteger(port) && port >= 1024 && port <= 65535) || originUrl.port === '')) {
       return true;
@@ -33,7 +33,7 @@ export function corsHeaders(request: Request): Record<string, string> {
   return {
     'Access-Control-Allow-Origin': origin,
     'Access-Control-Allow-Methods': 'GET, POST, OPTIONS, DELETE',
-    'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Requested-With',
+    'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Requested-With, x-slightnudge-token',
     'Access-Control-Max-Age': '86400',
   };
 }

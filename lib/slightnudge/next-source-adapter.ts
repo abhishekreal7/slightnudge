@@ -414,12 +414,30 @@ export function getBridgeClient(targetRepositoryId = '') {
     }
   }
 
+  let cachedToken = null;
+  async function getBridgeToken() {
+    if (cachedToken) return cachedToken;
+    try {
+      const res = await fetch(\`\${backendOrigin}/api/slightnudge/token\`);
+      if (res.ok) {
+        const data = await res.json();
+        cachedToken = data.token;
+        return cachedToken;
+      }
+    } catch {}
+    return '';
+  }
+
   async function applyPending() {
     if (!pendingEdit) return;
     try {
+      const token = await getBridgeToken();
       const res = await fetch(\`\${backendOrigin}/api/slightnudge/apply\`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'x-slightnudge-token': token,
+        },
         body: JSON.stringify({
           previewId: pendingEdit.id,
           repositoryId: defaultRepo || undefined,
@@ -453,9 +471,13 @@ export function getBridgeClient(targetRepositoryId = '') {
 
   async function undoLast() {
     try {
+      const token = await getBridgeToken();
       const res = await fetch(\`\${backendOrigin}/api/slightnudge/undo\`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'x-slightnudge-token': token,
+        },
         body: JSON.stringify({
           repositoryId: defaultRepo || undefined,
           sourcePath: selectedElement?.dataset.sourceFile,

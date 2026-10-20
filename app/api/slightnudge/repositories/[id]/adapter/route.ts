@@ -1,14 +1,11 @@
 import { NextResponse } from 'next/server';
 import { getNextSourceAdapterStatus, installNextSourceAdapter, removeNextSourceAdapter } from '@/lib/slightnudge/next-source-adapter';
+import { validateMutatingRequest } from '@/lib/slightnudge/auth';
 
 function authorizeLocalRequest(request: Request) {
   if (process.env.NODE_ENV === 'production') return NextResponse.json({ error: 'Local source adapters require the desktop development app.' }, { status: 501 });
-  const origin = request.headers.get('origin');
-  let sameOrigin = false;
-  try { sameOrigin = Boolean(origin) && new URL(origin!).origin === new URL(request.url).origin; } catch { sameOrigin = false; }
-  if (!sameOrigin) {
-    return NextResponse.json({ error: 'Source adapter changes must come from this SlightNudge workspace.' }, { status: 403 });
-  }
+  const auth = validateMutatingRequest(request);
+  if (!auth.valid) return auth.response;
   return null;
 }
 

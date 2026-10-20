@@ -83,11 +83,37 @@ export async function inspectElementAPI(params: InspectParams): Promise<InspectR
   }
 }
 
+let cachedSessionToken: string | null = null;
+
+export async function getClientSessionToken(): Promise<string> {
+  if (cachedSessionToken) return cachedSessionToken;
+  if (typeof window !== 'undefined' && (window as any).__SLIGHTNUDGE_TOKEN__) {
+    cachedSessionToken = (window as any).__SLIGHTNUDGE_TOKEN__;
+    return cachedSessionToken!;
+  }
+  try {
+    const res = await fetch('/api/slightnudge/token');
+    if (res.ok) {
+      const data = await res.json();
+      cachedSessionToken = data.token;
+      if (typeof window !== 'undefined') {
+        (window as any).__SLIGHTNUDGE_TOKEN__ = data.token;
+      }
+      return cachedSessionToken || '';
+    }
+  } catch {}
+  return '';
+}
+
 export async function previewEditAPI(params: PreviewParams): Promise<PreviewResult> {
   try {
+    const token = await getClientSessionToken();
     const res = await fetch('/api/slightnudge/preview', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'x-slightnudge-token': token,
+      },
       body: JSON.stringify(params),
     });
     const data = await res.json();
@@ -122,9 +148,13 @@ export async function previewEditAPI(params: PreviewParams): Promise<PreviewResu
 
 export async function applyEditAPI(previewId: string): Promise<{ success: boolean; error?: string }> {
   try {
+    const token = await getClientSessionToken();
     const res = await fetch('/api/slightnudge/apply', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'x-slightnudge-token': token,
+      },
       body: JSON.stringify({ previewId }),
     });
     const data = await res.json();
@@ -139,8 +169,12 @@ export async function applyEditAPI(previewId: string): Promise<{ success: boolea
 
 export async function discardEditAPI(previewId: string): Promise<boolean> {
   try {
+    const token = await getClientSessionToken();
     const res = await fetch(`/api/slightnudge/preview?id=${encodeURIComponent(previewId)}`, {
       method: 'DELETE',
+      headers: {
+        'x-slightnudge-token': token,
+      },
     });
     return res.ok;
   } catch {
@@ -150,9 +184,13 @@ export async function discardEditAPI(previewId: string): Promise<boolean> {
 
 export async function undoEditAPI(filePath?: string): Promise<{ success: boolean; message?: string; error?: string }> {
   try {
+    const token = await getClientSessionToken();
     const res = await fetch('/api/slightnudge/undo', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'x-slightnudge-token': token,
+      },
       body: JSON.stringify({ filePath }),
     });
     const data = await res.json();

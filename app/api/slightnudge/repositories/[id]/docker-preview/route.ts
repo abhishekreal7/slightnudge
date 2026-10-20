@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { getDockerPreviewStatus, startDockerPreview, stopDockerPreview } from '@/lib/slightnudge/docker-preview';
+import { validateMutatingRequest } from '@/lib/slightnudge/auth';
 
 function isAllowed(request: Request) {
   if (process.env.NODE_ENV === 'production') return false;
@@ -20,7 +21,10 @@ export async function GET(request: Request, context: { params: Promise<{ id: str
 }
 
 export async function POST(request: Request, context: { params: Promise<{ id: string }> }) {
-  if (!isAllowed(request)) return NextResponse.json({ error: 'Docker preview must be started from this local SlightNudge workspace.' }, { status: 403 });
+  if (process.env.NODE_ENV === 'production') return NextResponse.json({ error: 'Docker preview is available only in the local development app.' }, { status: 501 });
+  const auth = validateMutatingRequest(request);
+  if (!auth.valid) return auth.response;
+
   try {
     const { id } = await context.params;
     return NextResponse.json(await startDockerPreview(id), { status: 202 });
@@ -30,7 +34,10 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
 }
 
 export async function DELETE(request: Request, context: { params: Promise<{ id: string }> }) {
-  if (!isAllowed(request)) return NextResponse.json({ error: 'Docker preview must be stopped from this local SlightNudge workspace.' }, { status: 403 });
+  if (process.env.NODE_ENV === 'production') return NextResponse.json({ error: 'Docker preview is available only in the local development app.' }, { status: 501 });
+  const auth = validateMutatingRequest(request);
+  if (!auth.valid) return auth.response;
+
   try {
     const { id } = await context.params;
     return NextResponse.json(await stopDockerPreview(id));

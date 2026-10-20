@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { importPublicRepository, listLocalRepositories } from '@/lib/slightnudge/repository-store';
+import { validateMutatingRequest } from '@/lib/slightnudge/auth';
 
 export async function GET() {
   try {
@@ -11,6 +12,9 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
+  const auth = validateMutatingRequest(request);
+  if (!auth.valid) return auth.response;
+
   try {
     const body = await request.json();
     if (typeof body.url !== 'string' || body.url.length > 500) {

@@ -3,6 +3,7 @@ import { mkdir, readdir, stat, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { NextResponse } from 'next/server';
 import { resolveRepositoryRoot } from '@/lib/slightnudge/repository-store';
+import { validateMutatingRequest } from '@/lib/slightnudge/auth';
 
 export const runtime = 'nodejs';
 
@@ -75,7 +76,8 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
-  if (!sameOriginRequest(request)) return NextResponse.json({ error: 'Asset imports must come from this SlightNudge workspace.' }, { status: 403 });
+  const auth = validateMutatingRequest(request);
+  if (!auth.valid) return auth.response;
   try {
     const contentLength = Number(request.headers.get('content-length'));
     if (Number.isFinite(contentLength) && contentLength > maxBytes + 64 * 1024) return NextResponse.json({ error: 'Images must be smaller than 8 MB.' }, { status: 413 });

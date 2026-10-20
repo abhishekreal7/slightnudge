@@ -1,18 +1,18 @@
 import { NextResponse } from 'next/server';
 import { applyPendingSourceEdit } from '@/lib/slightnudge/edit-history';
 import { resolveRepositorySourcePath } from '@/lib/slightnudge/repository-store';
-import { corsHeaders, handleCorsPreflight, isAllowedOrigin } from '@/lib/slightnudge/cors';
+import { corsHeaders, handleCorsPreflight } from '@/lib/slightnudge/cors';
+import { validateMutatingRequest } from '@/lib/slightnudge/auth';
 
 export async function OPTIONS(request: Request) {
   return handleCorsPreflight(request) || new NextResponse(null, { status: 204 });
 }
 
 export async function POST(request: Request) {
+  const auth = validateMutatingRequest(request);
+  if (!auth.valid) return auth.response;
+
   try {
-    const origin = request.headers.get('origin');
-    if (origin && !isAllowedOrigin(origin, request.url)) {
-      return NextResponse.json({ error: 'Source changes must be applied from this SlightNudge workspace.' }, { status: 403, headers: corsHeaders(request) });
-    }
     const body = await request.json();
     if (typeof body.previewId !== 'string') return NextResponse.json({ error: 'Review a change before applying it.' }, { status: 400, headers: corsHeaders(request) });
     const repositoryId = typeof body.repositoryId === 'string' ? body.repositoryId : undefined;

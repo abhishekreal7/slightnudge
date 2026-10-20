@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { getClientSessionToken } from '@/lib/slightnudge/client';
 import {
   ArrowUpDown,
   ArrowUpRight,
@@ -132,9 +133,13 @@ export default function WorkspaceHome() {
     setLoading(true);
     setError('');
     try {
+      const token = await getClientSessionToken();
       const response = await fetch('/api/slightnudge/repositories', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'x-slightnudge-token': token,
+        },
         body: JSON.stringify({ url: repoUrl }),
       });
       const data = await response.json();

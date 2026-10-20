@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 import { Header } from '@/components/Header';
+import { getSessionToken } from '@/lib/slightnudge/auth';
 
 export const metadata: Metadata = {
   title: {
@@ -42,8 +43,16 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const sessionToken = getSessionToken();
   return (
     <html lang="en" className={`${geist.variable} ${geistMono.variable}`}>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `window.__SLIGHTNUDGE_TOKEN__ = ${JSON.stringify(sessionToken)};`,
+          }}
+        />
+      </head>
       <body className={`${geist.variable} ${geistMono.variable} flex min-h-screen flex-col`}>
         <Header />
         <div className="sn-main-content">{children}</div>

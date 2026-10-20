@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { AlignCenter, AlignLeft, AlignRight, ArrowDown, ArrowUp, ArrowUpDown, Check, ChevronDown, ChevronsDown, ChevronsUp, CircleAlert, Code2, Columns2, GripVertical, Laptop2, LayoutGrid, Layers, LoaderCircle, MoreHorizontal, MousePointer2, Pencil, Play, RotateCcw, Sparkles, Trash2, Type, Undo2, X } from 'lucide-react';
+import { getClientSessionToken } from '@/lib/slightnudge/client';
 
 interface SelectedElementInfo {
   tagName: string;
@@ -454,15 +455,17 @@ export function SlightNudgeOverlay({
       if (pendingEdit) {
         try {
           editGroupIdRef.current ||= crypto.randomUUID();
+          const token = await getClientSessionToken();
           await fetch('/api/slightnudge/apply', {
-            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            method: 'POST', headers: { 'Content-Type': 'application/json', 'x-slightnudge-token': token },
             body: JSON.stringify({ previewId: pendingEdit.id, groupId: editGroupIdRef.current }),
           });
           setCanUndo(true);
         } catch { /* proceed with new change */ }
       }
+      const token = await getClientSessionToken();
       const response = await fetch('/api/slightnudge/preview', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload),
+        method: 'POST', headers: { 'Content-Type': 'application/json', 'x-slightnudge-token': token }, body: JSON.stringify(payload),
       });
       const result = await response.json();
       if (!response.ok || !result.success) throw new Error(result.error || 'Could not prepare this change.');
@@ -614,7 +617,11 @@ export function SlightNudgeOverlay({
       animateSelectionRect(260);
     }
     setPendingEdit(null);
-    const response = await fetch(`/api/slightnudge/preview?id=${encodeURIComponent(pending.id)}`, { method: 'DELETE' });
+    const token = await getClientSessionToken();
+    const response = await fetch(`/api/slightnudge/preview?id=${encodeURIComponent(pending.id)}`, {
+      method: 'DELETE',
+      headers: { 'x-slightnudge-token': token },
+    });
     if (!response.ok) setNotice('Preview dismissed. It will expire automatically.');
     else setNotice('Change discarded. Source is unchanged.');
   }, [animateSelectionRect, pendingEdit]);
@@ -628,8 +635,9 @@ export function SlightNudgeOverlay({
     setBusy(true); setNotice(null);
     try {
       editGroupIdRef.current ||= crypto.randomUUID();
+      const token = await getClientSessionToken();
       const response = await fetch('/api/slightnudge/apply', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        method: 'POST', headers: { 'Content-Type': 'application/json', 'x-slightnudge-token': token },
         body: JSON.stringify({ previewId: pendingEdit.id, groupId: editGroupIdRef.current }),
       });
       const result = await response.json();
@@ -811,8 +819,9 @@ export function SlightNudgeOverlay({
     if (pendingEdit) { await discardPreview(); return; }
     setBusy(true); setNotice(null);
     try {
+      const token = await getClientSessionToken();
       const response = await fetch('/api/slightnudge/undo', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        method: 'POST', headers: { 'Content-Type': 'application/json', 'x-slightnudge-token': token },
         body: JSON.stringify({ filePath: selected?.filePath || defaultFilePath }),
       });
       const result = await response.json();
@@ -911,11 +920,14 @@ export function SlightNudgeOverlay({
       if (pendingEdit) {
         try {
           editGroupIdRef.current ||= crypto.randomUUID();
-          void fetch('/api/slightnudge/apply', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ previewId: pendingEdit.id, groupId: editGroupIdRef.current }),
-          });
+          void (async () => {
+            const token = await getClientSessionToken();
+            void fetch('/api/slightnudge/apply', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json', 'x-slightnudge-token': token },
+              body: JSON.stringify({ previewId: pendingEdit.id, groupId: editGroupIdRef.current }),
+            });
+          })();
           setCanUndo(true);
         } catch { /* proceed with new selection */ }
         setPendingEdit(null);

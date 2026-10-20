@@ -4,7 +4,8 @@ import path from 'node:path';
 import { nudgeElement, reorderElement, updateStaticImageSource, updateStaticJsxText, updateStaticTailwindClass, type EditableStyleProperty } from '@/lib/slightnudge/ast-nudger';
 import { createPendingSourceEdit, discardPendingSourceEdit } from '@/lib/slightnudge/edit-history';
 import { resolveRepositoryRoot, resolveRepositorySourcePath, resolveWorkspaceSourcePath } from '@/lib/slightnudge/repository-store';
-import { corsHeaders, handleCorsPreflight, isAllowedOrigin } from '@/lib/slightnudge/cors';
+import { corsHeaders, handleCorsPreflight } from '@/lib/slightnudge/cors';
+import { validateMutatingRequest } from '@/lib/slightnudge/auth';
 
 const allowedProperties = new Set<EditableStyleProperty>([
   'fontSize', 'fontWeight', 'fontFamily', 'lineHeight', 'letterSpacing', 'textTransform',
@@ -20,11 +21,10 @@ export async function OPTIONS(request: Request) {
 }
 
 export async function POST(request: Request) {
+  const auth = validateMutatingRequest(request);
+  if (!auth.valid) return auth.response;
+
   try {
-    const origin = request.headers.get('origin');
-    if (origin && !isAllowedOrigin(origin, request.url)) {
-      return NextResponse.json({ error: 'Edit previews must come from this SlightNudge workspace.' }, { status: 403, headers: corsHeaders(request) });
-    }
     const body = await request.json();
     if (typeof body.kind !== 'string') {
       return NextResponse.json({ error: 'A source file and edit type are required.' }, { status: 400, headers: corsHeaders(request) });
@@ -133,11 +133,10 @@ export async function POST(request: Request) {
 }
 
 export async function DELETE(request: Request) {
+  const auth = validateMutatingRequest(request);
+  if (!auth.valid) return auth.response;
+
   try {
-    const origin = request.headers.get('origin');
-    if (origin && !isAllowedOrigin(origin, request.url)) {
-      return NextResponse.json({ error: 'Edit previews must come from this SlightNudge workspace.' }, { status: 403, headers: corsHeaders(request) });
-    }
     const id = new URL(request.url).searchParams.get('id');
     if (!id) return NextResponse.json({ error: 'A preview id is required.' }, { status: 400, headers: corsHeaders(request) });
     discardPendingSourceEdit(id);

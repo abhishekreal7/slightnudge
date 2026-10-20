@@ -1,15 +1,15 @@
 import { NextResponse } from 'next/server';
 import { listLocalRepositories, validateLocalPreviewUrl } from '@/lib/slightnudge/repository-store';
+import { validateMutatingRequest } from '@/lib/slightnudge/auth';
 
 export async function POST(request: Request, context: { params: Promise<{ id: string }> }) {
+  if (process.env.NODE_ENV === 'production') {
+    return NextResponse.json({ error: 'Local preview connections require the desktop development app.' }, { status: 501 });
+  }
+  const auth = validateMutatingRequest(request);
+  if (!auth.valid) return auth.response;
+
   try {
-    if (process.env.NODE_ENV === 'production') {
-      return NextResponse.json({ error: 'Local preview connections require the desktop development app.' }, { status: 501 });
-    }
-    const origin = request.headers.get('origin');
-    if (!origin || new URL(origin).origin !== new URL(request.url).origin) {
-      return NextResponse.json({ error: 'Preview checks must come from this SlightNudge workspace.' }, { status: 403 });
-    }
     const contentLength = Number(request.headers.get('content-length') || 0);
     if (contentLength > 4096) return NextResponse.json({ error: 'The preview request is too large.' }, { status: 413 });
 
