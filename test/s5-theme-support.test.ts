@@ -229,13 +229,16 @@ describe('S5: Theme Support and Config Detection in Tailwind Verifier', () => {
       previewType: 'className',
     });
 
+    assert.ok(pending.id, 'pending.id must exist');
     try {
       const res = await applyPendingSourceEdit(pending.id);
       assert.strictEqual(res.success, true, `Apply must succeed when only new token p-4 is added: ${(res as any).error}`);
       const diskContent = fs.readFileSync(targetFile, 'utf8');
       assert.strictEqual(diskContent, updatedContent, 'File on disk must be updated');
     } finally {
-      try { discardPendingSourceEdit(pending.id); } catch {}
+      if (pending.id) {
+        try { discardPendingSourceEdit(pending.id); } catch {}
+      }
       try {
         const editsFile = path.join(process.cwd(), '.slightnudge', 'history', 'edits.json');
         if (fs.existsSync(editsFile)) {
