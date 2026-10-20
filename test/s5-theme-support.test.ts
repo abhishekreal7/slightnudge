@@ -6,6 +6,7 @@ import os from 'node:os';
 import { randomUUID } from 'node:crypto';
 import { verifyTailwindClass } from '../lib/slightnudge/tailwind-verifier';
 import { createPendingSourceEdit, applyPendingSourceEdit, discardPendingSourceEdit } from '../lib/slightnudge/edit-history';
+import { setupIsolatedEnv } from './helpers/test-server';
 
 describe('S5: Theme Support and Config Detection in Tailwind Verifier', () => {
   const rootNodeModules = path.resolve('node_modules');
@@ -210,6 +211,7 @@ describe('S5: Theme Support and Config Detection in Tailwind Verifier', () => {
   });
 
   it('g. Unchanged existing tokens in className are never verified and never cause refusal; only added tokens are verified', async () => {
+    const env = setupIsolatedEnv('s5-theme-g');
     const scratchDir = path.join(process.cwd(), 'scratch');
     fs.mkdirSync(scratchDir, { recursive: true });
     const targetFile = path.join(scratchDir, 'test-s5-g.tsx');
@@ -239,15 +241,8 @@ describe('S5: Theme Support and Config Detection in Tailwind Verifier', () => {
       if (pending.id) {
         try { discardPendingSourceEdit(pending.id); } catch {}
       }
-      try {
-        const editsFile = path.join(process.cwd(), '.slightnudge', 'history', 'edits.json');
-        if (fs.existsSync(editsFile)) {
-          const raw = fs.readFileSync(editsFile, 'utf8');
-          const records = JSON.parse(raw).filter((r: any) => !r.filePath.includes('test-s5-g'));
-          fs.writeFileSync(editsFile, JSON.stringify(records, null, 2), 'utf8');
-        }
-      } catch {}
       try { fs.unlinkSync(targetFile); } catch {}
+      env.cleanup();
     }
   });
 });

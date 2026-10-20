@@ -3,12 +3,19 @@ import assert from 'node:assert';
 import fs from 'node:fs';
 import path from 'node:path';
 import { createPendingSourceEdit, applyPendingSourceEdit, discardPendingSourceEdit } from '../lib/slightnudge/edit-history';
+import { setupIsolatedEnv, IsolatedEnv } from './helpers/test-server';
 
 describe('S3: Atomic or refuse in atomicWrite', () => {
   const scratchDir = path.join(process.cwd(), 'scratch');
+  let env: IsolatedEnv;
 
   before(() => {
+    env = setupIsolatedEnv('s3-test');
     fs.mkdirSync(scratchDir, { recursive: true });
+  });
+
+  after(() => {
+    if (env) env.cleanup();
   });
 
   it('refuses and leaves target file unchanged when rename fails permanently without fallback overwrite', async () => {
@@ -98,7 +105,7 @@ describe('S3: Atomic or refuse in atomicWrite', () => {
       fs.renameSync = originalRename;
       try { discardPendingSourceEdit(pending.id); } catch {}
       try {
-        const editsFile = path.join(process.cwd(), '.slightnudge', 'history', 'edits.json');
+        const editsFile = env.editsPath;
         if (fs.existsSync(editsFile)) {
           const raw = fs.readFileSync(editsFile, 'utf8');
           const records = JSON.parse(raw).filter((r: any) => !r.filePath.includes('s3-retry-success'));

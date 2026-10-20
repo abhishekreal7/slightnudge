@@ -1,12 +1,27 @@
-import { describe, it } from 'node:test';
+import { describe, it, before, after } from 'node:test';
 import assert from 'node:assert';
 import { randomUUID } from 'node:crypto';
 import http from 'node:http';
 import fs from 'node:fs';
 import path from 'node:path';
+import { startTestServer, TestServer } from './helpers/test-server';
 
 describe('S1: Authenticated, local-only mutating requests', () => {
-  const baseUrl = 'http://127.0.0.1:3000';
+  let server: TestServer;
+  let baseUrl: string;
+  let port: number;
+  let originUrl: string;
+
+  before(async () => {
+    server = await startTestServer();
+    baseUrl = server.baseUrl;
+    port = server.port;
+    originUrl = `http://localhost:${port}`;
+  });
+
+  after(async () => {
+    if (server) await server.stop();
+  });
 
   async function fetchToken(): Promise<string> {
     const res = await fetch(`${baseUrl}/api/slightnudge/token`);
@@ -30,13 +45,13 @@ describe('S1: Authenticated, local-only mutating requests', () => {
     const status = await new Promise<number>((resolve, reject) => {
       const req = http.request({
         host: '127.0.0.1',
-        port: 3000,
+        port,
         path: '/api/slightnudge/apply',
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Host': 'attacker.evil.com',
-          'Origin': 'http://localhost:3000',
+          'Origin': originUrl,
           'x-slightnudge-token': token,
         }
       }, (res) => {
@@ -54,7 +69,7 @@ describe('S1: Authenticated, local-only mutating requests', () => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Origin': 'http://localhost:3000'
+        'Origin': originUrl
       },
       body: JSON.stringify({ previewId: randomUUID() })
     });
@@ -66,7 +81,7 @@ describe('S1: Authenticated, local-only mutating requests', () => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Origin': 'http://localhost:3000',
+        'Origin': originUrl,
         'x-slightnudge-token': 'bad-token-0000000000000000000000000000000000000000000000000000000000000000'
       },
       body: JSON.stringify({ previewId: randomUUID() })
@@ -81,7 +96,7 @@ describe('S1: Authenticated, local-only mutating requests', () => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Origin': 'http://localhost:3000',
+        'Origin': originUrl,
         'x-slightnudge-token': token,
       },
       body: JSON.stringify({ previewId: fakeId })
@@ -107,7 +122,7 @@ describe('S1: Authenticated, local-only mutating requests', () => {
 
   it('completes preview, apply, and undo flow in a temp copy with valid token and Origin', async () => {
     const token = await fetchToken();
-    const scratchDir = path.join(process.cwd(), 'scratch');
+    const scratchDir = path.join(server.wsDir, 'scratch');
     fs.mkdirSync(scratchDir, { recursive: true });
 
     const tempFile = path.join(scratchDir, 's1-auth-flow.tsx');
@@ -120,12 +135,12 @@ describe('S1: Authenticated, local-only mutating requests', () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Origin': 'http://localhost:3000',
+          'Origin': originUrl,
           'x-slightnudge-token': token,
         },
         body: JSON.stringify({
           kind: 'style',
-          filePath: path.relative(process.cwd(), tempFile),
+          filePath: path.relative(server.wsDir, tempFile),
           line: 2,
           property: 'fontSize',
           value: 'text-xl',
@@ -140,7 +155,7 @@ describe('S1: Authenticated, local-only mutating requests', () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Origin': 'http://localhost:3000',
+          'Origin': originUrl,
           'x-slightnudge-token': token,
         },
         body: JSON.stringify({ previewId: previewData.id })
@@ -155,17 +170,17 @@ describe('S1: Authenticated, local-only mutating requests', () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Origin': 'http://localhost:3000',
+          'Origin': originUrl,
           'x-slightnudge-token': token,
         },
-        body: JSON.stringify({ filePath: path.relative(process.cwd(), tempFile) })
+        body: JSON.stringify({ filePath: path.relative(server.wsDir, tempFile) })
       });
       assert.strictEqual(undoRes.status, 200, `Undo failed with status ${undoRes.status}`);
       const revertedCode = fs.readFileSync(tempFile, 'utf8');
       assert.strictEqual(revertedCode, initialCode, 'File should be restored to initial code');
     } finally {
-      // Clean up history entry for tempFile to prevent future realpathSync ENOENT
-      const historyFile = path.join(process.cwd(), '.slightnudge', 'history', 'edits.json');
+      // Clean up history entry for tempFile in server.dataDir
+      const historyFile = path.join(server.dataDir, 'history', 'edits.json');
       try {
         if (fs.existsSync(historyFile)) {
           const h = JSON.parse(fs.readFileSync(historyFile, 'utf8'));

@@ -1,13 +1,23 @@
-import { describe, it } from 'node:test';
+import { describe, it, before, after } from 'node:test';
 import assert from 'node:assert';
 import fs from 'node:fs';
 import path from 'node:path';
 import os from 'node:os';
 import { randomUUID } from 'node:crypto';
 import { applyPendingSourceEdit, discardPendingSourceEdit } from '../lib/slightnudge/edit-history';
+import { setupIsolatedEnv, IsolatedEnv } from './helpers/test-server';
 
 describe('S2: Path traversal refusal regression test', () => {
   const scratchDir = path.join(process.cwd(), 'scratch');
+  let env: IsolatedEnv;
+
+  before(() => {
+    env = setupIsolatedEnv('s2-test');
+  });
+
+  after(() => {
+    if (env) env.cleanup();
+  });
 
   it('refuses pending-preview with ..\\ traversing outside project root, leaving target file unchanged', async () => {
     fs.mkdirSync(scratchDir, { recursive: true });
@@ -30,7 +40,7 @@ describe('S2: Path traversal refusal regression test', () => {
       before: initialContent,
       after: 'OVERWRITTEN MALICIOUS CONTENT',
     };
-    const pendingFile = path.join(process.cwd(), '.slightnudge', 'pending', `${pendingId}.json`);
+    const pendingFile = path.join(env.pendingDir, `${pendingId}.json`);
     fs.writeFileSync(pendingFile, JSON.stringify(pending), 'utf8');
 
     try {
@@ -92,7 +102,7 @@ describe('S2: Path traversal refusal regression test', () => {
       before: initialContent,
       after: 'OVERWRITTEN MALICIOUS CONTENT VIA JUNCTION',
     };
-    const pendingFile = path.join(process.cwd(), '.slightnudge', 'pending', `${pendingId}.json`);
+    const pendingFile = path.join(env.pendingDir, `${pendingId}.json`);
     fs.writeFileSync(pendingFile, JSON.stringify(pending), 'utf8');
 
     try {

@@ -1,14 +1,21 @@
-import { describe, it, before } from 'node:test';
+import { describe, it, before, after } from 'node:test';
 import assert from 'node:assert';
 import fs from 'node:fs';
 import path from 'node:path';
 import { createPendingSourceEdit, applyPendingSourceEdit, discardPendingSourceEdit } from '../lib/slightnudge/edit-history';
+import { setupIsolatedEnv, IsolatedEnv } from './helpers/test-server';
 
 describe('S5: Verify Tailwind compilation and AST parse before write', () => {
   const scratchDir = path.join(process.cwd(), 'scratch');
+  let env: IsolatedEnv;
 
   before(() => {
+    env = setupIsolatedEnv('s5-compile-test');
     fs.mkdirSync(scratchDir, { recursive: true });
+  });
+
+  after(() => {
+    if (env) env.cleanup();
   });
 
   it('refuses applying an edit with a bogus non-compiling class and leaves file unchanged', async () => {
@@ -69,7 +76,7 @@ describe('S5: Verify Tailwind compilation and AST parse before write', () => {
     } finally {
       try { discardPendingSourceEdit(pending.id); } catch {}
       try {
-        const editsFile = path.join(process.cwd(), '.slightnudge', 'history', 'edits.json');
+        const editsFile = env.editsPath;
         if (fs.existsSync(editsFile)) {
           const raw = fs.readFileSync(editsFile, 'utf8');
           const records = JSON.parse(raw).filter((r: any) => !r.filePath.includes('s5-valid-classes'));
