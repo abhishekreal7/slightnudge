@@ -604,12 +604,16 @@ export default function StudioPage() {
           setElements((prev) => {
             const el = prev[key];
             if (!el) return prev;
+            const hasMaxWidth = /\bmax-w-[a-z0-9]+\b/.test(el.classes);
+            const updatedClasses = hasMaxWidth
+              ? el.classes.replace(/\bmax-w-[a-z0-9]+\b/, twClass)
+              : `${el.classes} ${twClass}`.trim();
             return {
               ...prev,
               [key]: {
                 ...el,
                 maxWidth: twClass,
-                classes: el.classes.replace(/\bmax-w-[a-z0-9]+\b/, twClass),
+                classes: updatedClasses,
               },
             };
           });
@@ -1911,84 +1915,59 @@ export default function StudioPage() {
                           </div>
                         )}
 
-                        {/* Precision Solid Emerald Circular Handles */}
+                        {/* Precision Handles System (Benchmark Match) */}
                         {!isInlineEditing && !isDraggingMove && (
                           <>
-                            {/* South Midpoint Handle */}
+                            {/* South Midpoint Handle (Horizontal Pill) */}
                             <div
                               onPointerDown={(e) => startResize('s', e)}
-                              className="absolute -bottom-[5px] left-1/2 -translate-x-1/2 w-2.5 h-2.5 rounded-full bg-[#10B981] ring-1 ring-white shadow-xs cursor-ns-resize hover:scale-125 transition-transform z-30"
+                              className={`absolute -bottom-[3px] left-1/2 -translate-x-1/2 w-[22px] h-[5px] rounded-full bg-white border border-[#10B981] shadow-2xs cursor-ns-resize transition-all z-30 ${
+                                isResizing && resizeHandle === 's' ? 'scale-125 bg-emerald-50' : 'hover:scale-125'
+                              }`}
                               title="Drag edge to resize height"
                             />
-                            {/* West Midpoint Handle */}
+                            {/* West Midpoint Handle (Vertical Pill) */}
                             <div
                               onPointerDown={(e) => startResize('w', e)}
-                              className="absolute -left-[5px] top-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full bg-[#10B981] ring-1 ring-white shadow-xs cursor-ew-resize hover:scale-125 transition-transform z-30"
+                              className={`absolute -left-[3px] top-1/2 -translate-y-1/2 w-[5px] h-[22px] rounded-full bg-white border border-[#10B981] shadow-2xs cursor-ew-resize transition-all z-30 ${
+                                isResizing && resizeHandle === 'w' ? 'scale-125 bg-emerald-50' : 'hover:scale-125'
+                              }`}
                               title="Drag side to resize width"
                             />
-                            {/* East Midpoint Handle */}
+                            {/* East Midpoint Handle (Vertical Pill) */}
                             <div
                               onPointerDown={(e) => startResize('e', e)}
-                              className="absolute -right-[5px] top-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full bg-[#10B981] ring-1 ring-white shadow-xs cursor-ew-resize hover:scale-125 transition-transform z-30"
+                              className={`absolute -right-[3px] top-1/2 -translate-y-1/2 w-[5px] h-[22px] rounded-full bg-white border border-[#10B981] shadow-2xs cursor-ew-resize transition-all z-30 ${
+                                isResizing && resizeHandle === 'e' ? 'scale-125 bg-emerald-50' : 'hover:scale-125'
+                              }`}
                               title="Drag side to resize width"
                             />
 
-                            {/* Northeast Corner Handle: Smoothly transitions from emerald dot to refined curved corner pill */}
+                            {/* Northeast Corner Handle (Dark Circular Lens Badge with Emerald Core) */}
                             <div
                               onPointerDown={(e) => startResize('ne', e)}
-                              className="absolute -top-[7px] -right-[7px] w-[24px] h-[24px] flex items-center justify-center cursor-nesw-resize select-none z-30 group"
+                              className={`absolute -top-[8px] -right-[8px] w-[18px] h-[18px] rounded-full bg-[#0F172A] border border-slate-700/80 shadow-md flex items-center justify-center cursor-nesw-resize transition-all z-30 ${
+                                isResizing && resizeHandle === 'ne' ? 'scale-125 ring-2 ring-emerald-400' : 'hover:scale-125'
+                              }`}
                               title="Drag corner to resize"
                             >
-                              {/* State 1: Idle Emerald Dot */}
-                              <div
-                                className={`absolute top-[2px] right-[2px] w-2.5 h-2.5 rounded-full bg-[#10B981] ring-1 ring-white shadow-xs transition-all duration-200 ease-out pointer-events-none ${
-                                  isResizing
-                                    ? 'opacity-0 scale-50'
-                                    : 'opacity-100 scale-100 group-hover:opacity-0 group-hover:scale-50'
-                                }`}
-                              />
-
-                              {/* State 2: Sleek Curved Corner Pill (Refined Image 2 design) */}
-                              <div
-                                className={`absolute top-0 right-0 w-[24px] h-[24px] transition-all duration-200 ease-out pointer-events-none ${
-                                  isResizing
-                                    ? 'opacity-100 scale-100'
-                                    : 'opacity-0 scale-75 group-hover:opacity-100 group-hover:scale-100'
-                                }`}
-                              >
-                                <svg
-                                  viewBox="0 0 24 24"
-                                  className="w-full h-full drop-shadow-[0_2px_5px_rgba(0,0,0,0.25)] drop-shadow-[0_0_6px_rgba(16,185,129,0.35)]"
-                                >
-                                  {/* 1px crisp white glass rim */}
-                                  <path
-                                    d="M 5 6 A 9 9 0 0 1 18 19"
-                                    fill="none"
-                                    stroke="#ffffff"
-                                    strokeWidth="4.5"
-                                    strokeLinecap="round"
-                                  />
-                                  {/* Sleek emerald core */}
-                                  <path
-                                    d="M 5 6 A 9 9 0 0 1 18 19"
-                                    fill="none"
-                                    stroke="#10B981"
-                                    strokeWidth="2.75"
-                                    strokeLinecap="round"
-                                  />
-                                </svg>
-                              </div>
+                              <div className="w-2 h-2 rounded-full bg-[#10B981] shadow-[0_0_5px_rgba(16,185,129,0.9)]" />
                             </div>
-                            {/* Southwest Corner Handle */}
+
+                            {/* Southwest Corner Handle (White Circle with Emerald Border) */}
                             <div
                               onPointerDown={(e) => startResize('sw', e)}
-                              className="absolute -bottom-[5px] -left-[5px] w-2.5 h-2.5 rounded-full bg-[#10B981] ring-1 ring-white shadow-xs cursor-nesw-resize hover:scale-125 transition-transform z-30"
+                              className={`absolute -bottom-[5px] -left-[5px] w-2.5 h-2.5 rounded-full bg-white border border-[#10B981] shadow-2xs cursor-nesw-resize transition-all z-30 ${
+                                isResizing && resizeHandle === 'sw' ? 'scale-125 ring-2 ring-emerald-400' : 'hover:scale-125'
+                              }`}
                               title="Drag corner to resize"
                             />
-                            {/* Southeast Corner Handle */}
+                            {/* Southeast Corner Handle (White Circle with Emerald Border) */}
                             <div
                               onPointerDown={(e) => startResize('se', e)}
-                              className="absolute -bottom-[5px] -right-[5px] w-2.5 h-2.5 rounded-full bg-[#10B981] ring-1 ring-white shadow-xs cursor-nwse-resize hover:scale-125 transition-transform z-30"
+                              className={`absolute -bottom-[5px] -right-[5px] w-2.5 h-2.5 rounded-full bg-white border border-[#10B981] shadow-2xs cursor-nwse-resize transition-all z-30 ${
+                                isResizing && resizeHandle === 'se' ? 'scale-125 ring-2 ring-emerald-400' : 'hover:scale-125'
+                              }`}
                               title="Drag corner to resize"
                             />
 
