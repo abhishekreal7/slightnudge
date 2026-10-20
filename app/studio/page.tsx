@@ -1947,44 +1947,44 @@ export default function StudioPage() {
                             {/* Northeast Corner Handle: Smoothly transitions from clean emerald dot to VisionOS curved pill */}
                             <div
                               onPointerDown={(e) => startResize('ne', e)}
-                              className="absolute -top-[16px] -right-[16px] w-[48px] h-[48px] flex items-center justify-center cursor-nesw-resize select-none z-30 group"
+                              className="absolute -top-[10px] -right-[10px] w-[36px] h-[36px] flex items-center justify-center cursor-nesw-resize select-none z-30 group"
                               title="Drag corner to resize"
                             >
-                              {/* State 1: Idle Clean Emerald Dot with White Ring */}
+                              {/* State 1: Idle Clean Emerald Dot with White Ring (Centered on Corner Curve) */}
                               <div
-                                className={`absolute top-[10px] right-[10px] w-3 h-3 rounded-full bg-[#10B981] ring-1.5 ring-white shadow-xs transition-all duration-200 ease-out pointer-events-none ${
+                                className={`absolute top-[7px] right-[7px] w-2.5 h-2.5 rounded-full bg-[#10B981] ring-1.5 ring-white shadow-xs transition-all duration-200 ease-out pointer-events-none ${
                                   isResizing
                                     ? 'opacity-0 scale-50'
                                     : 'opacity-100 scale-100 group-hover:opacity-0 group-hover:scale-50'
                                 }`}
                               />
 
-                              {/* State 2: VisionOS Curved Pill Handle (Exact Benchmark Match) */}
+                              {/* State 2: VisionOS Curved Pill Handle (Centered Directly on Corner Curve with Zero Gap) */}
                               <svg
-                                viewBox="0 0 48 48"
-                                className={`absolute top-0 right-0 w-[48px] h-[48px] pointer-events-none transition-all duration-200 ease-out ${
+                                viewBox="0 0 36 36"
+                                className={`absolute top-0 right-0 w-[36px] h-[36px] pointer-events-none transition-all duration-200 ease-out ${
                                   isResizing
-                                    ? 'opacity-100 scale-100 drop-shadow-[0_4px_10px_rgba(0,0,0,0.5)]'
-                                    : 'opacity-0 scale-60 group-hover:opacity-100 group-hover:scale-100 drop-shadow-[0_2.5px_6px_rgba(0,0,0,0.4)]'
+                                    ? 'opacity-100 scale-100 drop-shadow-[0_2px_4px_rgba(0,0,0,0.45)]'
+                                    : 'opacity-0 scale-75 group-hover:opacity-100 group-hover:scale-100 drop-shadow-[0_2px_3px_rgba(0,0,0,0.35)]'
                                 }`}
                               >
                                 <defs>
                                   <linearGradient id="visionOSPillBody" x1="15%" y1="10%" x2="85%" y2="90%">
-                                    <stop offset="0%" stopColor="#64748B" />
-                                    <stop offset="45%" stopColor="#475569" />
-                                    <stop offset="100%" stopColor="#1E293B" />
+                                    <stop offset="0%" stopColor="#52525B" />
+                                    <stop offset="45%" stopColor="#3F3F46" />
+                                    <stop offset="100%" stopColor="#27272A" />
                                   </linearGradient>
                                   <linearGradient id="visionOSPillRim" x1="0%" y1="0%" x2="100%" y2="100%">
                                     <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.95" />
                                     <stop offset="50%" stopColor="#FFFFFF" stopOpacity="0.65" />
-                                    <stop offset="100%" stopColor="#71717A" stopOpacity="0.25" />
+                                    <stop offset="100%" stopColor="#71717A" stopOpacity="0.3" />
                                   </linearGradient>
                                 </defs>
                                 <path
-                                  d="M 26.61 5.34 A 15 15 0 0 1 38.85 17.58 A 3.5 3.5 0 0 1 31.92 18.55 A 8 8 0 0 0 25.64 12.27 A 3.5 3.5 0 0 1 26.61 5.34 Z"
+                                  d="M 18.96 7.04 A 11 11 0 0 1 28.96 17.04 A 3 3 0 0 1 22.98 17.56 A 5 5 0 0 0 18.44 13.02 A 3 3 0 0 1 18.96 7.04 Z"
                                   fill="url(#visionOSPillBody)"
                                   stroke="url(#visionOSPillRim)"
-                                  strokeWidth="1.2"
+                                  strokeWidth="1"
                                   strokeLinejoin="round"
                                 />
                               </svg>
