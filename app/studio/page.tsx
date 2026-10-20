@@ -60,6 +60,7 @@ interface ElementMeta {
   text?: string;
   display: string;
   width: string;
+  maxWidth?: string;
   height: string;
   overflow: 'visible' | 'hidden' | 'scroll' | 'auto';
   marginTop: string;
@@ -136,6 +137,7 @@ const defaultElements: Record<string, ElementMeta> = {
     borderRadius: 'rounded-none',
     borderStroke: 'None',
     position: 'Relative',
+    maxWidth: 'max-w-2xl',
   },
   paragraph: {
     id: '',
@@ -165,6 +167,7 @@ const defaultElements: Record<string, ElementMeta> = {
     borderRadius: 'rounded-none',
     borderStroke: 'None',
     position: 'Relative',
+    maxWidth: 'max-w-xl',
   },
   button: {
     id: '',
@@ -409,7 +412,9 @@ export default function StudioPage() {
   const [isResizing, setIsResizing] = useState<boolean>(false);
   const [resizeHandle, setResizeHandle] = useState<'e' | 'w' | 's' | 'se' | 'sw' | 'nw' | 'ne' | null>(null);
   const [resizeStartX, setResizeStartX] = useState<number>(0);
+  const [resizeStartY, setResizeStartY] = useState<number>(0);
   const [resizeStartWidth, setResizeStartWidth] = useState<number>(0);
+  const [resizeStartHeight, setResizeStartHeight] = useState<number>(0);
   const [liveWidth, setLiveWidth] = useState<number | null>(null);
   const [dimensionTooltip, setDimensionTooltip] = useState<string | null>(null);
 
@@ -458,9 +463,12 @@ export default function StudioPage() {
     setIsResizing(true);
     setResizeHandle(handle);
     setResizeStartX(e.clientX);
+    setResizeStartY(e.clientY);
     const key = selectedLayer || 'text';
     const currentW = elementRefs.current[key]?.offsetWidth || 672;
+    const currentH = elementRefs.current[key]?.offsetHeight || 114;
     setResizeStartWidth(currentW);
+    setResizeStartHeight(currentH);
     setLiveWidth(currentW);
   };
 
@@ -528,8 +536,31 @@ export default function StudioPage() {
         }
         setDropSlotIndex(targetSlot);
       } else if (isResizing && resizeHandle) {
-        const deltaX = (resizeHandle === 'w' || resizeHandle === 'nw' || resizeHandle === 'sw' ? -1 : 1) * (e.clientX - resizeStartX) * 2;
-        const newW = Math.max(320, Math.min(960, Math.round(resizeStartWidth + deltaX)));
+        const dx = e.clientX - resizeStartX;
+        const dy = e.clientY - resizeStartY;
+        let deltaW = 0;
+
+        if (resizeHandle === 'e') {
+          deltaW = dx * 2;
+        } else if (resizeHandle === 'w') {
+          deltaW = -dx * 2;
+        } else if (resizeHandle === 'ne') {
+          // Dragging top-right: moving right (+dx) or moving up (-dy) expands width
+          deltaW = (dx - dy);
+        } else if (resizeHandle === 'se') {
+          // Dragging bottom-right: moving right (+dx) or moving down (+dy) expands width
+          deltaW = (dx + dy);
+        } else if (resizeHandle === 'sw') {
+          // Dragging bottom-left: moving left (-dx) or moving down (+dy) expands width
+          deltaW = (-dx + dy);
+        } else if (resizeHandle === 'nw') {
+          // Dragging top-left: moving left (-dx) or moving up (-dy) expands width
+          deltaW = (-dx - dy);
+        } else if (resizeHandle === 's') {
+          deltaW = dy * 2;
+        }
+
+        const newW = Math.max(320, Math.min(1088, Math.round(resizeStartWidth + deltaW)));
         setLiveWidth(newW);
 
         let twClass = 'max-w-2xl';
@@ -539,7 +570,9 @@ export default function StudioPage() {
         else if (newW < 624) twClass = 'max-w-xl';
         else if (newW < 720) twClass = 'max-w-2xl';
         else if (newW < 832) twClass = 'max-w-3xl';
-        else twClass = 'max-w-4xl';
+        else if (newW < 960) twClass = 'max-w-4xl';
+        else if (newW < 1088) twClass = 'max-w-5xl';
+        else twClass = 'max-w-6xl';
 
         setDimensionTooltip(`${newW}px • ${twClass}`);
       }
@@ -568,10 +601,18 @@ export default function StudioPage() {
         if (dimensionTooltip) {
           const twClass = dimensionTooltip.split('• ')[1]?.trim() || 'max-w-2xl';
           const key = selectedLayer || 'text';
-          setElements((prev) => ({
-            ...prev,
-            [key]: { ...prev[key], maxWidth: twClass },
-          }));
+          setElements((prev) => {
+            const el = prev[key];
+            if (!el) return prev;
+            return {
+              ...prev,
+              [key]: {
+                ...el,
+                maxWidth: twClass,
+                classes: el.classes.replace(/\bmax-w-[a-z0-9]+\b/, twClass),
+              },
+            };
+          });
           void triggerBackendPreview('style', {
             property: 'maxWidth',
             value: twClass,
@@ -590,7 +631,7 @@ export default function StudioPage() {
       window.removeEventListener('pointermove', onPointerMove);
       window.removeEventListener('pointerup', onPointerUp);
     };
-  }, [isDraggingMove, isResizing, dragLayerKey, dragStartY, childOrder, dropSlotIndex, resizeHandle, resizeStartX, resizeStartWidth, dimensionTooltip, selectedLayer, triggerBackendPreview]);
+  }, [isDraggingMove, isResizing, dragLayerKey, dragStartY, childOrder, dropSlotIndex, resizeHandle, resizeStartX, resizeStartY, resizeStartWidth, resizeStartHeight, dimensionTooltip, selectedLayer, triggerBackendPreview]);
 
   // Cancel manipulation or clear selection on Escape key
   useEffect(() => {
@@ -646,11 +687,13 @@ export default function StudioPage() {
       setElements((prev) => {
         const cur = prev[selectedLayer];
         if (!cur) return prev;
+        const oldMaxW = pendingEdit.oldClassName?.match(/\bmax-w-[a-z0-9]+\b/)?.[0];
         return {
           ...prev,
           [selectedLayer]: {
             ...cur,
             classes: pendingEdit.oldClassName || cur.classes,
+            maxWidth: oldMaxW || cur.maxWidth,
           },
         };
       });
@@ -665,6 +708,22 @@ export default function StudioPage() {
       const result = await undoEditAPI(activeElement.filePath);
       if (result.success) {
         showToast(`✓ ${result.message || 'Restored previous source state'}`);
+        if (pendingEdit && pendingEdit.oldClassName && selectedLayer) {
+          const oldMaxW = pendingEdit.oldClassName.match(/\bmax-w-[a-z0-9]+\b/)?.[0];
+          setElements((prev) => {
+            const cur = prev[selectedLayer];
+            if (!cur) return prev;
+            return {
+              ...prev,
+              [selectedLayer]: {
+                ...cur,
+                classes: pendingEdit.oldClassName || cur.classes,
+                maxWidth: oldMaxW || cur.maxWidth,
+              },
+            };
+          });
+          setPendingEdit(null);
+        }
       } else {
         showToast(`Notice: ${result.error || 'No more undo history'}`);
       }
@@ -767,6 +826,10 @@ export default function StudioPage() {
       } else if (property === 'width') {
         updated.width = value;
         newClasses = newClasses.replace(/\bw-(auto|full|1\/2|1\/3|2\/3|1\/4|3\/4|fit)\b/, '').trim();
+        newClasses = `${newClasses} ${value}`.trim();
+      } else if (property === 'maxWidth') {
+        updated.maxWidth = value;
+        newClasses = newClasses.replace(/\bmax-w-(none|sm|md|lg|xl|2xl|3xl|4xl|5xl|6xl|7xl)\b/, '').trim();
         newClasses = `${newClasses} ${value}`.trim();
       }
       updated.classes = newClasses;
@@ -1870,12 +1933,76 @@ export default function StudioPage() {
                               title="Drag side to resize width"
                             />
 
-                            {/* Northeast Corner Handle */}
+                            {/* Northeast Corner Handle: Smoothly transitions from green dot (Image 1) to curved arc pill (Image 2) */}
                             <div
                               onPointerDown={(e) => startResize('ne', e)}
-                              className="absolute -top-[5px] -right-[5px] w-2.5 h-2.5 rounded-full bg-[#10B981] ring-1 ring-white shadow-xs cursor-nesw-resize hover:scale-125 transition-transform z-30"
+                              className="absolute -top-[12px] -right-[12px] w-[34px] h-[34px] flex items-center justify-center cursor-nesw-resize select-none z-30 group"
                               title="Drag corner to resize"
-                            />
+                            >
+                              {/* State 1: Idle Green Dot (Image 1) */}
+                              <div
+                                className={`absolute top-[7px] right-[7px] w-2.5 h-2.5 rounded-full bg-[#10B981] ring-1 ring-white shadow-xs transition-all duration-300 ease-out pointer-events-none ${
+                                  isResizing
+                                    ? 'opacity-0 scale-50'
+                                    : 'opacity-100 scale-100 group-hover:opacity-0 group-hover:scale-50'
+                                }`}
+                              />
+
+                              {/* State 2: Curved Corner Arc Capsule (Image 2) */}
+                              <div
+                                className={`absolute top-0 right-0 w-[34px] h-[34px] transition-all duration-300 ease-out pointer-events-none ${
+                                  isResizing
+                                    ? 'opacity-100 scale-100'
+                                    : 'opacity-0 scale-75 group-hover:opacity-100 group-hover:scale-100'
+                                }`}
+                              >
+                                <svg
+                                  viewBox="0 0 34 34"
+                                  className="w-full h-full drop-shadow-[0_2px_6px_rgba(0,0,0,0.45)] drop-shadow-[0_0_8px_rgba(16,185,129,0.6)]"
+                                >
+                                  <defs>
+                                    <linearGradient id="cornerPillGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                      <stop offset="0%" stopColor="#10B981" />
+                                      <stop offset="40%" stopColor="#059669" />
+                                      <stop offset="100%" stopColor="#047857" />
+                                    </linearGradient>
+                                    <linearGradient id="cornerGlassRim" x1="0%" y1="0%" x2="100%" y2="100%">
+                                      <stop offset="0%" stopColor="rgba(255,255,255,0.95)" />
+                                      <stop offset="50%" stopColor="rgba(255,255,255,0.65)" />
+                                      <stop offset="100%" stopColor="rgba(255,255,255,0.3)" />
+                                    </linearGradient>
+                                  </defs>
+
+                                  {/* Outer Glass Bevel / Highlight Rim from Image 2 */}
+                                  <path
+                                    d="M 9.5 9.5 A 11 11 0 0 1 24.5 24.5"
+                                    fill="none"
+                                    stroke="url(#cornerGlassRim)"
+                                    strokeWidth="11"
+                                    strokeLinecap="round"
+                                  />
+
+                                  {/* Core Sleek Emerald Pill Body */}
+                                  <path
+                                    d="M 9.5 9.5 A 11 11 0 0 1 24.5 24.5"
+                                    fill="none"
+                                    stroke="url(#cornerPillGrad)"
+                                    strokeWidth="8.5"
+                                    strokeLinecap="round"
+                                  />
+
+                                  {/* Specular White Crest Glint */}
+                                  <path
+                                    d="M 11 8.5 A 11.5 11.5 0 0 1 25.5 23"
+                                    fill="none"
+                                    stroke="rgba(255, 255, 255, 0.95)"
+                                    strokeWidth="1.5"
+                                    strokeLinecap="round"
+                                    strokeDasharray="14 30"
+                                  />
+                                </svg>
+                              </div>
+                            </div>
                             {/* Southwest Corner Handle */}
                             <div
                               onPointerDown={(e) => startResize('sw', e)}
@@ -1892,7 +2019,7 @@ export default function StudioPage() {
                             {/* Live Dimension Tooltip - Only visible while actively resizing */}
                             {isResizing && (
                               <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 bg-[#0F172A]/95 backdrop-blur-md text-[10.5px] font-mono text-emerald-400 px-3 py-1 rounded-full shadow-2xl border border-slate-700/80 select-none pointer-events-none z-50 flex items-center space-x-1.5 whitespace-nowrap animate-fade-in">
-                                <span>W: {dim.w}px × H: {dim.h}px</span>
+                                <span>W: {liveWidth || dim.w}px × H: {dim.h}px</span>
                                 {dimensionTooltip && (
                                   <span className="text-emerald-300 font-semibold border-l border-slate-700/80 pl-1.5">{dimensionTooltip}</span>
                                 )}
@@ -1913,14 +2040,17 @@ export default function StudioPage() {
                               if (inspectorActive) setSelectedLayer('text');
                             }}
                             className={`relative cursor-pointer rounded-lg p-1 transition-all ${
+                              elements.text.maxWidth || 'max-w-2xl'
+                            } mx-auto ${
                               isSelected
                                 ? 'border-[1.5px] border-[#059669] shadow-[0_0_0_1px_rgba(5,150,105,0.08)]'
                                 : 'border-[1.5px] border-transparent hover:border-slate-300'
                             } ${isTargetOfMove ? 'scale-[1.02] shadow-2xl ring-2 ring-emerald-500/80 opacity-95 z-40' : ''}`}
                             style={{
+                              width: isSelected && liveWidth ? `${liveWidth}px` : undefined,
                               maxWidth: isSelected && liveWidth ? `${liveWidth}px` : undefined,
                               transform: transformStyle,
-                              transition: isDraggingMove ? 'transform 0.2s cubic-bezier(0.16, 1, 0.3, 1)' : 'max-width 0.1s ease-out',
+                              transition: isDraggingMove ? 'transform 0.2s cubic-bezier(0.16, 1, 0.3, 1)' : 'max-width 0.1s ease-out, width 0.1s ease-out',
                             }}
                           >
                             {interactiveHandles}
@@ -1959,7 +2089,7 @@ export default function StudioPage() {
                                     setIsInlineEditing(false);
                                   }
                                 }}
-                                className="relative font-manrope text-4xl sm:text-5xl font-extrabold tracking-tight leading-[1.14] max-w-2xl mx-auto bg-transparent border-b-2 border-emerald-500 text-center focus:outline-none w-full"
+                                className="relative font-manrope text-4xl sm:text-5xl font-extrabold tracking-tight leading-[1.14] w-full mx-auto bg-transparent border-b-2 border-emerald-500 text-center focus:outline-none"
                                 style={{
                                   color: `#${elements.text.textColor}`,
                                 }}
@@ -1971,7 +2101,7 @@ export default function StudioPage() {
                                   if (inspectorActive) setSelectedLayer('text');
                                 }}
                                 onDoubleClick={() => setIsInlineEditing(true)}
-                                className="relative font-manrope text-4xl sm:text-5xl font-extrabold tracking-tight leading-[1.14] max-w-2xl mx-auto cursor-pointer"
+                                className="relative font-manrope text-4xl sm:text-5xl font-extrabold tracking-tight leading-[1.14] w-full mx-auto cursor-pointer"
                                 style={{
                                   color: `#${elements.text.textColor}`,
                                   fontFamily: elements.text.typeface === 'Manrope' ? 'Manrope, sans-serif' : 'Inter, sans-serif',
@@ -2010,19 +2140,22 @@ export default function StudioPage() {
                               if (inspectorActive) setSelectedLayer('paragraph');
                             }}
                             className={`relative cursor-pointer rounded-lg p-1 transition-all ${
+                              elements.paragraph.maxWidth || 'max-w-xl'
+                            } mx-auto ${
                               isSelected
                                 ? 'border-[1.5px] border-[#059669] shadow-[0_0_0_1px_rgba(5,150,105,0.08)]'
                                 : 'border-[1.5px] border-transparent hover:border-slate-300'
                             } ${isTargetOfMove ? 'scale-[1.02] shadow-2xl ring-2 ring-emerald-500/80 opacity-95 z-40' : ''}`}
                             style={{
+                              width: isSelected && liveWidth ? `${liveWidth}px` : undefined,
                               maxWidth: isSelected && liveWidth ? `${liveWidth}px` : undefined,
                               transform: transformStyle,
-                              transition: isDraggingMove ? 'transform 0.2s cubic-bezier(0.16, 1, 0.3, 1)' : 'max-width 0.1s ease-out',
+                              transition: isDraggingMove ? 'transform 0.2s cubic-bezier(0.16, 1, 0.3, 1)' : 'max-width 0.1s ease-out, width 0.1s ease-out',
                             }}
                           >
                             {interactiveHandles}
                             <p
-                              className="mt-5 text-[13.5px] max-w-xl mx-auto leading-relaxed cursor-pointer"
+                              className="mt-5 text-[13.5px] w-full mx-auto leading-relaxed cursor-pointer"
                               style={{
                                 color: `#${elements.paragraph.textColor}`,
                               }}
@@ -2063,6 +2196,8 @@ export default function StudioPage() {
                                 : 'border-[1.5px] border-transparent hover:border-slate-300'
                             } ${isTargetOfMove ? 'scale-[1.02] shadow-2xl ring-2 ring-emerald-500/80 opacity-95 z-40' : ''}`}
                             style={{
+                              width: isSelected && liveWidth ? `${liveWidth}px` : undefined,
+                              maxWidth: isSelected && liveWidth ? `${liveWidth}px` : undefined,
                               transform: transformStyle,
                               transition: isDraggingMove ? 'transform 0.2s cubic-bezier(0.16, 1, 0.3, 1)' : undefined,
                             }}
@@ -2073,6 +2208,7 @@ export default function StudioPage() {
                               style={{
                                 backgroundColor: elements.button.bgFill === 'slate-900' ? '#0F172A' : `#${elements.button.bgFill}`,
                                 color: `#${elements.button.textColor}`,
+                                width: isSelected && liveWidth ? '100%' : undefined,
                               }}
                             >
                               {elements.button.text || 'Join the waitlist'}
