@@ -145,7 +145,8 @@ describe('S1: Authenticated, local-only mutating requests', () => {
         },
         body: JSON.stringify({ previewId: previewData.id })
       });
-      assert.strictEqual(applyRes.status, 200, `Apply failed with status ${applyRes.status}`);
+      const applyBody = await applyRes.json();
+      assert.strictEqual(applyRes.status, 200, `Apply failed with status ${applyRes.status}: ${JSON.stringify(applyBody)}`);
       const diskCode = fs.readFileSync(tempFile, 'utf8');
       assert.match(diskCode, /text-xl/, 'File should have updated content');
 

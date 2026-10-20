@@ -36,7 +36,22 @@ export function findProjectRoot(filePath: string): string {
 
 import { createRequire } from 'node:module';
 
-const req = typeof require === 'function' ? require : createRequire(import.meta.url);
+declare const __non_webpack_require__: any;
+
+function getNativeRequire(): any {
+  if (typeof __non_webpack_require__ === 'function') {
+    return __non_webpack_require__;
+  }
+  try {
+    return createRequire(import.meta.url);
+  } catch {}
+  if (typeof require === 'function') {
+    return require;
+  }
+  return null;
+}
+
+const req = getNativeRequire();
 
 function findInstalledPackage(packageName: string, startDir: string): { dir: string; pkg: any } | null {
   let curr = path.resolve(startDir);
@@ -61,22 +76,34 @@ function findInstalledPackage(packageName: string, startDir: string): { dir: str
   return null;
 }
 
-function loadPackage(installed: { dir: string; pkg: any }): any {
-  const entryCandidate =
-    (typeof installed.pkg.exports === 'object' && installed.pkg.exports?.['.']?.require) ||
-    installed.pkg.main ||
-    'index.js';
-  const fullPath = path.resolve(installed.dir, entryCandidate);
-  if (existsSync(fullPath)) {
-    return req(fullPath);
-  }
-  for (const alt of ['dist/index.js', 'dist/lib.js', 'lib/index.js', 'index.js']) {
-    const altPath = path.resolve(installed.dir, alt);
-    if (existsSync(altPath)) {
-      return req(altPath);
+function loadPackage(packageName: string, installed: { dir: string; pkg: any }): any {
+  if (req) {
+    try {
+      return req(packageName);
+    } catch {}
+    const entryCandidate =
+      (typeof installed.pkg.exports === 'object' && installed.pkg.exports?.['.']?.require) ||
+      installed.pkg.main ||
+      'index.js';
+    const fullPath = path.resolve(installed.dir, entryCandidate);
+    if (existsSync(fullPath)) {
+      try {
+        return req(fullPath);
+      } catch {}
     }
+    for (const alt of ['dist/index.js', 'dist/lib.js', 'lib/index.js', 'index.js']) {
+      const altPath = path.resolve(installed.dir, alt);
+      if (existsSync(altPath)) {
+        try {
+          return req(altPath);
+        } catch {}
+      }
+    }
+    try {
+      return req(installed.dir);
+    } catch {}
   }
-  return req(installed.dir);
+  throw new Error(`Cannot load package ${packageName}`);
 }
 
 const v4Cache = new Map<string, any>();
@@ -97,7 +124,7 @@ export async function verifyTailwindClass(candidate: string, projectDir: string)
         let twNode: any = null;
         if (twNodeInstalled) {
           try {
-            twNode = loadPackage(twNodeInstalled);
+            twNode = loadPackage('@tailwindcss/node', twNodeInstalled);
           } catch {}
         }
 
@@ -111,7 +138,7 @@ export async function verifyTailwindClass(candidate: string, projectDir: string)
           if (twNode && typeof twNode.compile === 'function') {
             compileFn = twNode.compile;
           } else {
-            const tw = loadPackage(twInstalled);
+            const tw = loadPackage('tailwindcss', twInstalled);
             compileFn = tw.compile;
           }
           if (typeof compileFn === 'function') {
@@ -155,8 +182,8 @@ export async function verifyTailwindClass(candidate: string, projectDir: string)
       if (!postcssInstalled) {
         return { verified: false, error: "can't verify this class: postcss not found in project" };
       }
-      const postcss = loadPackage(postcssInstalled);
-      const tailwindcss = loadPackage(twInstalled);
+      const postcss = loadPackage('postcss', postcssInstalled);
+      const tailwindcss = loadPackage('tailwindcss', twInstalled);
 
       let config: any = {};
       for (const configName of ['tailwind.config.js', 'tailwind.config.cjs', 'tailwind.config.mjs']) {
