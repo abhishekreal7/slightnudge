@@ -1,5 +1,5 @@
 import { randomUUID } from 'node:crypto';
-import { chmodSync, mkdirSync, readFileSync, readdirSync, realpathSync, renameSync, statSync, unlinkSync, writeFileSync } from 'node:fs';
+import fs, { chmodSync, closeSync, fsyncSync, mkdirSync, openSync, readFileSync, readdirSync, realpathSync, statSync, unlinkSync, writeSync } from 'node:fs';
 import path from 'node:path';
 
 const historyDirectory = path.join(process.cwd(), '.slightnudge', 'history');
@@ -59,36 +59,56 @@ function readHistory(): EditRecord[] {
   return records;
 }
 
-function atomicWrite(filePath: string, contents: string) {
+function sleepSync(ms: number) {
+  try {
+    Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, ms);
+  } catch {
+    const start = Date.now();
+    while (Date.now() - start < ms) {}
+  }
+}
+
+export function atomicWrite(filePath: string, contents: string) {
   mkdirSync(path.dirname(filePath), { recursive: true });
   const tempPath = `${filePath}.${randomUUID()}.tmp`;
   const existingMode = (() => {
     try { return statSync(filePath).mode; } catch { return undefined; }
   })();
-  writeFileSync(tempPath, contents, { encoding: 'utf8', mode: existingMode });
-  if (existingMode !== undefined) chmodSync(tempPath, existingMode);
 
-  // On Windows, dev file watchers can hold brief read locks during file change events.
-  let retries = 5;
-  while (retries > 0) {
+  const fd = openSync(tempPath, 'w', existingMode);
+  try {
+    writeSync(fd, contents, 0, 'utf8');
+    fsyncSync(fd);
+  } finally {
+    closeSync(fd);
+  }
+  if (existingMode !== undefined) {
+    try { chmodSync(tempPath, existingMode); } catch {}
+  }
+
+  const backoffs = [50, 100, 200, 400, 800];
+  let renameSucceeded = false;
+  let lastError: any = null;
+
+  for (let attempt = 0; attempt <= backoffs.length; attempt++) {
     try {
-      renameSync(tempPath, filePath);
-      return;
+      fs.renameSync(tempPath, filePath);
+      renameSucceeded = true;
+      break;
     } catch (err: any) {
-      if ((err.code === 'EPERM' || err.code === 'EBUSY') && retries > 1) {
-        retries--;
-        const start = Date.now();
-        while (Date.now() - start < 50) {}
+      lastError = err;
+      const isLockError = err.code === 'EPERM' || err.code === 'EBUSY' || err.code === 'EACCES';
+      if (isLockError && attempt < backoffs.length) {
+        sleepSync(backoffs[attempt]);
       } else {
-        try {
-          writeFileSync(filePath, contents, { encoding: 'utf8', mode: existingMode });
-          try { unlinkSync(tempPath); } catch {}
-          return;
-        } catch {
-          throw err;
-        }
+        break;
       }
     }
+  }
+
+  if (!renameSucceeded) {
+    try { unlinkSync(tempPath); } catch {}
+    throw new Error(`The file is locked and nothing was changed (${lastError?.code || 'locked'}).`);
   }
 }
 
@@ -232,7 +252,14 @@ export function applyPendingSourceEdit(id: string, groupId?: string, repositoryI
     return { success: false as const, error: 'The edit session is invalid. Preview this change again.' };
   }
 
-  atomicWrite(filePath, pending.after);
+  try {
+    atomicWrite(filePath, pending.after);
+  } catch (error) {
+    return {
+      success: false as const,
+      error: error instanceof Error ? error.message : 'The file is locked and nothing was changed.',
+    };
+  }
   let history: { editId?: string };
   try {
     history = recordSourceEdit(filePath, pending.before, pending.after, pending.summary, groupId);
