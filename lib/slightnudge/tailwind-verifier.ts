@@ -74,31 +74,55 @@ function findInstalledPackage(packageName: string, projectDir: string): { dir: s
   return null;
 }
 
-function loadPackage(packageName: string, installed: { dir: string; pkg: any }): any {
-  if (req) {
+function loadPackage(packageName: string, installed: { dir: string; pkg: any }, projectDir?: string): any {
+  if (projectDir) {
     try {
-      return req(packageName);
+      const projReq = createRequire(path.join(projectDir, 'package.json'));
+      return projReq(packageName);
     } catch {}
-    const entryCandidate =
-      (typeof installed.pkg.exports === 'object' && installed.pkg.exports?.['.']?.require) ||
-      installed.pkg.main ||
-      'index.js';
-    const fullPath = path.resolve(installed.dir, entryCandidate);
-    if (existsSync(fullPath)) {
-      try {
-        return req(fullPath);
-      } catch {}
+  }
+  try {
+    const parentPkgJson = path.resolve(installed.dir, '..', '..', 'package.json');
+    if (existsSync(parentPkgJson)) {
+      const parentReq = createRequire(parentPkgJson);
+      return parentReq(packageName);
     }
-    for (const alt of ['dist/index.js', 'dist/lib.js', 'lib/index.js', 'index.js']) {
-      const altPath = path.resolve(installed.dir, alt);
-      if (existsSync(altPath)) {
+  } catch {}
+  const entryCandidate =
+    (typeof installed.pkg.exports === 'object' && installed.pkg.exports?.['.']?.require) ||
+    installed.pkg.main ||
+    'index.js';
+  const fullPath = path.resolve(installed.dir, entryCandidate);
+  if (existsSync(fullPath)) {
+    try {
+      const fileReq = createRequire(fullPath);
+      return fileReq(fullPath);
+    } catch {
+      if (req) {
         try {
-          return req(altPath);
+          return req(fullPath);
         } catch {}
       }
     }
+  }
+  for (const alt of ['dist/index.js', 'dist/lib.js', 'lib/index.js', 'index.js']) {
+    const altPath = path.resolve(installed.dir, alt);
+    if (existsSync(altPath)) {
+      try {
+        const fileReq = createRequire(altPath);
+        return fileReq(altPath);
+      } catch {
+        if (req) {
+          try {
+            return req(altPath);
+          } catch {}
+        }
+      }
+    }
+  }
+  if (req) {
     try {
-      return req(installed.dir);
+      return req(packageName);
     } catch {}
   }
   throw new Error(`Cannot load package ${packageName}`);
@@ -243,12 +267,27 @@ interface V4CacheEntry {
 const v4DesignSystemCache = new Map<string, V4CacheEntry>();
 
 export async function verifyTailwindClass(candidate: string, projectDir: string): Promise<{ verified: boolean; css?: string; error?: string }> {
-  const twInstalled = findInstalledPackage('tailwindcss', projectDir);
+  let rootDir = path.resolve(projectDir);
+  if (existsSync(rootDir)) {
+    try {
+      if (statSync(rootDir).isFile()) {
+        rootDir = findProjectRoot(rootDir);
+      } else if (!existsSync(path.join(rootDir, 'package.json'))) {
+        rootDir = findProjectRoot(rootDir);
+      }
+    } catch {
+      rootDir = findProjectRoot(rootDir);
+    }
+  } else {
+    rootDir = findProjectRoot(rootDir);
+  }
+
+  const twInstalled = findInstalledPackage('tailwindcss', rootDir);
   if (!twInstalled) {
     return { verified: false, error: "can't verify this class: tailwindcss is not installed" };
   }
 
-  const targetPkgJsonPath = path.join(projectDir, 'package.json');
+  const targetPkgJsonPath = path.join(rootDir, 'package.json');
   if (existsSync(targetPkgJsonPath)) {
     try {
       const targetPkg = JSON.parse(readFileSync(targetPkgJsonPath, 'utf8'));
@@ -263,13 +302,13 @@ export async function verifyTailwindClass(candidate: string, projectDir: string)
 
   if (twVersion.startsWith('4')) {
     try {
-      const cssEntry = findProjectCssEntry(projectDir);
-      const config = findProjectTailwindConfig(projectDir);
+      const cssEntry = findProjectCssEntry(rootDir);
+      const config = findProjectTailwindConfig(rootDir);
 
-      const cacheKey = `${projectDir}|${cssEntry?.filePath || ''}:${cssEntry?.mtimeMs || 0}|${config?.filePath || ''}:${config?.mtimeMs || 0}`;
+      const cacheKey = `${rootDir}|${cssEntry?.filePath || ''}:${cssEntry?.mtimeMs || 0}|${config?.filePath || ''}:${config?.mtimeMs || 0}`;
 
       let ds: any = null;
-      const cached = v4DesignSystemCache.get(projectDir);
+      const cached = v4DesignSystemCache.get(rootDir);
       if (cached && cached.cacheKey === cacheKey) {
         ds = cached.ds;
       }
@@ -284,17 +323,17 @@ export async function verifyTailwindClass(candidate: string, projectDir: string)
         } else if (config) {
           const normalizedConfigPath = config.filePath.split(path.sep).join('/');
           cssInput = `@import "tailwindcss";\n@config "${normalizedConfigPath}";\n`;
-          baseDir = projectDir;
+          baseDir = rootDir;
         } else {
           cssInput = '@import "tailwindcss";\n';
-          baseDir = projectDir;
+          baseDir = rootDir;
         }
 
-        const twNodeInstalled = findInstalledPackage('@tailwindcss/node', projectDir);
+        const twNodeInstalled = findInstalledPackage('@tailwindcss/node', rootDir);
         let twNode: any = null;
         if (twNodeInstalled) {
           try {
-            twNode = loadPackage('@tailwindcss/node', twNodeInstalled);
+            twNode = loadPackage('@tailwindcss/node', twNodeInstalled, rootDir);
           } catch {}
         }
 
@@ -302,13 +341,13 @@ export async function verifyTailwindClass(candidate: string, projectDir: string)
           ds = await twNode.__unstable__loadDesignSystem(cssInput, {
             base: baseDir,
           });
-          v4DesignSystemCache.set(projectDir, { cacheKey, ds });
+          v4DesignSystemCache.set(rootDir, { cacheKey, ds });
         } else {
           let compileFn: any = null;
           if (twNode && typeof twNode.compile === 'function') {
             compileFn = twNode.compile;
           } else {
-            const tw = loadPackage('tailwindcss', twInstalled);
+            const tw = loadPackage('tailwindcss', twInstalled, rootDir);
             compileFn = tw.compile;
           }
           if (typeof compileFn === 'function') {
@@ -317,7 +356,7 @@ export async function verifyTailwindClass(candidate: string, projectDir: string)
               onDependency: () => {},
             });
             ds = compiler;
-            v4DesignSystemCache.set(projectDir, { cacheKey, ds });
+            v4DesignSystemCache.set(rootDir, { cacheKey, ds });
           }
         }
       }
@@ -348,20 +387,28 @@ export async function verifyTailwindClass(candidate: string, projectDir: string)
 
   if (twVersion.startsWith('3')) {
     try {
-      const postcssInstalled = findInstalledPackage('postcss', projectDir);
+      const postcssInstalled = findInstalledPackage('postcss', rootDir);
       if (!postcssInstalled) {
         return { verified: false, error: "can't verify this class: postcss not found in project" };
       }
-      const postcss = loadPackage('postcss', postcssInstalled);
-      const tailwindcss = loadPackage('tailwindcss', twInstalled);
+      const postcss = loadPackage('postcss', postcssInstalled, rootDir);
+      const tailwindcss = loadPackage('tailwindcss', twInstalled, rootDir);
 
-      const configInfo = findProjectTailwindConfig(projectDir);
+      const configInfo = findProjectTailwindConfig(rootDir);
       let config: any = {};
       if (configInfo) {
         try {
-          config = req(configInfo.filePath);
+          const configReq = createRequire(configInfo.filePath);
+          config = configReq(configInfo.filePath);
           if (config && config.default) config = config.default;
-        } catch {}
+        } catch {
+          if (req) {
+            try {
+              config = req(configInfo.filePath);
+              if (config && config.default) config = config.default;
+            } catch {}
+          }
+        }
       }
 
       const plugin = tailwindcss({
@@ -369,9 +416,9 @@ export async function verifyTailwindClass(candidate: string, projectDir: string)
         content: [{ raw: `<div class="${candidate}"></div>` }],
       });
 
-      const res = await postcss([plugin]).process('@tailwind utilities;', { from: undefined });
+      const res = await postcss([plugin]).process('@tailwind components;\n@tailwind utilities;', { from: undefined });
       const css = (res.css || '').trim();
-      if (css.length > 0 && css.includes(candidate)) {
+      if (css.length > 0) {
         return { verified: true, css };
       }
       return { verified: false, error: `can't verify this class: "${candidate}" produced no CSS in v3` };

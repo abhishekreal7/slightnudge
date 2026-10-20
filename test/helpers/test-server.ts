@@ -39,7 +39,7 @@ export interface IsolatedEnv {
  * Creates an isolated temp data directory and points SLIGHTNUDGE environment
  * variables at it, leaving the real project's .slightnudge/ untouched.
  */
-export function setupIsolatedEnv(prefix = 'sn-test'): IsolatedEnv {
+export function setupIsolatedEnv(prefix = 'sn-test', workspaceRoot?: string): IsolatedEnv {
   const id = randomUUID();
   const baseDir = path.join(os.tmpdir(), `${prefix}-${id}`);
   const dataDir = path.join(baseDir, '.slightnudge');
@@ -59,8 +59,9 @@ export function setupIsolatedEnv(prefix = 'sn-test'): IsolatedEnv {
     SLIGHTNUDGE_PENDING_DIR: process.env.SLIGHTNUDGE_PENDING_DIR,
   };
 
+  const effectiveWorkspace = workspaceRoot || process.cwd();
   process.env.SLIGHTNUDGE_TEST = '1';
-  process.env.SLIGHTNUDGE_WORKSPACE_ROOT = process.cwd();
+  process.env.SLIGHTNUDGE_WORKSPACE_ROOT = effectiveWorkspace;
   process.env.SLIGHTNUDGE_DATA_DIR = dataDir;
   process.env.SLIGHTNUDGE_HISTORY_PATH = editsPath;
   process.env.SLIGHTNUDGE_PENDING_DIR = pendingDir;
