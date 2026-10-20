@@ -18,7 +18,7 @@ export async function POST(request: Request) {
     const repositoryId = typeof body.repositoryId === 'string' ? body.repositoryId : undefined;
     const sourcePath = typeof body.sourcePath === 'string' ? body.sourcePath : undefined;
     const validatedFilePath = repositoryId && sourcePath ? (await resolveRepositorySourcePath(repositoryId, sourcePath)).filePath : undefined;
-    const result = applyPendingSourceEdit(body.previewId, typeof body.groupId === 'string' ? body.groupId : undefined, repositoryId, sourcePath, validatedFilePath);
+    const result = await applyPendingSourceEdit(body.previewId, typeof body.groupId === 'string' ? body.groupId : undefined, repositoryId, sourcePath, validatedFilePath);
     return NextResponse.json(result, { status: result.success ? 200 : 409, headers: corsHeaders(request) });
   } catch (error) {
     return NextResponse.json({ error: error instanceof Error ? error.message : 'Could not apply this change.' }, { status: 400, headers: corsHeaders(request) });

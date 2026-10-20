@@ -1,6 +1,7 @@
 import { randomUUID } from 'node:crypto';
 import fs, { chmodSync, closeSync, fsyncSync, mkdirSync, openSync, readFileSync, readdirSync, realpathSync, statSync, unlinkSync, writeSync } from 'node:fs';
 import path from 'node:path';
+import { verifyTailwindClass, verifySyntacticParse, findProjectRoot } from './tailwind-verifier';
 
 const historyDirectory = path.join(process.cwd(), '.slightnudge', 'history');
 const historyPath = path.join(historyDirectory, 'edits.json');
@@ -239,7 +240,7 @@ export function discardPendingSourceEdit(id: string) {
   }
 }
 
-export function applyPendingSourceEdit(id: string, groupId?: string, repositoryId?: string, sourcePath?: string, validatedFilePath?: string) {
+export async function applyPendingSourceEdit(id: string, groupId?: string, repositoryId?: string, sourcePath?: string, validatedFilePath?: string) {
   const pending = readPendingSourceEdit(id);
   if (pending.repositoryId !== repositoryId) return { success: false as const, error: 'This preview belongs to a different project. Review the change again.' };
   if (pending.repositoryId && (pending.sourcePath !== sourcePath || !validatedFilePath)) return { success: false as const, error: 'This preview belongs to a different source file. Review the change again.' };
@@ -250,6 +251,32 @@ export function applyPendingSourceEdit(id: string, groupId?: string, repositoryI
   }
   if (groupId && !/^[0-9a-f-]{36}$/i.test(groupId)) {
     return { success: false as const, error: 'The edit session is invalid. Preview this change again.' };
+  }
+
+  if (!pending.previewType || pending.previewType === 'className') {
+    const oldTokens = new Set((pending.oldValue || '').trim().split(/\s+/).filter(Boolean));
+    const newTokens = (pending.newValue || '').trim().split(/\s+/).filter(Boolean);
+    const addedTokens = newTokens.filter(t => !oldTokens.has(t));
+    if (addedTokens.length > 0) {
+      const projectDir = findProjectRoot(filePath);
+      for (const token of addedTokens) {
+        const check = await verifyTailwindClass(token, projectDir);
+        if (!check.verified) {
+          return {
+            success: false as const,
+            error: check.error || `can't verify this class: ${token}`,
+          };
+        }
+      }
+    }
+  }
+
+  const parseCheck = verifySyntacticParse(filePath, pending.after);
+  if (!parseCheck.valid) {
+    return {
+      success: false as const,
+      error: `can't verify this content: parse failed (${parseCheck.error})`,
+    };
   }
 
   try {
