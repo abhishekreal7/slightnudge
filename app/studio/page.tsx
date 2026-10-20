@@ -545,8 +545,9 @@ export default function StudioPage() {
         } else if (resizeHandle === 'w') {
           deltaW = -dx * 2;
         } else if (resizeHandle === 'ne') {
-          // Dragging top-right: moving right (+dx) or moving up (-dy) expands width
-          deltaW = (dx - dy);
+          // Dragging top-right: dominant delta with 2x multiplier tracks centered container 1:1
+          const dominantDelta = Math.abs(dx) >= Math.abs(dy) ? dx : -dy;
+          deltaW = dominantDelta * 2;
         } else if (resizeHandle === 'se') {
           // Dragging bottom-right: moving right (+dx) or moving down (+dy) expands width
           deltaW = (dx + dy);
@@ -1943,15 +1944,50 @@ export default function StudioPage() {
                               title="Drag side to resize width"
                             />
 
-                            {/* Northeast Corner Handle (Dark Circular Lens Badge with Emerald Core) */}
+                            {/* Northeast Corner Handle: Smoothly transitions from clean emerald dot to VisionOS curved pill */}
                             <div
                               onPointerDown={(e) => startResize('ne', e)}
-                              className={`absolute -top-[8px] -right-[8px] w-[18px] h-[18px] rounded-full bg-[#0F172A] border border-slate-700/80 shadow-md flex items-center justify-center cursor-nesw-resize transition-all z-30 ${
-                                isResizing && resizeHandle === 'ne' ? 'scale-125 ring-2 ring-emerald-400' : 'hover:scale-125'
-                              }`}
+                              className="absolute -top-[16px] -right-[16px] w-[48px] h-[48px] flex items-center justify-center cursor-nesw-resize select-none z-30 group"
                               title="Drag corner to resize"
                             >
-                              <div className="w-2 h-2 rounded-full bg-[#10B981] shadow-[0_0_5px_rgba(16,185,129,0.9)]" />
+                              {/* State 1: Idle Clean Emerald Dot with White Ring */}
+                              <div
+                                className={`absolute top-[10px] right-[10px] w-3 h-3 rounded-full bg-[#10B981] ring-1.5 ring-white shadow-xs transition-all duration-200 ease-out pointer-events-none ${
+                                  isResizing
+                                    ? 'opacity-0 scale-50'
+                                    : 'opacity-100 scale-100 group-hover:opacity-0 group-hover:scale-50'
+                                }`}
+                              />
+
+                              {/* State 2: VisionOS Curved Pill Handle (Exact Benchmark Match) */}
+                              <svg
+                                viewBox="0 0 48 48"
+                                className={`absolute top-0 right-0 w-[48px] h-[48px] pointer-events-none transition-all duration-200 ease-out ${
+                                  isResizing
+                                    ? 'opacity-100 scale-100 drop-shadow-[0_4px_10px_rgba(0,0,0,0.5)]'
+                                    : 'opacity-0 scale-60 group-hover:opacity-100 group-hover:scale-100 drop-shadow-[0_2.5px_6px_rgba(0,0,0,0.4)]'
+                                }`}
+                              >
+                                <defs>
+                                  <linearGradient id="visionOSPillBody" x1="15%" y1="10%" x2="85%" y2="90%">
+                                    <stop offset="0%" stopColor="#64748B" />
+                                    <stop offset="45%" stopColor="#475569" />
+                                    <stop offset="100%" stopColor="#1E293B" />
+                                  </linearGradient>
+                                  <linearGradient id="visionOSPillRim" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.95" />
+                                    <stop offset="50%" stopColor="#FFFFFF" stopOpacity="0.65" />
+                                    <stop offset="100%" stopColor="#71717A" stopOpacity="0.25" />
+                                  </linearGradient>
+                                </defs>
+                                <path
+                                  d="M 26.61 5.34 A 15 15 0 0 1 38.85 17.58 A 3.5 3.5 0 0 1 31.92 18.55 A 8 8 0 0 0 25.64 12.27 A 3.5 3.5 0 0 1 26.61 5.34 Z"
+                                  fill="url(#visionOSPillBody)"
+                                  stroke="url(#visionOSPillRim)"
+                                  strokeWidth="1.2"
+                                  strokeLinejoin="round"
+                                />
+                              </svg>
                             </div>
 
                             {/* Southwest Corner Handle (White Circle with Emerald Border) */}
