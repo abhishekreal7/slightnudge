@@ -49,15 +49,20 @@ describe('History Resilience: Resilient readHistory and Safe File Validation', (
     fs.writeFileSync(path.join(wsDir, 'app', 'globals.css'), '@import "tailwindcss";\n', 'utf8');
 
     // Set environment overrides for isolation
+    const prevTest = process.env.SLIGHTNUDGE_TEST;
     const prevWs = process.env.SLIGHTNUDGE_WORKSPACE_ROOT;
     const prevHist = process.env.SLIGHTNUDGE_HISTORY_PATH;
     const prevPend = process.env.SLIGHTNUDGE_PENDING_DIR;
 
+    process.env.SLIGHTNUDGE_TEST = '1';
     process.env.SLIGHTNUDGE_WORKSPACE_ROOT = wsDir;
     process.env.SLIGHTNUDGE_HISTORY_PATH = editsPath;
     process.env.SLIGHTNUDGE_PENDING_DIR = pendingDir;
 
     const cleanup = () => {
+      if (prevTest !== undefined) process.env.SLIGHTNUDGE_TEST = prevTest;
+      else delete process.env.SLIGHTNUDGE_TEST;
+
       if (prevWs !== undefined) process.env.SLIGHTNUDGE_WORKSPACE_ROOT = prevWs;
       else delete process.env.SLIGHTNUDGE_WORKSPACE_ROOT;
 
