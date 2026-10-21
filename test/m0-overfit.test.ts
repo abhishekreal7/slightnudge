@@ -237,10 +237,11 @@ async function runOverfitSuite() {
   const browser: Browser = await chromium.launch({ headless: true });
   const page: Page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
 
-  await page.goto('http://127.0.0.1:3002', { waitUntil: 'domcontentloaded' });
+  const baseUrl = process.env.M0_OVERFIT_BASE_URL || 'http://127.0.0.1:3002';
+  await page.goto(baseUrl, { waitUntil: 'domcontentloaded' });
   await page.waitForSelector('#app-shell');
 
-  const repoBase = path.resolve('.slightnudge/repositories/m0-overfit-lab');
+  const repoBase = path.resolve(process.env.M0_OVERFIT_REPO_PATH || '.slightnudge/repositories/m0-overfit-lab');
 
   let allowed = 0;
   let refused = 0;

@@ -304,3 +304,234 @@ export async function startTestServer(options?: { port?: number; useFixture1Base
     stop,
   };
 }
+
+export interface LabServer {
+  baseUrl: string;
+  repoDir: string;
+  port: number;
+  stop: () => Promise<void>;
+}
+
+export interface LabServerOptions {
+  labName: 'm0-control-lab' | 'm0-overfit-lab';
+  port?: number;
+}
+
+export interface TempLabWorkspace {
+  labDir: string;
+  cleanup: () => Promise<void>;
+}
+
+function copyDirRecursive(src: string, dest: string) {
+  if (!fs.existsSync(dest)) {
+    fs.mkdirSync(dest, { recursive: true });
+  }
+
+  const entries = fs.readdirSync(src, { withFileTypes: true });
+  for (const entry of entries) {
+    const srcPath = path.join(src, entry.name);
+    const destPath = path.join(dest, entry.name);
+
+    if (
+      entry.name === '.git' ||
+      entry.name === '.next' ||
+      entry.name === 'node_modules' ||
+      entry.name === 'tsconfig.tsbuildinfo' ||
+      entry.name.startsWith('.env')
+    ) {
+      continue;
+    }
+
+    if (entry.isDirectory()) {
+      copyDirRecursive(srcPath, destPath);
+    } else if (entry.isSymbolicLink()) {
+      continue;
+    } else {
+      fs.copyFileSync(srcPath, destPath);
+    }
+  }
+}
+
+/**
+ * Creates a temporary workspace copy for an m0/overfit lab,
+ * junctions node_modules from the project root, and provides cleanup.
+ */
+export function createTempLabWorkspace(labName: 'm0-control-lab' | 'm0-overfit-lab'): TempLabWorkspace {
+  const projectRoot = process.cwd();
+  const id = randomUUID();
+  const labDir = path.join(os.tmpdir(), `sn-lab-${labName}-${id}`);
+  fs.mkdirSync(labDir, { recursive: true });
+
+  let srcLab = path.join(projectRoot, 'test', 'labs', labName);
+  if (!fs.existsSync(srcLab)) {
+    srcLab = path.join(projectRoot, '.slightnudge', 'repositories', labName);
+  }
+
+  copyDirRecursive(srcLab, labDir);
+
+  const srcModules = path.join(projectRoot, 'node_modules');
+  const destModules = path.join(labDir, 'node_modules');
+  if (fs.existsSync(srcModules)) {
+    if (process.platform === 'win32') {
+      execSync(`cmd.exe /c mklink /J "${destModules}" "${srcModules}"`, { stdio: 'ignore' });
+    } else {
+      fs.symlinkSync(srcModules, destModules, 'junction');
+    }
+  }
+
+  const cleanup = async () => {
+    try {
+      if (fs.existsSync(destModules)) {
+        if (process.platform === 'win32') {
+          fs.rmdirSync(destModules);
+        } else {
+          fs.unlinkSync(destModules);
+        }
+      }
+    } catch {}
+    try {
+      fs.rmSync(labDir, { recursive: true, force: true });
+    } catch {}
+  };
+
+  return { labDir, cleanup };
+}
+
+/**
+ * Starts a Next.js dev server for a lab application on a free port bound to 127.0.0.1.
+ */
+export async function startLabServer(options: LabServerOptions): Promise<LabServer> {
+  const port = options.port || (await findFreePort());
+  const baseUrl = `http://127.0.0.1:${port}`;
+  const workspace = createTempLabWorkspace(options.labName);
+
+  const env = {
+    ...process.env,
+    PORT: String(port),
+    SLIGHTNUDGE_TEST: '1',
+  };
+
+  const serverProc: ChildProcess = spawn(
+    process.platform === 'win32' ? 'npx.cmd' : 'npx',
+    ['next', 'dev', '--webpack', '-H', '127.0.0.1', '-p', String(port)],
+    {
+      cwd: workspace.labDir,
+      env,
+      shell: true,
+      stdio: ['ignore', 'pipe', 'pipe'],
+    }
+  );
+
+  let stopped = false;
+  const stop = async () => {
+    if (stopped) return;
+    stopped = true;
+    try {
+      if (serverProc.pid) {
+        if (process.platform === 'win32') {
+          execSync(`taskkill /pid ${serverProc.pid} /T /F`, { stdio: 'ignore' });
+        } else {
+          serverProc.kill('SIGKILL');
+        }
+      }
+    } catch {}
+    try {
+      serverProc.kill('SIGTERM');
+    } catch {}
+    await new Promise((r) => setTimeout(r, 1000));
+    await workspace.cleanup();
+  };
+
+  const start = Date.now();
+  const timeoutMs = 60000;
+  let ready = false;
+
+  while (Date.now() - start < timeoutMs) {
+    if (serverProc.exitCode !== null) {
+      await stop();
+      throw new Error(`Lab server exited prematurely with code ${serverProc.exitCode}`);
+    }
+    try {
+      const res = await new Promise<{ status: number }>((resolve, reject) => {
+        const req = http.request(
+          {
+            host: '127.0.0.1',
+            port,
+            path: '/',
+            method: 'GET',
+            timeout: 2000,
+          },
+          (r) => resolve({ status: r.statusCode || 0 })
+        );
+        req.on('error', reject);
+        req.on('timeout', () => {
+          req.destroy();
+          reject(new Error('timeout'));
+        });
+        req.end();
+      });
+      if (res.status === 200) {
+        ready = true;
+        break;
+      }
+    } catch {}
+    await new Promise((r) => setTimeout(r, 500));
+  }
+
+  if (!ready) {
+    await stop();
+    throw new Error(`Lab server at ${baseUrl} failed to become ready within ${timeoutMs}ms`);
+  }
+
+  return {
+    port,
+    baseUrl,
+    repoDir: workspace.labDir,
+    stop,
+  };
+}
+
+/**
+ * Runs a test file against a freshly started lab dev server, then stops the server.
+ */
+export async function runLabSuite(
+  labName: 'm0-control-lab' | 'm0-overfit-lab',
+  testFile: string
+): Promise<{ exitCode: number; output: string; durationMs: number }> {
+  const projectRoot = process.cwd();
+  const lab = await startLabServer({ labName });
+  const start = performance.now();
+  let exitCode = 0;
+  let output = '';
+
+  const env: NodeJS.ProcessEnv = {
+    ...process.env,
+    SLIGHTNUDGE_TEST: '1',
+  };
+
+  if (labName === 'm0-control-lab') {
+    env.M0_BASE_URL = lab.baseUrl;
+    env.M0_REPO_PATH = lab.repoDir;
+  } else {
+    env.M0_OVERFIT_BASE_URL = lab.baseUrl;
+    env.M0_OVERFIT_REPO_PATH = lab.repoDir;
+  }
+
+  try {
+    output = execSync(`npx tsx ${testFile}`, {
+      cwd: projectRoot,
+      env,
+      encoding: 'utf8',
+      stdio: ['pipe', 'pipe', 'pipe'],
+      timeout: 120000,
+    });
+  } catch (err: any) {
+    exitCode = err.status || 1;
+    output = (err.stdout || '') + '\n' + (err.stderr || '') + '\n' + (err.message || '');
+  } finally {
+    const durationMs = Math.round(performance.now() - start);
+    await lab.stop();
+    return { exitCode, output, durationMs };
+  }
+}
+

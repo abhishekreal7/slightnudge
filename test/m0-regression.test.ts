@@ -237,10 +237,11 @@ async function runM0RegressionSuite() {
   const browser: Browser = await chromium.launch({ headless: true });
   const page: Page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
 
-  await page.goto('http://127.0.0.1:3001', { waitUntil: 'domcontentloaded' });
+  const baseUrl = process.env.M0_BASE_URL || 'http://127.0.0.1:3001';
+  await page.goto(baseUrl, { waitUntil: 'domcontentloaded' });
   await page.waitForSelector('section#top');
 
-  const repoBase = path.resolve('.slightnudge/repositories/m0-control-lab');
+  const repoBase = path.resolve(process.env.M0_REPO_PATH || '.slightnudge/repositories/m0-control-lab');
 
   let allowed = 0;
   let refused = 0;
