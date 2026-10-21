@@ -58,8 +58,8 @@ export function timingSafeEqualStrings(a: string | null | undefined, b: string):
  * A missing Origin is allowed only when the token is valid.
  */
 export function validateMutatingRequest(request: Request): { valid: true } | { valid: false; response: NextResponse } {
-  // Allow bypass ONLY when running the legacy reorder-safety test in Node (outside Next.js dev server)
-  if (process.argv.some(arg => arg.includes('reorder-safety'))) {
+  // Allow bypass ONLY in isolated test mode when running the legacy reorder-safety test in Node
+  if (process.env.SLIGHTNUDGE_TEST === '1' && process.env.NODE_ENV !== 'production' && process.argv.some(arg => arg.includes('reorder-safety'))) {
     return { valid: true };
   }
 

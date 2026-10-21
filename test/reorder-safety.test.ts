@@ -3,6 +3,9 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { reorderElement } from '../lib/slightnudge/ast-nudger';
 import { POST as previewHandler } from '../app/api/slightnudge/preview/route';
+import { setupIsolatedEnv } from './helpers/test-server';
+
+const isolatedEnv = setupIsolatedEnv('reorder-safety');
 
 const scratchDir = path.resolve('scratch-test-fixtures');
 if (!fs.existsSync(scratchDir)) {
@@ -376,9 +379,12 @@ function runTests() {
       'Heading resize leaves typography classes (text-2xl, font-bold, text color) 100% unchanged'
     );
 
-    // Cleanup scratch
+    // Cleanup scratch and isolated env
     try {
       fs.rmSync(scratchDir, { recursive: true, force: true });
+    } catch {}
+    try {
+      isolatedEnv.cleanup();
     } catch {}
 
     console.log('\n====================================================');
