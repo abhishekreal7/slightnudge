@@ -9,7 +9,9 @@ async function main() {
   console.log('====================================================\n');
 
   const ws = createTempWorkspace('sn-studio-restore', { useFixture1Baseline: true });
-  const fixturePath = path.join(ws.wsDir, 'fixtures', '1-plain-static.tsx');
+  const fixturePath = process.env.SLIGHTNUDGE_WORKSPACE_ROOT
+    ? path.join(process.env.SLIGHTNUDGE_WORKSPACE_ROOT, 'fixtures', '1-plain-static.tsx')
+    : path.resolve('fixtures', '1-plain-static.tsx');
   const origFixture = fs.readFileSync(fixturePath, 'utf8');
 
   const browser = await chromium.launch({ headless: true });
@@ -99,8 +101,8 @@ async function main() {
     if (!isPositionDisabled) throw new Error('Position modes control is not disabled!');
     console.log('   ✅ [PASS] Position modes control properly disabled with tooltip');
 
-    // 9. Test Second Apply Button: "Apply to Source" in bottom floating bar
-    console.log('9. Testing second Apply button ("Apply to Source" in bottom floating bar)...');
+    // 9. Test Unified Apply Button in Inspector Dock
+    console.log('9. Testing unified Apply button in Inspector Dock...');
     await page.click('aside >> text=Paragraph');
     await page.waitForTimeout(400);
 
@@ -111,16 +113,16 @@ async function main() {
     const previewBody2 = await previewResp2.json();
     console.log('   ✅ [PASS] Paragraph style preview generated:', previewBody2.summary);
 
-    const applyToSourceBtn = page.locator('button:has-text("Apply to Source")');
+    const applyToSourceBtn = page.locator('button:has-text("Apply to code"), button:has-text("Apply to Source")').first();
     await applyToSourceBtn.waitFor({ state: 'visible', timeout: 5000 });
     const isFloatingApplyVisible = await applyToSourceBtn.isVisible();
-    if (!isFloatingApplyVisible) throw new Error('"Apply to Source" button was not visible!');
-    console.log('   ✅ [PASS] "Apply to Source" button visible in bottom floating bar');
+    if (!isFloatingApplyVisible) throw new Error('"Apply to code" button was not visible!');
+    console.log('   ✅ [PASS] "Apply to code" button visible in Inspector Dock');
 
     const applyPromise2 = page.waitForResponse((r) => r.url().includes('/api/slightnudge/apply'));
     await applyToSourceBtn.click();
     const applyResp2 = await applyPromise2;
-    console.log('   ✅ [PASS] "Apply to Source" applied successfully (200 OK)');
+    console.log('   ✅ [PASS] "Apply to code" applied successfully (200 OK)');
 
     const diskAfterParagraph = fs.readFileSync(fixturePath, 'utf8');
     if (!diskAfterParagraph.includes('font-bold')) throw new Error('Disk file missing paragraph bold edit!');

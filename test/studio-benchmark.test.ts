@@ -17,7 +17,9 @@ async function runStudioBenchmark() {
   console.log('========================================================================\n');
 
   const ws = createTempWorkspace('sn-benchmark', { useFixture1Baseline: true });
-  const fixturePath = path.join(ws.wsDir, 'fixtures', '1-plain-static.tsx');
+  const fixturePath = process.env.SLIGHTNUDGE_WORKSPACE_ROOT
+    ? path.join(process.env.SLIGHTNUDGE_WORKSPACE_ROOT, 'fixtures', '1-plain-static.tsx')
+    : path.resolve('fixtures', '1-plain-static.tsx');
   const origFixture = fs.readFileSync(fixturePath, 'utf8');
   const metrics: BenchmarkMetric[] = [];
 
@@ -291,14 +293,14 @@ async function runStudioBenchmark() {
     if (!diffVisible) throw new Error('Syntax diff preview was not visible when toggled');
 
     const applyDiffPromise = page.waitForResponse((r) => r.url().includes('/api/slightnudge/apply'));
-    await page.click('button:has-text("Apply to Source")');
+    await page.locator('button:has-text("Apply to code"), button:has-text("Apply to Source")').first().click();
     await applyDiffPromise;
 
     const undoDiffPromise = page.waitForResponse((r) => r.url().includes('/api/slightnudge/undo'));
     await page.keyboard.press('Control+z');
     await undoDiffPromise;
     await page.waitForTimeout(1000);
-    recordMetric('Floating Review Bar Live Diff Preview & Apply to Source', 'Disk AST', t0, 'Diff card inspected, applied, and undone');
+    recordMetric('Unified Inspector Live Diff Preview & Apply to Code', 'Disk AST', t0, 'Diff card inspected, applied, and undone');
 
     // 18. Direct Canvas Drag to Resize
     t0 = performance.now();

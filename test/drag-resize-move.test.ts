@@ -9,7 +9,9 @@ async function testDragResizeAndMove() {
   console.log('====================================================\n');
 
   const ws = createTempWorkspace('sn-drag-resize', { useFixture1Baseline: true });
-  const fixturePath = path.join(ws.wsDir, 'fixtures', '1-plain-static.tsx');
+  const fixturePath = process.env.SLIGHTNUDGE_WORKSPACE_ROOT
+    ? path.join(process.env.SLIGHTNUDGE_WORKSPACE_ROOT, 'fixtures', '1-plain-static.tsx')
+    : path.resolve('fixtures', '1-plain-static.tsx');
   const origFixture = fs.readFileSync(fixturePath, 'utf8');
 
   const browser = await chromium.launch({ headless: true });
@@ -93,13 +95,14 @@ async function testDragResizeAndMove() {
     const reorderPromise = page.waitForResponse((r) => r.url().includes('/api/slightnudge/preview'));
     await page.mouse.move(moveBox.x + moveBox.width / 2, moveBox.y + moveBox.height / 2);
     await page.mouse.down();
-    await page.mouse.move(moveBox.x + moveBox.width / 2, moveBox.y + moveBox.height / 2 + 70, { steps: 8 });
+    await page.waitForTimeout(100);
+    await page.mouse.move(moveBox.x + moveBox.width / 2, moveBox.y + moveBox.height / 2 + 80, { steps: 8 });
     await page.waitForTimeout(250);
 
     // Check if drop line appeared
-    const dropLineText = await page.locator('text=/Drop here/').first().isVisible();
+    const dropLineText = await page.locator('[data-testid="drop-indicator"]').or(page.locator('text=/Drop here/')).first().isVisible();
     if (dropLineText) {
-      console.log('   ✅ [PASS] Illuminated magnetic drop line indicator rendered with glowing end caps');
+      console.log('   ✅ [PASS] Streamlined drop indicator rendered');
     }
 
     await page.mouse.up();
@@ -122,7 +125,8 @@ async function testDragResizeAndMove() {
     const undoReorderPromise = page.waitForResponse((r) => r.url().includes('/api/slightnudge/undo'));
     await page.keyboard.press('Control+z');
     const undoReorderResp = await undoReorderPromise;
-    console.log('   ✅ [PASS] Reorder undone cleanly (200 OK)');
+    const undoReorderBody = await undoReorderResp.json();
+    console.log('   ✅ [PASS] Reorder undone cleanly (200 OK):', undoReorderBody);
 
     const finalFixture = fs.readFileSync(fixturePath, 'utf8');
     if (finalFixture !== origFixture) {

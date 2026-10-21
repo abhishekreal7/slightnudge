@@ -995,11 +995,22 @@ export default function StudioPage() {
 
   // Floating In-Situ Canvas HUD Bar matching user benchmark reference exactly
   const renderHUDBar = () => {
-    if (!selectedLayer) return null;
+    if (!selectedLayer || isDraggingMove) return null;
+
+    const el = elementRefs.current[selectedLayer];
+    let flipBelow = selectedLayer === 'button';
+    if (el) {
+      const rect = el.getBoundingClientRect();
+      if (rect.top < 180) {
+        flipBelow = true;
+      }
+    }
 
     return (
       <div
-        className="absolute -top-16 left-1/2 -translate-x-1/2 z-40 flex flex-col items-center select-none"
+        className={`absolute left-1/2 -translate-x-1/2 z-40 flex flex-col items-center select-none transition-all duration-150 ${
+          flipBelow ? 'top-full mt-3' : '-top-[68px]'
+        }`}
         style={{ minWidth: 'max-content' }}
         onClick={(e) => e.stopPropagation()}
       >
@@ -1868,15 +1879,11 @@ export default function StudioPage() {
 
                   {/* Magnetic Drag Slot Drop Indicator (Before First Child) */}
                   {isDraggingMove && dropSlotIndex === 0 && (
-                    <div className="w-full my-3 flex items-center justify-center relative animate-fade-in z-50 pointer-events-none">
-                      <div className="w-full h-1 bg-gradient-to-r from-emerald-400 via-teal-300 to-emerald-400 rounded-full shadow-[0_0_14px_rgba(16,185,129,0.9)] relative">
-                        <div className="absolute -left-1 -top-0.5 w-2 h-2 rounded-full bg-emerald-400 ring-2 ring-white shadow" />
-                        <div className="absolute -right-1 -top-0.5 w-2 h-2 rounded-full bg-emerald-400 ring-2 ring-white shadow" />
-                      </div>
-                      <div className="absolute -top-3 bg-emerald-600 text-white font-sans text-[10px] font-semibold px-2 py-0.5 rounded-full shadow-md flex items-center space-x-1">
-                        <Sparkles size={10} className="text-emerald-200" />
-                        <span>Drop here (Position 1 of {childOrder.length})</span>
-                      </div>
+                    <div
+                      data-testid="drop-indicator"
+                      className="w-full my-2 flex items-center justify-center relative animate-fade-in z-30 pointer-events-none transition-all duration-150"
+                    >
+                      <div className="w-full h-[2px] bg-emerald-500 rounded-full shadow-[0_0_6px_rgba(16,185,129,0.3)]" />
                     </div>
                   )}
 
@@ -1909,7 +1916,9 @@ export default function StudioPage() {
                         {!isInlineEditing && (
                           <div
                             onPointerDown={(e) => startDragMove(layerKey, e)}
-                            className="absolute -top-[20px] left-1/2 -translate-x-1/2 w-[26px] h-[20px] bg-[#10B981] hover:bg-emerald-600 rounded-t-[5px] flex items-center justify-center cursor-grab active:cursor-grabbing shadow-xs transition-colors z-30"
+                            className={`absolute -top-[20px] left-1/2 -translate-x-1/2 w-[26px] h-[20px] bg-[#10B981] hover:bg-emerald-600 rounded-t-[5px] flex items-center justify-center cursor-grab active:cursor-grabbing shadow-xs transition-colors z-30 ${
+                              isDraggingMove ? 'opacity-0' : ''
+                            }`}
                             title="Drag to reorder element (iOS style)"
                           >
                             <Move size={12} className="text-white" strokeWidth={2.5} />
@@ -2106,15 +2115,11 @@ export default function StudioPage() {
 
                           {/* Magnetic Drop Slot Line between siblings */}
                           {isDraggingMove && dropSlotIndex === index + 1 && (
-                            <div className="w-full my-3 flex items-center justify-center relative animate-fade-in z-50 pointer-events-none">
-                              <div className="w-full h-1 bg-gradient-to-r from-emerald-400 via-teal-300 to-emerald-400 rounded-full shadow-[0_0_14px_rgba(16,185,129,0.9)] relative">
-                                <div className="absolute -left-1 -top-0.5 w-2 h-2 rounded-full bg-emerald-400 ring-2 ring-white shadow" />
-                                <div className="absolute -right-1 -top-0.5 w-2 h-2 rounded-full bg-emerald-400 ring-2 ring-white shadow" />
-                              </div>
-                              <div className="absolute -top-3 bg-emerald-600 text-white font-sans text-[10px] font-semibold px-2 py-0.5 rounded-full shadow-md flex items-center space-x-1">
-                                <Sparkles size={10} className="text-emerald-200" />
-                                <span>Drop here (Position {index + 2} of {childOrder.length})</span>
-                              </div>
+                            <div
+                              data-testid="drop-indicator"
+                              className="w-full my-2 flex items-center justify-center relative animate-fade-in z-30 pointer-events-none transition-all duration-150"
+                            >
+                              <div className="w-full h-[2px] bg-emerald-500 rounded-full shadow-[0_0_6px_rgba(16,185,129,0.3)]" />
                             </div>
                           )}
                         </React.Fragment>
@@ -2157,15 +2162,11 @@ export default function StudioPage() {
 
                           {/* Magnetic Drop Slot Line between siblings */}
                           {isDraggingMove && dropSlotIndex === index + 1 && (
-                            <div className="w-full my-3 flex items-center justify-center relative animate-fade-in z-50 pointer-events-none">
-                              <div className="w-full h-1 bg-gradient-to-r from-emerald-400 via-teal-300 to-emerald-400 rounded-full shadow-[0_0_14px_rgba(16,185,129,0.9)] relative">
-                                <div className="absolute -left-1 -top-0.5 w-2 h-2 rounded-full bg-emerald-400 ring-2 ring-white shadow" />
-                                <div className="absolute -right-1 -top-0.5 w-2 h-2 rounded-full bg-emerald-400 ring-2 ring-white shadow" />
-                              </div>
-                              <div className="absolute -top-3 bg-emerald-600 text-white font-sans text-[10px] font-semibold px-2 py-0.5 rounded-full shadow-md flex items-center space-x-1">
-                                <Sparkles size={10} className="text-emerald-200" />
-                                <span>Drop here (Position {index + 2} of {childOrder.length})</span>
-                              </div>
+                            <div
+                              data-testid="drop-indicator"
+                              className="w-full my-2 flex items-center justify-center relative animate-fade-in z-30 pointer-events-none transition-all duration-150"
+                            >
+                              <div className="w-full h-[2px] bg-emerald-500 rounded-full shadow-[0_0_6px_rgba(16,185,129,0.3)]" />
                             </div>
                           )}
                         </React.Fragment>
@@ -2208,15 +2209,11 @@ export default function StudioPage() {
 
                           {/* Magnetic Drop Slot Line between siblings */}
                           {isDraggingMove && dropSlotIndex === index + 1 && (
-                            <div className="w-full my-3 flex items-center justify-center relative animate-fade-in z-50 pointer-events-none">
-                              <div className="w-full h-1 bg-gradient-to-r from-emerald-400 via-teal-300 to-emerald-400 rounded-full shadow-[0_0_14px_rgba(16,185,129,0.9)] relative">
-                                <div className="absolute -left-1 -top-0.5 w-2 h-2 rounded-full bg-emerald-400 ring-2 ring-white shadow" />
-                                <div className="absolute -right-1 -top-0.5 w-2 h-2 rounded-full bg-emerald-400 ring-2 ring-white shadow" />
-                              </div>
-                              <div className="absolute -top-3 bg-emerald-600 text-white font-sans text-[10px] font-semibold px-2 py-0.5 rounded-full shadow-md flex items-center space-x-1">
-                                <Sparkles size={10} className="text-emerald-200" />
-                                <span>Drop here (Position {index + 2} of {childOrder.length})</span>
-                              </div>
+                            <div
+                              data-testid="drop-indicator"
+                              className="w-full my-2 flex items-center justify-center relative animate-fade-in z-30 pointer-events-none transition-all duration-150"
+                            >
+                              <div className="w-full h-[2px] bg-emerald-500 rounded-full shadow-[0_0_6px_rgba(16,185,129,0.3)]" />
                             </div>
                           )}
                         </React.Fragment>
@@ -2317,78 +2314,7 @@ export default function StudioPage() {
               </div>
             </div>
 
-            {/* Floating Source Review Bar (Appears when an edit is made) */}
-            {pendingEdit && (
-              <div
-                onClick={(e) => e.stopPropagation()}
-                className="fixed bottom-12 left-1/2 -translate-x-1/2 z-40 flex flex-col items-center"
-              >
-                {showDiffPreview && (
-                  <div className="mb-2 w-[460px] bg-slate-950/95 backdrop-blur-md text-white rounded-xl shadow-2xl p-3 border border-slate-700/80 text-xs animate-in fade-in duration-150">
-                    <div className="flex items-center justify-between pb-1.5 border-b border-slate-800 font-mono text-[11px] text-slate-400">
-                      <span className="flex items-center space-x-1.5">
-                        <Code2 size={13} className="text-emerald-400" />
-                        <span className="text-slate-200">{pendingEdit.filePath}:{pendingEdit.line}</span>
-                      </span>
-                      <span className="text-emerald-400 font-semibold">{pendingEdit.summary}</span>
-                    </div>
-                    <div className="mt-2 space-y-1 font-mono text-[11px]">
-                      {pendingEdit.oldValue && (
-                        <div className="px-2 py-1 bg-rose-950/30 text-rose-300 rounded border border-rose-900/30 flex items-center space-x-2">
-                          <span className="font-bold text-rose-500 select-none">-</span>
-                          <span className="truncate">{pendingEdit.oldValue}</span>
-                        </div>
-                      )}
-                      {pendingEdit.newValue && (
-                        <div className="px-2 py-1 bg-emerald-950/30 text-emerald-300 rounded border border-emerald-900/30 flex items-center space-x-2">
-                          <span className="font-bold text-emerald-500 select-none">+</span>
-                          <span className="truncate">{pendingEdit.newValue}</span>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                )}
 
-                <div className="bg-slate-900 text-white rounded-xl shadow-2xl px-4 py-3 flex items-center space-x-4 border border-slate-700 animate-slide-up">
-                  <div className="flex items-center space-x-2">
-                    <span className="h-2 w-2 rounded-full bg-emerald-400 animate-ping"></span>
-                    <div>
-                      <div className="text-xs font-semibold text-emerald-300">Review Source Edit</div>
-                      <div className="text-[11px] text-slate-300 font-mono">{pendingEdit.summary}</div>
-                    </div>
-                  </div>
-
-                  <div className="h-6 w-[1px] bg-slate-700"></div>
-
-                  <div className="flex items-center space-x-2">
-                    <button
-                      type="button"
-                      onClick={() => setShowDiffPreview((prev) => !prev)}
-                      className={`px-2.5 py-1.5 rounded-lg text-xs font-medium transition cursor-pointer border ${
-                        showDiffPreview ? 'bg-emerald-950/60 border-emerald-500 text-emerald-300' : 'bg-slate-800 border-slate-700 text-slate-300 hover:text-white'
-                      }`}
-                    >
-                      {showDiffPreview ? 'Hide Diff' : 'View Diff'}
-                    </button>
-                    <button
-                      type="button"
-                      onClick={applySourceEdit}
-                      disabled={isApplying}
-                      className="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold shadow transition disabled:opacity-50 cursor-pointer"
-                    >
-                      {isApplying ? 'Applying...' : 'Apply to Source'}
-                    </button>
-                    <button
-                      type="button"
-                      onClick={discardPendingEdit}
-                      className="px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs transition cursor-pointer"
-                    >
-                      Discard
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
           </main>
         </div>
 
@@ -2428,6 +2354,88 @@ export default function StudioPage() {
               </button>
             </div>
 
+            {/* Consolidated Pending Edit Review Dock (Single Unified Apply/Diff Control) */}
+            {pendingEdit && (
+              <div className="p-3 bg-gradient-to-b from-emerald-50/90 to-emerald-50/40 border-b border-emerald-200/80 flex flex-col space-y-2.5 shrink-0 animate-fade-in shadow-xs">
+                {/* Header row: Status indicator + file location + Diff toggle */}
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-1.5 min-w-0">
+                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0" />
+                    <span className="text-[11px] font-semibold text-emerald-950 truncate">
+                      {pendingEdit.summary}
+                    </span>
+                  </div>
+                  <div className="flex items-center space-x-1.5 shrink-0">
+                    <span className="text-[9.5px] font-medium text-emerald-700 bg-emerald-100/90 px-1.5 py-0.5 rounded">
+                      Live on canvas
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => setShowDiffPreview((prev) => !prev)}
+                      className={`px-2 py-0.5 rounded text-[10px] font-medium transition cursor-pointer border ${
+                        showDiffPreview
+                          ? 'bg-emerald-100 border-emerald-300 text-emerald-800'
+                          : 'bg-white border-slate-200 text-slate-600 hover:text-slate-900 hover:border-slate-300'
+                      }`}
+                    >
+                      {showDiffPreview ? 'Hide Diff' : 'View Diff'}
+                    </button>
+                  </div>
+                </div>
+
+                {/* Collapsible Diff Preview Card */}
+                {showDiffPreview && (
+                  <div className="p-2.5 bg-slate-950 text-white rounded-lg border border-slate-800 text-[10px] font-mono space-y-1.5 animate-in fade-in duration-150 shadow-inner">
+                    <div className="flex items-center justify-between pb-1 border-b border-slate-800 text-slate-400 text-[9.5px]">
+                      <span className="flex items-center space-x-1 truncate max-w-[200px]">
+                        <Code2 size={11} className="text-emerald-400 shrink-0" />
+                        <span className="truncate">{pendingEdit.filePath}:{pendingEdit.line}</span>
+                      </span>
+                      <span className="text-emerald-400 font-semibold uppercase tracking-wider text-[9px]">Diff</span>
+                    </div>
+                    <div className="space-y-1 pt-0.5">
+                      {pendingEdit.oldValue && (
+                        <div className="px-1.5 py-1 bg-rose-950/40 text-rose-300 rounded border border-rose-900/40 flex items-start space-x-1.5 overflow-hidden">
+                          <span className="font-bold text-rose-500 select-none">-</span>
+                          <span className="break-all">{pendingEdit.oldValue}</span>
+                        </div>
+                      )}
+                      {pendingEdit.newValue && (
+                        <div className="px-1.5 py-1 bg-emerald-950/40 text-emerald-300 rounded border border-emerald-900/40 flex items-start space-x-1.5 overflow-hidden">
+                          <span className="font-bold text-emerald-500 select-none">+</span>
+                          <span className="break-all">{pendingEdit.newValue}</span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {/* Primary Action Buttons */}
+                <div className="flex items-center space-x-2 pt-0.5">
+                  <button
+                    type="button"
+                    onClick={applySourceEdit}
+                    disabled={isApplying}
+                    className="flex-1 h-7 rounded-md bg-emerald-700 hover:bg-emerald-600 disabled:opacity-50 text-white text-[11px] font-semibold flex items-center justify-center space-x-1.5 shadow-2xs transition cursor-pointer"
+                  >
+                    {isApplying ? (
+                      <LoaderCircle size={12} className="animate-spin" />
+                    ) : (
+                      <Check size={12} />
+                    )}
+                    <span>{isApplying ? 'Applying...' : 'Apply to code'}</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={discardPendingEdit}
+                    className="px-2.5 h-7 rounded-md bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 text-[11px] font-medium transition cursor-pointer shadow-2xs"
+                  >
+                    Discard
+                  </button>
+                </div>
+              </div>
+            )}
+
             {/* Inspector Content */}
             {!selectedLayer ? (
               /* DEFAULT UNSELECTED STATE (Image 2 empty state) */
@@ -2460,38 +2468,6 @@ export default function StudioPage() {
             ) : (
               /* SELECTED ELEMENT STATE (Clean SaaS Design Inspector) */
               <div className="flex-1 flex flex-col overflow-hidden">
-                {/* Pending Edit Review Dock in Inspector (When edit is active) */}
-                {pendingEdit && (
-                  <div className="p-3 bg-emerald-50/70 border-b border-emerald-100 flex flex-col space-y-2 shrink-0 animate-fade-in">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-1.5 text-xs font-semibold text-emerald-950">
-                        <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                        <span className="truncate max-w-[185px]">{pendingEdit.summary}</span>
-                      </div>
-                      <span className="text-[10px] font-medium text-emerald-700 bg-emerald-100/90 px-1.5 py-0.5 rounded">
-                        Live on canvas
-                      </span>
-                    </div>
-                    <div className="flex items-center space-x-2 pt-0.5">
-                      <button
-                        type="button"
-                        onClick={applySourceEdit}
-                        disabled={isApplying}
-                        className="flex-1 h-7 rounded-md bg-emerald-700 hover:bg-emerald-600 disabled:opacity-50 text-white text-[11px] font-semibold flex items-center justify-center space-x-1 shadow-2xs transition cursor-pointer"
-                      >
-                        <Check size={12} />
-                        <span>{isApplying ? 'Applying...' : 'Apply to code'}</span>
-                      </button>
-                      <button
-                        type="button"
-                        onClick={discardPendingEdit}
-                        className="px-2.5 h-7 rounded-md bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 text-[11px] font-medium transition cursor-pointer shadow-2xs"
-                      >
-                        Discard
-                      </button>
-                    </div>
-                  </div>
-                )}
 
                 {/* Top Tabs: Design | Settings (with emerald SaaS active line) */}
                 <div className="flex border-b border-[#E5E7EB] px-3 shrink-0 bg-white sticky top-0 z-10">
