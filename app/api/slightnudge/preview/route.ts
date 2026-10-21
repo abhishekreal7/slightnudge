@@ -83,7 +83,25 @@ export async function POST(request: Request) {
       const result = nudgeElement({ ...target, direction: body.direction, stepSize: body.stepSize === 'big' ? 'big' : 'normal', breakpoint: typeof body.breakpoint === 'string' ? body.breakpoint : '' });
       if (!result.success || !result.updatedSource || !result.originalSource) return NextResponse.json({ error: result.reason || 'This change cannot be previewed safely.' }, { status: 422 });
       const summary = result.oldClass && result.newClass ? `${result.oldClass} → ${result.newClass}` : (result.newClass ? `none → ${result.newClass}` : `move ${body.direction}`);
-      const preview = createPendingSourceEdit({ filePath, before: result.originalSource, after: result.updatedSource, summary, oldValue: result.oldClass || result.oldClassNameValue || '', newValue: result.newClass || result.newClassNameValue || '', line: result.line, repositoryId, sourcePath });
+      const preview = createPendingSourceEdit({
+        filePath,
+        before: result.originalSource,
+        after: result.updatedSource,
+        summary,
+        oldValue: result.oldClass || result.oldClassNameValue || '',
+        newValue: result.newClass || result.newClassNameValue || '',
+        line: result.line,
+        column: target.column,
+        elementId: target.elementId,
+        tagName: target.tagName,
+        oldClassName: result.oldClassNameValue,
+        newClassName: result.newClassNameValue,
+        removedTokens: result.oldClass ? [result.oldClass] : [],
+        addedTokens: result.newClass ? [result.newClass] : [],
+        previewType: 'className',
+        repositoryId,
+        sourcePath,
+      });
       return NextResponse.json(preview.changed ? { ...preview, success: true } : { success: true, changed: false, message: 'That spacing value is already applied.' });
     }
 
@@ -94,7 +112,25 @@ export async function POST(request: Request) {
       const result = updateStaticTailwindClass({ ...target, property: body.property as EditableStyleProperty, value: body.value, breakpoint: typeof body.breakpoint === 'string' ? body.breakpoint : '' });
       if (!result.success || !result.updatedSource || !result.originalSource) return NextResponse.json({ error: 'This change cannot be previewed safely.' }, { status: 422 });
       const summary = `${result.oldToken || 'none'} → ${result.newToken}`;
-      const preview = createPendingSourceEdit({ filePath, before: result.originalSource, after: result.updatedSource, summary, oldValue: result.oldToken || result.oldClassName, newValue: result.newToken || result.newClassName, line: result.line, repositoryId, sourcePath });
+      const preview = createPendingSourceEdit({
+        filePath,
+        before: result.originalSource,
+        after: result.updatedSource,
+        summary,
+        oldValue: result.oldToken || result.oldClassName,
+        newValue: result.newToken || result.newClassName,
+        line: result.line,
+        column: target.column,
+        elementId: target.elementId,
+        tagName: target.tagName,
+        oldClassName: result.oldClassName,
+        newClassName: result.newClassName,
+        removedTokens: result.oldToken ? [result.oldToken] : [],
+        addedTokens: result.newToken ? [result.newToken] : [],
+        previewType: 'className',
+        repositoryId,
+        sourcePath,
+      });
       return NextResponse.json(preview.changed ? { ...preview, oldClassName: result.oldClassName, newClassName: result.newClassName, success: true } : { success: true, changed: false, message: 'That style is already applied.' });
     }
 
@@ -105,7 +141,21 @@ export async function POST(request: Request) {
       const oldSnippet = result.oldValue.length > 18 ? `${result.oldValue.slice(0, 16)}…` : result.oldValue;
       const newSnippet = result.newValue.length > 18 ? `${result.newValue.slice(0, 16)}…` : result.newValue;
       const summary = `"${oldSnippet}" → "${newSnippet}"`;
-      const preview = createPendingSourceEdit({ filePath, before: result.originalSource, after: result.updatedSource, summary, oldValue: result.oldValue, newValue: result.newValue, line: result.line, previewType: 'textContent', repositoryId, sourcePath });
+      const preview = createPendingSourceEdit({
+        filePath,
+        before: result.originalSource,
+        after: result.updatedSource,
+        summary,
+        oldValue: result.oldValue,
+        newValue: result.newValue,
+        line: result.line,
+        column: target.column,
+        elementId: target.elementId,
+        tagName: target.tagName,
+        previewType: 'textContent',
+        repositoryId,
+        sourcePath,
+      });
       return NextResponse.json(preview.changed ? { ...preview, success: true } : { success: true, changed: false, message: 'That text is already applied.' });
     }
 
@@ -122,7 +172,21 @@ export async function POST(request: Request) {
       }
       const result = updateStaticImageSource({ ...target, value: body.value });
       if (!result.success || !result.updatedSource || !result.originalSource) return NextResponse.json({ error: result.reason || 'This image cannot be replaced safely.' }, { status: 422 });
-      const preview = createPendingSourceEdit({ filePath, before: result.originalSource, after: result.updatedSource, summary: 'replace image', oldValue: result.oldValue, newValue: result.newValue, line: result.line, previewType: 'imageSource', repositoryId, sourcePath });
+      const preview = createPendingSourceEdit({
+        filePath,
+        before: result.originalSource,
+        after: result.updatedSource,
+        summary: 'replace image',
+        oldValue: result.oldValue,
+        newValue: result.newValue,
+        line: result.line,
+        column: target.column,
+        elementId: target.elementId,
+        tagName: target.tagName,
+        previewType: 'imageSource',
+        repositoryId,
+        sourcePath,
+      });
       return NextResponse.json(preview.changed ? { ...preview, success: true } : { success: true, changed: false, message: 'That image is already applied.' }, { headers: corsHeaders(request) });
     }
 

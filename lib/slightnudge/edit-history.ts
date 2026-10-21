@@ -1,7 +1,9 @@
 import { randomUUID } from 'node:crypto';
 import fs, { chmodSync, closeSync, existsSync, fsyncSync, mkdirSync, openSync, readFileSync, readdirSync, realpathSync, statSync, unlinkSync, writeSync } from 'node:fs';
 import path from 'node:path';
+import { Project, SyntaxKind, Node, JsxOpeningElement, JsxSelfClosingElement, StringLiteral } from 'ts-morph';
 import { verifyTailwindClass, verifySyntacticParse, findProjectRoot } from './tailwind-verifier';
+import { isElementInsideLoop, isComponentUsedMultipleTimes } from './ast-nudger';
 
 function isTestMode(): boolean {
   return process.env.SLIGHTNUDGE_TEST === '1' && process.env.NODE_ENV !== 'production';
@@ -43,6 +45,17 @@ export interface EditRecord {
   after: string;
   status: EditStatus;
   missing?: boolean;
+  previewType?: 'className' | 'textContent' | 'imageSource' | 'reorder';
+  line?: number;
+  column?: number;
+  elementId?: string;
+  tagName?: string;
+  oldClassName?: string;
+  newClassName?: string;
+  removedTokens?: string[];
+  addedTokens?: string[];
+  oldValue?: string;
+  newValue?: string;
 }
 
 interface PendingEdit {
@@ -54,6 +67,13 @@ interface PendingEdit {
   newValue: string;
   previewType?: 'className' | 'textContent' | 'imageSource' | 'reorder';
   line?: number;
+  column?: number;
+  elementId?: string;
+  tagName?: string;
+  oldClassName?: string;
+  newClassName?: string;
+  removedTokens?: string[];
+  addedTokens?: string[];
   before: string;
   after: string;
   repositoryId?: string;
@@ -201,11 +221,113 @@ function relativeFilePath(filePath: string) {
   return relativePath;
 }
 
+export function deriveClassEditDetails(before: string, after: string, lineHint?: number) {
+  try {
+    const project = new Project({ useInMemoryFileSystem: true, skipAddingFilesFromTsConfig: true });
+    const beforeFile = project.createSourceFile('before.tsx', before);
+    const afterFile = project.createSourceFile('after.tsx', after);
+
+    const beforeEls = [
+      ...beforeFile.getDescendantsOfKind(SyntaxKind.JsxOpeningElement),
+      ...beforeFile.getDescendantsOfKind(SyntaxKind.JsxSelfClosingElement),
+    ];
+    const afterEls = [
+      ...afterFile.getDescendantsOfKind(SyntaxKind.JsxOpeningElement),
+      ...afterFile.getDescendantsOfKind(SyntaxKind.JsxSelfClosingElement),
+    ];
+
+    let candidateBefore: (JsxOpeningElement | JsxSelfClosingElement) | null = null;
+    let candidateAfter: (JsxOpeningElement | JsxSelfClosingElement) | null = null;
+
+    for (let i = 0; i < beforeEls.length && i < afterEls.length; i++) {
+      const b = beforeEls[i];
+      const a = afterEls[i];
+      const bAttr = b.getAttribute('className');
+      const aAttr = a.getAttribute('className');
+      const bInit = bAttr && Node.isJsxAttribute(bAttr) ? bAttr.getInitializer() : null;
+      const aInit = aAttr && Node.isJsxAttribute(aAttr) ? aAttr.getInitializer() : null;
+      const bLit = bInit && Node.isStringLiteral(bInit) ? bInit : (bInit && Node.isJsxExpression(bInit) && bInit.getExpression() && Node.isStringLiteral(bInit.getExpression()!) ? (bInit.getExpression() as StringLiteral) : null);
+      const aLit = aInit && Node.isStringLiteral(aInit) ? aInit : (aInit && Node.isJsxExpression(aInit) && aInit.getExpression() && Node.isStringLiteral(aInit.getExpression()!) ? (aInit.getExpression() as StringLiteral) : null);
+
+      if (bLit && aLit && bLit.getLiteralValue() !== aLit.getLiteralValue()) {
+        candidateBefore = b;
+        candidateAfter = a;
+        break;
+      }
+    }
+
+    if (!candidateBefore || !candidateAfter) {
+      if (lineHint) {
+        const b = beforeEls.find(el => el.getStartLineNumber() === lineHint);
+        const a = afterEls.find(el => el.getStartLineNumber() === lineHint);
+        if (b && a) {
+          candidateBefore = b;
+          candidateAfter = a;
+        }
+      }
+    }
+
+    if (!candidateBefore || !candidateAfter) return null;
+
+    const bAttr = candidateBefore.getAttribute('className');
+    const aAttr = candidateAfter.getAttribute('className');
+    const bInit = bAttr && Node.isJsxAttribute(bAttr) ? bAttr.getInitializer() : null;
+    const aInit = aAttr && Node.isJsxAttribute(aAttr) ? aAttr.getInitializer() : null;
+    const bLit = bInit && Node.isStringLiteral(bInit) ? bInit : (bInit && Node.isJsxExpression(bInit) && bInit.getExpression() && Node.isStringLiteral(bInit.getExpression()!) ? (bInit.getExpression() as StringLiteral) : null);
+    const aLit = aInit && Node.isStringLiteral(aInit) ? aInit : (aInit && Node.isJsxExpression(aInit) && aInit.getExpression() && Node.isStringLiteral(aInit.getExpression()!) ? (aInit.getExpression() as StringLiteral) : null);
+
+    if (!bLit || !aLit) return null;
+
+    const oldClassName = bLit.getLiteralValue();
+    const newClassName = aLit.getLiteralValue();
+
+    const oldTokens = oldClassName.trim().split(/\s+/).filter(Boolean);
+    const newTokens = newClassName.trim().split(/\s+/).filter(Boolean);
+    const addedTokens = newTokens.filter(t => !oldTokens.includes(t));
+    const removedTokens = oldTokens.filter(t => !newTokens.includes(t));
+
+    if (addedTokens.length === 0 && removedTokens.length === 0) return null;
+
+    const idAttr = candidateBefore.getAttribute('id');
+    const elementId = idAttr && Node.isJsxAttribute(idAttr) && idAttr.getInitializer() && Node.isStringLiteral(idAttr.getInitializer()!) ? (idAttr.getInitializer() as StringLiteral).getLiteralValue() : undefined;
+    const pos = beforeFile.getLineAndColumnAtPos(candidateBefore.getStart());
+
+    return {
+      previewType: 'className' as const,
+      line: pos.line,
+      column: pos.column,
+      elementId,
+      tagName: candidateBefore.getTagNameNode().getText(),
+      oldClassName,
+      newClassName,
+      addedTokens,
+      removedTokens,
+    };
+  } catch {
+    return null;
+  }
+}
+
 /** Record a source edit without staging or committing any repository files. */
-export function recordSourceEdit(filePath: string, before: string, after: string, summary: string, groupId?: string) {
+export function recordSourceEdit(
+  filePath: string,
+  before: string,
+  after: string,
+  summary: string,
+  groupId?: string,
+  metadata?: Partial<EditRecord>
+) {
   if (before === after) return { editId: undefined };
   if (Buffer.byteLength(before) > maxSnapshotBytes || Buffer.byteLength(after) > maxSnapshotBytes) {
     throw new Error('This source file is too large for safe local edit history. No change was recorded.');
+  }
+
+  let classDetails: Partial<EditRecord> = {};
+  if (!metadata?.addedTokens && !metadata?.removedTokens) {
+    const derived = deriveClassEditDetails(before, after, metadata?.line);
+    if (derived) {
+      classDetails = derived;
+    }
   }
 
   const record: EditRecord = {
@@ -218,12 +340,14 @@ export function recordSourceEdit(filePath: string, before: string, after: string
     before,
     after,
     status: 'applied',
+    ...classDetails,
+    ...metadata,
   };
   const records = readHistory();
   const last = records.at(-1);
   if (groupId && last?.status === 'applied' && last.groupId === groupId && last.filePath === record.filePath && last.after === before) {
     const changeCount = (last.changeCount || 1) + 1;
-    records[records.length - 1] = { ...last, after, summary: `${changeCount} visual adjustments`, changeCount };
+    records[records.length - 1] = { ...last, after, summary: `${changeCount} visual adjustments`, changeCount, ...metadata };
     writeHistory(records);
     return { editId: last.id };
   }
@@ -278,6 +402,13 @@ export function createPendingSourceEdit(options: {
   newValue: string;
   previewType?: 'className' | 'textContent' | 'imageSource' | 'reorder';
   line?: number;
+  column?: number;
+  elementId?: string;
+  tagName?: string;
+  oldClassName?: string;
+  newClassName?: string;
+  removedTokens?: string[];
+  addedTokens?: string[];
   repositoryId?: string;
   sourcePath?: string;
 }) {
@@ -291,13 +422,37 @@ export function createPendingSourceEdit(options: {
   }
   pruneExpiredPreviews();
   const pending: PendingEdit = {
-    id: randomUUID(), filePath: relativePath, createdAt: new Date().toISOString(),
-    summary: options.summary, oldValue: options.oldValue, newValue: options.newValue, previewType: options.previewType,
-    line: options.line, before: options.before, after: options.after,
-    repositoryId: options.repositoryId, sourcePath: options.sourcePath,
+    id: randomUUID(),
+    filePath: relativePath,
+    createdAt: new Date().toISOString(),
+    summary: options.summary,
+    oldValue: options.oldValue,
+    newValue: options.newValue,
+    previewType: options.previewType,
+    line: options.line,
+    column: options.column,
+    elementId: options.elementId,
+    tagName: options.tagName,
+    oldClassName: options.oldClassName,
+    newClassName: options.newClassName,
+    removedTokens: options.removedTokens,
+    addedTokens: options.addedTokens,
+    before: options.before,
+    after: options.after,
+    repositoryId: options.repositoryId,
+    sourcePath: options.sourcePath,
   };
   atomicWrite(pendingPath(pending.id), JSON.stringify(pending));
-  return { changed: true as const, id: pending.id, filePath: pending.filePath, line: pending.line, summary: pending.summary, oldValue: pending.oldValue, newValue: pending.newValue, previewType: pending.previewType || 'className' };
+  return {
+    changed: true as const,
+    id: pending.id,
+    filePath: pending.filePath,
+    line: pending.line,
+    summary: pending.summary,
+    oldValue: pending.oldValue,
+    newValue: pending.newValue,
+    previewType: pending.previewType || 'className',
+  };
 }
 
 function readPendingSourceEdit(id: string): PendingEdit {
@@ -364,7 +519,19 @@ export async function applyPendingSourceEdit(id: string, groupId?: string, repos
   }
   let history: { editId?: string };
   try {
-    history = recordSourceEdit(filePath, pending.before, pending.after, pending.summary, groupId);
+    history = recordSourceEdit(filePath, pending.before, pending.after, pending.summary, groupId, {
+      previewType: pending.previewType,
+      line: pending.line,
+      column: pending.column,
+      elementId: pending.elementId,
+      tagName: pending.tagName,
+      oldClassName: pending.oldClassName,
+      newClassName: pending.newClassName,
+      removedTokens: pending.removedTokens,
+      addedTokens: pending.addedTokens,
+      oldValue: pending.oldValue,
+      newValue: pending.newValue,
+    });
   } catch (error) {
     atomicWrite(filePath, pending.before);
     throw error;
@@ -376,18 +543,43 @@ export async function applyPendingSourceEdit(id: string, groupId?: string, repos
   return { success: true as const, editId: history.editId, filePath: pending.filePath, line: pending.line, previewType: pending.previewType || 'className', value: pending.newValue, className: pending.previewType === 'textContent' ? undefined : pending.newValue, message: `Applied ${pending.summary}.` };
 }
 
-/** Undo only the most recent SlightNudge edit, and refuse if the file changed afterward. */
-export function undoSourceEdit(filePath?: string) {
+/** Undo only the most recent SlightNudge edit, or a specified edit if valid, using token-level revert where possible. */
+export function undoSourceEdit(target?: string | { filePath?: string; editId?: string }, maybeEditId?: string) {
   let wantedPath: string | undefined;
-  if (filePath) {
-    const resolvedPath = path.resolve(getWorkspacePath(), filePath);
+  let wantedEditId: string | undefined;
+
+  if (typeof target === 'string') {
+    wantedPath = target;
+    wantedEditId = maybeEditId;
+  } else if (target && typeof target === 'object') {
+    wantedPath = target.filePath;
+    wantedEditId = target.editId || maybeEditId;
+  }
+
+  if (wantedPath) {
+    const normalized = path.normalize(wantedPath);
+    if (path.isAbsolute(normalized) || normalized === '..' || normalized.startsWith(`..${path.sep}`)) {
+      return { success: false as const, error: 'The edited file must be inside the SlightNudge workspace.' };
+    }
+    const resolvedPath = path.resolve(getWorkspacePath(), wantedPath);
     if (!existsSync(resolvedPath)) {
       return { success: false as const, error: 'That file no longer exists.' };
     }
-    wantedPath = relativeFilePath(resolvedPath);
+    try {
+      wantedPath = relativeFilePath(resolvedPath);
+    } catch {
+      return { success: false as const, error: 'The edited file must be inside the SlightNudge workspace.' };
+    }
   }
+
   const records = readHistory();
-  const index = records.findLastIndex((record) => record.status !== 'undone' && (!wantedPath || record.filePath === wantedPath));
+  let index = -1;
+  if (wantedEditId) {
+    index = records.findLastIndex((record) => record.id === wantedEditId && record.status !== 'undone' && (!wantedPath || record.filePath === wantedPath));
+  } else {
+    index = records.findLastIndex((record) => record.status !== 'undone' && (!wantedPath || record.filePath === wantedPath));
+  }
+
   if (index < 0) return { success: false as const, error: 'There is no visual edit to undo.' };
 
   const record = records[index];
@@ -395,29 +587,236 @@ export function undoSourceEdit(filePath?: string) {
   if (!existsSync(absolutePath)) {
     return { success: false as const, error: 'That file no longer exists.' };
   }
+
+  // Check 4: If the same element was edited twice, undoing the older edit while a newer one is on top must refuse
+  for (let i = index + 1; i < records.length; i++) {
+    const newer = records[i];
+    if (newer.status !== 'undone' && newer.filePath === record.filePath) {
+      const sameElement = (record.elementId && newer.elementId && record.elementId === newer.elementId) ||
+        (record.line && newer.line && record.line === newer.line && record.tagName === newer.tagName) ||
+        (newer.before === record.after);
+      if (sameElement) {
+        return {
+          success: false as const,
+          error: 'Cannot undo this edit because a newer edit on the same element depends on it. Undo the newer edit first.',
+        };
+      }
+    }
+  }
+
   const current = readFileSync(absolutePath, 'utf8');
 
-  // Recover a partially completed undo after a process interruption.
+  // Recover a partially completed undo after a process interruption
   if (record.status === 'undoing' && current === record.before) {
     records[index] = { ...record, status: 'undone' };
     writeHistory(records);
     return { success: true as const, editId: record.id, message: `Undid ${record.summary}.` };
   }
-  if (current !== record.after) {
-    return { success: false as const, error: 'This file changed after the visual edit. Nothing was overwritten; review the source before undoing.' };
+
+  // Step (i): Exact-match path
+  if (current === record.after) {
+    records[index] = { ...record, status: 'undoing' };
+    writeHistory(records);
+    try {
+      relativeFilePath(absolutePath);
+      atomicWrite(absolutePath, record.before);
+      records[index] = { ...record, status: 'undone' };
+      writeHistory(records);
+    } catch (error) {
+      try {
+        records[index] = { ...record, status: 'applied' };
+        writeHistory(records);
+      } catch {}
+      throw error;
+    }
+    return { success: true as const, editId: record.id, message: `Undid ${record.summary}.` };
   }
 
+  // Step (ii): Token-level undo for class/style edits
+  const details = (record.addedTokens && record.removedTokens)
+    ? record
+    : deriveClassEditDetails(record.before, record.after, record.line);
+
+  if (!details || (!details.addedTokens?.length && !details.removedTokens?.length)) {
+    if (record.previewType === 'textContent' || record.summary.startsWith('"')) {
+      const oldVal = record.oldValue || 'original text';
+      const newVal = record.newValue || 'current text';
+      return {
+        success: false as const,
+        error: `This file changed after the visual edit. Open ${record.filePath} near line ${record.line || 1} and change the text from "${newVal}" to "${oldVal}". Nothing was changed.`,
+      };
+    }
+    if (record.previewType === 'imageSource' || record.summary.includes('image')) {
+      const oldVal = record.oldValue || '';
+      const newVal = record.newValue || '';
+      return {
+        success: false as const,
+        error: `This file changed after the visual edit. Open ${record.filePath} near line ${record.line || 1} and change the image src from "${newVal}" to "${oldVal}". Nothing was changed.`,
+      };
+    }
+    return {
+      success: false as const,
+      error: 'This file changed after the visual edit. Nothing was overwritten; review the source before undoing.',
+    };
+  }
+
+  const addedTokens = details.addedTokens || [];
+  const removedTokens = details.removedTokens || [];
+  const recordLine = details.line || 1;
+
+  function refuseWithInstructions(reason: string, line = recordLine) {
+    const toRemoveStr = addedTokens.length > 0 ? addedTokens.join(' ') : 'none';
+    const toRestoreStr = removedTokens.length > 0 ? removedTokens.join(' ') : 'none';
+    return {
+      success: false as const,
+      error: `This file changed after the visual edit: ${reason}. Open ${record.filePath} near line ${line} and change the className to remove "${toRemoveStr}" and restore "${toRestoreStr}". Nothing was changed.`,
+    };
+  }
+
+  let project: Project;
+  let sourceFile: any;
+  try {
+    project = new Project({ useInMemoryFileSystem: true, skipAddingFilesFromTsConfig: true });
+    sourceFile = project.createSourceFile('current.tsx', current);
+  } catch (err: any) {
+    return refuseWithInstructions(`parse failure (${err.message})`);
+  }
+
+  const jsxElements = [
+    ...sourceFile.getDescendantsOfKind(SyntaxKind.JsxOpeningElement),
+    ...sourceFile.getDescendantsOfKind(SyntaxKind.JsxSelfClosingElement),
+  ];
+
+  let candidates: (JsxOpeningElement | JsxSelfClosingElement)[] = [];
+
+  if (details.elementId) {
+    candidates = jsxElements.filter((el) => {
+      const idAttr = el.getAttribute('id');
+      return idAttr && Node.isJsxAttribute(idAttr) && idAttr.getInitializer() && Node.isStringLiteral(idAttr.getInitializer()!) && (idAttr.getInitializer() as StringLiteral).getLiteralValue() === details.elementId;
+    });
+  } else {
+    candidates = jsxElements.filter((el) => {
+      if (details.tagName && el.getTagNameNode().getText().toLowerCase() !== details.tagName.toLowerCase()) {
+        return false;
+      }
+      const classAttr = el.getAttribute('className');
+      if (!classAttr || !Node.isJsxAttribute(classAttr)) return false;
+      const init = classAttr.getInitializer();
+      const literal = init && Node.isStringLiteral(init) ? init : (init && Node.isJsxExpression(init) && init.getExpression() && Node.isStringLiteral(init.getExpression()!) ? (init.getExpression() as StringLiteral) : null);
+      if (!literal) return false;
+      const toks = literal.getLiteralValue().trim().split(/\s+/).filter(Boolean);
+      const hasAdded = addedTokens.every(t => toks.includes(t));
+      const hasNoRemoved = removedTokens.every(t => !toks.includes(t));
+      return hasAdded && hasNoRemoved;
+    });
+  }
+
+  if (candidates.length === 0) {
+    return refuseWithInstructions(`element could not be found`);
+  }
+  if (candidates.length > 1) {
+    return refuseWithInstructions(`multiple matching elements found where uniqueness cannot be established`);
+  }
+
+  const targetEl = candidates[0];
+  const targetLine = targetEl.getStartLineNumber();
+
+  // Safety checks on candidate element
+  if (isElementInsideLoop(targetEl)) {
+    return refuseWithInstructions('element is inside a repeating list', targetLine);
+  }
+  if (isComponentUsedMultipleTimes(targetEl, project)) {
+    return refuseWithInstructions('element is in a component used in several places', targetLine);
+  }
+
+  // Check conditional ancestor
+  let ancestor: Node | undefined = targetEl.getParent();
+  while (ancestor) {
+    if (Node.isConditionalExpression(ancestor) || (Node.isBinaryExpression(ancestor) && ['&&', '||'].includes(ancestor.getOperatorToken().getText()))) {
+      return refuseWithInstructions('element is in a conditional expression', targetLine);
+    }
+    if (Node.isIfStatement(ancestor)) {
+      return refuseWithInstructions('element is in a conditional statement', targetLine);
+    }
+    ancestor = ancestor.getParent();
+  }
+
+  // Check same-line sibling ambiguity
+  const sameLineSiblings = jsxElements.filter(el => el !== targetEl && el.getStartLineNumber() === targetLine && el.getTagNameNode().getText().toLowerCase() === targetEl.getTagNameNode().getText().toLowerCase());
+  if (sameLineSiblings.length > 0 && details.column === undefined && !details.elementId) {
+    return refuseWithInstructions('same-line sibling ambiguity', targetLine);
+  }
+
+  // Check current className attribute
+  const classAttr = targetEl.getAttribute('className');
+  if (!classAttr || !Node.isJsxAttribute(classAttr)) {
+    return refuseWithInstructions('className attribute missing', targetLine);
+  }
+  const init = classAttr.getInitializer();
+  const literal = init && Node.isStringLiteral(init) ? init : (init && Node.isJsxExpression(init) && init.getExpression() && Node.isStringLiteral(init.getExpression()!) ? (init.getExpression() as StringLiteral) : null);
+  if (!literal) {
+    return refuseWithInstructions('className is dynamic and cannot be edited safely', targetLine);
+  }
+
+  const currentClassVal = literal.getLiteralValue();
+  const currentTokens = currentClassVal.trim().split(/\s+/).filter(Boolean);
+
+  const hasAllAdded = addedTokens.every(t => currentTokens.includes(t));
+  const hasNoRemoved = removedTokens.every(t => !currentTokens.includes(t));
+
+  if (!hasAllAdded || !hasNoRemoved) {
+    return refuseWithInstructions('the token was modified by the user', targetLine);
+  }
+
+  // Revert in place: remove addedTokens, restore removedTokens at original positions where possible
+  const remainingToRemove = new Set(addedTokens);
+  let removedToRestore = [...removedTokens];
+
+  const newTokens: string[] = [];
+  for (const tok of currentTokens) {
+    if (remainingToRemove.has(tok)) {
+      remainingToRemove.delete(tok);
+      if (removedToRestore.length > 0) {
+        newTokens.push(removedToRestore.shift()!);
+      }
+    } else {
+      newTokens.push(tok);
+    }
+  }
+  if (removedToRestore.length > 0) {
+    newTokens.push(...removedToRestore);
+  }
+
+  const updatedClassVal = newTokens.join(' ');
+
+  // Direct string slice replacement in current source code
+  const litStart = literal.getStart();
+  const litEnd = literal.getEnd();
+  const quote = current[litStart];
+  const newLiteralSnippet = `${quote}${updatedClassVal}${quote}`;
+  const newContent = current.slice(0, litStart) + newLiteralSnippet + current.slice(litEnd);
+
+  // Re-parse verification
+  const parseCheck = verifySyntacticParse(absolutePath, newContent);
+  if (!parseCheck.valid) {
+    return refuseWithInstructions(`re-parse verification failed (${parseCheck.error})`, targetLine);
+  }
+
+  // Containment check
+  relativeFilePath(absolutePath);
+
+  // Write through atomic write path
   records[index] = { ...record, status: 'undoing' };
   writeHistory(records);
   try {
-    atomicWrite(absolutePath, record.before);
+    atomicWrite(absolutePath, newContent);
     records[index] = { ...record, status: 'undone' };
     writeHistory(records);
   } catch (error) {
     try {
       records[index] = { ...record, status: 'applied' };
       writeHistory(records);
-    } catch { /* Keep the recovery record if the history store itself is unavailable. */ }
+    } catch {}
     throw error;
   }
 
@@ -432,7 +831,13 @@ export function canUndoSourceEdit(filePath: string) {
     const records = readHistory();
     const record = records.findLast((entry) => entry.status !== 'undone' && entry.filePath === wantedPath);
     if (!record || record.missing) return false;
-    return readFileSync(resolvedPath, 'utf8') === record.after;
+    const current = readFileSync(resolvedPath, 'utf8');
+    if (current === record.after) return true;
+    const details = (record.addedTokens && record.removedTokens)
+      ? record
+      : deriveClassEditDetails(record.before, record.after, record.line);
+    if (!details || (!details.addedTokens?.length && !details.removedTokens?.length)) return false;
+    return true;
   } catch {
     return false;
   }
