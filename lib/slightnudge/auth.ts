@@ -6,7 +6,7 @@ const GLOBAL_TOKEN_KEY = Symbol.for('slightnudge.sessionToken');
 const GLOBAL_PORT_KEY = Symbol.for('slightnudge.serverPort');
 
 export function getSessionToken(): string {
-  if (process.env.SLIGHTNUDGE_TEST === '1' && process.env.SLIGHTNUDGE_SESSION_TOKEN) {
+  if (process.env.SLIGHTNUDGE_TEST === '1' && process.env.NODE_ENV !== 'production' && process.env.SLIGHTNUDGE_SESSION_TOKEN) {
     return process.env.SLIGHTNUDGE_SESSION_TOKEN;
   }
   const g = globalThis as any;

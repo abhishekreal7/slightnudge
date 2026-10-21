@@ -4,7 +4,7 @@ import path from 'node:path';
 import { verifyTailwindClass, verifySyntacticParse, findProjectRoot } from './tailwind-verifier';
 
 function isTestMode(): boolean {
-  return process.env.SLIGHTNUDGE_TEST === '1';
+  return process.env.SLIGHTNUDGE_TEST === '1' && process.env.NODE_ENV !== 'production';
 }
 
 function getWorkspacePath(): string {
