@@ -1,5 +1,7 @@
 import { chromium } from 'playwright';
 import fs from 'fs';
+import path from 'path';
+import { createTempWorkspace } from './helpers/test-server';
 
 interface BenchmarkMetric {
   task: string;
@@ -14,7 +16,9 @@ async function runStudioBenchmark() {
   console.log('🚀 SLIGHTNUDGE STUDIO FULL 20-POINT PERFORMANCE & AST BENCHMARK SUITE');
   console.log('========================================================================\n');
 
-  const origFixture = fs.readFileSync('fixtures/1-plain-static.tsx', 'utf8');
+  const ws = createTempWorkspace('sn-benchmark', { useFixture1Baseline: true });
+  const fixturePath = path.join(ws.wsDir, 'fixtures', '1-plain-static.tsx');
+  const origFixture = fs.readFileSync(fixturePath, 'utf8');
   const metrics: BenchmarkMetric[] = [];
 
   const browser = await chromium.launch({ headless: true });
@@ -62,8 +66,9 @@ async function runStudioBenchmark() {
     };
 
     // 1. Initial Page Load
+    const BASE_URL = process.env.STUDIO_BASE_URL || (process.env.SLIGHTNUDGE_TEST === '1' ? 'http://127.0.0.1:3999' : 'http://localhost:3000');
     let t0 = performance.now();
-    await page.goto('http://localhost:3000/studio', { waitUntil: 'networkidle' });
+    await page.goto(`${BASE_URL}/studio`, { waitUntil: 'networkidle' });
     recordMetric('Studio Page Initial Load', 'Canvas Gestures', t0, '200 OK network idle');
 
     // 2. Select Headline on Canvas
@@ -85,14 +90,14 @@ async function runStudioBenchmark() {
     await page.locator('button:has-text("Apply to Source"), button:has-text("Apply to code")').first().click();
     await applyPromise;
 
-    const diskAfterBold = fs.readFileSync('fixtures/1-plain-static.tsx', 'utf8');
+    const diskAfterBold = fs.readFileSync(fixturePath, 'utf8');
     if (!diskAfterBold.includes('font-bold')) throw new Error('Disk file missing font-bold');
 
     const undoPromise = page.waitForResponse((r) => r.url().includes('/api/slightnudge/undo'));
     await page.keyboard.press('Control+z');
     await undoPromise;
 
-    const diskRestored = fs.readFileSync('fixtures/1-plain-static.tsx', 'utf8');
+    const diskRestored = fs.readFileSync(fixturePath, 'utf8');
     if (diskRestored !== origFixture) throw new Error('Disk file not restored byte-for-byte');
     recordMetric('HUD Bold Toggle -> Disk Apply -> Byte-for-Byte Undo', 'Disk AST', t0, 'AST transaction verified on disk');
     await page.waitForTimeout(1000);
@@ -218,7 +223,7 @@ async function runStudioBenchmark() {
     await page.locator('button:has-text("Apply to Source"), button:has-text("Apply to code")').first().click();
     await applyRadiusPromise;
 
-    const diskWithRadius = fs.readFileSync('fixtures/1-plain-static.tsx', 'utf8');
+    const diskWithRadius = fs.readFileSync(fixturePath, 'utf8');
     if (!diskWithRadius.includes('rounded-xl')) throw new Error('Disk file missing rounded-xl');
 
     await page.waitForTimeout(200);
@@ -227,7 +232,7 @@ async function runStudioBenchmark() {
     await undoRadiusPromise;
     await page.waitForTimeout(100);
 
-    const diskAfterUndoRadius = fs.readFileSync('fixtures/1-plain-static.tsx', 'utf8');
+    const diskAfterUndoRadius = fs.readFileSync(fixturePath, 'utf8');
     if (diskAfterUndoRadius !== origFixture) throw new Error('Disk not restored after radius undo');
     recordMetric('Inspector Border Radius -> Disk Apply -> Byte-for-Byte Undo', 'Disk AST', t0, 'rounded-xl written & restored');
     await page.waitForTimeout(1000);
@@ -360,7 +365,8 @@ async function runStudioBenchmark() {
 
   } finally {
     await browser.close();
-    fs.writeFileSync('fixtures/1-plain-static.tsx', origFixture, 'utf8');
+    fs.writeFileSync(fixturePath, origFixture, 'utf8');
+    await ws.cleanup();
   }
 }
 

@@ -29,7 +29,8 @@ async function runDragTest(
   setupParentLayout?: (page: Page) => Promise<void>
 ): Promise<DragTestResult> {
   // Navigate fresh to studio fixture
-  await page.goto('http://localhost:3000/studio?file=fixtures/1-plain-static.tsx', { waitUntil: 'domcontentloaded' });
+  const BASE_URL = process.env.STUDIO_BASE_URL || (process.env.SLIGHTNUDGE_TEST === '1' ? 'http://127.0.0.1:3999' : 'http://localhost:3000');
+  await page.goto(`${BASE_URL}/studio?file=fixtures/1-plain-static.tsx`, { waitUntil: 'domcontentloaded' });
   await page.waitForSelector('#target', { timeout: 10000 });
   await page.waitForTimeout(400);
 

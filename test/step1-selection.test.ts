@@ -22,13 +22,14 @@ async function runStep1Tests() {
 
   const browser: Browser = await chromium.launch({ headless: true });
   const page: Page = await browser.newPage();
+  const BASE_URL = process.env.STUDIO_BASE_URL || (process.env.SLIGHTNUDGE_TEST === '1' ? 'http://127.0.0.1:3999' : 'http://localhost:3000');
 
   try {
     // -----------------------------------------------------------------------
     // TEST 1: Fixture 1 Selection & Source Display
     // -----------------------------------------------------------------------
     console.log('--- Test 1: Click selection on Fixture 1 ---');
-    await page.goto('http://localhost:3000/fixtures/1');
+    await page.goto(`${BASE_URL}/fixtures/1`);
     await page.waitForSelector('#target');
 
     // Click target element to select it
@@ -64,7 +65,7 @@ async function runStep1Tests() {
     // TEST 2: Fixture 2 Selection & Multi-utility Display
     // -----------------------------------------------------------------------
     console.log('\n--- Test 2: Click selection on Fixture 2 (Multiple utilities) ---');
-    await page.goto('http://localhost:3000/fixtures/2');
+    await page.goto(`${BASE_URL}/fixtures/2`);
     await page.waitForSelector('#target');
     await page.click('#target');
 
@@ -89,7 +90,7 @@ async function runStep1Tests() {
     // TEST 3: Fixture 3 Conditional cn() - Unsafe Warning
     // -----------------------------------------------------------------------
     console.log('\n--- Test 3: Click selection on Fixture 3 (Conditional cn) ---');
-    await page.goto('http://localhost:3000/fixtures/3');
+    await page.goto(`${BASE_URL}/fixtures/3`);
     await page.waitForSelector('#target');
     await page.click('#target');
 
@@ -115,7 +116,7 @@ async function runStep1Tests() {
     // TEST 4: Fixture 4 Shared Component - Unsafe Warning
     // -----------------------------------------------------------------------
     console.log('\n--- Test 4: Click selection on Fixture 4 (Shared Component) ---');
-    await page.goto('http://localhost:3000/fixtures/4');
+    await page.goto(`${BASE_URL}/fixtures/4`);
     await page.waitForSelector('#card-1');
     await page.click('#card-1');
 
@@ -141,7 +142,7 @@ async function runStep1Tests() {
     // TEST 5: Fixture 5 Responsive Classes Selection
     // -----------------------------------------------------------------------
     console.log('\n--- Test 5: Click selection on Fixture 5 (Responsive classes) ---');
-    await page.goto('http://localhost:3000/fixtures/5');
+    await page.goto(`${BASE_URL}/fixtures/5`);
     await page.waitForSelector('#target');
     await page.click('#target');
 

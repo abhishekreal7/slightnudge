@@ -1,12 +1,16 @@
 import { chromium } from 'playwright';
 import fs from 'fs';
+import path from 'path';
+import { createTempWorkspace } from './helpers/test-server';
 
 async function main() {
   console.log('====================================================');
   console.log('🧪 STUDIO BACKEND RESTORATION BROWSER SUITE');
   console.log('====================================================\n');
 
-  const origFixture = fs.readFileSync('fixtures/1-plain-static.tsx', 'utf8');
+  const ws = createTempWorkspace('sn-studio-restore', { useFixture1Baseline: true });
+  const fixturePath = path.join(ws.wsDir, 'fixtures', '1-plain-static.tsx');
+  const origFixture = fs.readFileSync(fixturePath, 'utf8');
 
   const browser = await chromium.launch({ headless: true });
   const context = await browser.newContext({ viewport: { width: 1440, height: 900 } });
@@ -14,8 +18,9 @@ async function main() {
 
   try {
     // 1. Load /studio
-    console.log('1. Loading http://localhost:3000/studio...');
-    await page.goto('http://localhost:3000/studio', { waitUntil: 'networkidle' });
+    const BASE_URL = process.env.STUDIO_BASE_URL || (process.env.SLIGHTNUDGE_TEST === '1' ? 'http://127.0.0.1:3999' : 'http://localhost:3000');
+    console.log(`1. Loading ${BASE_URL}/studio...`);
+    await page.goto(`${BASE_URL}/studio`, { waitUntil: 'networkidle' });
     console.log('   ✅ [PASS] Studio page loaded successfully (200 OK)');
 
     // 2. Select Headline on canvas
@@ -57,7 +62,7 @@ async function main() {
     console.log('   ✅ [PASS] POST /api/slightnudge/apply returned status', applyResp.status());
 
     // 6. Check Disk
-    const modifiedFixture = fs.readFileSync('fixtures/1-plain-static.tsx', 'utf8');
+    const modifiedFixture = fs.readFileSync(fixturePath, 'utf8');
     const isDiskModified = modifiedFixture !== origFixture && modifiedFixture.includes('font-bold');
     if (!isDiskModified) throw new Error('Disk file was NOT modified with font-bold after Apply!');
     console.log('   ✅ [PASS] Source file verified modified on disk with new AST class');
@@ -70,7 +75,7 @@ async function main() {
     const undoBody = await undoResp.json();
     console.log('   ✅ [PASS] POST /api/slightnudge/undo returned status', undoResp.status(), undoBody);
 
-    const restoredFixture = fs.readFileSync('fixtures/1-plain-static.tsx', 'utf8');
+    const restoredFixture = fs.readFileSync(fixturePath, 'utf8');
     const isRestored = restoredFixture === origFixture;
     if (!isRestored) throw new Error('Disk file was NOT cleanly restored byte-for-byte by Undo!');
     console.log('   ✅ [PASS] Source file restored byte-for-byte on disk');
@@ -117,7 +122,7 @@ async function main() {
     const applyResp2 = await applyPromise2;
     console.log('   ✅ [PASS] "Apply to Source" applied successfully (200 OK)');
 
-    const diskAfterParagraph = fs.readFileSync('fixtures/1-plain-static.tsx', 'utf8');
+    const diskAfterParagraph = fs.readFileSync(fixturePath, 'utf8');
     if (!diskAfterParagraph.includes('font-bold')) throw new Error('Disk file missing paragraph bold edit!');
     console.log('   ✅ [PASS] Disk verified with paragraph bold update');
 
@@ -126,7 +131,7 @@ async function main() {
     await undoPromise2;
     console.log('   ✅ [PASS] Undo successfully restored source file');
 
-    const finalDisk = fs.readFileSync('fixtures/1-plain-static.tsx', 'utf8');
+    const finalDisk = fs.readFileSync(fixturePath, 'utf8');
     if (finalDisk !== origFixture) throw new Error('Final disk does not match original fixture!');
     console.log('   ✅ [PASS] Final disk matches original fixture byte-for-byte');
 
@@ -135,7 +140,8 @@ async function main() {
     console.log('====================================================\n');
   } finally {
     await browser.close();
-    fs.writeFileSync('fixtures/1-plain-static.tsx', origFixture, 'utf8');
+    fs.writeFileSync(fixturePath, origFixture, 'utf8');
+    await ws.cleanup();
   }
 }
 

@@ -1,6 +1,16 @@
 import { chromium, Browser, Page } from 'playwright';
 import fs from 'node:fs/promises';
 import path from 'node:path';
+import { createTempWorkspace, TempWorkspace } from './helpers/test-server';
+
+let tempWs: TempWorkspace | null = null;
+const BASE_URL = process.env.STUDIO_BASE_URL || (process.env.SLIGHTNUDGE_TEST === '1' ? 'http://127.0.0.1:3999' : 'http://localhost:3000');
+function getFixturePath(): string {
+  if (!tempWs) {
+    tempWs = createTempWorkspace('sn-move-exp', { useFixture1Baseline: true });
+  }
+  return path.join(tempWs.wsDir, 'fixtures', '1-plain-static.tsx');
+}
 
 interface FrameSample {
   timestamp: number;
@@ -42,10 +52,11 @@ export default function PlainStaticPage() {
 `;
 
 async function restoreFixture(): Promise<boolean> {
-  const current = await fs.readFile(path.resolve('fixtures/1-plain-static.tsx'), 'utf-8').catch(() => '');
+  const fPath = getFixturePath();
+  const current = await fs.readFile(fPath, 'utf-8').catch(() => '');
   if (normalizeLines(current) !== normalizeLines(PRISTINE_FIXTURE_1)) {
     console.log('Restoring fixtures/1-plain-static.tsx to pristine base and waiting for Next.js dev server...');
-    await fs.writeFile(path.resolve('fixtures/1-plain-static.tsx'), PRISTINE_FIXTURE_1, 'utf-8');
+    await fs.writeFile(fPath, PRISTINE_FIXTURE_1, 'utf-8');
     await new Promise((r) => setTimeout(r, 4500));
     return true;
   }
@@ -128,7 +139,7 @@ async function testMatrixCase(
   dy: number,
   setupFn?: (page: Page) => Promise<void>
 ): Promise<TestRunResult> {
-  await page.goto('http://localhost:3000/fixtures/1', { waitUntil: 'domcontentloaded' });
+  await page.goto(`${BASE_URL}/fixtures/1`, { waitUntil: 'domcontentloaded' });
   await page.waitForSelector('#target', { timeout: 10000 });
   await page.waitForTimeout(300);
 
@@ -343,10 +354,10 @@ async function testMatrixCase(
 async function testApplyAndUndo(page: Page) {
   console.log('\n--- Running 1d: Apply & Undo byte-for-byte verification ---');
   await restoreFixture();
-  const fixturePath = path.resolve('fixtures/1-plain-static.tsx');
+  const fixturePath = getFixturePath();
   const originalSource = await fs.readFile(fixturePath, 'utf-8');
 
-  await page.goto('http://localhost:3000/fixtures/1', { waitUntil: 'domcontentloaded' });
+  await page.goto(`${BASE_URL}/fixtures/1`, { waitUntil: 'domcontentloaded' });
   await page.waitForSelector('#target', { timeout: 10000 });
   await setZoom(page, 100);
 
@@ -417,10 +428,10 @@ async function testApplyAndUndo(page: Page) {
 async function testCancelDiscardReload(page: Page) {
   console.log('\n--- Running 1e & Item 3: Esc, Discard, and Reload verification ---');
   await restoreFixture();
-  const fixturePath = path.resolve('fixtures/1-plain-static.tsx');
+  const fixturePath = getFixturePath();
   const sourceBefore = await fs.readFile(fixturePath, 'utf-8');
 
-  await page.goto('http://localhost:3000/fixtures/1', { waitUntil: 'domcontentloaded' });
+  await page.goto(`${BASE_URL}/fixtures/1`, { waitUntil: 'domcontentloaded' });
   await page.waitForSelector('#target', { timeout: 10000 });
   await setZoom(page, 100);
 
@@ -669,7 +680,8 @@ async function main() {
   }
 
   const browser: Browser = await chromium.launch({ headless: true });
-  const context = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+  try {
+    const context = await browser.newContext({ viewport: { width: 1440, height: 900 } });
 
   const matrixCases: {
     layout: 'block' | 'flex-row' | 'flex-column';
@@ -787,6 +799,10 @@ async function main() {
 
   if (!totalPass) {
     process.exit(1);
+  }
+  } finally {
+    await browser.close();
+    if (tempWs) await tempWs.cleanup();
   }
 }
 

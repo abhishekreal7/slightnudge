@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { nudgeElement } from '../lib/slightnudge/ast-nudger';
+import { createTempWorkspace } from './helpers/test-server';
 
 async function runFixtureTests() {
   console.log('====================================================');
@@ -22,7 +23,10 @@ async function runFixtureTests() {
     }
   }
 
-  const fixturesDir = path.resolve(process.cwd(), 'fixtures');
+  const ws = createTempWorkspace('sn-fixtures', { useFixture1Baseline: true });
+  const fixturesDir = path.join(ws.wsDir, 'fixtures');
+
+  try {
 
   // Helper to preserve file content
   function withFixtureBackup(filePath: string, fn: () => void) {
@@ -199,6 +203,9 @@ async function runFixtureTests() {
   console.log('\n====================================================');
   console.log(`🎉 ALL ${passed}/${total} STEP 0 FIXTURE TESTS PASSED!`);
   console.log('====================================================\n');
+  } finally {
+    await ws.cleanup();
+  }
 }
 
 runFixtureTests().catch((err) => {

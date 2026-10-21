@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { execSync } from 'child_process';
 import { chromium, Browser, Page } from 'playwright';
+import { createTempWorkspace } from './helpers/test-server';
 
 async function runStep3Tests() {
   console.log('====================================================');
@@ -23,7 +24,8 @@ async function runStep3Tests() {
     }
   }
 
-  const fixturesDir = path.resolve(process.cwd(), 'fixtures');
+  const ws = createTempWorkspace('sn-step3', { useFixture1Baseline: true });
+  const fixturesDir = path.join(ws.wsDir, 'fixtures');
   const f1Path = path.join(fixturesDir, '1-plain-static.tsx');
   const f3Path = path.join(fixturesDir, '3-conditional-cn.tsx');
   const f4Path = path.join(fixturesDir, '4-shared-component.tsx');
@@ -185,6 +187,7 @@ async function runStep3Tests() {
     console.log('====================================================\n');
   } finally {
     await browser.close();
+    await ws.cleanup();
   }
 }
 

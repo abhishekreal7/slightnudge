@@ -1,12 +1,16 @@
 import { chromium } from 'playwright';
 import fs from 'fs';
+import path from 'path';
+import { createTempWorkspace } from './helpers/test-server';
 
 async function testDragResizeAndMove() {
   console.log('====================================================');
   console.log('🧪 VERIFYING DRAG TO RESIZE & CLEAN IOS MOVE SUITE');
   console.log('====================================================\n');
 
-  const origFixture = fs.readFileSync('fixtures/1-plain-static.tsx', 'utf8');
+  const ws = createTempWorkspace('sn-drag-resize', { useFixture1Baseline: true });
+  const fixturePath = path.join(ws.wsDir, 'fixtures', '1-plain-static.tsx');
+  const origFixture = fs.readFileSync(fixturePath, 'utf8');
 
   const browser = await chromium.launch({ headless: true });
   const context = await browser.newContext({ viewport: { width: 1440, height: 900 } });
@@ -14,8 +18,9 @@ async function testDragResizeAndMove() {
 
   try {
     // 1. Load /studio
-    console.log('1. Loading http://localhost:3000/studio...');
-    await page.goto('http://localhost:3000/studio', { waitUntil: 'networkidle' });
+    const BASE_URL = process.env.STUDIO_BASE_URL || (process.env.SLIGHTNUDGE_TEST === '1' ? 'http://127.0.0.1:3999' : 'http://localhost:3000');
+    console.log(`1. Loading ${BASE_URL}/studio...`);
+    await page.goto(`${BASE_URL}/studio`, { waitUntil: 'networkidle' });
 
     // 2. Click canvas <h1> element to select Headline
     console.log('2. Selecting Headline element on canvas...');
@@ -119,7 +124,7 @@ async function testDragResizeAndMove() {
     const undoReorderResp = await undoReorderPromise;
     console.log('   ✅ [PASS] Reorder undone cleanly (200 OK)');
 
-    const finalFixture = fs.readFileSync('fixtures/1-plain-static.tsx', 'utf8');
+    const finalFixture = fs.readFileSync(fixturePath, 'utf8');
     if (finalFixture !== origFixture) {
       throw new Error('Final fixture on disk does not match original fixture byte-for-byte!');
     }
@@ -129,8 +134,9 @@ async function testDragResizeAndMove() {
     console.log('🎉 ALL DRAG RESIZE & IOS MOVE TESTS PASSED (100%)');
     console.log('====================================================\n');
   } finally {
-    fs.writeFileSync('fixtures/1-plain-static.tsx', origFixture, 'utf8');
+    fs.writeFileSync(fixturePath, origFixture, 'utf8');
     await browser.close();
+    await ws.cleanup();
   }
 }
 

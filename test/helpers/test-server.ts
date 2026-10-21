@@ -93,12 +93,16 @@ export interface TempWorkspace {
   cleanup: () => Promise<void>;
 }
 
+export interface TempWorkspaceOptions {
+  useFixture1Baseline?: boolean;
+}
+
 /**
  * Creates a temporary workspace copy outside the project root,
  * junctions node_modules from the project root, and initializes
  * an isolated .slightnudge directory.
  */
-export function createTempWorkspace(prefix = 'sn-ws'): TempWorkspace {
+export function createTempWorkspace(prefix = 'sn-ws', options?: TempWorkspaceOptions): TempWorkspace {
   const id = randomUUID();
   const wsDir = path.join(os.tmpdir(), `${prefix}-${id}`);
   fs.mkdirSync(wsDir, { recursive: true });
@@ -115,6 +119,16 @@ export function createTempWorkspace(prefix = 'sn-ws'): TempWorkspace {
     const dest = path.join(wsDir, file);
     fs.mkdirSync(path.dirname(dest), { recursive: true });
     fs.copyFileSync(src, dest);
+  }
+
+  // If baseline requested, overwrite fixtures/1-plain-static.tsx in the temp copy
+  if (options?.useFixture1Baseline) {
+    const baselinePath = path.join(projectRoot, 'test', 'baselines', '1-plain-static.tsx');
+    if (fs.existsSync(baselinePath)) {
+      const destBaseline = path.join(wsDir, 'fixtures', '1-plain-static.tsx');
+      fs.mkdirSync(path.dirname(destBaseline), { recursive: true });
+      fs.copyFileSync(baselinePath, destBaseline);
+    }
   }
 
   // Junction node_modules
@@ -164,10 +178,10 @@ export interface TestServer {
  * Starts a Next.js dev server on an isolated free port with its own workspace copy.
  * Exposes baseUrl, token, and a stop() teardown function.
  */
-export async function startTestServer(options?: { port?: number }): Promise<TestServer> {
+export async function startTestServer(options?: { port?: number; useFixture1Baseline?: boolean }): Promise<TestServer> {
   const port = options?.port || (await findFreePort());
   const baseUrl = `http://127.0.0.1:${port}`;
-  const workspace = createTempWorkspace('sn-srv');
+  const workspace = createTempWorkspace('sn-srv', { useFixture1Baseline: options?.useFixture1Baseline });
 
   const env = {
     ...process.env,

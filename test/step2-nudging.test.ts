@@ -168,7 +168,12 @@ async function runStep2Tests() {
     console.log('====================================================\n');
   } finally {
     await browser.close();
-    execSync(`git reset --hard ${initialGitHash}`, { stdio: 'pipe' });
+    try {
+      const currentHash = execSync('git rev-parse HEAD').toString().trim();
+      if (currentHash !== initialGitHash) {
+        execSync(`git reset --hard ${initialGitHash}`, { stdio: 'pipe' });
+      }
+    } catch {}
   }
 }
 
