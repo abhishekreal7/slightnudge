@@ -557,11 +557,12 @@ export function undoSourceEdit(target?: string | { filePath?: string; editId?: s
   }
 
   if (wantedPath) {
-    const normalized = path.normalize(wantedPath);
-    if (path.isAbsolute(normalized) || normalized === '..' || normalized.startsWith(`..${path.sep}`)) {
+    const workspaceRoot = getWorkspacePath();
+    const resolvedPath = path.resolve(workspaceRoot, wantedPath);
+    const relFromWs = path.relative(workspaceRoot, resolvedPath);
+    if (!relFromWs || relFromWs === '..' || relFromWs.startsWith(`..${path.sep}`) || path.isAbsolute(relFromWs)) {
       return { success: false as const, error: 'The edited file must be inside the SlightNudge workspace.' };
     }
-    const resolvedPath = path.resolve(getWorkspacePath(), wantedPath);
     if (!existsSync(resolvedPath)) {
       return { success: false as const, error: 'That file no longer exists.' };
     }
