@@ -211,14 +211,70 @@ function writeHistory(records: EditRecord[]) {
   atomicWrite(getHistoryPath(), JSON.stringify(records.slice(-maxHistoryEntries), null, 2));
 }
 
-function relativeFilePath(filePath: string) {
-  const workspacePath = realpathSync(getWorkspacePath());
-  const absolutePath = realpathSync(filePath);
-  const relativePath = path.relative(workspacePath, absolutePath);
-  if (!relativePath || relativePath === '..' || relativePath.startsWith(`..${path.sep}`) || path.isAbsolute(relativePath)) {
-    throw new Error('The edited file must be inside the SlightNudge workspace.');
+let preWriteTestHook: ((filePath: string) => void) | null = null;
+
+export function setPreWriteTestHook(hook: ((filePath: string) => void) | null): void {
+  if (process.env.SLIGHTNUDGE_TEST === '1' && process.env.NODE_ENV !== 'production') {
+    preWriteTestHook = hook;
   }
-  return relativePath;
+}
+
+export function invokePreWriteHook(filePath: string): void {
+  if (process.env.SLIGHTNUDGE_TEST === '1' && process.env.NODE_ENV !== 'production' && preWriteTestHook) {
+    preWriteTestHook(filePath);
+  }
+}
+
+export function assertWriteTargetInsideWorkspace(targetPath: string): string {
+  if (!targetPath || typeof targetPath !== 'string') {
+    throw new Error('The target file must be inside the SlightNudge workspace.');
+  }
+
+  // Reject UNC paths
+  if (targetPath.startsWith('\\\\') || targetPath.startsWith('//')) {
+    throw new Error('The target file must be inside the SlightNudge workspace.');
+  }
+
+  let cleanPath = targetPath;
+  if (cleanPath.startsWith('\\\\?\\UNC\\')) {
+    throw new Error('The target file must be inside the SlightNudge workspace.');
+  }
+  if (cleanPath.startsWith('\\\\?\\')) {
+    cleanPath = cleanPath.slice(4);
+  }
+
+  const workspaceRoot = getWorkspacePath();
+  const realWorkspace = realpathSync(workspaceRoot);
+
+  const resolved = path.resolve(workspaceRoot, cleanPath);
+  const relSimple = path.relative(workspaceRoot, resolved);
+  if (!relSimple || relSimple === '..' || relSimple.startsWith(`..${path.sep}`) || path.isAbsolute(relSimple)) {
+    throw new Error('The target file must be inside the SlightNudge workspace.');
+  }
+
+  let realTarget: string;
+  try {
+    if (existsSync(resolved)) {
+      realTarget = realpathSync(resolved);
+    } else {
+      const parentDir = path.dirname(resolved);
+      const realParent = realpathSync(parentDir);
+      realTarget = path.join(realParent, path.basename(resolved));
+    }
+  } catch (err: any) {
+    throw new Error(`The target file must be inside the SlightNudge workspace: ${err.message}`);
+  }
+
+  const relReal = path.relative(realWorkspace, realTarget);
+  if (!relReal || relReal === '..' || relReal.startsWith(`..${path.sep}`) || path.isAbsolute(relReal)) {
+    throw new Error('The target file must be inside the SlightNudge workspace.');
+  }
+
+  return relReal;
+}
+
+function relativeFilePath(filePath: string) {
+  return assertWriteTargetInsideWorkspace(filePath);
 }
 
 export function deriveClassEditDetails(before: string, after: string, lineHint?: number) {
@@ -510,6 +566,7 @@ export async function applyPendingSourceEdit(id: string, groupId?: string, repos
   }
 
   try {
+    assertWriteTargetInsideWorkspace(filePath);
     atomicWrite(filePath, pending.after);
   } catch (error) {
     return {
@@ -573,12 +630,17 @@ export function undoSourceEdit(target?: string | { filePath?: string; editId?: s
     }
   }
 
+  const isSamePath = (a?: string, b?: string) => {
+    if (!a || !b) return false;
+    return path.resolve(getWorkspacePath(), a) === path.resolve(getWorkspacePath(), b);
+  };
+
   const records = readHistory();
   let index = -1;
   if (wantedEditId) {
-    index = records.findLastIndex((record) => record.id === wantedEditId && record.status !== 'undone' && (!wantedPath || record.filePath === wantedPath));
+    index = records.findLastIndex((record) => record.id === wantedEditId && record.status !== 'undone' && (!wantedPath || isSamePath(record.filePath, wantedPath)));
   } else {
-    index = records.findLastIndex((record) => record.status !== 'undone' && (!wantedPath || record.filePath === wantedPath));
+    index = records.findLastIndex((record) => record.status !== 'undone' && (!wantedPath || isSamePath(record.filePath, wantedPath)));
   }
 
   if (index < 0) return { success: false as const, error: 'There is no visual edit to undo.' };
@@ -592,7 +654,7 @@ export function undoSourceEdit(target?: string | { filePath?: string; editId?: s
   // Check 4: If the same element was edited twice, undoing the older edit while a newer one is on top must refuse
   for (let i = index + 1; i < records.length; i++) {
     const newer = records[i];
-    if (newer.status !== 'undone' && newer.filePath === record.filePath) {
+    if (newer.status !== 'undone' && isSamePath(newer.filePath, record.filePath)) {
       const sameElement = (record.elementId && newer.elementId && record.elementId === newer.elementId) ||
         (record.line && newer.line && record.line === newer.line && record.tagName === newer.tagName) ||
         (newer.before === record.after);
@@ -618,8 +680,9 @@ export function undoSourceEdit(target?: string | { filePath?: string; editId?: s
   if (current === record.after) {
     records[index] = { ...record, status: 'undoing' };
     writeHistory(records);
+    invokePreWriteHook(absolutePath);
     try {
-      relativeFilePath(absolutePath);
+      assertWriteTargetInsideWorkspace(absolutePath);
       atomicWrite(absolutePath, record.before);
       records[index] = { ...record, status: 'undone' };
       writeHistory(records);
@@ -672,6 +735,11 @@ export function undoSourceEdit(target?: string | { filePath?: string; editId?: s
       success: false as const,
       error: `This file changed after the visual edit: ${reason}. Open ${record.filePath} near line ${line} and change the className to remove "${toRemoveStr}" and restore "${toRestoreStr}". Nothing was changed.`,
     };
+  }
+
+  const currentParse = verifySyntacticParse(absolutePath, current);
+  if (!currentParse.valid) {
+    return refuseWithInstructions(`parse failure (${currentParse.error})`);
   }
 
   let project: Project;
@@ -803,8 +871,34 @@ export function undoSourceEdit(target?: string | { filePath?: string; editId?: s
     return refuseWithInstructions(`re-parse verification failed (${parseCheck.error})`, targetLine);
   }
 
+  // M6 post-condition check: confirm only target element's className literal range changed
+  const beforeSlice = current.slice(0, litStart);
+  const afterSlice = current.slice(litEnd);
+  const newBeforeSlice = newContent.slice(0, litStart);
+  const newAfterSlice = newContent.slice(litStart + newLiteralSnippet.length);
+  if (beforeSlice !== newBeforeSlice || afterSlice !== newAfterSlice) {
+    return refuseWithInstructions('scope violation outside className literal', targetLine);
+  }
+
+  // M6 post-condition check: confirm target element's token multiset equals (currentTokens minus addedTokens plus removedTokens)
+  const expectedTokens = [...currentTokens];
+  for (const t of addedTokens) {
+    const idx = expectedTokens.indexOf(t);
+    if (idx >= 0) expectedTokens.splice(idx, 1);
+  }
+  expectedTokens.push(...removedTokens);
+  expectedTokens.sort();
+
+  const actualTokens = [...newTokens].sort();
+  if (expectedTokens.length !== actualTokens.length || !expectedTokens.every((t, i) => t === actualTokens[i])) {
+    return refuseWithInstructions('token multiset mismatch after substitution', targetLine);
+  }
+
+  // Hook for M5 test before pre-write containment check
+  invokePreWriteHook(absolutePath);
+
   // Containment check
-  relativeFilePath(absolutePath);
+  assertWriteTargetInsideWorkspace(absolutePath);
 
   // Write through atomic write path
   records[index] = { ...record, status: 'undoing' };
