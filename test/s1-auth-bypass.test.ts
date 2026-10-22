@@ -12,7 +12,7 @@ try {
   // Case 1: SLIGHTNUDGE_TEST unset, argv contains 'reorder-safety'
   // Under the old code, this passed through as valid: true!
   delete process.env.SLIGHTNUDGE_TEST;
-  process.env.NODE_ENV = 'development';
+  (process.env as Record<string, string | undefined>).NODE_ENV = 'development';
   process.argv = ['node', 'server.js', 'reorder-safety'];
 
   const unauthenticatedReq1 = new Request('http://localhost:3000/api/slightnudge/preview', {
@@ -37,7 +37,7 @@ try {
 
   // Case 2: In production mode (NODE_ENV=production), test overrides and argv bypass must be refused
   process.env.SLIGHTNUDGE_TEST = '1';
-  process.env.NODE_ENV = 'production';
+  (process.env as Record<string, string | undefined>).NODE_ENV = 'production';
   process.argv = ['node', 'server.js', 'reorder-safety'];
 
   const unauthenticatedReq2 = new Request('http://localhost:3000/api/slightnudge/preview', {

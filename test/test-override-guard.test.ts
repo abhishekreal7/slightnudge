@@ -49,7 +49,7 @@ try {
   // Test 1: In production mode (NODE_ENV=production), SLIGHTNUDGE_TEST=1 MUST BE IGNORED
   {
     setOverrides();
-    process.env.NODE_ENV = 'production';
+    (process.env as Record<string, string | undefined>).NODE_ENV = 'production';
     process.env.SLIGHTNUDGE_TEST = '1';
     resetToken();
 
@@ -69,7 +69,7 @@ try {
   // Test 2: In development / test mode (NODE_ENV=development, SLIGHTNUDGE_TEST=1), overrides ARE honored
   {
     setOverrides();
-    process.env.NODE_ENV = 'development';
+    (process.env as Record<string, string | undefined>).NODE_ENV = 'development';
     process.env.SLIGHTNUDGE_TEST = '1';
     resetToken();
 
@@ -86,7 +86,7 @@ try {
   // Test 3: In development mode when SLIGHTNUDGE_TEST is unset or not '1', overrides are IGNORED
   {
     setOverrides();
-    process.env.NODE_ENV = 'development';
+    (process.env as Record<string, string | undefined>).NODE_ENV = 'development';
     delete process.env.SLIGHTNUDGE_TEST;
     resetToken();
 
