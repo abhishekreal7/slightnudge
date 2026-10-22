@@ -1,8 +1,9 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
+import { headers } from 'next/headers';
 import { Header } from '@/components/Header';
-import { getSessionToken } from '@/lib/slightnudge/auth';
+import { getSessionToken, isRequestHostAllowed } from '@/lib/slightnudge/auth';
 
 export const metadata: Metadata = {
   title: {
@@ -38,20 +39,24 @@ export const metadata: Metadata = {
 const geist = Geist({ variable: '--font-geist-sans', subsets: ['latin'], display: 'swap' });
 const geistMono = Geist_Mono({ variable: '--font-geist-mono', subsets: ['latin'], display: 'swap' });
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const sessionToken = getSessionToken();
+  const headerList = await headers();
+  const allowToken = isRequestHostAllowed(headerList);
+  const sessionToken = allowToken ? getSessionToken() : null;
   return (
     <html lang="en" className={`${geist.variable} ${geistMono.variable}`}>
       <head>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `window.__SLIGHTNUDGE_TOKEN__ = ${JSON.stringify(sessionToken)};`,
-          }}
-        />
+        {sessionToken ? (
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `window.__SLIGHTNUDGE_TOKEN__ = ${JSON.stringify(sessionToken)};`,
+            }}
+          />
+        ) : null}
       </head>
       <body className={`${geist.variable} ${geistMono.variable} flex min-h-screen flex-col`}>
         <Header />

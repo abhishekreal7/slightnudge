@@ -39,6 +39,39 @@ export function isValidHost(host: string | null): boolean {
   return allowed.includes(host.trim().toLowerCase());
 }
 
+export function isRequestHostAllowed(headers: Headers | { get(name: string): string | null }): boolean {
+  const host = headers.get('host');
+  if (!isValidHost(host)) {
+    return false;
+  }
+
+  const xForwardedHost = headers.get('x-forwarded-host');
+  if (xForwardedHost) {
+    const parts = xForwardedHost.split(',').map((s) => s.trim()).filter(Boolean);
+    for (const part of parts) {
+      if (!isValidHost(part)) {
+        return false;
+      }
+    }
+  }
+
+  const forwarded = headers.get('forwarded');
+  if (forwarded) {
+    const matches = forwarded.matchAll(/(?:^|[;,])\s*host=([^;,\s]+)/gi);
+    for (const match of matches) {
+      let forwardedHost = match[1];
+      if (forwardedHost.startsWith('"') && forwardedHost.endsWith('"')) {
+        forwardedHost = forwardedHost.slice(1, -1);
+      }
+      if (!isValidHost(forwardedHost)) {
+        return false;
+      }
+    }
+  }
+
+  return true;
+}
+
 export function timingSafeEqualStrings(a: string | null | undefined, b: string): boolean {
   if (!a || !b) return false;
   const bufA = Buffer.from(a, 'utf8');
@@ -51,7 +84,8 @@ export function timingSafeEqualStrings(a: string | null | undefined, b: string):
 
 /**
  * Validates mutating requests to SlightNudge endpoints:
- * 1. Host must be exactly localhost:PORT or 127.0.0.1:PORT for the server's actual port.
+ * 1. Host must be exactly localhost:PORT or 127.0.0.1:PORT for the server's actual port,
+ *    and no forwarded host header may contradict it.
  * 2. If an Origin header is present it must be an allowed local origin.
  * 3. The token must be present and match using crypto.timingSafeEqual.
  * Any failure returns 403 with a short generic message and does nothing else.
@@ -63,9 +97,9 @@ export function validateMutatingRequest(request: Request): { valid: true } | { v
     return { valid: true };
   }
 
-  // 1. Host check: Host must be exactly localhost:PORT or 127.0.0.1:PORT for the server's actual port
-  const host = request.headers.get('host');
-  if (!isValidHost(host)) {
+  // 1. Host check: Host must be exactly localhost:PORT or 127.0.0.1:PORT for the server's actual port,
+  // and no forwarded host header may contradict it
+  if (!isRequestHostAllowed(request.headers)) {
     return {
       valid: false,
       response: NextResponse.json({ error: 'Access denied.' }, { status: 403, headers: corsHeaders(request) }),
