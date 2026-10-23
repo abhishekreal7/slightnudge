@@ -79,7 +79,7 @@ describe('Mutant M5 Closeout: Parent Directory Junction TOCTOU Attack Battery', 
         addedTokens: ['font-bold'],
       });
 
-      const applyRes = await applyPendingSourceEdit(pending.id);
+      const applyRes = await applyPendingSourceEdit(pending.id!);
       assert.strictEqual(applyRes.success, true, 'Initial apply must succeed');
 
       // 2. Setup pre-write hook to execute the real TOCTOU attack:
@@ -221,7 +221,7 @@ describe('Mutant M5 Closeout: Parent Directory Junction TOCTOU Attack Battery', 
         fs.symlinkSync(outsideSubDir, wsSubDir, 'junction');
       });
 
-      const applyRes = await applyPendingSourceEdit(pending.id);
+      const applyRes = await applyPendingSourceEdit(pending.id!);
       setPreWriteTestHook(null);
 
       // Assertions per spec:
@@ -302,7 +302,7 @@ describe('Mutant M5 Closeout: Parent Directory Junction TOCTOU Attack Battery', 
         addedTokens: ['font-bold'],
       });
 
-      await applyPendingSourceEdit(pending.id);
+      await applyPendingSourceEdit(pending.id!);
 
       const backupFile = path.join(wsRoot, 'target-backup.tsx');
       let hookTriggered = false;

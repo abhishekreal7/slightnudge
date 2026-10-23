@@ -53,7 +53,7 @@ describe('Mutant M3 Closeout: Restored Token Refusal Battery', () => {
         addedTokens: ['font-bold'],
       });
 
-      const applyRes = await applyPendingSourceEdit(pending.id);
+      const applyRes = await applyPendingSourceEdit(pending.id!);
       assert.strictEqual(applyRes.success, true, 'Apply must succeed');
       const postApplyContent = fs.readFileSync(fullPath, 'utf8');
       assert.strictEqual(postApplyContent, updatedSource, 'File updated to applied state');
@@ -156,7 +156,7 @@ describe('Mutant M3 Closeout: Restored Token Refusal Battery', () => {
         addedTokens: ['font-bold'],
       });
 
-      const applyRes = await applyPendingSourceEdit(pending.id);
+      const applyRes = await applyPendingSourceEdit(pending.id!);
       assert.strictEqual(applyRes.success, true, 'Apply must succeed');
 
       // 2. User restores removed token by hand

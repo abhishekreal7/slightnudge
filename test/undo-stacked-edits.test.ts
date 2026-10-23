@@ -88,7 +88,7 @@ describe('Multi-Element Stacked Edits Undo Battery', () => {
         removedTokens: ['text-xl'],
         addedTokens: ['text-2xl'],
       });
-      const resA = await applyPendingSourceEdit(pendingA.id);
+      const resA = await applyPendingSourceEdit(pendingA.id!);
       assert.strictEqual(resA.success, true);
 
       // Edit B: elem2 mt-2 -> mt-4
@@ -107,7 +107,7 @@ describe('Multi-Element Stacked Edits Undo Battery', () => {
         removedTokens: ['mt-2'],
         addedTokens: ['mt-4'],
       });
-      const resB = await applyPendingSourceEdit(pendingB.id);
+      const resB = await applyPendingSourceEdit(pendingB.id!);
       assert.strictEqual(resB.success, true);
 
       // Undo A first (the older edit on elem1)
@@ -176,7 +176,7 @@ describe('Multi-Element Stacked Edits Undo Battery', () => {
         removedTokens: ['text-xl'],
         addedTokens: ['text-2xl'],
       });
-      const resA = await applyPendingSourceEdit(pendingA.id);
+      const resA = await applyPendingSourceEdit(pendingA.id!);
 
       const sourceB = sourceA.replace('mt-2 text-gray-500', 'mt-4 text-gray-500');
       const pendingB = createPendingSourceEdit({
@@ -193,7 +193,7 @@ describe('Multi-Element Stacked Edits Undo Battery', () => {
         removedTokens: ['mt-2'],
         addedTokens: ['mt-4'],
       });
-      const resB = await applyPendingSourceEdit(pendingB.id);
+      const resB = await applyPendingSourceEdit(pendingB.id!);
 
       // Undo B first
       const undoResB = await undoSourceEdit({ filePath: relPath, editId: resB.editId });
@@ -249,7 +249,7 @@ describe('Multi-Element Stacked Edits Undo Battery', () => {
         removedTokens: ['text-sm'],
         addedTokens: ['text-lg'],
       });
-      const resA = await applyPendingSourceEdit(pendingA.id);
+      const resA = await applyPendingSourceEdit(pendingA.id!);
 
       // Edit B: font-normal -> font-bold on SAME element
       const sourceB = sourceA.replace('text-lg font-normal', 'text-lg font-bold');
@@ -267,7 +267,7 @@ describe('Multi-Element Stacked Edits Undo Battery', () => {
         removedTokens: ['font-normal'],
         addedTokens: ['font-bold'],
       });
-      const resB = await applyPendingSourceEdit(pendingB.id);
+      const resB = await applyPendingSourceEdit(pendingB.id!);
 
       // Undo A (older edit on same element) -> MUST REFUSE
       const undoResA1 = await undoSourceEdit({ filePath: relPath, editId: resA.editId });
@@ -390,7 +390,7 @@ describe('Multi-Element Stacked Edits Undo Battery', () => {
         removedTokens: ['text-sm'],
         addedTokens: ['text-lg'],
       });
-      const resA = await applyPendingSourceEdit(pendingA.id);
+      const resA = await applyPendingSourceEdit(pendingA.id!);
 
       // Create a structural reorder edit as newer edit
       const sourceB = [
@@ -415,7 +415,7 @@ describe('Multi-Element Stacked Edits Undo Battery', () => {
         line: 4,
         previewType: 'reorder',
       });
-      const resB = await applyPendingSourceEdit(pendingB.id);
+      const resB = await applyPendingSourceEdit(pendingB.id!);
 
       // Attempt to undo older edit A while newer structural edit is applied
       const undoResA = await undoSourceEdit({ filePath: relPath, editId: resA.editId });
@@ -471,7 +471,7 @@ describe('Multi-Element Stacked Edits Undo Battery', () => {
         removedTokens: ['text-sm'],
         addedTokens: ['text-lg'],
       });
-      const resA = await applyPendingSourceEdit(pendingA.id);
+      const resA = await applyPendingSourceEdit(pendingA.id!);
 
       const sourceB = sourceA.replace('id="btn2" className="btn text-sm"', 'id="btn2" className="btn text-xl"');
       const pendingB = createPendingSourceEdit({
@@ -488,7 +488,7 @@ describe('Multi-Element Stacked Edits Undo Battery', () => {
         removedTokens: ['text-sm'],
         addedTokens: ['text-xl'],
       });
-      const resB = await applyPendingSourceEdit(pendingB.id);
+      const resB = await applyPendingSourceEdit(pendingB.id!);
 
       // Attempt to undo A: shares line 4 with newer edit B on btn2 -> MUST REFUSE
       const undoResA = await undoSourceEdit({ filePath: relPath, editId: resA.editId });
@@ -581,7 +581,7 @@ describe('Multi-Element Stacked Edits Undo Battery', () => {
             addedTokens: [el.newTok],
           });
 
-          const applyRes = await applyPendingSourceEdit(pending.id);
+          const applyRes = await applyPendingSourceEdit(pending.id!);
           assert.strictEqual(applyRes.success, true);
           appliedEdits.push({ id: applyRes.editId!, elemId: el.id, oldTok: el.oldTok, newTok: el.newTok });
           currentSource = fs.readFileSync(fullPath, 'utf8');
