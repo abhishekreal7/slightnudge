@@ -652,17 +652,112 @@ export function undoSourceEdit(target?: string | { filePath?: string; editId?: s
     return { success: false as const, error: 'That file no longer exists.' };
   }
 
-  // Check 4: If the same element was edited twice, undoing the older edit while a newer one is on top must refuse
+  // Helper to establish identity and structural nature of an edit record
+  function getEditIdentity(rec: EditRecord) {
+    const isStructural = rec.previewType === 'reorder' ||
+      Boolean(rec.summary && /\b(reorder|move|insert|delete)\b/i.test(rec.summary));
+
+    if (isStructural) {
+      return { known: true, isStructural: true, elementId: rec.elementId, line: rec.line, tagName: rec.tagName };
+    }
+
+    if (rec.elementId) {
+      return {
+        known: true,
+        isStructural: false,
+        elementId: rec.elementId,
+        line: rec.line,
+        tagName: rec.tagName,
+      };
+    }
+
+    // Try deriving identity from AST before/after diff
+    if (rec.before && rec.after) {
+      const derived = deriveClassEditDetails(rec.before, rec.after, rec.line);
+      if (derived) {
+        return {
+          known: true,
+          isStructural: false,
+          elementId: derived.elementId,
+          line: derived.line,
+          tagName: derived.tagName,
+        };
+      }
+    }
+
+    if (rec.line && rec.tagName) {
+      return {
+        known: true,
+        isStructural: false,
+        elementId: undefined,
+        line: rec.line,
+        tagName: rec.tagName,
+      };
+    }
+
+    return {
+      known: false,
+      isStructural: false,
+      elementId: undefined,
+      line: undefined,
+      tagName: undefined,
+    };
+  }
+
+  const recordIdentity = getEditIdentity(record);
+
+  // Check 4: Identity-based dependency check on newer applied edits in the same file
   for (let i = index + 1; i < records.length; i++) {
     const newer = records[i];
     if (newer.status !== 'undone' && isSamePath(newer.filePath, record.filePath)) {
-      const sameElement = (record.elementId && newer.elementId && record.elementId === newer.elementId) ||
-        (record.line && newer.line && record.line === newer.line && record.tagName === newer.tagName) ||
-        (newer.before === record.after);
-      if (sameElement) {
+      const newerIdentity = getEditIdentity(newer);
+
+      // Rule 1: A newer structural edit (reorder/move) blocks undo of older edits
+      if (recordIdentity.isStructural || newerIdentity.isStructural) {
         return {
           success: false as const,
-          error: 'Cannot undo this edit because a newer edit on the same element depends on it. Undo the newer edit first.',
+          error: `Cannot undo this edit because a structural edit ("${newer.summary}") was applied to this file. Undo the structural edit first.`,
+        };
+      }
+
+      // Rule 2: If either record's identity cannot be established (legacy records), refuse conservatively with manual instructions
+      if (!recordIdentity.known || !newerIdentity.known) {
+        const toRemoveStr = record.addedTokens?.length ? record.addedTokens.join(' ') : 'none';
+        const toRestoreStr = record.removedTokens?.length ? record.removedTokens.join(' ') : 'none';
+        return {
+          success: false as const,
+          error: `This file changed after the visual edit: element identity cannot be established. Open ${record.filePath} near line ${record.line || 1} and change the className to remove "${toRemoveStr}" and restore "${toRestoreStr}". Nothing was changed.`,
+        };
+      }
+
+      // Rule 3: Edits targeting the same element block undo
+      const sameElementId = Boolean(
+        recordIdentity.elementId &&
+        newerIdentity.elementId &&
+        recordIdentity.elementId === newerIdentity.elementId
+      );
+      const sameDerivedLocator = Boolean(
+        (!recordIdentity.elementId || !newerIdentity.elementId) &&
+        recordIdentity.line &&
+        newerIdentity.line &&
+        recordIdentity.line === newerIdentity.line &&
+        recordIdentity.tagName &&
+        newerIdentity.tagName &&
+        recordIdentity.tagName.toLowerCase() === newerIdentity.tagName.toLowerCase()
+      );
+
+      if (sameElementId || sameDerivedLocator) {
+        return {
+          success: false as const,
+          error: `Cannot undo this edit because a newer edit ("${newer.summary}") on the same element depends on it. Undo the newer edit first.`,
+        };
+      }
+
+      // Rule 4: Edits sharing a line (same-line siblings) block undo
+      if (recordIdentity.line && newerIdentity.line && recordIdentity.line === newerIdentity.line) {
+        return {
+          success: false as const,
+          error: `Cannot undo this edit because a newer edit on the same line depends on it. Undo the newer edit first.`,
         };
       }
     }
