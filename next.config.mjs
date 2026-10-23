@@ -5,6 +5,9 @@ const projectRoot = path.dirname(fileURLToPath(import.meta.url));
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  experimental: {
+    agentUpgrade: 'security',
+  },
   webpack(config, { dev }) {
     if (dev) {
       config.module.rules.push({
