@@ -746,7 +746,8 @@ export function undoSourceEdit(target?: string | { filePath?: string; editId?: s
         recordIdentity.tagName.toLowerCase() === newerIdentity.tagName.toLowerCase()
       );
 
-      if (sameElementId || sameDerivedLocator) {
+      const sameElement = sameElementId || sameDerivedLocator;
+      if (sameElement) {
         return {
           success: false as const,
           error: `Cannot undo this edit because a newer edit ("${newer.summary}") on the same element depends on it. Undo the newer edit first.`,
