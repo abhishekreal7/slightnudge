@@ -565,6 +565,7 @@ export async function applyPendingSourceEdit(id: string, groupId?: string, repos
     };
   }
 
+  invokePreWriteHook(filePath);
   try {
     assertWriteTargetInsideWorkspace(filePath);
     atomicWrite(filePath, pending.after);
