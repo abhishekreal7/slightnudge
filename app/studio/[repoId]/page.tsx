@@ -5,13 +5,18 @@ import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { AlignCenter, AlignLeft, AlignRight, ArrowDown, ArrowUp, ArrowUpDown, ArrowUpRight, Check, CircleAlert, Code2, ExternalLink, FileCode2, GitBranch, ImagePlus, LoaderCircle, Play, RotateCcw, Search, ShieldCheck, Square, Type } from 'lucide-react';
 import { StudioLayout } from '@/components/slightnudge/StudioLayout';
-import { getClientSessionToken } from '@/lib/slightnudge/client';
+import { ProjectCompatibility } from '@/components/slightnudge/ProjectCompatibility';
+import { nextDevCommand } from '@/lib/slightnudge/editing-capabilities';
+import type { ProjectCompatibility as CompatibilityReport } from '@/lib/slightnudge/project-compatibility';
+import { getClientSessionToken, undoEditAPI, type UndoContext } from '@/lib/slightnudge/client';
 
 interface RepositoryDetail {
   repository: { id: string; name: string; owner: string; url: string; defaultBranch: string };
   files: string[];
   framework: string;
+  compatibility?: CompatibilityReport;
   sourceAdapterEnabled?: boolean;
+  sourceAdapterNeedsUpdate?: boolean;
 }
 
 interface PreviewSelection {
@@ -46,6 +51,8 @@ interface ImportedEditPreview {
   summary: string;
   oldValue: string;
   newValue: string;
+  oldClassName?: string;
+  newClassName?: string;
   previewType?: 'className' | 'textContent' | 'imageSource' | 'reorder';
 }
 
@@ -107,11 +114,27 @@ export default function ImportedRepositoryPage() {
   const [assets, setAssets] = useState<ImportedAsset[]>([]);
   const [assetBusy, setAssetBusy] = useState(false);
   const assetInputRef = useRef<HTMLInputElement | null>(null);
-  const [editPreview, setEditPreview] = useState<ImportedEditPreview | null>(null);
-  const [editBusy, setEditBusy] = useState(false);
+  const [editPreview, setEditPreviewState] = useState<ImportedEditPreview | null>(null);
+  const [editBusy, setEditBusyState] = useState(false);
   const [editNotice, setEditNotice] = useState('');
+  const editBusyRef = useRef(false);
+  const editPreviewRef = useRef<ImportedEditPreview | null>(null);
+  editPreviewRef.current = editPreview;
+  editBusyRef.current = editBusy;
+  const reviewNotice = 'Apply or discard the current preview before making another change. Source has not been changed.';
+  function setEditPreview(value: ImportedEditPreview | null) {
+    editPreviewRef.current = value;
+    setEditPreviewState(value);
+  }
+  function setEditBusy(value: boolean) {
+    editBusyRef.current = value;
+    setEditBusyState(value);
+  }
   const [canUndo, setCanUndo] = useState(false);
   const editGroupIdRef = useRef<string | null>(null);
+  const undoTargetRef = useRef<UndoContext | null>(null);
+  const undoUncertainRef = useRef(false);
+  const [undoUncertain, setUndoUncertain] = useState(false);
   const [adapterEnabled, setAdapterEnabled] = useState(false);
   const [adapterLoading, setAdapterLoading] = useState(false);
   const [adapterNotice, setAdapterNotice] = useState('');
@@ -202,21 +225,8 @@ export default function ImportedRepositoryPage() {
         return;
       }
       if (message.type !== 'source-selection' || !Number.isSafeInteger(value.line) || value.line < 1 || !Number.isSafeInteger(value.column) || value.column < 1) return;
-      if (editPreview) {
-        try {
-          editGroupIdRef.current ||= crypto.randomUUID();
-          void (async () => {
-            const token = await getClientSessionToken();
-            void fetch('/api/slightnudge/apply', {
-              method: 'POST',
-              headers: { 'content-type': 'application/json', 'x-slightnudge-token': token },
-              body: JSON.stringify({ previewId: editPreview.id, groupId: editGroupIdRef.current, repositoryId: params.repoId, sourcePath: selection?.path }),
-            });
-          })();
-          setCanUndo(true);
-        } catch { /* proceed with new selection */ }
-        setEditPreview(null);
-      }
+      if (undoUncertainRef.current) { setEditNotice('Check Undo status before selecting another element.'); return; }
+      if (editPreviewRef.current || editBusyRef.current) { setEditNotice(reviewNotice); return; }
 
       const nextSelection: PreviewSelection = {
         path: value.path,
@@ -267,7 +277,8 @@ export default function ImportedRepositoryPage() {
               propSource: result.propSource,
             }
           : current);
-        setCanUndo(Boolean(result.canUndo));
+        undoTargetRef.current = result.undoTarget ? { ...result.undoTarget, repositoryId: params.repoId, sourcePath: nextSelection.path } : null;
+        setCanUndo(Boolean(undoTargetRef.current));
       } catch (cause) {
         if (active && selectionRequestId === selectionRequestRef.current) setSelection((current) => current && current.path === nextSelection.path && current.line === nextSelection.line
           ? { ...current, safeToEdit: false, refusalReason: cause instanceof Error ? cause.message : 'Could not verify this source location.' }
@@ -281,15 +292,6 @@ export default function ImportedRepositoryPage() {
   useEffect(() => {
     if (selection?.path === selectedFile) selectedSourceLineRef.current?.scrollIntoView({ block: 'center', behavior: 'smooth' });
   }, [selection, selectedFile, source]);
-
-  useEffect(() => {
-    const onViewport = (event: Event) => {
-      const viewport = (event as CustomEvent<{ viewport?: string }>).detail?.viewport;
-      setActiveBreakpoint(viewport === 'mobile' ? '' : viewport === 'tablet' ? 'md' : 'lg');
-    };
-    window.addEventListener('slightnudge:viewport', onViewport);
-    return () => window.removeEventListener('slightnudge:viewport', onViewport);
-  }, []);
 
   useEffect(() => {
     if (selection?.tagName !== 'img') { setAssets([]); return; }
@@ -308,6 +310,8 @@ export default function ImportedRepositoryPage() {
 
   async function connectPreview(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (undoUncertainRef.current) { setPreviewError('Check Undo status before reconnecting.'); return; }
+    if (editPreviewRef.current || editBusyRef.current) { setPreviewError(reviewNotice); return; }
     setPreviewLoading(true);
     setPreviewError('');
     try {
@@ -328,6 +332,7 @@ export default function ImportedRepositoryPage() {
   }
 
   function attachPreview(url: string) {
+    if (editPreviewRef.current || editBusyRef.current) { setPreviewError(reviewNotice); return; }
     const session = crypto.randomUUID();
     const frameUrl = new URL(url);
     frameUrl.searchParams.set('__slightnudge_session', session);
@@ -340,6 +345,8 @@ export default function ImportedRepositoryPage() {
   }
 
   async function startDockerPreview() {
+    if (undoUncertainRef.current) { setDockerError('Check Undo status before reconnecting.'); return; }
+    if (editPreviewRef.current || editBusyRef.current) { setDockerError(reviewNotice); return; }
     setDockerBusy(true);
     setDockerError('');
     try {
@@ -387,6 +394,8 @@ export default function ImportedRepositoryPage() {
   }
 
   async function stopDockerPreview() {
+    if (undoUncertainRef.current) { setDockerError('Check Undo status before disconnecting.'); return; }
+    if (editPreviewRef.current || editBusyRef.current) { setDockerError(reviewNotice); return; }
     setDockerBusy(true);
     setDockerError('');
     try {
@@ -419,21 +428,14 @@ export default function ImportedRepositoryPage() {
   }
 
   async function previewImportedChange(kind: 'style' | 'text' | 'image-source' | 'reorder', value: string, property?: keyof typeof importedStyleNames, breakpoint = activeBreakpoint, direction?: 'earlier' | 'later') {
-    if (!selection?.safeToEdit || editBusy) return;
+    if (undoUncertainRef.current) { setEditNotice('Check Undo status before making another change.'); return; }
+    if (editPreviewRef.current || editBusyRef.current) { setEditNotice(reviewNotice); return; }
+    if (!selection?.safeToEdit) return;
+    editBusyRef.current = true;
     setEditBusy(true);
     setEditNotice('');
     try {
       const token = await getClientSessionToken();
-      if (editPreview) {
-        try {
-          editGroupIdRef.current ||= crypto.randomUUID();
-          await fetch('/api/slightnudge/apply', {
-            method: 'POST', headers: { 'content-type': 'application/json', 'x-slightnudge-token': token },
-            body: JSON.stringify({ previewId: editPreview.id, groupId: editGroupIdRef.current, repositoryId: params.repoId, sourcePath: selection.path }),
-          });
-          setCanUndo(true);
-        } catch { /* proceed with next change */ }
-      }
       const response = await fetch('/api/slightnudge/preview', {
         method: 'POST', headers: { 'content-type': 'application/json', 'x-slightnudge-token': token },
         body: JSON.stringify({ repositoryId: params.repoId, sourcePath: selection.path, line: selection.line, column: selection.column, kind, ...(property ? { property, breakpoint } : {}), ...(direction ? { direction } : {}), value }),
@@ -442,8 +444,12 @@ export default function ImportedRepositoryPage() {
       if (!response.ok) throw new Error(data.error || 'Could not prepare this source change.');
       if (data.changed === false) { setEditNotice(data.message || 'That value is already applied.'); return; }
       const preview = data as ImportedEditPreview;
+      if (preview.previewType === 'className' && (typeof preview.newClassName !== 'string' || typeof preview.oldClassName !== 'string')) {
+        throw new Error('This preview is missing its complete class list. Source has not been changed.');
+      }
+      editPreviewRef.current = preview;
       setEditPreview(preview);
-      sendImportedPreview(preview.previewType === 'textContent' ? 'textContent' : preview.previewType === 'imageSource' ? 'imageSource' : preview.previewType === 'reorder' ? 'reorder' : 'className', preview.newValue, direction);
+      sendImportedPreview(preview.previewType === 'textContent' ? 'textContent' : preview.previewType === 'imageSource' ? 'imageSource' : preview.previewType === 'reorder' ? 'reorder' : 'className', preview.previewType === 'className' ? preview.newClassName! : preview.newValue, direction);
     } catch (cause) {
       setEditNotice(cause instanceof Error ? cause.message : 'Could not prepare this source change.');
     } finally {
@@ -485,7 +491,8 @@ export default function ImportedRepositoryPage() {
   }
 
   async function discardImportedEdit() {
-    if (!editPreview) return;
+    if (!editPreview || editBusyRef.current) return;
+    editBusyRef.current = true;
     setEditBusy(true);
     try {
       const token = await getClientSessionToken();
@@ -499,7 +506,7 @@ export default function ImportedRepositoryPage() {
         const revertDir = editPreview.summary.includes('earlier') ? 'later' : 'earlier';
         sendImportedPreview('reorder', '', revertDir);
       } else {
-        sendImportedPreview(editPreview.previewType === 'textContent' ? 'textContent' : editPreview.previewType === 'imageSource' ? 'imageSource' : 'className', editPreview.oldValue);
+        sendImportedPreview(editPreview.previewType === 'textContent' ? 'textContent' : editPreview.previewType === 'imageSource' ? 'imageSource' : 'className', editPreview.previewType === 'className' ? editPreview.oldClassName! : editPreview.oldValue);
       }
       setEditPreview(null);
       setEditNotice('Change discarded. Repository source is unchanged.');
@@ -511,7 +518,8 @@ export default function ImportedRepositoryPage() {
   }
 
   async function applyImportedEdit() {
-    if (!editPreview || !selection || editBusy) return;
+    if (!editPreview || !selection || editBusyRef.current) return;
+    editBusyRef.current = true;
     setEditBusy(true);
     setEditNotice('');
     try {
@@ -522,8 +530,17 @@ export default function ImportedRepositoryPage() {
         body: JSON.stringify({ previewId: editPreview.id, groupId: editGroupIdRef.current, repositoryId: params.repoId, sourcePath: selection.path }),
       });
       const data = await response.json();
-      if (!response.ok || !data.success) throw new Error(data.error || 'The source changed after review. Preview it again before applying.');
+      if (!response.ok || !data.success) {
+        if (data.code === 'SOURCE_CHANGED') {
+          sendImportedPreview(editPreview.previewType === 'textContent' ? 'textContent' : editPreview.previewType === 'imageSource' ? 'imageSource' : editPreview.previewType === 'reorder' ? 'reorder' : 'className', editPreview.previewType === 'className' ? editPreview.oldClassName! : editPreview.oldValue, editPreview.previewType === 'reorder' ? editPreview.summary.includes('earlier') ? 'later' : 'earlier' : undefined);
+          setEditPreview(null);
+          setSelection(null);
+          setSourceRevision((revision) => revision + 1);
+        }
+        throw new Error(data.error || 'The source changed after review. Preview it again before applying.');
+      }
       setEditPreview(null);
+      undoTargetRef.current = { previewId: editPreview.id, editId: data.editId, repositoryId: params.repoId, sourcePath: selection.path };
       setCanUndo(true);
       setSelection((current) => current ? editPreview.previewType === 'textContent'
         ? { ...current, textContent: editPreview.newValue }
@@ -531,7 +548,7 @@ export default function ImportedRepositoryPage() {
           ? { ...current, imageSource: editPreview.newValue }
           : editPreview.previewType === 'reorder'
             ? current
-            : { ...current, className: editPreview.newValue } : current);
+            : { ...current, className: editPreview.newClassName! } : current);
       setSourceRevision((revision) => revision + 1);
       setEditNotice('Applied to the imported source and visible in the live preview. You can keep refining this element.');
     } catch (cause) {
@@ -546,13 +563,13 @@ export default function ImportedRepositoryPage() {
     setEditBusy(true);
     setEditNotice('');
     try {
-      const token = await getClientSessionToken();
-      const response = await fetch('/api/slightnudge/undo', {
-        method: 'POST', headers: { 'content-type': 'application/json', 'x-slightnudge-token': token },
-        body: JSON.stringify({ repositoryId: params.repoId, sourcePath: selection.path }),
-      });
-      const data = await response.json();
-      if (!response.ok || !data.success) throw new Error(data.error || 'Could not undo the last source change.');
+      const target = undoTargetRef.current;
+      if (!target) throw new Error('Inspect the accepted edit before undoing.');
+      const data = await undoEditAPI(undefined, target);
+      undoUncertainRef.current = !data.success && ['UNDO_UNCERTAIN', 'UNDO_RECOVERY_REQUIRED', 'UNDO_UNKNOWN', 'UNDO_TARGET_CHANGED', 'OUTCOME_SCOPE_MISMATCH'].includes(data.code || '');
+      setUndoUncertain(undoUncertainRef.current);
+      if (!data.success) throw new Error(data.error || 'Check Undo status before continuing.');
+      undoTargetRef.current = null;
       setCanUndo(false);
       setSourceRevision((revision) => revision + 1);
       setSelection(null);
@@ -583,6 +600,7 @@ export default function ImportedRepositoryPage() {
       const data = await response.json();
       if (!response.ok) throw new Error(data.error || 'Could not update the Next.js source adapter.');
       setAdapterEnabled(enable);
+      setProject(current => current ? { ...current, sourceAdapterEnabled: enable, sourceAdapterNeedsUpdate: false } : current);
       setAdapterNotice(enable
         ? 'Source mapping is installed in this local clone. Stop its dev server, then restart it with the command below.'
         : 'Source mapping has been removed and the original Next.js config restored. Restart the dev server.');
@@ -597,13 +615,14 @@ export default function ImportedRepositoryPage() {
   return <StudioLayout projectName={projectName} activeFile={selectedFile || 'Repository sources'} inspectorEnabled={false} previewConnected={Boolean(previewUrl)}>
     <section className="sn-repository-welcome">
       <div className="sn-repo-welcome-icon"><Code2 size={21}/></div>
-      <p className="sn-eyebrow">REPOSITORY READY</p>
+      <p className="sn-eyebrow">Repository ready</p>
       <h1>{projectName}</h1>
       <p className="sn-repo-welcome-lede">Connect a local preview, select a supported element, and review precise style changes before they reach your imported source.</p>
       {error && <p className="sn-form-error" role="alert"><CircleAlert size={15}/>{error}</p>}
       {!project && !error && <p className="sn-loading-line"><LoaderCircle className="sn-spinner" size={15}/> Reading repository…</p>}
       {project && <>
         <div className="sn-repo-facts"><span><GitBranch size={14}/>{project.repository.defaultBranch}</span><span><FileCode2 size={14}/>{project.files.length} source {project.files.length === 1 ? 'file' : 'files'}</span><span><Check size={14}/>{project.framework}</span></div>
+        {project.compatibility && <ProjectCompatibility report={project.compatibility}/>}
         <div className="sn-repo-next"><span><ShieldCheck size={16}/></span><div><strong>Isolated local preview</strong><p>Starting runs this repository’s install scripts and dev server inside Docker. The source mount is read only; the container has memory, CPU, and process limits. Network access stays enabled for dependencies and app services.</p></div></div>
         <section className="sn-docker-preview" aria-label="Docker preview">
           <div className="sn-docker-preview-copy"><div className="sn-docker-preview-heading"><span className={`sn-docker-indicator ${dockerStatus?.state === 'running' ? 'is-running' : ''}`}/><strong>Docker preview</strong><span>{dockerStatus?.available ? dockerStatus.state === 'running' ? 'Running' : dockerStatus.state === 'exited' ? 'Stopped with an error' : 'Engine ready' : dockerStatus ? 'Engine unavailable' : 'Checking engine'}</span></div><p>{dockerStatus?.message || 'Checking Docker Desktop…'}</p></div>
@@ -612,27 +631,31 @@ export default function ImportedRepositoryPage() {
           {(dockerError || (!dockerStatus && project)) && <p className="sn-form-error" role="alert"><CircleAlert size={15}/>{dockerError || 'Docker status is still loading.'}</p>}
         </section>
         {project.framework === 'Next.js' && <section className="sn-next-adapter" aria-label="Next.js source mapping">
-          <div><strong>Click-to-source for Next.js</strong><p>{adapterEnabled ? 'The reversible adapter is installed in this local clone.' : 'Install a reversible development adapter to map preview clicks to JSX source files and exact lines.'}</p></div>
-          <button type="button" className="sn-button sn-button-secondary" disabled={adapterLoading} onClick={() => void updateAdapter(!adapterEnabled)}>{adapterLoading ? <><LoaderCircle className="sn-spinner" size={14}/> Updating…</> : adapterEnabled ? 'Remove adapter' : 'Enable source mapping'}</button>
+          <div><strong>Click-to-source for Next.js</strong><p>{adapterEnabled ? project.sourceAdapterNeedsUpdate ? 'This adapter needs an update for the current editing tools. Remove and enable source mapping, then restart the local dev server. Modified config files are preserved.' : 'The reversible adapter is installed in this local clone.' : 'Install a reversible development adapter to map preview clicks to JSX source files and exact lines.'}</p></div>
+          <button type="button" className="sn-button sn-button-secondary" disabled={adapterLoading || !adapterEnabled && (project.compatibility?.sourceMapping === false || project.compatibility?.checks.some(check => check.id === 'framework' && check.state === 'setup'))} onClick={() => void updateAdapter(!adapterEnabled)}>{adapterLoading ? <><LoaderCircle className="sn-spinner" size={14}/> Updating…</> : adapterEnabled ? 'Remove adapter' : 'Enable source mapping'}</button>
           {adapterNotice && <p className="sn-next-adapter-notice" role="status">{adapterNotice}</p>}
           {adapterError && <p className="sn-form-error" role="alert"><CircleAlert size={15}/>{adapterError}</p>}
         </section>}
         <form className="sn-preview-connect" onSubmit={connectPreview}>
           <div className="sn-preview-connect-heading"><span><Play size={15}/></span><div><strong>Connect a local preview</strong><p>Start the app yourself, then connect to its local address.</p></div></div>
-          <div className="sn-preview-command"><span>In the repository folder, start its dev server on <code>127.0.0.1:3001</code>.</span><code>{project.framework === 'Next.js' ? adapterEnabled ? 'npx next dev --webpack --hostname 127.0.0.1 --port 3001' : 'npm run dev -- --hostname 127.0.0.1 --port 3001' : project.framework === 'Vite' ? 'npm run dev -- --host 127.0.0.1 --port 3001' : 'Use your framework’s dev command on port 3001'}</code></div>
+          <div className="sn-preview-command"><span>In the repository folder, start its dev server on <code>127.0.0.1:3001</code>.</span><code>{project.framework === 'Next.js' ? adapterEnabled ? nextDevCommand(project.compatibility?.nextVersion) : 'npm run dev -- --hostname 127.0.0.1 --port 3001' : project.framework === 'Vite' ? 'npm run dev -- --host 127.0.0.1 --port 3001' : 'Use your framework’s dev command on port 3001'}</code></div>
           <label className="sn-preview-url-label" htmlFor="sn-preview-url">Local preview URL</label>
           <div className="sn-preview-connect-row"><input id="sn-preview-url" type="url" inputMode="url" autoComplete="url" value={previewInput} onChange={(event) => setPreviewInput(event.target.value)} placeholder="http://127.0.0.1:3001" required/><button className="sn-button sn-button-primary" type="submit" disabled={previewLoading}>{previewLoading ? <><LoaderCircle className="sn-spinner" size={15}/> Checking…</> : <>{previewUrl ? 'Reconnect' : 'Connect'} <ArrowUpRight size={15}/></>}</button></div>
           <p className="sn-preview-safety"><ShieldCheck size={14}/> Connect only to code you trust. The frame is isolated from SlightNudge; your dev server runs under your user account.</p>
           {previewError && <p className="sn-form-error" role="alert"><CircleAlert size={15}/>{previewError}</p>}
         </form>
-        <div className="sn-repo-actions"><Link className="sn-button sn-button-secondary" href={project.repository.url} target="_blank" rel="noreferrer">Open on GitHub <ExternalLink size={15}/></Link><Link className="sn-text-action" href="/studio">Try the visual playground <ArrowUpRight size={15}/></Link></div>
+        <div className="sn-repo-actions">
+          {project.framework === 'Next.js' && project.compatibility?.sourceMapping !== false && <Link className="sn-button sn-button-primary" href={`/studio/${encodeURIComponent(params.repoId)}/edit${previewUrl ? '?preview=' + encodeURIComponent(previewUrl) : ''}`}>Open Studio <ArrowUpRight size={15}/></Link>}
+          <Link className="sn-button sn-button-secondary" href={project.repository.url} target="_blank" rel="noreferrer">Open on GitHub <ExternalLink size={15}/></Link><Link className="sn-text-action" href="/studio">Try the visual playground <ArrowUpRight size={15}/></Link>
+        </div>
         {previewUrl && <section className="sn-live-preview" aria-label="Connected local preview">
           <div className="sn-live-preview-head"><div><span className="sn-live-dot"/><strong>Live preview</strong><code>{previewUrl}</code></div><a href={previewUrl} target="_blank" rel="noreferrer" referrerPolicy="no-referrer">Open in new tab <ExternalLink size={13}/></a></div>
           <div className="sn-live-preview-stage"><iframe ref={previewFrameRef} className="sn-live-preview-frame" key={previewFrameUrl} src={previewFrameUrl} title={`${projectName} local preview`} sandbox="allow-scripts allow-same-origin" referrerPolicy="no-referrer"/>{selection && <div className="sn-live-selection-outline" aria-hidden="true" style={{ top: selection.rect.top, left: selection.rect.left, width: selection.rect.width, height: selection.rect.height }}/>}</div>
           {selection && <div className="sn-live-selection-status" aria-live="polite"><span>&lt;{selection.tagName}&gt;</span><code>{selection.path}:{selection.line}:{selection.column}</code><span className={selection.safeToEdit ? 'is-mapped' : ''}>{selection.safeToEdit ? 'Source verified' : selection.refusalReason || 'Source mapped'}</span></div>}
         </section>}
+        {!selection && editNotice && <p className="sn-imported-edit-notice" role="status">{editNotice}</p>}
         {selection && <section className="sn-imported-edit" aria-label="Edit selected element">
-          <div className="sn-imported-edit-heading"><div><p className="sn-eyebrow">SOURCE EDITOR</p><h2>Refine selected element</h2><p>{selection.path}:{selection.line} · {selection.safeToEdit ? 'Static Tailwind classes are editable' : selection.refusalReason || 'Checking whether this element can be edited safely'}</p></div><button type="button" className="sn-button sn-button-secondary" disabled={!canUndo || editBusy || Boolean(editPreview)} onClick={() => void undoImportedEdit()}><RotateCcw size={14}/> Undo last change</button></div>
+          <div className="sn-imported-edit-heading"><div><p className="sn-eyebrow">Source editor</p><h2>Refine selected element</h2><p>{selection.path}:{selection.line} · {selection.safeToEdit ? 'Static Tailwind classes are editable' : selection.refusalReason || 'Checking whether this element can be edited safely'}</p></div><button type="button" className="sn-button sn-button-secondary" disabled={!canUndo || editBusy || Boolean(editPreview)} onClick={() => void undoImportedEdit()}><RotateCcw size={14}/> {undoUncertain ? 'Check Undo status' : 'Undo last change'}</button></div>
           {selection.safeToEdit && <>
             {editPreview && (
               <div className="sn-pending-dock" aria-live="polite">
@@ -641,7 +664,12 @@ export default function ImportedRepositoryPage() {
                     <span className="sn-pending-dot" />
                     <span>{editPreview.summary}</span>
                   </div>
-                  <span style={{ fontSize: '10px', color: '#64748b' }}>Live on canvas</span>
+                  <span style={{ fontSize: '11px', color: '#64748b' }}>Not saved to source</span>
+                </div>
+                <div className="sn-review-diff">
+                  <code className="sn-review-file">{editPreview.filePath}{editPreview.line ? `:${editPreview.line}` : ''}</code>
+                  <div><span>Before</span><pre aria-label="Before change">{editPreview.oldValue}</pre></div>
+                  <div><span>After</span><pre aria-label="After change">{editPreview.newValue}</pre></div>
                 </div>
                 <div className="sn-pending-actions">
                   <button type="button" className="sn-dock-btn sn-dock-discard" disabled={editBusy} onClick={() => void discardImportedEdit()}>

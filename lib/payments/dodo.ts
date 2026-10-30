@@ -2,6 +2,7 @@ import DodoPayments from 'dodopayments';
 import { Webhook } from 'standardwebhooks';
 import { getDatabaseRepository } from '../db/client';
 import { trackFunnelEvent } from '../analytics/events';
+import { paidEvent } from './paid-event';
 
 let dodoClientInstance: DodoPayments | null = null;
 
@@ -41,11 +42,13 @@ export async function createScanCheckoutSession(
   options: CreateCheckoutOptions
 ): Promise<CheckoutResult> {
   const client = getDodoClient();
+  if (process.env.NODE_ENV === 'production' && !process.env.DODO_PRODUCT_ID_FULL_SCAN) throw new Error('The paid product is not configured.');
   const productId = process.env.DODO_PRODUCT_ID_FULL_SCAN || 'p_full_scan_shipcheck';
   const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
   const returnUrl = options.returnUrl || `${appUrl}/runs/${options.runId}?payment_status=success`;
 
   if (!client) {
+    if (process.env.NODE_ENV === 'production') throw new Error('Payment processing is not configured.');
     // Development / Test simulation mode when no live Dodo API key is supplied
     console.log('[Dodo Payments] No live API key configured. Providing simulated checkout URL.');
     const mockSessionId = `mock_sess_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
@@ -95,7 +98,7 @@ export function verifyDodoWebhook(payload: string, headers: Record<string, strin
 
 export interface WebhookProcessingResult {
   success: boolean;
-  action: 'fulfilled' | 'duplicate_skipped' | 'refunded' | 'failed' | 'ignored';
+  action: 'fulfilled' | 'duplicate_skipped' | 'already_unlocked' | 'refunded' | 'failed' | 'ignored';
   paymentId?: string;
   runId?: string;
   message?: string;
@@ -105,80 +108,19 @@ export interface WebhookProcessingResult {
  * Handles webhook event processing with strict idempotency.
  */
 export async function handleDodoWebhookEvent(event: any): Promise<WebhookProcessingResult> {
+  const paid = paidEvent(event, process.env.NODE_ENV === 'production', process.env.DODO_PRODUCT_ID_FULL_SCAN, getScanPriceUsd());
+  if (paid) {
+    const action = await getDatabaseRepository().fulfillScanPayment(paid.paymentId, paid.runId, paid.amountUsd);
+    if (action === 'fulfilled') trackFunnelEvent('paid', { paymentId: paid.paymentId, runId: paid.runId, amountUsd: paid.amountUsd });
+    return { success: true, action, paymentId: paid.paymentId, runId: paid.runId };
+  }
+  const eventType = event?.type || event?.event_type || event?.event, data = event?.data || {};
+  const paymentId = data.payment_id;
+  if (!['refund.succeeded', 'payment.refunded'].includes(eventType)) return { success: true, action: 'ignored' };
+  if (typeof paymentId !== 'string' || !paymentId) return { success: false, action: 'ignored', message: 'Missing payment_id in event data' };
   const repo = getDatabaseRepository();
-  const eventType = event.type || event.event;
-  const data = event.data || event;
-
-  const paymentId = data.payment_id || data.id || data.session_id;
-  const runId = data.metadata?.runId || data.run_id;
-
-  if (!paymentId) {
-    return { success: false, action: 'ignored', message: 'Missing payment_id in event data' };
-  }
-
-  // Handle successful checkout / payment
-  if (
-    eventType === 'checkout.session.completed' ||
-    eventType === 'payment.succeeded' ||
-    eventType === 'payment_intent.succeeded'
-  ) {
-    if (!runId) {
-      return { success: false, action: 'ignored', message: 'No runId associated with payment' };
-    }
-
-    // Check existing order for idempotency
-    const existingOrders = await (repo as any).getOrdersByPaymentId?.(paymentId);
-    if (existingOrders && existingOrders.length > 0) {
-      console.log(`[Dodo Webhook] Duplicate payment webhook detected for ${paymentId}. Skipping.`);
-      return { success: true, action: 'duplicate_skipped', paymentId, runId };
-    }
-
-    // Save order record
-    try {
-      await (repo as any).createOrder?.({
-        id: `ord_${Date.now()}`,
-        user_id: data.customer?.id || 'default_user',
-        run_id: runId,
-        dodo_payment_id: paymentId,
-        amount_usd: getScanPriceUsd(),
-        status: 'succeeded',
-      });
-    } catch (e: any) {
-      // If unique constraint triggers on duplicate concurrent request
-      if (e.message?.includes('duplicate') || e.message?.includes('unique')) {
-        return { success: true, action: 'duplicate_skipped', paymentId, runId };
-      }
-    }
-
-    // Upgrade run to full kind and enqueue new job
-    const run = await repo.getRun(runId);
-    if (run) {
-      await repo.updateRun(runId, {
-        kind: 'full',
-        status: 'queued',
-        stage: 'preflight',
-        progress: 0,
-        limits_json: {
-          maxScenarios: 12,
-          maxMinutes: 10,
-          maxSteps: 50,
-        },
-      });
-
-      // Enqueue job for background worker to execute full scan
-      await repo.createJob({
-        run_id: runId,
-        type: 'test_run',
-        status: 'queued',
-      });
-
-      trackFunnelEvent('paid', { paymentId, runId, amountUsd: getScanPriceUsd() });
-      console.log(`[Dodo Webhook] Run ${runId} successfully unlocked to Full Scan and enqueued.`);
-    }
-
-    return { success: true, action: 'fulfilled', paymentId, runId };
-  }
-
+  const orders = await repo.getOrdersByPaymentId(paymentId);
+  const runId = orders[0]?.run_id;
   // Handle refunds
   if (eventType === 'refund.succeeded' || eventType === 'payment.refunded') {
     if (runId) {
@@ -204,6 +146,7 @@ export async function triggerAutomaticSystemRefund(
   const repo = getDatabaseRepository();
 
   try {
+    if (!client && process.env.NODE_ENV === 'production') throw new Error('Refund processing is not configured.');
     if (client) {
       await (client.refunds as any).create({
         payment_id: dodoPaymentId,

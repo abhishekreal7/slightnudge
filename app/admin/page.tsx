@@ -13,7 +13,7 @@ export default function AdminDashboardPage() {
     setLoading(true);
     setError(null);
     try {
-      const resp = await fetch(`/api/admin/metrics?admin_key=${encodeURIComponent(key)}`);
+      const resp = await fetch('/api/admin/metrics', { headers: { 'x-admin-key': key } });
       const json = await resp.json();
 
       if (!resp.ok) {

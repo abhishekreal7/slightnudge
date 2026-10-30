@@ -1,17 +1,19 @@
 import { NextResponse } from 'next/server';
 import { getDatabaseRepository } from '@/lib/db/client';
 import { FindingRecord } from '@/lib/db/types';
+import { requireAccount, ownsResource } from '@/lib/auth/account';
 
 export async function GET(
   req: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const auth = await requireAccount(req); if (auth.response) return auth.response;
   try {
     const { id } = await params;
     const repo = getDatabaseRepository();
     const run = await repo.getRun(id);
 
-    if (!run) {
+    if (!run || !ownsResource(auth.account, run)) {
       return NextResponse.json({ error: 'Run not found' }, { status: 404 });
     }
 

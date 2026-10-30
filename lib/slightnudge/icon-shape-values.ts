@@ -1,0 +1,8 @@
+export interface IconShape { name: string; classes: string[]; nodes: [string, Record<string, string>][] }
+/** Data only. This validator also runs inside the serialized browser bridge. */
+export function validIconShape(value: any): value is IconShape {
+  if (!value || typeof value.name !== 'string' || !/^[A-Z][A-Za-z0-9]{0,63}$/.test(value.name) || !Array.isArray(value.classes) || value.classes.length > 12 || !value.classes.length || value.classes.some((name: unknown) => typeof name !== 'string' || !/^lucide(?:-[a-z0-9-]{1,80})?$/.test(name))) return false;
+  if (!Array.isArray(value.nodes) || !value.nodes.length || value.nodes.length > 128) return false;
+  const geometry = ['d', 'points', 'cx', 'cy', 'r', 'rx', 'ry', 'x', 'y', 'x1', 'y1', 'x2', 'y2', 'width', 'height'];
+  return value.nodes.every((node: any) => Array.isArray(node) && node.length === 2 && ['path', 'circle', 'rect', 'line', 'polyline', 'polygon', 'ellipse'].includes(node[0]) && node[1] && typeof node[1] === 'object' && !Array.isArray(node[1]) && Object.keys(node[1]).length <= 18 && Object.entries(node[1]).every(([name, content]) => typeof content === 'string' && content.length <= 8192 && (geometry.includes(name) ? /^[MmZzLlHhVvCcSsQqTtAa0-9eE+.,\s-]*$/.test(content) : name === 'fill' || name === 'stroke' ? /^(none|currentColor|#[a-fA-F0-9]{6})$/.test(content) : name === 'stroke-width' || name === 'opacity' ? /^\d+(?:\.\d+)?$/.test(content) : name === 'stroke-linecap' ? ['round', 'butt', 'square'].includes(content) : name === 'stroke-linejoin' ? ['round', 'miter', 'bevel'].includes(content) : ['fill-rule', 'clip-rule'].includes(name) && ['nonzero', 'evenodd'].includes(content))));
+}

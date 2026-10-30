@@ -1,3 +1,4 @@
+import { randomUUID } from 'node:crypto';
 import { FindingRecord } from '../db/types';
 import { analyzeTestResults } from '../llm/generator';
 import { AnalysisReportOutput } from '../llm/schemas';
@@ -23,6 +24,7 @@ export async function executeStageEAnalysis(
   }));
 
   const analysis = await analyzeTestResults(ctx.scenarioResults, evidenceList);
+  analysis.findings = analysis.findings.map(finding => ({ ...finding, id: randomUUID() }));
   ctx.analysis = analysis;
 
   const findings: FindingRecord[] = analysis.findings.map((f) => ({

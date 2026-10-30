@@ -230,6 +230,7 @@ async function runSingleScenario(
     verdict,
     steps_json: steps,
     evidence_json: {
+      planKey: ctx.scenarioKeys?.[plan.id],
       consoleErrors,
       networkFailures,
       screenshotIds,

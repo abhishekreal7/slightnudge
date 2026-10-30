@@ -1,19 +1,22 @@
-import { randomUUID } from 'node:crypto';
+import { createHash, randomUUID } from 'node:crypto';
 import fs, { chmodSync, closeSync, existsSync, fsyncSync, mkdirSync, openSync, readFileSync, readdirSync, realpathSync, statSync, unlinkSync, writeSync } from 'node:fs';
 import path from 'node:path';
 import { Project, SyntaxKind, Node, JsxOpeningElement, JsxSelfClosingElement, StringLiteral } from 'ts-morph';
 import { verifyTailwindClass, verifySyntacticParse, findProjectRoot } from './tailwind-verifier';
 import { isElementInsideLoop, isComponentUsedMultipleTimes } from './ast-nudger';
+import { guardUnfinishedGroups, readGroupJournal, validGroupId } from './source-group-journal';
+import { SourceOperationBusyError, withSourceOperationLock } from './source-operation-lock';
+import { validateComponentDependencies } from './component-ownership';
 
 function isTestMode(): boolean {
   return process.env.SLIGHTNUDGE_TEST === '1' && process.env.NODE_ENV !== 'production';
 }
 
-function getWorkspacePath(): string {
+export function getWorkspacePath(): string {
   return (isTestMode() && process.env.SLIGHTNUDGE_WORKSPACE_ROOT) || process.cwd();
 }
 
-function getHistoryPath(): string {
+export function getHistoryPath(): string {
   if (isTestMode() && process.env.SLIGHTNUDGE_HISTORY_PATH) {
     return process.env.SLIGHTNUDGE_HISTORY_PATH;
   }
@@ -34,16 +37,39 @@ const maxSnapshotBytes = 1024 * 1024;
 
 export type EditStatus = 'applied' | 'undoing' | 'undone';
 
+interface SourceApplyDetails {
+  code?: string;
+  error?: string;
+  editId?: string;
+  filePath?: string;
+  line?: number;
+  previewType?: 'className' | 'textContent' | 'imageSource' | 'reorder';
+  value?: string;
+  className?: string;
+  message?: string;
+}
+
+export type SourceApplyResult = SourceApplyDetails & ({ success: true; editId: string } | { success: false; error: string });
+
 export interface EditRecord {
+  componentDependencies?: import('./component-ownership').ComponentDependency[];
   id: string;
+  /** Correlate accepted proposals even after their pending files are removed. */
+  previewIds?: string[];
+  repositoryId?: string;
+  sourcePath?: string;
   filePath: string;
   createdAt: string;
   summary: string;
   groupId?: string;
+  /** Explicit grouped-transaction identity, distinct from gesture grouping. */
+  changeSetId?: string;
   changeCount?: number;
   before: string;
   after: string;
   status: EditStatus;
+  undoBefore?: string;
+  undoAfter?: string;
   missing?: boolean;
   previewType?: 'className' | 'textContent' | 'imageSource' | 'reorder';
   line?: number;
@@ -58,7 +84,10 @@ export interface EditRecord {
   newValue?: string;
 }
 
-interface PendingEdit {
+export interface PendingEdit {
+  componentDependencies?: import('./component-ownership').ComponentDependency[];
+  draft?: boolean;
+  sourceOrder?: number[];
   id: string;
   filePath: string;
   createdAt: string;
@@ -78,6 +107,23 @@ interface PendingEdit {
   after: string;
   repositoryId?: string;
   sourcePath?: string;
+}
+
+interface ApplyIntent {
+  version: 1;
+  phase: 'applying' | 'not-applied';
+  pending: PendingEdit;
+  groupId?: string;
+  historyDigest: string;
+}
+
+class SourceRecoveryRequiredError extends Error {
+  readonly code = 'SOURCE_RECOVERY_REQUIRED';
+  constructor(kind = 'save') { super(`An interrupted ${kind} needs recovery before this file can be changed. Check the status of the reviewed change first.`); }
+}
+
+export function withHistoryMutation<T>(operation: () => T): T {
+  return withSourceOperationLock(path.join(path.dirname(getHistoryPath()), 'mutation-locks'), operation);
 }
 
 export function readHistory(): EditRecord[] {
@@ -207,8 +253,11 @@ export function atomicWrite(filePath: string, contents: string) {
   }
 }
 
-function writeHistory(records: EditRecord[]) {
-  atomicWrite(getHistoryPath(), JSON.stringify(records.slice(-maxHistoryEntries), null, 2));
+export function writeHistory(records: EditRecord[]) {
+  // An interrupted Undo is a recovery intent, so ordinary history retention
+  // must not erase it while edits to other files continue.
+  const retained = records.filter((record, index) => record.status === 'undoing' || index >= records.length - maxHistoryEntries);
+  atomicWrite(getHistoryPath(), JSON.stringify(retained, null, 2));
 }
 
 let preWriteTestHook: ((filePath: string) => void) | null = null;
@@ -365,7 +414,14 @@ export function deriveClassEditDetails(before: string, after: string, lineHint?:
 }
 
 /** Record a source edit without staging or committing any repository files. */
-export function recordSourceEdit(
+export function recordSourceEdit(filePath: string, before: string, after: string, summary: string, groupId?: string, metadata?: Partial<EditRecord>) {
+  return withHistoryMutation(() => {
+    assertNoUnfinishedApply(filePath, metadata?.previewIds?.at(-1));
+    return recordSourceEditUnlocked(filePath, before, after, summary, groupId, metadata);
+  });
+}
+
+function recordSourceEditUnlocked(
   filePath: string,
   before: string,
   after: string,
@@ -403,7 +459,9 @@ export function recordSourceEdit(
   const last = records.at(-1);
   if (groupId && last?.status === 'applied' && last.groupId === groupId && last.filePath === record.filePath && last.after === before) {
     const changeCount = (last.changeCount || 1) + 1;
-    records[records.length - 1] = { ...last, after, summary: `${changeCount} visual adjustments`, changeCount, ...metadata };
+    records[records.length - 1] = { ...last, after, summary: `${changeCount} visual adjustments`, changeCount, ...metadata,
+      previewIds: [...(last.previewIds || []), ...(metadata?.previewIds || [])],
+    };
     writeHistory(records);
     return { editId: last.id };
   }
@@ -413,6 +471,13 @@ export function recordSourceEdit(
 
 /** Capture the exact file before/after an AST edit; restore it if journaling fails. */
 export function withRecordedSourceEdit<T extends { success: boolean }>(filePath: string, summary: string, edit: () => T): T & { editId?: string } {
+  return withHistoryMutation(() => {
+    assertNoUnfinishedApply(filePath);
+    return withRecordedSourceEditUnlocked(filePath, summary, edit);
+  });
+}
+
+function withRecordedSourceEditUnlocked<T extends { success: boolean }>(filePath: string, summary: string, edit: () => T): T & { editId?: string } {
   const before = readFileSync(filePath, 'utf8');
   try {
     const result = edit();
@@ -442,7 +507,11 @@ function pruneExpiredPreviews() {
     for (const entry of readdirSync(dir)) {
       if (!/^[0-9a-f-]{36}\.json$/i.test(entry)) continue;
       const entryPath = path.join(dir, entry);
-      if (Date.now() - statSync(entryPath).mtimeMs > 30 * 60 * 1000) unlinkSync(entryPath);
+      const age = Date.now() - statSync(entryPath).mtimeMs;
+      if (!existsSync(applyIntentPath(entry.slice(0, -5))) && age > 30 * 60 * 1000) {
+        const persisted = JSON.parse(readFileSync(entryPath, 'utf8'));
+        if (!persisted.draft || age > 30 * 24 * 60 * 60 * 1000) unlinkSync(entryPath);
+      }
     }
   } catch (error) {
     if ((error as NodeJS.ErrnoException).code !== 'ENOENT') throw error;
@@ -450,6 +519,9 @@ function pruneExpiredPreviews() {
 }
 
 export function createPendingSourceEdit(options: {
+  componentDependencies?: import('./component-ownership').ComponentDependency[];
+  draft?: boolean;
+  sourceOrder?: number[];
   filePath: string;
   before: string;
   after: string;
@@ -478,6 +550,9 @@ export function createPendingSourceEdit(options: {
   }
   pruneExpiredPreviews();
   const pending: PendingEdit = {
+    componentDependencies: options.componentDependencies,
+    draft: options.draft,
+    sourceOrder: options.sourceOrder,
     id: randomUUID(),
     filePath: relativePath,
     createdAt: new Date().toISOString(),
@@ -508,41 +583,207 @@ export function createPendingSourceEdit(options: {
     oldValue: pending.oldValue,
     newValue: pending.newValue,
     previewType: pending.previewType || 'className',
+    oldClassName: pending.oldClassName,
+    newClassName: pending.newClassName,
   };
 }
 
-function readPendingSourceEdit(id: string): PendingEdit {
+export function readPendingSourceEdit(id: string): PendingEdit {
   const pending = JSON.parse(readFileSync(pendingPath(id), 'utf8')) as PendingEdit;
-  if (pending.id !== id || typeof pending.before !== 'string' || typeof pending.after !== 'string' || typeof pending.filePath !== 'string') {
-    throw new Error('The preview data is invalid. Discard it and try again.');
-  }
-  relativeFilePath(path.resolve(getWorkspacePath(), pending.filePath));
+  validatePending(pending, id);
   return pending;
 }
 
-export function discardPendingSourceEdit(id: string) {
-  try { unlinkSync(pendingPath(id)); } catch (error) {
-    if ((error as NodeJS.ErrnoException).code !== 'ENOENT') throw error;
+/** Only server-produced snapshots can become a draft's next revision. */
+export function readDraftSource(id: string, filePath: string, repositoryId?: string) {
+  const pending = readPendingSourceEdit(id);
+  if (!pending.draft || pending.repositoryId !== repositoryId || realpathSync(filePath) !== realpathSync(path.resolve(getWorkspacePath(), pending.filePath))) throw new Error('This draft belongs to a different source file or project.');
+  if (readFileSync(filePath, 'utf8') !== pending.before) throw new Error('The source changed outside this draft. Your draft is preserved; resolve the source change before saving.');
+  return pending;
+}
+
+function validatePending(pending: PendingEdit, id: string) {
+  if (!pending || pending.id !== id || typeof pending.before !== 'string' || typeof pending.after !== 'string' || pending.before === pending.after || typeof pending.filePath !== 'string' || path.isAbsolute(pending.filePath) ||
+      typeof pending.summary !== 'string' || typeof pending.oldValue !== 'string' || typeof pending.newValue !== 'string' ||
+      Buffer.byteLength(pending.before) > maxSnapshotBytes || Buffer.byteLength(pending.after) > maxSnapshotBytes ||
+      (pending.previewType !== undefined && !['className', 'textContent', 'imageSource', 'reorder'].includes(pending.previewType))) {
+    throw new Error('The preview data is invalid. Discard it and try again.');
+  }
+  relativeFilePath(path.resolve(getWorkspacePath(), pending.filePath));
+}
+
+function applyIntentPath(id: string) {
+  pendingPath(id);
+  return path.join(path.dirname(getHistoryPath()), 'apply-journal', `${id}.json`);
+}
+
+function readApplyIntent(id: string): ApplyIntent | null {
+  let contents: string;
+  try {
+    if (statSync(applyIntentPath(id)).size > maxSnapshotBytes * 32) throw new Error('The save recovery record is too large.');
+    contents = readFileSync(applyIntentPath(id), 'utf8');
+  } catch (error) { if ((error as NodeJS.ErrnoException).code === 'ENOENT') return null; throw error; }
+  const intent = JSON.parse(contents) as ApplyIntent;
+  if (intent.version !== 1 || !['applying', 'not-applied'].includes(intent.phase) || typeof intent.historyDigest !== 'string' || !/^[a-f0-9]{64}$/.test(intent.historyDigest) ||
+      (intent.groupId !== undefined && !/^[0-9a-f-]{36}$/i.test(intent.groupId))) throw new Error('The save recovery record is invalid. No source was changed.');
+  validatePending(intent.pending, id);
+  return intent;
+}
+
+export function fileHistoryDigest(filePath: string) {
+  const absolute = path.resolve(getWorkspacePath(), filePath);
+  const entries = readHistory().filter(record => path.resolve(getWorkspacePath(), record.filePath) === absolute);
+  return createHash('sha256').update(JSON.stringify(entries.map(record => ({ id: record.id, status: record.status, before: record.before, after: record.after, previewIds: record.previewIds })))).digest('hex');
+}
+
+function hasAcceptedPreview(id: string) {
+  return readHistory().some(record => Array.isArray(record.previewIds) && record.previewIds.includes(id));
+}
+
+export function assertNoUnfinishedApply(filePath: string, exceptId?: string, exceptUndoId?: string, exceptGroupId?: string) {
+  guardUnfinishedGroups(path.join(path.dirname(getHistoryPath()), 'groups'), getWorkspacePath(), filePath, exceptGroupId);
+  for (const record of readHistory().filter(record => record.changeSetId && record.status !== 'undone' && path.resolve(getWorkspacePath(), record.filePath) === path.resolve(getWorkspacePath(), filePath))) {
+    if (!readGroupJournal(path.join(path.dirname(getHistoryPath()), 'groups'), record.changeSetId!)) throw new SourceRecoveryRequiredError('change-set recovery');
+  }
+  if (readHistory().some(record => record.status === 'undoing' && record.id !== exceptUndoId && path.resolve(getWorkspacePath(), record.filePath) === path.resolve(getWorkspacePath(), filePath))) {
+    throw new SourceRecoveryRequiredError('Undo');
+  }
+  const directory = path.dirname(applyIntentPath('00000000-0000-0000-0000-000000000000'));
+  let files: string[];
+  try { files = readdirSync(directory); } catch (error) { if ((error as NodeJS.ErrnoException).code === 'ENOENT') return; throw error; }
+  for (const name of files) {
+    if (!/^[0-9a-f-]{36}\.json$/i.test(name)) continue;
+    const id = name.slice(0, -5);
+    if (id === exceptId) continue;
+    const intent = readApplyIntent(id);
+    if (!intent || path.resolve(getWorkspacePath(), intent.pending.filePath) !== path.resolve(getWorkspacePath(), filePath)) continue;
+    if (hasAcceptedPreview(id)) { try { unlinkSync(applyIntentPath(id)); } catch { /* A receipt already protects this operation. */ } continue; }
+    if (intent.phase !== 'not-applied') throw new SourceRecoveryRequiredError();
   }
 }
 
-export async function applyPendingSourceEdit(id: string, groupId?: string, repositoryId?: string, sourcePath?: string, validatedFilePath?: string) {
+export function pendingMetadata(pending: PendingEdit): Partial<EditRecord> {
+  return {
+    componentDependencies: pending.componentDependencies,
+    previewIds: [pending.id], repositoryId: pending.repositoryId, sourcePath: pending.sourcePath,
+    previewType: pending.previewType, line: pending.line, column: pending.column, elementId: pending.elementId, tagName: pending.tagName,
+    oldClassName: pending.oldClassName, newClassName: pending.newClassName, removedTokens: pending.removedTokens, addedTokens: pending.addedTokens,
+    oldValue: pending.oldValue, newValue: pending.newValue,
+  };
+}
+
+function matchesPendingScope(pending: PendingEdit, repositoryId?: string, sourcePath?: string, validatedFilePath?: string) {
+  return pending.repositoryId === repositoryId && (!repositoryId || (pending.sourcePath === sourcePath && !!validatedFilePath && relativeFilePath(validatedFilePath) === path.normalize(pending.filePath)));
+}
+
+function finishApplyCleanup(id: string) {
+  try { unlinkSync(applyIntentPath(id)); } catch { /* Durable history is the accepted receipt. */ }
+  try { discardPendingSourceEdit(id); } catch { /* Pending cleanup cannot revoke an accepted write. */ }
+}
+
+export function discardPendingSourceEdit(id: string) {
+  return withHistoryMutation(() => {
+    const intent = readApplyIntent(id);
+    if (intent?.phase === 'applying' && !hasAcceptedPreview(id)) throw new SourceRecoveryRequiredError();
+    if (intent?.phase === 'not-applied') unlinkSync(applyIntentPath(id));
+    try { unlinkSync(pendingPath(id)); } catch (error) { if ((error as NodeJS.ErrnoException).code !== 'ENOENT') throw error; }
+  });
+}
+
+function readSourceApplyOutcome(id: string, repositoryId?: string, sourcePath?: string, validatedFilePath?: string): SourceApplyResult | null {
+  pendingPath(id); // Validate the identifier before consulting history.
+  const record = readHistory().findLast(entry => Array.isArray(entry.previewIds) && entry.previewIds.includes(id));
+  if (!record) return null;
+  if (record.repositoryId !== repositoryId || (repositoryId && (record.sourcePath !== sourcePath || !validatedFilePath || path.normalize(record.filePath) !== relativeFilePath(validatedFilePath)))) {
+    return { success: false as const, code: 'OUTCOME_SCOPE_MISMATCH' as const, error: 'This change belongs to a different project or source file.' };
+  }
+  if (record.status !== 'applied') {
+    return { success: false as const, code: 'APPLY_ALREADY_UNDONE' as const, error: 'This change was already undone or is being restored. It was not applied again.' };
+  }
+  const filePath = repositoryId ? validatedFilePath! : path.resolve(getWorkspacePath(), record.filePath);
+  assertWriteTargetInsideWorkspace(filePath);
+  if (record.previewIds?.at(-1) !== id || !existsSync(filePath) || readFileSync(filePath, 'utf8') !== record.after) {
+    return { success: false as const, code: 'SOURCE_CHANGED' as const, error: 'This change was saved, but its source changed afterward. Review the current source before editing again.' };
+  }
+  return { success: true as const, editId: record.id, filePath: record.filePath, line: record.line, previewType: record.previewType || 'className', value: record.newValue, className: record.previewType === 'textContent' ? undefined : record.newClassName ?? record.newValue, message: `Applied ${record.summary}.` };
+}
+
+/** Reconcile journal/history only. Status lookup never writes a source file. */
+export function getSourceApplyOutcome(id: string, repositoryId?: string, sourcePath?: string, validatedFilePath?: string): SourceApplyResult | null {
+  const accepted = readSourceApplyOutcome(id, repositoryId, sourcePath, validatedFilePath);
+  if (accepted) {
+    if (accepted.success && existsSync(applyIntentPath(id))) {
+      try { withHistoryMutation(() => { if (hasAcceptedPreview(id)) finishApplyCleanup(id); }); } catch { /* A receipt is valid even while its original writer finishes cleanup. */ }
+    }
+    return accepted;
+  }
+  // Another process may finish recovery between the first history read and
+  // journal lookup. Cleanup always follows the durable receipt.
+  if (!readApplyIntent(id)) return withHistoryMutation(() => {
+    const receipt = readSourceApplyOutcome(id, repositoryId, sourcePath, validatedFilePath);
+    if (receipt) return receipt;
+    // The browser persists its reference before sending Apply. A reload can
+    // therefore precede any server write intent. Prove the original still
+    // exists under the same mutation lock; a status read never replays Apply.
+    if (readApplyIntent(id)) return getSourceApplyOutcome(id, repositoryId, sourcePath, validatedFilePath);
+    if (!existsSync(pendingPath(id))) return null;
+    const pending = readPendingSourceEdit(id);
+    if (!matchesPendingScope(pending, repositoryId, sourcePath, validatedFilePath)) return { success: false as const, code: 'OUTCOME_SCOPE_MISMATCH', error: 'This change belongs to a different project or source file.' };
+    const filePath = path.resolve(getWorkspacePath(), pending.filePath);
+    assertWriteTargetInsideWorkspace(filePath);
+    if (relativeFilePath(filePath) !== path.normalize(pending.filePath) || readFileSync(filePath, 'utf8') !== pending.before) return { success: false as const, code: 'SOURCE_CHANGED', error: 'The source changed after review. Inspect its current version before continuing.' };
+    return { success: false as const, code: 'APPLY_NOT_APPLIED', error: 'The reviewed source is unchanged and no save is recorded. Explicitly apply the review when you are ready.' };
+  });
+  return withHistoryMutation(() => {
+    const recorded = readSourceApplyOutcome(id, repositoryId, sourcePath, validatedFilePath);
+    if (recorded) return recorded;
+    const intent = readApplyIntent(id);
+    if (!intent) return null;
+    const pending = intent.pending;
+    if (!matchesPendingScope(pending, repositoryId, sourcePath, validatedFilePath)) {
+      return { success: false as const, code: 'OUTCOME_SCOPE_MISMATCH' as const, error: 'This change belongs to a different project or source file.' };
+    }
+    const filePath = path.resolve(getWorkspacePath(), pending.filePath);
+    assertWriteTargetInsideWorkspace(filePath);
+    if (relativeFilePath(filePath) !== path.normalize(pending.filePath) || !existsSync(filePath) || fileHistoryDigest(pending.filePath) !== intent.historyDigest) {
+      return { success: false as const, code: intent.phase === 'not-applied' ? 'SOURCE_CHANGED' as const : 'SOURCE_RECOVERY_REQUIRED' as const, error: 'This file or its history changed after the interrupted save. Nothing was overwritten; review its source before continuing.' };
+    }
+    const current = readFileSync(filePath, 'utf8');
+    if (intent.phase === 'not-applied' && current !== pending.before) {
+      return { success: false as const, code: 'SOURCE_CHANGED' as const, error: 'The interrupted save was not applied, and the source changed afterward. Review the current source before editing again.' };
+    }
+    if (current === pending.before) {
+      if (intent.phase !== 'not-applied') atomicWrite(applyIntentPath(id), JSON.stringify({ ...intent, phase: 'not-applied' }));
+      return { success: false as const, code: 'APPLY_NOT_APPLIED' as const, error: 'The source still matches the reviewed original. Apply the reviewed change again, or discard it.' };
+    }
+    if (current !== pending.after) {
+      return { success: false as const, code: 'SOURCE_RECOVERY_REQUIRED' as const, error: 'The source changed after the interrupted save. Nothing was overwritten; review its source before continuing.' };
+    }
+    recordSourceEdit(filePath, pending.before, pending.after, pending.summary, intent.groupId, pendingMetadata(pending));
+    finishApplyCleanup(id);
+    return readSourceApplyOutcome(id, repositoryId, sourcePath, validatedFilePath);
+  });
+}
+
+export async function applyPendingSourceEdit(id: string, groupId?: string, repositoryId?: string, sourcePath?: string, validatedFilePath?: string): Promise<SourceApplyResult> {
+  const accepted = getSourceApplyOutcome(id, repositoryId, sourcePath, validatedFilePath);
+  if (accepted && (accepted.success || accepted.code !== 'APPLY_NOT_APPLIED')) return accepted;
   const pending = readPendingSourceEdit(id);
-  if (pending.repositoryId !== repositoryId) return { success: false as const, error: 'This preview belongs to a different project. Review the change again.' };
-  if (pending.repositoryId && (pending.sourcePath !== sourcePath || !validatedFilePath)) return { success: false as const, error: 'This preview belongs to a different source file. Review the change again.' };
+  if (!matchesPendingScope(pending, repositoryId, sourcePath, validatedFilePath)) return { success: false as const, error: 'This preview belongs to a different project or source file. Review the change again.' };
   const filePath = pending.repositoryId ? validatedFilePath! : path.resolve(getWorkspacePath(), pending.filePath);
   const current = readFileSync(filePath, 'utf8');
   if (current !== pending.before) {
-    return { success: false as const, error: 'This source changed after the preview. Review it again before applying.' };
+    if (!pending.draft) try { discardPendingSourceEdit(id); } catch { /* Invalid proposals remain unusable and expire automatically. */ }
+    return { success: false as const, code: 'SOURCE_CHANGED' as const, error: 'This source changed after the preview. Review it again before applying.' };
   }
   if (groupId && !/^[0-9a-f-]{36}$/i.test(groupId)) {
     return { success: false as const, error: 'The edit session is invalid. Preview this change again.' };
   }
 
-  if (!pending.previewType || pending.previewType === 'className') {
+  if (pending.draft || !pending.previewType || pending.previewType === 'className') {
     const oldTokens = new Set((pending.oldValue || '').trim().split(/\s+/).filter(Boolean));
     const newTokens = (pending.newValue || '').trim().split(/\s+/).filter(Boolean);
-    const addedTokens = newTokens.filter(t => !oldTokens.has(t));
+    const addedTokens = pending.draft ? pending.addedTokens || [] : newTokens.filter(t => !oldTokens.has(t));
     if (addedTokens.length > 0) {
       const projectDir = findProjectRoot(filePath);
       for (const token of addedTokens) {
@@ -565,44 +806,75 @@ export async function applyPendingSourceEdit(id: string, groupId?: string, repos
     };
   }
 
+  try { validateComponentDependencies(pending.componentDependencies,{}, {root:findProjectRoot(filePath),caller:filePath}); }
+  catch(error) { return {success:false as const,error:error instanceof Error?error.message:'Component ownership changed.'}; }
+
   invokePreWriteHook(filePath);
   try {
-    assertWriteTargetInsideWorkspace(filePath);
-    atomicWrite(filePath, pending.after);
+    return withHistoryMutation(() => {
+      assertWriteTargetInsideWorkspace(filePath);
+      if (relativeFilePath(filePath) !== path.normalize(pending.filePath)) throw new Error('The source target changed after review. Nothing was written.');
+      const concurrentlyAccepted = readSourceApplyOutcome(id, repositoryId, sourcePath, validatedFilePath);
+      if (concurrentlyAccepted) return concurrentlyAccepted;
+      assertNoUnfinishedApply(filePath, id);
+      validateComponentDependencies(pending.componentDependencies,{}, {root:findProjectRoot(filePath),caller:filePath});
+      if (!existsSync(pendingPath(id))) {
+        return { success: false as const, code: 'PREVIEW_EXPIRED' as const, error: 'This review was discarded or expired. Prepare the change again before applying.' };
+      }
+      // Validation can compile Tailwind asynchronously. Recheck while holding
+      // the mutation lock, then journal the approved snapshots before the write.
+      if (readFileSync(filePath, 'utf8') !== pending.before) {
+        try { discardPendingSourceEdit(id); } catch { /* Invalid proposals expire automatically. */ }
+        return { success: false as const, code: 'SOURCE_CHANGED' as const, error: 'This source changed after the preview. Review it again before applying.' };
+      }
+      const intent: ApplyIntent = { version: 1, phase: 'applying', pending, groupId, historyDigest: fileHistoryDigest(pending.filePath) };
+      atomicWrite(applyIntentPath(id), JSON.stringify(intent));
+      // Journal persistence can take time. Preserve an outside edit arriving
+      // during it, without turning that outside edit into our accepted receipt.
+      if (readFileSync(filePath, 'utf8') !== pending.before) {
+        atomicWrite(applyIntentPath(id), JSON.stringify({ ...intent, phase: 'not-applied' }));
+        return { success: false as const, code: 'SOURCE_CHANGED' as const, error: 'This source changed while the save was being prepared. Nothing was overwritten.' };
+      }
+      try {
+        atomicWrite(filePath, pending.after);
+        const history = recordSourceEdit(filePath, pending.before, pending.after, pending.summary, groupId, pendingMetadata(pending));
+        if (!history.editId) throw new Error('The accepted history receipt is unavailable.');
+        finishApplyCleanup(id);
+        return { success: true as const, editId: history.editId, filePath: pending.filePath, line: pending.line, previewType: pending.previewType || 'className', value: pending.newValue, className: pending.previewType === 'textContent' ? undefined : pending.newClassName ?? pending.newValue, message: `Applied ${pending.summary}.` };
+      } catch {
+        // Never roll a source file back over a possible outside edit. The
+        // durable intent retains the exact snapshots for status reconciliation.
+        return { success: false as const, code: 'APPLY_UNCERTAIN' as const, error: 'The save could not be fully recorded. Check save status before continuing.' };
+      }
+    });
   } catch (error) {
     return {
       success: false as const,
+      code: error instanceof SourceOperationBusyError || error instanceof SourceRecoveryRequiredError ? error.code : undefined,
       error: error instanceof Error ? error.message : 'The file is locked and nothing was changed.',
     };
   }
-  let history: { editId?: string };
-  try {
-    history = recordSourceEdit(filePath, pending.before, pending.after, pending.summary, groupId, {
-      previewType: pending.previewType,
-      line: pending.line,
-      column: pending.column,
-      elementId: pending.elementId,
-      tagName: pending.tagName,
-      oldClassName: pending.oldClassName,
-      newClassName: pending.newClassName,
-      removedTokens: pending.removedTokens,
-      addedTokens: pending.addedTokens,
-      oldValue: pending.oldValue,
-      newValue: pending.newValue,
-    });
-  } catch (error) {
-    atomicWrite(filePath, pending.before);
-    throw error;
-  }
-  // Applying and recording the source change is the transaction's success condition.
-  // A failed cleanup only leaves an expiring preview file; it must not report the
-  // applied edit as failed after the source and undo history have already changed.
-  try { discardPendingSourceEdit(id); } catch { /* expires with the pending preview */ }
-  return { success: true as const, editId: history.editId, filePath: pending.filePath, line: pending.line, previewType: pending.previewType || 'className', value: pending.newValue, className: pending.previewType === 'textContent' ? undefined : pending.newValue, message: `Applied ${pending.summary}.` };
 }
 
 /** Undo only the most recent SlightNudge edit, or a specified edit if valid, using token-level revert where possible. */
 export function undoSourceEdit(target?: string | { filePath?: string; editId?: string }, maybeEditId?: string) {
+  try {
+    return withHistoryMutation(() => {
+      const requestedPath = typeof target === 'string' ? target : target?.filePath;
+      const requestedId = typeof target === 'object' ? target.editId || maybeEditId : maybeEditId;
+      const record = readHistory().findLast(entry => entry.status !== 'undone' && (!requestedId || entry.id === requestedId) && (!requestedPath || path.resolve(getWorkspacePath(), requestedPath) === path.resolve(getWorkspacePath(), entry.filePath)));
+      if (record?.changeSetId || record?.groupId && validGroupId(record.groupId) && readGroupJournal(path.join(path.dirname(getHistoryPath()), 'groups'), record.groupId)) return { success: false as const, error: 'Undo this saved change set together, rather than undoing an individual file.' };
+      const filePath = requestedPath || record?.filePath;
+      if (filePath) assertNoUnfinishedApply(filePath, undefined, record?.id);
+      return undoSourceEditUnlocked(target, maybeEditId);
+    });
+  } catch (error) {
+    if (error instanceof SourceOperationBusyError || error instanceof SourceRecoveryRequiredError) return { success: false as const, error: error.message };
+    throw error;
+  }
+}
+
+function undoSourceEditUnlocked(target?: string | { filePath?: string; editId?: string }, maybeEditId?: string) {
   let wantedPath: string | undefined;
   let wantedEditId: string | undefined;
 
@@ -767,7 +1039,7 @@ export function undoSourceEdit(target?: string | { filePath?: string; editId?: s
   const current = readFileSync(absolutePath, 'utf8');
 
   // Recover a partially completed undo after a process interruption
-  if (record.status === 'undoing' && current === record.before) {
+  if (record.status === 'undoing' && current === (record.undoAfter ?? record.before)) {
     records[index] = { ...record, status: 'undone' };
     writeHistory(records);
     return { success: true as const, editId: record.id, message: `Undid ${record.summary}.` };
@@ -775,22 +1047,7 @@ export function undoSourceEdit(target?: string | { filePath?: string; editId?: s
 
   // Step (i): Exact-match path
   if (current === record.after) {
-    records[index] = { ...record, status: 'undoing' };
-    writeHistory(records);
-    invokePreWriteHook(absolutePath);
-    try {
-      assertWriteTargetInsideWorkspace(absolutePath);
-      atomicWrite(absolutePath, record.before);
-      records[index] = { ...record, status: 'undone' };
-      writeHistory(records);
-    } catch (error) {
-      try {
-        records[index] = { ...record, status: 'applied' };
-        writeHistory(records);
-      } catch {}
-      throw error;
-    }
-    return { success: true as const, editId: record.id, message: `Undid ${record.summary}.` };
+    return commitSourceUndo(records, index, absolutePath, current, record.before);
   }
 
   // Step (ii): Token-level undo for class/style edits
@@ -991,28 +1248,140 @@ export function undoSourceEdit(target?: string | { filePath?: string; editId?: s
     return refuseWithInstructions('token multiset mismatch after substitution', targetLine);
   }
 
-  // Hook for M5 test before pre-write containment check
-  invokePreWriteHook(absolutePath);
+  return commitSourceUndo(records, index, absolutePath, current, newContent);
+}
 
-  // Containment check
-  assertWriteTargetInsideWorkspace(absolutePath);
-
-  // Write through atomic write path
-  records[index] = { ...record, status: 'undoing' };
+function commitSourceUndo(records: EditRecord[], index: number, filePath: string, before: string, after: string) {
+  const record = records[index];
+  try{validateComponentDependencies(record.componentDependencies,{}, {root:findProjectRoot(filePath),caller:filePath})}catch(error){return {success:false as const,error:error instanceof Error?error.message:'Component ownership changed.'};}
+  if (Buffer.byteLength(before) > maxSnapshotBytes || Buffer.byteLength(after) > maxSnapshotBytes) return { success: false as const, error: 'This file is too large for a recoverable Undo. Nothing was changed.' };
+  const intent: EditRecord = { ...record, status: 'undoing', undoBefore: before, undoAfter: after };
+  records[index] = intent;
   writeHistory(records);
   try {
-    atomicWrite(absolutePath, newContent);
-    records[index] = { ...record, status: 'undone' };
+    invokePreWriteHook(filePath);
+    validateComponentDependencies(record.componentDependencies,{}, {root:findProjectRoot(filePath),caller:filePath});
+    assertWriteTargetInsideWorkspace(filePath);
+    if (readFileSync(filePath, 'utf8') !== before) {
+      records[index] = { ...record, status: 'applied', undoBefore: undefined, undoAfter: undefined };
+      writeHistory(records);
+      return { success: false as const, error: 'The source changed while Undo was being prepared. Nothing was overwritten.' };
+    }
+    atomicWrite(filePath, after);
+    records[index] = { ...intent, status: 'undone' };
     writeHistory(records);
   } catch (error) {
+    // Reset only when the source is still the exact Undo input. If a source
+    // replacement completed, retain the durable intent for status reconciliation.
     try {
-      records[index] = { ...record, status: 'applied' };
-      writeHistory(records);
-    } catch {}
+      if (readFileSync(filePath, 'utf8') === before) {
+        records[index] = { ...record, status: 'applied', undoBefore: undefined, undoAfter: undefined };
+        writeHistory(records);
+      }
+    } catch { /* Preserve the original durable intent when storage is unavailable. */ }
     throw error;
   }
-
   return { success: true as const, editId: record.id, message: `Undid ${record.summary}.` };
+}
+
+export interface ReviewedUndoContext {
+  repositoryId?: string;
+  sourcePath?: string;
+  filePath?: string;
+  editId?: string;
+}
+
+export interface ReviewedUndoResult {
+  success: boolean;
+  previewId?: string;
+  editId?: string;
+  code?: string;
+  error?: string;
+  message?: string;
+  sourceCurrent?: boolean;
+}
+
+function bindReviewedUndo(previewId: string, context: ReviewedUndoContext): { record: EditRecord } | { error: ReviewedUndoResult } {
+  pendingPath(previewId);
+  const record = readHistory().findLast(entry => Array.isArray(entry.previewIds) && entry.previewIds.includes(previewId));
+  if (!record) return { error: { success: false, code: 'UNDO_UNKNOWN', error: 'The accepted edit could not be found. Inspect the current source before undoing.' } };
+  const filePath = path.resolve(getWorkspacePath(), record.filePath);
+  if (record.repositoryId !== context.repositoryId || (record.repositoryId && (record.sourcePath !== context.sourcePath || !context.filePath)) ||
+      (context.filePath && path.resolve(getWorkspacePath(), context.filePath) !== filePath) ||
+      (existsSync(filePath) && relativeFilePath(filePath) !== path.normalize(record.filePath))) {
+    return { error: { success: false, code: 'OUTCOME_SCOPE_MISMATCH', error: 'This Undo belongs to a different project or source file.' } };
+  }
+  if ((context.editId && context.editId !== record.id) || record.previewIds?.at(-1) !== previewId) {
+    return { error: { success: false, code: 'UNDO_TARGET_CHANGED', error: 'This edit group changed after the accepted review. Inspect its latest change before undoing.' } };
+  }
+  return { record };
+}
+
+function undoReceipt(record: EditRecord, previewId: string): ReviewedUndoResult {
+  let sourceCurrent = false;
+  try { sourceCurrent = readFileSync(path.resolve(getWorkspacePath(), record.filePath), 'utf8') === (record.undoAfter ?? record.before); } catch { /* The receipt remains true even when the current revision cannot be read. */ }
+  return { success: true, previewId, editId: record.id, sourceCurrent, message: sourceCurrent ? `Undid ${record.summary}.` : 'Undo is recorded, but the current source revision could not be confirmed. Inspect the current page before continuing.' };
+}
+
+/** Reconcile only the requested Undo receipt. Never writes or retries source. */
+export function getSourceUndoOutcome(previewId: string, context: ReviewedUndoContext = {}): ReviewedUndoResult {
+  return withHistoryMutation(() => {
+    const bound = bindReviewedUndo(previewId, context);
+    if ('error' in bound) return bound.error;
+    const record = bound.record;
+    if (record.status === 'undone') return undoReceipt(record, previewId);
+    if (record.status === 'applied') return { success: false, previewId, editId: record.id, code: 'UNDO_NOT_APPLIED', error: 'Undo is not recorded for this edit. You can explicitly retry Undo.' };
+    const before = record.undoBefore ?? record.after;
+    const after = record.undoAfter ?? record.before;
+    const current = readFileSync(path.resolve(getWorkspacePath(), record.filePath), 'utf8');
+    const records = readHistory();
+    const index = records.findIndex(entry => entry.id === record.id);
+    if (index < 0) return { success: false, code: 'UNDO_UNKNOWN', error: 'The accepted edit could not be found. Inspect the current source before undoing.' };
+    if (current === after) {
+      records[index] = { ...record, status: 'undone', undoBefore: before, undoAfter: after };
+      writeHistory(records);
+      return undoReceipt(records[index], previewId);
+    }
+    if (current === before) {
+      records[index] = { ...record, status: 'applied', undoBefore: undefined, undoAfter: undefined };
+      writeHistory(records);
+      return { success: false, previewId, editId: record.id, code: 'UNDO_NOT_APPLIED', error: 'Undo did not change the source. Explicitly retry Undo when you are ready.' };
+    }
+    return { success: false, previewId, editId: record.id, code: 'UNDO_RECOVERY_REQUIRED', error: 'The source changed after Undo was interrupted. Nothing was overwritten; review the current source before continuing.' };
+  });
+}
+
+/** HTTP-facing Undo always targets an immutable accepted proposal, never latest. */
+export function undoReviewedSourceEdit(previewId: string, context: ReviewedUndoContext = {}): ReviewedUndoResult {
+  try {
+    return withHistoryMutation(() => {
+      let bound = bindReviewedUndo(previewId, context);
+      if ('error' in bound) return bound.error;
+      if (bound.record.status === 'undone') return undoReceipt(bound.record, previewId);
+      if (bound.record.status === 'undoing') {
+        const recovered = getSourceUndoOutcome(previewId, context);
+        if (recovered.success || recovered.code !== 'UNDO_NOT_APPLIED') return recovered;
+        bound = bindReviewedUndo(previewId, context);
+        if ('error' in bound) return bound.error;
+      }
+      const result = undoSourceEdit({ filePath: bound.record.filePath, editId: bound.record.id });
+      if (!result.success) return { success: false, previewId, editId: bound.record.id, code: 'UNDO_REFUSED', error: result.error };
+      return getSourceUndoOutcome(previewId, context);
+    });
+  } catch (error) {
+    if (error instanceof SourceOperationBusyError) return { success: false, code: error.code, error: error.message };
+    if (error instanceof SourceRecoveryRequiredError) return { success: false, code: 'UNDO_RECOVERY_REQUIRED', error: error.message };
+    return { success: false, code: 'UNDO_UNCERTAIN', error: 'Undo could not be fully confirmed. Check Undo status before continuing.' };
+  }
+}
+
+export function getLatestUndoTarget(filePath: string, repositoryId?: string, sourcePath?: string) {
+  if (!canUndoSourceEdit(filePath)) return null;
+  const absolute = path.resolve(getWorkspacePath(), filePath);
+  const record = readHistory().findLast(entry => entry.status !== 'undone' && path.resolve(getWorkspacePath(), entry.filePath) === absolute);
+  const previewId = record?.previewIds?.at(-1);
+  if (!record || !previewId || record.repositoryId !== repositoryId || (repositoryId && record.sourcePath !== sourcePath)) return null;
+  return { previewId, editId: record.id };
 }
 
 export function canUndoSourceEdit(filePath: string) {

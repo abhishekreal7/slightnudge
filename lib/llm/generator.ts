@@ -96,6 +96,7 @@ export async function generateTestPlan(
 
   if (!client) {
     // Deterministic fallback for test benchmark & offline execution
+    if (process.env.NODE_ENV === 'production') throw new Error('Test planning is not configured. Configure the analysis service before running production scans.');
     return generateBenchmarkTestPlan(appMap, userNotes, maxScenarios);
   }
 
@@ -137,6 +138,7 @@ export async function analyzeTestResults(
 
   if (!client) {
     // Deterministic fallback for test benchmark & offline execution
+    if (process.env.NODE_ENV === 'production') throw new Error('Report analysis is not configured. Configure the analysis service before running production scans.');
     return generateBenchmarkAnalysis(scenarioResults, evidenceArtifacts);
   }
 
@@ -377,7 +379,7 @@ Make the pricing table responsive by using 'overflow-x: auto' on the wrapper, or
   }
 
   // 4. Broken validation
-  const validationTest = scenarioResults.find((s: any) => s.id === 'sc_signup_validation');
+  const validationTest = scenarioResults.find((s: any) => s.id === 'sc_signup_validation' || s.evidence_json?.planKey === 'sc_signup_validation');
   if (validationTest && validationTest.verdict === 'failed') {
     findings.push({
       id: 'finding_signup_validation_bypass',

@@ -1,4 +1,9 @@
+import { appearanceValue, gradientPattern, shadowPattern, parseGradient, parseShadow } from './appearance-values';
+import { isNextLink } from './link-identity';
+import { isLucideIcon } from './icon-identity';
+import { isNextImage } from './image-identity';
 import { Project, SyntaxKind, Node, JsxOpeningElement, JsxSelfClosingElement, StringLiteral } from 'ts-morph';
+import { translatedClasses, type Translation } from './translation';
 import {
   TAILWIND_SPACING_SCALE,
   getNextSpacingValue,
@@ -8,6 +13,7 @@ import {
 export { TAILWIND_SPACING_SCALE, getNextSpacingValue, computeNudgedClass };
 
 export interface NudgeOptions {
+  sourceText?: string;
   filePath: string;
   line?: number;
   column?: number;
@@ -16,6 +22,7 @@ export interface NudgeOptions {
   stepSize?: 'normal' | 'big';
   breakpoint?: string; // e.g. '' (base), 'sm', 'md', 'lg', 'xl', '2xl'
   dryRun?: boolean;
+  translation?: Translation;
 }
 
 export interface NudgeResult {
@@ -44,7 +51,7 @@ export function isComponentUsedMultipleTimes(targetNode: JsxOpeningElement | Jsx
 
   // 1. Check if target element itself is a custom component (starts with capital letter)
   const tagName = targetNode.getTagNameNode().getText();
-  if (/^[A-Z]/.test(tagName)) {
+  if (/^[A-Z]/.test(tagName) && !isNextImage(targetNode) && !isNextLink(targetNode) && !isLucideIcon(targetNode)) {
     let usageCount = 0;
     for (const el of jsxElements) {
       if (el.getTagNameNode().getText() === tagName) {
@@ -120,6 +127,17 @@ export interface TextSourceAnalysis {
   isProp: boolean;
   propName?: string;
   reason?: string;
+}
+
+/** A button/link may contain one static label alongside untouched icon JSX. */
+export function editableTextChild(target: JsxOpeningElement) {
+  const parent = target.getParent();
+  if (!Node.isJsxElement(parent)) return undefined;
+  const children = parent.getJsxChildren().filter(child => !Node.isJsxText(child) || !child.containsOnlyTriviaWhiteSpaces());
+  if (children.length === 1) return children[0];
+  if (!['a', 'button'].includes(target.getTagNameNode().getText()) && !isNextLink(target)) return undefined;
+  const labels = children.filter(child => Node.isJsxText(child) || Node.isJsxExpression(child));
+  return labels.length === 1 ? labels[0] : undefined;
 }
 
 export function analyzeElementText(targetNode: JsxOpeningElement | JsxSelfClosingElement): TextSourceAnalysis {
@@ -204,7 +222,8 @@ export function analyzeElementText(targetNode: JsxOpeningElement | JsxSelfClosin
     }
   }
 
-  if (meaningful.length > 1) {
+  const singleChild = editableTextChild(targetNode);
+  if (!singleChild) {
     return {
       textEditable: false,
       isProp: false,
@@ -212,7 +231,6 @@ export function analyzeElementText(targetNode: JsxOpeningElement | JsxSelfClosin
     };
   }
 
-  const singleChild = meaningful[0];
   if (Node.isJsxText(singleChild)) {
     return {
       textEditable: true,
@@ -262,7 +280,8 @@ export function nudgeElement(options: NudgeOptions): NudgeResult {
     skipAddingFilesFromTsConfig: true,
   });
 
-  const sourceFile = project.addSourceFileAtPath(filePath);
+  if (options.sourceText !== undefined && !options.dryRun) throw new Error('Draft source is read-only until Save.');
+  const sourceFile = options.sourceText === undefined ? project.addSourceFileAtPath(filePath) : project.createSourceFile(filePath, options.sourceText, { overwrite: true });
 
   // 1. Locate the JSX element by line number or element ID
   const jsxElements = [
@@ -431,12 +450,25 @@ export function nudgeElement(options: NudgeOptions): NudgeResult {
   const originalSource = sourceFile.getFullText();
 
   // 4. Compute updated class safely
-  const computed = computeNudgedClass({
+  const marginAxis = direction === 'left' || direction === 'right' ? 'ml' : 'mt';
+  const scope = breakpoint ? `${breakpoint}:` : '';
+  const scopedTokens = rawValue.split(/\s+/).filter(Boolean).filter(token => scope ? token.startsWith(scope) && !token.slice(scope.length).includes(':') : !token.includes(':')).map(token => token.slice(scope.length));
+  const relevantMargins = scopedTokens.filter(token => new RegExp(marginAxis === 'ml' ? '^!?-?(?:m|mx|ml|ms|me)-' : '^!?-?(?:m|my|mt)-').test(token));
+  if (!options.translation && (relevantMargins.length > 1 || relevantMargins.some(token => !new RegExp(`^-?${marginAxis}-[0-9.]+$`).test(token)))) {
+    return { success: false, refusedSafely: true, reason: 'This spacing uses automatic, custom, or overlapping margins. Adjust it in source before using Move. Nothing was changed.', filePath, line: targetElement.getStartLineNumber() };
+  }
+  if (options.translation && targetElement.getAttribute('style')) return { success: false, refusedSafely: true, reason: 'Inline styles need to be resolved before this element can be moved. Nothing was changed.', filePath };
+  let computed: { oldClass?: string; newClass: string; newClassName: string };
+  try { computed = options.translation ? {
+    oldClass: rawValue,
+    newClass: translatedClasses(rawValue, options.translation),
+    newClassName: translatedClasses(rawValue, options.translation),
+  } : computeNudgedClass({
     currentClassName: rawValue,
     direction,
     stepSize,
     breakpoint,
-  });
+  }); } catch (error) { return { success: false, refusedSafely: true, reason: error instanceof Error ? error.message : 'This movement cannot be prepared safely.', filePath }; }
 
   // 5. Apply the edit strictly to the string literal node ONLY
   stringLiteralNode.setLiteralValue(computed.newClassName);
@@ -460,6 +492,7 @@ export function nudgeElement(options: NudgeOptions): NudgeResult {
 }
 
 export interface InspectOptions {
+  sourceText?: string;
   filePath: string;
   line?: number;
   column?: number;
@@ -496,7 +529,7 @@ export function inspectElement(options: InspectOptions): InspectResult {
     skipAddingFilesFromTsConfig: true,
   });
 
-  const sourceFile = project.addSourceFileAtPath(filePath);
+  const sourceFile = options.sourceText === undefined ? project.addSourceFileAtPath(filePath) : project.createSourceFile(filePath, options.sourceText, { overwrite: true });
 
   const jsxElements = [
     ...sourceFile.getDescendantsOfKind(SyntaxKind.JsxOpeningElement),
@@ -558,7 +591,7 @@ export function inspectElement(options: InspectOptions): InspectResult {
     };
   }
 
-  const tagName = targetElement.getTagNameNode().getText();
+  const tagName = isNextImage(targetElement) ? 'img' : isNextLink(targetElement) ? 'a' : isLucideIcon(targetElement) ? 'svg' : targetElement.getTagNameNode().getText();
   const actualLine = targetElement.getStartLineNumber();
   const actualPos = sourceFile.getLineAndColumnAtPos(targetElement.getStart());
 
@@ -801,10 +834,11 @@ export function inspectElement(options: InspectOptions): InspectResult {
   };
 }
 
-export type EditableStyleProperty = 'fontSize' | 'fontWeight' | 'fontFamily' | 'lineHeight' | 'letterSpacing' | 'textTransform' | 'textColor' | 'alignment' | 'backgroundColor' | 'padding' | 'display' | 'width' | 'maxWidth' | 'gap' | 'borderRadius' | 'justifyContent' | 'alignItems' | 'flexDirection' | 'borderWidth' | 'borderColor' | 'fontStyle' | 'textDecoration';
+export type EditableStyleProperty = 'backgroundImage' | 'boxShadow' | 'minWidth' | 'minHeight' | 'flexGrow' | 'flexShrink' | 'alignSelf' | 'fontSize' | 'fontWeight' | 'fontFamily' | 'lineHeight' | 'letterSpacing' | 'textTransform' | 'textColor' | 'alignment' | 'backgroundColor' | 'padding' | 'display' | 'width' | 'maxWidth' | 'gap' | 'borderRadius' | 'justifyContent' | 'alignItems' | 'flexDirection' | 'flexWrap' | 'gridTemplateColumns' | 'borderWidth' | 'borderColor' | 'fontStyle' | 'textDecoration' | 'transitionProperty' | 'transitionDuration' | 'transitionDelay' | 'transitionTimingFunction' | 'objectFit' | 'objectPosition';
 
 export interface ReorderOptions {
   filePath: string;
+  sourceText?: string;
   line?: number;
   column?: number;
   elementId?: string;
@@ -823,12 +857,15 @@ export interface ReorderResult {
   line?: number;
   updatedSource?: string;
   originalSource?: string;
+  sourceOrder?: number[];
 }
 
 export function reorderElement(options: ReorderOptions): ReorderResult {
   const { filePath, line, column, elementId, direction, dryRun = false } = options;
+  if (options.sourceText !== undefined && !dryRun) throw new Error('Draft source is read-only until Save.');
   const project = new Project({ skipAddingFilesFromTsConfig: true });
   const sourceFile = project.addSourceFileAtPath(filePath);
+  if (options.sourceText !== undefined) sourceFile.replaceWithText(options.sourceText);
   const elements = [
     ...sourceFile.getDescendantsOfKind(SyntaxKind.JsxOpeningElement),
     ...sourceFile.getDescendantsOfKind(SyntaxKind.JsxSelfClosingElement),
@@ -924,6 +961,8 @@ export function reorderElement(options: ReorderOptions): ReorderResult {
   }
 
   const destNode = elementChildren[destIdx];
+  const hostTag = (node: Node) => Node.isJsxElement(node) ? node.getOpeningElement().getTagNameNode().getText() : Node.isJsxSelfClosingElement(node) ? node.getTagNameNode().getText() : '';
+  if (elementChildren.some(node => !/^[a-z][a-z0-9-]*$/.test(hostTag(node)))) return { success: false, refusedSafely: true, reason: 'Reorder direct page elements within one container. Component boundaries need editing in source.', filePath, line: targetLine };
 
   // Multi-slot reorder safety: inspect moved element and all siblings/children between source and destination
   const rawTargetIdx = allChildren.indexOf(fullTargetNode);
@@ -985,14 +1024,16 @@ export function reorderElement(options: ReorderOptions): ReorderResult {
   const [movedItem] = texts.splice(targetIdx, 1);
   texts.splice(destIdx, 0, movedItem);
 
-  elementChildren.forEach((child, i) => {
-    if (child.getText() !== texts[i]) {
-      child.replaceWithText(texts[i]);
-    }
-  });
-
-  const updatedSource = sourceFile.getFullText();
-  if (!dryRun) sourceFile.saveSync();
+  const openings = elements.sort((a, b) => a.getStart() - b.getStart());
+  const chunks = elementChildren.map(child => openings.map((node, index) => ({ node, index })).filter(({ node }) => node.getStart() >= child.getStart() && node.getEnd() <= child.getEnd()).map(({ index }) => index));
+  const chunkOrder = chunks.map((_, index) => index); const [movedChunk] = chunkOrder.splice(targetIdx, 1); chunkOrder.splice(destIdx, 0, movedChunk);
+  const slots = new Map(chunks.map((chunk, index) => [chunk[0], { end: chunk.at(-1)!, replacement: chunks[chunkOrder[index]] }]));
+  const sequence: number[] = [];
+  for (let index = 0; index < openings.length; index++) { const slot = slots.get(index); if (slot) { sequence.push(...slot.replacement); index = slot.end; } else sequence.push(index); }
+  const sourceOrder = openings.map((_, index) => sequence.indexOf(index));
+  let updatedSource = originalSource;
+  for (let i = elementChildren.length - 1; i >= 0; i--) updatedSource = updatedSource.slice(0, elementChildren[i].getStart()) + texts[i] + updatedSource.slice(elementChildren[i].getEnd());
+  if (!dryRun) { sourceFile.replaceWithText(updatedSource); sourceFile.saveSync(); }
 
   return {
     success: true,
@@ -1001,6 +1042,7 @@ export function reorderElement(options: ReorderOptions): ReorderResult {
     line: targetLine,
     updatedSource: dryRun ? updatedSource : undefined,
     originalSource: dryRun ? originalSource : undefined,
+    sourceOrder,
   };
 }
 
@@ -1034,12 +1076,13 @@ export function updateStaticImageSource(options: { filePath: string; line?: numb
   return { success: true as const, oldValue, newValue: value, filePath, line: target.getStartLineNumber(), updatedSource: dryRun ? updatedSource : undefined, originalSource: dryRun ? originalSource : undefined };
 }
 
-/** Change only simple, static JSX text. Nested components and dynamic expressions are refused. */
-export function updateStaticJsxText(options: { filePath: string; line?: number; column?: number; elementId?: string; value: string; dryRun?: boolean }) {
+/** Change one static label; buttons/links preserve adjacent icon JSX. Dynamic labels are refused. */
+export function updateStaticJsxText(options: { sourceText?: string; filePath: string; line?: number; column?: number; elementId?: string; value: string; dryRun?: boolean }) {
   const { filePath, line, column, elementId, value, dryRun = false } = options;
   if (value.length > 2000 || /[\u0000-\u0008\u000B\u000C\u000E-\u001F]/.test(value)) throw new Error('Text must be under 2,000 characters and cannot contain control characters.');
   const project = new Project({ skipAddingFilesFromTsConfig: true });
-  const sourceFile = project.addSourceFileAtPath(filePath);
+  if (options.sourceText !== undefined && !dryRun) throw new Error('Draft source is read-only until Save.');
+  const sourceFile = options.sourceText === undefined ? project.addSourceFileAtPath(filePath) : project.createSourceFile(filePath, options.sourceText, { overwrite: true });
   const elements = [...sourceFile.getDescendantsOfKind(SyntaxKind.JsxOpeningElement), ...sourceFile.getDescendantsOfKind(SyntaxKind.JsxSelfClosingElement)];
   const target = elements.find((element) => {
     const idAttr = element.getAttribute('id');
@@ -1061,10 +1104,8 @@ export function updateStaticJsxText(options: { filePath: string; line?: number; 
   }
   const jsxElement = target.getParent();
   if (!Node.isJsxElement(jsxElement)) return { success: false as const, reason: 'This self-closing element has no editable text.' };
-  const children = jsxElement.getJsxChildren();
-  const meaningful = children.filter((child) => !Node.isJsxText(child) || !child.containsOnlyTriviaWhiteSpaces());
-  if (meaningful.length !== 1) return { success: false as const, reason: 'For safety, text editing currently supports elements with one plain text value and no nested elements.' };
-  const child = meaningful[0];
+  const child = editableTextChild(target);
+  if (!child) return { success: false as const, reason: 'Select one static text label to edit.' };
   const originalSource = sourceFile.getFullText();
   let oldValue: string;
   if (Node.isJsxText(child)) {
@@ -1082,25 +1123,48 @@ export function updateStaticJsxText(options: { filePath: string; line?: number; 
   return { success: true as const, oldValue, newValue: value, filePath, line: target.getStartLineNumber(), updatedSource: dryRun ? updatedSource : undefined, originalSource: dryRun ? originalSource : undefined };
 }
 
+// Background and text prefixes each cover several independent CSS properties.
+// Match colors only: bg-[length:...]/bg-[bottom]/gradients and text-[14px]
+// must survive a color edit. Custom/ambiguous color values still match here so
+// the existing custom-value guard can refuse replacing them without guessing.
+function colorUtilityPattern(prefix: 'bg' | 'text') {
+  return new RegExp(`^${prefix}-(?:(?:[a-z][a-z0-9-]*-\\d{2,3}|white|black|transparent|current|inherit)(?:/(?:\\d+(?:\\.\\d+)?|\\[[^\\]]+\\]))?|\\[(?:color:|#|(?:rgba?|hsla?|hwb|lab|lch|oklab|oklch|color|light-dark|var)\\()[^\\]]*\\])$`);
+}
+
 const editableUtilities: Record<EditableStyleProperty, { pattern: RegExp; values: Set<string> }> = {
+  backgroundImage: { pattern: gradientPattern, values: new Set(['bg-none']) },
+  boxShadow: { pattern: shadowPattern, values: new Set(['shadow-none']) },
+  minWidth: { pattern: /^min-w-.+$/, values: new Set(['min-w-0','min-w-full','min-w-min','min-w-max','min-w-fit']) },
+  minHeight: { pattern: /^min-h-.+$/, values: new Set(['min-h-0','min-h-full','min-h-screen']) },
+  flexGrow: { pattern: /^(?:grow|flex-grow)(?:-.+)?$/, values: new Set(['grow-0','grow']) },
+  flexShrink: { pattern: /^(?:shrink|flex-shrink)(?:-.+)?$/, values: new Set(['shrink-0','shrink']) },
+  alignSelf: { pattern: /^self-.+$/, values: new Set(['self-auto','self-start','self-center','self-end','self-stretch']) },
+  objectFit: { pattern: /^object-(?:contain|cover|fill|none|scale-down)$/, values: new Set(['object-contain', 'object-cover', 'object-fill', 'object-none', 'object-scale-down']) },
+  objectPosition: { pattern: /^object-(?:\[[^\]]+\]|center|top|bottom|left|right|left-top|right-top|left-bottom|right-bottom|top-left|top-right|bottom-left|bottom-right)$/, values: new Set(['object-center', 'object-top', 'object-bottom', 'object-left', 'object-right', 'object-top-left', 'object-top-right', 'object-bottom-left', 'object-bottom-right']) },
+  transitionProperty: { pattern: /^transition(?:-.+)?$/, values: new Set(['transition', 'transition-none', 'transition-colors', 'transition-opacity', 'transition-transform', 'transition-all']) },
+  transitionDuration: { pattern: /^duration-.+$/, values: new Set(['duration-75', 'duration-100', 'duration-150', 'duration-200', 'duration-300', 'duration-500', 'duration-700', 'duration-1000']) },
+  transitionDelay: { pattern: /^delay-.+$/, values: new Set(['delay-0', 'delay-75', 'delay-100', 'delay-150', 'delay-200', 'delay-300', 'delay-500', 'delay-700', 'delay-1000']) },
+  transitionTimingFunction: { pattern: /^ease-.+$/, values: new Set(['ease-linear', 'ease-in', 'ease-out', 'ease-in-out']) },
   fontSize: { pattern: /^text-(?:xs|sm|base|lg|xl|[2-7]xl|\[length:)/, values: new Set(['text-xs', 'text-sm', 'text-base', 'text-lg', 'text-xl', 'text-2xl', 'text-3xl', 'text-4xl', 'text-5xl', 'text-6xl', 'text-7xl']) },
   fontWeight: { pattern: /^font-(?:thin|extralight|light|normal|medium|semibold|bold|extrabold|black)$/, values: new Set(['font-thin', 'font-extralight', 'font-light', 'font-normal', 'font-medium', 'font-semibold', 'font-bold', 'font-extrabold', 'font-black']) },
   fontFamily: { pattern: /^font-(?:sans|serif|mono)$/, values: new Set(['font-sans', 'font-serif', 'font-mono']) },
   lineHeight: { pattern: /^leading-(?:none|tight|snug|normal|relaxed|loose)$/, values: new Set(['leading-none', 'leading-tight', 'leading-snug', 'leading-normal', 'leading-relaxed', 'leading-loose']) },
   letterSpacing: { pattern: /^tracking-(?:tighter|tight|normal|wide|wider|widest)$/, values: new Set(['tracking-tighter', 'tracking-tight', 'tracking-normal', 'tracking-wide', 'tracking-wider', 'tracking-widest']) },
   textTransform: { pattern: /^(?:uppercase|lowercase|capitalize|normal-case)$/, values: new Set(['uppercase', 'lowercase', 'capitalize', 'normal-case']) },
-  textColor: { pattern: /^text-(?:\[|[a-z]+-\d{2,3}$|white|black|transparent)/, values: new Set(['text-[#17211f]', 'text-[#697571]', 'text-[#176b55]', 'text-[#b43e35]', 'text-[#ffffff]', 'text-slate-900', 'text-slate-800', 'text-slate-700', 'text-slate-600', 'text-slate-500', 'text-slate-400', 'text-white', 'text-black', 'text-transparent', 'text-emerald-600', 'text-emerald-700', 'text-blue-600', 'text-rose-600', 'text-amber-600']) },
+  textColor: { pattern: colorUtilityPattern('text'), values: new Set(['text-[#17211f]', 'text-[#697571]', 'text-[#176b55]', 'text-[#b43e35]', 'text-[#ffffff]', 'text-slate-900', 'text-slate-800', 'text-slate-700', 'text-slate-600', 'text-slate-500', 'text-slate-400', 'text-white', 'text-black', 'text-transparent', 'text-emerald-600', 'text-emerald-700', 'text-blue-600', 'text-rose-600', 'text-amber-600']) },
   alignment: { pattern: /^text-(?:left|center|right|justify)$/, values: new Set(['text-left', 'text-center', 'text-right']) },
-  backgroundColor: { pattern: /^bg-(?:\[|[a-z]+-\d{2,3}$|transparent|white|black)/, values: new Set(['bg-[#ffffff]', 'bg-[#f1f3f1]', 'bg-[#176b55]', 'bg-[#17211f]', 'bg-transparent', 'bg-white', 'bg-black', 'bg-slate-50', 'bg-slate-100', 'bg-slate-200', 'bg-slate-800', 'bg-slate-900', 'bg-emerald-500', 'bg-emerald-600', 'bg-emerald-700', 'bg-blue-500', 'bg-blue-600', 'bg-pink-500', 'bg-rose-500']) },
+  backgroundColor: { pattern: colorUtilityPattern('bg'), values: new Set(['bg-[#ffffff]', 'bg-[#f1f3f1]', 'bg-[#176b55]', 'bg-[#17211f]', 'bg-transparent', 'bg-white', 'bg-black', 'bg-slate-50', 'bg-slate-100', 'bg-slate-200', 'bg-slate-800', 'bg-slate-900', 'bg-emerald-500', 'bg-emerald-600', 'bg-emerald-700', 'bg-blue-500', 'bg-blue-600', 'bg-pink-500', 'bg-rose-500']) },
   padding: { pattern: /^p[trblxy]?-(?:\d+(?:\.\d+)?|\[)/, values: new Set(['p-0', 'p-1', 'p-2', 'p-3', 'p-4', 'p-6', 'p-8', 'p-10', 'p-12']) },
   display: { pattern: /^(?:block|inline-block|flex|inline-flex|grid|hidden)$/, values: new Set(['block', 'inline-block', 'flex', 'inline-flex', 'grid', 'hidden']) },
-  width: { pattern: /^w-(?:auto|full|1\/2|1\/3|2\/3|1\/4|3\/4)$/, values: new Set(['w-auto', 'w-full', 'w-1/2', 'w-1/3', 'w-2/3', 'w-1/4', 'w-3/4']) },
+  width: { pattern: /^w-(?:auto|full|fit|min|max|1\/2|1\/3|2\/3|1\/4|3\/4)$/, values: new Set(['w-auto', 'w-full', 'w-fit', 'w-min', 'w-max', 'w-1/2', 'w-1/3', 'w-2/3', 'w-1/4', 'w-3/4']) },
   maxWidth: { pattern: /^max-w-(?:none|sm|md|lg|xl|2xl|3xl|4xl|5xl|6xl|7xl)$/, values: new Set(['max-w-none', 'max-w-sm', 'max-w-md', 'max-w-lg', 'max-w-xl', 'max-w-2xl', 'max-w-3xl', 'max-w-4xl', 'max-w-5xl', 'max-w-6xl', 'max-w-7xl']) },
   gap: { pattern: /^gap-(?:0|1|2|3|4|6|8|10|12|16)$/, values: new Set(['gap-0', 'gap-1', 'gap-2', 'gap-3', 'gap-4', 'gap-6', 'gap-8', 'gap-10', 'gap-12', 'gap-16']) },
   borderRadius: { pattern: /^rounded(?:-(?:none|sm|md|lg|xl|2xl|3xl|full))?$/, values: new Set(['rounded-none', 'rounded-sm', 'rounded', 'rounded-md', 'rounded-lg', 'rounded-xl', 'rounded-2xl', 'rounded-3xl', 'rounded-full']) },
   justifyContent: { pattern: /^justify-(?:start|end|center|between|around|evenly)$/, values: new Set(['justify-start', 'justify-center', 'justify-between', 'justify-end', 'justify-around', 'justify-evenly']) },
   alignItems: { pattern: /^items-(?:start|end|center|baseline|stretch)$/, values: new Set(['items-start', 'items-center', 'items-end', 'items-stretch']) },
   flexDirection: { pattern: /^flex-(?:row|col)(?:-reverse)?$/, values: new Set(['flex-row', 'flex-col']) },
+  flexWrap: { pattern: /^flex-(?:wrap|nowrap|wrap-reverse)$/, values: new Set(['flex-wrap', 'flex-nowrap', 'flex-wrap-reverse']) },
+  gridTemplateColumns: { pattern: /^grid-cols-.+$/, values: new Set(Array.from({ length: 12 }, (_, index) => `grid-cols-${index + 1}`)) },
   borderWidth: { pattern: /^border(?:-[0248])?$/, values: new Set(['border-0', 'border', 'border-2', 'border-4', 'border-8']) },
   borderColor: { pattern: /^border-(?:transparent|current|black|white|slate-\d{2,3}|emerald-\d{2,3}|blue-\d{2,3}|rose-\d{2,3}|gray-\d{2,3})|border-\[/, values: new Set(['border-transparent', 'border-slate-200', 'border-slate-300', 'border-slate-400', 'border-slate-700', 'border-slate-900', 'border-emerald-500', 'border-emerald-600', 'border-blue-500', 'border-blue-600', 'border-rose-500', 'border-white', 'border-black']) },
   fontStyle: { pattern: /^(?:italic|not-italic)$/, values: new Set(['italic', 'not-italic']) },
@@ -1111,18 +1175,19 @@ const editableUtilities: Record<EditableStyleProperty, { pattern: RegExp; values
 export const ALLOWED_UTILITY_VARIANTS = new Set(['', 'sm', 'md', 'lg', 'xl', '2xl', 'hover', 'focus', 'focus-visible', 'active']);
 
 /** Update one statically-defined Tailwind utility while preserving every other source token. */
-export function updateStaticTailwindClass(options: { filePath: string; line?: number; column?: number; elementId?: string; property: EditableStyleProperty; value: string; breakpoint?: string; dryRun?: boolean }) {
+export function updateStaticTailwindClass(options: { sourceText?: string; filePath: string; line?: number; column?: number; elementId?: string; property: EditableStyleProperty; value: string; breakpoint?: string; verifiedResponsiveScope?: boolean; dryRun?: boolean; important?: boolean }) {
   const { filePath, line, column, elementId, property, value, breakpoint = '', dryRun = false } = options;
   const rule = editableUtilities[property];
-  if (!rule || !rule.values.has(value) || !ALLOWED_UTILITY_VARIANTS.has(breakpoint)) throw new Error('That style value or breakpoint is not supported.');
+  if (!rule || !(rule.values.has(value) || appearanceValue(property,value)) || !ALLOWED_UTILITY_VARIANTS.has(breakpoint) && !(options.verifiedResponsiveScope && /^[a-z0-9][a-z0-9-]{0,31}$/i.test(breakpoint))) throw new Error('That style value or breakpoint is not supported.');
 
-  const inspected = inspectElement({ filePath, line, column, elementId });
+  const inspected = inspectElement({ filePath, line, column, elementId, sourceText: options.sourceText });
   if (!inspected.found || !inspected.safeToEdit || !inspected.className) {
     return { success: false as const, reason: inspected.reason || 'This element cannot be edited safely.' };
   }
 
   const project = new Project({ skipAddingFilesFromTsConfig: true });
-  const sourceFile = project.addSourceFileAtPath(filePath);
+  if (options.sourceText !== undefined && !dryRun) throw new Error('Draft source is read-only until Save.');
+  const sourceFile = options.sourceText === undefined ? project.addSourceFileAtPath(filePath) : project.createSourceFile(filePath, options.sourceText, { overwrite: true });
   const elements = [
     ...sourceFile.getDescendantsOfKind(SyntaxKind.JsxOpeningElement),
     ...sourceFile.getDescendantsOfKind(SyntaxKind.JsxSelfClosingElement),
@@ -1138,6 +1203,8 @@ export function updateStaticTailwindClass(options: { filePath: string; line?: nu
     return line !== undefined && element.getStartLineNumber() === line;
   });
   if (!target) return { success: false as const, reason: 'The selected source element could not be found.' };
+  if ((property === 'objectFit' || property === 'objectPosition') && target.getTagNameNode().getText() !== 'img' && !isNextImage(target)) return { success: false as const, reason: 'Choose a source-mapped image to adjust its framing.' };
+  if (options.important && !['a', 'button'].includes(target.getTagNameNode().getText()) && !isNextLink(target)) return { success: false as const, reason: 'Button style priority is only available on links and buttons.' };
 
   const classAttr = target.getAttribute('className');
   if (!classAttr || !Node.isJsxAttribute(classAttr)) return { success: false as const, reason: 'This element has no editable className.' };
@@ -1153,14 +1220,30 @@ export function updateStaticTailwindClass(options: { filePath: string; line?: nu
   const originalSource = sourceFile.getFullText();
   const prefix = breakpoint ? `${breakpoint}:` : '';
   const tokens = original.split(/\s+/).filter(Boolean);
-  const index = tokens.findIndex((token) => token.startsWith(prefix) && rule.pattern.test(token.slice(prefix.length)));
-  const nextToken = `${prefix}${value}`;
-  const oldToken = index >= 0 ? tokens[index] : '';
+  const baseUtility = (token: string) => token.slice(prefix.length).replace(/^!|!$/g, '');
+  const effects = property === 'backgroundImage' || property === 'boxShadow';
+  const matches = tokens.map((token, index) => ({ token, index })).filter(({ token }) => token.startsWith(prefix) && rule.pattern.test(baseUtility(token)));
+  if (!effects && matches.length > 1) return { success: false as const, reason: 'This element has conflicting styles in this state. Resolve the conflict in code before editing.' };
+  if (matches.some(({ token }) => token.includes('[') && !(rule.values.has(baseUtility(token)) || appearanceValue(property,baseUtility(token)) || property==='backgroundImage'&&/^(?:from|via|to)-\[(?:#[a-f0-9]{3,8}|\d{1,3}%)\]$/i.test(baseUtility(token)) || property==='boxShadow'&&/^shadow-\[#[a-f0-9]{3,8}\](?:\/\d{1,3})?$/i.test(baseUtility(token))) || (property.startsWith('transition') && !rule.values.has(baseUtility(token))))) {
+    return { success: false as const, reason: 'This style uses a custom value that cannot be replaced safely. Nothing was changed.' };
+  }
+  if(effects){
+    const local=tokens.filter(token=>token.startsWith(prefix)&&!baseUtility(token).split('[')[0].includes(':')).map(baseUtility);
+    if(property==='backgroundImage'&&local.some(token=>/^bg-(?:radial|conic|\()/.test(token)))return {success:false as const,reason:'This background uses a radial, conic or variable fill. Edit it in source.'};
+    if(property==='backgroundImage'&&local.some(token=>/^bg-\[/.test(token)&&!/^bg-\[#[a-f0-9]+\]$/i.test(token)&&!parseGradient(token)))return {success:false as const,reason:'This background uses a custom image or layered fill. Edit it in source.'};
+    if(property==='boxShadow'&&local.some(token=>/^(?:inset-shadow|shadow-inset)/.test(token)))return {success:false as const,reason:'This element uses an inset shadow. Edit it in source.'};
+    const geometry=matches.filter(({token})=>!(property==='boxShadow'&&/^shadow-\[#[a-f0-9]{3,8}\](?:\/\d{1,3})?$/i.test(baseUtility(token)))).filter(({token})=>property==='backgroundImage'?/^bg-/.test(baseUtility(token)):/^shadow(?:$|-(?:none|sm|md|lg|xl|2xl|xs|2xs|\[))/.test(baseUtility(token)));
+    if(geometry.length>1)return {success:false as const,reason:'Resolve conflicting effects in source before editing.'};
+  }
+  const index = matches[0]?.index ?? -1;
+  const oldToken = effects ? matches.map(item=>item.token).join(' ') : index >= 0 ? tokens[index] : '';
+  const nextToken = `${prefix}${options.important || matches.some(({token})=>token.slice(prefix.length).startsWith('!')||token.endsWith('!')) ? '!' : ''}${value}`;
   const newToken = nextToken;
-  if (index >= 0) tokens[index] = nextToken;
+  if (effects) { for(const item of [...matches].reverse())tokens.splice(item.index,1);tokens.splice(index<0?tokens.length:index,0,nextToken); }
+  else if (index >= 0) tokens[index] = nextToken;
   else tokens.push(nextToken);
-  const updated = tokens.join(' ');
-  literal.setLiteralValue(updated);
+  const updated = oldToken === nextToken ? original : tokens.join(' ');
+  if (updated !== original) literal.setLiteralValue(updated);
   const updatedSource = sourceFile.getFullText();
   if (!dryRun) sourceFile.saveSync();
   return { success: true as const, oldClassName: original, newClassName: updated, oldToken, newToken, filePath, line: target.getStartLineNumber(), updatedSource: dryRun ? updatedSource : undefined, originalSource: dryRun ? originalSource : undefined };

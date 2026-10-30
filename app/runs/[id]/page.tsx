@@ -7,6 +7,8 @@ import { LiveProgress } from '@/components/LiveProgress';
 import { FindingWorkbench } from '@/components/FindingWorkbench';
 import { FindingRecord, PipelineStageName } from '@/lib/db/types';
 import { trackFunnelEvent } from '@/lib/analytics/events';
+import { accountFetch } from '@/lib/auth/browser';
+import Link from 'next/link';
 
 interface RunDetailData {
   run: {
@@ -35,6 +37,8 @@ export default function RunDetailPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [shareCopied, setShareCopied] = useState(false);
+  const [actionError, setActionError] = useState('');
+  const [checkoutBusy, setCheckoutBusy] = useState(false);
   const previewTrackedRef = useRef(false);
 
   useEffect(() => {
@@ -42,9 +46,9 @@ export default function RunDetailPage() {
 
     const fetchStatus = async () => {
       try {
-        const resp = await fetch(`/api/runs/${runId}`);
+        const resp = await accountFetch(`/api/runs/${runId}`);
         if (!resp.ok) {
-          throw new Error('Scan not found');
+          throw new Error(resp.status === 401 ? 'Sign in to view your scan.' : resp.status === 404 ? 'Scan not found' : 'Could not load this scan. Try again.');
         }
         const json = await resp.json();
         setData(json);
@@ -92,6 +96,7 @@ export default function RunDetailPage() {
         <div className="rounded-md border border-red-200 bg-red-50 p-6 text-red-900 text-left space-y-2">
           <h2 className="text-sm font-semibold">Unable to load scan</h2>
           <p className="text-xs text-red-700 leading-relaxed">{error || 'Scan does not exist or has expired.'}</p>
+          {error?.includes('Sign in') && <Link href={`/login?next=${encodeURIComponent(`/runs/${runId}`)}`} className="text-xs underline">Sign in</Link>}
         </div>
       </div>
     );
@@ -107,20 +112,27 @@ export default function RunDetailPage() {
   };
 
   const handleUnlockPayment = async () => {
+    if (checkoutBusy) return; setCheckoutBusy(true); setActionError('');
     try {
       trackFunnelEvent('checkout_started', { runId });
-      const resp = await fetch('/api/checkout', {
+      const resp = await accountFetch('/api/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ runId }),
       });
       const res = await resp.json();
+      if (!resp.ok || !res.checkoutUrl) throw new Error(res.error || 'Could not open checkout. Try again.');
       if (res.checkoutUrl) {
         window.location.href = res.checkoutUrl;
       }
     } catch (e: any) {
-      alert(`Checkout error: ${e.message}`);
-    }
+      setActionError(e.message || 'Could not open checkout. Try again.');
+    } finally { setCheckoutBusy(false); }
+  };
+  const exportReport = async () => {
+    setActionError('');
+    try { const response = await accountFetch(`/api/runs/${run.id}/report.pdf`); if (!response.ok) { const value = await response.json(); throw new Error(value.error || 'Could not export this report.'); } const url = URL.createObjectURL(await response.blob()); const link = document.createElement('a'); link.href = url; link.download = `slightnudge-report-${run.id}.html`; link.click(); setTimeout(() => URL.revokeObjectURL(url), 1000); }
+    catch (cause) { setActionError(cause instanceof Error ? cause.message : 'Could not export this report.'); }
   };
 
   // Compute severity counts
@@ -174,17 +186,17 @@ export default function RunDetailPage() {
             )}
           </button>
 
-          <a
-            href={`/api/runs/${run.id}/report.pdf`}
-            download
+          <button type="button"
+            onClick={exportReport} disabled={run.kind !== 'full'}
             className="inline-flex items-center gap-1.5 rounded border border-slate-300 bg-white px-3 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-50 transition"
           >
             <Download className="w-3.5 h-3.5 text-slate-500" />
-            <span>Export PDF</span>
-          </a>
+            <span>Export printable report</span>
+          </button>
         </div>
       </div>
 
+      {actionError && <p role="alert" className="rounded-md border border-amber-200 bg-amber-50 px-4 py-3 text-xs text-amber-900">{actionError}</p>}
       {/* Live Stage Progress Indicator (when running) */}
       {isRunning && (
         <LiveProgress
@@ -251,9 +263,10 @@ export default function RunDetailPage() {
           <button
             type="button"
             onClick={handleUnlockPayment}
+            disabled={checkoutBusy}
             className="rounded border border-slate-900 bg-slate-900 px-4 py-2 text-xs font-semibold text-white hover:bg-slate-800 transition shadow-xs shrink-0"
           >
-            Unlock full report ($9.99)
+            {checkoutBusy ? 'Opening checkout…' : 'Unlock full report ($9.99)'}
           </button>
         </div>
       )}

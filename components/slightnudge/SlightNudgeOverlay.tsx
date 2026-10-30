@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { AlignCenter, AlignLeft, AlignRight, ArrowDown, ArrowUp, ArrowUpDown, Check, ChevronDown, ChevronsDown, ChevronsUp, CircleAlert, Code2, Columns2, GripVertical, Laptop2, LayoutGrid, Layers, LoaderCircle, MoreHorizontal, MousePointer2, Pencil, Play, RotateCcw, Sparkles, Trash2, Type, Undo2, X } from 'lucide-react';
-import { getClientSessionToken } from '@/lib/slightnudge/client';
+import { getClientSessionToken, undoEditAPI, type UndoContext } from '@/lib/slightnudge/client';
 
 interface SelectedElementInfo {
   tagName: string;
@@ -27,6 +27,8 @@ interface PendingEdit {
   summary: string;
   oldValue: string;
   newValue: string;
+  oldClassName?: string;
+  newClassName?: string;
   previewType?: 'className' | 'textContent' | 'imageSource' | 'reorder';
   originalDomValue?: string;
   targetIndex?: number;
@@ -389,7 +391,7 @@ export function SlightNudgeOverlay({
   const [pendingEdit, setPendingEdit] = useState<PendingEdit | null>(null);
   const [openSection, setOpenSection] = useState<'text' | 'arrange' | 'spacing' | 'layout' | 'type' | 'color' | 'surface'>('type');
   const [draftText, setDraftText] = useState('');
-  const [activeBreakpoint, setActiveBreakpoint] = useState('lg');
+  const [activeBreakpoint, setActiveBreakpoint] = useState('');
   const [canUndo, setCanUndo] = useState(false);
   const [isInlineEditing, setIsInlineEditing] = useState(false);
   const [buttonMode, setButtonMode] = useState<'shell' | 'content'>('shell');
@@ -414,6 +416,9 @@ export function SlightNudgeOverlay({
   } | null>(null);
   const selectedNodeRef = useRef<HTMLElement | null>(null);
   const editGroupIdRef = useRef<string | null>(null);
+  const undoTargetRef = useRef<{ filePath: string; context: UndoContext } | null>(null);
+  const undoUncertainRef = useRef(false);
+  const [undoUncertain, setUndoUncertain] = useState(false);
   const originalStyleRef = useRef<string | null>(null);
   const originalPositionRef = useRef<{ parent: HTMLElement; nextSibling: HTMLElement | null } | null>(null);
 
@@ -441,28 +446,20 @@ export function SlightNudgeOverlay({
   }, [defaultFilePath]);
 
   const isSyncingRef = useRef(false);
-  const pendingPayloadQueueRef = useRef<Record<string, unknown> | null>(null);
-  const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const pendingReviewRef = useRef<PendingEdit | null>(null);
+  pendingReviewRef.current = pendingEdit;
+  const reviewNotice = 'Apply or discard the current preview before making another change. Source has not been changed.';
 
   const previewChange = useCallback(async (payload: Record<string, unknown>) => {
-    if (isSyncingRef.current) {
-      pendingPayloadQueueRef.current = payload;
+    if (undoUncertainRef.current) { setNotice('Check Undo status before making another change.'); return; }
+    if (isSyncingRef.current || pendingReviewRef.current) {
+      setNotice(reviewNotice);
       return;
     }
     isSyncingRef.current = true;
+    setBusy(true);
     setNotice(null);
     try {
-      if (pendingEdit) {
-        try {
-          editGroupIdRef.current ||= crypto.randomUUID();
-          const token = await getClientSessionToken();
-          await fetch('/api/slightnudge/apply', {
-            method: 'POST', headers: { 'Content-Type': 'application/json', 'x-slightnudge-token': token },
-            body: JSON.stringify({ previewId: pendingEdit.id, groupId: editGroupIdRef.current }),
-          });
-          setCanUndo(true);
-        } catch { /* proceed with new change */ }
-      }
       const token = await getClientSessionToken();
       const response = await fetch('/api/slightnudge/preview', {
         method: 'POST', headers: { 'Content-Type': 'application/json', 'x-slightnudge-token': token }, body: JSON.stringify(payload),
@@ -551,39 +548,27 @@ export function SlightNudgeOverlay({
           });
         }
         animateSelectionRect(260);
-      } else if (selectedNodeRef.current && typeof preview.newValue === 'string') {
-        selectedNodeRef.current.className = preview.newValue;
-        applyMarginInline(selectedNodeRef.current, preview.newValue);
-        setSelected((current) => current ? { ...current, className: preview.newValue } : current);
+      } else if (selectedNodeRef.current && preview.previewType === 'className') {
+        if (typeof preview.newClassName !== 'string' || typeof preview.oldClassName !== 'string') {
+          throw new Error('This preview is missing its complete class list. Source has not been changed.');
+        }
+        const nextClasses = preview.newClassName;
+        selectedNodeRef.current.className = nextClasses;
+        applyMarginInline(selectedNodeRef.current, nextClasses);
+        setSelected((current) => current ? { ...current, className: nextClasses } : current);
         animateSelectionRect(260);
       }
+      pendingReviewRef.current = preview;
       setPendingEdit(preview);
     } catch (error) {
       setNotice(error instanceof Error ? error.message : 'Could not prepare this change.');
     } finally {
       isSyncingRef.current = false;
-      if (pendingPayloadQueueRef.current) {
-        const nextPayload = pendingPayloadQueueRef.current;
-        pendingPayloadQueueRef.current = null;
-        void previewChange(nextPayload);
-      }
+      setBusy(false);
     }
   }, [animateSelectionRect, pendingEdit]);
 
-  const debouncedServerPreview = useCallback((payload: Record<string, unknown>) => {
-    if (debounceTimerRef.current) {
-      clearTimeout(debounceTimerRef.current);
-    }
-    debounceTimerRef.current = setTimeout(() => {
-      void previewChange(payload);
-    }, 180);
-  }, [previewChange]);
-
   const discardPreview = useCallback(async () => {
-    if (debounceTimerRef.current) {
-      clearTimeout(debounceTimerRef.current);
-      debounceTimerRef.current = null;
-    }
     const pending = pendingEdit;
     if (!pending) return;
     if (selectedNodeRef.current && selectedNodeRef.current.isConnected) {
@@ -603,9 +588,10 @@ export function SlightNudgeOverlay({
         }
         animateSelectionRect(260);
       } else {
-        selectedNodeRef.current.className = pending.oldValue;
-        applyMarginInline(selectedNodeRef.current, pending.oldValue);
-        setSelected((current) => current ? { ...current, className: pending.oldValue } : current);
+        const originalClasses = pending.oldClassName ?? pending.oldValue;
+        selectedNodeRef.current.className = originalClasses;
+        applyMarginInline(selectedNodeRef.current, originalClasses);
+        setSelected((current) => current ? { ...current, className: originalClasses } : current);
       }
       if (originalStyleRef.current !== null) {
         if (originalStyleRef.current) {
@@ -627,10 +613,6 @@ export function SlightNudgeOverlay({
   }, [animateSelectionRect, pendingEdit]);
 
   const applyPreview = useCallback(async () => {
-    if (debounceTimerRef.current) {
-      clearTimeout(debounceTimerRef.current);
-      debounceTimerRef.current = null;
-    }
     if (!pendingEdit || busy) return;
     setBusy(true); setNotice(null);
     try {
@@ -641,7 +623,15 @@ export function SlightNudgeOverlay({
         body: JSON.stringify({ previewId: pendingEdit.id, groupId: editGroupIdRef.current }),
       });
       const result = await response.json();
-      if (!response.ok || !result.success) throw new Error(result.error || 'Could not apply this change.');
+      if (!response.ok || !result.success) {
+        if (result.code === 'SOURCE_CHANGED') {
+          await discardPreview();
+          setSelected(null);
+          selectedNodeRef.current = null;
+          window.dispatchEvent(new CustomEvent('slightnudge:selection', { detail: null }));
+        }
+        throw new Error(result.error || 'Could not apply this change.');
+      }
       if (selectedNodeRef.current && result.previewType === 'textContent' && typeof result.value === 'string') {
         selectedNodeRef.current.textContent = result.value;
         setDraftText(result.value);
@@ -671,13 +661,14 @@ export function SlightNudgeOverlay({
       originalStyleRef.current = selectedNodeRef.current?.getAttribute('style') || '';
       originalPositionRef.current = null;
       setPendingEdit(null);
+      undoTargetRef.current = { filePath: pendingEdit.filePath, context: { previewId: pendingEdit.id, editId: result.editId } };
       setCanUndo(true);
       setNotice(`${result.message} Further tweaks to this selection will undo together.`);
       animateSelectionRect(260);
     } catch (error) {
       setNotice(error instanceof Error ? error.message : 'Could not apply this change.');
     } finally { setBusy(false); }
-  }, [animateSelectionRect, busy, pendingEdit]);
+  }, [animateSelectionRect, busy, discardPreview, pendingEdit]);
 
   const inspect = useCallback(async (element: HTMLElement, info: SelectedElementInfo) => {
     if (!info.filePath) {
@@ -715,7 +706,10 @@ export function SlightNudgeOverlay({
           propSource: result.propSource,
         } : null;
       });
-      setCanUndo(Boolean(result.canUndo));
+      if (!undoUncertainRef.current) {
+        undoTargetRef.current = result.undoTarget ? { filePath: info.filePath, context: result.undoTarget } : null;
+        setCanUndo(Boolean(undoTargetRef.current));
+      }
       requestAnimationFrame(updateSelectedRect);
     } catch {
       setSelected((current) => current ? { ...current, safeToEdit: false, refusalReason: 'Could not inspect this source file.' } : null);
@@ -723,6 +717,8 @@ export function SlightNudgeOverlay({
   }, [updateSelectedRect]);
 
   const startInlineEditing = useCallback(() => {
+    if (undoUncertainRef.current) { setNotice('Check Undo status before selecting another element.'); return; }
+    if (isSyncingRef.current || pendingReviewRef.current) { setNotice(reviewNotice); return; }
     if (!selected || !selectedNodeRef.current) return;
     if (selected.safeToEdit !== true) {
       setWarning(true);
@@ -763,8 +759,11 @@ export function SlightNudgeOverlay({
     const newText = (el.textContent || '').trim();
     const oldText = inlineInitialTextRef.current;
     if (save && newText && newText !== oldText) {
+      // The verified preview owns the displayed change. Restore the original
+      // first so a refusal also restores what was actually in the source.
+      el.textContent = oldText;
       setDraftText(newText);
-      setSelected((cur) => cur ? { ...cur, textContent: newText } : null);
+      setSelected((cur) => cur ? { ...cur, textContent: oldText } : null);
       animateSelectionRect(260);
       if (selected && selected.safeToEdit === true) {
         void previewChange({
@@ -819,13 +818,13 @@ export function SlightNudgeOverlay({
     if (pendingEdit) { await discardPreview(); return; }
     setBusy(true); setNotice(null);
     try {
-      const token = await getClientSessionToken();
-      const response = await fetch('/api/slightnudge/undo', {
-        method: 'POST', headers: { 'Content-Type': 'application/json', 'x-slightnudge-token': token },
-        body: JSON.stringify({ filePath: selected?.filePath || defaultFilePath }),
-      });
-      const result = await response.json();
-      if (!response.ok || !result.success) throw new Error(result.error || 'There is no visual edit to undo.');
+      const target = undoTargetRef.current;
+      if (!target) throw new Error('There is no accepted edit from this session to undo.');
+      const result = await undoEditAPI(target.filePath, target.context);
+      undoUncertainRef.current = !result.success && ['UNDO_UNCERTAIN', 'UNDO_RECOVERY_REQUIRED', 'UNDO_UNKNOWN', 'UNDO_TARGET_CHANGED', 'OUTCOME_SCOPE_MISMATCH'].includes(result.code || '');
+      setUndoUncertain(undoUncertainRef.current);
+      if (!result.success) throw new Error(result.error || 'Check Undo status before continuing.');
+      undoTargetRef.current = null;
       editGroupIdRef.current = null;
       setCanUndo(false);
       setNotice(result.message || 'Undid the last visual change.');
@@ -842,18 +841,9 @@ export function SlightNudgeOverlay({
   }, [updateSelectedRect]);
 
   useEffect(() => {
-    const onViewport = (event: Event) => {
-      const viewport = (event as CustomEvent<{ viewport?: string }>).detail?.viewport;
-      setActiveBreakpoint(viewport === 'mobile' ? '' : viewport === 'tablet' ? 'md' : 'lg');
-    };
-    window.addEventListener('slightnudge:viewport', onViewport);
-    return () => window.removeEventListener('slightnudge:viewport', onViewport);
-  }, []);
-
-  useEffect(() => {
     const onLayerSelect = (event: Event) => {
       const detail = (event as CustomEvent<{ filePath: string; line: string; column: string; tagName: string }>).detail;
-      if (!active || !detail || pendingEdit || busy) return;
+      if (!active || !detail || pendingReviewRef.current || isSyncingRef.current || busy) return;
       const root = document.querySelector<HTMLElement>('.sn-preview-content');
       const target = root && Array.from(root.querySelectorAll<HTMLElement>('[data-source-file][data-source-line]')).find((element) =>
         element.tagName.toLowerCase() === detail.tagName &&
@@ -911,26 +901,18 @@ export function SlightNudgeOverlay({
       const rawTarget = event.target as HTMLElement | null;
       const target = rawTarget;
       if (!target || target.closest('#slightnudge-ui') || !target.closest('.sn-preview-content')) return;
+      if (pendingReviewRef.current || isSyncingRef.current || busy) {
+        event.preventDefault(); event.stopPropagation();
+        setNotice(reviewNotice);
+        return;
+      }
       if (isInlineEditing) {
         if (selectedNodeRef.current && (target === selectedNodeRef.current || selectedNodeRef.current.contains(target))) {
           return;
         }
         finishInlineEditing(true);
-      }
-      if (pendingEdit) {
-        try {
-          editGroupIdRef.current ||= crypto.randomUUID();
-          void (async () => {
-            const token = await getClientSessionToken();
-            void fetch('/api/slightnudge/apply', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json', 'x-slightnudge-token': token },
-              body: JSON.stringify({ previewId: pendingEdit.id, groupId: editGroupIdRef.current }),
-            });
-          })();
-          setCanUndo(true);
-        } catch { /* proceed with new selection */ }
-        setPendingEdit(null);
+        event.preventDefault(); event.stopPropagation();
+        return;
       }
       event.preventDefault(); event.stopPropagation();
       const sourceNode = target.closest<HTMLElement>('[data-source-file]') || target;
@@ -978,6 +960,12 @@ export function SlightNudgeOverlay({
         setSelected(null); window.dispatchEvent(new CustomEvent('slightnudge:selection', { detail: null })); selectedNodeRef.current = null; editGroupIdRef.current = null; originalStyleRef.current = null; setNotice(null); return;
       }
       if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'z') { event.preventDefault(); void undo(); return; }
+      if (pendingReviewRef.current || isSyncingRef.current) {
+        if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Enter'].includes(event.key)) {
+          event.preventDefault(); setNotice(reviewNotice);
+        }
+        return;
+      }
       if (event.key === 'Enter' && selected && isTextElement(selected.tagName) && selected.textEditable !== false) {
         event.preventDefault();
         startInlineEditing();
@@ -1025,15 +1013,7 @@ export function SlightNudgeOverlay({
 
   async function updateStyle(property: keyof typeof propertyNames, value: string, breakpoint = activeBreakpoint) {
     if (!selected || selected.safeToEdit !== true || !selectedNodeRef.current) return;
-    // Instant 0ms Optimistic Update on DOM & State
-    applyOptimisticInlineStyle(selectedNodeRef.current, property, value);
-    const nextClass = computeOptimisticClassName(selected.className, property, value, breakpoint);
-    selectedNodeRef.current.className = nextClass;
-    setSelected((current) => current ? { ...current, className: nextClass } : current);
-    animateSelectionRect(260);
-
-    // Non-blocking Debounced Server Background Preview
-    debouncedServerPreview({
+    await previewChange({
       kind: 'style',
       filePath: selected.filePath,
       line: Number(selected.line) || undefined,
@@ -1047,13 +1027,7 @@ export function SlightNudgeOverlay({
 
   async function updateText() {
     if (!selected || selected.safeToEdit !== true || !selectedNodeRef.current) return;
-    // Instant 0ms Optimistic Update on DOM & State
-    selectedNodeRef.current.textContent = draftText;
-    setSelected((current) => current ? { ...current, textContent: draftText } : current);
-    animateSelectionRect(260);
-
-    // Non-blocking Server Background Preview
-    void previewChange({
+    await previewChange({
       kind: 'text',
       filePath: selected.filePath,
       line: Number(selected.line) || undefined,
@@ -1731,7 +1705,16 @@ export function SlightNudgeOverlay({
     Math.max(12, viewportWidth - inspectorInset - hudWidthLimit - 12),
   );
 
-  return <div id="slightnudge-ui">
+  const guardReviewInteraction = (event: React.SyntheticEvent) => {
+    if (!pendingReviewRef.current && !isSyncingRef.current) return;
+    const target = event.target as HTMLElement;
+    if (target.closest('.sn-pending-dock')) return;
+    if ('key' in event && event.key === 'Tab') return;
+    event.preventDefault(); event.stopPropagation();
+    setNotice(reviewNotice);
+  };
+
+  return <div id="slightnudge-ui" onPointerDownCapture={guardReviewInteraction} onClickCapture={guardReviewInteraction} onKeyDownCapture={guardReviewInteraction}>
     {active && hoveredRect && !selected && <div className="sn-hover-outline" style={{ top: hoveredRect.top, left: hoveredRect.left, width: hoveredRect.width, height: hoveredRect.height }} aria-hidden="true"/>}
     {selected && (
       <div
@@ -2222,8 +2205,8 @@ export function SlightNudgeOverlay({
                 <div className="sn-hud-divider" />
                 <button
                   type="button"
-                  title="Undo last change (Ctrl+Z)"
-                  aria-label="Undo last change"
+                  title={undoUncertain ? 'Check Undo status' : 'Undo last change (Ctrl+Z)'}
+                  aria-label={undoUncertain ? 'Check Undo status' : 'Undo last change'}
                   disabled={busy}
                   className="sn-hud-btn"
                   onClick={() => void undo()}
@@ -2490,6 +2473,7 @@ export function SlightNudgeOverlay({
     <aside className="sn-inspector-panel" aria-label="Visual inspector">
       <div className="sn-inspector-header"><div className="sn-inspector-title"><span className="sn-inspector-icon"><MousePointer2 size={16}/></span><div><strong>Visual editor</strong><span>{active ? 'Select a page element' : 'Selection paused'}</span></div></div><button className={`sn-inspector-toggle ${active ? 'is-active' : ''}`} type="button" disabled={busy} onClick={() => { if (pendingEdit) void discardPreview(); setActive((value) => !value); setSelected(null); window.dispatchEvent(new CustomEvent('slightnudge:selection', { detail: null })); selectedNodeRef.current = null; editGroupIdRef.current = null; }} aria-pressed={active}>{active ? 'On' : 'Off'}</button></div>
 
+      {!selected && notice && <p className="sn-review-status" role="status">{notice}</p>}
       {!selected ? <div className="sn-inspector-empty"><span><MousePointer2 size={20}/></span><strong>Choose something to refine</strong><p>Click any element in the preview to inspect its source and adjust its styles.</p><div className="sn-shortcut"><kbd>Esc</kbd> clear selection <i/> <kbd>↑</kbd><kbd>↓</kbd><kbd>←</kbd><kbd>→</kbd> spacing</div></div> : <>
         <div className="sn-selected-summary"><div className="sn-element-name"><span>&lt;{selected.tagName}{selected.id ? `#${selected.id}` : ''}&gt;</span>{busy && <LoaderCircle className="sn-spinner" size={14}/>}</div><code>{selected.filePath || 'No source mapping'}{selected.line ? `:${selected.line}${selected.column ? `:${selected.column}` : ''}` : ''}</code>{selected.safeToEdit === false && <p className="sn-safety-warning" id="slightnudge-safety-warning"><CircleAlert size={14}/>{selected.refusalReason || 'This component cannot be edited safely.'}</p>}{selected.safeToEdit === true && <p className="sn-safety-safe" id="slightnudge-safety-ok"><Check size={14}/>Source mapping verified · select a control to preview</p>}
         </div>
@@ -2500,7 +2484,12 @@ export function SlightNudgeOverlay({
                 <span className="sn-pending-dot" />
                 <span>{pendingEdit.summary}</span>
               </div>
-              <span style={{ fontSize: '10px', color: '#64748b' }}>Live on canvas</span>
+              <span style={{ fontSize: '11px', color: '#64748b' }}>Not saved to source</span>
+            </div>
+            <div className="sn-review-diff">
+              <code className="sn-review-file">{pendingEdit.filePath}{pendingEdit.line ? `:${pendingEdit.line}` : ''}</code>
+              <div><span>Before</span><pre aria-label="Before change">{pendingEdit.oldValue}</pre></div>
+              <div><span>After</span><pre aria-label="After change">{pendingEdit.newValue}</pre></div>
             </div>
             <div className="sn-pending-actions">
               <button type="button" className="sn-dock-btn sn-dock-discard" disabled={busy} onClick={() => void discardPreview()}>

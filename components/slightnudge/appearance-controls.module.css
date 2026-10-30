@@ -1,0 +1,37 @@
+.section {border-top:1px solid #edf0ed;padding:16px 0;font-size:12px;color:#37413d}
+.section summary {cursor:pointer;font-weight:500;user-select:none}
+.content {display:grid;gap:14px;padding-top:12px}
+.group {border:1px solid #e6eae7;border-radius:8px;padding:10px}
+.group>summary {display:list-item;line-height:20px}
+.group>summary>span {float:right;color:#89938d;font-size:11px;font-weight:400}
+.group[open]>:not(summary) {margin-top:10px}
+.note {font-size:11px;line-height:1.6;color:#89938d;margin:0}
+.swatch {height:32px;border:1px solid #e3e8e4;border-radius:5px;background-color:#f7f8f7}
+.row {display:flex;align-items:center;justify-content:space-between;gap:10px}
+.row>input,.row>select {width:138px;min-width:0}
+.field {display:grid;gap:5px;font-size:11px;color:#697571}
+.field>input {width:100%;min-width:0}
+.section input,.section select {border:1px solid #e3e8e4;background:#f7f8f7;border-radius:5px;padding:6px 7px;font:inherit;color:#37413d;box-sizing:border-box}
+.section input:focus-visible,.section select:focus-visible,.section button:focus-visible {outline:2px solid #86b9a8;outline-offset:2px}
+.grid {display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stop {display:flex;align-items:center;gap:5px}
+.stop>input {width:60px;min-width:0;font-size:11px}
+.stop>span {font-size:10px;color:#89938d}
+.color {display:flex;align-items:center;gap:5px;flex:1;min-width:0}
+.color>span {width:18px;height:18px;flex-shrink:0;border:1px solid #dce2dd;border-radius:4px}
+.color>input {width:100%;min-width:0;font-size:11px}
+.actions {display:flex;gap:6px;flex-wrap:wrap}
+.section button {border:1px solid #e3e8e4;background:white;border-radius:5px;padding:6px 8px;font:inherit;cursor:pointer}
+.section button:hover {background:#f2f5f3}
+.section :disabled {opacity:.5;cursor:default}
+.error {color:#a23b32;font-size:11px;line-height:1.6}
+.color>input[type=color],.shadowColor>input[type=color] {width:24px;height:28px;flex:0 0 24px;padding:2px;cursor:pointer}
+.shadowColor {display:flex;gap:5px;width:138px;min-width:0}
+.shadowColor>input {width:100%;min-width:0}
+.section summary {list-style:none;display:flex;align-items:center;gap:6px}
+.section summary::-webkit-details-marker {display:none}
+.group>summary {display:flex}
+.group>summary>span {margin-left:auto;float:none}
+.chevron {color:#94a3b8;flex-shrink:0;transition:transform .12s ease}
+.section[open]>summary>.chevron,.group[open]>summary>.chevron {transform:rotate(90deg)}
+@media (prefers-reduced-motion:reduce) {.chevron {transition:none}}

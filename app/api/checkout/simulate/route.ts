@@ -2,9 +2,11 @@ import { NextResponse } from 'next/server';
 import { handleDodoWebhookEvent } from '@/lib/payments/dodo';
 
 export async function GET(req: Request) {
+  if (process.env.NODE_ENV === 'production') return NextResponse.json({ error: 'Not found' }, { status: 404 });
   const { searchParams } = new URL(req.url);
   const runId = searchParams.get('runId');
   const sessionId = searchParams.get('session_id') || `mock_sess_${Date.now()}`;
+  if (!runId || !/^[a-zA-Z0-9_-]{1,128}$/.test(runId) || !/^[a-zA-Z0-9_-]{1,160}$/.test(sessionId)) return NextResponse.json({ error: 'Invalid checkout session' }, { status: 400 });
   const action = searchParams.get('action');
 
   if (action === 'confirm' && runId) {

@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { inspectElement } from '@/lib/slightnudge/ast-nudger';
+import { getLatestUndoTarget } from '@/lib/slightnudge/edit-history';
 import { resolveWorkspaceSourcePath } from '@/lib/slightnudge/repository-store';
 import { corsHeaders, handleCorsPreflight, isAllowedOrigin } from '@/lib/slightnudge/cors';
 
@@ -33,7 +34,7 @@ export async function POST(request: Request) {
       clickedRect,
     });
 
-    return NextResponse.json(result, { headers: corsHeaders(request) });
+    return NextResponse.json({ ...result, undoTarget: getLatestUndoTarget(resolvedPath) }, { headers: corsHeaders(request) });
   } catch (error: any) {
     return NextResponse.json(
       { error: error?.message || 'Inspection failed' },

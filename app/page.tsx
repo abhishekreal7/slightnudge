@@ -1,30 +1,44 @@
 import Link from 'next/link';
-import { ArrowDown, ArrowRight, Check, Code2, MousePointer2, ShieldCheck, Sparkles } from 'lucide-react';
+import { ArrowRight, Check, Code2, FileCode2, MousePointer2, ShieldCheck } from 'lucide-react';
 import { MarketingFooter } from '@/components/MarketingFooter';
 import { ProductWindow } from '@/components/marketing/ProductWindow';
+import { ReviewWorkflowSection } from '@/components/marketing/ReviewWorkflowSection';
 
-const questions = [
-  ['How closely does a selection map to source?', 'In the guided playground, selecting a supported element identifies its component and source line. Imported mapping is more limited: the Next.js adapter is available for supported projects, while dynamic expressions and unsupported files stay read only.'],
-  ['Can I undo an edit?', 'Yes. The playground and supported imported source edits keep a local before-and-after history so you can undo a change. SlightNudge does not commit or push changes to GitHub.'],
-  ['What has not been tested?', 'SlightNudge is an early build, not a verified editor for every framework. Imported live preview currently supports selected Next.js and Vite projects; arbitrary frameworks and dynamic class expressions are not supported.'],
-  ['Is it safe to run an imported repository?', 'Docker preview runs install scripts and the development server in a resource-limited container with source mounted read only. Network access is enabled, so only preview repositories you trust.'],
-  ['What about pricing and refunds?', 'There is no paid plan or checkout available today, so no charge or refund applies. Hosted pricing will be published when access is ready.'],
+const workflow = [
+  ['01', 'Choose from the live page', 'Select the precise element you want to refine while the rest of the interface stays visible.'],
+  ['02', 'Check the source behind it', 'See the mapped file and source location before SlightNudge offers an edit.'],
+  ['03', 'Review one focused update', 'Inspect the proposed code change and decide whether it should be applied.'],
 ];
 
 export default function HomePage() {
-  return <main className="sn-marketing-page">
-    <section className="sn-marketing-hero sn-marketing-container">
-      <div className="sn-marketing-hero-copy"><p className="sn-marketing-eyebrow"><span/> A visual workspace for product teams</p><h1>Make the change.<br/><span>Keep the code.</span></h1><p className="sn-marketing-lede">Refine a real interface in context. Select what feels off, make a focused adjustment, and review the source change before it lands in your project.</p><div className="sn-marketing-actions"><Link className="sn-marketing-button sn-marketing-button-primary" href="/workspace">Open your workspace <ArrowRight size={16}/></Link><Link className="sn-marketing-text-link" href="/how-it-works">See how it works <ArrowDown size={15}/></Link></div><div className="sn-marketing-note"><ShieldCheck size={15}/> Local-first edits. You stay in control.</div></div>
-      <div className="sn-marketing-product-wrap sn-reference-product-wrap"><ProductWindow/></div>
-    </section>
+  return (
+    <main className="sn-marketing-page sn-crawl-page sn-crawl-v2">
+      <section className="sn-v2-hero">
+        <div className="sn-crawl-shell">
+          <div className="sn-v2-hero-copy">
+            <p>Visual editing for real projects</p>
+            <h1><span className="sn-v2-head-green">One visual editor</span><br /><span className="sn-v2-head-grey">for the page you already own.</span></h1>
+            <div><span>Choose an element in context. Trace it to source. Review the exact change before it is applied.</span></div>
+            <nav><Link href="/studio" className="sn-v2-primary">Open playground <ArrowRight size={16} /></Link><Link href="/how-it-works" className="sn-v2-secondary">How it works <ArrowRight size={15} /></Link></nav>
+            <small><ShieldCheck size={14} /> Local workflow&nbsp;&nbsp;·&nbsp;&nbsp;No automatic commits or pushes</small>
+          </div>
 
-    <section id="workflow" className="sn-marketing-section sn-workflow-section"><div className="sn-marketing-container"><div className="sn-section-intro"><p className="sn-marketing-eyebrow">A SMALLER LOOP</p><h2>From “that feels off”<br/>to a reviewed change.</h2><p>Work in the page you can see. Keep the source change understandable and yours to accept.</p></div><div className="sn-workflow-grid"><article className="sn-workflow-card sn-workflow-card-main"><span className="sn-workflow-index">01</span><div className="sn-workflow-icon"><MousePointer2 size={18}/></div><h3>Choose the thing to change</h3><p>Select a visible element in the live preview, then inspect the source it came from.</p><div className="sn-selection-preview"><div className="sn-selection-top"><span>PLAYGROUND / PRODUCT PAGE</span><span>SELECTED</span></div><div className="sn-selection-content"><div className="sn-selection-preview-box"><span className="sn-selection-tag">Heading · h1</span><strong>Make room for<br/>your best work.</strong></div><span className="sn-selection-helper">Pick an element in the preview</span></div></div></article><article className="sn-workflow-card"><span className="sn-workflow-index">02</span><div className="sn-workflow-icon"><Sparkles size={18}/></div><h3>Refine it in context</h3><p>Adjust supported styles and see the result against the rest of your page before you apply it.</p><div className="sn-style-preview"><span>STYLE</span><div><span>Text size</span><b>36 px</b></div><div><span>Weight</span><b>Semibold</b></div><div><span>Alignment</span><b className="sn-align-mark">≡</b></div></div></article><article className="sn-workflow-card"><span className="sn-workflow-index">03</span><div className="sn-workflow-icon"><Code2 size={18}/></div><h3>Review the source change</h3><p>See what will change, apply it deliberately, and undo locally if the result isn’t right.</p><div className="sn-code-preview"><div><span>−</span><code>font-semibold</code></div><div><span>+</span><code>font-medium</code></div><small><Check size={13}/> Ready for your review</small></div></article></div></div></section>
+          <div className="sn-v2-showcase"><ProductWindow /></div>
+        </div>
+      </section>
 
-    <section className="sn-marketing-section sn-truth-section"><div className="sn-marketing-container sn-truth-layout"><div className="sn-section-intro"><p className="sn-marketing-eyebrow">BUILT FOR CAREFUL EDITS</p><h2>Quick to try.<br/>Clear about its limits.</h2><p>SlightNudge is early. The useful part is already here: a guided playground, a source-aware inspector, and a cautious path for supported repository changes.</p><Link className="sn-marketing-text-link" href="/how-it-works">Read what works today <ArrowRight size={15}/></Link></div><div className="sn-truth-list"><article><span><Check size={16}/></span><div><h3>Start without connecting a repository</h3><p>Explore the editor using the included playground.</p></div></article><article><span><Check size={16}/></span><div><h3>Review before writing</h3><p>Preview supported edits before they touch a source file.</p></div></article><article><span><Check size={16}/></span><div><h3>Keep control of your project</h3><p>Changes stay local. Nothing is committed or pushed for you.</p></div></article></div></div></section>
+      <section className="sn-v2-rail"><div className="sn-crawl-shell"><span>Built for a careful edit loop</span><b><MousePointer2 size={15} /> Select in context</b><b><FileCode2 size={15} /> Trace to source</b><b><Code2 size={15} /> Review before apply</b></div></section>
 
-    <section className="sn-marketing-section sn-faq-section"><div className="sn-marketing-container sn-faq-layout"><div className="sn-section-intro"><p className="sn-marketing-eyebrow">GOOD TO KNOW</p><h2>Before you<br/>bring a project.</h2><p>Practical answers about safety, support, and what you can expect today.</p><Link className="sn-marketing-text-link" href="/how-it-works">See the full workflow <ArrowRight size={15}/></Link></div><div className="sn-faq-list">{questions.map(([question, answer]) => <details key={question}><summary>{question}<span>+</span></summary><p>{answer}</p></details>)}</div></div></section>
+      <section className="sn-v2-workflow" id="workflow"><div className="sn-crawl-shell"><div className="sn-v2-section-head"><span>How it works</span><h2>Visual feedback is useful<br />when the code stays clear.</h2><p>SlightNudge is designed for one deliberate change at a time, not a detached design canvas.</p></div><div className="sn-v2-steps">{workflow.map(([number, title, detail]) => <article key={number}><span>{number}</span><h3>{title}</h3><p>{detail}</p><i><ArrowRight size={17} /></i></article>)}</div></div></section>
 
-    <section className="sn-marketing-closing"><div className="sn-marketing-container"><p className="sn-marketing-eyebrow">START WITH A REAL PAGE</p><h2>Your next refinement<br/>doesn’t need a ticket.</h2><p>Open the playground and try a visual change against a working sample.</p><Link className="sn-marketing-button sn-marketing-button-primary" href="/studio">Try the playground <ArrowRight size={16}/></Link></div></section>
-    <MarketingFooter/>
-  </main>;
+      <section className="sn-v2-source" id="source"><div className="sn-crawl-shell sn-v2-source-grid"><div className="sn-v2-source-copy"><span>Source-aware by design</span><h2>The visible element<br />is only the beginning.</h2><p>Before a control changes anything, it needs a verified path back to the code that produced the selected UI.</p><ul><li><Check size={15} /> The selected element remains obvious</li><li><Check size={15} /> The file and source location stay visible</li><li><Check size={15} /> Unsupported patterns are refused clearly</li></ul><Link href="/studio">Try the playground <ArrowRight size={16} /></Link></div><div className="sn-v2-source-ui"><div className="sn-v2-ui-bar"><span>Northstar / Product overview</span><b>Source verified</b></div><div className="sn-v2-ui-main"><div className="sn-v2-ui-preview"><small>Live preview</small><div><i>Heading · h1</i><strong>Make room for<br />your best work.</strong><p>One thoughtful workspace for the people, projects, and plans that move your business forward.</p><b>Get started <ArrowRight size={11} /></b></div></div><div className="sn-v2-ui-code"><div><FileCode2 size={13} /> app/page.tsx:39</div><code><span>38</span>&lt;h1 className={"{"}</code><code><span>39</span>  <em>&quot;text-4xl font-semibold&quot;</em></code><code><span>40</span>{"}"}&gt;Make room for your best work.&lt;/h1&gt;</code><footer><small>Proposed update</small><p><i>−</i> text-3xl</p><p><b>+</b> text-4xl</p></footer></div></div><div className="sn-v2-ui-foot"><span><Check size={13} /> Source mapping verified</span><span>Review change <ArrowRight size={13} /></span></div></div></div></section>
+
+      <section className="sn-v2-principles" id="principles"><div className="sn-crawl-shell"><div className="sn-v2-section-head"><span>The product rules</span><h2>Useful when it can be exact.</h2></div><div className="sn-v2-principle-grid"><article><span>01</span><h3>Work from the actual page</h3><p>Use a rendered interface to find the concrete thing that needs attention.</p></article><article><span>02</span><h3>Keep each change narrow</h3><p>One selection, one proposed source edit, and a review step before it lands.</p></article><article><span>03</span><h3>Refuse unsafe changes</h3><p>When the source cannot be mapped safely, SlightNudge leaves the project alone.</p></article></div></div></section>
+
+      <ReviewWorkflowSection />
+
+      <section className="sn-v2-closing"><div className="sn-crawl-shell"><div><span>Start in the playground</span><h2>Change the interface.<br />Keep your footing in the code.</h2><p>Open a sample page, select an element, and trace the proposed update.</p></div><Link href="/studio" className="sn-v2-primary">Open playground <ArrowRight size={16} /></Link></div></section>
+      <MarketingFooter />
+    </main>
+  );
 }

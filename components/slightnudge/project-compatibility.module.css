@@ -1,0 +1,26 @@
+.panel { margin: 16px 0; border: 1px solid #e2e8e5; border-radius: 10px; background: #fff; color: #263c33; font-size: 13px; }
+.panel summary { cursor: pointer; padding: 14px 16px; font-weight: 600; }
+.panel summary:focus-visible { outline: 2px solid #18745a; outline-offset: 3px; border-radius: 8px; }
+.status { float: right; color: #65756e; font-size: 12px; font-weight: 400; margin-left: 12px; }
+.note { margin: 0 16px 14px; color: #68776f; line-height: 1.6; }
+.capabilities { margin: 0 16px; }
+.capabilities > div { display: flex; align-items: flex-start; gap: 10px; padding: 13px 0; border-top: 1px solid #edf0ee; }
+.capabilities svg { flex: none; margin-top: 2px; color: #6f8178; }
+.capabilities strong { font-weight: 500; font-size: 13px; }
+.capabilities p { margin: 5px 0 0; color: #68776f; line-height: 1.6; font-size: 12px; }
+.capabilities > div > span { flex: none; font-size: 11px; color: #68776f; margin-left: auto; padding-top: 2px; }
+.capabilities [data-state='available'] > span { color: #23745a; }
+.nextStep { margin: 4px 16px 16px; padding: 12px; border-radius: 7px; background: #f4f7f5; color: #56685e; line-height: 1.6; font-size: 12px; }
+.nextStep strong { display: block; color: #263c33; font-size: 12px; font-weight: 600; margin-bottom: 3px; }
+.technical { border-top: 1px solid #edf0ee; }
+.technical summary { padding: 12px 16px; font-size: 12px; color: #68776f; font-weight: 500; }
+@media (max-width: 600px) { .capabilities > div { flex-wrap: wrap; } .capabilities > div > div { flex: 1; min-width: 160px; } .capabilities > div > span { margin-left: 25px; padding: 0; } }
+.panel dl { margin: 0; padding: 0 16px; }
+.panel dl > div { padding: 12px 0; border-top: 1px solid #edf0ee; }
+.panel dt { display: flex; align-items: center; gap: 8px; font-weight: 500; }
+.kind { margin-left: auto; color: #68776f; font-size: 11px; font-weight: 400; }
+.dot { width: 6px; height: 6px; border-radius: 50%; background: #9baba2; }
+.panel [data-state='available'] .dot { background: #238269; }
+.panel [data-state='setup'] .dot { background: #a7803c; }
+.panel dd { margin: 7px 0 0 14px; color: #68776f; line-height: 1.6; }
+@media (max-width: 600px) { .status { float: none; display: block; margin: 6px 0 0 14px; } }

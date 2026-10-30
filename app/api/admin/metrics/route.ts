@@ -1,17 +1,19 @@
 import { NextResponse } from 'next/server';
 import { getDatabaseRepository, MemoryDatabaseRepository } from '@/lib/db/client';
 import { verifyUnitEconomicsMargin } from '@/lib/security/rate-limit';
+import { timingSafeEqualStrings } from '@/lib/slightnudge/auth';
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   const adminKey =
-    searchParams.get('admin_key') ||
+    (process.env.NODE_ENV !== 'production' ? searchParams.get('admin_key') : null) ||
     req.headers.get('x-admin-key') ||
     req.headers.get('authorization')?.replace('Bearer ', '');
 
-  const expectedKey = process.env.ADMIN_SECRET_KEY || 'shipcheck_admin_secret_dev';
+  const expectedKey = process.env.ADMIN_SECRET_KEY || (process.env.NODE_ENV !== 'production' ? 'shipcheck_admin_secret_dev' : '');
+  if (!expectedKey) return NextResponse.json({ error: 'Admin access is not configured.' }, { status: 503 });
 
-  if (!adminKey || adminKey !== expectedKey) {
+  if (!timingSafeEqualStrings(adminKey, expectedKey)) {
     return NextResponse.json({ error: 'Unauthorized. Invalid admin credentials.' }, { status: 401 });
   }
 

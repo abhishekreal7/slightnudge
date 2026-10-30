@@ -1,0 +1,27 @@
+import assert from 'node:assert/strict';
+import { readStudioRecovery, saveStudioRecovery, clearStudioRecovery, type RecoveryStorage } from '../lib/slightnudge/studio-recovery';
+
+const values = new Map<string, string>();
+const storage: RecoveryStorage = { getItem: key => values.get(key) ?? null, setItem: (key, value) => { values.set(key, value); }, removeItem: key => { values.delete(key); } };
+assert.equal(readStudioRecovery(undefined, storage).status, 'empty');
+const record = saveStudioRecovery({ kind: 'apply', previewId: 'reviewed-proposal', filePath: 'page.tsx', view: { selectedLayer: 'text' } }, storage);
+const restored = readStudioRecovery(undefined, storage);
+assert.equal(restored.status, 'found');
+if (restored.status === 'found') assert.equal(restored.record.operationId, record.operationId);
+assert.equal(readStudioRecovery('other-project', storage).status, 'empty');
+assert.equal(readStudioRecovery('workspace', storage).status, 'empty', 'A project named workspace must not share the local workspace key');
+const newer = saveStudioRecovery({ kind: 'undo', previewId: 'accepted-proposal', filePath: 'page.tsx', editId: 'history-id', view: {} }, storage);
+assert.equal(clearStudioRecovery(record, storage), false);
+assert.equal(readStudioRecovery(undefined, storage).status, 'found');
+assert.equal(clearStudioRecovery(newer, storage), true);
+assert.equal(readStudioRecovery(undefined, storage).status, 'empty');
+saveStudioRecovery({ kind: 'apply', previewId: 'project-proposal', filePath: 'page.tsx', repositoryId: 'project-a', sourcePath: 'page.tsx', view: {} }, storage);
+assert.equal(readStudioRecovery('project-a', storage).status, 'found');
+assert.equal(readStudioRecovery('project-b', storage).status, 'empty');
+const broken: RecoveryStorage = { getItem: () => { throw new Error('Denied'); }, setItem: () => { throw new Error('Quota'); }, removeItem: () => { throw new Error('Denied'); } };
+assert.equal(readStudioRecovery(undefined, broken).status, 'unavailable');
+assert.throws(() => saveStudioRecovery({ kind: 'apply', previewId: 'proposal', filePath: 'page.tsx', view: {} }, broken), /No write was sent/);
+assert.throws(() => saveStudioRecovery({ kind: 'apply', previewId: 'proposal', filePath: 'page.tsx', view: 'x'.repeat(300000) }, storage), /too large/);
+for (const key of values.keys()) values.set(key, '{broken');
+assert.equal(readStudioRecovery('project-a', storage).status, 'unavailable');
+console.log('PASS: tab recovery survives a fresh read, isolates projects, retains newer operations, and fails closed on corrupt/oversized/unavailable storage');

@@ -1,5 +1,5 @@
 import { randomUUID } from 'node:crypto';
-import { mkdir, readdir, stat, writeFile } from 'node:fs/promises';
+import { mkdir, readdir, writeFile, lstat } from 'node:fs/promises';
 import path from 'node:path';
 import { NextResponse } from 'next/server';
 import { resolveRepositoryRoot } from '@/lib/slightnudge/repository-store';
@@ -10,6 +10,10 @@ export const runtime = 'nodejs';
 async function getAssetDirectory(request: Request) {
   const repositoryId = new URL(request.url).searchParams.get('repositoryId');
   const root = repositoryId ? await resolveRepositoryRoot(repositoryId) : process.cwd();
+  for (const directory of [path.join(root, 'public'), path.join(root, 'public/slightnudge-assets')]) {
+    try { const info = await lstat(directory); if (info.isSymbolicLink() || !info.isDirectory()) throw new Error('Image storage must be inside the project.'); }
+    catch (error) { if ((error as NodeJS.ErrnoException).code !== 'ENOENT') throw error; }
+  }
   return path.join(root, 'public', 'slightnudge-assets');
 }
 const supportedTypes = new Map([
@@ -64,8 +68,8 @@ export async function GET(request: Request) {
     const assetDirectory = await getAssetDirectory(request);
     const files = await readdir(assetDirectory);
     const assets = await Promise.all(files.filter((name) => /^[a-f0-9-]{36}\.(?:png|jpg|webp|gif)$/i.test(name)).map(async (name) => {
-      const info = await stat(path.join(assetDirectory, name));
-      if (!info.isFile() || info.size > maxBytes) return null;
+      const info = await lstat(path.join(assetDirectory, name));
+      if (info.isSymbolicLink() || !info.isFile() || info.size > maxBytes) return null;
       return { id: name, url: `/slightnudge-assets/${name}`, size: info.size, addedAt: info.mtime.toISOString() };
     }));
     return NextResponse.json({ assets: assets.filter(Boolean) });

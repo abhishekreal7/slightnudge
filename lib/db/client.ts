@@ -1,4 +1,5 @@
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
+import { randomUUID } from 'node:crypto';
 import {
   ArtifactRecord,
   FindingRecord,
@@ -28,6 +29,10 @@ export function getSupabaseAdmin(): SupabaseClient | null {
 }
 
 export interface IDatabaseRepository {
+  fulfillScanPayment(paymentId: string, runId: string, amountUsd: number): Promise<'fulfilled' | 'duplicate_skipped' | 'already_unlocked'>;
+  createSite(site: Omit<SiteRecord, 'id' | 'created_at'> & { id?: string }): Promise<SiteRecord>;
+  getSite(id: string): Promise<SiteRecord | null>;
+  updateSite(id: string, updates: Partial<SiteRecord>): Promise<SiteRecord>;
   createRun(run: Partial<RunRecord>): Promise<RunRecord>;
   getRun(id: string): Promise<RunRecord | null>;
   updateRun(id: string, updates: Partial<RunRecord>): Promise<RunRecord>;
@@ -46,6 +51,20 @@ export interface IDatabaseRepository {
 }
 
 export class MemoryDatabaseRepository implements IDatabaseRepository {
+  async fulfillScanPayment(paymentId: string, runId: string, amountUsd: number): Promise<'fulfilled' | 'duplicate_skipped' | 'already_unlocked'> {
+    const existing = [...this.orders.values()].find(order => order.dodo_payment_id === paymentId);
+    if (existing) { if (existing.run_id !== runId) throw new Error('Payment is associated with another run'); return 'duplicate_skipped'; }
+    const run = this.runs.get(runId); if (!run) throw new Error('Payment run not found');
+    const order: OrderRecord = { id: randomUUID(), user_id: run.user_id, run_id: runId, dodo_payment_id: paymentId, amount_usd: amountUsd, status: 'succeeded', created_at: new Date().toISOString() };
+    if (run.kind === 'full') { this.orders.set(order.id, order); return 'already_unlocked'; }
+    const updated: RunRecord = { ...run, kind: 'full', status: 'queued', stage: 'preflight', progress: 0, limits_json: { maxScenarios: 12, maxMinutes: 10, maxSteps: 50 } };
+    const job: JobRecord = { id: randomUUID(), run_id: runId, type: 'test_run', status: 'queued', attempts: 0, run_after: new Date().toISOString(), locked_by: null, locked_at: null, last_error: null, created_at: new Date().toISOString() };
+    this.orders.set(order.id, order); this.runs.set(runId, updated); this.jobs.set(job.id, job); return 'fulfilled';
+  }
+  public sites = new Map<string, SiteRecord>();
+  async createSite(site: Omit<SiteRecord, 'id' | 'created_at'> & { id?: string }): Promise<SiteRecord> { const record = { ...site, id: site.id || randomUUID(), created_at: new Date().toISOString() }; this.sites.set(record.id, record); return record; }
+  async getSite(id: string) { return this.sites.get(id) || null; }
+  async updateSite(id: string, updates: Partial<SiteRecord>) { const site = this.sites.get(id); if (!site) throw new Error('Site not found'); const record = { ...site, ...updates, id: site.id, user_id: site.user_id }; this.sites.set(id, record); return record; }
   public runs: Map<string, RunRecord> = new Map();
   public scenarios: Map<string, ScenarioRecord[]> = new Map();
   public findings: Map<string, FindingRecord[]> = new Map();
@@ -193,11 +212,19 @@ export class MemoryDatabaseRepository implements IDatabaseRepository {
 }
 
 export class SupabaseDatabaseRepository implements IDatabaseRepository {
+  async fulfillScanPayment(paymentId: string, runId: string, amountUsd: number): Promise<'fulfilled' | 'duplicate_skipped' | 'already_unlocked'> {
+    const { data, error } = await this.client.rpc('fulfill_scan_payment', { p_payment_id: paymentId, p_run_id: runId, p_amount_usd: amountUsd });
+    if (error || !['fulfilled', 'duplicate_skipped', 'already_unlocked'].includes(data)) throw new Error('Payment fulfillment could not be committed. Retry this webhook.');
+    return data;
+  }
   private client: SupabaseClient;
 
   constructor(client: SupabaseClient) {
     this.client = client;
   }
+  async createSite(site: Omit<SiteRecord, 'id' | 'created_at'> & { id?: string }): Promise<SiteRecord> { const { data, error } = await this.client.from('sites').insert(site).select().single(); if (error) throw new Error('Could not create site'); return data; }
+  async getSite(id: string): Promise<SiteRecord | null> { const { data, error } = await this.client.from('sites').select('*').eq('id', id).single(); if (error) return null; return data; }
+  async updateSite(id: string, updates: Partial<SiteRecord>): Promise<SiteRecord> { const { data, error } = await this.client.from('sites').update(updates).eq('id', id).select().single(); if (error) throw new Error('Could not update site'); return data; }
 
   async createRun(run: Partial<RunRecord>): Promise<RunRecord> {
     const { data, error } = await this.client
@@ -346,12 +373,14 @@ export class SupabaseDatabaseRepository implements IDatabaseRepository {
 let repositoryInstance: IDatabaseRepository | null = null;
 
 export function getDatabaseRepository(): IDatabaseRepository {
+  if (process.env.NODE_ENV === 'production' && repositoryInstance instanceof MemoryDatabaseRepository) throw new Error('A persistent production database is required.');
   if (repositoryInstance) return repositoryInstance;
 
   const adminClient = getSupabaseAdmin();
   if (adminClient) {
     repositoryInstance = new SupabaseDatabaseRepository(adminClient);
   } else {
+    if (process.env.NODE_ENV === 'production') throw new Error('A persistent production database is required.');
     repositoryInstance = new MemoryDatabaseRepository();
   }
   return repositoryInstance;

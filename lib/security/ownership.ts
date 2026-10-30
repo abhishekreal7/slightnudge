@@ -1,4 +1,6 @@
 import dns from 'dns';
+import { randomBytes } from 'node:crypto';
+import { validateTargetUrl } from './ssrf';
 import { OwnershipMethod } from '../db/types';
 
 export interface OwnershipVerificationResult {
@@ -9,7 +11,7 @@ export interface OwnershipVerificationResult {
 
 export function generateVerificationToken(hostname: string): string {
   const clean = hostname.replace(/[^a-zA-Z0-9]/g, '');
-  return `shipcheck_${clean}_${Math.random().toString(36).slice(2, 10)}`;
+  return `shipcheck_${clean}_${randomBytes(24).toString('hex')}`;
 }
 
 /**
@@ -23,6 +25,8 @@ export async function verifySiteOwnership(
   expectedToken: string,
   preferredMethod?: OwnershipMethod
 ): Promise<OwnershipVerificationResult> {
+  const target = await validateTargetUrl(url);
+  if (!target.isValid) return { verified: false, error: target.error || 'Invalid ownership target' };
   const parsed = new URL(url);
   const hostname = parsed.hostname;
 
@@ -30,6 +34,7 @@ export async function verifySiteOwnership(
   if (!preferredMethod || preferredMethod === 'meta_tag') {
     try {
       const resp = await fetch(url, {
+        redirect: 'manual',
         headers: { 'User-Agent': 'ShipCheck-Verification-Bot/1.0' },
         signal: AbortSignal.timeout(5000),
       });
@@ -57,6 +62,7 @@ export async function verifySiteOwnership(
     try {
       const wellKnownUrl = `${parsed.origin}/.well-known/shipcheck-verify.txt`;
       const resp = await fetch(wellKnownUrl, {
+        redirect: 'manual',
         signal: AbortSignal.timeout(5000),
       });
       if (resp.ok) {

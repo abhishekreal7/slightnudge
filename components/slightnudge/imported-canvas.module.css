@@ -1,0 +1,8 @@
+.connection { position: absolute; top: 14px; left: 14px; z-index: 20; max-width: calc(100% - 28px); border: 1px solid #e1e7e3; border-radius: 9px; background: #fffffff5; box-shadow: 0 3px 12px #223a2c08; font-size: 12px; color: #51655a; }
+.connection summary { padding: 9px 12px; cursor: pointer; }
+.connection summary:focus-visible { outline: 2px solid #16845b; border-radius: 8px; }
+.form { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; padding: 4px 12px 12px; max-width: 460px; }
+.form label { width: 100%; }
+.form input { min-width: 120px; }
+.connection p { max-width: 420px; margin: 8px 12px; line-height: 1.5; }
+.connection [role='alert'] { color: #9b3636; }

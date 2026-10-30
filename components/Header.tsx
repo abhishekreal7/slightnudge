@@ -19,17 +19,20 @@ export function Header() {
     window.addEventListener('scroll', updateScrollState, { passive: true });
     return () => window.removeEventListener('scroll', updateScrollState);
   }, [marketing]);
-  if (pathname === '/studio' || pathname.startsWith('/studio/') || pathname.startsWith('/fixtures') || pathname === '/workspace' || pathname.startsWith('/workspace/')) return null;
+  if (pathname === '/editor' || pathname.startsWith('/editor/') || pathname === '/studio' || pathname.startsWith('/studio/') || pathname.startsWith('/fixtures') || pathname === '/workspace' || pathname.startsWith('/workspace/')) return null;
 
   return <header className={`sn-app-header ${marketing ? `sn-marketing-header${scrolled ? ' is-scrolled' : ''}` : ''}`}>
     <div className="sn-header-inner">
       <Link href="/" className="sn-brand" aria-label="SlightNudge home"><span className="sn-brand-icon"><Image src="/icon.svg" alt="" width={30} height={30} className="sn-brand-favicon" unoptimized/></span><span>SlightNudge</span></Link>
       <button className="sn-mobile-menu-button" type="button" aria-label={open ? 'Close navigation' : 'Open navigation'} aria-expanded={open} onClick={() => setOpen(!open)}>{open ? <X size={19}/> : <Menu size={19}/>}</button>
-      <nav className={`sn-header-nav ${open ? 'is-open' : ''}`} aria-label="Main navigation">
+      <nav className={`sn-header-nav ${marketing ? 'sn-marketing-nav' : ''} ${open ? 'is-open' : ''}`} aria-label="Main navigation">
         {marketing ? <>
-          <Link href="/how-it-works" aria-current={pathname.startsWith('/how-it-works') ? 'page' : undefined} onClick={() => setOpen(false)}>How it works</Link>
+          <Link href="/" aria-current={pathname === '/' ? 'page' : undefined} onClick={() => setOpen(false)}>Home</Link>
+          <Link href="/#workflow" onClick={() => setOpen(false)}>Workflow</Link>
+          <Link href="/#source" onClick={() => setOpen(false)}>Source editing</Link>
+          <Link href="/#principles" onClick={() => setOpen(false)}>Product</Link>
           <Link href="/pricing" aria-current={pathname === '/pricing' ? 'page' : undefined} onClick={() => setOpen(false)}>Pricing</Link>
-          <Link className="sn-marketing-cta" href="/workspace" onClick={() => setOpen(false)}>Open workspace <ArrowRight size={15}/></Link>
+          <Link href="/how-it-works" aria-current={pathname.startsWith('/how-it-works') ? 'page' : undefined} onClick={() => setOpen(false)}>Guide</Link>
         </> : workspace ? <>
           <Link href="/" onClick={() => setOpen(false)}>Home</Link>
           <Link href="/workspace" aria-current="page" onClick={() => setOpen(false)}>Projects</Link>
@@ -39,6 +42,7 @@ export function Header() {
           <Link className="sn-marketing-cta" href="/workspace" onClick={() => setOpen(false)}>Projects <ArrowRight size={15}/></Link>
         </>}
       </nav>
+      {marketing ? <Link className="sn-marketing-cta" href="/studio">Open playground <ArrowRight size={15}/></Link> : null}
     </div>
   </header>;
 }

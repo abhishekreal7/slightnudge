@@ -96,8 +96,8 @@ export function computeNudgedClass(options: NudgeClassOptions): NudgeClassResult
   } else {
     const initialVal = directionType === 'increase'
       ? (stepSize === 'big' ? '4' : '1')
-      : '0';
-    newClass = `${bpPrefix}${propBase}${initialVal}`;
+      : (stepSize === 'big' ? '-4' : '-1');
+    newClass = initialVal.startsWith('-') ? `${bpPrefix}-${propBase}${initialVal.slice(1)}` : `${bpPrefix}${propBase}${initialVal}`;
     tokens.push(newClass);
   }
 

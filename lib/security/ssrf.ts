@@ -69,7 +69,7 @@ export async function validateTargetUrl(
   const hostname = parsed.hostname.toLowerCase();
 
   // Handle localhost bypass for local benchmark and test environment
-  if (options.allowLocalhost || process.env.ALLOW_LOCAL_TARGETS === 'true') {
+  if (process.env.NODE_ENV !== 'production' && (options.allowLocalhost || process.env.ALLOW_LOCAL_TARGETS === 'true')) {
     if (hostname === 'localhost' || hostname === '127.0.0.1') {
       return { isValid: true, resolvedIp: '127.0.0.1' };
     }

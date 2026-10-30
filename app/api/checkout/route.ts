@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { z } from 'zod';
 import { createScanCheckoutSession } from '@/lib/payments/dodo';
 import { getDatabaseRepository } from '@/lib/db/client';
+import { requireAccount, ownsResource } from '@/lib/auth/account';
 
 const CheckoutSchema = z.object({
   runId: z.string().min(1),
@@ -9,6 +10,7 @@ const CheckoutSchema = z.object({
 });
 
 export async function POST(req: Request) {
+  const auth = await requireAccount(req); if (auth.response) return auth.response;
   try {
     const body = await req.json();
     const parsed = CheckoutSchema.safeParse(body);
@@ -20,9 +22,10 @@ export async function POST(req: Request) {
     const repo = getDatabaseRepository();
     const run = await repo.getRun(runId);
 
-    if (!run) {
+    if (!run || !ownsResource(auth.account, run)) {
       return NextResponse.json({ error: 'Run not found' }, { status: 404 });
     }
+    if (run.kind === 'full') return NextResponse.json({ error: 'This run is already unlocked.' }, { status: 409 });
 
     const session = await createScanCheckoutSession({
       runId,

@@ -1,0 +1,78 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import path from 'node:path';
+import type { Page } from 'playwright';
+
+export async function checkContinuousDraft(page: Page, baseURL: string, workspace: string) {
+  page.setDefaultTimeout(30000);
+  const file = path.join(workspace, 'fixtures/1-plain-static.tsx');
+  const original = fs.readFileSync(file, 'utf8');
+  const ready = page.waitForResponse(response => new URL(response.url()).pathname.endsWith('/pages'), { timeout: 120000 });
+  await page.goto(`${baseURL}/studio`, { waitUntil: 'domcontentloaded', timeout: 120000 }); await ready;
+  const status = page.getByLabel('Draft status', { exact: true });
+  const idle = () => page.waitForFunction(() => document.querySelector('[aria-label="Visual editing workspace"]')?.getAttribute('aria-busy') === 'false', undefined, { timeout: 30000 });
+  const step = async (key: string) => {
+    await idle(); const response = page.waitForResponse(response => new URL(response.url()).pathname.endsWith('/preview'));
+    await page.getByRole('button', { name: 'Move element', exact: true }).focus(); await page.keyboard.press(key);
+    const result = await (await response).json(); assert.equal(result.success, true, result.error); await idle();
+  };
+  await page.locator('h1').click();
+  await step('ArrowRight'); await step('ArrowDown');
+  await page.getByText('One thoughtful workspace for the people, projects, and plans that move your business forward.', { exact: true }).click();
+  await step('ArrowLeft');
+  assert.match(await status.innerText(), /Draft saved · 3 changes/);
+  assert.equal(await page.getByRole('region', { name: 'Review source change' }).count(), 0);
+  assert.equal(fs.readFileSync(file, 'utf8'), original);
+  await page.keyboard.press('Control+z'); assert.match(await status.innerText(), /2 changes/);
+  await page.keyboard.press('Control+Shift+z'); assert.match(await status.innerText(), /3 changes/);
+  await page.reload({ waitUntil: 'networkidle' }); await idle();
+  assert.match(await status.innerText(), /3 changes/, 'Draft and history survive reload');
+  await page.getByRole('button', { name: 'Review changes', exact: true }).click();
+  assert.equal(await page.getByLabel('Draft change history').locator('li').count(), 3);
+  await page.getByRole('button', { name: 'Hide changes', exact: true }).click();
+  await page.keyboard.press('Control+s'); await idle();
+  await page.waitForFunction(() => document.querySelector('[aria-label="Draft status"]')?.textContent === 'All changes saved');
+  const saved = fs.readFileSync(file, 'utf8');
+  assert.ok(saved.includes('translate-x-[4px]') && saved.includes('translate-x-[-4px]'));
+  const history = JSON.parse(fs.readFileSync(path.join(workspace, '.slightnudge/history/edits.json'), 'utf8'));
+  assert.equal(history.length, 1);
+  await page.reload({ waitUntil: 'networkidle' }); await idle();
+  await page.getByRole('button', { name: 'Undo', exact: true }).click(); await idle();
+  assert.equal(fs.readFileSync(file, 'utf8'), original, 'Saved batch Undo restores all edited elements');
+  console.log('PASS continuous editing across elements, gesture Undo/Redo, reload persistence, optional review, Ctrl+S one save, reload then saved batch Undo');
+  await page.locator('h1').click();
+  const content = page.getByRole('textbox', { name: 'Content', exact: true });
+  await content.fill('Text saved directly from the active field');
+  const textSave = page.waitForResponse(response => new URL(response.url()).pathname.endsWith('/apply'));
+  await page.keyboard.press('Control+s');
+  assert.equal((await (await textSave).json()).success, true);
+  await idle();
+  assert.ok(fs.readFileSync(file, 'utf8').includes('Text saved directly from the active field'));
+  await page.getByText('One thoughtful workspace for the people, projects, and plans that move your business forward.', { exact: true }).click();
+  await step('ArrowRight'); await page.keyboard.press('Control+s'); await idle();
+  await page.waitForFunction(() => document.querySelector('[aria-label="Draft status"]')?.textContent === 'All changes saved', undefined, { timeout: 30000 });
+  await page.getByRole('button', { name: 'Undo', exact: true }).click(); await idle();
+  assert.ok(fs.readFileSync(file, 'utf8').includes('Text saved directly from the active field'));
+  await page.getByRole('button', { name: 'Undo', exact: true }).click(); await idle();
+  assert.equal(fs.readFileSync(file, 'utf8'), original);
+  console.log('PASS Ctrl+S includes unblurred text; another element remains editable after Save rebases source positions; successive batch Undo restores both saves');
+  await page.locator('h1').click(); await step('ArrowRight');
+  // Conflicting outside changes remain untouched and the editor retains its draft.
+  fs.appendFileSync(file, '\n// external edit preserved\n');
+  await page.keyboard.press('Control+s'); await idle();
+  assert.equal(fs.readFileSync(file, 'utf8'), original + '\n// external edit preserved\n');
+  assert.match(await status.innerText(), /Draft saved/);
+  await page.reload({ waitUntil: 'networkidle' }); await idle();
+  assert.match(await status.innerText(), /Draft saved/);
+  await page.getByRole('button', { name: 'Discard draft', exact: true }).click();
+  assert.equal(fs.readFileSync(file, 'utf8'), original + '\n// external edit preserved\n');
+  // Only reset the disposable fixture to set up an independent visual check.
+  fs.writeFileSync(file, original);
+  await page.locator('h1').click(); await step('ArrowRight');
+  await page.mouse.move(1200, 850);
+  await page.screenshot({ path: path.join(process.cwd(), 'docs/continuous-draft.png'), animations: 'disabled' });
+  await page.getByRole('button', { name: 'Discard draft', exact: true }).click();
+  assert.equal(fs.readFileSync(file, 'utf8'), original);
+  console.log('PASS conflict preserves outside source and recoverable draft; discard never writes source');
+  return 3;
+}

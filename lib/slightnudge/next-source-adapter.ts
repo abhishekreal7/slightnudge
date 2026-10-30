@@ -1,13 +1,16 @@
-import { lstat, mkdir, readFile, rename, rm, writeFile } from 'node:fs/promises';
+import { lstat, mkdir, readFile, rename, rm, rmdir, writeFile } from 'node:fs/promises';
+import { createHash } from 'node:crypto';
 import path from 'node:path';
 import { resolveRepositoryRoot } from './repository-store';
+import { getSourceCanvasBridge } from './source-canvas-bridge';
+import { SOURCE_CANVAS_PROTOCOL } from './source-canvas-contract';
 
 const adapterDirectoryName = '.slightnudge-source-adapter';
 const stateFileName = 'state.json';
 const generatedConfigMarker = 'slightnudge-source-adapter';
 
 export function getBridgeClient(targetRepositoryId = '') {
-  return `
+  return `${getSourceCanvasBridge(false, targetRepositoryId)}\n
 (() => {
   if (typeof window === 'undefined') return;
   if (window.__slightnudge_bridge_active) return;
@@ -27,11 +30,20 @@ export function getBridgeClient(targetRepositoryId = '') {
   // --- EMBEDDED IFRAME MODE ---
   if (isEmbedded) {
     let selected = null;
+    let pending = null;
+    document.addEventListener('submit', event => { event.preventDefault(); event.stopImmediatePropagation(); }, true);
+    const indicator = document.createElement('div');
+    indicator.setAttribute('aria-hidden', 'true');
+    indicator.style.cssText = 'all:initial;position:fixed;pointer-events:none;z-index:2147483645;border:1px solid #16845b;border-radius:2px;box-sizing:border-box;';
+    const measuredProperties = ['fontSize', 'fontWeight', 'fontFamily', 'fontStyle', 'lineHeight', 'letterSpacing', 'textAlign', 'color', 'backgroundColor', 'paddingTop', 'paddingRight', 'paddingBottom', 'paddingLeft', 'borderRadius', 'display', 'width', 'maxWidth'];
+    const propertyNames = { fontSize: 'fontSize', fontWeight: 'fontWeight', fontFamily: 'fontFamily', fontStyle: 'fontStyle', lineHeight: 'lineHeight', letterSpacing: 'letterSpacing', alignment: 'textAlign', textColor: 'color', backgroundColor: 'backgroundColor', padding: 'paddingTop', borderRadius: 'borderRadius', display: 'display', width: 'width', maxWidth: 'maxWidth', marginLeft: 'marginLeft', marginTop: 'marginTop' };
     function send(type, target, clicked) {
       if (!target?.isConnected) return;
       const marker = target.closest('[data-source-file]');
       if (!marker) return;
       const rect = marker.getBoundingClientRect();
+      if (!indicator.isConnected) document.body.append(indicator);
+      Object.assign(indicator.style, { top: rect.top + 'px', left: rect.left + 'px', width: rect.width + 'px', height: rect.height + 'px' });
       const clickedEl = (clicked instanceof Element && clicked.isConnected) ? clicked : marker;
       const clickedRect = clickedEl.getBoundingClientRect();
       const selection = {
@@ -46,9 +58,10 @@ export function getBridgeClient(targetRepositoryId = '') {
         imageSource: marker instanceof HTMLImageElement ? marker.getAttribute('src') || '' : undefined,
         rect: { top: rect.top, left: rect.left, width: rect.width, height: rect.height },
         clickedRect: { top: clickedRect.top, left: clickedRect.left, width: clickedRect.width, height: clickedRect.height },
+        computed: Object.fromEntries(measuredProperties.map(key => [key, getComputedStyle(marker)[key]])),
       };
       if (!selection.path || !Number.isSafeInteger(selection.line) || !Number.isSafeInteger(selection.column)) return;
-      window.parent.postMessage({ channel: 'slightnudge', type, session, selection }, parentOrigin);
+      window.parent.postMessage({ channel: 'slightnudge', type, session, selection, pageUrl: window.location.href }, parentOrigin);
     }
 
     document.addEventListener('click', (event) => {
@@ -57,6 +70,7 @@ export function getBridgeClient(targetRepositoryId = '') {
       if (!marker) return;
       event.preventDefault();
       event.stopImmediatePropagation();
+      if (pending) return;
       selected = marker;
       send('source-selection', marker, event.target);
     }, true);
@@ -64,6 +78,49 @@ export function getBridgeClient(targetRepositoryId = '') {
     window.addEventListener('message', (event) => {
       if (event.origin !== parentOrigin || event.source !== window.parent) return;
       const message = event.data;
+      if (message?.channel === 'slightnudge' && message.session === session && message.type === 'source-edit') {
+        const reply = (success, reason = '') => window.parent.postMessage({ channel: 'slightnudge', session, type: 'edit-result', requestId: message.requestId, success, reason }, parentOrigin);
+        const target = message.selection;
+        if (message.operation === 'verify' && target && (typeof message.expectedClass === 'string' || typeof message.expectedText === 'string')) {
+          const matches = Array.from(document.querySelectorAll('[data-source-file]')).filter(element => element.getAttribute('data-source-file') === target.path && Number(element.getAttribute('data-source-line')) === target.line && Number(element.getAttribute('data-source-column')) === target.column);
+          reply(matches.length === 1 && (typeof message.expectedClass !== 'string' || matches[0].getAttribute('class') === message.expectedClass) && (typeof message.expectedText !== 'string' || matches[0].textContent === message.expectedText), 'The project is still rendering an older source revision.'); return;
+        }
+        if (!selected?.isConnected || !target || target.path !== selected.dataset.sourceFile || target.line !== Number(selected.dataset.sourceLine) || target.column !== Number(selected.dataset.sourceColumn)) { reply(false, 'The selected element changed. Reload and select it again.'); return; }
+        if (message.operation !== 'discard') {
+          const instances = Array.from(document.querySelectorAll('[data-source-file]')).filter(element => element.getAttribute('data-source-file') === target.path && Number(element.getAttribute('data-source-line')) === target.line && Number(element.getAttribute('data-source-column')) === target.column);
+          if (instances.length !== 1) { reply(false, 'This source element appears more than once on the page. Editing shared instances is not supported yet. Nothing was changed.'); return; }
+        }
+        const intact = () => pending && pending.element === selected && selected.getAttribute('class') === pending.afterClass && (pending.kind !== 'text' || selected.innerHTML === pending.afterHTML) && selected.getAttribute('style') === pending.style;
+        if (message.operation === 'check') { reply(Boolean(intact()), 'The page changed after preview. Reload and select again.'); return; }
+        if (message.operation === 'discard') {
+          if (!intact()) { reply(false, 'The page changed after preview. Reload to restore the actual page.'); return; }
+          if (pending.beforeClass === null) selected.removeAttribute('class'); else selected.setAttribute('class', pending.beforeClass);
+          if (pending.kind === 'text') selected.textContent = pending.beforeText;
+          pending = null; send('source-rect', selected); reply(true); return;
+        }
+        if (message.operation !== 'preview' || pending) { reply(false, 'Apply or discard the current preview first.'); return; }
+        const beforeClass = selected.getAttribute('class');
+        const beforeText = selected.textContent;
+        const style = selected.getAttribute('style');
+        if (message.kind === 'text') {
+          if (selected.children.length || typeof message.value !== 'string' || message.value.length > 2000) { reply(false, 'Only plain text without child elements can be previewed safely.'); return; }
+          selected.textContent = message.value;
+        } else {
+          const property = propertyNames[message.property];
+          if (!property || typeof message.value !== 'string' || message.value.length > 1200 || typeof message.utility !== 'string' || message.utility.includes(':')) { reply(false, 'This style cannot yet be verified in the actual page. Nothing was changed.'); return; }
+          const before = getComputedStyle(selected)[property];
+          const probe = document.createElement('span'); probe.className = message.utility; probe.style.position = 'fixed'; probe.style.visibility = 'hidden'; document.body.append(probe);
+          const expected = getComputedStyle(probe)[property]; probe.remove();
+          selected.className = message.value;
+          const actual = getComputedStyle(selected)[property];
+          if (actual !== expected || actual === before) {
+            if (beforeClass === null) selected.removeAttribute('class'); else selected.setAttribute('class', beforeClass);
+            reply(false, 'The project styling overrides this change, or its utility is unavailable. Nothing was changed.'); return;
+          }
+        }
+        pending = { element: selected, beforeClass, beforeText, kind: message.kind, afterClass: selected.getAttribute('class'), afterHTML: selected.innerHTML, style };
+        send('source-rect', selected); reply(true); return;
+      }
       if (!selected || !message || message.channel !== 'slightnudge' || message.session !== session || message.type !== 'preview-change') return;
       const target = message.selection;
       if (!target || target.path !== selected.dataset.sourceFile || Number(target.line) !== Number(selected.dataset.sourceLine) || Number(target.column) !== Number(selected.dataset.sourceColumn)) return;
@@ -90,6 +147,8 @@ export function getBridgeClient(targetRepositoryId = '') {
 
     window.addEventListener('scroll', () => { if (selected) send('source-rect', selected); }, { passive: true });
     window.addEventListener('resize', () => { if (selected) send('source-rect', selected); }, { passive: true });
+    const ready = () => requestAnimationFrame(() => requestAnimationFrame(() => window.parent.postMessage({ channel: 'slightnudge', session, type: 'bridge-ready' }, parentOrigin)));
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', ready, { once: true }); else ready();
     return;
   }
 
@@ -104,6 +163,9 @@ export function getBridgeClient(targetRepositoryId = '') {
   let pendingEdit = null;
   let inspectedData = null;
   let canUndoState = false;
+  let undoTarget = null;
+  let undoNeedsCheck = false;
+  let undoBusy = false;
   let activeTab = 'style';
 
   // Create isolated Shadow DOM root
@@ -300,6 +362,7 @@ export function getBridgeClient(targetRepositoryId = '') {
   window.addEventListener('resize', updateOverlays, { passive: true });
 
   document.addEventListener('mousemove', (e) => {
+    if (e.composedPath().includes(container)) return;
     if (!inspectActive || !(e.target instanceof Element)) return;
     const marker = e.target.closest('[data-source-file]');
     if (marker !== hoveredElement) {
@@ -309,6 +372,9 @@ export function getBridgeClient(targetRepositoryId = '') {
   }, true);
 
   document.addEventListener('click', (e) => {
+    // Shadow events are retargeted to our host. On a mapped <html> element,
+    // closest() would select the document and swallow our own controls.
+    if (e.composedPath().includes(container)) return;
     if (!(e.target instanceof Element)) return;
     const isAltClick = e.altKey;
     if (!inspectActive && !isAltClick) return;
@@ -355,7 +421,10 @@ export function getBridgeClient(targetRepositoryId = '') {
       });
       if (res.ok) {
         inspectedData = await res.json();
-        canUndoState = Boolean(inspectedData.canUndo);
+        if (!undoNeedsCheck && !undoBusy) {
+          undoTarget = inspectedData.undoTarget ? { ...inspectedData.undoTarget, sourcePath: payload.path } : null;
+          canUndoState = Boolean(undoTarget);
+        }
         renderDock();
       }
     } catch (err) {
@@ -364,7 +433,7 @@ export function getBridgeClient(targetRepositoryId = '') {
   }
 
   async function previewChange(kind, payload) {
-    if (!selectedElement) return;
+    if (!selectedElement || undoNeedsCheck || undoBusy) return;
     const sourcePath = selectedElement.dataset.sourceFile;
     const line = Number(selectedElement.dataset.sourceLine);
     const column = Number(selectedElement.dataset.sourceColumn);
@@ -389,7 +458,7 @@ export function getBridgeClient(targetRepositoryId = '') {
       });
       const data = await res.json();
       if (res.ok && data.success) {
-        pendingEdit = { id: data.id, summary: data.summary, kind };
+        pendingEdit = { id: data.id, summary: data.summary, kind, sourcePath };
         if (kind === 'style' && payload.value) {
           const classes = selectedElement.className.split(/\\s+/).filter(Boolean);
           const nextClasses = classes.filter((c) => !c.startsWith(payload.value.split('-')[0] + '-'));
@@ -429,7 +498,8 @@ export function getBridgeClient(targetRepositoryId = '') {
   }
 
   async function applyPending() {
-    if (!pendingEdit) return;
+    if (!pendingEdit || undoNeedsCheck || undoBusy) return;
+    const accepted = pendingEdit;
     try {
       const token = await getBridgeToken();
       const res = await fetch(\`\${backendOrigin}/api/slightnudge/apply\`, {
@@ -439,13 +509,14 @@ export function getBridgeClient(targetRepositoryId = '') {
           'x-slightnudge-token': token,
         },
         body: JSON.stringify({
-          previewId: pendingEdit.id,
+          previewId: accepted.id,
           repositoryId: defaultRepo || undefined,
-          sourcePath: selectedElement?.dataset.sourceFile,
+          sourcePath: accepted.sourcePath,
         }),
       });
       const data = await res.json();
       if (res.ok && data.success) {
+        undoTarget = { previewId: accepted.id, editId: data.editId, sourcePath: accepted.sourcePath };
         pendingEdit = null;
         canUndoState = true;
         renderDock();
@@ -470,9 +541,14 @@ export function getBridgeClient(targetRepositoryId = '') {
   }
 
   async function undoLast() {
+    if (!undoTarget || undoBusy || pendingEdit) return;
+    const target = undoTarget;
+    const checking = undoNeedsCheck;
+    undoBusy = true;
+    undoNeedsCheck = true;
     try {
       const token = await getBridgeToken();
-      const res = await fetch(\`\${backendOrigin}/api/slightnudge/undo\`, {
+      const res = await fetch(\`\${backendOrigin}/api/slightnudge/undo\${checking ? '/status' : ''}\`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -480,16 +556,28 @@ export function getBridgeClient(targetRepositoryId = '') {
         },
         body: JSON.stringify({
           repositoryId: defaultRepo || undefined,
-          sourcePath: selectedElement?.dataset.sourceFile,
+          sourcePath: defaultRepo ? target.sourcePath : undefined,
+          filePath: defaultRepo ? undefined : target.sourcePath,
+          previewId: target.previewId,
+          editId: target.editId,
         }),
+        signal: AbortSignal.timeout(15000),
       });
-      if (res.ok) {
+      const data = await res.json();
+      if (res.ok && data.success) {
         pendingEdit = null;
         canUndoState = false;
-        renderDock();
+        undoTarget = null;
+        undoNeedsCheck = false;
+      } else if (data.code === 'UNDO_NOT_APPLIED' || (!checking && res.status === 403)) {
+        undoNeedsCheck = false;
+        if (res.status === 403) cachedToken = null;
       }
     } catch (err) {
       console.error('[SlightNudge In-Situ] Undo failed:', err);
+    } finally {
+      undoBusy = false;
+      renderDock();
     }
   }
 
@@ -530,7 +618,8 @@ export function getBridgeClient(targetRepositoryId = '') {
       const undoBtn = document.createElement('button');
       undoBtn.type = 'button';
       undoBtn.className = 'sn-btn';
-      undoBtn.textContent = '↺ Undo';
+      undoBtn.textContent = undoNeedsCheck ? 'Check Undo status' : '↺ Undo';
+      undoBtn.disabled = undoBusy;
       undoBtn.onclick = () => undoLast();
       bar.appendChild(undoBtn);
     }
@@ -717,7 +806,14 @@ interface AdapterState {
   backupName: string | null;
   wrapperName: string;
   installedAt: string;
+  protocol?: number;
+  configRevision?: number;
+  generatedHashes?: Record<string, string>;
 }
+
+const digest = (source: string) => createHash('sha256').update(source).digest('hex');
+const generatedFiles = ['next-source-loader.cjs', 'bridge-client.mjs', 'hydration-client.jsx', 'next-hmr-sync-loader.cjs'];
+const safeConfigName = (name: unknown) => typeof name === 'string' && /^next\.config\.(?:js|mjs|cjs|ts|mts|cts)$/.test(name);
 
 async function exists(filePath: string) {
   try { await lstat(filePath); return true; } catch (error) {
@@ -729,8 +825,11 @@ async function exists(filePath: string) {
 async function getState(root: string): Promise<AdapterState | null> {
   const statePath = path.join(root, adapterDirectoryName, stateFileName);
   try {
+    const directory = await lstat(path.join(root, adapterDirectoryName));
+    if (!directory.isDirectory() || directory.isSymbolicLink()) throw new Error('Adapter directory was replaced');
     const state = JSON.parse(await readFile(statePath, 'utf8')) as AdapterState;
-    return state?.version === 1 && typeof state.wrapperName === 'string' ? state : null;
+    if (state?.version !== 1 || !safeConfigName(state.wrapperName) || state.backupName !== null && (typeof state.backupName !== 'string' || !/^next\.config\.slightnudge-original\.(?:js|mjs|cjs|ts|mts|cts)$/.test(state.backupName))) throw new Error('Invalid adapter state');
+    return state;
   } catch (error) {
     if ((error as NodeJS.ErrnoException).code === 'ENOENT') return null;
     throw new Error('SlightNudge found an unreadable Next.js adapter state file.');
@@ -739,7 +838,8 @@ async function getState(root: string): Promise<AdapterState | null> {
 
 export async function getNextSourceAdapterStatus(repositoryId: string) {
   const root = await resolveRepositoryRoot(repositoryId);
-  return { enabled: Boolean(await getState(root)) };
+  const state = await getState(root);
+  return { enabled: Boolean(state), needsUpdate: Boolean(state && (state.protocol !== SOURCE_CANVAS_PROTOCOL || /\.(?:ts|mts|cts)$/.test(state.wrapperName) && state.configRevision !== 1)) };
 }
 
 export async function installNextSourceAdapter(repositoryId: string) {
@@ -770,19 +870,18 @@ export async function installNextSourceAdapter(repositoryId: string) {
 
   const adapterRoot = path.join(root, adapterDirectoryName);
   if (await exists(adapterRoot)) {
-    const stateFile = path.join(adapterRoot, stateFileName);
-    if (await exists(stateFile)) {
-      throw new Error('A .slightnudge-source-adapter folder already exists in this repository. Rename it before enabling the adapter.');
-    }
-    await rm(adapterRoot, { recursive: true, force: true }).catch(() => undefined);
+    throw new Error('A .slightnudge-source-adapter folder already exists in this repository. Preserve or rename it before enabling the adapter.');
   }
   const configPath = path.join(root, wrapperName);
 
   await mkdir(adapterRoot, { recursive: false });
   let backupName: string | null = null;
+  let backupMoved = false;
+  let wrapperWritten = false;
   try {
     const loaderSource = await readFile(path.join(process.cwd(), 'lib', 'slightnudge', 'next-source-loader.cjs'), 'utf8');
     await writeFile(path.join(adapterRoot, 'next-source-loader.cjs'), loaderSource, { encoding: 'utf8', flag: 'wx' });
+    await writeFile(path.join(adapterRoot, 'hydration-client.jsx'), `'use client';\nimport { useEffect } from 'react';\nexport default function SlightNudgeHydrationSignal() { useEffect(() => { window.__slightnudge_hydrated = true; window.dispatchEvent(new Event('slightnudge:hydrated')); }, []); return null; }\n`, { encoding: 'utf8', flag: 'wx' });
     const repoBridgeClient = getBridgeClient(repositoryId);
     await writeFile(path.join(adapterRoot, 'bridge-client.mjs'), repoBridgeClient, { encoding: 'utf8', flag: 'wx' });
 
@@ -792,17 +891,34 @@ export async function installNextSourceAdapter(repositoryId: string) {
       const backupPath = path.join(root, backupName);
       if (await exists(backupPath)) throw new Error(`The preserved config path ${backupName} already exists.`);
       await rename(path.join(root, originalName), backupPath);
+      backupMoved = true;
     }
 
-    const originalImport = backupName ? `const importedConfig = await import('./${backupName}');\n  const baseConfig = importedConfig.default ?? importedConfig;` : 'const baseConfig = {};';
-    const wrapper = `/* eslint-disable */\n// ${generatedConfigMarker}: generated for development previews; remove through SlightNudge to restore the original config.\nimport path from 'node:path';\nimport { fileURLToPath } from 'node:url';\nconst projectRoot = path.dirname(fileURLToPath(import.meta.url));\n${originalImport}\n\nexport default async function slightNudgeNextConfig(phase, context) {\n  const resolved = typeof baseConfig === 'function' ? await baseConfig(phase, context) : baseConfig;\n  const config = { ...resolved };\n  config.webpack = (webpackConfig, options) => {\n    const applyAdapter = (nextConfig) => {\n      const result = nextConfig || webpackConfig;\n      if (options.dev) {\n        result.module.rules.push({\n          test: /\\.[jt]sx?$/,\n          include: [projectRoot],\n          enforce: 'pre',\n          use: [{ loader: path.join(projectRoot, '${adapterDirectoryName}', 'next-source-loader.cjs'), options: { development: true, root: projectRoot } }],\n        });\n        if (!options.isServer) {\n          const bridgePath = path.join(projectRoot, '${adapterDirectoryName}', 'bridge-client.mjs');\n          const origEntry = result.entry;\n          result.entry = async () => {\n            const entries = typeof origEntry === 'function' ? await origEntry() : origEntry;\n            if (entries && typeof entries === 'object') {\n              for (const key of ['main-app', 'main', 'app']) {\n                if (entries[key] && Array.isArray(entries[key]) && !entries[key].includes(bridgePath)) {\n                  entries[key].unshift(bridgePath);\n                }\n              }\n            }\n            return entries;\n          };\n        }\n      }\n      return result;\n    };\n    const originalWebpack = config.webpack;\n    const previous = originalWebpack ? originalWebpack(webpackConfig, options) : webpackConfig;\n    return previous && typeof previous.then === 'function' ? previous.then(applyAdapter) : applyAdapter(previous);\n  };\n  return config;\n}\n`;
-    await writeFile(configPath, wrapper, { encoding: 'utf8', flag: 'wx' });
-    const state: AdapterState = { version: 1, backupName, wrapperName, installedAt: new Date().toISOString() };
+    // Next's TypeScript config loader compiles to CommonJS. A static import
+    // loads the preserved TS config while its transpilation hook is active;
+    // module-level await would make that CommonJS graph impossible to require.
+    const originalImport = backupName ? isTypeScript
+      ? `import importedConfig from './${backupName}';\nconst baseConfig = importedConfig;`
+      : `const importedConfig = await import('./${backupName}');\n  const baseConfig = importedConfig.default ?? importedConfig;`
+      : 'const baseConfig = {};';
+    const wrapper = `/* eslint-disable */\n// ${generatedConfigMarker}: generated for development previews; remove through SlightNudge to restore the original config.\nimport path from 'node:path';\nimport { fileURLToPath } from 'node:url';\nconst projectRoot = path.dirname(fileURLToPath(import.meta.url));\n${originalImport}\n\nexport default async function slightNudgeNextConfig(phase, context) {\n  const resolved = typeof baseConfig === 'function' ? await baseConfig(phase, context) : baseConfig;\n  const config = { ...resolved };\n  const originalWebpack = config.webpack;\n  config.webpack = (webpackConfig, options) => {\n    const applyAdapter = (nextConfig) => {\n      const result = nextConfig || webpackConfig;\n      if (options.dev) {\n        result.module.rules.push({\n          test: /\\.[jt]sx?$/,\n          include: [projectRoot],\n          enforce: 'pre',\n          use: [{ loader: path.join(projectRoot, '${adapterDirectoryName}', 'next-source-loader.cjs'), options: { development: true, root: projectRoot } }],\n        });\n        if (!options.isServer) {\n          const bridgePath = path.join(projectRoot, '${adapterDirectoryName}', 'bridge-client.mjs');\n          const origEntry = result.entry;\n          result.entry = async () => {\n            const entries = typeof origEntry === 'function' ? await origEntry() : origEntry;\n            if (entries && typeof entries === 'object') {\n              for (const key of ['main-app', 'main', 'app']) {\n                if (entries[key] && Array.isArray(entries[key]) && !entries[key].includes(bridgePath)) {\n                  entries[key].unshift(bridgePath);\n                }\n              }\n            }\n            return entries;\n          };\n        }\n      }\n      return result;\n    };\n    const previous = originalWebpack ? originalWebpack(webpackConfig, options) : webpackConfig;\n    return previous && typeof previous.then === 'function' ? previous.then(applyAdapter) : applyAdapter(previous);\n  };\n  return config;\n}\n`;
+    let configuredWrapper = wrapper.replace('  const config = { ...resolved };', '  const config = { ...resolved };\n  config.devIndicators = false;').replace('development: true, root: projectRoot', 'development: true, hydrationSignal: true, root: projectRoot');
+    if (isTypeScript) configuredWrapper = '// @ts-nocheck\n' + configuredWrapper;
+    const socketSource = await readFile(path.join(root, 'node_modules/next/dist/client/dev/hot-reloader/app/web-socket.js'), 'utf8').catch(() => '');
+    if (socketSource.includes('// Track webpack compilation hash for server restart detection') && socketSource.includes('mostRecentCompilationHash !== message.hash')) {
+      await writeFile(path.join(adapterRoot, 'next-hmr-sync-loader.cjs'), await readFile(path.join(process.cwd(), 'lib/slightnudge/next-hmr-sync-loader.cjs'), 'utf8'), { encoding: 'utf8', flag: 'wx' });
+      configuredWrapper = configuredWrapper.replace('          const bridgePath =', `          result.module.rules.push({ test: /[\\\\/]next[\\\\/]dist[\\\\/]client[\\\\/]dev[\\\\/]hot-reloader[\\\\/]app[\\\\/]web-socket\\.js$/, enforce: 'pre', use: [{ loader: path.join(projectRoot, '${adapterDirectoryName}', 'next-hmr-sync-loader.cjs') }] });\n          const bridgePath =`);
+    }
+    await writeFile(configPath, configuredWrapper, { encoding: 'utf8', flag: 'wx' });
+    wrapperWritten = true;
+    const generatedHashes: Record<string, string> = { [wrapperName]: digest(configuredWrapper) };
+    for (const name of generatedFiles) if (await exists(path.join(adapterRoot, name))) generatedHashes[name] = digest(await readFile(path.join(adapterRoot, name), 'utf8'));
+    const state: AdapterState = { version: 1, backupName, wrapperName, installedAt: new Date().toISOString(), protocol: SOURCE_CANVAS_PROTOCOL, configRevision: 1, generatedHashes };
     await writeFile(path.join(adapterRoot, stateFileName), JSON.stringify(state, null, 2), { encoding: 'utf8', flag: 'wx' });
     return { success: true as const, alreadyInstalled: false, restartRequired: true };
   } catch (error) {
-    await rm(configPath, { force: true }).catch(() => undefined);
-    if (backupName && await exists(path.join(root, backupName))) {
+    if (wrapperWritten) await rm(configPath, { force: true }).catch(() => undefined);
+    if (backupMoved && backupName && await exists(path.join(root, backupName))) {
       await rename(path.join(root, backupName), path.join(root, originalName!)).catch(() => undefined);
     }
     await rm(adapterRoot, { recursive: true, force: true }).catch(() => undefined);
@@ -817,17 +933,28 @@ export async function removeNextSourceAdapter(repositoryId: string) {
   const configPath = path.join(root, state.wrapperName);
   const wrapper = await readFile(configPath, 'utf8').catch(() => '');
   if (!wrapper.includes(generatedConfigMarker)) throw new Error('The Next.js config changed after adapter setup. Restore or merge it manually before removing the adapter.');
-
-  await rm(configPath, { force: true });
-  if (state.backupName) {
-    const backupPath = path.join(root, state.backupName);
-    if (!(await exists(backupPath))) throw new Error('The original Next.js config backup is missing; it was not deleted.');
-    const originalExt = path.extname(state.backupName);
-    const restoredName = state.wrapperName.endsWith(originalExt) ? state.wrapperName : `next.config${originalExt}`;
-    await rename(backupPath, path.join(root, restoredName));
+  if (!state.generatedHashes) throw new Error('This older adapter has no file integrity record. Preserve the adapter folder and merge its original config backup manually before enabling the current adapter; automatic removal could discard local edits.');
+  // Preflight everything before touching the config or its original backup.
+  if (state.generatedHashes) {
+    if (state.generatedHashes[state.wrapperName] !== digest(wrapper)) throw new Error('The generated Next.js config has local changes. Preserve or merge them before removing the adapter.');
   }
   const adapterRoot = path.join(root, adapterDirectoryName);
-  for (const name of ['next-source-loader.cjs', 'bridge-client.mjs', stateFileName]) {
+  for (const target of [configPath, ...(state.backupName ? [path.join(root, state.backupName)] : []), ...generatedFiles.map(name => path.join(adapterRoot, name)), path.join(adapterRoot, stateFileName)]) {
+    if (!(await exists(target))) {
+      if (target === configPath || state.backupName && target === path.join(root, state.backupName)) throw new Error('The original Next.js config or adapter config is missing. Nothing was removed.');
+      continue;
+    }
+    const info = await lstat(target);
+    if (!info.isFile() || info.isSymbolicLink()) throw new Error('An adapter file was replaced. Nothing was removed.');
+    const name = path.basename(target);
+    if (generatedFiles.includes(name) && state.generatedHashes?.[name] && state.generatedHashes[name] !== digest(await readFile(target, 'utf8'))) throw new Error('An adapter file has local changes. Preserve them before removing the adapter.');
+  }
+  // Rename the preserved config over the generated wrapper in one operation.
+  if (state.backupName) {
+    const backupPath = path.join(root, state.backupName);
+    await rename(backupPath, configPath);
+  } else await rm(configPath);
+  for (const name of [...generatedFiles, stateFileName]) {
     const target = path.join(adapterRoot, name);
     if (await exists(target)) {
       const info = await lstat(target);
@@ -835,6 +962,7 @@ export async function removeNextSourceAdapter(repositoryId: string) {
       await rm(target);
     }
   }
-  await rm(adapterRoot, { recursive: true, force: true }).catch(() => undefined);
+  // Leave unknown files intact rather than deleting user content recursively.
+  await rmdir(adapterRoot).catch(() => undefined);
   return { success: true as const, removed: true, restartRequired: true };
 }

@@ -30,7 +30,9 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
       cache: 'no-store',
       redirect: 'manual',
       headers: { accept: 'text/html' },
-      signal: AbortSignal.timeout(4_000),
+      // Development servers may compile this route again after recovery.
+      // Keep the check bounded without rejecting an ordinary cold rebuild.
+      signal: AbortSignal.timeout(15_000),
     });
     const contentType = response.headers.get('content-type') || '';
     const frameOptions = response.headers.get('x-frame-options')?.trim().toLowerCase();
@@ -56,7 +58,7 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
     return NextResponse.json({ success: true, url: url.toString(), status: response.status });
   } catch (error) {
     if (error instanceof Error && error.name === 'TimeoutError') {
-      return NextResponse.json({ error: 'The preview server did not respond within four seconds.' }, { status: 504 });
+      return NextResponse.json({ error: 'The local preview is still starting or compiling. Wait for its dev server to finish, then reconnect.' }, { status: 504 });
     }
     if (error instanceof TypeError && error.message.toLowerCase().includes('fetch')) {
       return NextResponse.json({ error: 'Could not reach the preview server. Start it on 127.0.0.1:3001 and try again.' }, { status: 502 });

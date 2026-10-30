@@ -28,19 +28,21 @@ async function runWorkerLoop() {
           continue;
         }
 
-        // Fetch site details for targetUrl
-        const targetUrl = (runRecord as any).target_url || 'http://localhost:3100';
+        const site = await repo.getSite(runRecord.site_id);
+        if (!site || site.user_id !== runRecord.user_id) { await repo.failJob(job.id, 'The run has no matching site owner.'); continue; }
+        const targetUrl = site.url;
 
         const result = await runner.runPipeline({
           runId: runRecord.id,
           targetUrl,
           userId: runRecord.user_id,
           siteId: runRecord.site_id,
+          verificationToken: site.verification_token,
           kind: runRecord.kind,
           notes: runRecord.notes || undefined,
           config: {
-            allowLocalhost: true,
-            skipOwnershipCheck: true,
+            allowLocalhost: process.env.NODE_ENV !== 'production',
+            skipOwnershipCheck: process.env.NODE_ENV !== 'production',
             limits: runRecord.limits_json,
           },
         });

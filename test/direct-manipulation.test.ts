@@ -1,0 +1,20 @@
+import assert from 'node:assert/strict';
+import { snapWidth, stepWidth, widthFromPointer } from '../lib/slightnudge/direct-manipulation';
+
+assert.deepEqual(snapWidth(810), { width: 768, token: 'max-w-3xl' });
+assert.equal(snapWidth(-200).width, 384);
+assert.equal(snapWidth(9000).width, 1152);
+assert.equal(snapWidth(502, 20).width, 480, 'Preset pixels follow the measured root rem');
+assert.equal(snapWidth(466, 16, 'max-w-md').width, 448, 'A magnetic band holds the current snap');
+assert.equal(snapWidth(490, 16, 'max-w-md').width, 512);
+assert.equal(widthFromPointer(672, 100, 150, 'e'), 772);
+assert.equal(widthFromPointer(672, 100, 150, 'w'), 572);
+assert.equal(widthFromPointer(672, 100, 150, 'e', .5), 872, 'Pointer deltas account for rendered canvas scale');
+assert.equal(stepWidth(672, 1).width, 768);
+assert.equal(stepWidth(672, -1).width, 576);
+assert.equal(stepWidth(500, 1).width, 512);
+assert.equal(stepWidth(384, -1).width, 384);
+assert.throws(() => snapWidth(NaN));
+assert.throws(() => widthFromPointer(672, 0, 10, 'e', 0));
+assert.throws(() => stepWidth(NaN, 1));
+console.log('PASS: width snapping, bounds, root units, hysteresis, centered/scaled pointer geometry, keyboard steps and invalid measurements');

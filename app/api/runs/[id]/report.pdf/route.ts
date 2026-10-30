@@ -1,19 +1,23 @@
 import { NextResponse } from 'next/server';
 import { getDatabaseRepository } from '@/lib/db/client';
+import { requireAccount, ownsResource } from '@/lib/auth/account';
+import { escapeHtml } from '@/lib/security/html';
 
 export async function GET(
   req: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const auth = await requireAccount(req); if (auth.response) return auth.response;
   try {
     const { id } = await params;
     const repo = getDatabaseRepository();
     const run = await repo.getRun(id);
 
-    if (!run) {
+    if (!run || !ownsResource(auth.account, run)) {
       return NextResponse.json({ error: 'Run not found' }, { status: 404 });
     }
 
+    if (run.kind !== 'full') return NextResponse.json({ error: 'Unlock the full scan before exporting its report.' }, { status: 403 });
     const findings = await repo.getFindings(id);
 
     // Generate printable HTML document formatted for PDF printing
@@ -21,7 +25,7 @@ export async function GET(
 <html>
 <head>
   <meta charset="utf-8">
-  <title>ShipCheck QA Audit Report - ${run.id}</title>
+  <title>ShipCheck QA Audit Report - ${escapeHtml(run.id)}</title>
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; color: #1e293b; padding: 40px; margin: 0; }
     h1 { font-size: 24px; color: #0f172a; margin-bottom: 4px; }
@@ -40,15 +44,15 @@ export async function GET(
 <body>
   <h1>ShipCheck QA Audit Report</h1>
   <div class="meta">
-    Run ID: ${run.id} | Generated: ${new Date().toUTCString()} | Status: ${run.status}
+    Run ID: ${escapeHtml(run.id)} | Generated: ${new Date().toUTCString()} | Status: ${escapeHtml(run.status)}
   </div>
 
   <div class="scorecard">
     <div>
       <div style="font-weight: 700;">Overall Application Health Score</div>
-      <div style="font-size: 12px; color: #64748b;">Automated testing completed on cloud Chromium desktop and mobile.</div>
+      <div style="font-size: 12px; color: #64748b;">Findings from this run. Check the run status for execution details.</div>
     </div>
-    <div class="score">${run.health_score ?? 100}/100</div>
+    <div class="score">${typeof run.health_score === 'number' && Number.isFinite(run.health_score) && run.health_score >= 0 && run.health_score <= 100 ? `${run.health_score}/100` : 'Not available'}</div>
   </div>
 
   <h2>Confirmed Findings (${findings.length})</h2>
@@ -56,14 +60,14 @@ export async function GET(
     .map(
       (f) => `
     <div class="finding">
-      <span class="severity sev-${f.severity}">${f.severity} - ${f.category}</span>
-      <h3 style="margin: 4px 0 8px; font-size: 16px;">${f.title}</h3>
-      <p style="font-size: 12px; color: #475569;"><strong>Expected:</strong> ${f.body_json.expected || 'N/A'}</p>
-      <p style="font-size: 12px; color: #b91c1c;"><strong>Actual:</strong> ${f.body_json.actual || 'N/A'}</p>
-      <p style="font-size: 12px; color: #1e3a8a;"><strong>Suspected Area:</strong> ${f.body_json.likelyCause || 'N/A'}</p>
+      <span class="severity sev-${escapeHtml(f.severity)}">${escapeHtml(f.severity)} - ${escapeHtml(f.category)}</span>
+      <h3 style="margin: 4px 0 8px; font-size: 16px;">${escapeHtml(f.title)}</h3>
+      <p style="font-size: 12px; color: #475569;"><strong>Expected:</strong> ${escapeHtml(f.body_json.expected || 'N/A')}</p>
+      <p style="font-size: 12px; color: #b91c1c;"><strong>Actual:</strong> ${escapeHtml(f.body_json.actual || 'N/A')}</p>
+      <p style="font-size: 12px; color: #1e3a8a;"><strong>Suspected Area:</strong> ${escapeHtml(f.body_json.likelyCause || 'N/A')}</p>
       
       <div style="font-size: 11px; font-weight: 700; color: #2563eb; margin-top: 12px;">AI Fix Prompt:</div>
-      <div class="prompt">${f.fix_prompt}</div>
+      <div class="prompt">${escapeHtml(f.fix_prompt)}</div>
     </div>
   `
     )
@@ -74,7 +78,9 @@ export async function GET(
     return new NextResponse(html, {
       headers: {
         'Content-Type': 'text/html; charset=utf-8',
-        'Content-Disposition': `attachment; filename="shipcheck-report-${run.id}.html"`,
+        'Content-Disposition': `attachment; filename="shipcheck-report-${run.id.replace(/[^a-zA-Z0-9_-]/g, '_')}.html"`,
+        'Content-Security-Policy': "default-src 'none'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'; sandbox",
+        'X-Content-Type-Options': 'nosniff',
       },
     });
   } catch (err: any) {

@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { inspectElement } from '@/lib/slightnudge/ast-nudger';
 import { resolveRepositorySourcePath } from '@/lib/slightnudge/repository-store';
-import { canUndoSourceEdit } from '@/lib/slightnudge/edit-history';
+import { getLatestUndoTarget } from '@/lib/slightnudge/edit-history';
 import { corsHeaders, handleCorsPreflight, isAllowedOrigin } from '@/lib/slightnudge/cors';
 
 export async function OPTIONS(request: Request) {
@@ -40,7 +40,8 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
       rect: body.rect,
       clickedRect: body.clickedRect,
     });
-    return NextResponse.json({ ...result, canUndo: canUndoSourceEdit(source.filePath), path: source.path, line, column }, { headers: corsHeaders(request) });
+    const undoTarget = getLatestUndoTarget(source.filePath, id, source.path);
+    return NextResponse.json({ ...result, canUndo: Boolean(undoTarget), undoTarget, path: source.path, line, column }, { headers: corsHeaders(request) });
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Could not inspect that source location.';
     const status = /could not be found/i.test(message) ? 404 : 400;

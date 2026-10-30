@@ -1,0 +1,16 @@
+.page { min-height: calc(100dvh - 65px); display: grid; place-items: center; padding: 48px 20px; background: #f7f9f7; }
+.card { width: min(390px, 100%); padding: 34px; border: 1px solid #e2e8e3; border-radius: 14px; background: #fff; box-shadow: 0 6px 28px #1c372908; }
+.brand { color: #176b55; font-size: 13px; font-weight: 650; text-decoration: none; }
+.card h1 { margin: 27px 0 9px; color: #23372b; font-size: 25px; font-weight: 600; letter-spacing: -.7px; }
+.card > p { margin: 0 0 25px; color: #8a978f; font-size: 12px; line-height: 1.6; }
+.card form { display: flex; flex-direction: column; gap: 16px; }
+.card label { display: flex; flex-direction: column; gap: 7px; color: #617568; font-size: 11px; }
+.card input { height: 39px; padding: 8px 10px; border: 1px solid #dfe8e2; border-radius: 6px; background: #fff; color: #2c4535; font-size: 13px; }
+.card input:focus-visible, .card button:focus-visible { outline: 2px solid #87b59f; outline-offset: 2px; }
+.primary { min-height: 39px; border: 0; border-radius: 6px; background: #176b55; color: #fff; font-size: 12px; cursor: pointer; }
+.primary:disabled { opacity: .5; cursor: default; }
+.actions { display: flex; justify-content: space-between; gap: 12px; margin-top: 22px; }
+.actions button, .actions a { padding: 0; border: 0; background: transparent; color: #7a8d80; font-size: 11px; cursor: pointer; text-decoration: none; }
+.notice, .error { margin: 0 0 16px; padding: 11px 12px; border: 1px solid #e2e9e3; border-radius: 6px; background: #f5f8f5; color: #6c8272; font-size: 11px; line-height: 1.7; }
+.error { border-color: #eedfd8; background: #fcf7f4; color: #9c6656; }
+.notice a { color: #176b55; text-decoration: underline; }

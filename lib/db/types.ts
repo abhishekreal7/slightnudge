@@ -73,6 +73,7 @@ export interface ScenarioRecord {
     error?: string;
   }>;
   evidence_json: {
+    planKey?: string;
     consoleErrors?: Array<{ type: string; text: string }>;
     networkFailures?: Array<{ url: string; status?: number; error?: string }>;
     screenshotIds?: string[];

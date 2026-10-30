@@ -1,0 +1,6 @@
+.controls { display: flex; flex-direction: column; gap: 10px; padding-top: 5px; }
+.row { display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 12px; color: #7a857e; }
+.row select { width: 155px; max-width: 62%; min-height: 31px; padding: 5px 8px; border: 1px solid #e2e9e4; border-radius: 6px; background: #fff; color: #40584a; font-size: 11px; }
+.row select:focus-visible { outline: 2px solid #94b9a7; outline-offset: 2px; }
+.row select:disabled { opacity: .45; }
+.note { margin: 2px 0 0; color: #929d95; font-size: 11px; line-height: 1.5; }

@@ -65,14 +65,14 @@ function LayerRows({ nodes, selectedKey, onSelect, depth = 0 }: { nodes: LayerNo
   })}</>;
 }
 
-export function StudioLayout({ children, projectName = 'SlightNudge Playground', activeFile, inspectorEnabled = true, previewConnected = false }: { children: React.ReactNode; projectName?: string; activeFile?: string; inspectorEnabled?: boolean; previewConnected?: boolean }) {
+export function StudioLayout({ children, projectName = 'SlightNudge Playground', activeFile, activePageId, inspectorEnabled = true, previewConnected = false }: { children: React.ReactNode; projectName?: string; activeFile?: string; activePageId?: string; inspectorEnabled?: boolean; previewConnected?: boolean }) {
   const pathname = usePathname();
   const [viewport, setViewport] = useState<Viewport>('desktop');
   const [zoom, setZoom] = useState<number>(100);
   const [sidebarTab, setSidebarTab] = useState<'pages' | 'layers'>('pages');
   const [layers, setLayers] = useState<LayerNode[]>([]);
   const [selectedLayer, setSelectedLayer] = useState('');
-  const currentPage = demoPages.find((item) => item.path === pathname) || demoPages[0];
+  const currentPage = demoPages.find((item) => activePageId ? item.id === activePageId : item.path === pathname) || demoPages[0];
   const width = viewport === 'mobile' ? 390 : viewport === 'tablet' ? 768 : 1120;
   const selectViewport = (value: Viewport) => {
     setViewport(value);
@@ -94,14 +94,14 @@ export function StudioLayout({ children, projectName = 'SlightNudge Playground',
     observer.observe(root, { childList: true, subtree: true, characterData: true });
     window.addEventListener('slightnudge:selection', updateSelection);
     return () => { observer.disconnect(); window.removeEventListener('slightnudge:selection', updateSelection); };
-  }, [inspectorEnabled, pathname]);
+  }, [inspectorEnabled, pathname, activePageId]);
 
   const selectLayer = (layer: LayerNode) => {
     window.dispatchEvent(new CustomEvent('slightnudge:select-source', { detail: { filePath: layer.file, line: layer.line, column: layer.column, tagName: layer.tag } }));
   };
 
   return <div className="sn-editor-shell">
-    {inspectorEnabled && <SlightNudgeOverlay defaultFilePath={activeFile || currentPage?.file} zoom={zoom} />}
+    {inspectorEnabled && <SlightNudgeOverlay key={currentPage.id} defaultFilePath={activeFile || currentPage?.file} zoom={zoom} />}
     <header className="sn-editor-header">
       <Link className="sn-editor-brand" href="/workspace" aria-label="Back to projects"><span className="sn-brand-icon"><Code2 size={17}/></span><span>SlightNudge</span></Link>
       <span className="sn-editor-divider"/>
@@ -131,13 +131,13 @@ export function StudioLayout({ children, projectName = 'SlightNudge Playground',
             <button type="button" role="tab" aria-selected={sidebarTab === 'pages'} className={sidebarTab === 'pages' ? 'is-active' : ''} onClick={() => setSidebarTab('pages')}><FileCode2 size={14}/> Pages</button>
             <button type="button" role="tab" aria-selected={sidebarTab === 'layers'} className={sidebarTab === 'layers' ? 'is-active' : ''} onClick={() => setSidebarTab('layers')}><Layers size={14}/> Layers</button>
           </div>
-          {sidebarTab === 'pages' ? <><div className="sn-sidebar-heading"><span>PROJECT PAGES</span><button type="button" disabled title="Page management is not available in the playground yet">+</button></div>
-            <nav aria-label="Demo pages">{demoPages.map((page) => <Link className={page.path === pathname ? 'is-active' : ''} href={page.path} key={page.id}><span className="sn-page-glyph">{page.id}</span><span>{page.title}</span></Link>)}</nav></> : <>
-            <div className="sn-sidebar-heading"><span>PAGE LAYERS</span><span className="sn-layer-count">Live source map</span></div>
+          {sidebarTab === 'pages' ? <><div className="sn-sidebar-heading"><span>Project pages</span><button type="button" disabled title="Page management is not available in the playground yet">+</button></div>
+            <nav aria-label="Demo pages">{demoPages.map((page) => <Link className={page.id === currentPage.id ? 'is-active' : ''} href={pathname === '/studio' ? `/studio?page=${page.id}` : page.path} key={page.id}><span className="sn-page-glyph">{page.id}</span><span>{page.title}</span></Link>)}</nav></> : <>
+            <div className="sn-sidebar-heading"><span>Page layers</span><span className="sn-layer-count">Live source map</span></div>
             <div className="sn-layer-tree" role="tree" aria-label="Page layers">{layers.length ? <LayerRows nodes={layers} selectedKey={selectedLayer} onSelect={selectLayer}/> : <p className="sn-layer-empty">Loading page structure…</p>}</div>
           </>}
-        </> : <div className="sn-sidebar-heading"><span>REPOSITORY</span></div>}
-        <div className="sn-file-location"><span className="sn-sidebar-heading">SOURCE</span><div><Code2 size={14}/><span>{activeFile || currentPage.file}</span></div><p>{inspectorEnabled ? 'Changes are written to this local source file.' : 'Source inspection only. Files stay unchanged.'}</p></div>
+        </> : <div className="sn-sidebar-heading"><span>Repository</span></div>}
+        <div className="sn-file-location"><span className="sn-sidebar-heading">Source</span><div><Code2 size={14}/><span>{activeFile || currentPage.file}</span></div><p>{inspectorEnabled ? 'Changes are written to this local source file.' : 'Source inspection only. Files stay unchanged.'}</p></div>
         <Link href="/workspace" className="sn-sidebar-back"><ArrowLeft size={15}/> All projects</Link>
       </aside>
       <main className={`sn-canvas-area ${inspectorEnabled ? '' : 'sn-canvas-no-inspector'}`}>

@@ -1,0 +1,47 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
+import { createRequire } from 'node:module';
+import { inspectIconSource, updateIconSource } from '../lib/slightnudge/icon-source';
+import { POST } from '../app/api/slightnudge/preview/route';
+import { getSessionToken } from '../lib/slightnudge/auth';
+import { applyPendingSourceEdit, undoReviewedSourceEdit } from '../lib/slightnudge/edit-history';
+
+const previous = process.cwd(), root = fs.mkdtempSync(path.join(os.tmpdir(), 'sn-icon-properties-'));
+process.env.SLIGHTNUDGE_TEST = '1'; process.env.SLIGHTNUDGE_WORKSPACE_ROOT = root; process.env.SLIGHTNUDGE_DATA_DIR = path.join(root, '.slightnudge'); process.env.PORT = '3000';
+const inspect = (sourceText: string) => inspectIconSource({ sourceText, line: 1, column: sourceText.indexOf('<Mark') + 1 });
+try {
+  process.chdir(root);
+  const fixture = 'import { ArrowRight as Mark } from "lucide-react";export default function Page(){return <button onClick={run}>Go<Mark id="icon" size={24} strokeWidth={2} color="#112233"/><Mark id="other" size={18}/></button>}';
+  const file = path.join(root, 'page.tsx'); fs.writeFileSync(file, fixture);
+  const request = async (data: Record<string, unknown>) => { const response = await POST(new Request('http://127.0.0.1:3000/api/slightnudge/preview', { method: 'POST', headers: { host: '127.0.0.1:3000', origin: 'http://127.0.0.1:3000', 'content-type': 'application/json', 'x-slightnudge-token': getSessionToken() }, body: JSON.stringify({ filePath: 'page.tsx', elementId: 'icon', tagName: 'svg', kind: 'icon', draft: true, ...data }) })); return { status: response.status, ...await response.json() }; };
+  assert.equal(inspect(fixture).fields.size.editable, true);
+  assert.equal((await request({ operation: 'inspect' })).icon.lucide, true);
+  const unchanged = await request({ property: 'size', value: '24.0' }); assert.equal(unchanged.success, true); assert.equal(unchanged.changed, false);
+  let edit = await request({ property: 'size', value: '32' }); assert.equal(edit.success, true, edit.error);
+  assert.deepEqual(edit.renderPatches[0].attributes, { width: '32', height: '32' });
+  edit = await request({ property: 'strokeWidth', value: '1.5', parentPreviewId: edit.id }); assert.equal(edit.success, true, edit.error);
+  edit = await request({ property: 'color', value: '#abcdef', parentPreviewId: edit.id }); assert.equal(edit.success, true, edit.error);
+  assert.deepEqual(edit.renderPatches[0].attributes, { width: '32', height: '32', 'stroke-width': '1.5', stroke: '#abcdef' });
+  assert.equal(fs.readFileSync(file, 'utf8'), fixture);
+  assert.equal((await applyPendingSourceEdit(edit.id)).success, true);
+  assert.ok(fs.readFileSync(file, 'utf8').includes('<Mark id="other" size={18}/>'));
+  assert.ok(fs.readFileSync(file, 'utf8').includes('onClick={run}'));
+  assert.equal(undoReviewedSourceEdit(edit.id).success, true); assert.equal(fs.readFileSync(file, 'utf8'), fixture);
+  for (const [property, value] of [['size', '0'], ['size', 'Infinity'], ['strokeWidth', '9'], ['color', 'url(https://example.test/x)'], ['color', 'red;stroke:url(x)'], ['onClick', 'run']]) assert.notEqual((await request({ property, value })).success, true);
+  assert.notEqual((await request({ property: 'size', value: '40', breakpoint: 'md' })).success, true);
+  for (const props of ['size={computed}', '{...props}', 'style={{width:20}}', 'absoluteStrokeWidth', 'className="w-4"', 'width={40}']) assert.equal(inspect('import { ArrowRight as Mark } from "lucide-react";export function Page(){return <Mark ' + props + '/>}').fields.size.editable, false, props);
+  assert.equal(inspect('import { ArrowRight as Mark } from "lucide-react";export function Page(){return items.map(item=><Mark/>)}').fields.size.editable, false);
+  assert.throws(() => inspect('import { ArrowRight as Mark } from "lucide-react";export function Page(Mark:any){return <Mark/>}'));
+  const native = '<svg width={24} height="24" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M2 12h20"/></svg>';
+  const changed = updateIconSource({ sourceText: native, line: 1, column: 1, property: 'size', value: '48' });
+  assert.ok(changed.after.includes('width={48}')); assert.ok(changed.after.includes('height={48}')); assert.ok(changed.after.includes('d="M2 12h20"'));
+  const dashed = updateIconSource({ sourceText: '<svg stroke-width="2"/>', line: 1, column: 1, property: 'strokeWidth', value: '1.5' });
+  assert.ok(dashed.after.includes('stroke-width={1.5}')); assert.ok(!dashed.after.includes('strokeWidth='));
+  const loader = createRequire(import.meta.url)(path.join(previous, 'lib/slightnudge/next-source-loader.cjs'));
+  const instrument = (source: string) => loader.call({ getOptions: () => ({ development: true, root }), resourcePath: file }, source) as string;
+  assert.equal((instrument(fixture).match(/data-source-file=/g) || []).length, 3);
+  assert.equal(instrument('import { ArrowRight as Mark } from "lucide-react";function Page(Mark:any){return <Mark/>}').includes('data-source-file='), false);
+  console.log('PASS icon properties: aliased Lucide/native SVG, combined draft attributes, no early writes, preserved shape/handlers/other instance, exact Save/Undo, dynamic/class/shared/scope/value refusals, shadow-safe mapping');
+} finally { process.chdir(previous); }

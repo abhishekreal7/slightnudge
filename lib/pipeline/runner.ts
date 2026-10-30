@@ -1,3 +1,4 @@
+import { randomUUID } from 'node:crypto';
 import { getDatabaseRepository, IDatabaseRepository } from '../db/client';
 import { RunRecord } from '../db/types';
 import { executeStageAPreflight } from './stage-a-preflight';
@@ -36,7 +37,7 @@ export class PipelineRunner {
     const hostname = parsed.hostname;
 
     // Create or retrieve run record
-    const run = await this.repo.createRun({
+    const runValues: Partial<RunRecord> = {
       id: options.runId,
       user_id: options.userId || 'system_user',
       site_id: options.siteId || 'system_site',
@@ -47,7 +48,10 @@ export class PipelineRunner {
       notes: options.notes || null,
       started_at: new Date().toISOString(),
       limits_json: options.config?.limits || {},
-    });
+    };
+    const existingRun = options.runId ? await this.repo.getRun(options.runId) : null;
+    if (existingRun && options.userId && existingRun.user_id !== options.userId) throw new Error('This run belongs to another account.');
+    const run = existingRun ? await this.repo.updateRun(existingRun.id, runValues) : await this.repo.createRun(runValues);
 
     const ctx: PipelineContext = {
       run,
@@ -103,7 +107,7 @@ export class PipelineRunner {
       // Save artifacts
       for (const art of ctx.artifacts) {
         await this.repo.saveArtifact({
-          id: `art_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
+          id: randomUUID(),
           run_id: run.id,
           type: art.type,
           storage_path: art.path,

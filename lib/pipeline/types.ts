@@ -37,6 +37,7 @@ export interface PipelineContext {
   config: PipelineConfig;
   appMap?: AppMap;
   testPlan?: TestPlanOutput;
+  scenarioKeys?: Record<string, string>;
   scenarioResults: ScenarioRecord[];
   analysis?: AnalysisReportOutput;
   findings: FindingRecord[];

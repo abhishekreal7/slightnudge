@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { validateTargetUrl } from '@/lib/security/ssrf';
 import { generateVerificationToken } from '@/lib/security/ownership';
 import { getDatabaseRepository } from '@/lib/db/client';
+import { requireAccount } from '@/lib/auth/account';
 
 const CreateSiteSchema = z.object({
   url: z.string().url('Must be a valid URL'),
@@ -10,6 +11,7 @@ const CreateSiteSchema = z.object({
 });
 
 export async function POST(req: Request) {
+  const auth = await requireAccount(req); if (auth.response) return auth.response;
   try {
     const body = await req.json();
     const parsed = CreateSiteSchema.safeParse(body);
@@ -31,16 +33,14 @@ export async function POST(req: Request) {
 
     const repo = getDatabaseRepository();
     // Register site record
-    const site = {
-      id: `site_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
-      user_id: 'default_user',
+    const site = await repo.createSite({
+      user_id: auth.account.userId,
       url,
       hostname,
       verification_token: token,
       ownership_method: ownershipMethod,
       ownership_verified_at: null,
-      created_at: new Date().toISOString(),
-    };
+    });
 
     return NextResponse.json({
       success: true,
