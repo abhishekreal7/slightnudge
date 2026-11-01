@@ -105,7 +105,7 @@ async function main() {
   }
   function startServer(port,cwd) {
     const fd=fs.openSync(path.join(evidence,`server-${port}.log`),'wx');
-    const child=spawn(process.execPath,[path.join(project,'node_modules','next','dist','bin','next'),'dev','--webpack','--hostname','127.0.0.1','--port',String(port)],{cwd,env:{...env,PORT:String(port)},windowsHide:true,detached:process.platform!=='win32',stdio:['ignore',fd,fd]});
+    const child=spawn(process.execPath,['--import',pathToFileURL(path.join(project,'tools/observe-next-manifests.mjs')).href,path.join(project,'node_modules','next','dist','bin','next'),'dev','--webpack','--hostname','127.0.0.1','--port',String(port)],{cwd,env:{...env,PORT:String(port)},windowsHide:true,detached:process.platform!=='win32',stdio:['ignore',fd,fd]});
     fs.closeSync(fd);servers.add(child);print(`SERVER ${port} PID ${child.pid} ${cwd}\n`);
     return child;
   }
@@ -123,13 +123,20 @@ async function main() {
         const preview=await fetch('http://127.0.0.1:'+port,{signal:AbortSignal.timeout(Math.max(1,Math.floor(deadline-performance.now())))});
         if(!preview.ok)throw Error(`Warm-up preview HTTP ${preview.status}: ${repo}`);
         const page=await browser.newPage({viewport:{width:1440,height:900}});let pageError;
+        const traceFile=path.join(evidence,`warmup-${repo}-${view}-network.jsonl`);
+        const trace=value=>fs.appendFileSync(traceFile,JSON.stringify({time:Date.now(),elapsed:performance.now()-started,...value})+'\n');
+        page.on('console',message=>trace({kind:'console',level:message.type(),text:message.text()}));
+        page.on('request',request=>trace({kind:'request',url:request.url()}));
+        page.on('response',response=>trace({kind:'response',url:response.url(),status:response.status()}));
+        page.on('requestfailed',request=>trace({kind:'requestfailed',url:request.url(),error:request.failure()}));
+        trace({kind:'warmup-page-created',remaining:deadline-performance.now()});
         const errorSignal=new Promise((_,reject)=>page.once('pageerror',error=>{pageError=error;fatal=true;reject(error);}));void errorSignal.catch(()=>{});
         const url=`http://127.0.0.1:3000/editor/${repo}?view=${view}&preview=${encodeURIComponent('http://127.0.0.1:'+port)}`;
         try {
           await Promise.race([(async()=>{await page.goto(url,{waitUntil:'domcontentloaded',timeout:Math.max(1,deadline-performance.now())});await page.locator('[data-source-ready="true"]').waitFor({timeout:Math.max(1,deadline-performance.now())});})(),errorSignal]);
           if(pageError)throw pageError;
           const seconds=Math.round((performance.now()-started)/10)/100;rows.push({workflow:`warmup-${repo}-${view}`,api:'REAL',result:'PASS',seconds});print(`WARMUP ${repo} ${view}: ${seconds}s\n`);
-        } catch(error) { rows.push({workflow:`warmup-${repo}-${view}`,api:'REAL',result:'FAIL',seconds:Math.round((performance.now()-started)/10)/100,error:String(error)});await page.screenshot({path:path.join(evidence,`warmup-${repo}-${view}-failure.png`)}).catch(()=>{});throw error; }
+        } catch(error) { rows.push({workflow:`warmup-${repo}-${view}`,api:'REAL',result:'FAIL',seconds:Math.round((performance.now()-started)/10)/100,error:String(error)});trace({kind:'failure',error:String(error)});await page.content().then(content=>fs.writeFileSync(path.join(evidence,`warmup-${repo}-${view}-failure.html`),content)).catch(()=>{});await page.screenshot({path:path.join(evidence,`warmup-${repo}-${view}-failure.png`),timeout:5000}).catch(()=>{});throw error; }
         finally { await page.close(); }
       }
     } finally {await browser.close();}
