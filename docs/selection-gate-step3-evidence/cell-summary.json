@@ -1,0 +1,359 @@
+[
+  {
+    "round": 1,
+    "surface": "old-studio",
+    "suite": "regression",
+    "completed": 30,
+    "geometry": 0,
+    "counts": {
+      "allowed": 18,
+      "refused": 12
+    },
+    "pointerAssertionFailures": 0,
+    "expectedAssertionFailures": 0,
+    "errors": []
+  },
+  {
+    "round": 1,
+    "surface": "old-studio",
+    "suite": "overfit",
+    "completed": 30,
+    "geometry": 0,
+    "counts": {
+      "NOT-CLICKABLE": 1,
+      "allowed": 25,
+      "refused": 4
+    },
+    "pointerAssertionFailures": 0,
+    "expectedAssertionFailures": 0,
+    "errors": []
+  },
+  {
+    "round": 1,
+    "surface": "old-window",
+    "suite": "regression",
+    "completed": 30,
+    "geometry": 0,
+    "counts": {
+      "allowed": 18,
+      "refused": 11,
+      "NOT-CLICKABLE": 1
+    },
+    "pointerAssertionFailures": 0,
+    "expectedAssertionFailures": 1,
+    "errors": []
+  },
+  {
+    "round": 1,
+    "surface": "old-window",
+    "suite": "overfit",
+    "completed": 30,
+    "geometry": 0,
+    "counts": {
+      "allowed": 26,
+      "refused": 4
+    },
+    "pointerAssertionFailures": 0,
+    "expectedAssertionFailures": 0,
+    "errors": []
+  },
+  {
+    "round": 1,
+    "surface": "full",
+    "suite": "regression",
+    "completed": 30,
+    "geometry": 0,
+    "counts": {
+      "allowed": 18,
+      "refused": 11,
+      "NOT-CLICKABLE": 1
+    },
+    "pointerAssertionFailures": 0,
+    "expectedAssertionFailures": 1,
+    "errors": []
+  },
+  {
+    "round": 1,
+    "surface": "full",
+    "suite": "overfit",
+    "completed": 30,
+    "geometry": 0,
+    "counts": {
+      "allowed": 26,
+      "refused": 4
+    },
+    "pointerAssertionFailures": 0,
+    "expectedAssertionFailures": 0,
+    "errors": []
+  },
+  {
+    "round": 1,
+    "surface": "fit",
+    "suite": "regression",
+    "completed": 30,
+    "geometry": 30,
+    "counts": {
+      "allowed": 17,
+      "refused": 11,
+      "NOT-CLICKABLE": 2
+    },
+    "pointerAssertionFailures": 0,
+    "expectedAssertionFailures": 1,
+    "errors": []
+  },
+  {
+    "round": 1,
+    "surface": "fit",
+    "suite": "overfit",
+    "completed": 30,
+    "geometry": 30,
+    "counts": {
+      "NOT-CLICKABLE": 1,
+      "allowed": 25,
+      "refused": 4
+    },
+    "pointerAssertionFailures": 0,
+    "expectedAssertionFailures": 0,
+    "errors": []
+  },
+  {
+    "round": 2,
+    "surface": "old-studio",
+    "suite": "regression",
+    "completed": 30,
+    "geometry": 0,
+    "counts": {
+      "allowed": 18,
+      "refused": 12
+    },
+    "pointerAssertionFailures": 0,
+    "expectedAssertionFailures": 0,
+    "errors": []
+  },
+  {
+    "round": 2,
+    "surface": "old-studio",
+    "suite": "overfit",
+    "completed": 30,
+    "geometry": 0,
+    "counts": {
+      "NOT-CLICKABLE": 1,
+      "allowed": 25,
+      "refused": 4
+    },
+    "pointerAssertionFailures": 0,
+    "expectedAssertionFailures": 0,
+    "errors": []
+  },
+  {
+    "round": 2,
+    "surface": "old-window",
+    "suite": "regression",
+    "completed": 30,
+    "geometry": 0,
+    "counts": {
+      "allowed": 18,
+      "refused": 11,
+      "NOT-CLICKABLE": 1
+    },
+    "pointerAssertionFailures": 0,
+    "expectedAssertionFailures": 1,
+    "errors": []
+  },
+  {
+    "round": 2,
+    "surface": "old-window",
+    "suite": "overfit",
+    "completed": 0,
+    "geometry": 0,
+    "counts": {},
+    "pointerAssertionFailures": 0,
+    "expectedAssertionFailures": 0,
+    "errors": [
+      {
+        "kind": "harness-or-setup-error",
+        "message": "TimeoutError: locator.waitFor: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-source-ready=\"true\"]') to be visible\u001b[22m\n"
+      }
+    ]
+  },
+  {
+    "round": 2,
+    "surface": "full",
+    "suite": "regression",
+    "completed": 30,
+    "geometry": 0,
+    "counts": {
+      "allowed": 18,
+      "refused": 11,
+      "NOT-CLICKABLE": 1
+    },
+    "pointerAssertionFailures": 0,
+    "expectedAssertionFailures": 1,
+    "errors": []
+  },
+  {
+    "round": 2,
+    "surface": "full",
+    "suite": "overfit",
+    "completed": 30,
+    "geometry": 0,
+    "counts": {
+      "allowed": 26,
+      "refused": 4
+    },
+    "pointerAssertionFailures": 0,
+    "expectedAssertionFailures": 0,
+    "errors": []
+  },
+  {
+    "round": 2,
+    "surface": "fit",
+    "suite": "regression",
+    "completed": 30,
+    "geometry": 30,
+    "counts": {
+      "allowed": 17,
+      "refused": 11,
+      "NOT-CLICKABLE": 2
+    },
+    "pointerAssertionFailures": 0,
+    "expectedAssertionFailures": 1,
+    "errors": []
+  },
+  {
+    "round": 2,
+    "surface": "fit",
+    "suite": "overfit",
+    "completed": 30,
+    "geometry": 30,
+    "counts": {
+      "NOT-CLICKABLE": 1,
+      "allowed": 25,
+      "refused": 4
+    },
+    "pointerAssertionFailures": 0,
+    "expectedAssertionFailures": 0,
+    "errors": []
+  },
+  {
+    "round": 3,
+    "surface": "old-studio",
+    "suite": "regression",
+    "completed": 30,
+    "geometry": 0,
+    "counts": {
+      "allowed": 18,
+      "refused": 12
+    },
+    "pointerAssertionFailures": 0,
+    "expectedAssertionFailures": 0,
+    "errors": []
+  },
+  {
+    "round": 3,
+    "surface": "old-studio",
+    "suite": "overfit",
+    "completed": 3,
+    "geometry": 0,
+    "counts": {
+      "NOT-CLICKABLE": 1,
+      "allowed": 2
+    },
+    "pointerAssertionFailures": 0,
+    "expectedAssertionFailures": 0,
+    "errors": [
+      {
+        "kind": "harness-or-setup-error",
+        "message": "Error: frame.evaluate: Execution context was destroyed, most likely because of a navigation"
+      }
+    ]
+  },
+  {
+    "round": 3,
+    "surface": "old-window",
+    "suite": "regression",
+    "completed": 30,
+    "geometry": 0,
+    "counts": {
+      "allowed": 18,
+      "refused": 11,
+      "NOT-CLICKABLE": 1
+    },
+    "pointerAssertionFailures": 0,
+    "expectedAssertionFailures": 1,
+    "errors": []
+  },
+  {
+    "round": 3,
+    "surface": "old-window",
+    "suite": "overfit",
+    "completed": 30,
+    "geometry": 0,
+    "counts": {
+      "allowed": 26,
+      "refused": 4
+    },
+    "pointerAssertionFailures": 0,
+    "expectedAssertionFailures": 0,
+    "errors": []
+  },
+  {
+    "round": 3,
+    "surface": "full",
+    "suite": "regression",
+    "completed": 30,
+    "geometry": 0,
+    "counts": {
+      "allowed": 18,
+      "refused": 11,
+      "NOT-CLICKABLE": 1
+    },
+    "pointerAssertionFailures": 0,
+    "expectedAssertionFailures": 1,
+    "errors": []
+  },
+  {
+    "round": 3,
+    "surface": "full",
+    "suite": "overfit",
+    "completed": 30,
+    "geometry": 0,
+    "counts": {
+      "allowed": 26,
+      "refused": 4
+    },
+    "pointerAssertionFailures": 0,
+    "expectedAssertionFailures": 0,
+    "errors": []
+  },
+  {
+    "round": 3,
+    "surface": "fit",
+    "suite": "regression",
+    "completed": 30,
+    "geometry": 30,
+    "counts": {
+      "allowed": 17,
+      "refused": 11,
+      "NOT-CLICKABLE": 2
+    },
+    "pointerAssertionFailures": 0,
+    "expectedAssertionFailures": 1,
+    "errors": []
+  },
+  {
+    "round": 3,
+    "surface": "fit",
+    "suite": "overfit",
+    "completed": 30,
+    "geometry": 30,
+    "counts": {
+      "NOT-CLICKABLE": 1,
+      "allowed": 25,
+      "refused": 4
+    },
+    "pointerAssertionFailures": 0,
+    "expectedAssertionFailures": 0,
+    "errors": []
+  }
+]

@@ -1,0 +1,20 @@
+{
+  "cell": "round-2-old-window-overfit",
+  "reason": "Product-facing runtime SyntaxError shown by Next error overlay before source ready",
+  "message": "Unexpected end of JSON input",
+  "requestedUrl": "http://127.0.0.1:3000/studio/m0-overfit-lab/window?preview=http%3A%2F%2F127.0.0.1%3A3002",
+  "actualUrl": "http://127.0.0.1:3000/editor/m0-overfit-lab?preview=http%3A%2F%2F127.0.0.1%3A3002",
+  "events": [
+    {
+      "kind": "pageerror",
+      "message": "Unexpected end of JSON input"
+    },
+    {
+      "kind": "harness-or-setup-error",
+      "message": "TimeoutError: locator.waitFor: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-source-ready=\"true\"]') to be visible\u001b[22m\n"
+    }
+  ],
+  "screenshot": "round-2-old-window-overfit-error.png",
+  "rootCause": "Unresolved; screenshot proves runtime failure, not its originating parse site",
+  "runnerDisclosure": "The initial runner had already continued after this setup failure before the evidence was reviewed. Later results are retained but do not qualify as a successful gate. No additional browser execution was started on continuation. The new runner now stops on pre-case pageerror."
+}

@@ -1,0 +1,202 @@
+{
+  "round": "2",
+  "surface": "old-studio",
+  "expectations": [
+    {
+      "fixture": 1,
+      "title": "Product Overview",
+      "selector": "#target",
+      "file": "fixtures/1-plain-static.tsx",
+      "line": 7,
+      "classes": "ml-2",
+      "safe": true
+    },
+    {
+      "fixture": 2,
+      "title": "Feature Section",
+      "selector": "#target",
+      "file": "fixtures/2-several-utilities.tsx",
+      "line": 7,
+      "classes": "flex items-center ml-2 bg-blue-500"
+    },
+    {
+      "fixture": 3,
+      "title": "Pricing Panel",
+      "selector": "#target",
+      "file": "fixtures/3-conditional-cn.tsx",
+      "line": 13,
+      "warning": "can't edit this safely"
+    },
+    {
+      "fixture": 4,
+      "title": "Customer Cards",
+      "selector": "#card-1",
+      "file": "fixtures/4-shared-component.tsx",
+      "line": 11,
+      "warning": "component used in several places"
+    },
+    {
+      "fixture": 5,
+      "title": "Responsive Layout",
+      "selector": "#target",
+      "file": "fixtures/5-responsive-classes.tsx",
+      "line": 7,
+      "classes": "ml-2 md:ml-4 lg:ml-8"
+    }
+  ],
+  "results": [
+    {
+      "expected": {
+        "fixture": 1,
+        "title": "Product Overview",
+        "selector": "#target",
+        "file": "fixtures/1-plain-static.tsx",
+        "line": 7,
+        "classes": "ml-2",
+        "safe": true
+      },
+      "selected": {
+        "path": "fixtures/1-plain-static.tsx",
+        "line": 8,
+        "column": 1,
+        "tag": "h1"
+      },
+      "pointerSource": {
+        "path": "fixtures/1-plain-static.tsx",
+        "line": 8,
+        "column": 1,
+        "tag": "h1",
+        "id": "target"
+      },
+      "pointerAssertion": true,
+      "overlayVisible": true,
+      "originalFileLineAssertion": false,
+      "actualClasses": "ml-2.5 mt-1 text-2xl translate-x-[-16px] translate-y-[0px]",
+      "originalClassAssertion": true,
+      "originalSafetyTextAssertion": false,
+      "result": "EXPECTED-CONTRACT-FAIL"
+    },
+    {
+      "expected": {
+        "fixture": 2,
+        "title": "Feature Section",
+        "selector": "#target",
+        "file": "fixtures/2-several-utilities.tsx",
+        "line": 7,
+        "classes": "flex items-center ml-2 bg-blue-500"
+      },
+      "selected": {
+        "path": "fixtures/2-several-utilities.tsx",
+        "line": 7,
+        "column": 1,
+        "tag": "div"
+      },
+      "pointerSource": {
+        "path": "fixtures/2-several-utilities.tsx",
+        "line": 7,
+        "column": 1,
+        "tag": "div",
+        "id": "target"
+      },
+      "pointerAssertion": true,
+      "overlayVisible": true,
+      "originalFileLineAssertion": true,
+      "actualClasses": "flex items-center ml-2 bg-blue-500 text-white p-4 rounded-lg shadow-md",
+      "originalClassAssertion": true,
+      "result": "PASS"
+    },
+    {
+      "expected": {
+        "fixture": 3,
+        "title": "Pricing Panel",
+        "selector": "#target",
+        "file": "fixtures/3-conditional-cn.tsx",
+        "line": 13,
+        "warning": "can't edit this safely"
+      },
+      "selected": {
+        "path": "fixtures/3-conditional-cn.tsx",
+        "line": 13,
+        "column": 1,
+        "tag": "div"
+      },
+      "pointerSource": {
+        "path": "fixtures/3-conditional-cn.tsx",
+        "line": 13,
+        "column": 1,
+        "tag": "div",
+        "id": "target"
+      },
+      "pointerAssertion": true,
+      "overlayVisible": true,
+      "originalFileLineAssertion": true,
+      "actualClasses": "ml-2 p-4 text-white rounded bg-slate-700",
+      "originalClassAssertion": null,
+      "originalSafetyTextAssertion": false,
+      "result": "EXPECTED-CONTRACT-FAIL"
+    },
+    {
+      "expected": {
+        "fixture": 4,
+        "title": "Customer Cards",
+        "selector": "#card-1",
+        "file": "fixtures/4-shared-component.tsx",
+        "line": 11,
+        "warning": "component used in several places"
+      },
+      "selected": {
+        "path": "fixtures/4-shared-component.tsx",
+        "line": 11,
+        "column": 1,
+        "tag": "div"
+      },
+      "pointerSource": {
+        "path": "fixtures/4-shared-component.tsx",
+        "line": 11,
+        "column": 1,
+        "tag": "div",
+        "id": "card-1"
+      },
+      "pointerAssertion": true,
+      "overlayVisible": true,
+      "originalFileLineAssertion": true,
+      "actualClasses": "ml-2 p-4 rounded border border-slate-300",
+      "originalClassAssertion": null,
+      "originalSafetyTextAssertion": false,
+      "result": "EXPECTED-CONTRACT-FAIL"
+    },
+    {
+      "expected": {
+        "fixture": 5,
+        "title": "Responsive Layout",
+        "selector": "#target",
+        "file": "fixtures/5-responsive-classes.tsx",
+        "line": 7,
+        "classes": "ml-2 md:ml-4 lg:ml-8"
+      },
+      "selected": {
+        "path": "fixtures/5-responsive-classes.tsx",
+        "line": 7,
+        "column": 1,
+        "tag": "div"
+      },
+      "pointerSource": {
+        "path": "fixtures/5-responsive-classes.tsx",
+        "line": 7,
+        "column": 1,
+        "tag": "div",
+        "id": "target"
+      },
+      "pointerAssertion": true,
+      "overlayVisible": true,
+      "originalFileLineAssertion": true,
+      "actualClasses": "ml-2 md:ml-4 lg:ml-8 p-4 bg-purple-600 text-white rounded",
+      "originalClassAssertion": true,
+      "result": "PASS"
+    },
+    {
+      "assertion": "Selection box disappears cleanly on Escape key",
+      "pass": true
+    }
+  ]
+}

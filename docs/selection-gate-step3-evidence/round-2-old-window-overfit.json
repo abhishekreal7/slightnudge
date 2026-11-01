@@ -1,0 +1,19 @@
+{
+  "round": 2,
+  "surface": "old-window",
+  "suite": "overfit",
+  "requestedUrl": "http://127.0.0.1:3000/studio/m0-overfit-lab/window?preview=http%3A%2F%2F127.0.0.1%3A3002",
+  "actualUrl": "http://127.0.0.1:3000/editor/m0-overfit-lab?preview=http%3A%2F%2F127.0.0.1%3A3002",
+  "cases": [],
+  "geometry": [],
+  "events": [
+    {
+      "kind": "pageerror",
+      "message": "Unexpected end of JSON input"
+    },
+    {
+      "kind": "harness-or-setup-error",
+      "message": "TimeoutError: locator.waitFor: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-source-ready=\"true\"]') to be visible\u001b[22m\n"
+    }
+  ]
+}

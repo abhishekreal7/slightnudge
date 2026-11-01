@@ -1,0 +1,578 @@
+[
+  {
+    "round": 1,
+    "surface": "old-window",
+    "suite": "regression",
+    "index": 6,
+    "verdict": "allowed",
+    "point": {
+      "x": 336.6640625,
+      "y": 835.5
+    },
+    "interceptor": {
+      "tag": "header",
+      "id": "",
+      "classes": "jsx-fe1209ef422846ce editor-workspace_editorTopbar__IqoCN",
+      "label": "Editor toolbar",
+      "role": null,
+      "isIframe": false
+    },
+    "expectedAssertion": "PASS",
+    "screenshot": "round-1-old-window-regression-case-6-blocked.png"
+  },
+  {
+    "round": 1,
+    "surface": "old-window",
+    "suite": "regression",
+    "index": 19,
+    "verdict": "allowed",
+    "point": {
+      "x": 314.6640625,
+      "y": 835.5
+    },
+    "interceptor": {
+      "tag": "header",
+      "id": "",
+      "classes": "jsx-fe1209ef422846ce editor-workspace_editorTopbar__IqoCN",
+      "label": "Editor toolbar",
+      "role": null,
+      "isIframe": false
+    },
+    "expectedAssertion": "PASS",
+    "screenshot": "round-1-old-window-regression-case-19-blocked.png"
+  },
+  {
+    "round": 1,
+    "surface": "old-window",
+    "suite": "regression",
+    "index": 30,
+    "verdict": "NOT-CLICKABLE",
+    "point": {
+      "x": 565.2734375,
+      "y": 848
+    },
+    "interceptor": {
+      "tag": "select",
+      "id": "",
+      "classes": "jsx-fe1209ef422846ce",
+      "label": "Editor view",
+      "role": null,
+      "isIframe": false
+    },
+    "layerError": "Expected source node is not exposed in Layers",
+    "expectedAssertion": "FAIL",
+    "screenshot": "round-1-old-window-regression-case-30-blocked.png"
+  },
+  {
+    "round": 1,
+    "surface": "full",
+    "suite": "regression",
+    "index": 6,
+    "verdict": "allowed",
+    "point": {
+      "x": 336.6640625,
+      "y": 835.5
+    },
+    "interceptor": {
+      "tag": "header",
+      "id": "",
+      "classes": "jsx-fe1209ef422846ce editor-workspace_editorTopbar__IqoCN",
+      "label": "Editor toolbar",
+      "role": null,
+      "isIframe": false
+    },
+    "expectedAssertion": "PASS",
+    "screenshot": "round-1-full-regression-case-6-blocked.png"
+  },
+  {
+    "round": 1,
+    "surface": "full",
+    "suite": "regression",
+    "index": 19,
+    "verdict": "allowed",
+    "point": {
+      "x": 314.6640625,
+      "y": 835.5
+    },
+    "interceptor": {
+      "tag": "header",
+      "id": "",
+      "classes": "jsx-fe1209ef422846ce editor-workspace_editorTopbar__IqoCN",
+      "label": "Editor toolbar",
+      "role": null,
+      "isIframe": false
+    },
+    "expectedAssertion": "PASS",
+    "screenshot": "round-1-full-regression-case-19-blocked.png"
+  },
+  {
+    "round": 1,
+    "surface": "full",
+    "suite": "regression",
+    "index": 30,
+    "verdict": "NOT-CLICKABLE",
+    "point": {
+      "x": 565.2734375,
+      "y": 848
+    },
+    "interceptor": {
+      "tag": "select",
+      "id": "",
+      "classes": "jsx-fe1209ef422846ce",
+      "label": "Editor view",
+      "role": null,
+      "isIframe": false
+    },
+    "layerError": "Expected source node is not exposed in Layers",
+    "expectedAssertion": "FAIL",
+    "screenshot": "round-1-full-regression-case-30-blocked.png"
+  },
+  {
+    "round": 1,
+    "surface": "fit",
+    "suite": "regression",
+    "index": 29,
+    "verdict": "NOT-CLICKABLE",
+    "point": {
+      "x": 612.3745420773824,
+      "y": 839.5614830621499
+    },
+    "interceptor": {
+      "tag": "header",
+      "id": "",
+      "classes": "jsx-fe1209ef422846ce editor-workspace_editorTopbar__IqoCN",
+      "label": "Editor toolbar",
+      "role": null,
+      "isIframe": false
+    },
+    "expectedAssertion": "PASS",
+    "screenshot": "round-1-fit-regression-case-29-blocked.png"
+  },
+  {
+    "round": 1,
+    "surface": "fit",
+    "suite": "regression",
+    "index": 30,
+    "verdict": "NOT-CLICKABLE",
+    "point": {
+      "x": 686.8045919736227,
+      "y": 839.5614830621499
+    },
+    "interceptor": {
+      "tag": "header",
+      "id": "",
+      "classes": "jsx-fe1209ef422846ce editor-workspace_editorTopbar__IqoCN",
+      "label": "Editor toolbar",
+      "role": null,
+      "isIframe": false
+    },
+    "layerError": "Expected source node is not exposed in Layers",
+    "expectedAssertion": "FAIL",
+    "screenshot": "round-1-fit-regression-case-30-blocked.png"
+  },
+  {
+    "round": 1,
+    "surface": "fit",
+    "suite": "overfit",
+    "index": 5,
+    "verdict": "allowed",
+    "point": {
+      "x": 339.361865234375,
+      "y": 839.0531400966183
+    },
+    "interceptor": {
+      "tag": "header",
+      "id": "",
+      "classes": "jsx-fe1209ef422846ce editor-workspace_editorTopbar__IqoCN",
+      "label": "Editor toolbar",
+      "role": null,
+      "isIframe": false
+    },
+    "expectedAssertion": "PASS",
+    "screenshot": "round-1-fit-overfit-case-5-blocked.png"
+  },
+  {
+    "round": 2,
+    "surface": "old-window",
+    "suite": "regression",
+    "index": 6,
+    "verdict": "allowed",
+    "point": {
+      "x": 336.6640625,
+      "y": 835.5
+    },
+    "interceptor": {
+      "tag": "header",
+      "id": "",
+      "classes": "jsx-fe1209ef422846ce editor-workspace_editorTopbar__IqoCN",
+      "label": "Editor toolbar",
+      "role": null,
+      "isIframe": false
+    },
+    "expectedAssertion": "PASS",
+    "screenshot": "round-2-old-window-regression-case-6-blocked.png"
+  },
+  {
+    "round": 2,
+    "surface": "old-window",
+    "suite": "regression",
+    "index": 19,
+    "verdict": "allowed",
+    "point": {
+      "x": 314.6640625,
+      "y": 835.5
+    },
+    "interceptor": {
+      "tag": "header",
+      "id": "",
+      "classes": "jsx-fe1209ef422846ce editor-workspace_editorTopbar__IqoCN",
+      "label": "Editor toolbar",
+      "role": null,
+      "isIframe": false
+    },
+    "expectedAssertion": "PASS",
+    "screenshot": "round-2-old-window-regression-case-19-blocked.png"
+  },
+  {
+    "round": 2,
+    "surface": "old-window",
+    "suite": "regression",
+    "index": 30,
+    "verdict": "NOT-CLICKABLE",
+    "point": {
+      "x": 565.2734375,
+      "y": 848
+    },
+    "interceptor": {
+      "tag": "select",
+      "id": "",
+      "classes": "jsx-fe1209ef422846ce",
+      "label": "Editor view",
+      "role": null,
+      "isIframe": false
+    },
+    "layerError": "Expected source node is not exposed in Layers",
+    "expectedAssertion": "FAIL",
+    "screenshot": "round-2-old-window-regression-case-30-blocked.png"
+  },
+  {
+    "round": 2,
+    "surface": "full",
+    "suite": "regression",
+    "index": 6,
+    "verdict": "allowed",
+    "point": {
+      "x": 336.6640625,
+      "y": 835.5
+    },
+    "interceptor": {
+      "tag": "header",
+      "id": "",
+      "classes": "jsx-fe1209ef422846ce editor-workspace_editorTopbar__IqoCN",
+      "label": "Editor toolbar",
+      "role": null,
+      "isIframe": false
+    },
+    "expectedAssertion": "PASS",
+    "screenshot": "round-2-full-regression-case-6-blocked.png"
+  },
+  {
+    "round": 2,
+    "surface": "full",
+    "suite": "regression",
+    "index": 19,
+    "verdict": "allowed",
+    "point": {
+      "x": 314.6640625,
+      "y": 835.5
+    },
+    "interceptor": {
+      "tag": "header",
+      "id": "",
+      "classes": "jsx-fe1209ef422846ce editor-workspace_editorTopbar__IqoCN",
+      "label": "Editor toolbar",
+      "role": null,
+      "isIframe": false
+    },
+    "expectedAssertion": "PASS",
+    "screenshot": "round-2-full-regression-case-19-blocked.png"
+  },
+  {
+    "round": 2,
+    "surface": "full",
+    "suite": "regression",
+    "index": 30,
+    "verdict": "NOT-CLICKABLE",
+    "point": {
+      "x": 565.2734375,
+      "y": 848
+    },
+    "interceptor": {
+      "tag": "select",
+      "id": "",
+      "classes": "jsx-fe1209ef422846ce",
+      "label": "Editor view",
+      "role": null,
+      "isIframe": false
+    },
+    "layerError": "Expected source node is not exposed in Layers",
+    "expectedAssertion": "FAIL",
+    "screenshot": "round-2-full-regression-case-30-blocked.png"
+  },
+  {
+    "round": 2,
+    "surface": "fit",
+    "suite": "regression",
+    "index": 29,
+    "verdict": "NOT-CLICKABLE",
+    "point": {
+      "x": 612.3745420773824,
+      "y": 839.5614830621499
+    },
+    "interceptor": {
+      "tag": "header",
+      "id": "",
+      "classes": "jsx-fe1209ef422846ce editor-workspace_editorTopbar__IqoCN",
+      "label": "Editor toolbar",
+      "role": null,
+      "isIframe": false
+    },
+    "expectedAssertion": "PASS",
+    "screenshot": "round-2-fit-regression-case-29-blocked.png"
+  },
+  {
+    "round": 2,
+    "surface": "fit",
+    "suite": "regression",
+    "index": 30,
+    "verdict": "NOT-CLICKABLE",
+    "point": {
+      "x": 686.8045919736227,
+      "y": 839.5614830621499
+    },
+    "interceptor": {
+      "tag": "header",
+      "id": "",
+      "classes": "jsx-fe1209ef422846ce editor-workspace_editorTopbar__IqoCN",
+      "label": "Editor toolbar",
+      "role": null,
+      "isIframe": false
+    },
+    "layerError": "Expected source node is not exposed in Layers",
+    "expectedAssertion": "FAIL",
+    "screenshot": "round-2-fit-regression-case-30-blocked.png"
+  },
+  {
+    "round": 2,
+    "surface": "fit",
+    "suite": "overfit",
+    "index": 5,
+    "verdict": "allowed",
+    "point": {
+      "x": 339.361865234375,
+      "y": 839.0531400966183
+    },
+    "interceptor": {
+      "tag": "header",
+      "id": "",
+      "classes": "jsx-fe1209ef422846ce editor-workspace_editorTopbar__IqoCN",
+      "label": "Editor toolbar",
+      "role": null,
+      "isIframe": false
+    },
+    "expectedAssertion": "PASS",
+    "screenshot": "round-2-fit-overfit-case-5-blocked.png"
+  },
+  {
+    "round": 3,
+    "surface": "old-window",
+    "suite": "regression",
+    "index": 6,
+    "verdict": "allowed",
+    "point": {
+      "x": 336.6640625,
+      "y": 835.5
+    },
+    "interceptor": {
+      "tag": "header",
+      "id": "",
+      "classes": "jsx-fe1209ef422846ce editor-workspace_editorTopbar__IqoCN",
+      "label": "Editor toolbar",
+      "role": null,
+      "isIframe": false
+    },
+    "expectedAssertion": "PASS",
+    "screenshot": "round-3-old-window-regression-case-6-blocked.png"
+  },
+  {
+    "round": 3,
+    "surface": "old-window",
+    "suite": "regression",
+    "index": 19,
+    "verdict": "allowed",
+    "point": {
+      "x": 314.6640625,
+      "y": 835.5
+    },
+    "interceptor": {
+      "tag": "header",
+      "id": "",
+      "classes": "jsx-fe1209ef422846ce editor-workspace_editorTopbar__IqoCN",
+      "label": "Editor toolbar",
+      "role": null,
+      "isIframe": false
+    },
+    "expectedAssertion": "PASS",
+    "screenshot": "round-3-old-window-regression-case-19-blocked.png"
+  },
+  {
+    "round": 3,
+    "surface": "old-window",
+    "suite": "regression",
+    "index": 30,
+    "verdict": "NOT-CLICKABLE",
+    "point": {
+      "x": 565.2734375,
+      "y": 848
+    },
+    "interceptor": {
+      "tag": "select",
+      "id": "",
+      "classes": "jsx-fe1209ef422846ce",
+      "label": "Editor view",
+      "role": null,
+      "isIframe": false
+    },
+    "layerError": "Expected source node is not exposed in Layers",
+    "expectedAssertion": "FAIL",
+    "screenshot": "round-3-old-window-regression-case-30-blocked.png"
+  },
+  {
+    "round": 3,
+    "surface": "full",
+    "suite": "regression",
+    "index": 6,
+    "verdict": "allowed",
+    "point": {
+      "x": 336.6640625,
+      "y": 835.5
+    },
+    "interceptor": {
+      "tag": "header",
+      "id": "",
+      "classes": "jsx-fe1209ef422846ce editor-workspace_editorTopbar__IqoCN",
+      "label": "Editor toolbar",
+      "role": null,
+      "isIframe": false
+    },
+    "expectedAssertion": "PASS",
+    "screenshot": "round-3-full-regression-case-6-blocked.png"
+  },
+  {
+    "round": 3,
+    "surface": "full",
+    "suite": "regression",
+    "index": 19,
+    "verdict": "allowed",
+    "point": {
+      "x": 314.6640625,
+      "y": 835.5
+    },
+    "interceptor": {
+      "tag": "header",
+      "id": "",
+      "classes": "jsx-fe1209ef422846ce editor-workspace_editorTopbar__IqoCN",
+      "label": "Editor toolbar",
+      "role": null,
+      "isIframe": false
+    },
+    "expectedAssertion": "PASS",
+    "screenshot": "round-3-full-regression-case-19-blocked.png"
+  },
+  {
+    "round": 3,
+    "surface": "full",
+    "suite": "regression",
+    "index": 30,
+    "verdict": "NOT-CLICKABLE",
+    "point": {
+      "x": 565.2734375,
+      "y": 848
+    },
+    "interceptor": {
+      "tag": "select",
+      "id": "",
+      "classes": "jsx-fe1209ef422846ce",
+      "label": "Editor view",
+      "role": null,
+      "isIframe": false
+    },
+    "layerError": "Expected source node is not exposed in Layers",
+    "expectedAssertion": "FAIL",
+    "screenshot": "round-3-full-regression-case-30-blocked.png"
+  },
+  {
+    "round": 3,
+    "surface": "fit",
+    "suite": "regression",
+    "index": 29,
+    "verdict": "NOT-CLICKABLE",
+    "point": {
+      "x": 612.3745420773824,
+      "y": 839.5614830621499
+    },
+    "interceptor": {
+      "tag": "header",
+      "id": "",
+      "classes": "jsx-fe1209ef422846ce editor-workspace_editorTopbar__IqoCN",
+      "label": "Editor toolbar",
+      "role": null,
+      "isIframe": false
+    },
+    "expectedAssertion": "PASS",
+    "screenshot": "round-3-fit-regression-case-29-blocked.png"
+  },
+  {
+    "round": 3,
+    "surface": "fit",
+    "suite": "regression",
+    "index": 30,
+    "verdict": "NOT-CLICKABLE",
+    "point": {
+      "x": 686.8045919736227,
+      "y": 839.5614830621499
+    },
+    "interceptor": {
+      "tag": "header",
+      "id": "",
+      "classes": "jsx-fe1209ef422846ce editor-workspace_editorTopbar__IqoCN",
+      "label": "Editor toolbar",
+      "role": null,
+      "isIframe": false
+    },
+    "layerError": "Expected source node is not exposed in Layers",
+    "expectedAssertion": "FAIL",
+    "screenshot": "round-3-fit-regression-case-30-blocked.png"
+  },
+  {
+    "round": 3,
+    "surface": "fit",
+    "suite": "overfit",
+    "index": 5,
+    "verdict": "allowed",
+    "point": {
+      "x": 339.361865234375,
+      "y": 839.0531400966183
+    },
+    "interceptor": {
+      "tag": "header",
+      "id": "",
+      "classes": "jsx-fe1209ef422846ce editor-workspace_editorTopbar__IqoCN",
+      "label": "Editor toolbar",
+      "role": null,
+      "isIframe": false
+    },
+    "expectedAssertion": "PASS",
+    "screenshot": "round-3-fit-overfit-case-5-blocked.png"
+  }
+]

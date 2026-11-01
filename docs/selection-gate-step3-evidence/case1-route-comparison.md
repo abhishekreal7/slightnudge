@@ -1,0 +1,10 @@
+# Overfit case 1 by route and view
+
+All rects/padding/gaps and exact hit records are retained in each diagnostic JSON, with a matching PNG. A rectangular child-coverage certificate is used only for untransformed, unclipped, square-corner children with pointer events enabled. Other searches are finite probes.
+
+| Surface | Ready ms | Original point hit | Container rect | Container padding / gap | Header rect | Header padding / gap | Direct container point found | Child rectangles cover wrapper | Evidence |
+|---|---:|---|---|---|---|---|---|---|---|
+| fit | 12798 | header | {"x":0,"y":0,"width":1200,"height":1242} | {"top":"0px","right":"0px","bottom":"0px","left":"0px"} / normal | {"x":0,"y":0,"width":1200,"height":61} | {"top":"16px","right":"24px","bottom":"16px","left":"24px"} / normal | — | true | [JSON](diagnostic-fit-m0-overfit-lab.json) · [PNG](diagnostic-fit-m0-overfit-lab.png) |
+| full | 12872 | header | {"x":0,"y":0,"width":1440,"height":1242} | {"top":"0px","right":"0px","bottom":"0px","left":"0px"} / normal | {"x":0,"y":0,"width":1440,"height":61} | {"top":"16px","right":"24px","bottom":"16px","left":"24px"} / normal | {"x":40,"y":81} | false | [JSON](diagnostic-full-m0-overfit-lab.json) · [PNG](diagnostic-full-m0-overfit-lab.png) |
+| old-studio | 11239 | header | {"x":0,"y":0,"width":1200,"height":1242} | {"top":"0px","right":"0px","bottom":"0px","left":"0px"} / normal | {"x":0,"y":0,"width":1200,"height":61} | {"top":"16px","right":"24px","bottom":"16px","left":"24px"} / normal | — | true | [JSON](diagnostic-old-studio-m0-overfit-lab.json) · [PNG](diagnostic-old-studio-m0-overfit-lab.png) |
+| old-window | 12874 | header | {"x":0,"y":0,"width":1440,"height":1242} | {"top":"0px","right":"0px","bottom":"0px","left":"0px"} / normal | {"x":0,"y":0,"width":1440,"height":61} | {"top":"16px","right":"24px","bottom":"16px","left":"24px"} / normal | {"x":40,"y":81} | false | [JSON](diagnostic-old-window-m0-overfit-lab.json) · [PNG](diagnostic-old-window-m0-overfit-lab.png) |

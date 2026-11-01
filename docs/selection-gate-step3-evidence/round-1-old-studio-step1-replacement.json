@@ -1,0 +1,114 @@
+{
+  "round": "1",
+  "surface": "old-studio",
+  "expectations": [
+    {
+      "fixture": 1,
+      "title": "Product Overview",
+      "selector": "#target",
+      "file": "fixtures/1-plain-static.tsx",
+      "line": 7,
+      "classes": "ml-2",
+      "safe": true
+    },
+    {
+      "fixture": 2,
+      "title": "Feature Section",
+      "selector": "#target",
+      "file": "fixtures/2-several-utilities.tsx",
+      "line": 7,
+      "classes": "flex items-center ml-2 bg-blue-500"
+    },
+    {
+      "fixture": 3,
+      "title": "Pricing Panel",
+      "selector": "#target",
+      "file": "fixtures/3-conditional-cn.tsx",
+      "line": 13,
+      "warning": "can't edit this safely"
+    },
+    {
+      "fixture": 4,
+      "title": "Customer Cards",
+      "selector": "#card-1",
+      "file": "fixtures/4-shared-component.tsx",
+      "line": 11,
+      "warning": "component used in several places"
+    },
+    {
+      "fixture": 5,
+      "title": "Responsive Layout",
+      "selector": "#target",
+      "file": "fixtures/5-responsive-classes.tsx",
+      "line": 7,
+      "classes": "ml-2 md:ml-4 lg:ml-8"
+    }
+  ],
+  "results": [
+    {
+      "expected": {
+        "fixture": 1,
+        "title": "Product Overview",
+        "selector": "#target",
+        "file": "fixtures/1-plain-static.tsx",
+        "line": 7,
+        "classes": "ml-2",
+        "safe": true
+      },
+      "error": "TimeoutError: locator.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-editor-panel=\"layers\"]').getByText('Product Overview', { exact: true }).last()\u001b[22m\n\u001b[2m    - locator resolved to <strong data-source-line=\"2304\" data-source-column=\"19\" title=\"Product Overview\" class=\"jsx-fe1209ef422846ce\" data-source-file=\"components/slightnudge/EditorWorkspace.tsx\" data-slightnudge-callsite=\"[\"app/studio/page.tsx\",0,\"7252cb902aa04a9560a5e5ae5fae4fb5f587f6e405f04fb602f5cbc67e240874\"]\">Product Overview</strong>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not visible\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not visible\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    57 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is not visible\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n",
+      "result": "MISSING-TARGET"
+    },
+    {
+      "expected": {
+        "fixture": 2,
+        "title": "Feature Section",
+        "selector": "#target",
+        "file": "fixtures/2-several-utilities.tsx",
+        "line": 7,
+        "classes": "flex items-center ml-2 bg-blue-500"
+      },
+      "error": "TimeoutError: locator.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-editor-panel=\"layers\"]').getByText('Feature Section', { exact: true }).last()\u001b[22m\n",
+      "result": "MISSING-TARGET"
+    },
+    {
+      "expected": {
+        "fixture": 3,
+        "title": "Pricing Panel",
+        "selector": "#target",
+        "file": "fixtures/3-conditional-cn.tsx",
+        "line": 13,
+        "warning": "can't edit this safely"
+      },
+      "error": "TimeoutError: locator.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-editor-panel=\"layers\"]').getByText('Pricing Panel', { exact: true }).last()\u001b[22m\n",
+      "result": "MISSING-TARGET"
+    },
+    {
+      "expected": {
+        "fixture": 4,
+        "title": "Customer Cards",
+        "selector": "#card-1",
+        "file": "fixtures/4-shared-component.tsx",
+        "line": 11,
+        "warning": "component used in several places"
+      },
+      "error": "TimeoutError: locator.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-editor-panel=\"layers\"]').getByText('Customer Cards', { exact: true }).last()\u001b[22m\n",
+      "result": "MISSING-TARGET"
+    },
+    {
+      "expected": {
+        "fixture": 5,
+        "title": "Responsive Layout",
+        "selector": "#target",
+        "file": "fixtures/5-responsive-classes.tsx",
+        "line": 7,
+        "classes": "ml-2 md:ml-4 lg:ml-8"
+      },
+      "error": "TimeoutError: locator.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-editor-panel=\"layers\"]').getByText('Responsive Layout', { exact: true }).last()\u001b[22m\n",
+      "result": "MISSING-TARGET"
+    },
+    {
+      "assertion": "Selection box disappears cleanly on Escape key",
+      "pass": true
+    }
+  ]
+}

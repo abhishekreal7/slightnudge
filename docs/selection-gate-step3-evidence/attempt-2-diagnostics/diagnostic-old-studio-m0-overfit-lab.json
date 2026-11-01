@@ -1,0 +1,224 @@
+{
+  "surface": "old-studio",
+  "repo": "m0-overfit-lab",
+  "requestedUrl": "http://127.0.0.1:3000/studio/m0-overfit-lab/edit?preview=http%3A%2F%2F127.0.0.1%3A3002&panel=inspector&legacyStudio=1",
+  "started": "2026-10-30T06:47:56.624Z",
+  "status": 200,
+  "actualUrl": "http://127.0.0.1:3000/studio/m0-overfit-lab/edit?preview=http%3A%2F%2F127.0.0.1%3A3002&panel=inspector&legacyStudio=1",
+  "ready": true,
+  "readyMs": 10625,
+  "readyAttributes": [
+    {
+      "ready": "true",
+      "rect": {
+        "x": 342.375,
+        "y": 48,
+        "width": 707.246337890625,
+        "height": 732,
+        "top": 48,
+        "right": 1049.621337890625,
+        "bottom": 780,
+        "left": 342.375
+      }
+    }
+  ],
+  "bodyText": "SlightNudge\nLayers\nGroup\nHeader\nRow\nNavigation\nGrids\nFeed\nPage\nAside\nRow\nHigh-density verification workspace active.\nSection\nRow\nMulti-tier Architecture\nGrid\nGroup\nSidebar Overview\nSummary metrics for nested layout test.\nGrid\nGroup\nCell Alpha\nFirst nested child item.\nGroup\nCell Beta\nSecond nested child item.\nSection\nGroup\nActive Workstreams\nComparing static cards against mapped lists.\nGroup\nFeatured Workstream\nThis card is static and outside any loop.\nGrid\nArticle\n×3\nProject Aurora\n×3\nIn progress\n×3\nGroup\nGroup\nLive Analytics Widget\nLoaded dynamically to test code-splitting resilience.\nRow\nFooter\nRow\nOverfitLab Home\nRow\nRaw Action\nSelect an element\nPreview connected\nFit page\n10%\n25%\n50%\n75%\n100%\n150%\n200%\npx\nEdit\nAll sizes\nsm · 640px+\nmd · 768px+\nlg · 1024px+\nxl · 1280px+\n2xl · 1536px+\nVisual editor\nSelect an element to edit\n\nClick the page or choose a layer.\n\nAll changes saved\nSave changes",
+  "iframeCount": 1,
+  "iframeUrl": "http://127.0.0.1:3002/?__slightnudge_session=[session-redacted]&__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A3000&__slightnudge_draft=1&__slightnudge_canvas=1",
+  "frameBody": "OverfitLab\nGrids\nFeed\n\nHigh-density verification workspace active.\n\nNotice\nSystem v2\nMulti-tier Architecture\nSidebar Overview\n\nSummary metrics for nested layout test.\n\nCell Alpha\n\nFirst nested child item.\n\nCell Beta\n\nSecond nested child item.\n\nActive Workstreams\n\nComparing static cards against mapped lists.\n\nFeatured Workstream\n\nThis card is static and outside any loop.\n\nStatic Tier\nProject Aurora\n\nIn progress\n\nProject Borealis\n\nPaused\n\nProject Celestial\n\nReview\n\nLive Analytics Widget\n\nLoaded dynamically to test code-splitting resilience.\n\nLive updates active\nOverfitLab Home\nEnterprise Ready\nEnterprise Ready\nRaw Action",
+  "error": "Error: locator.evaluate: ReferenceError: __name is not defined\n    at eval (eval at evaluate (:370:30), <anonymous>:1:60)\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)",
+  "events": [
+    {
+      "ms": 1423,
+      "kind": "response",
+      "url": "http://127.0.0.1:3000/studio/m0-overfit-lab/edit?preview=http%3A%2F%2F127.0.0.1%3A3002&panel=inspector&legacyStudio=1",
+      "status": 200
+    },
+    {
+      "ms": 1510,
+      "kind": "response",
+      "url": "http://127.0.0.1:3000/_next/static/css/app/layout.css?v=1793342877386",
+      "status": 200
+    },
+    {
+      "ms": 1513,
+      "kind": "response",
+      "url": "http://127.0.0.1:3000/_next/static/css/app/studio/%5BrepoId%5D/edit/page.css?v=1793342877386",
+      "status": 200
+    },
+    {
+      "ms": 1668,
+      "kind": "response",
+      "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap",
+      "status": 200
+    },
+    {
+      "ms": 1729,
+      "kind": "response",
+      "url": "http://127.0.0.1:3000/_next/static/chunks/webpack.js?v=1793342877386",
+      "status": 200
+    },
+    {
+      "ms": 1747,
+      "kind": "response",
+      "url": "http://127.0.0.1:3000/_next/static/chunks/app-pages-internals.js",
+      "status": 200
+    },
+    {
+      "ms": 1749,
+      "kind": "response",
+      "url": "http://127.0.0.1:3000/icon.svg",
+      "status": 200
+    },
+    {
+      "ms": 1753,
+      "kind": "response",
+      "url": "http://127.0.0.1:3000/_next/static/media/e4af272ccee01ff0-s.p.woff2",
+      "status": 200
+    },
+    {
+      "ms": 1935,
+      "kind": "response",
+      "url": "https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7.woff2",
+      "status": 200
+    },
+    {
+      "ms": 5206,
+      "kind": "response",
+      "url": "http://127.0.0.1:3000/_next/static/chunks/main-app.js?v=1793342877386",
+      "status": 200
+    },
+    {
+      "ms": 5883,
+      "kind": "console",
+      "level": "info",
+      "text": "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"
+    },
+    {
+      "ms": 6083,
+      "kind": "console",
+      "level": "log",
+      "text": "[HMR] connected"
+    },
+    {
+      "ms": 6132,
+      "kind": "response",
+      "url": "http://127.0.0.1:3000/_next/static/media/22a5144ee8d83bca-s.p.woff2",
+      "status": 200
+    },
+    {
+      "ms": 6132,
+      "kind": "response",
+      "url": "http://127.0.0.1:3000/_next/static/chunks/app/not-found.js",
+      "status": 200
+    },
+    {
+      "ms": 6145,
+      "kind": "response",
+      "url": "http://127.0.0.1:3000/_next/static/chunks/app/layout.js",
+      "status": 200
+    },
+    {
+      "ms": 6353,
+      "kind": "response",
+      "url": "http://127.0.0.1:3000/_next/static/chunks/app/studio/%5BrepoId%5D/edit/page.js",
+      "status": 200
+    },
+    {
+      "ms": 6847,
+      "kind": "response",
+      "url": "http://127.0.0.1:3000/api/slightnudge/pages",
+      "status": 200
+    },
+    {
+      "ms": 6954,
+      "kind": "response",
+      "url": "http://127.0.0.1:3000/api/slightnudge/pages",
+      "status": 200
+    },
+    {
+      "ms": 7036,
+      "kind": "response",
+      "url": "http://127.0.0.1:3000/api/slightnudge/repositories/m0-overfit-lab",
+      "status": 200
+    },
+    {
+      "ms": 7179,
+      "kind": "response",
+      "url": "http://127.0.0.1:3000/api/slightnudge/repositories/m0-overfit-lab",
+      "status": 200
+    },
+    {
+      "ms": 7397,
+      "kind": "response",
+      "url": "http://127.0.0.1:3000/api/slightnudge/repositories/m0-overfit-lab/preview-check",
+      "status": 200
+    },
+    {
+      "ms": 7513,
+      "kind": "response",
+      "url": "http://127.0.0.1:3002/?__slightnudge_session=[session-redacted]&__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A3000&__slightnudge_draft=1&__slightnudge_canvas=1",
+      "status": 200
+    },
+    {
+      "ms": 7548,
+      "kind": "response",
+      "url": "http://127.0.0.1:3002/_next/static/css/app/layout.css?v=1793342884066",
+      "status": 200
+    },
+    {
+      "ms": 7632,
+      "kind": "response",
+      "url": "http://127.0.0.1:3002/_next/static/chunks/app/layout.js",
+      "status": 200
+    },
+    {
+      "ms": 7634,
+      "kind": "response",
+      "url": "http://127.0.0.1:3002/_next/static/chunks/webpack.js?v=1793342884066",
+      "status": 200
+    },
+    {
+      "ms": 7636,
+      "kind": "response",
+      "url": "http://127.0.0.1:3002/_next/static/chunks/_app-pages-browser_src_components_DynamicWidget_tsx.js",
+      "status": 200
+    },
+    {
+      "ms": 7638,
+      "kind": "response",
+      "url": "http://127.0.0.1:3002/_next/static/chunks/app/page.js",
+      "status": 200
+    },
+    {
+      "ms": 7639,
+      "kind": "response",
+      "url": "http://127.0.0.1:3002/_next/static/chunks/app-pages-internals.js",
+      "status": 200
+    },
+    {
+      "ms": 8856,
+      "kind": "response",
+      "url": "http://127.0.0.1:3002/_next/static/chunks/main-app.js?v=1793342884066",
+      "status": 200
+    },
+    {
+      "ms": 9758,
+      "kind": "console",
+      "level": "log",
+      "text": "[HMR] connected"
+    },
+    {
+      "ms": 9960,
+      "kind": "response",
+      "url": "http://127.0.0.1:3002/__nextjs_font/geist-latin.woff2",
+      "status": 200
+    },
+    {
+      "ms": 11018,
+      "kind": "response",
+      "url": "http://127.0.0.1:3000/api/slightnudge/responsive",
+      "status": 200
+    }
+  ]
+}

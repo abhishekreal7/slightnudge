@@ -1,0 +1,410 @@
+{
+  "surface": "old-studio",
+  "repo": "m0-overfit-lab",
+  "requestedUrl": "http://127.0.0.1:3000/studio/m0-overfit-lab/edit?preview=http%3A%2F%2F127.0.0.1%3A3002&panel=inspector&legacyStudio=1",
+  "started": "2026-10-30T06:49:25.967Z",
+  "status": 200,
+  "actualUrl": "http://127.0.0.1:3000/studio/m0-overfit-lab/edit?preview=http%3A%2F%2F127.0.0.1%3A3002&panel=inspector&legacyStudio=1",
+  "ready": true,
+  "readyMs": 11239,
+  "readyAttributes": [
+    {
+      "ready": "true",
+      "rect": {
+        "x": 342.375,
+        "y": 48,
+        "width": 707.246337890625,
+        "height": 732,
+        "top": 48,
+        "right": 1049.621337890625,
+        "bottom": 780,
+        "left": 342.375
+      }
+    }
+  ],
+  "bodyText": "SlightNudge\nLayers\nGroup\nHeader\nRow\nNavigation\nGrids\nFeed\nPage\nAside\nRow\nHigh-density verification workspace active.\nSection\nRow\nMulti-tier Architecture\nGrid\nGroup\nSidebar Overview\nSummary metrics for nested layout test.\nGrid\nGroup\nCell Alpha\nFirst nested child item.\nGroup\nCell Beta\nSecond nested child item.\nSection\nGroup\nActive Workstreams\nComparing static cards against mapped lists.\nGroup\nFeatured Workstream\nThis card is static and outside any loop.\nGrid\nArticle\n×3\nProject Aurora\n×3\nIn progress\n×3\nGroup\nGroup\nLive Analytics Widget\nLoaded dynamically to test code-splitting resilience.\nRow\nFooter\nRow\nOverfitLab Home\nRow\nRaw Action\nSelect an element\nPreview connected\nFit page\n10%\n25%\n50%\n75%\n100%\n150%\n200%\npx\nEdit\nAll sizes\nsm · 640px+\nmd · 768px+\nlg · 1024px+\nxl · 1280px+\n2xl · 1536px+\nVisual editor\nSelect an element to edit\n\nClick the page or choose a layer.\n\nAll changes saved\nSave changes",
+  "iframeCount": 1,
+  "iframeUrl": "http://127.0.0.1:3002/?__slightnudge_session=[session-redacted]&__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A3000&__slightnudge_draft=1&__slightnudge_canvas=1",
+  "frameBody": "OverfitLab\nGrids\nFeed\n\nHigh-density verification workspace active.\n\nNotice\nSystem v2\nMulti-tier Architecture\nSidebar Overview\n\nSummary metrics for nested layout test.\n\nCell Alpha\n\nFirst nested child item.\n\nCell Beta\n\nSecond nested child item.\n\nActive Workstreams\n\nComparing static cards against mapped lists.\n\nFeatured Workstream\n\nThis card is static and outside any loop.\n\nStatic Tier\nProject Aurora\n\nIn progress\n\nProject Borealis\n\nPaused\n\nProject Celestial\n\nReview\n\nLive Analytics Widget\n\nLoaded dynamically to test code-splitting resilience.\n\nLive updates active\nOverfitLab Home\nEnterprise Ready\nEnterprise Ready\nRaw Action",
+  "case1": {
+    "probe": {
+      "source": {
+        "path": "src/components/ShellLayout.tsx",
+        "line": 9,
+        "column": 5,
+        "tag": "div",
+        "id": "app-shell",
+        "instance": "[\"src/app/page.tsx\",0,\"14bb809475b6413d90e788ed4d1e44930a69377172ba8113458537438e5f3397\"]"
+      },
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 1200,
+        "height": 1242
+      },
+      "classes": "min-h-screen bg-slate-50 text-slate-900 antialiased",
+      "style": {
+        "display": "block",
+        "padding": {
+          "top": "0px",
+          "right": "0px",
+          "bottom": "0px",
+          "left": "0px"
+        },
+        "gap": "normal",
+        "rowGap": "normal",
+        "columnGap": "normal",
+        "border": {
+          "top": "0px",
+          "right": "0px",
+          "bottom": "0px",
+          "left": "0px"
+        }
+      },
+      "children": [
+        {
+          "tag": "header",
+          "id": "",
+          "classes": "border-b border-slate-200 bg-white px-6 py-4",
+          "source": {
+            "path": "src/components/ShellLayout.tsx",
+            "line": 10,
+            "column": 7,
+            "tag": "header",
+            "id": "",
+            "instance": "[\"src/app/page.tsx\",0,\"14bb809475b6413d90e788ed4d1e44930a69377172ba8113458537438e5f3397\"]"
+          },
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1200,
+            "height": 61
+          },
+          "padding": {
+            "top": "16px",
+            "right": "24px",
+            "bottom": "16px",
+            "left": "24px"
+          },
+          "gap": "normal",
+          "borderRadius": "0px",
+          "clipPath": "none",
+          "maskImage": "none",
+          "transform": "none",
+          "pointerEvents": "auto",
+          "visibility": "visible"
+        },
+        {
+          "tag": "main",
+          "id": "",
+          "classes": "mx-auto max-w-7xl px-6 py-10",
+          "source": {
+            "path": "src/components/ShellLayout.tsx",
+            "line": 19,
+            "column": 7,
+            "tag": "main",
+            "id": "",
+            "instance": "[\"src/app/page.tsx\",0,\"14bb809475b6413d90e788ed4d1e44930a69377172ba8113458537438e5f3397\"]"
+          },
+          "rect": {
+            "x": 0,
+            "y": 61,
+            "width": 1200,
+            "height": 1181
+          },
+          "padding": {
+            "top": "40px",
+            "right": "24px",
+            "bottom": "40px",
+            "left": "24px"
+          },
+          "gap": "normal",
+          "borderRadius": "0px",
+          "clipPath": "none",
+          "maskImage": "none",
+          "transform": "none",
+          "pointerEvents": "auto",
+          "visibility": "visible"
+        }
+      ],
+      "initial": {
+        "x": 5,
+        "y": 5
+      },
+      "initialHit": {
+        "tag": "header",
+        "id": "",
+        "classes": "border-b border-slate-200 bg-white px-6 py-4",
+        "source": {
+          "path": "src/components/ShellLayout.tsx",
+          "line": 10,
+          "column": 7,
+          "tag": "header",
+          "id": "",
+          "instance": "[\"src/app/page.tsx\",0,\"14bb809475b6413d90e788ed4d1e44930a69377172ba8113458537438e5f3397\"]"
+        }
+      },
+      "initialDirect": false,
+      "scroll": {
+        "x": 0,
+        "y": 0
+      },
+      "viewport": {
+        "width": 1200,
+        "height": 1242
+      },
+      "candidates": [],
+      "checked": 3672,
+      "fullChildRectangleCoverage": true,
+      "search": "descendant-rectangle cell midpoints plus relative edge samples; full rectangular child coverage is separately recorded when applicable"
+    },
+    "originalPoint": {
+      "logical": {
+        "x": 5,
+        "y": 5
+      },
+      "screen": {
+        "x": 345.3218597412109,
+        "y": 50.94685990338164
+      },
+      "scale": {
+        "x": 0.5893719482421875,
+        "y": 0.5893719806763285
+      },
+      "iframeRect": {
+        "x": 342.375,
+        "y": 48,
+        "width": 707.246337890625,
+        "height": 732
+      },
+      "parentHit": {
+        "tag": "div",
+        "id": "",
+        "classes": "imported-canvas_connection__J1mmz",
+        "label": null,
+        "role": null,
+        "isIframe": false
+      }
+    },
+    "originalHit": {
+      "point": {
+        "x": 5,
+        "y": 5
+      },
+      "element": {
+        "tag": "header",
+        "id": "",
+        "classes": "border-b border-slate-200 bg-white px-6 py-4"
+      },
+      "source": {
+        "path": "src/components/ShellLayout.tsx",
+        "line": 10,
+        "column": 7,
+        "tag": "header",
+        "id": "",
+        "instance": "[\"src/app/page.tsx\",0,\"14bb809475b6413d90e788ed4d1e44930a69377172ba8113458537438e5f3397\"]"
+      }
+    },
+    "directPhysicalPoint": null
+  },
+  "events": [
+    {
+      "ms": 1411,
+      "kind": "response",
+      "url": "http://127.0.0.1:3000/studio/m0-overfit-lab/edit?preview=http%3A%2F%2F127.0.0.1%3A3002&panel=inspector&legacyStudio=1",
+      "status": 200
+    },
+    {
+      "ms": 1510,
+      "kind": "response",
+      "url": "http://127.0.0.1:3000/_next/static/css/app/layout.css?v=1793342967107",
+      "status": 200
+    },
+    {
+      "ms": 1521,
+      "kind": "response",
+      "url": "http://127.0.0.1:3000/_next/static/css/app/studio/%5BrepoId%5D/edit/page.css?v=1793342967107",
+      "status": 200
+    },
+    {
+      "ms": 1694,
+      "kind": "response",
+      "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap",
+      "status": 200
+    },
+    {
+      "ms": 1939,
+      "kind": "response",
+      "url": "https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7.woff2",
+      "status": 200
+    },
+    {
+      "ms": 3375,
+      "kind": "response",
+      "url": "http://127.0.0.1:3000/icon.svg",
+      "status": 200
+    },
+    {
+      "ms": 3379,
+      "kind": "response",
+      "url": "http://127.0.0.1:3000/_next/static/chunks/webpack.js?v=1793342967107",
+      "status": 200
+    },
+    {
+      "ms": 3493,
+      "kind": "response",
+      "url": "http://127.0.0.1:3000/_next/static/chunks/app-pages-internals.js",
+      "status": 200
+    },
+    {
+      "ms": 3499,
+      "kind": "response",
+      "url": "http://127.0.0.1:3000/_next/static/media/e4af272ccee01ff0-s.p.woff2",
+      "status": 200
+    },
+    {
+      "ms": 5634,
+      "kind": "response",
+      "url": "http://127.0.0.1:3000/_next/static/chunks/main-app.js?v=1793342967107",
+      "status": 200
+    },
+    {
+      "ms": 6296,
+      "kind": "console",
+      "level": "info",
+      "text": "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"
+    },
+    {
+      "ms": 6515,
+      "kind": "console",
+      "level": "log",
+      "text": "[HMR] connected"
+    },
+    {
+      "ms": 6516,
+      "kind": "response",
+      "url": "http://127.0.0.1:3000/_next/static/chunks/app/not-found.js",
+      "status": 200
+    },
+    {
+      "ms": 6562,
+      "kind": "response",
+      "url": "http://127.0.0.1:3000/_next/static/media/22a5144ee8d83bca-s.p.woff2",
+      "status": 200
+    },
+    {
+      "ms": 6585,
+      "kind": "response",
+      "url": "http://127.0.0.1:3000/_next/static/chunks/app/layout.js",
+      "status": 200
+    },
+    {
+      "ms": 6800,
+      "kind": "response",
+      "url": "http://127.0.0.1:3000/_next/static/chunks/app/studio/%5BrepoId%5D/edit/page.js",
+      "status": 200
+    },
+    {
+      "ms": 7256,
+      "kind": "response",
+      "url": "http://127.0.0.1:3000/api/slightnudge/pages",
+      "status": 200
+    },
+    {
+      "ms": 7369,
+      "kind": "response",
+      "url": "http://127.0.0.1:3000/api/slightnudge/pages",
+      "status": 200
+    },
+    {
+      "ms": 7445,
+      "kind": "response",
+      "url": "http://127.0.0.1:3000/api/slightnudge/repositories/m0-overfit-lab",
+      "status": 200
+    },
+    {
+      "ms": 7593,
+      "kind": "response",
+      "url": "http://127.0.0.1:3000/api/slightnudge/repositories/m0-overfit-lab",
+      "status": 200
+    },
+    {
+      "ms": 7809,
+      "kind": "response",
+      "url": "http://127.0.0.1:3000/api/slightnudge/repositories/m0-overfit-lab/preview-check",
+      "status": 200
+    },
+    {
+      "ms": 7953,
+      "kind": "response",
+      "url": "http://127.0.0.1:3002/?__slightnudge_session=[session-redacted]&__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A3000&__slightnudge_draft=1&__slightnudge_canvas=1",
+      "status": 200
+    },
+    {
+      "ms": 7984,
+      "kind": "response",
+      "url": "http://127.0.0.1:3002/_next/static/css/app/layout.css?v=1793342973818",
+      "status": 200
+    },
+    {
+      "ms": 8063,
+      "kind": "response",
+      "url": "http://127.0.0.1:3002/_next/static/chunks/webpack.js?v=1793342973818",
+      "status": 200
+    },
+    {
+      "ms": 8065,
+      "kind": "response",
+      "url": "http://127.0.0.1:3002/_next/static/chunks/app/layout.js",
+      "status": 200
+    },
+    {
+      "ms": 8072,
+      "kind": "response",
+      "url": "http://127.0.0.1:3002/_next/static/chunks/_app-pages-browser_src_components_DynamicWidget_tsx.js",
+      "status": 200
+    },
+    {
+      "ms": 8073,
+      "kind": "response",
+      "url": "http://127.0.0.1:3002/_next/static/chunks/app/page.js",
+      "status": 200
+    },
+    {
+      "ms": 8076,
+      "kind": "response",
+      "url": "http://127.0.0.1:3002/_next/static/chunks/app-pages-internals.js",
+      "status": 200
+    },
+    {
+      "ms": 9423,
+      "kind": "response",
+      "url": "http://127.0.0.1:3002/_next/static/chunks/main-app.js?v=1793342973818",
+      "status": 200
+    },
+    {
+      "ms": 10329,
+      "kind": "console",
+      "level": "log",
+      "text": "[HMR] connected"
+    },
+    {
+      "ms": 10504,
+      "kind": "response",
+      "url": "http://127.0.0.1:3002/__nextjs_font/geist-latin.woff2",
+      "status": 200
+    },
+    {
+      "ms": 11648,
+      "kind": "response",
+      "url": "http://127.0.0.1:3000/api/slightnudge/responsive",
+      "status": 200
+    },
+    {
+      "ms": 12284,
+      "kind": "console",
+      "level": "log",
+      "text": "[Fast Refresh] rebuilding"
+    }
+  ]
+}

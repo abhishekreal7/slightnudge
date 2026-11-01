@@ -1,0 +1,36 @@
+{
+  "gate": "NOT PASSED",
+  "stoppedFor": "Product route runtime error",
+  "beforeMandatoryStop": {
+    "allowed": 234,
+    "refused": 88,
+    "NOT-CLICKABLE": 8
+  },
+  "allRetainedAttempts": {
+    "allowed": 470,
+    "refused": 175,
+    "NOT-CLICKABLE": 18,
+    "UNREACHED": 57
+  },
+  "afterStopDisclosure": "Results after round-2-old-window-overfit are unqualified because the runner should have stopped there.",
+  "geometryBeforeStop": {
+    "measured": 60,
+    "maxAbsoluteOffsetPx": {
+      "x": 0.0078125,
+      "y": 0,
+      "width": 0.0078125,
+      "height": 0
+    }
+  },
+  "geometryAllRetained": {
+    "measured": 180,
+    "maxAbsoluteOffsetPx": {
+      "x": 0.0078125,
+      "y": 0,
+      "width": 0.0078125,
+      "height": 0
+    }
+  },
+  "pointerFailures": 0,
+  "expectedNodeFailures": 9
+}

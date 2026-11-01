@@ -1,0 +1,11 @@
+NAVIGATION http://127.0.0.1:3000/studio/m0-overfit-lab/window?preview=http%3A%2F%2F127.0.0.1%3A3002
+locator.waitFor: Timeout 30000ms exceeded.
+Call log:
+[2m  - waiting for locator('[data-source-ready="true"]') to be visible[22m
+
+    at runSelectionGate (C:\dev\vibecheck\test\helpers\selection-gate-v3.ts:31:145) {
+  log: [
+    `  - waiting for locator('[data-source-ready="true"]') to be visible`
+  ],
+  name: 'TimeoutError'
+}

@@ -1,0 +1,29 @@
+{
+  "scope": "Syntax only, not typecheck or browser rerun. Initial TypeScript transpile API check unavailable (ScriptTarget undefined); esbuild used instead.",
+  "rows": [
+    {
+      "file": "test/helpers/selection-gate-v3-coordinates.ts",
+      "syntax": "PASS"
+    },
+    {
+      "file": "test/helpers/selection-gate-v3.ts",
+      "syntax": "PASS"
+    },
+    {
+      "file": "test/m0-regression.iframe-v3.test.ts",
+      "syntax": "PASS"
+    },
+    {
+      "file": "test/m0-overfit.iframe-v3.test.ts",
+      "syntax": "PASS"
+    },
+    {
+      "file": "test/selection-gate-v3-diagnostics.ts",
+      "syntax": "PASS"
+    },
+    {
+      "file": "test/step1-selection.iframe-v3.test.ts",
+      "syntax": "PASS"
+    }
+  ]
+}

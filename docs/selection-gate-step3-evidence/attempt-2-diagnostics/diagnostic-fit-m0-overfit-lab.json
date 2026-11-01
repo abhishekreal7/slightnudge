@@ -1,0 +1,212 @@
+{
+  "surface": "fit",
+  "repo": "m0-overfit-lab",
+  "requestedUrl": "http://127.0.0.1:3000/editor/m0-overfit-lab?preview=http%3A%2F%2F127.0.0.1%3A3002&panel=inspector&view=fit",
+  "started": "2026-10-30T06:48:45.588Z",
+  "status": 200,
+  "actualUrl": "http://127.0.0.1:3000/editor/m0-overfit-lab?preview=http%3A%2F%2F127.0.0.1%3A3002&panel=inspector&view=fit",
+  "ready": true,
+  "readyMs": 14567,
+  "readyAttributes": [
+    {
+      "ready": "true",
+      "rect": {
+        "x": 331.59375,
+        "y": 48,
+        "width": 776.8115234375,
+        "height": 804,
+        "top": 48,
+        "right": 1108.4052734375,
+        "bottom": 852,
+        "left": 331.59375
+      }
+    }
+  ],
+  "bodyText": "Edit\nBrowse\nView\nFull page\nFit canvas\nFit page\n10%\n25%\n50%\n75%\n100%\n150%\n200%\nDesktop\npx\nEdit\nAll sizes\nsm · 640px+\nmd · 768px+\nlg · 1024px+\nxl · 1280px+\n2xl · 1536px+\nAll changes saved\nSave changes\nPreview connected\nVisual editor\nSelect an element to edit\n\nClick the page or choose a layer.",
+  "iframeCount": 1,
+  "iframeUrl": "http://127.0.0.1:3002/?__slightnudge_session=[session-redacted]&__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A3000&__slightnudge_draft=1&__slightnudge_canvas=1",
+  "frameBody": "OverfitLab\nGrids\nFeed\n\nHigh-density verification workspace active.\n\nNotice\nSystem v2\nMulti-tier Architecture\nSidebar Overview\n\nSummary metrics for nested layout test.\n\nCell Alpha\n\nFirst nested child item.\n\nCell Beta\n\nSecond nested child item.\n\nActive Workstreams\n\nComparing static cards against mapped lists.\n\nFeatured Workstream\n\nThis card is static and outside any loop.\n\nStatic Tier\nProject Aurora\n\nIn progress\n\nProject Borealis\n\nPaused\n\nProject Celestial\n\nReview\n\nLive Analytics Widget\n\nLoaded dynamically to test code-splitting resilience.\n\nLive updates active\nOverfitLab Home\nEnterprise Ready\nEnterprise Ready\nRaw Action",
+  "error": "Error: locator.evaluate: ReferenceError: __name is not defined\n    at eval (eval at evaluate (:370:30), <anonymous>:1:60)\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)",
+  "events": [
+    {
+      "ms": 2073,
+      "kind": "response",
+      "url": "http://127.0.0.1:3000/editor/m0-overfit-lab?preview=http%3A%2F%2F127.0.0.1%3A3002&panel=inspector&view=fit",
+      "status": 200
+    },
+    {
+      "ms": 2134,
+      "kind": "response",
+      "url": "http://127.0.0.1:3000/_next/static/css/app/layout.css?v=1793342927288",
+      "status": 200
+    },
+    {
+      "ms": 2356,
+      "kind": "response",
+      "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap",
+      "status": 200
+    },
+    {
+      "ms": 2628,
+      "kind": "response",
+      "url": "http://127.0.0.1:3000/_next/static/css/app/editor/%5B%5B...project%5D%5D/page.css?v=1793342927288",
+      "status": 200
+    },
+    {
+      "ms": 2801,
+      "kind": "response",
+      "url": "http://127.0.0.1:3000/_next/static/chunks/webpack.js?v=1793342927288",
+      "status": 200
+    },
+    {
+      "ms": 2970,
+      "kind": "response",
+      "url": "http://127.0.0.1:3000/_next/static/chunks/app-pages-internals.js",
+      "status": 200
+    },
+    {
+      "ms": 3064,
+      "kind": "response",
+      "url": "https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7.woff2",
+      "status": 200
+    },
+    {
+      "ms": 8454,
+      "kind": "response",
+      "url": "http://127.0.0.1:3000/_next/static/chunks/main-app.js?v=1793342927288",
+      "status": 200
+    },
+    {
+      "ms": 9105,
+      "kind": "console",
+      "level": "info",
+      "text": "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"
+    },
+    {
+      "ms": 9322,
+      "kind": "console",
+      "level": "log",
+      "text": "[HMR] connected"
+    },
+    {
+      "ms": 9365,
+      "kind": "response",
+      "url": "http://127.0.0.1:3000/_next/static/media/22a5144ee8d83bca-s.p.woff2",
+      "status": 200
+    },
+    {
+      "ms": 9367,
+      "kind": "response",
+      "url": "http://127.0.0.1:3000/_next/static/chunks/app/not-found.js",
+      "status": 200
+    },
+    {
+      "ms": 9645,
+      "kind": "response",
+      "url": "http://127.0.0.1:3000/_next/static/chunks/app/layout.js",
+      "status": 200
+    },
+    {
+      "ms": 10168,
+      "kind": "response",
+      "url": "http://127.0.0.1:3000/_next/static/chunks/app/editor/%5B%5B...project%5D%5D/page.js",
+      "status": 200
+    },
+    {
+      "ms": 10600,
+      "kind": "response",
+      "url": "http://127.0.0.1:3000/api/slightnudge/pages",
+      "status": 200
+    },
+    {
+      "ms": 10713,
+      "kind": "response",
+      "url": "http://127.0.0.1:3000/api/slightnudge/pages",
+      "status": 200
+    },
+    {
+      "ms": 10802,
+      "kind": "response",
+      "url": "http://127.0.0.1:3000/api/slightnudge/repositories/m0-overfit-lab",
+      "status": 200
+    },
+    {
+      "ms": 10932,
+      "kind": "response",
+      "url": "http://127.0.0.1:3000/api/slightnudge/repositories/m0-overfit-lab",
+      "status": 200
+    },
+    {
+      "ms": 11169,
+      "kind": "response",
+      "url": "http://127.0.0.1:3000/api/slightnudge/repositories/m0-overfit-lab/preview-check",
+      "status": 200
+    },
+    {
+      "ms": 11314,
+      "kind": "response",
+      "url": "http://127.0.0.1:3002/?__slightnudge_session=[session-redacted]&__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A3000&__slightnudge_draft=1&__slightnudge_canvas=1",
+      "status": 200
+    },
+    {
+      "ms": 11349,
+      "kind": "response",
+      "url": "http://127.0.0.1:3002/_next/static/css/app/layout.css?v=1793342936804",
+      "status": 200
+    },
+    {
+      "ms": 11433,
+      "kind": "response",
+      "url": "http://127.0.0.1:3002/_next/static/chunks/app/layout.js",
+      "status": 200
+    },
+    {
+      "ms": 11433,
+      "kind": "response",
+      "url": "http://127.0.0.1:3002/_next/static/chunks/webpack.js?v=1793342936804",
+      "status": 200
+    },
+    {
+      "ms": 11435,
+      "kind": "response",
+      "url": "http://127.0.0.1:3002/_next/static/chunks/_app-pages-browser_src_components_DynamicWidget_tsx.js",
+      "status": 200
+    },
+    {
+      "ms": 11441,
+      "kind": "response",
+      "url": "http://127.0.0.1:3002/_next/static/chunks/app/page.js",
+      "status": 200
+    },
+    {
+      "ms": 11441,
+      "kind": "response",
+      "url": "http://127.0.0.1:3002/_next/static/chunks/app-pages-internals.js",
+      "status": 200
+    },
+    {
+      "ms": 12808,
+      "kind": "response",
+      "url": "http://127.0.0.1:3002/_next/static/chunks/main-app.js?v=1793342936804",
+      "status": 200
+    },
+    {
+      "ms": 13710,
+      "kind": "console",
+      "level": "log",
+      "text": "[HMR] connected"
+    },
+    {
+      "ms": 13898,
+      "kind": "response",
+      "url": "http://127.0.0.1:3002/__nextjs_font/geist-latin.woff2",
+      "status": 200
+    },
+    {
+      "ms": 14974,
+      "kind": "response",
+      "url": "http://127.0.0.1:3000/api/slightnudge/responsive",
+      "status": 200
+    }
+  ]
+}
