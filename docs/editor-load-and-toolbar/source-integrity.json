@@ -1,0 +1,28 @@
+{
+  "protectedFiles": 399,
+  "changed": [
+    "components/slightnudge/SourceLayers.tsx",
+    "components/slightnudge/editor-workspace.module.css",
+    "components/slightnudge/useWindowDock.ts"
+  ],
+  "allOtherProtectedFilesUnchanged": true,
+  "existingTestsUnchanged": true,
+  "astPatcherAndSelectionLogicUnchanged": true,
+  "testedProductParity": [
+    {
+      "file": "components/slightnudge/SourceLayers.tsx",
+      "main": "22dadd5ef7353031fbe54606c863ff94dd9c0b2a666b6dfb1fca9ee0a1a97508",
+      "lab": "22dadd5ef7353031fbe54606c863ff94dd9c0b2a666b6dfb1fca9ee0a1a97508"
+    },
+    {
+      "file": "components/slightnudge/useWindowDock.ts",
+      "main": "40f9aeebf12b4270ffff91e5767b4a622e04ae10bffd83bf552f39db4af4a3e9",
+      "lab": "40f9aeebf12b4270ffff91e5767b4a622e04ae10bffd83bf552f39db4af4a3e9"
+    },
+    {
+      "file": "components/slightnudge/editor-workspace.module.css",
+      "main": "bf5abc950ce21e55fc6f5a6feb0afc1bf8136b290902aaa4c37bea831ee68f9c",
+      "lab": "bf5abc950ce21e55fc6f5a6feb0afc1bf8136b290902aaa4c37bea831ee68f9c"
+    }
+  ]
+}

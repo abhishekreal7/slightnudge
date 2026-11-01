@@ -1,0 +1,476 @@
+[
+  {
+    "file": "components/slightnudge/ActionControls.tsx",
+    "line": 23,
+    "call": "const result = await response.json(); if (!response.ok || !result.success) throw new Error(result.error || 'This source could not be inspected.');",
+    "context": "18:     void (async () => {\n19:       try {\n20:         const token = await getClientSessionToken();\n21:         if (!active) return;\n22:         const response = await fetch('/api/slightnudge/preview', { signal: controller.signal, method: 'POST', headers: { 'content-type': 'application/json', 'x-slightnudge-token': token }, body: JSON.stringify({ ...source, ...(source.repositoryId ? { sourcePath: source.filePath } : {}), kind: 'action', operation: 'inspect', draft: true, parentPreviewId }) });\n23:         const result = await response.json(); if (!response.ok || !result.success) throw new Error(result.error || 'This source could not be inspected.');\n24:         if (active) { setInfo(result.action); if (!focused.current) setHref(result.action.fields.href?.value || ''); }\n25:       } catch (error) { if (active) setError(error instanceof Error ? error.message : 'This source could not be inspected.'); }\n26:     })();"
+  },
+  {
+    "file": "components/slightnudge/ChangeHistory.tsx",
+    "line": 22,
+    "call": "const data = await response.json();",
+    "context": "17:     const load = async () => {\n18:       let token = await getClientSessionToken();\n19:       const request = () => fetch('/api/slightnudge/history', { method: 'POST', signal: controller.signal, headers: { 'content-type': 'application/json', 'x-slightnudge-token': token }, body: JSON.stringify({ repositoryId }) });\n20:       let response = await request();\n21:       if (response.status === 403) { token = await getClientSessionToken(true); response = await request(); }\n22:       const data = await response.json();\n23:       if (!response.ok) throw new Error(data.error || 'History is unavailable.');\n24:       if (!controller.signal.aborted) setEntries(data.entries);\n25:     };"
+  },
+  {
+    "file": "components/slightnudge/EditorWorkspace.tsx",
+    "line": 485,
+    "call": "const saved = JSON.parse(localStorage.getItem('slightnudge:workspace-layout') || 'null');",
+    "context": "480:     document.addEventListener('keydown', escape);\n481:     return () => { document.removeEventListener('pointerdown', dismiss); document.removeEventListener('keydown', escape); };\n482:   }, []);\n483:   useEffect(() => {\n484:     try {\n485:       const saved = JSON.parse(localStorage.getItem('slightnudge:workspace-layout') || 'null');\n486:       if (saved && Number.isFinite(saved.width)) setInspectorWidth(Math.min(360, Math.max(272, saved.width)));\n487:       if (saved?.collapsed === true) setInspectorCollapsed(true);\n488:     } catch { /* Layout preferences are optional. */ }"
+  },
+  {
+    "file": "components/slightnudge/EditorWorkspace.tsx",
+    "line": 583,
+    "call": "const saved = JSON.parse(localStorage.getItem(responsivePreferenceKey) || 'null');",
+    "context": "578:   const hasResponsivePreferences = useRef(false);\n579:   const responsivePreferenceKey = `slightnudge:responsive:${repositoryId || 'local'}${repositoryId && !windowMode ? ':setup' : ''}`;\n580:   useEffect(() => {\n581:     hasResponsivePreferences.current = false;\n582:     try {\n583:       const saved = JSON.parse(localStorage.getItem(responsivePreferenceKey) || 'null');\n584:       if (saved && (saved.width === null || Number.isInteger(saved.width) && saved.width >= 240 && saved.width <= 3840) && typeof saved.scope === 'string' && (!saved.scope || /^[a-z0-9][a-z0-9-]{0,31}$/i.test(saved.scope))) { hasResponsivePreferences.current = true; setViewportWidth(saved.width); setActiveBreakpoint(usesDrafts ? saved.scope : ''); }\n585:     } catch { /* A malformed preference does not affect source or drafts. */ }\n586:     setResponsivePreferencesReady(true);"
+  },
+  {
+    "file": "components/slightnudge/EditorWorkspace.tsx",
+    "line": 626,
+    "call": "const result = await response.json(); if (!response.ok) throw new Error(result.error || 'Project breakpoints are unavailable.');",
+    "context": "621:     if (!responsiveSourcePath) { setScopeLoading(false); return; }\n622:     void (async () => {\n623:       try {\n624:         const token = await getClientSessionToken();\n625:         const response = await fetch('/api/slightnudge/responsive', { method: 'POST', headers: { 'content-type': 'application/json', 'x-slightnudge-token': token }, body: JSON.stringify({ repositoryId, filePath: responsiveSourcePath }) });\n626:         const result = await response.json(); if (!response.ok) throw new Error(result.error || 'Project breakpoints are unavailable.');\n627:         if (!cancelled) setResponsiveScopes(result.breakpoints);\n628:       } catch (error) { if (!cancelled) setScopeError(error instanceof Error ? error.message : 'Project breakpoints are unavailable.'); }\n629:       finally { if (!cancelled) setScopeLoading(false); }"
+  },
+  {
+    "file": "components/slightnudge/EditorWorkspace.tsx",
+    "line": 672,
+    "call": "const data = await res.json();",
+    "context": "667:   // Auto-detect project routes from Next.js filesystem\n668:   const autoDetectPages = useCallback(async (notify = false) => {\n669:     try {\n670:       const res = await fetch('/api/slightnudge/pages');\n671:       if (res.ok) {\n672:         const data = await res.json();\n673:         if (data.allPages && data.allPages.length > 0) {\n674:           setPages(data.allPages);\n675:           if (notify) {"
+  },
+  {
+    "file": "components/slightnudge/EditorWorkspace.tsx",
+    "line": 805,
+    "call": "const result = await response.json(); if (!response.ok) throw new Error(result.error); patches.push(...result.renderPatches);",
+    "context": "800:       try {\n801:         const patches: CanvasRenderPatch[] = [];\n802:         for (const head of Object.values(draftHeads(edit))) {\n803:           const token = await getClientSessionToken();\n804:           const response = await fetch('/api/slightnudge/draft-view', { signal: AbortSignal.timeout(30000), method: 'POST', headers: { 'content-type': 'application/json', 'x-slightnudge-token': token }, body: JSON.stringify({ previewId: head.id, filePath: head.filePath, repositoryId, sourcePath: editPath(head) }) });\n805:           const result = await response.json(); if (!response.ok) throw new Error(result.error); patches.push(...result.renderPatches);\n806:         }\n807:         await sourceCanvas.current?.command('restore', null, { patches }); needsDraftReplay.current = false; return true;\n808:       } catch (error) { showToast(error instanceof Error ? error.message : 'The draft could not be rendered.'); return false; }"
+  },
+  {
+    "file": "components/slightnudge/EditorWorkspace.tsx",
+    "line": 1286,
+    "call": "const value = JSON.parse(raw) as StudioDraft;",
+    "context": "1281:   const restoreStoredDraft = async () => {\n1282:     if (!usesDrafts) return false;\n1283:     try {\n1284:       const raw = localStorage.getItem(projectDraftStorageKey);\n1285:       if (!raw) return false;\n1286:       const value = JSON.parse(raw) as StudioDraft;\n1287:       if (!isStudioDraft(value)) throw new Error('The saved draft could not be restored.');\n1288:       const frame = value.frames[value.cursor];\n1289:       const viewport = value.viewport;"
+  },
+  {
+    "file": "components/slightnudge/EditorWorkspace.tsx",
+    "line": 1350,
+    "call": "const stored = JSON.parse(localStorage.getItem(projectDraftStorageKey) || 'null');",
+    "context": "1345:         if (group.success && group.state === expected) {\n1346:           // A retained receipt can predate a new unsaved draft. Confirming that\n1347:           // older operation must never delete the newer browser draft.\n1348:           let newerDraft = false;\n1349:           try {\n1350:             const stored = JSON.parse(localStorage.getItem(projectDraftStorageKey) || 'null');\n1351:             if (stored !== null && !isStudioDraft(stored)) throw new Error('Invalid saved draft');\n1352:             newerDraft = Boolean(stored && stored.frames[stored.cursor].edit?.groupTransactionId !== view.edit.groupTransactionId);\n1353:           } catch { setRecoveryError('The source operation is confirmed, but the saved draft could not be read. Its browser data has been preserved.'); return; }"
+  },
+  {
+    "file": "components/slightnudge/IconControls.tsx",
+    "line": 41,
+    "call": "const data = await response.json(); if (!response.ok || !data.success) throw new Error(data.error || 'This icon cannot be inspected.');",
+    "context": "36:     const controller = new AbortController(); let active = true;\n37:     void (async () => {\n38:       try {\n39:         const token = await getClientSessionToken(); if (!active) return;\n40:         const response = await fetch('/api/slightnudge/preview', { method: 'POST', signal: controller.signal, headers: { 'content-type': 'application/json', 'x-slightnudge-token': token }, body: JSON.stringify({ ...source, ...(source.repositoryId ? { sourcePath: source.filePath } : {}), kind: 'icon', operation: 'inspect', draft: true, parentPreviewId }) });\n41:         const data = await response.json(); if (!response.ok || !data.success) throw new Error(data.error || 'This icon cannot be inspected.');\n42:         if (active) { setInfo({ ...data.icon, choices: (data.icon.choices || []).filter(validIconShape) }); setInfoKey(requestKey); setError(''); }\n43:       } catch (cause) { if (active) setError(cause instanceof Error ? cause.message : 'This icon cannot be inspected.'); }\n44:     })();"
+  },
+  {
+    "file": "components/slightnudge/ImageContent.tsx",
+    "line": 17,
+    "call": "const result = await response.json(); if (!response.ok) throw new Error(result.error || 'Could not import this image.');",
+    "context": "12:       const file = e.currentTarget.files?.[0]; e.currentTarget.value = ''; if (!file) return;\n13:       setUploading(true); setError('');\n14:       try {\n15:         const token = await getClientSessionToken(); const form = new FormData(); form.set('file', file);\n16:         const response = await fetch(`/api/slightnudge/assets${repositoryId ? `?repositoryId=${encodeURIComponent(repositoryId)}` : ''}`, { method: 'POST', headers: { 'x-slightnudge-token': token }, body: form });\n17:         const result = await response.json(); if (!response.ok) throw new Error(result.error || 'Could not import this image.');\n18:         if (currentSelection.current === selectionKey) await onChange('src', result.asset.url);\n19:       } catch (error) { setError(error instanceof Error ? error.message : 'Image import failed.'); }\n20:       finally { setUploading(false); }"
+  },
+  {
+    "file": "components/slightnudge/SlightNudgeOverlay.tsx",
+    "line": 467,
+    "call": "const result = await response.json();",
+    "context": "462:     try {\n463:       const token = await getClientSessionToken();\n464:       const response = await fetch('/api/slightnudge/preview', {\n465:         method: 'POST', headers: { 'Content-Type': 'application/json', 'x-slightnudge-token': token }, body: JSON.stringify(payload),\n466:       });\n467:       const result = await response.json();\n468:       if (!response.ok || !result.success) throw new Error(result.error || 'Could not prepare this change.');\n469:       if (result.changed === false) {\n470:         setNotice(result.message || 'No source change is needed.');"
+  },
+  {
+    "file": "components/slightnudge/SlightNudgeOverlay.tsx",
+    "line": 625,
+    "call": "const result = await response.json();",
+    "context": "620:       const token = await getClientSessionToken();\n621:       const response = await fetch('/api/slightnudge/apply', {\n622:         method: 'POST', headers: { 'Content-Type': 'application/json', 'x-slightnudge-token': token },\n623:         body: JSON.stringify({ previewId: pendingEdit.id, groupId: editGroupIdRef.current }),\n624:       });\n625:       const result = await response.json();\n626:       if (!response.ok || !result.success) {\n627:         if (result.code === 'SOURCE_CHANGED') {\n628:           await discardPreview();"
+  },
+  {
+    "file": "components/slightnudge/SlightNudgeOverlay.tsx",
+    "line": 693,
+    "call": "const result = await response.json();",
+    "context": "688:           className: info.className,\n689:           rect: info.rect,\n690:           clickedRect: info.clickedRect,\n691:         }),\n692:       });\n693:       const result = await response.json();\n694:       if (typeof result.className === 'string' && element.isConnected) {\n695:         element.className = result.className;\n696:         applyMarginInline(element, result.className);"
+  },
+  {
+    "file": "components/slightnudge/SourceProjectCanvas.tsx",
+    "line": 97,
+    "call": "const data = await response.json();",
+    "context": "92:       if (!windowMode) next.searchParams.set('__slightnudge_canvas', '1');\n93:       documentUrl.current = next.toString(); setUrl(next.toString()); return;\n94:     }\n95:     let active = true;\n96:     fetch(`/api/slightnudge/repositories/${encodeURIComponent(repositoryId)}`).then(async response => {\n97:       const data = await response.json();\n98:       if (!response.ok) throw new Error(data.error || 'Could not inspect project compatibility.');\n99:       if (!active) return;\n100:       setFramework(data.framework);"
+  },
+  {
+    "file": "components/slightnudge/SourceProjectCanvas.tsx",
+    "line": 219,
+    "call": "data = await response.json();",
+    "context": "214:       // restarted Next server can be listening while its route still rebuilds.\n215:       for (let attempt = 0; attempt < 3; attempt++) {\n216:         const response = await fetch(`/api/slightnudge/repositories/${encodeURIComponent(repositoryId)}/preview-check`, {\n217:           method: 'POST', headers: { 'content-type': 'application/json', 'x-slightnudge-token': token }, body: JSON.stringify({ url: address }),\n218:         });\n219:         data = await response.json();\n220:         if (response.ok) break;\n221:         if ((response.status === 502 || response.status === 504) && attempt < 2) { await new Promise(resolve => setTimeout(resolve, 500 * (attempt + 1))); continue; }\n222:         throw new Error(data?.error || 'Could not connect to the project.');"
+  },
+  {
+    "file": "lib/slightnudge/client.ts",
+    "line": 73,
+    "call": "const result = await response.json();",
+    "context": "68:   const response = await fetch('/api/slightnudge/preview', {\n69:     method: 'POST', signal: signal || AbortSignal.timeout(30000),\n70:     headers: { 'content-type': 'application/json', 'x-slightnudge-token': token },\n71:     body: JSON.stringify({ ...params, ...(params.repositoryId ? { sourcePath: params.filePath } : {}), kind: 'component', operation: 'inspect', draft: true }),\n72:   });\n73:   const result = await response.json();\n74:   if (!response.ok || !result.success) throw new Error(result.error || 'Unable to inspect component props.');\n75:   return result.component;\n76: }"
+  },
+  {
+    "file": "lib/slightnudge/client.ts",
+    "line": 115,
+    "call": "return await res.json();",
+    "context": "110:           method: 'POST',\n111:           headers: { 'Content-Type': 'application/json' },\n112:           body: JSON.stringify(params.repositoryId ? { ...params, path: params.filePath } : params),\n113:         });\n114:         if (attempt === 0 && [502, 503, 504].includes(res.status)) { await new Promise(resolve => setTimeout(resolve, 250)); continue; }\n115:         return await res.json();\n116:       } catch (error) {\n117:         if (attempt === 0 && error instanceof Error && ['AbortError', 'TimeoutError', 'TypeError'].includes(error.name)) { await new Promise(resolve => setTimeout(resolve, 250)); continue; }\n118:         throw error;"
+  },
+  {
+    "file": "lib/slightnudge/client.ts",
+    "line": 148,
+    "call": "const data = await res.json();",
+    "context": "143:     return cachedSessionToken!;\n144:   }\n145:   try {\n146:     const res = await fetch('/api/slightnudge/token', { signal: AbortSignal.timeout(10000), cache: 'no-store' });\n147:     if (res.ok) {\n148:       const data = await res.json();\n149:       cachedSessionToken = data.token;\n150:       if (typeof window !== 'undefined') {\n151:         (window as any).__SLIGHTNUDGE_TOKEN__ = data.token;"
+  },
+  {
+    "file": "lib/slightnudge/client.ts",
+    "line": 171,
+    "call": "const data = await res.json();",
+    "context": "166:         'Content-Type': 'application/json',\n167:         'x-slightnudge-token': token,\n168:       },\n169:       body: JSON.stringify(params),\n170:     });\n171:     const data = await res.json();\n172:     if (!res.ok || !data.success) {\n173:       return {\n174:         success: false,"
+  },
+  {
+    "file": "lib/slightnudge/client.ts",
+    "line": 223,
+    "call": "const data = await res.json();",
+    "context": "218:     });\n219:     let res = await lookup();\n220:     // A restarted server has a new session token. Refresh authorization for this\n221:     // read only; never retry the write when its outcome is uncertain.\n222:     if (res.status === 403) { token = await getClientSessionToken(true); res = await lookup(); }\n223:     const data = await res.json();\n224:     if (res.ok && data.success === true) return { success: true, editId: data.editId };\n225:     if (['SOURCE_CHANGED', 'APPLY_ALREADY_UNDONE', 'OUTCOME_SCOPE_MISMATCH', 'APPLY_NOT_APPLIED', 'SOURCE_RECOVERY_REQUIRED'].includes(data.code)) return { success: false, code: data.code, error: data.error };\n226:   } catch { /* A failed lookup says nothing about whether the save succeeded. */ }"
+  },
+  {
+    "file": "lib/slightnudge/client.ts",
+    "line": 245,
+    "call": "const data = await res.json();",
+    "context": "240:         'Content-Type': 'application/json',\n241:         'x-slightnudge-token': token,\n242:       },\n243:       body: JSON.stringify({ previewId, ...context }),\n244:     });\n245:     const data = await res.json();\n246:     if (res.status === 403) {\n247:       // This endpoint's authorization guard runs before any source operation.\n248:       // Refresh the credential, but leave the reviewed write to an explicit retry."
+  },
+  {
+    "file": "lib/slightnudge/client.ts",
+    "line": 292,
+    "call": "const data=await response.json();",
+    "context": "287:     let token = await getClientSessionToken();\n288:     const request = () => fetch('/api/slightnudge/change-set', { method:'POST', signal:AbortSignal.timeout(15000), headers:{'content-type':'application/json','x-slightnudge-token':token},body:JSON.stringify({operation,transactionId,repositoryId,...(operation==='save'?{members}:{})}) });\n289:     let response=await request();\n290:     if(response.status===403&&operation==='status'){token=await getClientSessionToken(true);response=await request();}\n291:     if(response.status===403)return {success:false,transactionId,code:'GROUP_AUTH_DENIED',error:'The change-set request was denied before writing. Reconnect, then explicitly retry.'};\n292:     const data=await response.json();\n293:     if(response.status>=500&&operation!=='status')return changeSetAPI('status',transactionId,[],repositoryId);\n294:     return {...data,transactionId};\n295:   }catch{"
+  },
+  {
+    "file": "lib/slightnudge/client.ts",
+    "line": 315,
+    "call": "const data = await response.json();",
+    "context": "310:       headers: { 'Content-Type': 'application/json', 'x-slightnudge-token': token },\n311:       body: JSON.stringify({ filePath, ...context }),\n312:     });\n313:     let response = await lookup();\n314:     if (response.status === 403) { token = await getClientSessionToken(true); response = await lookup(); }\n315:     const data = await response.json();\n316:     if (response.ok && data.success === true && (!data.previewId || data.previewId === context.previewId)) {\n317:       uncertainUndos.delete(key);\n318:       return { success: true, editId: data.editId, message: data.message, sourceCurrent: data.sourceCurrent };"
+  },
+  {
+    "file": "lib/slightnudge/client.ts",
+    "line": 346,
+    "call": "const data = await res.json();",
+    "context": "341:         'Content-Type': 'application/json',\n342:         'x-slightnudge-token': token,\n343:       },\n344:       body: JSON.stringify({ filePath, ...context }),\n345:     });\n346:     const data = await res.json();\n347:     if (res.status === 403) {\n348:       uncertainUndos.delete(key); await getClientSessionToken(true);\n349:       return { success: false, code: 'AUTH_REQUIRED', error: 'Undo was denied before writing. Explicitly retry it after checking the connection.' };"
+  },
+  {
+    "file": "lib/slightnudge/docker-preview.ts",
+    "line": 52,
+    "call": "const manifest = JSON.parse(await readFile(packagePath, 'utf8')) as {",
+    "context": "47: }\n48: \n49: async function getRepoConfig(repositoryId: string) {\n50:   const root = await resolveRepositoryRoot(repositoryId);\n51:   const packagePath = path.join(root, 'package.json');\n52:   const manifest = JSON.parse(await readFile(packagePath, 'utf8')) as {\n53:     scripts?: Record<string, string>;\n54:     dependencies?: Record<string, string>;\n55:     devDependencies?: Record<string, string>;"
+  },
+  {
+    "file": "lib/slightnudge/edit-history.ts",
+    "line": 140,
+    "call": "rawRecords = JSON.parse(contents);",
+    "context": "135:     throw error;\n136:   }\n137: \n138:   let rawRecords: any;\n139:   try {\n140:     rawRecords = JSON.parse(contents);\n141:   } catch (err: any) {\n142:     throw new Error(`The local edit history is invalid or corrupted: ${err.message}`);\n143:   }"
+  },
+  {
+    "file": "lib/slightnudge/edit-history.ts",
+    "line": 512,
+    "call": "const persisted = JSON.parse(readFileSync(entryPath, 'utf8'));",
+    "context": "507:     for (const entry of readdirSync(dir)) {\n508:       if (!/^[0-9a-f-]{36}\\.json$/i.test(entry)) continue;\n509:       const entryPath = path.join(dir, entry);\n510:       const age = Date.now() - statSync(entryPath).mtimeMs;\n511:       if (!existsSync(applyIntentPath(entry.slice(0, -5))) && age > 30 * 60 * 1000) {\n512:         const persisted = JSON.parse(readFileSync(entryPath, 'utf8'));\n513:         if (!persisted.draft || age > 30 * 24 * 60 * 60 * 1000) unlinkSync(entryPath);\n514:       }\n515:     }"
+  },
+  {
+    "file": "lib/slightnudge/edit-history.ts",
+    "line": 592,
+    "call": "const pending = JSON.parse(readFileSync(pendingPath(id), 'utf8')) as PendingEdit;",
+    "context": "587:     newClassName: pending.newClassName,\n588:   };\n589: }\n590: \n591: export function readPendingSourceEdit(id: string): PendingEdit {\n592:   const pending = JSON.parse(readFileSync(pendingPath(id), 'utf8')) as PendingEdit;\n593:   validatePending(pending, id);\n594:   return pending;\n595: }"
+  },
+  {
+    "file": "lib/slightnudge/edit-history.ts",
+    "line": 626,
+    "call": "const intent = JSON.parse(contents) as ApplyIntent;",
+    "context": "621:   let contents: string;\n622:   try {\n623:     if (statSync(applyIntentPath(id)).size > maxSnapshotBytes * 32) throw new Error('The save recovery record is too large.');\n624:     contents = readFileSync(applyIntentPath(id), 'utf8');\n625:   } catch (error) { if ((error as NodeJS.ErrnoException).code === 'ENOENT') return null; throw error; }\n626:   const intent = JSON.parse(contents) as ApplyIntent;\n627:   if (intent.version !== 1 || !['applying', 'not-applied'].includes(intent.phase) || typeof intent.historyDigest !== 'string' || !/^[a-f0-9]{64}$/.test(intent.historyDigest) ||\n628:       (intent.groupId !== undefined && !/^[0-9a-f-]{36}$/i.test(intent.groupId))) throw new Error('The save recovery record is invalid. No source was changed.');\n629:   validatePending(intent.pending, id);"
+  },
+  {
+    "file": "lib/slightnudge/icon-library.ts",
+    "line": 30,
+    "call": "const packageRoot = path.dirname(packageFile), pkg = JSON.parse(readFileSync(packageFile, 'utf8'));",
+    "context": "25:     const candidate = path.join(directory, 'node_modules/lucide-react/package.json');\n26:     if (existsSync(candidate)) { packageFile = candidate; break; }\n27:     const parent = path.dirname(directory); if (parent === directory) break; directory = parent;\n28:   }\n29:   if (!packageFile) throw new Error('Install Lucide in this project before replacing icons.');\n30:   const packageRoot = path.dirname(packageFile), pkg = JSON.parse(readFileSync(packageFile, 'utf8'));\n31:   if (pkg.name !== 'lucide-react') throw new Error('This project uses a custom icon provider.');\n32:   if (typeof pkg.module !== 'string') throw new Error('This Lucide build does not expose supported static icon data.');\n33:   const entryPath = path.resolve(packageRoot, pkg.module), entry = ts.createSourceFile('library.js', read(packageRoot, pkg.module, 2_000_000), ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);"
+  },
+  {
+    "file": "lib/slightnudge/instance-trace.ts",
+    "line": 6,
+    "call": "try{return lines.map(line=>{const row=JSON.parse(line);if(!Array.isArray(row)||row.length!==3||typeof row[0]!=='string'||!row[0]||row[0].length>1000||row[0].includes('\\\\')||row[0].startsWith('/')||/^[a-z]:/i.test(row[0])||row[0].split('/').includes('..')||!Number.isSafeInteger(row[1])||row[1]<0||row[1]>100000||typeof row[2]!=='string'||! /^[a-f0-9]{64}$/.test(row[2]))throw Error();return {path:row[0],index:row[1],hash:row[2]}})}catch{return undefined}",
+    "context": "1: export interface InstanceCall { path: string; index: number; hash: string }\n2: /** Serialized into the preview bridge; keep independent of server modules. */\n3: export function parseInstanceTrace(value: unknown): InstanceCall[] | undefined {\n4:   if(typeof value!=='string'||!value||value.length>8192)return undefined;\n5:   const lines=value.split('\\n');if(lines.length>16)return undefined;\n6:   try{return lines.map(line=>{const row=JSON.parse(line);if(!Array.isArray(row)||row.length!==3||typeof row[0]!=='string'||!row[0]||row[0].length>1000||row[0].includes('\\\\')||row[0].startsWith('/')||/^[a-z]:/i.test(row[0])||row[0].split('/').includes('..')||!Number.isSafeInteger(row[1])||row[1]<0||row[1]>100000||typeof row[2]!=='string'||! /^[a-f0-9]{64}$/.test(row[2]))throw Error();return {path:row[0],index:row[1],hash:row[2]}})}catch{return undefined}\n7: }\n8: export function rebaseInstanceTrace(value:string,file:string,hash:string){const calls=parseInstanceTrace(value);if(!calls)throw new Error('The component instance marker is invalid.');return calls.map(call=>JSON.stringify([call.path,call.index,call.path===file?hash:call.hash])).join('\\n');}\n9: "
+  },
+  {
+    "file": "lib/slightnudge/next-source-adapter.ts",
+    "line": 423,
+    "call": "inspectedData = await res.json();",
+    "context": "418:         method: 'POST',\n419:         headers: { 'Content-Type': 'application/json' },\n420:         body: JSON.stringify(defaultRepo ? payload : { filePath: payload.path, ...payload }),\n421:       });\n422:       if (res.ok) {\n423:         inspectedData = await res.json();\n424:         if (!undoNeedsCheck && !undoBusy) {\n425:           undoTarget = inspectedData.undoTarget ? { ...inspectedData.undoTarget, sourcePath: payload.path } : null;\n426:           canUndoState = Boolean(undoTarget);"
+  },
+  {
+    "file": "lib/slightnudge/next-source-adapter.ts",
+    "line": 459,
+    "call": "const data = await res.json();",
+    "context": "454:       const res = await fetch(\\`\\${backendOrigin}/api/slightnudge/preview\\`, {\n455:         method: 'POST',\n456:         headers: { 'Content-Type': 'application/json' },\n457:         body: JSON.stringify(body),\n458:       });\n459:       const data = await res.json();\n460:       if (res.ok && data.success) {\n461:         pendingEdit = { id: data.id, summary: data.summary, kind, sourcePath };\n462:         if (kind === 'style' && payload.value) {"
+  },
+  {
+    "file": "lib/slightnudge/next-source-adapter.ts",
+    "line": 492,
+    "call": "const data = await res.json();",
+    "context": "487:   async function getBridgeToken() {\n488:     if (cachedToken) return cachedToken;\n489:     try {\n490:       const res = await fetch(\\`\\${backendOrigin}/api/slightnudge/token\\`);\n491:       if (res.ok) {\n492:         const data = await res.json();\n493:         cachedToken = data.token;\n494:         return cachedToken;\n495:       }"
+  },
+  {
+    "file": "lib/slightnudge/next-source-adapter.ts",
+    "line": 517,
+    "call": "const data = await res.json();",
+    "context": "512:           previewId: accepted.id,\n513:           repositoryId: defaultRepo || undefined,\n514:           sourcePath: accepted.sourcePath,\n515:         }),\n516:       });\n517:       const data = await res.json();\n518:       if (res.ok && data.success) {\n519:         undoTarget = { previewId: accepted.id, editId: data.editId, sourcePath: accepted.sourcePath };\n520:         pendingEdit = null;"
+  },
+  {
+    "file": "lib/slightnudge/next-source-adapter.ts",
+    "line": 566,
+    "call": "const data = await res.json();",
+    "context": "561:           previewId: target.previewId,\n562:           editId: target.editId,\n563:         }),\n564:         signal: AbortSignal.timeout(15000),\n565:       });\n566:       const data = await res.json();\n567:       if (res.ok && data.success) {\n568:         pendingEdit = null;\n569:         canUndoState = false;"
+  },
+  {
+    "file": "lib/slightnudge/next-source-adapter.ts",
+    "line": 830,
+    "call": "const state = JSON.parse(await readFile(statePath, 'utf8')) as AdapterState;",
+    "context": "825: async function getState(root: string): Promise<AdapterState | null> {\n826:   const statePath = path.join(root, adapterDirectoryName, stateFileName);\n827:   try {\n828:     const directory = await lstat(path.join(root, adapterDirectoryName));\n829:     if (!directory.isDirectory() || directory.isSymbolicLink()) throw new Error('Adapter directory was replaced');\n830:     const state = JSON.parse(await readFile(statePath, 'utf8')) as AdapterState;\n831:     if (state?.version !== 1 || !safeConfigName(state.wrapperName) || state.backupName !== null && (typeof state.backupName !== 'string' || !/^next\\.config\\.slightnudge-original\\.(?:js|mjs|cjs|ts|mts|cts)$/.test(state.backupName))) throw new Error('Invalid adapter state');\n832:     return state;\n833:   } catch (error) {"
+  },
+  {
+    "file": "lib/slightnudge/next-source-adapter.ts",
+    "line": 851,
+    "call": "const packageInfo = JSON.parse(await readFile(packagePath, 'utf8')) as { dependencies?: Record<string, string>; devDependencies?: Record<string, string> };",
+    "context": "846:   const root = await resolveRepositoryRoot(repositoryId);\n847:   const existingState = await getState(root);\n848:   if (existingState) return { success: true as const, alreadyInstalled: true, restartRequired: true };\n849: \n850:   const packagePath = path.join(root, 'package.json');\n851:   const packageInfo = JSON.parse(await readFile(packagePath, 'utf8')) as { dependencies?: Record<string, string>; devDependencies?: Record<string, string> };\n852:   const declaredNext = packageInfo.dependencies?.next || packageInfo.devDependencies?.next || '';\n853:   if (!declaredNext) throw new Error('This adapter currently supports Next.js repositories only.');\n854:   const nextVersionPath = path.join(root, 'node_modules', 'next', 'package.json');"
+  },
+  {
+    "file": "lib/slightnudge/next-source-adapter.ts",
+    "line": 856,
+    "call": "try { nextVersion = (JSON.parse(await readFile(nextVersionPath, 'utf8')) as { version: string }).version; } catch { /* Resolve from manifest */ }",
+    "context": "851:   const packageInfo = JSON.parse(await readFile(packagePath, 'utf8')) as { dependencies?: Record<string, string>; devDependencies?: Record<string, string> };\n852:   const declaredNext = packageInfo.dependencies?.next || packageInfo.devDependencies?.next || '';\n853:   if (!declaredNext) throw new Error('This adapter currently supports Next.js repositories only.');\n854:   const nextVersionPath = path.join(root, 'node_modules', 'next', 'package.json');\n855:   let nextVersion = declaredNext;\n856:   try { nextVersion = (JSON.parse(await readFile(nextVersionPath, 'utf8')) as { version: string }).version; } catch { /* Resolve from manifest */ }\n857:   const match = nextVersion.match(/(?:^|[^0-9])(\\d+)/);\n858:   if (!match || Number(match[1]) < 13) {\n859:     throw new Error('Click-to-source needs Next.js 13 or newer. This adapter will not change an older Next.js configuration.');"
+  },
+  {
+    "file": "lib/slightnudge/project-compatibility.ts",
+    "line": 25,
+    "call": "const value = JSON.parse(source);",
+    "context": "20: \n21: async function manifest(file: string): Promise<Manifest | null> {\n22:   try {\n23:     const source = await readFile(file, 'utf8');\n24:     if (source.length > 1024 * 1024) return null;\n25:     const value = JSON.parse(source);\n26:     return value && typeof value === 'object' && !Array.isArray(value) ? value : null;\n27:   } catch { return null; }\n28: }"
+  },
+  {
+    "file": "lib/slightnudge/repository-store.ts",
+    "line": 23,
+    "call": "const value = JSON.parse(await readFile(indexPath, 'utf8'));",
+    "context": "18:   importedAt: string;\n19: }\n20: \n21: async function readIndex(): Promise<LocalRepository[]> {\n22:   try {\n23:     const value = JSON.parse(await readFile(indexPath, 'utf8'));\n24:     return Array.isArray(value) ? value : [];\n25:   } catch (error) {\n26:     if ((error as NodeJS.ErrnoException).code === 'ENOENT') return [];"
+  },
+  {
+    "file": "lib/slightnudge/source-canvas-bridge.ts",
+    "line": 12,
+    "call": "let saved: any = null; try { saved = JSON.parse(sessionStorage.getItem('slightnudge:preview-session') || 'null'); } catch {}",
+    "context": "7: \n8: /** Browser runtime shared by local source previews and imported adapters. Keep\n9:  * this function self-contained: it is serialized into the preview document. */\n10: function sourceCanvasRuntime(continuous: boolean, repositoryId = '', protocol = 18, setupCanvas: typeof importedCanvasRuntime | undefined, classMatches: typeof sourceClassesMatch, runtimeClasses: typeof withRuntimeClasses, linkDestination: typeof validLinkDestination, iconValue: typeof validIconValue, iconShape: typeof validIconShape, instanceTrace: typeof parseInstanceTrace) {\n11:   const url = new URL(location.href);\n12:   let saved: any = null; try { saved = JSON.parse(sessionStorage.getItem('slightnudge:preview-session') || 'null'); } catch {}\n13:   const session = url.searchParams.get('__slightnudge_session') || (window.parent !== window ? saved?.session : null), origin = url.searchParams.get('__slightnudge_parent') || (window.parent !== window ? saved?.origin : null);\n14:   if (repositoryId && (url.searchParams.get('__slightnudge_draft') === '1' || saved?.session === session && saved?.continuous)) continuous = true;\n15:   if (!session || !origin || window.parent === window || (window as any).__slightnudge_bridge_active) return;"
+  },
+  {
+    "file": "lib/slightnudge/source-group-journal.ts",
+    "line": 43,
+    "call": "const value = JSON.parse(fs.readFileSync(file, 'utf8')) as SourceGroupJournal;",
+    "context": "38:     catch (error) {\n39:         if ((error as NodeJS.ErrnoException).code === 'ENOENT')\n40:             return null;\n41:         throw error;\n42:     }\n43:     const value = JSON.parse(fs.readFileSync(file, 'utf8')) as SourceGroupJournal;\n44:     if (value.version !== 1 || value.id !== id || !['saving', 'saved', 'undoing', 'undone'].includes(value.phase) || typeof value.root !== 'string' || path.isAbsolute(value.root) || typeof value.createdAt !== 'string' || value.repositoryId !== undefined && typeof value.repositoryId !== 'string' || !Array.isArray(value.members) || !value.members.length || value.members.length > 16 || value.digest !== groupDigest(value.members))\n45:         throw new Error('Change-set recovery data is invalid. Source writes are paused.');\n46:     const paths = new Set<string>(), ids = new Set<string>();"
+  },
+  {
+    "file": "lib/slightnudge/source-operation-lock.ts",
+    "line": 53,
+    "call": "const data = JSON.parse(contents);",
+    "context": "48:       }\n49:       let contents: string;\n50:       try { contents = fs.readFileSync(path.join(root, entry), 'utf8'); }\n51:       catch (error) { if ((error as NodeJS.ErrnoException).code === 'ENOENT') continue; throw error; }\n52:       try {\n53:         const data = JSON.parse(contents);\n54:         if (data.pid !== pid || (data.ticket !== null && (!Number.isSafeInteger(data.ticket) || data.ticket < 1))) throw new Error('Invalid ticket');\n55:         if (pid === process.pid && typeof data.processStart === 'number' && data.processStart !== processStart) {\n56:           // A restarted process can reuse its predecessor's PID. In the same"
+  },
+  {
+    "file": "lib/slightnudge/studio-recovery.ts",
+    "line": 29,
+    "call": "const record = JSON.parse(raw) as StudioRecoveryRecord;",
+    "context": "24: export function readStudioRecovery(repositoryId?: string, storage?: RecoveryStorage): RecoveryRead {\n25:   try {\n26:     const raw = (storage || browserStorage()).getItem(keyFor(repositoryId));\n27:     if (!raw) return { status: 'empty' };\n28:     if (raw.length > maxBytes) throw new Error('Oversized recovery record');\n29:     const record = JSON.parse(raw) as StudioRecoveryRecord;\n30:     if (record.version !== 1 || !shortString(record.operationId, 128) || !['apply', 'undo'].includes(record.kind) ||\n31:       !shortString(record.previewId, 128) || !shortString(record.filePath) || !Number.isFinite(record.startedAt) ||\n32:       record.repositoryId !== repositoryId || (record.editId !== undefined && !shortString(record.editId, 128)) ||"
+  },
+  {
+    "file": "lib/slightnudge/tailwind-verifier.ts",
+    "line": 118,
+    "call": "const pkg = JSON.parse(readFileSync(pkgJsonPath, 'utf8'));",
+    "context": "113:   let fallbackRoot: string | null = null;\n114:   while (curr && curr !== root) {\n115:     const pkgJsonPath = path.join(curr, 'package.json');\n116:     if (existsSync(pkgJsonPath)) {\n117:       try {\n118:         const pkg = JSON.parse(readFileSync(pkgJsonPath, 'utf8'));\n119:         const deps = { ...pkg.dependencies, ...pkg.devDependencies };\n120:         if (deps.tailwindcss) {\n121:           return curr;"
+  },
+  {
+    "file": "lib/slightnudge/tailwind-verifier.ts",
+    "line": 163,
+    "call": "const pkg = JSON.parse(readFileSync(pkgJsonPath, 'utf8'));",
+    "context": "158:   const root = path.parse(curr).root;\n159:   while (curr && curr !== root) {\n160:     const pkgJsonPath = path.join(curr, 'node_modules', packageName, 'package.json');\n161:     if (existsSync(pkgJsonPath)) {\n162:       try {\n163:         const pkg = JSON.parse(readFileSync(pkgJsonPath, 'utf8'));\n164:         return { dir: path.dirname(pkgJsonPath), pkg };\n165:       } catch {}\n166:     }"
+  },
+  {
+    "file": "lib/slightnudge/tailwind-verifier.ts",
+    "line": 388,
+    "call": "const targetPkg = JSON.parse(readFileSync(targetPkgJsonPath, 'utf8'));",
+    "context": "383:   }\n384: \n385:   const targetPkgJsonPath = path.join(rootDir, 'package.json');\n386:   if (existsSync(targetPkgJsonPath)) {\n387:     try {\n388:       const targetPkg = JSON.parse(readFileSync(targetPkgJsonPath, 'utf8'));\n389:       const deps = { ...targetPkg.dependencies, ...targetPkg.devDependencies };\n390:       if (!deps.tailwindcss) {\n391:         return { verified: false, error: \"can't verify this class: tailwindcss is not installed\" };"
+  },
+  {
+    "file": "app/api/slightnudge/apply/route.ts",
+    "line": 16,
+    "call": "const body = await request.json();",
+    "context": "11: export async function POST(request: Request) {\n12:   const auth = validateMutatingRequest(request);\n13:   if (!auth.valid) return auth.response;\n14: \n15:   try {\n16:     const body = await request.json();\n17:     if (typeof body.previewId !== 'string') return NextResponse.json({ error: 'Review a change before applying it.' }, { status: 400, headers: corsHeaders(request) });\n18:     const repositoryId = typeof body.repositoryId === 'string' ? body.repositoryId : undefined;\n19:     const sourcePath = typeof body.sourcePath === 'string' ? body.sourcePath : undefined;"
+  },
+  {
+    "file": "app/api/slightnudge/apply/status/route.ts",
+    "line": 18,
+    "call": "const body = await request.json();",
+    "context": "13: export async function POST(request: Request) {\n14:   const auth = validateMutatingRequest(request);\n15:   if (!auth.valid) return auth.response;\n16:   const headers = { ...corsHeaders(request), 'Cache-Control': 'no-store' };\n17:   try {\n18:     const body = await request.json();\n19:     if (typeof body.previewId !== 'string') return NextResponse.json({ success: false, error: 'A reviewed change is required.' }, { status: 400, headers });\n20:     const repositoryId = typeof body.repositoryId === 'string' ? body.repositoryId : undefined;\n21:     const sourcePath = typeof body.sourcePath === 'string' ? body.sourcePath : undefined;"
+  },
+  {
+    "file": "app/api/slightnudge/change-set/route.ts",
+    "line": 14,
+    "call": "const body = await request.json();",
+    "context": "9:     const auth = validateMutatingRequest(request);\n10:     if (!auth.valid)\n11:         return auth.response;\n12:     const headers = { ...corsHeaders(request), 'Cache-Control': 'no-store' };\n13:     try {\n14:         const body = await request.json();\n15:         if (!validGroupId(body.transactionId) || !['save', 'status', 'undo'].includes(body.operation) || body.repositoryId !== undefined && typeof body.repositoryId !== 'string')\n16:             throw new Error('Choose a valid change set and operation.');\n17:         const repositoryId = body.repositoryId as string | undefined;"
+  },
+  {
+    "file": "app/api/slightnudge/draft-view/route.ts",
+    "line": 10,
+    "call": "const body = await request.json();",
+    "context": "5: \n6: /** Read/compile a persisted local proposal without writing its project file. */\n7: export async function POST(request: Request) {\n8:   const auth = validateMutatingRequest(request); if (!auth.valid) return auth.response;\n9:   try {\n10:     const body = await request.json();\n11:     if (typeof body.previewId !== 'string' || typeof body.filePath !== 'string') return NextResponse.json({ error: 'Choose a saved local draft.' }, { status: 400 });\n12:     const repositoryId = typeof body.repositoryId === 'string' ? body.repositoryId : undefined;\n13:     const file = repositoryId ? (await resolveRepositorySourcePath(repositoryId, body.sourcePath)).filePath : resolveWorkspaceSourcePath(body.filePath);"
+  },
+  {
+    "file": "app/api/slightnudge/history/route.ts",
+    "line": 13,
+    "call": "const body = await request.json();",
+    "context": "8:   if (process.env.NODE_ENV === 'production') return NextResponse.json({ error: 'Local history requires the development app.' }, { status: 501 });\n9:   const auth = validateMutatingRequest(request);\n10:   if (!auth.valid) return auth.response;\n11:   const headers = { 'Cache-Control': 'no-store' };\n12:   try {\n13:     const body = await request.json();\n14:     if (!body || typeof body !== 'object' || Array.isArray(body) || body.repositoryId !== undefined && (typeof body.repositoryId !== 'string' || !body.repositoryId)) return NextResponse.json({ error: 'Choose a valid project.' }, { status: 400, headers });\n15:     const root = body.repositoryId ? await resolveRepositoryRoot(body.repositoryId) : process.cwd();\n16:     return NextResponse.json({ entries: getHistorySummary(root, body.repositoryId) }, { headers });"
+  },
+  {
+    "file": "app/api/slightnudge/inspect/route.ts",
+    "line": 17,
+    "call": "const body = await request.json();",
+    "context": "12:   try {\n13:     const origin = request.headers.get('origin');\n14:     if (origin && !isAllowedOrigin(origin, request.url)) {\n15:       return NextResponse.json({ error: 'Inspection must come from an authorized workspace.' }, { status: 403, headers: corsHeaders(request) });\n16:     }\n17:     const body = await request.json();\n18:     const { filePath, line, column, elementId, tagName, className, rect, clickedRect } = body;\n19: \n20:     if (!filePath) {"
+  },
+  {
+    "file": "app/api/slightnudge/preview/route.ts",
+    "line": 42,
+    "call": "const body = await request.json();",
+    "context": "37: export async function POST(request: Request) {\n38:   const auth = validateMutatingRequest(request);\n39:   if (!auth.valid) return auth.response;\n40: \n41:   try {\n42:     const body = await request.json();\n43:     if (typeof body.kind !== 'string') {\n44:       return NextResponse.json({ error: 'A source file and edit type are required.' }, { status: 400, headers: corsHeaders(request) });\n45:     }"
+  },
+  {
+    "file": "app/api/slightnudge/repositories/route.ts",
+    "line": 19,
+    "call": "const body = await request.json();",
+    "context": "14: export async function POST(request: Request) {\n15:   const auth = validateMutatingRequest(request);\n16:   if (!auth.valid) return auth.response;\n17: \n18:   try {\n19:     const body = await request.json();\n20:     if (typeof body.url !== 'string' || body.url.length > 500) {\n21:       return NextResponse.json({ error: 'A repository URL is required.' }, { status: 400 });\n22:     }"
+  },
+  {
+    "file": "app/api/slightnudge/repositories/[id]/inspect/route.ts",
+    "line": 22,
+    "call": "const body = await request.json();",
+    "context": "17:     if (origin && !isAllowedOrigin(origin, request.url)) {\n18:       return NextResponse.json({ error: 'Source inspection must come from this SlightNudge workspace.' }, { status: 403, headers: corsHeaders(request) });\n19:     }\n20: \n21:     const { id } = await context.params;\n22:     const body = await request.json();\n23:     if (typeof body.path !== 'string' || body.path.length > 1000) {\n24:       return NextResponse.json({ error: 'Choose a source file from the imported repository.' }, { status: 400, headers: corsHeaders(request) });\n25:     }"
+  },
+  {
+    "file": "app/api/slightnudge/repositories/[id]/preview-check/route.ts",
+    "line": 20,
+    "call": "const body = await request.json();",
+    "context": "15: \n16:     const { id } = await context.params;\n17:     const repository = (await listLocalRepositories()).find((item) => item.id === id);\n18:     if (!repository) return NextResponse.json({ error: 'Repository not found.' }, { status: 404 });\n19: \n20:     const body = await request.json();\n21:     if (typeof body.url !== 'string' || body.url.length > 2048) {\n22:       return NextResponse.json({ error: 'Enter your local preview URL.' }, { status: 400 });\n23:     }"
+  },
+  {
+    "file": "app/api/slightnudge/responsive/route.ts",
+    "line": 9,
+    "call": "const body = await request.json();",
+    "context": "4: import { findProjectRoot, getProjectResponsiveScopes } from '@/lib/slightnudge/tailwind-verifier';\n5: \n6: export async function POST(request: Request) {\n7:   const auth = validateMutatingRequest(request); if (!auth.valid) return auth.response;\n8:   try {\n9:     const body = await request.json();\n10:     if (typeof body.filePath !== 'string') return NextResponse.json({ error: 'Choose a project source file.' }, { status: 400 });\n11:     const target = typeof body.repositoryId === 'string' ? (await resolveRepositorySourcePath(body.repositoryId, body.filePath)).filePath : resolveWorkspaceSourcePath(body.filePath);\n12:     return NextResponse.json({ breakpoints: await getProjectResponsiveScopes(findProjectRoot(target)) });"
+  },
+  {
+    "file": "app/api/slightnudge/undo/route.ts",
+    "line": 16,
+    "call": "const body = await request.json();",
+    "context": "11: export async function POST(request: Request) {\n12:   const auth = validateMutatingRequest(request);\n13:   if (!auth.valid) return auth.response;\n14: \n15:   try {\n16:     const body = await request.json();\n17:     if (typeof body.previewId !== 'string' || !/^[0-9a-f-]{36}$/i.test(body.previewId)) return NextResponse.json({ success: false, code: 'UNDO_TARGET_REQUIRED', error: 'Choose the accepted edit to undo. Unbound Undo requests are not supported.' }, { status: 400, headers: corsHeaders(request) });\n18:     if (body.repositoryId !== undefined && (typeof body.repositoryId !== 'string' || typeof body.sourcePath !== 'string')) return NextResponse.json({ success: false, code: 'UNDO_TARGET_REQUIRED', error: 'Choose the project and source file for this Undo.' }, { status: 400, headers: corsHeaders(request) });\n19:     const filePath = typeof body.repositoryId === 'string' && typeof body.sourcePath === 'string'"
+  },
+  {
+    "file": "app/api/slightnudge/undo/status/route.ts",
+    "line": 14,
+    "call": "const body = await request.json();",
+    "context": "9: export async function POST(request: Request) {\n10:   const auth = validateMutatingRequest(request);\n11:   if (!auth.valid) return auth.response;\n12:   const headers = { ...corsHeaders(request), 'Cache-Control': 'no-store' };\n13:   try {\n14:     const body = await request.json();\n15:     if (typeof body.previewId !== 'string' || !/^[0-9a-f-]{36}$/i.test(body.previewId)) return NextResponse.json({ success: false, code: 'UNDO_TARGET_REQUIRED', error: 'An accepted edit reference is required.' }, { status: 400, headers });\n16:     if (body.repositoryId !== undefined && (typeof body.repositoryId !== 'string' || typeof body.sourcePath !== 'string')) return NextResponse.json({ success: false, code: 'UNDO_TARGET_REQUIRED', error: 'Choose the project and source file for this Undo.' }, { status: 400, headers });\n17:     const filePath = typeof body.repositoryId === 'string'"
+  },
+  {
+    "file": "app/studio/[repoId]/page.tsx",
+    "line": 150,
+    "call": "const data = await response.json();",
+    "context": "145: \n146:   useEffect(() => {\n147:     let cancelled = false;\n148:     fetch(`/api/slightnudge/repositories/${encodeURIComponent(params.repoId)}`)\n149:       .then(async (response) => {\n150:         const data = await response.json();\n151:         if (!response.ok) throw new Error(data.error || 'Repository details could not be loaded.');\n152:         if (!cancelled) {\n153:           setProject(data);"
+  },
+  {
+    "file": "app/studio/[repoId]/page.tsx",
+    "line": 158,
+    "call": "const status = await response.json();",
+    "context": "153:           setProject(data);\n154:           setSelectedFile(data.files[0] || '');\n155:           setAdapterEnabled(Boolean(data.sourceAdapterEnabled));\n156:           fetch(`/api/slightnudge/repositories/${encodeURIComponent(params.repoId)}/docker-preview`)\n157:             .then(async (response) => {\n158:               const status = await response.json();\n159:               if (!response.ok) throw new Error(status.error || 'Could not read Docker status.');\n160:               if (!cancelled) setDockerStatus(status);\n161:             })"
+  },
+  {
+    "file": "app/studio/[repoId]/page.tsx",
+    "line": 177,
+    "call": "const data = await response.json();",
+    "context": "172:     const sourceQuery = new URLSearchParams({ path: selectedFile });\n173:     setSourceLoading(true);\n174:     setSourceError('');\n175:     fetch(`/api/slightnudge/repositories/${encodeURIComponent(params.repoId)}/source?${sourceQuery}`)\n176:       .then(async (response) => {\n177:         const data = await response.json();\n178:         if (!response.ok) throw new Error(data.error || 'Could not inspect this source file.');\n179:         if (!cancelled) setSource(data.content);\n180:       })"
+  },
+  {
+    "file": "app/studio/[repoId]/page.tsx",
+    "line": 195,
+    "call": "const data = await response.json();",
+    "context": "190:       fetch(`/api/slightnudge/repositories/${encodeURIComponent(params.repoId)}/preview-check`, {\n191:         method: 'POST',\n192:         headers: { 'content-type': 'application/json', 'x-slightnudge-token': token },\n193:         body: JSON.stringify({ url: dockerStatus.url }),\n194:       }).then(async (response) => {\n195:         const data = await response.json();\n196:         if (!response.ok) return;\n197:         if (cancelled) return;\n198:         const session = crypto.randomUUID();"
+  },
+  {
+    "file": "app/studio/[repoId]/page.tsx",
+    "line": 266,
+    "call": "const result = await response.json();",
+    "context": "261:             className: nextSelection.className,\n262:             rect: nextSelection.rect,\n263:             clickedRect: nextSelection.clickedRect,\n264:           }),\n265:         });\n266:         const result = await response.json();\n267:         if (!response.ok || !active || selectionRequestId !== selectionRequestRef.current) return;\n268:         setSelection((current) => current && current.path === nextSelection.path && current.line === nextSelection.line\n269:           ? {"
+  },
+  {
+    "file": "app/studio/[repoId]/page.tsx",
+    "line": 301,
+    "call": "const data = await response.json();",
+    "context": "296:   useEffect(() => {\n297:     if (selection?.tagName !== 'img') { setAssets([]); return; }\n298:     let cancelled = false;\n299:     fetch(`/api/slightnudge/assets?repositoryId=${encodeURIComponent(params.repoId)}`)\n300:       .then(async (response) => {\n301:         const data = await response.json();\n302:         if (!response.ok) throw new Error(data.error || 'Could not load imported images.');\n303:         if (!cancelled) setAssets(data.assets || []);\n304:       })"
+  },
+  {
+    "file": "app/studio/[repoId]/page.tsx",
+    "line": 324,
+    "call": "const data = await response.json();",
+    "context": "319:       const response = await fetch(`/api/slightnudge/repositories/${encodeURIComponent(params.repoId)}/preview-check`, {\n320:         method: 'POST',\n321:         headers: { 'content-type': 'application/json', 'x-slightnudge-token': token },\n322:         body: JSON.stringify({ url: previewInput }),\n323:       });\n324:       const data = await response.json();\n325:       if (!response.ok) throw new Error(data.error || 'Could not connect to your local preview.');\n326:       attachPreview(data.url);\n327:     } catch (cause) {"
+  },
+  {
+    "file": "app/studio/[repoId]/page.tsx",
+    "line": 359,
+    "call": "const startResult = await started.json();",
+    "context": "354:       const token = await getClientSessionToken();\n355:       const started = await fetch(endpoint, {\n356:         method: 'POST',\n357:         headers: { 'x-slightnudge-token': token },\n358:       });\n359:       const startResult = await started.json();\n360:       if (!started.ok) throw new Error(startResult.error || 'Could not start the Docker preview.');\n361:       setDockerStatus({ available: true, state: 'starting', url: startResult.url, logs: '', message: startResult.message });\n362: "
+  },
+  {
+    "file": "app/studio/[repoId]/page.tsx",
+    "line": 369,
+    "call": "const checkResult = await check.json();",
+    "context": "364:         const check = await fetch(`/api/slightnudge/repositories/${encodeURIComponent(params.repoId)}/preview-check`, {\n365:           method: 'POST',\n366:           headers: { 'content-type': 'application/json', 'x-slightnudge-token': token },\n367:           body: JSON.stringify({ url: startResult.url }),\n368:         });\n369:         const checkResult = await check.json();\n370:         if (check.ok) {\n371:           attachPreview(checkResult.url);\n372:           setDockerStatus({ available: true, state: 'running', url: checkResult.url, logs: '', message: 'The isolated preview is ready.' });"
+  },
+  {
+    "file": "app/studio/[repoId]/page.tsx",
+    "line": 377,
+    "call": "const status = await statusResponse.json();",
+    "context": "372:           setDockerStatus({ available: true, state: 'running', url: checkResult.url, logs: '', message: 'The isolated preview is ready.' });\n373:           return;\n374:         }\n375:         if (check.status === 403 || check.status === 422) throw new Error(checkResult.error || 'The preview server cannot be embedded.');\n376:         const statusResponse = await fetch(endpoint);\n377:         const status = await statusResponse.json();\n378:         if (statusResponse.ok) setDockerStatus(status);\n379:         if (status.state === 'exited') throw new Error(`${status.message}\\n${status.logs || 'The container exited before the dev server was ready.'}`);\n380:         if (attempt % 4 === 3) setDockerStatus({ ...status, state: 'starting', message: 'Installing dependencies and starting the dev server…' });"
+  },
+  {
+    "file": "app/studio/[repoId]/page.tsx",
+    "line": 384,
+    "call": "const status = await statusResponse.json();",
+    "context": "379:         if (status.state === 'exited') throw new Error(`${status.message}\\n${status.logs || 'The container exited before the dev server was ready.'}`);\n380:         if (attempt % 4 === 3) setDockerStatus({ ...status, state: 'starting', message: 'Installing dependencies and starting the dev server…' });\n381:         await new Promise((resolve) => window.setTimeout(resolve, 2500));\n382:       }\n383:       const statusResponse = await fetch(endpoint);\n384:       const status = await statusResponse.json();\n385:       setDockerStatus(status);\n386:       throw new Error(`The preview is still starting. You can retry the connection in a moment.${status.logs ? `\\n${status.logs}` : ''}`);\n387:     } catch (cause) {"
+  },
+  {
+    "file": "app/studio/[repoId]/page.tsx",
+    "line": 407,
+    "call": "const data = await response.json();",
+    "context": "402:       const token = await getClientSessionToken();\n403:       const response = await fetch(`/api/slightnudge/repositories/${encodeURIComponent(params.repoId)}/docker-preview`, {\n404:         method: 'DELETE',\n405:         headers: { 'x-slightnudge-token': token },\n406:       });\n407:       const data = await response.json();\n408:       if (!response.ok) throw new Error(data.error || 'Could not stop the Docker preview.');\n409:       setDockerStatus({ available: true, state: 'missing', url: null, logs: '', message: data.message });\n410:       setPreviewUrl('');"
+  },
+  {
+    "file": "app/studio/[repoId]/page.tsx",
+    "line": 443,
+    "call": "const data = await response.json();",
+    "context": "438:       const token = await getClientSessionToken();\n439:       const response = await fetch('/api/slightnudge/preview', {\n440:         method: 'POST', headers: { 'content-type': 'application/json', 'x-slightnudge-token': token },\n441:         body: JSON.stringify({ repositoryId: params.repoId, sourcePath: selection.path, line: selection.line, column: selection.column, kind, ...(property ? { property, breakpoint } : {}), ...(direction ? { direction } : {}), value }),\n442:       });\n443:       const data = await response.json();\n444:       if (!response.ok) throw new Error(data.error || 'Could not prepare this source change.');\n445:       if (data.changed === false) { setEditNotice(data.message || 'That value is already applied.'); return; }\n446:       const preview = data as ImportedEditPreview;"
+  },
+  {
+    "file": "app/studio/[repoId]/page.tsx",
+    "line": 481,
+    "call": "const data = await response.json();",
+    "context": "476:       const response = await fetch(`/api/slightnudge/assets?repositoryId=${encodeURIComponent(params.repoId)}`, {\n477:         method: 'POST',\n478:         headers: { 'x-slightnudge-token': token },\n479:         body: form,\n480:       });\n481:       const data = await response.json();\n482:       if (!response.ok) throw new Error(data.error || 'Could not import this image.');\n483:       setAssets((current) => [data.asset, ...current.filter((asset) => asset.id !== data.asset.id)]);\n484:       setEditNotice('Image imported into this repository’s public/slightnudge-assets folder.');"
+  },
+  {
+    "file": "app/studio/[repoId]/page.tsx",
+    "line": 503,
+    "call": "const data = await response.json();",
+    "context": "498:       const token = await getClientSessionToken();\n499:       const response = await fetch(`/api/slightnudge/preview?id=${encodeURIComponent(editPreview.id)}`, {\n500:         method: 'DELETE',\n501:         headers: { 'x-slightnudge-token': token },\n502:       });\n503:       const data = await response.json();\n504:       if (!response.ok) throw new Error(data.error || 'Could not discard this source change.');\n505:       if (editPreview.previewType === 'reorder') {\n506:         const revertDir = editPreview.summary.includes('earlier') ? 'later' : 'earlier';"
+  },
+  {
+    "file": "app/studio/[repoId]/page.tsx",
+    "line": 532,
+    "call": "const data = await response.json();",
+    "context": "527:       const token = await getClientSessionToken();\n528:       const response = await fetch('/api/slightnudge/apply', {\n529:         method: 'POST', headers: { 'content-type': 'application/json', 'x-slightnudge-token': token },\n530:         body: JSON.stringify({ previewId: editPreview.id, groupId: editGroupIdRef.current, repositoryId: params.repoId, sourcePath: selection.path }),\n531:       });\n532:       const data = await response.json();\n533:       if (!response.ok || !data.success) {\n534:         if (data.code === 'SOURCE_CHANGED') {\n535:           sendImportedPreview(editPreview.previewType === 'textContent' ? 'textContent' : editPreview.previewType === 'imageSource' ? 'imageSource' : editPreview.previewType === 'reorder' ? 'reorder' : 'className', editPreview.previewType === 'className' ? editPreview.oldClassName! : editPreview.oldValue, editPreview.previewType === 'reorder' ? editPreview.summary.includes('earlier') ? 'later' : 'earlier' : undefined);"
+  },
+  {
+    "file": "app/studio/[repoId]/page.tsx",
+    "line": 600,
+    "call": "const data = await response.json();",
+    "context": "595:       const token = await getClientSessionToken();\n596:       const response = await fetch(`/api/slightnudge/repositories/${encodeURIComponent(params.repoId)}/adapter`, {\n597:         method: enable ? 'POST' : 'DELETE',\n598:         headers: { 'x-slightnudge-token': token },\n599:       });\n600:       const data = await response.json();\n601:       if (!response.ok) throw new Error(data.error || 'Could not update the Next.js source adapter.');\n602:       setAdapterEnabled(enable);\n603:       setProject(current => current ? { ...current, sourceAdapterEnabled: enable, sourceAdapterNeedsUpdate: false } : current);"
+  }
+]

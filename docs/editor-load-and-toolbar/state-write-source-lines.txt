@@ -1,0 +1,32 @@
+lib/slightnudge/source-group-journal.ts:43:    const value = JSON.parse(fs.readFileSync(file, 'utf8')) as SourceGroupJournal;
+lib/slightnudge/edit-history.ts:2:import fs, { chmodSync, closeSync, existsSync, fsyncSync, mkdirSync, openSync, readFileSync, readdirSync, realpathSync, statSync, unlinkSync, writeSync } from 'node:fs';
+lib/slightnudge/edit-history.ts:132:    contents = readFileSync(getHistoryPath(), 'utf8');
+lib/slightnudge/edit-history.ts:231:  let renameSucceeded = false;
+lib/slightnudge/edit-history.ts:236:      fs.renameSync(tempPath, filePath);
+lib/slightnudge/edit-history.ts:237:      renameSucceeded = true;
+lib/slightnudge/edit-history.ts:250:  if (!renameSucceeded) {
+lib/slightnudge/edit-history.ts:481:  const before = readFileSync(filePath, 'utf8');
+lib/slightnudge/edit-history.ts:485:    const after = readFileSync(filePath, 'utf8');
+lib/slightnudge/edit-history.ts:493:    const current = readFileSync(filePath, 'utf8');
+lib/slightnudge/edit-history.ts:512:        const persisted = JSON.parse(readFileSync(entryPath, 'utf8'));
+lib/slightnudge/edit-history.ts:545:  const current = readFileSync(safeFilePath, 'utf8');
+lib/slightnudge/edit-history.ts:592:  const pending = JSON.parse(readFileSync(pendingPath(id), 'utf8')) as PendingEdit;
+lib/slightnudge/edit-history.ts:601:  if (readFileSync(filePath, 'utf8') !== pending.before) throw new Error('The source changed outside this draft. Your draft is preserved; resolve the source change before saving.');
+lib/slightnudge/edit-history.ts:624:    contents = readFileSync(applyIntentPath(id), 'utf8');
+lib/slightnudge/edit-history.ts:705:  if (record.previewIds?.at(-1) !== id || !existsSync(filePath) || readFileSync(filePath, 'utf8') !== record.after) {
+lib/slightnudge/edit-history.ts:734:    if (relativeFilePath(filePath) !== path.normalize(pending.filePath) || readFileSync(filePath, 'utf8') !== pending.before) return { success: false as const, code: 'SOURCE_CHANGED', error: 'The source changed after review. Inspect its current version before continuing.' };
+lib/slightnudge/edit-history.ts:751:    const current = readFileSync(filePath, 'utf8');
+lib/slightnudge/edit-history.ts:774:  const current = readFileSync(filePath, 'utf8');
+lib/slightnudge/edit-history.ts:826:      if (readFileSync(filePath, 'utf8') !== pending.before) {
+lib/slightnudge/edit-history.ts:834:      if (readFileSync(filePath, 'utf8') !== pending.before) {
+lib/slightnudge/edit-history.ts:1039:  const current = readFileSync(absolutePath, 'utf8');
+lib/slightnudge/edit-history.ts:1265:    if (readFileSync(filePath, 'utf8') !== before) {
+lib/slightnudge/edit-history.ts:1277:      if (readFileSync(filePath, 'utf8') === before) {
+lib/slightnudge/edit-history.ts:1322:  try { sourceCurrent = readFileSync(path.resolve(getWorkspacePath(), record.filePath), 'utf8') === (record.undoAfter ?? record.before); } catch { /* The receipt remains true even when the current revision cannot be read. */ }
+lib/slightnudge/edit-history.ts:1336:    const current = readFileSync(path.resolve(getWorkspacePath(), record.filePath), 'utf8');
+lib/slightnudge/edit-history.ts:1395:    const current = readFileSync(resolvedPath, 'utf8');
+lib/slightnudge/repository-store.ts:2:import { lstat, mkdir, readFile, realpath, rename, writeFile } from 'node:fs/promises';
+lib/slightnudge/repository-store.ts:23:    const value = JSON.parse(await readFile(indexPath, 'utf8'));
+lib/slightnudge/repository-store.ts:98:  await writeFile(tempPath, JSON.stringify(nextIndex, null, 2), 'utf8');
+lib/slightnudge/repository-store.ts:99:  await rename(tempPath, indexPath);
+lib/slightnudge/repository-store.ts:161:  const content = await readFile(resolved.filePath, 'utf8');

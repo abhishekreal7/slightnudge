@@ -1,0 +1,144 @@
+{
+  "counts": {
+    "allowed": 522,
+    "refused": 192,
+    "NOT-CLICKABLE": 6
+  },
+  "pageErrors": 0,
+  "pointerAssertionFailures": 0,
+  "expectedAssertionFailures": 0,
+  "notClickable": [
+    {
+      "round": 1,
+      "surface": "old-studio",
+      "suite": "overfit",
+      "index": 1,
+      "expected": {
+        "file": "ShellLayout.tsx",
+        "line": 9,
+        "tag": "div",
+        "outcome": "allowed"
+      },
+      "layers": {
+        "status": "PASS",
+        "method": "Layers",
+        "selected": {
+          "path": "src/components/ShellLayout.tsx",
+          "line": 9,
+          "column": 5,
+          "tag": "div"
+        }
+      }
+    },
+    {
+      "round": 1,
+      "surface": "fit",
+      "suite": "overfit",
+      "index": 1,
+      "expected": {
+        "file": "ShellLayout.tsx",
+        "line": 9,
+        "tag": "div",
+        "outcome": "allowed"
+      },
+      "layers": {
+        "status": "PASS",
+        "method": "Layers",
+        "selected": {
+          "path": "src/components/ShellLayout.tsx",
+          "line": 9,
+          "column": 5,
+          "tag": "div"
+        }
+      }
+    },
+    {
+      "round": 2,
+      "surface": "old-studio",
+      "suite": "overfit",
+      "index": 1,
+      "expected": {
+        "file": "ShellLayout.tsx",
+        "line": 9,
+        "tag": "div",
+        "outcome": "allowed"
+      },
+      "layers": {
+        "status": "PASS",
+        "method": "Layers",
+        "selected": {
+          "path": "src/components/ShellLayout.tsx",
+          "line": 9,
+          "column": 5,
+          "tag": "div"
+        }
+      }
+    },
+    {
+      "round": 2,
+      "surface": "fit",
+      "suite": "overfit",
+      "index": 1,
+      "expected": {
+        "file": "ShellLayout.tsx",
+        "line": 9,
+        "tag": "div",
+        "outcome": "allowed"
+      },
+      "layers": {
+        "status": "PASS",
+        "method": "Layers",
+        "selected": {
+          "path": "src/components/ShellLayout.tsx",
+          "line": 9,
+          "column": 5,
+          "tag": "div"
+        }
+      }
+    },
+    {
+      "round": 3,
+      "surface": "old-studio",
+      "suite": "overfit",
+      "index": 1,
+      "expected": {
+        "file": "ShellLayout.tsx",
+        "line": 9,
+        "tag": "div",
+        "outcome": "allowed"
+      },
+      "layers": {
+        "status": "PASS",
+        "method": "Layers",
+        "selected": {
+          "path": "src/components/ShellLayout.tsx",
+          "line": 9,
+          "column": 5,
+          "tag": "div"
+        }
+      }
+    },
+    {
+      "round": 3,
+      "surface": "fit",
+      "suite": "overfit",
+      "index": 1,
+      "expected": {
+        "file": "ShellLayout.tsx",
+        "line": 9,
+        "tag": "div",
+        "outcome": "allowed"
+      },
+      "layers": {
+        "status": "PASS",
+        "method": "Layers",
+        "selected": {
+          "path": "src/components/ShellLayout.tsx",
+          "line": 9,
+          "column": 5,
+          "tag": "div"
+        }
+      }
+    }
+  ]
+}

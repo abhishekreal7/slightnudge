@@ -38,7 +38,8 @@
 .windowShell [data-editor-panel] { display: none; position: fixed; top: 80px; bottom: 16px; z-index: 80; border: 1px solid #e1e7e3; border-radius: 12px; box-shadow: 0 8px 32px #1d33231a; }
 .windowShell[data-window-panel='layers'] [data-editor-panel='layers'] { display: flex; left: 16px; }
 .windowShell[data-window-panel='inspector'] [data-editor-panel='inspector'] { display: flex; right: 16px; }
-.windowShell .editorTopbar { position: fixed; z-index: 90; bottom: 16px; top: auto; left: 50%; transform: translateX(-50%); width: max-content; max-width: calc(100vw - 32px); height: 48px; padding: 6px 10px; gap: 12px; border: 1px solid #e0e6e2; border-radius: 12px; background: #ffffffef; backdrop-filter: blur(16px); box-shadow: 0 4px 24px #223a2c15; }
+.windowShell .editorTopbar { position: fixed; z-index: 90; bottom: 16px; top: auto; left: 50%; transform: translateX(-50%); display: flex; flex-wrap: wrap; align-items: center; width: max-content; max-width: calc(100vw - 32px); min-height: 48px; height: auto; padding: 6px 10px; gap: 12px; border: 1px solid #e0e6e2; border-radius: 12px; background: #ffffffef; backdrop-filter: blur(16px); box-shadow: 0 4px 24px #223a2c15; pointer-events: none; }
+.windowShell .editorTopbar :is(button, a, input, select, textarea, [role='button']) { pointer-events: auto; }
 .windowShell .projectContext, .windowShell .projectsLink, .windowShell [data-editor-breadcrumb] { display: none; }
 .windowShell [data-editor-brand] { display: none; }
 .windowPanelHeader { display: flex; align-items: center; justify-content: space-between; height: 44px; padding: 0 12px; border-bottom: 1px solid #eef1ef; color: #46564b; }

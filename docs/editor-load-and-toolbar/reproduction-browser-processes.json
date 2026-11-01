@@ -1,0 +1,5 @@
+{
+  "ProcessId": 508,
+  "ParentProcessId": 17016,
+  "CommandLine": "\"C:\\Program Files\\WindowsApps\\OpenAI.CodexPrimaryRuntime.v26-1026-487-0_26.1026.487.0_x64__3k8sg7r9htsxt\\dependencies\\native\\powershell\\pwsh.exe\" -Command \"try { [Console]::OutputEncoding=[System.Text.Encoding]::UTF8 } catch {}\nGet-CimInstance Win32_Process | Where-Object { $_.CommandLine -match 'playwright_chromiumdev_profile|chrome-headless-shell' } | Select-Object ProcessId,ParentProcessId,CommandLine | ConvertTo-Json > docs/editor-load-and-toolbar/reproduction-browser-processes.json; Get-Content docs/editor-load-and-toolbar/reproduction-browser-processes.json -TotalCount 12; Get-NetTCPConnection -State Listen | Where-Object { $_.LocalPort -in 3000,3001,3002 } | Select-Object LocalPort,OwningProcess; Get-Content lib/slightnudge/edit-history.ts | Select-Object -Skip 124 -First 2; Get-Content docs/editor-load-and-toolbar/route-loads.json -Tail 3\""
+}

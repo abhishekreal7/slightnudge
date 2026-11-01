@@ -1,0 +1,164 @@
+[
+  {
+    "ProcessId": 31656,
+    "ParentProcessId": 18964,
+    "Name": "chrome.exe",
+    "CommandLine": "\"C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe\" "
+  },
+  {
+    "ProcessId": 18256,
+    "ParentProcessId": 31656,
+    "Name": "chrome.exe",
+    "CommandLine": "\"C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe\" --type=crashpad-handler \"--user-data-dir=C:\\Users\\abhis\\AppData\\Local\\Google\\Chrome\\User Data\" /prefetch:4 --monitor-self-annotation=ptype=crashpad-handler --user-stream-region=240,65568 \"--database=C:\\Users\\abhis\\AppData\\Local\\Google\\Chrome\\User Data\\Crashpad\" \"--metrics-dir=C:\\Users\\abhis\\AppData\\Local\\Google\\Chrome\\User Data\" --url=https://clients2.google.com/cr/report --annotation=channel= --annotation=plat=Win64 --annotation=prod=Chrome --annotation=ver=156.0.8078.76 --initial-client-data=0x134,0x138,0x13c,0x110,0x140,0x7ffafaf19f40,0x7ffafaf19f50,0x7ffafaf19f60"
+  },
+  {
+    "ProcessId": 7984,
+    "ParentProcessId": 31656,
+    "Name": "chrome.exe",
+    "CommandLine": "\"C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe\" --type=gpu-process --gpu-recent-crash-count=0 --no-pre-read-main-dll --gpu-preferences=WAAAAAAAAADgAAAEAAAAAAAAAAAAAGAAQAAAAAAAAAADAAAAAAAAADgAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAKAAAAAAAAAAoAAAAAAAAAAgAAAAAAAAAEAAAAAIAAAABAAAAAAAAAAgAAAAAAAAACAAAAAAAAAA= --metrics-shmem-handle=1952,i,16347597952434378514,7557163152026184071,262144 --field-trial-handle=2072,i,1329431087507008747,3615210965298865008,262144 --variations-seed-version=20261031-030032.506000-production --pseudonymization-salt-handle=2096,i,7725704352918540757,8989686693252861299,4 --trace-process-track-uuid=3190708988185955192 --mojo-platform-channel-handle=2060 /prefetch:2"
+  },
+  {
+    "ProcessId": 1960,
+    "ParentProcessId": 31656,
+    "Name": "chrome.exe",
+    "CommandLine": "\"C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe\" --type=utility --utility-sub-type=network.mojom.NetworkService --lang=en-US --service-sandbox-type=none --no-pre-read-main-dll --metrics-shmem-handle=2164,i,17973177480070279723,2767630022687903180,524288 --field-trial-handle=2072,i,1329431087507008747,3615210965298865008,262144 --variations-seed-version=20261031-030032.506000-production --pseudonymization-salt-handle=2096,i,7725704352918540757,8989686693252861299,4 --trace-process-track-uuid=3190708989122997041 --mojo-platform-channel-handle=2384 /prefetch:11"
+  },
+  {
+    "ProcessId": 23080,
+    "ParentProcessId": 31656,
+    "Name": "chrome.exe",
+    "CommandLine": "\"C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe\" --type=utility --utility-sub-type=storage.mojom.StorageService --lang=en-US --service-sandbox-type=service --no-pre-read-main-dll --metrics-shmem-handle=2488,i,2397222037867610165,11120276837538326104,524288 --field-trial-handle=2072,i,1329431087507008747,3615210965298865008,262144 --variations-seed-version=20261031-030032.506000-production --pseudonymization-salt-handle=2096,i,7725704352918540757,8989686693252861299,4 --trace-process-track-uuid=3190708990060038890 --mojo-platform-channel-handle=2504 /prefetch:13"
+  },
+  {
+    "ProcessId": 12148,
+    "ParentProcessId": 31656,
+    "Name": "chrome.exe",
+    "CommandLine": "\"C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe\" --type=utility --utility-sub-type=audio.mojom.AudioService --lang=en-US --service-sandbox-type=audio --video-capture-use-gpu-memory-buffer --no-pre-read-main-dll --metrics-shmem-handle=3156,i,2361398059685666437,10484622523881010639,524288 --field-trial-handle=2072,i,1329431087507008747,3615210965298865008,262144 --variations-seed-version=20261031-030032.506000-production --pseudonymization-salt-handle=2096,i,7725704352918540757,8989686693252861299,4 --trace-process-track-uuid=3190709018171294360 --mojo-platform-channel-handle=7972 /prefetch:12"
+  },
+  {
+    "ProcessId": 17828,
+    "ParentProcessId": 31656,
+    "Name": "chrome.exe",
+    "CommandLine": "\"C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe\" --type=utility --utility-sub-type=video_capture.mojom.VideoCaptureService --lang=en-US --service-sandbox-type=none --video-capture-use-gpu-memory-buffer --no-pre-read-main-dll --metrics-shmem-handle=9512,i,6096551947837540579,1284818003979615901,524288 --field-trial-handle=2072,i,1329431087507008747,3615210965298865008,262144 --variations-seed-version=20261031-030032.506000-production --pseudonymization-salt-handle=2096,i,7725704352918540757,8989686693252861299,4 --trace-process-track-uuid=3190709019108336209 --mojo-platform-channel-handle=7944 /prefetch:14"
+  },
+  {
+    "ProcessId": 18260,
+    "ParentProcessId": 31656,
+    "Name": "chrome.exe",
+    "CommandLine": "\"C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe\" --type=renderer --origin-trial-disabled-features=CanvasTextNg|WebAssemblyCustomDescriptors --no-pre-read-main-dll --video-capture-use-gpu-memory-buffer --lang=en-US --device-scale-factor=1.25 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=44 --launch-time-ticks=74434010488 --metrics-shmem-handle=11164,i,6680360901048377432,13248888165749555835,1572864 --field-trial-handle=2072,i,1329431087507008747,3615210965298865008,262144 --variations-seed-version=20261031-030032.506000-production --pseudonymization-salt-handle=2096,i,7725704352918540757,8989686693252861299,4 --trace-process-track-uuid=3190709027541712850 --mojo-platform-channel-handle=9680 /prefetch:1"
+  },
+  {
+    "ProcessId": 14208,
+    "ParentProcessId": 31332,
+    "Name": "node.exe",
+    "CommandLine": "\"C:\\Program Files\\WindowsApps\\OpenAI.CodexPrimaryRuntime.v26-1026-487-0_26.1026.487.0_x64__3k8sg7r9htsxt\\dependencies\\node\\bin\\node.exe\" \"C:\\Program Files\\WindowsApps\\OpenAI.CodexPrimaryRuntime.v26-1026-487-0_26.1026.487.0_x64__3k8sg7r9htsxt\\dependencies\\node\\node_modules\\@oai\\artifact-tool\\dist\\artifact-session\\host-daemon.mjs\""
+  },
+  {
+    "ProcessId": 22748,
+    "ParentProcessId": 17016,
+    "Name": "node.exe",
+    "CommandLine": "\"C:\\Users\\abhis\\AppData\\Local\\OpenAI\\Codex\\runtimes\\cua_node\\989c7523a11c09b9\\bin\\node.exe\" --import file:///C:/Users/abhis/.codex/plugins/cache/openai-bundled/unified-computer-use/26.1027.51404/require-browser-access.mjs C:\\Users\\abhis\\AppData\\Local\\OpenAI\\Codex\\runtimes\\cua_node\\989c7523a11c09b9\\bin\\node_modules\\@oai\\cua-repl\\bin\\cua-repl.mjs"
+  },
+  {
+    "ProcessId": 14896,
+    "ParentProcessId": 17016,
+    "Name": "node_repl.exe",
+    "CommandLine": "\"C:\\Users\\abhis\\AppData\\Local\\OpenAI\\Codex\\runtimes\\cua_node\\989c7523a11c09b9\\bin\\node_repl.exe\""
+  },
+  {
+    "ProcessId": 3796,
+    "ParentProcessId": 17016,
+    "Name": "node_repl.exe",
+    "CommandLine": "\"C:\\Users\\abhis\\AppData\\Local\\OpenAI\\Codex\\runtimes\\cua_node\\989c7523a11c09b9\\bin\\node_repl.exe\""
+  },
+  {
+    "ProcessId": 27912,
+    "ParentProcessId": 14744,
+    "Name": "node.exe",
+    "CommandLine": "\"C:\\Users\\abhis\\AppData\\Local\\OpenAI\\Codex\\runtimes\\cua_node\\989c7523a11c09b9\\bin\\node.exe\"  ./server.mjs"
+  },
+  {
+    "ProcessId": 10432,
+    "ParentProcessId": 22748,
+    "Name": "node_repl.exe",
+    "CommandLine": "C:\\Users\\abhis\\AppData\\Local\\OpenAI\\Codex\\runtimes\\cua_node\\989c7523a11c09b9\\bin\\node_repl.exe"
+  },
+  {
+    "ProcessId": 32908,
+    "ParentProcessId": 17016,
+    "Name": "node.exe",
+    "CommandLine": "\"C:\\Users\\abhis\\AppData\\Local\\OpenAI\\Codex\\runtimes\\cua_node\\989c7523a11c09b9\\bin\\node.exe\" --import file:///C:/Users/abhis/.codex/plugins/cache/openai-bundled/unified-computer-use/26.1027.51404/require-browser-access.mjs C:\\Users\\abhis\\AppData\\Local\\OpenAI\\Codex\\runtimes\\cua_node\\989c7523a11c09b9\\bin\\node_modules\\@oai\\cua-repl\\bin\\cua-repl.mjs"
+  },
+  {
+    "ProcessId": 19668,
+    "ParentProcessId": 17016,
+    "Name": "node_repl.exe",
+    "CommandLine": "\"C:\\Users\\abhis\\AppData\\Local\\OpenAI\\Codex\\runtimes\\cua_node\\989c7523a11c09b9\\bin\\node_repl.exe\""
+  },
+  {
+    "ProcessId": 11992,
+    "ParentProcessId": 17016,
+    "Name": "node_repl.exe",
+    "CommandLine": "\"C:\\Users\\abhis\\AppData\\Local\\OpenAI\\Codex\\runtimes\\cua_node\\989c7523a11c09b9\\bin\\node_repl.exe\""
+  },
+  {
+    "ProcessId": 17812,
+    "ParentProcessId": 26676,
+    "Name": "node.exe",
+    "CommandLine": "\"C:\\Users\\abhis\\AppData\\Local\\OpenAI\\Codex\\runtimes\\cua_node\\989c7523a11c09b9\\bin\\node.exe\"  ./server.mjs"
+  },
+  {
+    "ProcessId": 31032,
+    "ParentProcessId": 32908,
+    "Name": "node_repl.exe",
+    "CommandLine": "C:\\Users\\abhis\\AppData\\Local\\OpenAI\\Codex\\runtimes\\cua_node\\989c7523a11c09b9\\bin\\node_repl.exe"
+  },
+  {
+    "ProcessId": 32676,
+    "ParentProcessId": 31656,
+    "Name": "chrome.exe",
+    "CommandLine": "\"C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe\" --type=renderer --top-chrome-webui --origin-trial-disabled-features=CanvasTextNg|WebAssemblyCustomDescriptors --no-pre-read-main-dll --video-capture-use-gpu-memory-buffer --lang=en-US --device-scale-factor=1.25 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=140 --launch-time-ticks=77821381686 --metrics-shmem-handle=7784,i,17431154286207791430,7547286667487204129,1572864 --field-trial-handle=2072,i,1329431087507008747,3615210965298865008,262144 --variations-seed-version=20261031-030032.506000-production --pseudonymization-salt-handle=2096,i,7725704352918540757,8989686693252861299,4 --trace-process-track-uuid=3190709117497730354 --mojo-platform-channel-handle=9544 /prefetch:1"
+  },
+  {
+    "ProcessId": 27828,
+    "ParentProcessId": 31656,
+    "Name": "chrome.exe",
+    "CommandLine": "\"C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe\" --type=renderer --origin-trial-disabled-features=CanvasTextNg|WebAssemblyCustomDescriptors --no-pre-read-main-dll --video-capture-use-gpu-memory-buffer --lang=en-US --device-scale-factor=1.25 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=143 --launch-time-ticks=77821582768 --metrics-shmem-handle=8372,i,3998339135637405328,13955009073019284988,1572864 --field-trial-handle=2072,i,1329431087507008747,3615210965298865008,262144 --variations-seed-version=20261031-030032.506000-production --pseudonymization-salt-handle=2096,i,7725704352918540757,8989686693252861299,4 --trace-process-track-uuid=3190709120308855901 --mojo-platform-channel-handle=4932 /prefetch:1"
+  },
+  {
+    "ProcessId": 33240,
+    "ParentProcessId": 31656,
+    "Name": "chrome.exe",
+    "CommandLine": "\"C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe\" --type=utility --utility-sub-type=data_decoder.mojom.DataDecoderService --lang=en-US --service-sandbox-type=service --video-capture-use-gpu-memory-buffer --no-pre-read-main-dll --metrics-shmem-handle=8972,i,12511465971412832882,6380209650120985664,524288 --field-trial-handle=2072,i,1329431087507008747,3615210965298865008,262144 --variations-seed-version=20261031-030032.506000-production --pseudonymization-salt-handle=2096,i,7725704352918540757,8989686693252861299,4 --trace-process-track-uuid=3190709126868148844 --mojo-platform-channel-handle=9064 /prefetch:14"
+  },
+  {
+    "ProcessId": 26932,
+    "ParentProcessId": 31656,
+    "Name": "chrome.exe",
+    "CommandLine": "\"C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe\" --type=renderer --origin-trial-disabled-features=CanvasTextNg|WebAssemblyCustomDescriptors --no-pre-read-main-dll --video-capture-use-gpu-memory-buffer --lang=en-US --device-scale-factor=1.25 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=169 --launch-time-ticks=78223879559 --metrics-shmem-handle=5468,i,15633320776572275667,6270167538117692317,1572864 --field-trial-handle=2072,i,1329431087507008747,3615210965298865008,262144 --variations-seed-version=20261031-030032.506000-production --pseudonymization-salt-handle=2096,i,7725704352918540757,8989686693252861299,4 --trace-process-track-uuid=3190709144671943975 --mojo-platform-channel-handle=5644 /prefetch:1"
+  },
+  {
+    "ProcessId": 20932,
+    "ParentProcessId": 31656,
+    "Name": "chrome.exe",
+    "CommandLine": "\"C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe\" --type=renderer --extension-process --origin-trial-disabled-features=CanvasTextNg|WebAssemblyCustomDescriptors --no-pre-read-main-dll --video-capture-use-gpu-memory-buffer --lang=en-US --device-scale-factor=1.25 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=183 --launch-time-ticks=78333948824 --metrics-shmem-handle=5052,i,9290538543285354863,16473832318728743717,1572864 --field-trial-handle=2072,i,1329431087507008747,3615210965298865008,262144 --variations-seed-version=20261031-030032.506000-production --pseudonymization-salt-handle=2096,i,7725704352918540757,8989686693252861299,4 --trace-process-track-uuid=3190709157790529861 --mojo-platform-channel-handle=8260 /prefetch:9"
+  },
+  {
+    "ProcessId": 4524,
+    "ParentProcessId": 31656,
+    "Name": "chrome.exe",
+    "CommandLine": "\"C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe\" --type=renderer --origin-trial-disabled-features=CanvasTextNg|WebAssemblyCustomDescriptors --no-pre-read-main-dll --video-capture-use-gpu-memory-buffer --lang=en-US --device-scale-factor=1.25 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=184 --launch-time-ticks=78334025818 --metrics-shmem-handle=9508,i,16386577138005524305,16027580235470170105,1572864 --field-trial-handle=2072,i,1329431087507008747,3615210965298865008,262144 --variations-seed-version=20261031-030032.506000-production --pseudonymization-salt-handle=2096,i,7725704352918540757,8989686693252861299,4 --trace-process-track-uuid=3190709158727571710 --mojo-platform-channel-handle=6168 /prefetch:1"
+  },
+  {
+    "ProcessId": 4828,
+    "ParentProcessId": 31656,
+    "Name": "chrome.exe",
+    "CommandLine": "\"C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe\" --type=renderer --origin-trial-disabled-features=CanvasTextNg|WebAssemblyCustomDescriptors --no-pre-read-main-dll --video-capture-use-gpu-memory-buffer --lang=en-US --device-scale-factor=1.25 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=185 --launch-time-ticks=78336062522 --metrics-shmem-handle=11124,i,15581093641698457454,13185021156925410346,1572864 --field-trial-handle=2072,i,1329431087507008747,3615210965298865008,262144 --variations-seed-version=20261031-030032.506000-production --pseudonymization-salt-handle=2096,i,7725704352918540757,8989686693252861299,4 --trace-process-track-uuid=3190709159664613559 --mojo-platform-channel-handle=8176 /prefetch:1"
+  },
+  {
+    "ProcessId": 18264,
+    "ParentProcessId": 31656,
+    "Name": "chrome.exe",
+    "CommandLine": "\"C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe\" --type=renderer --origin-trial-disabled-features=CanvasTextNg|WebAssemblyCustomDescriptors --no-pre-read-main-dll --video-capture-use-gpu-memory-buffer --lang=en-US --device-scale-factor=1.25 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=186 --launch-time-ticks=78368349120 --metrics-shmem-handle=6296,i,15761688953295134780,13979281368366321119,1572864 --field-trial-handle=2072,i,1329431087507008747,3615210965298865008,262144 --variations-seed-version=20261031-030032.506000-production --pseudonymization-salt-handle=2096,i,7725704352918540757,8989686693252861299,4 --trace-process-track-uuid=3190709160601655408 --mojo-platform-channel-handle=10980 /prefetch:1"
+  }
+]

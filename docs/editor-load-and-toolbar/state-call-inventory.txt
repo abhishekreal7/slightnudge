@@ -1,0 +1,5 @@
+lib\slightnudge\repository-store.ts:2:import { lstat, mkdir, readFile, realpath, rename, writeFile } from 'node:fs/promises';
+lib\slightnudge\repository-store.ts:23:    const value = JSON.parse(await readFile(indexPath, 'utf8'));
+lib\slightnudge\repository-store.ts:98:  await writeFile(tempPath, JSON.stringify(nextIndex, null, 2), 'utf8');
+lib\slightnudge\repository-store.ts:99:  await rename(tempPath, indexPath);
+lib\slightnudge\repository-store.ts:161:  const content = await readFile(resolved.filePath, 'utf8');

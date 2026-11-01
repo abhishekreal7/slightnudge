@@ -1,0 +1,7 @@
+lib/slightnudge/studio-recovery.ts:29:    const record = JSON.parse(raw) as StudioRecoveryRecord;
+lib/slightnudge/source-group-journal.ts:43:    const value = JSON.parse(fs.readFileSync(file, 'utf8')) as SourceGroupJournal;
+lib/slightnudge/source-operation-lock.ts:50:      try { contents = fs.readFileSync(path.join(root, entry), 'utf8'); }
+lib/slightnudge/source-operation-lock.ts:53:        const data = JSON.parse(contents);
+lib/slightnudge/source-operation-lock.ts:71:    try { fs.writeFileSync(fd, JSON.stringify({ pid: process.pid, processStart, ticket: null })); fs.fsyncSync(fd); }
+lib/slightnudge/source-operation-lock.ts:77:    try { fs.writeFileSync(update, JSON.stringify({ pid: process.pid, processStart, ticket })); fs.fsyncSync(update); }
+lib/slightnudge/source-operation-lock.ts:83:      try { fs.renameSync(temporary, own); break; }

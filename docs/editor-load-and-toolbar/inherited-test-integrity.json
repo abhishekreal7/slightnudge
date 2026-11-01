@@ -1,0 +1,838 @@
+[
+  {
+    "file": "test/helpers/m0-iframe-selection-gate.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/m0-case8-diagnostic.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/m0-overfit.iframe.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/m0-regression.iframe.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/account-isolation.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/adapter-webpack-regression.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/adapter.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/advanced-image-bridge.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/advanced-image-source.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/analytics-funnel.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/appearance-layout.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/apply-client-recovery.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/apply-crash-recovery.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/apply-denial.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/apply-outcome.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/apply-review-race.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/baselines/1-plain-static.tsx",
+    "unchanged": true
+  },
+  {
+    "file": "test/button-editing.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/component-actions-bridge.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/component-actions.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/component-inline-bridge.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/component-ownership.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/component-props.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/container-move.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/continuous-draft.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/database-launch.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/direct-manipulation.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/drag-diagnosis.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/drag-move.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/drag-resize-move.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/fixtures.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/helpers/advanced-image-browser.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/helpers/appearance-layout-browser.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/helpers/apply-crash-worker.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/helpers/button-editing-browser.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/helpers/component-actions-browser.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/helpers/component-props-browser.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/helpers/container-move-browser.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/helpers/continuous-draft-browser.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/helpers/core-editing-browser.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/helpers/create-saas-sample.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/helpers/current-studio-live-browser.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/helpers/current-studio-review-browser.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/helpers/direct-manipulation-browser.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/helpers/drag-move-browser.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/helpers/editor-ergonomics-browser.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/helpers/group-crash-worker.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/helpers/high-fidelity-browser.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/helpers/icon-properties-browser.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/helpers/image-content-browser.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/helpers/image-framing-browser.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/helpers/imported-advanced-image-browser.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/helpers/imported-canvas-browser.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/helpers/imported-responsive-browser.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/helpers/imported-review-browser.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/helpers/inline-text-browser.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/helpers/layout-controls-browser.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/helpers/live-review-browser.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/helpers/live-window-browser.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/helpers/m1-interactions-browser.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/helpers/multi-file-browser.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/helpers/prepare-source-project.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/helpers/project-compatibility-browser.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/helpers/real-multi-file-browser.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/helpers/real-project-canvas-browser.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/helpers/responsive-editing-browser.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/helpers/section-order-browser.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/helpers/shared-instance-browser.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/helpers/single-canvas-browser.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/helpers/source-lock-worker.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/helpers/source-project-browser.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/helpers/source-selection-workflows.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/helpers/studio-reload-recovery-browser.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/helpers/studio-resize-browser.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/helpers/test-server.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/helpers/undo-crash-worker.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/helpers/unified-canvas-browser.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/helpers/workspace-redesign-browser.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/history-resilience.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/history-summary.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/hmr-sync.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/icon-properties-bridge.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/icon-properties.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/icon-replacement-bridge.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/icon-replacement.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/image-assets.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/image-attributes-bridge.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/image-content.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/image-framing.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/imported-canvas-runtime.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/imported-draft.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/in-situ-controls.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/in-situ-focus.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/inspect-rects.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/inspection-client.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/jsx-text.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/labs/m0-control-lab/.gitignore",
+    "unchanged": true
+  },
+  {
+    "file": "test/labs/m0-control-lab/.slightnudge-source-adapter/bridge-client.mjs",
+    "unchanged": true
+  },
+  {
+    "file": "test/labs/m0-control-lab/.slightnudge-source-adapter/next-source-loader.cjs",
+    "unchanged": true
+  },
+  {
+    "file": "test/labs/m0-control-lab/.slightnudge-source-adapter/state.json",
+    "unchanged": true
+  },
+  {
+    "file": "test/labs/m0-control-lab/AGENTS.md",
+    "unchanged": true
+  },
+  {
+    "file": "test/labs/m0-control-lab/M0-SELECTION-PLAN.md",
+    "unchanged": true
+  },
+  {
+    "file": "test/labs/m0-control-lab/README.md",
+    "unchanged": true
+  },
+  {
+    "file": "test/labs/m0-control-lab/eslint.config.mjs",
+    "unchanged": true
+  },
+  {
+    "file": "test/labs/m0-control-lab/next.config.mjs",
+    "unchanged": true
+  },
+  {
+    "file": "test/labs/m0-control-lab/next.config.slightnudge-original.mjs",
+    "unchanged": true
+  },
+  {
+    "file": "test/labs/m0-control-lab/package.json",
+    "unchanged": true
+  },
+  {
+    "file": "test/labs/m0-control-lab/postcss.config.mjs",
+    "unchanged": true
+  },
+  {
+    "file": "test/labs/m0-control-lab/public/file.svg",
+    "unchanged": true
+  },
+  {
+    "file": "test/labs/m0-control-lab/public/globe.svg",
+    "unchanged": true
+  },
+  {
+    "file": "test/labs/m0-control-lab/public/next.svg",
+    "unchanged": true
+  },
+  {
+    "file": "test/labs/m0-control-lab/public/vercel.svg",
+    "unchanged": true
+  },
+  {
+    "file": "test/labs/m0-control-lab/public/window.svg",
+    "unchanged": true
+  },
+  {
+    "file": "test/labs/m0-control-lab/src/app/favicon.ico",
+    "unchanged": true
+  },
+  {
+    "file": "test/labs/m0-control-lab/src/app/globals.css",
+    "unchanged": true
+  },
+  {
+    "file": "test/labs/m0-control-lab/src/app/layout.tsx",
+    "unchanged": true
+  },
+  {
+    "file": "test/labs/m0-control-lab/src/app/page.tsx",
+    "unchanged": true
+  },
+  {
+    "file": "test/labs/m0-control-lab/src/components/sections/FAQ.tsx",
+    "unchanged": true
+  },
+  {
+    "file": "test/labs/m0-control-lab/src/components/sections/Features.tsx",
+    "unchanged": true
+  },
+  {
+    "file": "test/labs/m0-control-lab/src/components/sections/Footer.tsx",
+    "unchanged": true
+  },
+  {
+    "file": "test/labs/m0-control-lab/src/components/sections/Hero.tsx",
+    "unchanged": true
+  },
+  {
+    "file": "test/labs/m0-control-lab/src/components/sections/Pricing.tsx",
+    "unchanged": true
+  },
+  {
+    "file": "test/labs/m0-control-lab/src/components/sections/Testimonials.tsx",
+    "unchanged": true
+  },
+  {
+    "file": "test/labs/m0-control-lab/src/lib/cn.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/labs/m0-control-lab/tsconfig.json",
+    "unchanged": true
+  },
+  {
+    "file": "test/labs/m0-overfit-lab/.slightnudge-source-adapter/bridge-client.mjs",
+    "unchanged": true
+  },
+  {
+    "file": "test/labs/m0-overfit-lab/.slightnudge-source-adapter/next-source-loader.cjs",
+    "unchanged": true
+  },
+  {
+    "file": "test/labs/m0-overfit-lab/.slightnudge-source-adapter/state.json",
+    "unchanged": true
+  },
+  {
+    "file": "test/labs/m0-overfit-lab/AGENTS.md",
+    "unchanged": true
+  },
+  {
+    "file": "test/labs/m0-overfit-lab/eslint.config.mjs",
+    "unchanged": true
+  },
+  {
+    "file": "test/labs/m0-overfit-lab/next-env.d.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/labs/m0-overfit-lab/next.config.mjs",
+    "unchanged": true
+  },
+  {
+    "file": "test/labs/m0-overfit-lab/next.config.slightnudge-original.mjs",
+    "unchanged": true
+  },
+  {
+    "file": "test/labs/m0-overfit-lab/package.json",
+    "unchanged": true
+  },
+  {
+    "file": "test/labs/m0-overfit-lab/postcss.config.mjs",
+    "unchanged": true
+  },
+  {
+    "file": "test/labs/m0-overfit-lab/src/app/globals.css",
+    "unchanged": true
+  },
+  {
+    "file": "test/labs/m0-overfit-lab/src/app/layout.tsx",
+    "unchanged": true
+  },
+  {
+    "file": "test/labs/m0-overfit-lab/src/app/page.tsx",
+    "unchanged": true
+  },
+  {
+    "file": "test/labs/m0-overfit-lab/src/components/Banner.tsx",
+    "unchanged": true
+  },
+  {
+    "file": "test/labs/m0-overfit-lab/src/components/CardListSection.tsx",
+    "unchanged": true
+  },
+  {
+    "file": "test/labs/m0-overfit-lab/src/components/DynamicWidget.tsx",
+    "unchanged": true
+  },
+  {
+    "file": "test/labs/m0-overfit-lab/src/components/FooterSection.tsx",
+    "unchanged": true
+  },
+  {
+    "file": "test/labs/m0-overfit-lab/src/components/NestedGridSection.tsx",
+    "unchanged": true
+  },
+  {
+    "file": "test/labs/m0-overfit-lab/src/components/ShellLayout.tsx",
+    "unchanged": true
+  },
+  {
+    "file": "test/labs/m0-overfit-lab/src/lib/cn.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/labs/m0-overfit-lab/tsconfig.json",
+    "unchanged": true
+  },
+  {
+    "file": "test/m0-overfit.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/m0-regression.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/m1-interactions.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/m5-containment-helper.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/move-controls.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/move-css-compatibility.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/move-expectations.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/multi-file-crash.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/multi-file-group.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/payment-fulfillment.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/payments.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/pipeline-integration.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/preview-connection.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/prewrite-hook-guard.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/production-boundaries.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/project-compatibility.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/real-project-benchmark.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/real-state-guard.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/reorder-safety.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/repro-glitch.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/responsive-scopes.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/responsive-tailwind3.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/review-consent.browser.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/review-demo-flags.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/runtime-class-ownership.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/s1-auth-bypass.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/s1-auth-origin.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/s2-path-traversal.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/s3-atomic-write.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/s5-tailwind-compile.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/s5-theme-support.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/s5-v3-support.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/section-order-bridge.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/section-order.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/security-hardening.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/shared-instance-bridge.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/shared-instance.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/source-operation-lock.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/source-rendered-bridge.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/step1-selection.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/step2-nudging.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/step3-file-git.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/studio-benchmark.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/studio-recovery.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/studio-restore.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/style-isolation.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/take-screenshot.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/test-full-flow.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/test-override-guard.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/token-html-host.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/token-undo.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/undo-client-recovery.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/undo-m3-restored-token.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/undo-m5-parent-junction.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/undo-recovery.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/undo-refusals.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/undo-stacked-edits.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/unified-editor-routing.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/unified-editor.browser.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/unified-navigation-preload.cjs",
+    "unchanged": true
+  },
+  {
+    "file": "test/unit.test.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/verify-fix.ts",
+    "unchanged": true
+  },
+  {
+    "file": "test/verify-live-move.ts",
+    "unchanged": true
+  }
+]

@@ -1,0 +1,35 @@
+{
+  "nodes": [
+    {
+      "ProcessId": 14208,
+      "ParentProcessId": 31332,
+      "Name": "node.exe",
+      "CommandLine": "\"C:\\Program Files\\WindowsApps\\OpenAI.CodexPrimaryRuntime.v26-1026-487-0_26.1026.487.0_x64__3k8sg7r9htsxt\\dependencies\\node\\bin\\node.exe\" \"C:\\Program Files\\WindowsApps\\OpenAI.CodexPrimaryRuntime.v26-1026-487-0_26.1026.487.0_x64__3k8sg7r9htsxt\\dependencies\\node\\node_modules\\@oai\\artifact-tool\\dist\\artifact-session\\host-daemon.mjs\""
+    },
+    {
+      "ProcessId": 22748,
+      "ParentProcessId": 17016,
+      "Name": "node.exe",
+      "CommandLine": "\"C:\\Users\\abhis\\AppData\\Local\\OpenAI\\Codex\\runtimes\\cua_node\\989c7523a11c09b9\\bin\\node.exe\" --import file:///C:/Users/abhis/.codex/plugins/cache/openai-bundled/unified-computer-use/26.1027.51404/require-browser-access.mjs C:\\Users\\abhis\\AppData\\Local\\OpenAI\\Codex\\runtimes\\cua_node\\989c7523a11c09b9\\bin\\node_modules\\@oai\\cua-repl\\bin\\cua-repl.mjs"
+    },
+    {
+      "ProcessId": 27912,
+      "ParentProcessId": 14744,
+      "Name": "node.exe",
+      "CommandLine": "\"C:\\Users\\abhis\\AppData\\Local\\OpenAI\\Codex\\runtimes\\cua_node\\989c7523a11c09b9\\bin\\node.exe\"  ./server.mjs"
+    },
+    {
+      "ProcessId": 32908,
+      "ParentProcessId": 17016,
+      "Name": "node.exe",
+      "CommandLine": "\"C:\\Users\\abhis\\AppData\\Local\\OpenAI\\Codex\\runtimes\\cua_node\\989c7523a11c09b9\\bin\\node.exe\" --import file:///C:/Users/abhis/.codex/plugins/cache/openai-bundled/unified-computer-use/26.1027.51404/require-browser-access.mjs C:\\Users\\abhis\\AppData\\Local\\OpenAI\\Codex\\runtimes\\cua_node\\989c7523a11c09b9\\bin\\node_modules\\@oai\\cua-repl\\bin\\cua-repl.mjs"
+    },
+    {
+      "ProcessId": 17812,
+      "ParentProcessId": 26676,
+      "Name": "node.exe",
+      "CommandLine": "\"C:\\Users\\abhis\\AppData\\Local\\OpenAI\\Codex\\runtimes\\cua_node\\989c7523a11c09b9\\bin\\node.exe\"  ./server.mjs"
+    }
+  ],
+  "browserProcessCount": 16
+}

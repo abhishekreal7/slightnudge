@@ -1,0 +1,341 @@
+ components/slightnudge/editor-workspace.module.css |      3 +-
+ components/slightnudge/useWindowDock.ts            |     38 +-
+ docs/editor-load-and-toolbar/README.md             |     66 +
+ docs/editor-load-and-toolbar/all-state-writes.txt  |     47 +
+ docs/editor-load-and-toolbar/api-return-sites.txt  |     43 +
+ .../checkpoint-git-log-stat.txt                    |    653 +
+ docs/editor-load-and-toolbar/clean-lab.json        |     10 +
+ docs/editor-load-and-toolbar/commit-scope.md       |      9 +
+ docs/editor-load-and-toolbar/diagnosis.md          |     66 +
+ docs/editor-load-and-toolbar/dock-fix.md           |     25 +
+ .../editor-json-call-inventory.txt                 |    215 +
+ .../editor-load-checkpoint-log.txt                 |    653 +
+ .../editor-load-processes-initial.json             |    164 +
+ .../final-git-status-before-commit.txt             |    764 +
+ docs/editor-load-and-toolbar/fixture-parity.json   |     82 +
+ .../inline-layers-after.json                       |      9 +
+ .../inline-layers-after.log                        |      1 +
+ .../inline-layers-after.png                        |    Bin 0 -> 111495 bytes
+ .../inline-layers-before.json                      |      9 +
+ .../inline-layers-before.log                       |      1 +
+ .../inline-layers-before.png                       |    Bin 0 -> 111869 bytes
+ .../json-full-inventory.txt                        |    232 +
+ docs/editor-load-and-toolbar/json-read-calls.txt   |     79 +
+ .../json-read-contexts.json                        |    476 +
+ docs/editor-load-and-toolbar/json-read-contexts.md |   1109 +
+ docs/editor-load-and-toolbar/load-0-failure.html   |     43 +
+ docs/editor-load-and-toolbar/load-0-failure.png    |    Bin 0 -> 28201 bytes
+ docs/editor-load-and-toolbar/load-1-failure.html   |     43 +
+ docs/editor-load-and-toolbar/load-1-failure.png    |    Bin 0 -> 28201 bytes
+ docs/editor-load-and-toolbar/load-summary.json     |      9 +
+ docs/editor-load-and-toolbar/memory-after.json     |      4 +
+ .../memory-during-matrix.json                      |      4 +
+ docs/editor-load-and-toolbar/memory-during.json    |      4 +
+ docs/editor-load-and-toolbar/memory-initial.json   |      5 +
+ .../obstruction-after-cold.json                    |    296 +
+ .../obstruction-after-cold.log                     |      8 +
+ .../obstruction-after-cold.png                     |    Bin 0 -> 68081 bytes
+ .../obstruction-after-dock.json                    |     52 +
+ .../obstruction-after-dock.log                     |      7 +
+ .../obstruction-after-dock.png                     |    Bin 0 -> 68375 bytes
+ .../obstruction-after-final.json                   |    306 +
+ .../obstruction-after-final.log                    |      8 +
+ .../obstruction-after-final.png                    |    Bin 0 -> 69807 bytes
+ .../obstruction-before-dock.json                   |     55 +
+ .../obstruction-before-dock.log                    |      7 +
+ .../obstruction-before-dock.png                    |    Bin 0 -> 57957 bytes
+ .../obstruction-before-overflow.json               |    296 +
+ .../obstruction-before-overflow.log                |      8 +
+ .../obstruction-before-overflow.png                |    Bin 0 -> 68379 bytes
+ .../obstruction-before.json                        |     55 +
+ .../editor-load-and-toolbar/obstruction-before.log |      7 +
+ .../editor-load-and-toolbar/obstruction-before.png |    Bin 0 -> 57957 bytes
+ .../editor-load-and-toolbar/other-state-writes.txt |      7 +
+ .../editor-load-and-toolbar/parallel-requests.json |   1052 +
+ .../processes-during-matrix.json                   |     72 +
+ docs/editor-load-and-toolbar/processes-during.json |     67 +
+ .../editor-load-and-toolbar/processes-initial.json |     35 +
+ docs/editor-load-and-toolbar/product-diff-stat.txt |      4 +
+ docs/editor-load-and-toolbar/product-diff.patch    |     91 +
+ .../project-client-json.txt                        |     17 +
+ docs/editor-load-and-toolbar/protected-before.json |    401 +
+ .../reproduction-before.log                        |      8 +
+ .../editor-load-and-toolbar/reproduction-bound.log |     56 +
+ .../reproduction-bound/load-events.json            |      1 +
+ .../reproduction-bound/parallel-requests.json      |   1052 +
+ .../reproduction-bound/route-loads.json            |    452 +
+ .../reproduction-browser-processes.json            |      5 +
+ .../root-restart-processes.json                    |     12 +
+ docs/editor-load-and-toolbar/route-loads.json      |     94 +
+ .../selection-initial-overflow/STOP.json           |      5 +
+ .../selection-initial-overflow/matrix-raw.log      |     14 +
+ .../overfit-unchanged-expectations.txt             |      1 +
+ .../regression-unchanged-expectations.txt          |      1 +
+ .../round-1-fit-overfit-case-5-blocked.png         |    Bin 0 -> 58820 bytes
+ .../round-1-fit-overfit.exit.json                  |      3 +
+ .../round-1-fit-overfit.json                       |   7484 +
+ .../round-1-fit-overfit.log                        |     32 +
+ .../round-1-fit-regression-case-1-blocked.png      |    Bin 0 -> 59478 bytes
+ .../round-1-fit-regression-case-12-blocked.png     |    Bin 0 -> 67526 bytes
+ .../round-1-fit-regression-case-19-blocked.png     |    Bin 0 -> 67494 bytes
+ .../round-1-fit-regression-case-24-blocked.png     |    Bin 0 -> 67390 bytes
+ .../round-1-fit-regression-case-6-blocked.png      |    Bin 0 -> 59575 bytes
+ .../round-1-fit-regression.exit.json               |      3 +
+ .../round-1-fit-regression.json                    |   7191 +
+ .../round-1-fit-regression.log                     |     32 +
+ .../round-1-full-overfit-case-1-blocked.png        |    Bin 0 -> 67575 bytes
+ .../round-1-full-overfit-case-27-blocked.png       |    Bin 0 -> 78756 bytes
+ .../round-1-full-overfit-case-28-blocked.png       |    Bin 0 -> 81884 bytes
+ .../round-1-full-overfit-case-5-blocked.png        |    Bin 0 -> 68898 bytes
+ .../round-1-full-overfit.exit.json                 |      3 +
+ .../round-1-full-overfit.json                      |   7633 +
+ .../round-1-full-overfit.log                       |     32 +
+ .../round-1-full-regression-case-12-blocked.png    |    Bin 0 -> 77297 bytes
+ .../round-1-full-regression-case-13-blocked.png    |    Bin 0 -> 77390 bytes
+ .../round-1-full-regression-case-19-blocked.png    |    Bin 0 -> 77800 bytes
+ .../round-1-full-regression-case-24-blocked.png    |    Bin 0 -> 72170 bytes
+ .../round-1-full-regression-case-29-blocked.png    |    Bin 0 -> 71583 bytes
+ .../round-1-full-regression-case-6-blocked.png     |    Bin 0 -> 68387 bytes
+ .../round-1-full-regression.exit.json              |      3 +
+ .../round-1-full-regression.json                   |   7215 +
+ .../round-1-full-regression.log                    |     32 +
+ .../round-1-git-status.txt                         |    739 +
+ .../round-1-old-studio-overfit-case-2-blocked.png  |    Bin 0 -> 92684 bytes
+ .../round-1-old-studio-overfit.exit.json           |      3 +
+ .../round-1-old-studio-overfit.json                |   7489 +
+ .../round-1-old-studio-overfit.log                 |     32 +
+ .../round-1-old-studio-regression.exit.json        |      3 +
+ .../round-1-old-studio-regression.json             |   7061 +
+ .../round-1-old-studio-regression.log              |     32 +
+ .../round-1-old-window-overfit-case-1-blocked.png  |    Bin 0 -> 67575 bytes
+ .../round-1-old-window-overfit-case-27-blocked.png |    Bin 0 -> 78756 bytes
+ .../round-1-old-window-overfit-case-28-blocked.png |    Bin 0 -> 81910 bytes
+ .../round-1-old-window-overfit-case-5-blocked.png  |    Bin 0 -> 68898 bytes
+ .../round-1-old-window-overfit.exit.json           |      3 +
+ .../round-1-old-window-overfit.json                |   7643 +
+ .../round-1-old-window-overfit.log                 |     32 +
+ ...und-1-old-window-regression-case-12-blocked.png |    Bin 0 -> 77297 bytes
+ ...und-1-old-window-regression-case-13-blocked.png |    Bin 0 -> 77296 bytes
+ ...und-1-old-window-regression-case-19-blocked.png |    Bin 0 -> 77800 bytes
+ ...und-1-old-window-regression-case-24-blocked.png |    Bin 0 -> 72170 bytes
+ ...und-1-old-window-regression-case-29-blocked.png |    Bin 0 -> 71583 bytes
+ ...ound-1-old-window-regression-case-6-blocked.png |    Bin 0 -> 68342 bytes
+ .../round-1-old-window-regression.exit.json        |      3 +
+ .../round-1-old-window-regression.json             |   7215 +
+ .../round-1-old-window-regression.log              |     32 +
+ .../selection-initial-overflow/round-1-raw.log     |    271 +
+ .../round-2-git-status.txt                         |    739 +
+ .../round-2-old-studio-overfit-case-2-blocked.png  |    Bin 0 -> 81389 bytes
+ .../round-2-old-studio-overfit.exit.json           |      3 +
+ .../round-2-old-studio-overfit.json                |   7489 +
+ .../round-2-old-studio-overfit.log                 |     32 +
+ .../round-2-old-studio-regression.exit.json        |      3 +
+ .../round-2-old-studio-regression.json             |   7041 +
+ .../round-2-old-studio-regression.log              |     32 +
+ ...und-2-old-window-regression-case-12-blocked.png |    Bin 0 -> 77297 bytes
+ ...und-2-old-window-regression-case-13-blocked.png |    Bin 0 -> 77296 bytes
+ ...und-2-old-window-regression-case-19-blocked.png |    Bin 0 -> 77800 bytes
+ ...ound-2-old-window-regression-case-6-blocked.png |    Bin 0 -> 68492 bytes
+ .../round-2-old-window-regression.exit.json        |      3 +
+ .../round-2-old-window-regression.json             |   4495 +
+ .../round-2-old-window-regression.log              |     19 +
+ .../selection-initial-overflow/round-2-raw.log     |     88 +
+ .../tested-toolbar.css.txt                         |    525 +
+ .../tested-useWindowDock.ts.txt                    |     70 +
+ .../selection/all-cases.json                       | 177953 ++++++++++++++++++
+ .../editor-load-and-toolbar/selection/all-cases.md |    726 +
+ docs/editor-load-and-toolbar/selection/cells.json  |    272 +
+ .../selection/matrix-raw.log                       |     27 +
+ .../selection/overfit-expected-copy.txt            |    231 +
+ .../selection/overfit-expected-original.txt        |    231 +
+ .../selection/overfit-expected.diff                |      0
+ .../selection/overfit-unchanged-expectations.txt   |      1 +
+ .../selection/regression-expected-copy.txt         |    231 +
+ .../selection/regression-expected-original.txt     |    231 +
+ .../selection/regression-expected.diff             |      0
+ .../regression-unchanged-expectations.txt          |      1 +
+ .../selection/report-raw.json                      |    144 +
+ .../round-1-fit-overfit-case-5-blocked.png         |    Bin 0 -> 61620 bytes
+ .../selection/round-1-fit-overfit.exit.json        |      3 +
+ .../selection/round-1-fit-overfit.json             |   7454 +
+ .../selection/round-1-fit-overfit.log              |     32 +
+ .../round-1-fit-regression-case-1-blocked.png      |    Bin 0 -> 62265 bytes
+ .../round-1-fit-regression-case-12-blocked.png     |    Bin 0 -> 70269 bytes
+ .../round-1-fit-regression-case-19-blocked.png     |    Bin 0 -> 70225 bytes
+ .../round-1-fit-regression-case-24-blocked.png     |    Bin 0 -> 70121 bytes
+ .../round-1-fit-regression-case-6-blocked.png      |    Bin 0 -> 62322 bytes
+ .../selection/round-1-fit-regression.exit.json     |      3 +
+ .../selection/round-1-fit-regression.json          |   7191 +
+ .../selection/round-1-fit-regression.log           |     32 +
+ .../round-1-full-overfit-case-1-blocked.png        |    Bin 0 -> 70117 bytes
+ .../round-1-full-overfit-case-27-blocked.png       |    Bin 0 -> 80575 bytes
+ .../round-1-full-overfit-case-5-blocked.png        |    Bin 0 -> 71406 bytes
+ .../selection/round-1-full-overfit.exit.json       |      3 +
+ .../selection/round-1-full-overfit.json            |   7609 +
+ .../selection/round-1-full-overfit.log             |     32 +
+ .../round-1-full-regression-case-12-blocked.png    |    Bin 0 -> 77134 bytes
+ .../round-1-full-regression-case-13-blocked.png    |    Bin 0 -> 77107 bytes
+ .../round-1-full-regression-case-19-blocked.png    |    Bin 0 -> 77478 bytes
+ .../round-1-full-regression-case-24-blocked.png    |    Bin 0 -> 71937 bytes
+ .../round-1-full-regression-case-29-blocked.png    |    Bin 0 -> 71302 bytes
+ .../round-1-full-regression-case-6-blocked.png     |    Bin 0 -> 71241 bytes
+ .../selection/round-1-full-regression.exit.json    |      3 +
+ .../selection/round-1-full-regression.json         |   7230 +
+ .../selection/round-1-full-regression.log          |     32 +
+ .../selection/round-1-git-status.txt               |    753 +
+ .../round-1-old-studio-overfit-case-2-blocked.png  |    Bin 0 -> 92684 bytes
+ .../selection/round-1-old-studio-overfit.exit.json |      3 +
+ .../selection/round-1-old-studio-overfit.json      |   7459 +
+ .../selection/round-1-old-studio-overfit.log       |     32 +
+ .../round-1-old-studio-regression.exit.json        |      3 +
+ .../selection/round-1-old-studio-regression.json   |   7056 +
+ .../selection/round-1-old-studio-regression.log    |     32 +
+ .../round-1-old-window-overfit-case-1-blocked.png  |    Bin 0 -> 70201 bytes
+ .../round-1-old-window-overfit-case-27-blocked.png |    Bin 0 -> 80575 bytes
+ .../round-1-old-window-overfit-case-5-blocked.png  |    Bin 0 -> 71406 bytes
+ .../selection/round-1-old-window-overfit.exit.json |      3 +
+ .../selection/round-1-old-window-overfit.json      |   7609 +
+ .../selection/round-1-old-window-overfit.log       |     32 +
+ ...und-1-old-window-regression-case-12-blocked.png |    Bin 0 -> 77134 bytes
+ ...und-1-old-window-regression-case-13-blocked.png |    Bin 0 -> 77107 bytes
+ ...und-1-old-window-regression-case-19-blocked.png |    Bin 0 -> 77478 bytes
+ ...und-1-old-window-regression-case-24-blocked.png |    Bin 0 -> 71937 bytes
+ ...und-1-old-window-regression-case-29-blocked.png |    Bin 0 -> 71302 bytes
+ ...ound-1-old-window-regression-case-6-blocked.png |    Bin 0 -> 71023 bytes
+ .../round-1-old-window-regression.exit.json        |      3 +
+ .../selection/round-1-old-window-regression.json   |   7209 +
+ .../selection/round-1-old-window-regression.log    |     32 +
+ .../selection/round-1-raw.log                      |    271 +
+ .../round-2-fit-overfit-case-5-blocked.png         |    Bin 0 -> 61636 bytes
+ .../selection/round-2-fit-overfit.exit.json        |      3 +
+ .../selection/round-2-fit-overfit.json             |   7469 +
+ .../selection/round-2-fit-overfit.log              |     32 +
+ .../round-2-fit-regression-case-1-blocked.png      |    Bin 0 -> 62265 bytes
+ .../round-2-fit-regression-case-12-blocked.png     |    Bin 0 -> 70269 bytes
+ .../round-2-fit-regression-case-19-blocked.png     |    Bin 0 -> 70237 bytes
+ .../round-2-fit-regression-case-24-blocked.png     |    Bin 0 -> 70133 bytes
+ .../round-2-fit-regression-case-6-blocked.png      |    Bin 0 -> 62322 bytes
+ .../selection/round-2-fit-regression.exit.json     |      3 +
+ .../selection/round-2-fit-regression.json          |   7186 +
+ .../selection/round-2-fit-regression.log           |     32 +
+ .../round-2-full-overfit-case-1-blocked.png        |    Bin 0 -> 70156 bytes
+ .../round-2-full-overfit-case-27-blocked.png       |    Bin 0 -> 80575 bytes
+ .../round-2-full-overfit-case-5-blocked.png        |    Bin 0 -> 71406 bytes
+ .../selection/round-2-full-overfit.exit.json       |      3 +
+ .../selection/round-2-full-overfit.json            |   7604 +
+ .../selection/round-2-full-overfit.log             |     32 +
+ .../round-2-full-regression-case-12-blocked.png    |    Bin 0 -> 77134 bytes
+ .../round-2-full-regression-case-13-blocked.png    |    Bin 0 -> 77107 bytes
+ .../round-2-full-regression-case-19-blocked.png    |    Bin 0 -> 77478 bytes
+ .../round-2-full-regression-case-24-blocked.png    |    Bin 0 -> 71937 bytes
+ .../round-2-full-regression-case-29-blocked.png    |    Bin 0 -> 71302 bytes
+ .../round-2-full-regression-case-6-blocked.png     |    Bin 0 -> 71275 bytes
+ .../selection/round-2-full-regression.exit.json    |      3 +
+ .../selection/round-2-full-regression.json         |   7209 +
+ .../selection/round-2-full-regression.log          |     32 +
+ .../selection/round-2-git-status.txt               |    753 +
+ .../round-2-old-studio-overfit-case-2-blocked.png  |    Bin 0 -> 92684 bytes
+ .../selection/round-2-old-studio-overfit.exit.json |      3 +
+ .../selection/round-2-old-studio-overfit.json      |   7464 +
+ .../selection/round-2-old-studio-overfit.log       |     32 +
+ .../round-2-old-studio-regression.exit.json        |      3 +
+ .../selection/round-2-old-studio-regression.json   |   7046 +
+ .../selection/round-2-old-studio-regression.log    |     32 +
+ .../round-2-old-window-overfit-case-1-blocked.png  |    Bin 0 -> 70201 bytes
+ .../round-2-old-window-overfit-case-27-blocked.png |    Bin 0 -> 80575 bytes
+ .../round-2-old-window-overfit-case-5-blocked.png  |    Bin 0 -> 71406 bytes
+ .../selection/round-2-old-window-overfit.exit.json |      3 +
+ .../selection/round-2-old-window-overfit.json      |   7619 +
+ .../selection/round-2-old-window-overfit.log       |     32 +
+ ...und-2-old-window-regression-case-12-blocked.png |    Bin 0 -> 77134 bytes
+ ...und-2-old-window-regression-case-13-blocked.png |    Bin 0 -> 77123 bytes
+ ...und-2-old-window-regression-case-19-blocked.png |    Bin 0 -> 77478 bytes
+ ...und-2-old-window-regression-case-24-blocked.png |    Bin 0 -> 71937 bytes
+ ...und-2-old-window-regression-case-29-blocked.png |    Bin 0 -> 71302 bytes
+ ...ound-2-old-window-regression-case-6-blocked.png |    Bin 0 -> 71267 bytes
+ .../round-2-old-window-regression.exit.json        |      3 +
+ .../selection/round-2-old-window-regression.json   |   7215 +
+ .../selection/round-2-old-window-regression.log    |     32 +
+ .../selection/round-2-raw.log                      |    271 +
+ .../round-3-fit-overfit-case-5-blocked.png         |    Bin 0 -> 61636 bytes
+ .../selection/round-3-fit-overfit.exit.json        |      3 +
+ .../selection/round-3-fit-overfit.json             |   7449 +
+ .../selection/round-3-fit-overfit.log              |     32 +
+ .../round-3-fit-regression-case-1-blocked.png      |    Bin 0 -> 62265 bytes
+ .../round-3-fit-regression-case-12-blocked.png     |    Bin 0 -> 70269 bytes
+ .../round-3-fit-regression-case-19-blocked.png     |    Bin 0 -> 70233 bytes
+ .../round-3-fit-regression-case-24-blocked.png     |    Bin 0 -> 70133 bytes
+ .../round-3-fit-regression-case-6-blocked.png      |    Bin 0 -> 62321 bytes
+ .../selection/round-3-fit-regression.exit.json     |      3 +
+ .../selection/round-3-fit-regression.json          |   7180 +
+ .../selection/round-3-fit-regression.log           |     32 +
+ .../round-3-full-overfit-case-1-blocked.png        |    Bin 0 -> 70201 bytes
+ .../round-3-full-overfit-case-27-blocked.png       |    Bin 0 -> 80575 bytes
+ .../round-3-full-overfit-case-5-blocked.png        |    Bin 0 -> 71406 bytes
+ .../selection/round-3-full-overfit.exit.json       |      3 +
+ .../selection/round-3-full-overfit.json            |   7609 +
+ .../selection/round-3-full-overfit.log             |     32 +
+ .../round-3-full-regression-case-12-blocked.png    |    Bin 0 -> 77134 bytes
+ .../round-3-full-regression-case-13-blocked.png    |    Bin 0 -> 77109 bytes
+ .../round-3-full-regression-case-19-blocked.png    |    Bin 0 -> 77478 bytes
+ .../round-3-full-regression-case-24-blocked.png    |    Bin 0 -> 71937 bytes
+ .../round-3-full-regression-case-29-blocked.png    |    Bin 0 -> 71302 bytes
+ .../round-3-full-regression-case-6-blocked.png     |    Bin 0 -> 71267 bytes
+ .../selection/round-3-full-regression.exit.json    |      3 +
+ .../selection/round-3-full-regression.json         |   7215 +
+ .../selection/round-3-full-regression.log          |     32 +
+ .../selection/round-3-git-status.txt               |    754 +
+ .../round-3-old-studio-overfit-case-2-blocked.png  |    Bin 0 -> 92684 bytes
+ .../selection/round-3-old-studio-overfit.exit.json |      3 +
+ .../selection/round-3-old-studio-overfit.json      |   7459 +
+ .../selection/round-3-old-studio-overfit.log       |     32 +
+ .../round-3-old-studio-regression.exit.json        |      3 +
+ .../selection/round-3-old-studio-regression.json   |   7035 +
+ .../selection/round-3-old-studio-regression.log    |     32 +
+ .../round-3-old-window-overfit-case-1-blocked.png  |    Bin 0 -> 70205 bytes
+ .../round-3-old-window-overfit-case-27-blocked.png |    Bin 0 -> 80575 bytes
+ .../round-3-old-window-overfit-case-5-blocked.png  |    Bin 0 -> 71406 bytes
+ .../selection/round-3-old-window-overfit.exit.json |      3 +
+ .../selection/round-3-old-window-overfit.json      |   7604 +
+ .../selection/round-3-old-window-overfit.log       |     32 +
+ ...und-3-old-window-regression-case-12-blocked.png |    Bin 0 -> 77134 bytes
+ ...und-3-old-window-regression-case-13-blocked.png |    Bin 0 -> 77109 bytes
+ ...und-3-old-window-regression-case-19-blocked.png |    Bin 0 -> 77478 bytes
+ ...und-3-old-window-regression-case-24-blocked.png |    Bin 0 -> 71937 bytes
+ ...und-3-old-window-regression-case-29-blocked.png |    Bin 0 -> 71302 bytes
+ ...ound-3-old-window-regression-case-6-blocked.png |    Bin 0 -> 71121 bytes
+ .../round-3-old-window-regression.exit.json        |      3 +
+ .../selection/round-3-old-window-regression.json   |   7215 +
+ .../selection/round-3-old-window-regression.log    |     32 +
+ .../selection/round-3-raw.log                      |    271 +
+ .../editor-load-and-toolbar/selection/summary.json |    144 +
+ docs/editor-load-and-toolbar/server-3000-bound.log |   3400 +
+ .../server-3000-final-legacy-ready.log             |   2301 +
+ .../server-3000-final-legacy.log                   |     10 +
+ docs/editor-load-and-toolbar/server-3000-final.log |      6 +
+ docs/editor-load-and-toolbar/server-3001-bound.log |     67 +
+ docs/editor-load-and-toolbar/server-3002-bound.log |    145 +
+ .../editor-load-and-toolbar/server-control.err.log |      0
+ .../editor-load-and-toolbar/server-control.out.log |     10 +
+ .../editor-load-and-toolbar/server-overfit.err.log |      3 +
+ .../editor-load-and-toolbar/server-overfit.out.log |      8 +
+ docs/editor-load-and-toolbar/server-root.err.log   |     11 +
+ docs/editor-load-and-toolbar/server-root.out.log   |    167 +
+ docs/editor-load-and-toolbar/source-integrity.json |     28 +
+ .../state-call-inventory.txt                       |      5 +
+ .../state-write-source-lines.txt                   |     32 +
+ .../state-writer-source-before.json                |     30 +
+ .../stopped-lab-servers.json                       |     44 +
+ test/editor-json-audit.cjs                         |      8 +
+ test/editor-load-lab-servers.cjs                   |      7 +
+ test/editor-load-lab-setup.cjs                     |     11 +
+ test/editor-load-reproduction.cjs                  |     22 +
+ test/editor-reliability-finalize.cjs               |     30 +
+ test/editor-reliability-matrix-setup.cjs           |     17 +
+ test/editor-reliability-matrix.cjs                 |     16 +
+ test/editor-reliability-report.cjs                 |     14 +
+ test/editor-toolbar-obstruction.test.ts            |     36 +
+ test/helpers/editor-reliability-selection.ts       |     89 +
+ test/m0-overfit.reliability.test.ts                |    233 +
+ test/m0-regression.reliability.test.ts             |    233 +
+ 340 files changed, 457658 insertions(+), 3 deletions(-)

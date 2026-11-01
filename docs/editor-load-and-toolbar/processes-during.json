@@ -1,0 +1,67 @@
+[
+  {
+    "ProcessId": 14208,
+    "ParentProcessId": 31332,
+    "CommandLine": "\"C:\\Program Files\\WindowsApps\\OpenAI.CodexPrimaryRuntime.v26-1026-487-0_26.1026.487.0_x64__3k8sg7r9htsxt\\dependencies\\node\\bin\\node.exe\" \"C:\\Program Files\\WindowsApps\\OpenAI.CodexPrimaryRuntime.v26-1026-487-0_26.1026.487.0_x64__3k8sg7r9htsxt\\dependencies\\node\\node_modules\\@oai\\artifact-tool\\dist\\artifact-session\\host-daemon.mjs\""
+  },
+  {
+    "ProcessId": 22748,
+    "ParentProcessId": 17016,
+    "CommandLine": "\"C:\\Users\\abhis\\AppData\\Local\\OpenAI\\Codex\\runtimes\\cua_node\\989c7523a11c09b9\\bin\\node.exe\" --import file:///C:/Users/abhis/.codex/plugins/cache/openai-bundled/unified-computer-use/26.1027.51404/require-browser-access.mjs C:\\Users\\abhis\\AppData\\Local\\OpenAI\\Codex\\runtimes\\cua_node\\989c7523a11c09b9\\bin\\node_modules\\@oai\\cua-repl\\bin\\cua-repl.mjs"
+  },
+  {
+    "ProcessId": 27912,
+    "ParentProcessId": 14744,
+    "CommandLine": "\"C:\\Users\\abhis\\AppData\\Local\\OpenAI\\Codex\\runtimes\\cua_node\\989c7523a11c09b9\\bin\\node.exe\"  ./server.mjs"
+  },
+  {
+    "ProcessId": 32908,
+    "ParentProcessId": 17016,
+    "CommandLine": "\"C:\\Users\\abhis\\AppData\\Local\\OpenAI\\Codex\\runtimes\\cua_node\\989c7523a11c09b9\\bin\\node.exe\" --import file:///C:/Users/abhis/.codex/plugins/cache/openai-bundled/unified-computer-use/26.1027.51404/require-browser-access.mjs C:\\Users\\abhis\\AppData\\Local\\OpenAI\\Codex\\runtimes\\cua_node\\989c7523a11c09b9\\bin\\node_modules\\@oai\\cua-repl\\bin\\cua-repl.mjs"
+  },
+  {
+    "ProcessId": 17812,
+    "ParentProcessId": 26676,
+    "CommandLine": "\"C:\\Users\\abhis\\AppData\\Local\\OpenAI\\Codex\\runtimes\\cua_node\\989c7523a11c09b9\\bin\\node.exe\"  ./server.mjs"
+  },
+  {
+    "ProcessId": 29580,
+    "ParentProcessId": 6580,
+    "CommandLine": "\"C:\\nvm4w\\nodejs\\node.exe\" test/editor-load-lab-servers.cjs"
+  },
+  {
+    "ProcessId": 13764,
+    "ParentProcessId": 29580,
+    "CommandLine": "C:\\nvm4w\\nodejs\\node.exe C:\\dev\\vibecheck\\node_modules\\next\\dist\\bin\\next dev --webpack --hostname 127.0.0.1 --port 3000"
+  },
+  {
+    "ProcessId": 19660,
+    "ParentProcessId": 29580,
+    "CommandLine": "C:\\nvm4w\\nodejs\\node.exe C:\\dev\\vibecheck\\node_modules\\next\\dist\\bin\\next dev --webpack --hostname 127.0.0.1 --port 3001"
+  },
+  {
+    "ProcessId": 7996,
+    "ParentProcessId": 29580,
+    "CommandLine": "C:\\nvm4w\\nodejs\\node.exe C:\\dev\\vibecheck\\node_modules\\next\\dist\\bin\\next dev --webpack --hostname 127.0.0.1 --port 3002"
+  },
+  {
+    "ProcessId": 16756,
+    "ParentProcessId": 7996,
+    "CommandLine": "C:\\nvm4w\\nodejs\\node.exe C:\\dev\\vibecheck\\node_modules\\next\\dist\\server\\lib\\start-server.js"
+  },
+  {
+    "ProcessId": 25996,
+    "ParentProcessId": 13764,
+    "CommandLine": "C:\\nvm4w\\nodejs\\node.exe C:\\dev\\vibecheck\\node_modules\\next\\dist\\server\\lib\\start-server.js"
+  },
+  {
+    "ProcessId": 16108,
+    "ParentProcessId": 19660,
+    "CommandLine": "C:\\nvm4w\\nodejs\\node.exe C:\\dev\\vibecheck\\node_modules\\next\\dist\\server\\lib\\start-server.js"
+  },
+  {
+    "ProcessId": 4568,
+    "ParentProcessId": 17740,
+    "CommandLine": "\"C:\\nvm4w\\nodejs\\node.exe\" test/editor-load-reproduction.cjs"
+  }
+]

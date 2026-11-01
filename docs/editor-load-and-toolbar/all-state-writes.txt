@@ -1,0 +1,47 @@
+lib\payments\dodo.ts:84:    // If running in development without webhook secret, attempt raw JSON parse
+lib\payments\dodo.ts:87:        return JSON.parse(payload);
+lib\llm\generator.ts:64:      const parsed = JSON.parse(jsonStr);
+lib\slightnudge\component-props.ts:35:  // TS's rename/reference search merges shorthand bindings with similarly named
+lib\security\encryption.ts:48:  const payload: EncryptedPayload = JSON.parse(cipherString);
+lib\slightnudge\docker-preview.ts:52:  const manifest = JSON.parse(await readFile(packagePath, 'utf8')) as {
+lib\slightnudge\edit-history.ts:140:    rawRecords = JSON.parse(contents);
+lib\slightnudge\edit-history.ts:231:  let renameSucceeded = false;
+lib\slightnudge\edit-history.ts:236:      fs.renameSync(tempPath, filePath);
+lib\slightnudge\edit-history.ts:237:      renameSucceeded = true;
+lib\slightnudge\edit-history.ts:250:  if (!renameSucceeded) {
+lib\slightnudge\edit-history.ts:512:        const persisted = JSON.parse(readFileSync(entryPath, 'utf8'));
+lib\slightnudge\edit-history.ts:592:  const pending = JSON.parse(readFileSync(pendingPath(id), 'utf8')) as PendingEdit;
+lib\slightnudge\edit-history.ts:626:  const intent = JSON.parse(contents) as ApplyIntent;
+lib\slightnudge\icon-library.ts:30:  const packageRoot = path.dirname(packageFile), pkg = JSON.parse(readFileSync(packageFile, 'utf8'));
+lib\slightnudge\instance-trace.ts:6:  try{return lines.map(line=>{const row=JSON.parse(line);if(!Array.isArray(row)||row.length!==3||typeof row[0]!=='string'||!row[0]||row[0].length>1000||row[0].includes('\\')||row[0].startsWith('/')||/^[a-z]:/i.test(row[0])||row[0].split('/').includes('..')||!Number.isSafeInteger(row[1])||row[1]<0||row[1]>100000||typeof row[2]!=='string'||! /^[a-f0-9]{64}$/.test(row[2]))throw Error();return {path:row[0],index:row[1],hash:row[2]}})}catch{return undefined}
+lib\slightnudge\image-source-advanced.ts:2:import { lstat, readFile, writeFile } from 'node:fs/promises';
+lib\slightnudge\image-source-advanced.ts:138:    for (const item of generated.values()) await writeFile(path.join(root, 'public', item.url), item.bytes, { flag: 'wx' });
+lib\slightnudge\next-source-adapter.ts:1:import { lstat, mkdir, readFile, rename, rm, rmdir, writeFile } from 'node:fs/promises';
+lib\slightnudge\next-source-adapter.ts:830:    const state = JSON.parse(await readFile(statePath, 'utf8')) as AdapterState;
+lib\slightnudge\next-source-adapter.ts:851:  const packageInfo = JSON.parse(await readFile(packagePath, 'utf8')) as { dependencies?: Record<string, string>; devDependencies?: Record<string, string> };
+lib\slightnudge\next-source-adapter.ts:856:  try { nextVersion = (JSON.parse(await readFile(nextVersionPath, 'utf8')) as { version: string }).version; } catch { /* Resolve from manifest */ }
+lib\slightnudge\next-source-adapter.ts:873:    throw new Error('A .slightnudge-source-adapter folder already exists in this repository. Preserve or rename it before enabling the adapter.');
+lib\slightnudge\next-source-adapter.ts:883:    await writeFile(path.join(adapterRoot, 'next-source-loader.cjs'), loaderSource, { encoding: 'utf8', flag: 'wx' });
+lib\slightnudge\next-source-adapter.ts:884:    await writeFile(path.join(adapterRoot, 'hydration-client.jsx'), `'use client';\nimport { useEffect } from 'react';\nexport default function SlightNudgeHydrationSignal() { useEffect(() => { window.__slightnudge_hydrated = true; window.dispatchEvent(new Event('slightnudge:hydrated')); }, []); return null; }\n`, { encoding: 'utf8', flag: 'wx' });
+lib\slightnudge\next-source-adapter.ts:886:    await writeFile(path.join(adapterRoot, 'bridge-client.mjs'), repoBridgeClient, { encoding: 'utf8', flag: 'wx' });
+lib\slightnudge\next-source-adapter.ts:893:      await rename(path.join(root, originalName), backupPath);
+lib\slightnudge\next-source-adapter.ts:909:      await writeFile(path.join(adapterRoot, 'next-hmr-sync-loader.cjs'), await readFile(path.join(process.cwd(), 'lib/slightnudge/next-hmr-sync-loader.cjs'), 'utf8'), { encoding: 'utf8', flag: 'wx' });
+lib\slightnudge\next-source-adapter.ts:912:    await writeFile(configPath, configuredWrapper, { encoding: 'utf8', flag: 'wx' });
+lib\slightnudge\next-source-adapter.ts:917:    await writeFile(path.join(adapterRoot, stateFileName), JSON.stringify(state, null, 2), { encoding: 'utf8', flag: 'wx' });
+lib\slightnudge\next-source-adapter.ts:922:      await rename(path.join(root, backupName), path.join(root, originalName!)).catch(() => undefined);
+lib\slightnudge\next-source-adapter.ts:955:    await rename(backupPath, configPath);
+lib\slightnudge\project-compatibility.ts:25:    const value = JSON.parse(source);
+lib\slightnudge\tailwind-verifier.ts:118:        const pkg = JSON.parse(readFileSync(pkgJsonPath, 'utf8'));
+lib\slightnudge\tailwind-verifier.ts:163:        const pkg = JSON.parse(readFileSync(pkgJsonPath, 'utf8'));
+lib\slightnudge\tailwind-verifier.ts:388:      const targetPkg = JSON.parse(readFileSync(targetPkgJsonPath, 'utf8'));
+lib\slightnudge\source-group-journal.ts:43:    const value = JSON.parse(fs.readFileSync(file, 'utf8')) as SourceGroupJournal;
+lib\slightnudge\studio-recovery.ts:29:    const record = JSON.parse(raw) as StudioRecoveryRecord;
+lib\slightnudge\source-canvas-bridge.ts:12:  let saved: any = null; try { saved = JSON.parse(sessionStorage.getItem('slightnudge:preview-session') || 'null'); } catch {}
+lib\slightnudge\source-operation-lock.ts:53:        const data = JSON.parse(contents);
+lib\slightnudge\source-operation-lock.ts:71:    try { fs.writeFileSync(fd, JSON.stringify({ pid: process.pid, processStart, ticket: null })); fs.fsyncSync(fd); }
+lib\slightnudge\source-operation-lock.ts:77:    try { fs.writeFileSync(update, JSON.stringify({ pid: process.pid, processStart, ticket })); fs.fsyncSync(update); }
+lib\slightnudge\source-operation-lock.ts:83:      try { fs.renameSync(temporary, own); break; }
+lib\slightnudge\repository-store.ts:2:import { lstat, mkdir, readFile, realpath, rename, writeFile } from 'node:fs/promises';
+lib\slightnudge\repository-store.ts:23:    const value = JSON.parse(await readFile(indexPath, 'utf8'));
+lib\slightnudge\repository-store.ts:98:  await writeFile(tempPath, JSON.stringify(nextIndex, null, 2), 'utf8');
+lib\slightnudge\repository-store.ts:99:  await rename(tempPath, indexPath);

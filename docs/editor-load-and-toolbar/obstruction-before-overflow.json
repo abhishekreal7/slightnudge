@@ -1,0 +1,296 @@
+{
+  "checks": [
+    {
+      "name": "Dock container ignores pointer events",
+      "pass": true,
+      "detail": {
+        "rect": {
+          "x": 226.03125,
+          "y": 836,
+          "width": 987.9375,
+          "height": 48,
+          "top": 836,
+          "right": 1213.96875,
+          "bottom": 884,
+          "left": 226.03125
+        },
+        "pointerEvents": "none",
+        "zIndex": "90",
+        "position": "fixed"
+      }
+    },
+    {
+      "name": "Dock box contains every interactive control",
+      "pass": false,
+      "detail": [
+        {
+          "tag": "BUTTON",
+          "rect": {
+            "x": 237.03125,
+            "y": 845,
+            "width": 18,
+            "height": 30,
+            "top": 845,
+            "right": 255.03125,
+            "bottom": 875,
+            "left": 237.03125
+          },
+          "contained": true
+        },
+        {
+          "tag": "A",
+          "rect": {
+            "x": 260.03125,
+            "y": 845,
+            "width": 30,
+            "height": 30,
+            "top": 845,
+            "right": 290.03125,
+            "bottom": 875,
+            "left": 260.03125
+          },
+          "contained": true
+        },
+        {
+          "tag": "BUTTON",
+          "rect": {
+            "x": 303.03125,
+            "y": 847.03125,
+            "width": 38.84375,
+            "height": 25.9375,
+            "top": 847.03125,
+            "right": 341.875,
+            "bottom": 872.96875,
+            "left": 303.03125
+          },
+          "contained": true
+        },
+        {
+          "tag": "BUTTON",
+          "rect": {
+            "x": 343.875,
+            "y": 847.03125,
+            "width": 57.625,
+            "height": 25.9375,
+            "top": 847.03125,
+            "right": 401.5,
+            "bottom": 872.96875,
+            "left": 343.875
+          },
+          "contained": true
+        },
+        {
+          "tag": "BUTTON",
+          "rect": {
+            "x": 414.5,
+            "y": 845,
+            "width": 30,
+            "height": 30,
+            "top": 845,
+            "right": 444.5,
+            "bottom": 875,
+            "left": 414.5
+          },
+          "contained": true
+        },
+        {
+          "tag": "BUTTON",
+          "rect": {
+            "x": 449.5,
+            "y": 845,
+            "width": 30,
+            "height": 30,
+            "top": 845,
+            "right": 479.5,
+            "bottom": 875,
+            "left": 449.5
+          },
+          "contained": true
+        },
+        {
+          "tag": "SELECT",
+          "rect": {
+            "x": 521.203125,
+            "y": 846,
+            "width": 85,
+            "height": 28,
+            "top": 846,
+            "right": 606.203125,
+            "bottom": 874,
+            "left": 521.203125
+          },
+          "contained": true
+        },
+        {
+          "tag": "SELECT",
+          "rect": {
+            "x": 612.203125,
+            "y": 845.5,
+            "width": 79,
+            "height": 29,
+            "top": 845.5,
+            "right": 691.203125,
+            "bottom": 874.5,
+            "left": 612.203125
+          },
+          "contained": true
+        },
+        {
+          "tag": "BUTTON",
+          "rect": {
+            "x": 707.203125,
+            "y": 847,
+            "width": 77.71875,
+            "height": 26,
+            "top": 847,
+            "right": 784.921875,
+            "bottom": 873,
+            "left": 707.203125
+          },
+          "contained": true
+        },
+        {
+          "tag": "BUTTON",
+          "rect": {
+            "x": 786.921875,
+            "y": 847,
+            "width": 32,
+            "height": 26,
+            "top": 847,
+            "right": 818.921875,
+            "bottom": 873,
+            "left": 786.921875
+          },
+          "contained": true
+        },
+        {
+          "tag": "BUTTON",
+          "rect": {
+            "x": 820.921875,
+            "y": 847,
+            "width": 32,
+            "height": 26,
+            "top": 847,
+            "right": 852.921875,
+            "bottom": 873,
+            "left": 820.921875
+          },
+          "contained": true
+        },
+        {
+          "tag": "INPUT",
+          "rect": {
+            "x": 877.921875,
+            "y": 852.296875,
+            "width": 42,
+            "height": 15.390625,
+            "top": 852.296875,
+            "right": 919.921875,
+            "bottom": 867.6875,
+            "left": 877.921875
+          },
+          "contained": true
+        },
+        {
+          "tag": "SELECT",
+          "rect": {
+            "x": 972.96875,
+            "y": 846,
+            "width": 118,
+            "height": 28,
+            "top": 846,
+            "right": 1090.96875,
+            "bottom": 874,
+            "left": 972.96875
+          },
+          "contained": true
+        },
+        {
+          "tag": "BUTTON",
+          "rect": {
+            "x": 1116.96875,
+            "y": 846,
+            "width": 28,
+            "height": 28,
+            "top": 846,
+            "right": 1144.96875,
+            "bottom": 874,
+            "left": 1116.96875
+          },
+          "contained": true
+        },
+        {
+          "tag": "BUTTON",
+          "rect": {
+            "x": 1145.96875,
+            "y": 846,
+            "width": 28,
+            "height": 28,
+            "top": 846,
+            "right": 1173.96875,
+            "bottom": 874,
+            "left": 1145.96875
+          },
+          "contained": true
+        },
+        {
+          "tag": "BUTTON",
+          "rect": {
+            "x": 1174.96875,
+            "y": 846,
+            "width": 28,
+            "height": 28,
+            "top": 846,
+            "right": 1202.96875,
+            "bottom": 874,
+            "left": 1174.96875
+          },
+          "contained": true
+        },
+        {
+          "tag": "BUTTON",
+          "rect": {
+            "x": 348.40625,
+            "y": 889,
+            "width": 94.078125,
+            "height": 29,
+            "top": 889,
+            "right": 442.484375,
+            "bottom": 918,
+            "left": 348.40625
+          },
+          "contained": false
+        }
+      ]
+    },
+    {
+      "name": "Dock padding lets content receive pointer events",
+      "pass": true,
+      "detail": {
+        "isDock": false,
+        "tag": "IFRAME"
+      }
+    },
+    {
+      "name": "Both source-backed inline badge instances appear in Layers",
+      "pass": true,
+      "detail": {
+        "count": 2
+      }
+    },
+    {
+      "name": "Dock and its controls avoid selected footer rectangle",
+      "pass": false
+    },
+    {
+      "name": "Click at old dock position selects the actual footer badge",
+      "pass": true
+    },
+    {
+      "name": "No page errors",
+      "pass": true,
+      "detail": []
+    }
+  ],
+  "events": []
+}
