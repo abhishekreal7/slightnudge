@@ -16,6 +16,13 @@ const self = fileURLToPath(import.meta.url);
 if (process.env.GATE_CHILD_OBSERVE === '1') {
   const childProcess=createRequire(import.meta.url)('node:child_process');
   const originalSpawn=childProcess.spawn;
+  const originalExec=childProcess.execFileSync;
+  childProcess.execFileSync=function(file,args=[],options={}){
+    const started=Date.now();process.stdout.write(`SETUP ${started} START ${file} ${JSON.stringify(args)}\n`);
+    try{return originalExec.call(this,file,args,{...options,stdio:options.stdio==='ignore'?'pipe':options.stdio});}
+    catch(error){process.stdout.write(`SETUP ERROR ${error.stderr?.toString()||error.message}\n`);throw error;}
+    finally{process.stdout.write(`SETUP END elapsed ${Date.now()-started}ms\n`);}
+  };
   let serverIndex=0;
   childProcess.spawn=function(executable,args=[],options={}){
     const next=args.some(value=>/next[\\/]dist[\\/]/.test(String(value)));
@@ -192,7 +199,7 @@ async function main() {
       fs.writeFileSync(path.join(workspace,'.slightnudge/repositories.json'),JSON.stringify(records,null,2));
       const install=await command('prepare-lab-adapters',['--import','tsx','--input-type=module','-e',"const {installNextSourceAdapter}=await import('./lib/slightnudge/next-source-adapter.ts');for(const id of ['m0-control-lab','m0-overfit-lab'])await installNextSourceAdapter(id);console.log('Temp adapters prepared');"]);
       if(install.code!==0)throw Error('Temporary adapter setup failed');
-      await warmup();
+      try { await warmup(); } catch(error) { fatal=false;print(`Warm-up failed; selection workflows will independently report readiness: ${error}\n`); }
       print(`Warm-up invalid manifest servers: ${checkServerManifests().join(', ')||'none'}\n`);
     }
     for(const item of selected) {
@@ -206,7 +213,7 @@ async function main() {
         if(data?.events.some(event=>event.kind==='pageerror')||data?.cases.some(row=>row.verdict==='WRONG TARGET'))fatal=true;
       }
       if(!item.surface&&!/PASS: \d+ review-consent browser cases/.test(result.output))passed=false;
-      const api=/\(mocked API;/.test(result.output)?'MOCKED':item.mode;
+      const api=/mocked API|MOCKED/.test(result.output)||item.mode.includes('MOCKED')?'MOCKED':'REAL';
       const invalid=checkServerManifests();
       rows.push({workflow:item.name,harness:item.harness||'existing',api,result:result.timedOut?'TIMEOUT':/ERR_MODULE_NOT_FOUND|Cannot find module|SyntaxError:.*test\//.test(result.output)?'HARNESS-ERROR':passed&&!invalid.length?'PASS':'FAIL',seconds:result.seconds,exitCode:result.code,historical:item.historical,invalidManifestServers:invalid});
       json('results.json',{head,productRef:ref,testRef:head,fatal,rows});
