@@ -7,6 +7,7 @@ import { isElementInsideLoop, isComponentUsedMultipleTimes } from './ast-nudger'
 import { guardUnfinishedGroups, readGroupJournal, validGroupId } from './source-group-journal';
 import { SourceOperationBusyError, withSourceOperationLock } from './source-operation-lock';
 import { validateComponentDependencies } from './component-ownership';
+import { assertSourceScope } from './source-paths';
 
 function isTestMode(): boolean {
   return process.env.SLIGHTNUDGE_TEST === '1' && process.env.NODE_ENV !== 'production';
@@ -175,8 +176,11 @@ export function readHistory(): EditRecord[] {
       continue;
     }
 
+    if (record.repositoryId !== undefined) assertSourceScope(workspaceRoot, resolvedPath, record.repositoryId, record.sourcePath);
+
     // Check if the file currently exists on disk
     if (existsSync(resolvedPath)) {
+      if (record.repositoryId === undefined) assertSourceScope(workspaceRoot, resolvedPath);
       if (realWorkspacePath) {
         try {
           const realFile = realpathSync(resolvedPath);
@@ -610,6 +614,7 @@ function validatePending(pending: PendingEdit, id: string) {
     throw new Error('The preview data is invalid. Discard it and try again.');
   }
   relativeFilePath(path.resolve(getWorkspacePath(), pending.filePath));
+  assertSourceScope(getWorkspacePath(), pending.filePath, pending.repositoryId, pending.sourcePath);
 }
 
 function applyIntentPath(id: string) {

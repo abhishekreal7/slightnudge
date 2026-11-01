@@ -30,6 +30,9 @@ try{
   const outside=path.join(base,'outside');fs.mkdirSync(outside,{recursive:true});fs.writeFileSync(path.join(outside,'victim.tsx'),'export default () => <p>outside temp project</p>;');
   const repos=path.join(root,'.slightnudge/repositories');for(const name of ['alpha','beta']){fs.mkdirSync(path.join(repos,name),{recursive:true});fs.writeFileSync(path.join(repos,name,'file.tsx'),'export default () => <p>before</p>;');}
   fs.writeFileSync(path.join(root,'.slightnudge/repositories.json'),JSON.stringify(['alpha','beta'].map(id=>({id,localPath:path.join(repos,id)}))));
+  fs.writeFileSync(path.join(root,'safe.tsx'),'export default () => <p>safe</p>;');
+  check('Regular local file remains usable',resolveWorkspaceSourcePath('safe.tsx')===fs.realpathSync(path.join(root,'safe.tsx')));
+  check('Registered project source remains usable',(await resolveRepositorySourcePath('alpha','file.tsx')).filePath===fs.realpathSync(path.join(repos,'alpha','file.tsx')));
   if(!fs.existsSync(path.join(root,'escape-link')))fs.symlinkSync(outside,path.join(root,'escape-link'),'junction');
   if(!fs.existsSync(path.join(repos,'alpha','jump')))fs.symlinkSync(path.join(repos,'beta'),path.join(repos,'alpha','jump'),'junction');
   const rejects=async(name:string,fn:()=>unknown)=>{try{await fn();check(name,false,{error:'Accepted unsafe path/state'});}catch(e){check(name,true,{error:String(e)});}};
@@ -40,10 +43,12 @@ try{
   await rejects('sourcePath traversal rejected',()=>resolveRepositorySourcePath('alpha','../beta/file.tsx'));
   await rejects('repository junction cannot escape registered project',()=>resolveRepositorySourcePath('alpha','jump/file.tsx'));
   const pendingDir=path.join(root,'.slightnudge/pending');fs.mkdirSync(pendingDir,{recursive:true});
-  for(const [name,filePath,extra] of [['parent','../outside/victim.tsx',{}],['absolute',path.join(outside,'victim.tsx'),{}],['junction','escape-link/victim.tsx',{}],['cross-project','.slightnudge/repositories/beta/file.tsx',{repositoryId:'alpha',sourcePath:'file.tsx'}]] as const){const id=randomUUID();fs.writeFileSync(path.join(pendingDir,id+'.json'),JSON.stringify({id,filePath,before:'before',after:'after',summary:'temp proof',oldValue:'before',newValue:'after',...extra}));await rejects(`pending state rejects ${name}`,()=>readPendingSourceEdit(id));}
+  for(const [name,filePath,extra] of [['parent','../outside/victim.tsx',{}],['absolute',path.join(outside,'victim.tsx'),{}],['junction','escape-link/victim.tsx',{}],['cross-project','.slightnudge/repositories/beta/file.tsx',{repositoryId:'alpha',sourcePath:'file.tsx'}],['unbound-managed-file','.slightnudge/repositories/beta/file.tsx',{}]] as const){const id=randomUUID();fs.writeFileSync(path.join(pendingDir,id+'.json'),JSON.stringify({id,filePath,before:'before',after:'after',summary:'temp proof',oldValue:'before',newValue:'after',...extra}));await rejects(`pending state rejects ${name}`,()=>readPendingSourceEdit(id));}
   await rejects('previewId traversal rejected',()=>readPendingSourceEdit('../bad'));
   fs.mkdirSync(path.join(root,'.slightnudge/history'),{recursive:true});fs.writeFileSync(path.join(root,'.slightnudge/history/edits.json'),JSON.stringify([{id:randomUUID(),filePath:'.slightnudge/repositories/beta/file.tsx',repositoryId:'alpha',sourcePath:'file.tsx',before:'before',after:'after',summary:'temp proof',status:'applied'}]));
   await rejects('history state rejects a target outside its registered project',()=>readHistory());
+  fs.writeFileSync(path.join(root,'.slightnudge/history/edits.json'),JSON.stringify([{id:randomUUID(),filePath:'.slightnudge/repositories/beta/file.tsx',before:'before',after:'after',summary:'unbound temp proof',status:'applied'}]));
+  await rejects('history cannot omit project scope for a managed file',()=>readHistory());
  }
  if(mode==='S3'){
   const {atomicWrite}=await import('../lib/slightnudge/edit-history');const target=path.join(root,'atomic-copy.tsx'),before='original byte-identical\r\n';fs.writeFileSync(target,before);const rename=fs.renameSync;let attempts=0;let error='';

@@ -2,6 +2,7 @@ import { execFile } from 'node:child_process';
 import { lstat, mkdir, readFile, realpath, rename, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { promisify } from 'node:util';
+import { assertSourceScope, canonicalFile, registeredProjectRoot } from './source-paths';
 
 const execFileAsync = promisify(execFile);
 const storageRoot = path.join(process.cwd(), '.slightnudge');
@@ -20,7 +21,7 @@ export interface LocalRepository {
 
 async function readIndex(): Promise<LocalRepository[]> {
   try {
-    const value = JSON.parse(await readFile(indexPath, 'utf8'));
+    const value = JSON.parse(await readFile(canonicalFile(process.cwd(), indexPath), 'utf8'));
     return Array.isArray(value) ? value : [];
   } catch (error) {
     if ((error as NodeJS.ErrnoException).code === 'ENOENT') return [];
@@ -109,22 +110,11 @@ export function resolveWorkspaceSourcePath(input: string) {
   if (!/\.(tsx?|jsx?)$/i.test(resolved)) {
     throw new Error('Only JavaScript and TypeScript source files can be edited.');
   }
-  return resolved;
+  return assertSourceScope(process.cwd(), resolved);
 }
 
 export async function resolveRepositoryRoot(repositoryId: string) {
-  if (!/^[a-z0-9_.-]{1,205}$/i.test(repositoryId) || repositoryId === '.' || repositoryId === '..') {
-    throw new Error('That repository could not be found.');
-  }
-  const repository = (await readIndex()).find((item) => item.id === repositoryId);
-  if (!repository) throw new Error('That repository could not be found.');
-  const workspace = await realpath(workspaceRoot);
-  const repositoryRoot = await realpath(repository.localPath);
-  const workspaceRelative = path.relative(workspace, repositoryRoot);
-  if (!workspaceRelative || workspaceRelative.startsWith(`..${path.sep}`) || path.isAbsolute(workspaceRelative)) {
-    throw new Error('The repository is outside the managed workspace.');
-  }
-  return repositoryRoot;
+  return registeredProjectRoot(process.cwd(), repositoryId);
 }
 
 export async function resolveRepositorySourcePath(repositoryId: string, sourcePath: string) {
