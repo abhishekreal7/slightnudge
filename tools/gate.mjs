@@ -5,7 +5,7 @@ import path from 'node:path';
 import net from 'node:net';
 import crypto from 'node:crypto';
 import {spawn, execFileSync} from 'node:child_process';
-import {fileURLToPath} from 'node:url';
+import {fileURLToPath, pathToFileURL} from 'node:url';
 
 const project = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const self = fileURLToPath(import.meta.url);
@@ -90,7 +90,7 @@ async function main() {
     const started = performance.now(), chunks=[];
     print(`\nCOMMAND ${name}: node ${args.join(' ')}\n`);
     const fd = fs.openSync(path.join(evidence,name+'.log'),'wx');
-    const child = spawn(process.execPath,['--import',self,...args],{cwd:workspace,env:{...env,GATE_CHILD_OBSERVE:'1',...extra},windowsHide:true,detached:process.platform!=='win32',stdio:['ignore','pipe','pipe']});
+    const child = spawn(process.execPath,['--import',pathToFileURL(self).href,...args],{cwd:workspace,env:{...env,GATE_CHILD_OBSERVE:'1',...extra},windowsHide:true,detached:process.platform!=='win32',stdio:['ignore','pipe','pipe']});
     let tail='';
     const output = chunk => {
       const text=String(chunk);chunks.push(text);fs.writeSync(fd,text);print(text);
