@@ -67,7 +67,7 @@ async function main() {
   const raw = fs.createWriteStream(path.join(evidence,'raw.log'),{flags:'wx'});
   const print = text => { process.stdout.write(text); raw.write(text); };
   const json = (file,value) => fs.writeFileSync(path.join(evidence,file),JSON.stringify(value,null,2));
-  const rows = [], servers = new Set(); let fatal = false;
+  const rows = [], servers = new Set(); let fatal = false,selectionSetupError;
   const safe = target => { const relative = path.relative(project,path.resolve(target)); if (!relative || relative === '..' || relative.startsWith('..'+path.sep) || path.isAbsolute(relative)) throw Error('Gate output must stay inside project: '+target); return target; };
   const envBase = {};
   for (const name of ['PATH','Path','SystemRoot','WINDIR','COMSPEC','PATHEXT','USERPROFILE','APPDATA','LOCALAPPDATA']) if (process.env[name]) envBase[name] = process.env[name];
@@ -199,11 +199,12 @@ async function main() {
       fs.writeFileSync(path.join(workspace,'.slightnudge/repositories.json'),JSON.stringify(records,null,2));
       const install=await command('prepare-lab-adapters',['--import','tsx','--input-type=module','-e',"const {installNextSourceAdapter}=await import('./lib/slightnudge/next-source-adapter.ts');for(const id of ['m0-control-lab','m0-overfit-lab'])await installNextSourceAdapter(id);console.log('Temp adapters prepared');"]);
       if(install.code!==0)throw Error('Temporary adapter setup failed');
-      try { await warmup(); } catch(error) { fatal=false;print(`Warm-up failed; selection workflows will independently report readiness: ${error}\n`); }
+      try { await warmup(); } catch(error) { fatal=false;selectionSetupError=String(error);print(`Selection setup HARNESS-ERROR: ${error}\n`); }
       print(`Warm-up invalid manifest servers: ${checkServerManifests().join(', ')||'none'}\n`);
     }
     for(const item of selected) {
       if(fatal)break;
+      if(item.surface&&selectionSetupError){rows.push({workflow:item.name,api:'REAL',result:'HARNESS-ERROR',seconds:0,error:selectionSetupError});continue;}
       if(!item.surface)stopServers();
       const result=await command(item.name,item.args,item.surface?{SELECTION_ROUND:'1',SELECTION_SURFACE:item.surface}:item.extra||{});
       let passed=result.code===0;
