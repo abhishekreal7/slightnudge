@@ -209,11 +209,11 @@ async function main() {
       if(item.surface&&selectionSetupError){rows.push({workflow:item.name,api:'REAL',result:'HARNESS-ERROR',seconds:0,error:selectionSetupError});continue;}
       if(!item.surface)stopServers();
       const result=await command(item.name,item.args,item.surface?{SELECTION_ROUND:'1',SELECTION_SURFACE:item.surface}:item.extra||{});
-      let passed=result.code===0;
+      let passed=result.code===0&&!/GATE_BROWSER_PAGE_ERROR/.test(result.output);
       if(item.surface) {
         const file=selectionFile(item.surface,item.suite),data=fs.existsSync(file)?JSON.parse(fs.readFileSync(file,'utf8')):null;
         passed=passed&&data?.cases.length===30&&!data.events.some(event=>event.kind==='pageerror')&&!data.cases.some(row=>['WRONG TARGET','MISSING-TARGET'].includes(row.verdict)||row.assertions.pointerSource.status==='FAIL'||row.assertions.expectedSource.status==='FAIL'||row.expectedResultMatch===false);
-        if(data?.events.some(event=>event.kind==='pageerror')||data?.cases.some(row=>row.verdict==='WRONG TARGET'))fatal=true;
+        if((data?.cases.length===0&&data?.events.some(event=>event.kind==='pageerror'))||data?.cases.some(row=>row.verdict==='WRONG TARGET'))fatal=true;
       }
       if(!item.surface&&!/PASS: \d+ review-consent browser cases/.test(result.output))passed=false;
       const api=/mocked API|MOCKED/.test(result.output)||item.mode.includes('MOCKED')?'MOCKED':'REAL';
