@@ -43,7 +43,9 @@ export function SourceLayers({ layers, selected, onSelect }: { layers: CanvasLay
   // Styled block containers own padding, fills and clipping too. They can be
   // covered by a parent's decorative pseudo-element, making Layers their only
   // reliable selection route. Keep unstyled pass-through divs out of the tree.
-  const visible = layers.filter(layer => /^(main|section|nav|header|footer|article|aside|h[1-6]|p|a|button|input|textarea|select|img|form|svg|video|picture)$/.test(layer.tagName) || layer.className.includes('sn-playground-content') || layer.tagName === 'div' && (Boolean(layer.className.trim()) || /^(flex|inline-flex|grid|inline-grid)$/.test(layer.computed.display || '')));
+  // Keep the inline text tags recognized by layerAppearance selectable here,
+  // including badges covered by editor controls on the canvas.
+  const visible = layers.filter(layer => /^(main|section|nav|header|footer|article|aside|h[1-6]|p|span|label|strong|em|li|a|button|input|textarea|select|img|form|svg|video|picture)$/.test(layer.tagName) || layer.className.includes('sn-playground-content') || layer.tagName === 'div' && (Boolean(layer.className.trim()) || /^(flex|inline-flex|grid|inline-grid)$/.test(layer.computed.display || '')));
   const all = new Map(layers.map(layer => [layer.key, layer]));
   const keys = new Set(visible.map(layer => layer.key));
   const parents = new Map(visible.map(layer => {
