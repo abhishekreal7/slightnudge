@@ -86,6 +86,13 @@ async function main() {
     try { if (process.platform==='win32') execFileSync('taskkill',['/pid',String(child.pid),'/T','/F'],{stdio:'ignore'}); else process.kill(-child.pid,'SIGTERM'); } catch { /* Already exited. */ }
   }
   function stopServers() { for (const child of servers) stop(child); servers.clear(); }
+  function checkServerManifests() {
+    const invalid=[3000,3001,3002].filter(port=>{
+      const log=path.join(evidence,`server-${port}.log`);
+      return fs.existsSync(log)&&fs.readFileSync(log,'utf8').includes('INVALID_NEXT_MANIFEST ');
+    });
+    if(invalid.length){fatal=true;throw Error('Invalid generated manifest read on server(s): '+invalid.join(', '));}
+  }
   async function command(name,args,extra={}) {
     const started = performance.now(), chunks=[];
     print(`\nCOMMAND ${name}: node ${args.join(' ')}\n`);
@@ -169,6 +176,7 @@ async function main() {
       const install=await command('prepare-lab-adapters',['--import','tsx','--input-type=module','-e',"const {installNextSourceAdapter}=await import('./lib/slightnudge/next-source-adapter.ts');for(const id of ['m0-control-lab','m0-overfit-lab'])await installNextSourceAdapter(id);console.log('Temp adapters prepared');"]);
       if(install.code!==0)throw Error('Temporary adapter setup failed');
       await warmup();
+      checkServerManifests();
     }
     for(const item of selected) {
       if(fatal)break;
@@ -185,6 +193,7 @@ async function main() {
       rows.push({workflow:item.name,api,result:passed?'PASS':'FAIL',seconds:result.seconds,exitCode:result.code,historical:item.historical});
       json('results.json',{head,productRef:ref,testRef:head,fatal,rows});
       fs.cpSync(path.join(workspace,'docs'),path.join(evidence,item.name+'-artifacts'),{recursive:true,filter:source=>!source.split(path.sep).some(part=>/^\.env(?:\.|$)/.test(part))});
+      checkServerManifests();
     }
   } catch(error) {print(`GATE ERROR ${error.stack || error}\n`);if(!rows.some(row=>row.result==='FAIL'))rows.push({workflow:'setup',api:'REAL',result:'FAIL',seconds:0,error:String(error)});}
   finally {
