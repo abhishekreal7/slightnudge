@@ -1,4 +1,6 @@
 'use client';
+import { readApiJson } from '@/lib/slightnudge/api-response';
+
 import { useEffect, useRef, useState } from 'react';
 import { getClientSessionToken } from '@/lib/slightnudge/client';
 import { validLinkDestination } from '@/lib/slightnudge/link-values';
@@ -20,7 +22,7 @@ export function ActionControls({ selectionKey, source, attributes, parentPreview
         const token = await getClientSessionToken();
         if (!active) return;
         const response = await fetch('/api/slightnudge/preview', { signal: controller.signal, method: 'POST', headers: { 'content-type': 'application/json', 'x-slightnudge-token': token }, body: JSON.stringify({ ...source, ...(source.repositoryId ? { sourcePath: source.filePath } : {}), kind: 'action', operation: 'inspect', draft: true, parentPreviewId }) });
-        const result = await response.json(); if (!response.ok || !result.success) throw new Error(result.error || 'This source could not be inspected.');
+        const result = await readApiJson(response); if (!response.ok || !result.success) throw new Error(result.error || 'This source could not be inspected.');
         if (active) { setInfo(result.action); if (!focused.current) setHref(result.action.fields.href?.value || ''); }
       } catch (error) { if (active) setError(error instanceof Error ? error.message : 'This source could not be inspected.'); }
     })();

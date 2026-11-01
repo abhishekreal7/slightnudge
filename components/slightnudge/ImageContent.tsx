@@ -1,4 +1,6 @@
 'use client';
+import { readApiJson } from '@/lib/slightnudge/api-response';
+
 import { useEffect, useRef, useState } from 'react';
 import { getClientSessionToken } from '@/lib/slightnudge/client';
 
@@ -14,7 +16,7 @@ export function ImageContent({ selectionKey, attributes, repositoryId, disabled,
       try {
         const token = await getClientSessionToken(); const form = new FormData(); form.set('file', file);
         const response = await fetch(`/api/slightnudge/assets${repositoryId ? `?repositoryId=${encodeURIComponent(repositoryId)}` : ''}`, { method: 'POST', headers: { 'x-slightnudge-token': token }, body: form });
-        const result = await response.json(); if (!response.ok) throw new Error(result.error || 'Could not import this image.');
+        const result = await readApiJson(response); if (!response.ok) throw new Error(result.error || 'Could not import this image.');
         if (currentSelection.current === selectionKey) await onChange('src', result.asset.url);
       } catch (error) { setError(error instanceof Error ? error.message : 'Image import failed.'); }
       finally { setUploading(false); }

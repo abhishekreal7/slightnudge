@@ -1,4 +1,6 @@
 'use client';
+import { readApiJson } from '@/lib/slightnudge/api-response';
+
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { AlignCenter, AlignLeft, AlignRight, ArrowDown, ArrowUp, ArrowUpDown, Check, ChevronDown, ChevronsDown, ChevronsUp, CircleAlert, Code2, Columns2, GripVertical, Laptop2, LayoutGrid, Layers, LoaderCircle, MoreHorizontal, MousePointer2, Pencil, Play, RotateCcw, Sparkles, Trash2, Type, Undo2, X } from 'lucide-react';
@@ -464,7 +466,7 @@ export function SlightNudgeOverlay({
       const response = await fetch('/api/slightnudge/preview', {
         method: 'POST', headers: { 'Content-Type': 'application/json', 'x-slightnudge-token': token }, body: JSON.stringify(payload),
       });
-      const result = await response.json();
+      const result = await readApiJson(response);
       if (!response.ok || !result.success) throw new Error(result.error || 'Could not prepare this change.');
       if (result.changed === false) {
         setNotice(result.message || 'No source change is needed.');
@@ -603,13 +605,14 @@ export function SlightNudgeOverlay({
       animateSelectionRect(260);
     }
     setPendingEdit(null);
-    const token = await getClientSessionToken();
-    const response = await fetch(`/api/slightnudge/preview?id=${encodeURIComponent(pending.id)}`, {
-      method: 'DELETE',
-      headers: { 'x-slightnudge-token': token },
-    });
-    if (!response.ok) setNotice('Preview dismissed. It will expire automatically.');
-    else setNotice('Change discarded. Source is unchanged.');
+    try {
+      const token = await getClientSessionToken();
+      const response = await fetch(`/api/slightnudge/preview?id=${encodeURIComponent(pending.id)}`, {
+        method: 'DELETE', headers: { 'x-slightnudge-token': token },
+      });
+      if (!response.ok) setNotice('Preview dismissed. It will expire automatically.');
+      else setNotice('Change discarded. Source is unchanged.');
+    } catch (error) { setNotice(error instanceof Error ? error.message : 'Preview dismissed. It will expire automatically.'); }
   }, [animateSelectionRect, pendingEdit]);
 
   const applyPreview = useCallback(async () => {
@@ -622,7 +625,7 @@ export function SlightNudgeOverlay({
         method: 'POST', headers: { 'Content-Type': 'application/json', 'x-slightnudge-token': token },
         body: JSON.stringify({ previewId: pendingEdit.id, groupId: editGroupIdRef.current }),
       });
-      const result = await response.json();
+      const result = await readApiJson(response);
       if (!response.ok || !result.success) {
         if (result.code === 'SOURCE_CHANGED') {
           await discardPreview();
@@ -690,7 +693,7 @@ export function SlightNudgeOverlay({
           clickedRect: info.clickedRect,
         }),
       });
-      const result = await response.json();
+      const result = await readApiJson(response);
       if (typeof result.className === 'string' && element.isConnected) {
         element.className = result.className;
         applyMarginInline(element, result.className);

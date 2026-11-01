@@ -1,4 +1,6 @@
 'use client';
+import { readApiJson } from '@/lib/slightnudge/api-response';
+
 import { createElement, useEffect, useRef, useState } from 'react';
 import { getClientSessionToken } from '@/lib/slightnudge/client';
 import { validIconValue } from '@/lib/slightnudge/icon-source-values';
@@ -38,7 +40,7 @@ export function IconControls({ selectionKey, source, parentPreviewId, instances,
       try {
         const token = await getClientSessionToken(); if (!active) return;
         const response = await fetch('/api/slightnudge/preview', { method: 'POST', signal: controller.signal, headers: { 'content-type': 'application/json', 'x-slightnudge-token': token }, body: JSON.stringify({ ...source, ...(source.repositoryId ? { sourcePath: source.filePath } : {}), kind: 'icon', operation: 'inspect', draft: true, parentPreviewId }) });
-        const data = await response.json(); if (!response.ok || !data.success) throw new Error(data.error || 'This icon cannot be inspected.');
+        const data = await readApiJson(response); if (!response.ok || !data.success) throw new Error(data.error || 'This icon cannot be inspected.');
         if (active) { setInfo({ ...data.icon, choices: (data.icon.choices || []).filter(validIconShape) }); setInfoKey(requestKey); setError(''); }
       } catch (cause) { if (active) setError(cause instanceof Error ? cause.message : 'This icon cannot be inspected.'); }
     })();

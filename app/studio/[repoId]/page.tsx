@@ -1,4 +1,6 @@
 'use client';
+import { readApiJson } from '@/lib/slightnudge/api-response';
+
 
 import { type FormEvent, useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
@@ -147,7 +149,7 @@ export default function ImportedRepositoryPage() {
     let cancelled = false;
     fetch(`/api/slightnudge/repositories/${encodeURIComponent(params.repoId)}`)
       .then(async (response) => {
-        const data = await response.json();
+        const data = await readApiJson(response);
         if (!response.ok) throw new Error(data.error || 'Repository details could not be loaded.');
         if (!cancelled) {
           setProject(data);
@@ -155,7 +157,7 @@ export default function ImportedRepositoryPage() {
           setAdapterEnabled(Boolean(data.sourceAdapterEnabled));
           fetch(`/api/slightnudge/repositories/${encodeURIComponent(params.repoId)}/docker-preview`)
             .then(async (response) => {
-              const status = await response.json();
+              const status = await readApiJson(response);
               if (!response.ok) throw new Error(status.error || 'Could not read Docker status.');
               if (!cancelled) setDockerStatus(status);
             })
@@ -174,7 +176,7 @@ export default function ImportedRepositoryPage() {
     setSourceError('');
     fetch(`/api/slightnudge/repositories/${encodeURIComponent(params.repoId)}/source?${sourceQuery}`)
       .then(async (response) => {
-        const data = await response.json();
+        const data = await readApiJson(response);
         if (!response.ok) throw new Error(data.error || 'Could not inspect this source file.');
         if (!cancelled) setSource(data.content);
       })
@@ -192,7 +194,7 @@ export default function ImportedRepositoryPage() {
         headers: { 'content-type': 'application/json', 'x-slightnudge-token': token },
         body: JSON.stringify({ url: dockerStatus.url }),
       }).then(async (response) => {
-        const data = await response.json();
+        const data = await readApiJson(response);
         if (!response.ok) return;
         if (cancelled) return;
         const session = crypto.randomUUID();
@@ -263,7 +265,7 @@ export default function ImportedRepositoryPage() {
             clickedRect: nextSelection.clickedRect,
           }),
         });
-        const result = await response.json();
+        const result = await readApiJson(response);
         if (!response.ok || !active || selectionRequestId !== selectionRequestRef.current) return;
         setSelection((current) => current && current.path === nextSelection.path && current.line === nextSelection.line
           ? {
@@ -298,7 +300,7 @@ export default function ImportedRepositoryPage() {
     let cancelled = false;
     fetch(`/api/slightnudge/assets?repositoryId=${encodeURIComponent(params.repoId)}`)
       .then(async (response) => {
-        const data = await response.json();
+        const data = await readApiJson(response);
         if (!response.ok) throw new Error(data.error || 'Could not load imported images.');
         if (!cancelled) setAssets(data.assets || []);
       })
@@ -321,7 +323,7 @@ export default function ImportedRepositoryPage() {
         headers: { 'content-type': 'application/json', 'x-slightnudge-token': token },
         body: JSON.stringify({ url: previewInput }),
       });
-      const data = await response.json();
+      const data = await readApiJson(response);
       if (!response.ok) throw new Error(data.error || 'Could not connect to your local preview.');
       attachPreview(data.url);
     } catch (cause) {
@@ -356,7 +358,7 @@ export default function ImportedRepositoryPage() {
         method: 'POST',
         headers: { 'x-slightnudge-token': token },
       });
-      const startResult = await started.json();
+      const startResult = await readApiJson(started);
       if (!started.ok) throw new Error(startResult.error || 'Could not start the Docker preview.');
       setDockerStatus({ available: true, state: 'starting', url: startResult.url, logs: '', message: startResult.message });
 
@@ -366,7 +368,7 @@ export default function ImportedRepositoryPage() {
           headers: { 'content-type': 'application/json', 'x-slightnudge-token': token },
           body: JSON.stringify({ url: startResult.url }),
         });
-        const checkResult = await check.json();
+        const checkResult = await readApiJson(check);
         if (check.ok) {
           attachPreview(checkResult.url);
           setDockerStatus({ available: true, state: 'running', url: checkResult.url, logs: '', message: 'The isolated preview is ready.' });
@@ -374,14 +376,14 @@ export default function ImportedRepositoryPage() {
         }
         if (check.status === 403 || check.status === 422) throw new Error(checkResult.error || 'The preview server cannot be embedded.');
         const statusResponse = await fetch(endpoint);
-        const status = await statusResponse.json();
+        const status = await readApiJson(statusResponse);
         if (statusResponse.ok) setDockerStatus(status);
         if (status.state === 'exited') throw new Error(`${status.message}\n${status.logs || 'The container exited before the dev server was ready.'}`);
         if (attempt % 4 === 3) setDockerStatus({ ...status, state: 'starting', message: 'Installing dependencies and starting the dev server…' });
         await new Promise((resolve) => window.setTimeout(resolve, 2500));
       }
       const statusResponse = await fetch(endpoint);
-      const status = await statusResponse.json();
+      const status = await readApiJson(statusResponse);
       setDockerStatus(status);
       throw new Error(`The preview is still starting. You can retry the connection in a moment.${status.logs ? `\n${status.logs}` : ''}`);
     } catch (cause) {
@@ -404,7 +406,7 @@ export default function ImportedRepositoryPage() {
         method: 'DELETE',
         headers: { 'x-slightnudge-token': token },
       });
-      const data = await response.json();
+      const data = await readApiJson(response);
       if (!response.ok) throw new Error(data.error || 'Could not stop the Docker preview.');
       setDockerStatus({ available: true, state: 'missing', url: null, logs: '', message: data.message });
       setPreviewUrl('');
@@ -440,7 +442,7 @@ export default function ImportedRepositoryPage() {
         method: 'POST', headers: { 'content-type': 'application/json', 'x-slightnudge-token': token },
         body: JSON.stringify({ repositoryId: params.repoId, sourcePath: selection.path, line: selection.line, column: selection.column, kind, ...(property ? { property, breakpoint } : {}), ...(direction ? { direction } : {}), value }),
       });
-      const data = await response.json();
+      const data = await readApiJson(response);
       if (!response.ok) throw new Error(data.error || 'Could not prepare this source change.');
       if (data.changed === false) { setEditNotice(data.message || 'That value is already applied.'); return; }
       const preview = data as ImportedEditPreview;
@@ -478,7 +480,7 @@ export default function ImportedRepositoryPage() {
         headers: { 'x-slightnudge-token': token },
         body: form,
       });
-      const data = await response.json();
+      const data = await readApiJson(response);
       if (!response.ok) throw new Error(data.error || 'Could not import this image.');
       setAssets((current) => [data.asset, ...current.filter((asset) => asset.id !== data.asset.id)]);
       setEditNotice('Image imported into this repository’s public/slightnudge-assets folder.');
@@ -500,7 +502,7 @@ export default function ImportedRepositoryPage() {
         method: 'DELETE',
         headers: { 'x-slightnudge-token': token },
       });
-      const data = await response.json();
+      const data = await readApiJson(response);
       if (!response.ok) throw new Error(data.error || 'Could not discard this source change.');
       if (editPreview.previewType === 'reorder') {
         const revertDir = editPreview.summary.includes('earlier') ? 'later' : 'earlier';
@@ -529,7 +531,7 @@ export default function ImportedRepositoryPage() {
         method: 'POST', headers: { 'content-type': 'application/json', 'x-slightnudge-token': token },
         body: JSON.stringify({ previewId: editPreview.id, groupId: editGroupIdRef.current, repositoryId: params.repoId, sourcePath: selection.path }),
       });
-      const data = await response.json();
+      const data = await readApiJson(response);
       if (!response.ok || !data.success) {
         if (data.code === 'SOURCE_CHANGED') {
           sendImportedPreview(editPreview.previewType === 'textContent' ? 'textContent' : editPreview.previewType === 'imageSource' ? 'imageSource' : editPreview.previewType === 'reorder' ? 'reorder' : 'className', editPreview.previewType === 'className' ? editPreview.oldClassName! : editPreview.oldValue, editPreview.previewType === 'reorder' ? editPreview.summary.includes('earlier') ? 'later' : 'earlier' : undefined);
@@ -597,7 +599,7 @@ export default function ImportedRepositoryPage() {
         method: enable ? 'POST' : 'DELETE',
         headers: { 'x-slightnudge-token': token },
       });
-      const data = await response.json();
+      const data = await readApiJson(response);
       if (!response.ok) throw new Error(data.error || 'Could not update the Next.js source adapter.');
       setAdapterEnabled(enable);
       setProject(current => current ? { ...current, sourceAdapterEnabled: enable, sourceAdapterNeedsUpdate: false } : current);

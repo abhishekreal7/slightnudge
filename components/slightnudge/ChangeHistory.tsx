@@ -1,4 +1,6 @@
 'use client';
+import { readApiJson } from '@/lib/slightnudge/api-response';
+
 
 import { useEffect, useRef, useState } from 'react';
 import { X, RotateCcw } from 'lucide-react';
@@ -19,7 +21,7 @@ export function ChangeHistory({ repositoryId, draft, recovery, onClose }: { repo
       const request = () => fetch('/api/slightnudge/history', { method: 'POST', signal: controller.signal, headers: { 'content-type': 'application/json', 'x-slightnudge-token': token }, body: JSON.stringify({ repositoryId }) });
       let response = await request();
       if (response.status === 403) { token = await getClientSessionToken(true); response = await request(); }
-      const data = await response.json();
+      const data = await readApiJson(response);
       if (!response.ok) throw new Error(data.error || 'History is unavailable.');
       if (!controller.signal.aborted) setEntries(data.entries);
     };

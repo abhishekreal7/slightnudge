@@ -1,0 +1,23 @@
+{
+  "rows": [
+    {
+      "body": "",
+      "text": "Invalid JSON response from http://127.0.0.1:3000/api/slightnudge/repositories/m0-overfit-lab (HTTP 502): <empty body>",
+      "pass": true,
+      "errors": []
+    },
+    {
+      "body": "{\"broken\":",
+      "text": "Invalid JSON response from http://127.0.0.1:3000/api/slightnudge/repositories/m0-overfit-lab (HTTP 502): {\"broken\":",
+      "pass": true,
+      "errors": []
+    },
+    {
+      "body": "<html>upstream failure</html>",
+      "text": "Invalid JSON response from http://127.0.0.1:3000/api/slightnudge/repositories/m0-overfit-lab (HTTP 502): <html>upstream failure</html>",
+      "pass": true,
+      "errors": []
+    }
+  ],
+  "events": []
+}

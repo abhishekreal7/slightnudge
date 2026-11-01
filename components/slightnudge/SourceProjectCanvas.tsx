@@ -1,4 +1,6 @@
 'use client';
+import { readApiJson } from '@/lib/slightnudge/api-response';
+
 
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
@@ -94,7 +96,7 @@ export const SourceProjectCanvas = forwardRef<SourceCanvasHandle, {
     }
     let active = true;
     fetch(`/api/slightnudge/repositories/${encodeURIComponent(repositoryId)}`).then(async response => {
-      const data = await response.json();
+      const data = await readApiJson(response);
       if (!response.ok) throw new Error(data.error || 'Could not inspect project compatibility.');
       if (!active) return;
       setFramework(data.framework);
@@ -216,7 +218,7 @@ export const SourceProjectCanvas = forwardRef<SourceCanvasHandle, {
         const response = await fetch(`/api/slightnudge/repositories/${encodeURIComponent(repositoryId)}/preview-check`, {
           method: 'POST', headers: { 'content-type': 'application/json', 'x-slightnudge-token': token }, body: JSON.stringify({ url: address }),
         });
-        data = await response.json();
+        data = await readApiJson(response);
         if (response.ok) break;
         if ((response.status === 502 || response.status === 504) && attempt < 2) { await new Promise(resolve => setTimeout(resolve, 500 * (attempt + 1))); continue; }
         throw new Error(data?.error || 'Could not connect to the project.');

@@ -4,6 +4,7 @@ import path from 'node:path';
 import { resolveRepositoryRoot } from './repository-store';
 import { getSourceCanvasBridge } from './source-canvas-bridge';
 import { SOURCE_CANVAS_PROTOCOL } from './source-canvas-contract';
+import { readApiJson } from './api-response';
 
 const adapterDirectoryName = '.slightnudge-source-adapter';
 const stateFileName = 'state.json';
@@ -12,6 +13,7 @@ const generatedConfigMarker = 'slightnudge-source-adapter';
 export function getBridgeClient(targetRepositoryId = '') {
   return `${getSourceCanvasBridge(false, targetRepositoryId)}\n
 (() => {
+  const readApiJson = (${readApiJson.toString()});
   if (typeof window === 'undefined') return;
   if (window.__slightnudge_bridge_active) return;
   window.__slightnudge_bridge_active = true;
@@ -420,7 +422,7 @@ export function getBridgeClient(targetRepositoryId = '') {
         body: JSON.stringify(defaultRepo ? payload : { filePath: payload.path, ...payload }),
       });
       if (res.ok) {
-        inspectedData = await res.json();
+        inspectedData = await readApiJson(res);
         if (!undoNeedsCheck && !undoBusy) {
           undoTarget = inspectedData.undoTarget ? { ...inspectedData.undoTarget, sourcePath: payload.path } : null;
           canUndoState = Boolean(undoTarget);
@@ -456,7 +458,7 @@ export function getBridgeClient(targetRepositoryId = '') {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),
       });
-      const data = await res.json();
+      const data = await readApiJson(res);
       if (res.ok && data.success) {
         pendingEdit = { id: data.id, summary: data.summary, kind, sourcePath };
         if (kind === 'style' && payload.value) {
@@ -489,7 +491,7 @@ export function getBridgeClient(targetRepositoryId = '') {
     try {
       const res = await fetch(\`\${backendOrigin}/api/slightnudge/token\`);
       if (res.ok) {
-        const data = await res.json();
+        const data = await readApiJson(res);
         cachedToken = data.token;
         return cachedToken;
       }
@@ -514,7 +516,7 @@ export function getBridgeClient(targetRepositoryId = '') {
           sourcePath: accepted.sourcePath,
         }),
       });
-      const data = await res.json();
+      const data = await readApiJson(res);
       if (res.ok && data.success) {
         undoTarget = { previewId: accepted.id, editId: data.editId, sourcePath: accepted.sourcePath };
         pendingEdit = null;
@@ -563,7 +565,7 @@ export function getBridgeClient(targetRepositoryId = '') {
         }),
         signal: AbortSignal.timeout(15000),
       });
-      const data = await res.json();
+      const data = await readApiJson(res);
       if (res.ok && data.success) {
         pendingEdit = null;
         canUndoState = false;

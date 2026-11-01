@@ -1,4 +1,6 @@
 'use client';
+import { readApiJson } from '@/lib/slightnudge/api-response';
+
 import { AppearanceControls } from './AppearanceControls';
 import { ConstraintControls } from './ConstraintControls';
 
@@ -623,7 +625,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
       try {
         const token = await getClientSessionToken();
         const response = await fetch('/api/slightnudge/responsive', { method: 'POST', headers: { 'content-type': 'application/json', 'x-slightnudge-token': token }, body: JSON.stringify({ repositoryId, filePath: responsiveSourcePath }) });
-        const result = await response.json(); if (!response.ok) throw new Error(result.error || 'Project breakpoints are unavailable.');
+        const result = await readApiJson(response); if (!response.ok) throw new Error(result.error || 'Project breakpoints are unavailable.');
         if (!cancelled) setResponsiveScopes(result.breakpoints);
       } catch (error) { if (!cancelled) setScopeError(error instanceof Error ? error.message : 'Project breakpoints are unavailable.'); }
       finally { if (!cancelled) setScopeLoading(false); }
@@ -669,7 +671,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
     try {
       const res = await fetch('/api/slightnudge/pages');
       if (res.ok) {
-        const data = await res.json();
+        const data = await readApiJson(res);
         if (data.allPages && data.allPages.length > 0) {
           setPages(data.allPages);
           if (notify) {
@@ -679,6 +681,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
       }
     } catch (err) {
       console.error('Failed to auto-detect routes:', err);
+      showToast(err instanceof Error ? err.message : 'Could not load project routes.');
     }
   }, []);
 
@@ -802,7 +805,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
         for (const head of Object.values(draftHeads(edit))) {
           const token = await getClientSessionToken();
           const response = await fetch('/api/slightnudge/draft-view', { signal: AbortSignal.timeout(30000), method: 'POST', headers: { 'content-type': 'application/json', 'x-slightnudge-token': token }, body: JSON.stringify({ previewId: head.id, filePath: head.filePath, repositoryId, sourcePath: editPath(head) }) });
-          const result = await response.json(); if (!response.ok) throw new Error(result.error); patches.push(...result.renderPatches);
+          const result = await readApiJson(response); if (!response.ok) throw new Error(result.error); patches.push(...result.renderPatches);
         }
         await sourceCanvas.current?.command('restore', null, { patches }); needsDraftReplay.current = false; return true;
       } catch (error) { showToast(error instanceof Error ? error.message : 'The draft could not be rendered.'); return false; }
