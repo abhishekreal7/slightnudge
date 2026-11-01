@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import {randomUUID} from 'node:crypto';
+import {syncBuiltinESMExports} from 'node:module';
 const project=path.resolve(import.meta.dirname,'..'),base=path.join(project,'scratch/security-hardening-20261101'),root=path.join(base,'proof-workspace');
 if(path.resolve(process.cwd())!==root)throw Error('Proofs must run only in the designated temp-copy cwd');
 process.env.SLIGHTNUDGE_TEST='1';process.env.NODE_ENV='test';process.env.SLIGHTNUDGE_WORKSPACE_ROOT=root;process.env.SLIGHTNUDGE_DATA_DIR=path.join(root,'.slightnudge');
@@ -57,6 +58,11 @@ try{
   check('Permanent rename failure refuses and never falls back to overwriting original',Boolean(error)&&fs.readFileSync(target,'utf8')===before,{attempts,error,originalUnchanged:fs.readFileSync(target,'utf8')===before,nonAtomicFallbackObserved:false});
   check('At most initial rename plus three short retries',attempts===4,{expectedAttempts:4,actualAttempts:attempts});
   check('Failed publication leaves no temp file',fs.readdirSync(root).filter(name=>name.startsWith('atomic-copy.tsx.')&&name.endsWith('.tmp')).length===0);
+  const partialTarget=path.join(root,'partial-write-copy.tsx'),payload='replacement with complete UTF-8: \u2713';fs.writeFileSync(partialTarget,'original');
+  const write=fs.writeSync;let shortWrites=0;
+  fs.writeSync=((fd:any,value:any,...args:any[])=>{shortWrites++;if(typeof value==='string')return write(fd,Buffer.from(value,'utf8').subarray(0,3));const [offset=0,length=value.length-offset,position]=args;return write(fd,value,offset,Math.min(length,3),position);}) as typeof fs.writeSync;syncBuiltinESMExports();
+  try{atomicWrite(partialTarget,payload);}finally{fs.writeSync=write;syncBuiltinESMExports();}
+  check('Short writes cannot publish a truncated temp file',fs.readFileSync(partialTarget,'utf8')===payload,{shortWrites,actual:fs.readFileSync(partialTarget,'utf8'),expected:payload});
  }
 }catch(error){check('Proof workflow completed',false,{error:String(error),stack:(error as Error).stack});}
 fs.writeFileSync(path.join(out,`${mode}-${label}.json`),JSON.stringify(rows,null,2));if(rows.some(row=>!row.pass))process.exitCode=1;

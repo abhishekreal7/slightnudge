@@ -1,0 +1,33 @@
+[
+  {
+    "name": "Permanent rename failure refuses and never falls back to overwriting original",
+    "pass": true,
+    "detail": {
+      "attempts": 6,
+      "error": "Error: The file is locked and nothing was changed (EPERM).",
+      "originalUnchanged": true,
+      "nonAtomicFallbackObserved": false
+    }
+  },
+  {
+    "name": "At most initial rename plus three short retries",
+    "pass": false,
+    "detail": {
+      "expectedAttempts": 4,
+      "actualAttempts": 6
+    }
+  },
+  {
+    "name": "Failed publication leaves no temp file",
+    "pass": true
+  },
+  {
+    "name": "Short writes cannot publish a truncated temp file",
+    "pass": false,
+    "detail": {
+      "shortWrites": 1,
+      "actual": "rep",
+      "expected": "replacement with complete UTF-8: ✓"
+    }
+  }
+]
