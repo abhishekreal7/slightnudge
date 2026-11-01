@@ -57,7 +57,9 @@ async function main() {
   const option = name => { const index = process.argv.indexOf(name); return index < 0 ? undefined : process.argv[index + 1]; };
   const git = (args, cwd = project) => execFileSync('git', args, {cwd, encoding:'utf8', maxBuffer:32 * 1024 * 1024}).trim();
   const head = git(['rev-parse','HEAD']), ref = git(['rev-parse',option('--ref') || 'HEAD']);
-  const requested = option('--workflow');
+  const comparisonFile=option('--failed-from');
+  const failedNames=comparisonFile?JSON.parse(fs.readFileSync(path.resolve(project,comparisonFile),'utf8')).rows.filter(row=>row.result!=='PASS').map(row=>row.workflow):null;
+  const requested = comparisonFile?'failed-comparison':option('--workflow');
   const stamp = new Date().toISOString().replace(/[:.]/g,'-');
   const runId = `${stamp}-${ref.slice(0,7)}${requested ? '-' + requested : ''}`;
   const scratch = path.join(project,'scratch','reliability-gate',runId);
@@ -96,7 +98,7 @@ async function main() {
     browser('recovery','--reload-recovery','docs/recovery-release-gates.log','REAL + MOCKED failure injection'),
   ];
   for (const item of plan) item.historicalEvidenceExists = fs.existsSync(path.join(project,item.historical));
-  const selected = requested ? plan.filter(item=>item.name===requested) : plan;
+  const selected = failedNames?plan.filter(item=>failedNames.includes(item.name)):requested ? plan.filter(item=>item.name===requested) : plan;
   if (!selected.length) throw Error('Unknown workflow '+requested);
   json('plan.json',{head,productRef:ref,testRef:head,workspace,requested:selected.map(item=>item.name),plan});
   fs.writeFileSync(path.join(evidence,'git-status-before.txt'),git(['status','--short'])+'\n');
