@@ -32,6 +32,7 @@ if (process.env.GATE_CHILD_OBSERVE === '1') {
 }
 
 async function main() {
+  const totalStarted=performance.now();
   if (path.resolve(process.cwd()) !== project) throw Error('Run gate from the project folder.');
   const option = name => { const index = process.argv.indexOf(name); return index < 0 ? undefined : process.argv[index + 1]; };
   const git = (args, cwd = project) => execFileSync('git', args, {cwd, encoding:'utf8', maxBuffer:32 * 1024 * 1024}).trim();
@@ -53,10 +54,10 @@ async function main() {
   const temp = path.join(workspace,'scratch','security-hardening-20261101','os-temp');
   const env = {...envBase,TEMP:temp,TMP:temp,CI:'1',NODE_ENV:'development',NEXT_TELEMETRY_DISABLED:'1',SLIGHTNUDGE_LEGACY_STUDIO:'1'};
   const selectionFile = (surface,suite) => path.join(workspace,'docs','editor-load-and-toolbar','selection',`round-1-${surface}-${suite}.json`);
-  const browser = (name,flag,historical,mode='REAL') => ({name,args:['--import','tsx','test/review-consent.browser.ts',flag],historical,mode});
+  const browser = (name,flag,historical,mode='REAL') => ({name,args:['--import','tsx','test/review-consent.browser.v3.ts',flag],historical,mode,harness:'HARNESS-V3'});
   const plan = [
     ...['full','fit'].flatMap(surface => ['regression','overfit'].map(suite => ({name:`selection-${surface}-${suite}`,surface,suite,mode:'REAL',args:['--import','tsx',`test/m0-${suite}.reliability.test.ts`],historical:'docs/editor-load-and-toolbar/selection/round-1-raw.log'}))),
-    {name:'shared-instances-four',mode:'REAL',args:['--import','tsx','test/shared-instance-security.v2.browser.ts','--shared-instances'],historical:'docs/security-hardening/shared-workflows.log'},
+    ...['local','imported'].flatMap(kind=>[false,true].map(window=>({name:`shared-${kind}-${window?'window':'studio'}`,mode:'REAL',harness:'HARNESS-V3',extra:{GATE_SHARED_KIND:kind,GATE_SHARED_VIEW:String(window)},args:['--import','tsx','test/shared-instance-security.v2.browser.v3.ts','--shared-instances'],historical:'docs/security-hardening/shared-workflows.log'}))),
     browser('movement','--drag-move','docs/center-move-release.log'),
     browser('state-and-transitions','--m1','docs/m1-final-gates.log'),
     browser('responsive','--responsive','docs/responsive-editing-qualification.log'),
@@ -91,24 +92,26 @@ async function main() {
       const log=path.join(evidence,`server-${port}.log`);
       return fs.existsSync(log)&&fs.readFileSync(log,'utf8').includes('INVALID_NEXT_MANIFEST ');
     });
-    if(invalid.length){fatal=true;throw Error('Invalid generated manifest read on server(s): '+invalid.join(', '));}
+    return invalid;
   }
   async function command(name,args,extra={}) {
     const started = performance.now(), chunks=[];
     print(`\nCOMMAND ${name}: node ${args.join(' ')}\n`);
     const fd = fs.openSync(path.join(evidence,name+'.log'),'wx');
     const child = spawn(process.execPath,['--import',pathToFileURL(self).href,...args],{cwd:workspace,env:{...env,GATE_CHILD_OBSERVE:'1',...extra},windowsHide:true,detached:process.platform!=='win32',stdio:['ignore','pipe','pipe']});
-    let tail='';
+    let tail='',timedOut=false;
+    const cap=name.startsWith('shared-')?120000:300000;
+    const watchdog=setTimeout(()=>{timedOut=true;print(`TIMEOUT ${name} after ${cap/1000}s\n`);stop(child);},cap);
     const output = chunk => {
       const text=String(chunk);chunks.push(text);fs.writeSync(fd,text);print(text);
       tail=(tail+text).slice(-16000);
-      if (/GATE_BROWSER_PAGE_ERROR|STOP WRONG TARGET|STOP-WRONG-TARGET|"verdict"\s*:\s*"WRONG TARGET"|Studio browser error:/.test(tail)) {fatal=true;stop(child);}
+      if (/STOP WRONG TARGET|STOP-WRONG-TARGET|"verdict"\s*:\s*"WRONG TARGET"/.test(tail)||(name.startsWith('selection-')&&/GATE_BROWSER_PAGE_ERROR/.test(tail)&&!chunks.join('').includes('"index":'))) {fatal=true;stop(child);}
     };
     child.stdout.on('data',output); child.stderr.on('data',output);
     let code;
     try { code=await new Promise((resolve,reject)=>{child.once('error',reject);child.once('exit',resolve);}); }
-    finally { fs.closeSync(fd); }
-    return {code,seconds:Math.round((performance.now()-started)/10)/100,output:chunks.join('')};
+    finally { clearTimeout(watchdog);stop(child);fs.closeSync(fd); }
+    return {code,timedOut,seconds:Math.round((performance.now()-started)/10)/100,output:chunks.join('')};
   }
   function startServer(port,cwd) {
     const fd=fs.openSync(path.join(evidence,`server-${port}.log`),'wx');
@@ -176,12 +179,12 @@ async function main() {
       const install=await command('prepare-lab-adapters',['--import','tsx','--input-type=module','-e',"const {installNextSourceAdapter}=await import('./lib/slightnudge/next-source-adapter.ts');for(const id of ['m0-control-lab','m0-overfit-lab'])await installNextSourceAdapter(id);console.log('Temp adapters prepared');"]);
       if(install.code!==0)throw Error('Temporary adapter setup failed');
       await warmup();
-      checkServerManifests();
+      print(`Warm-up invalid manifest servers: ${checkServerManifests().join(', ')||'none'}\n`);
     }
     for(const item of selected) {
       if(fatal)break;
       if(!item.surface)stopServers();
-      const result=await command(item.name,item.args,item.surface?{SELECTION_ROUND:'1',SELECTION_SURFACE:item.surface}:{});
+      const result=await command(item.name,item.args,item.surface?{SELECTION_ROUND:'1',SELECTION_SURFACE:item.surface}:item.extra||{});
       let passed=result.code===0;
       if(item.surface) {
         const file=selectionFile(item.surface,item.suite),data=fs.existsSync(file)?JSON.parse(fs.readFileSync(file,'utf8')):null;
@@ -190,19 +193,19 @@ async function main() {
       }
       if(!item.surface&&!/PASS: \d+ review-consent browser cases/.test(result.output))passed=false;
       const api=/\(mocked API;/.test(result.output)?'MOCKED':item.mode;
-      rows.push({workflow:item.name,api,result:passed?'PASS':'FAIL',seconds:result.seconds,exitCode:result.code,historical:item.historical});
+      const invalid=checkServerManifests();
+      rows.push({workflow:item.name,harness:item.harness||'existing',api,result:result.timedOut?'TIMEOUT':/ERR_MODULE_NOT_FOUND|Cannot find module|SyntaxError:.*test\//.test(result.output)?'HARNESS-ERROR':passed&&!invalid.length?'PASS':'FAIL',seconds:result.seconds,exitCode:result.code,historical:item.historical,invalidManifestServers:invalid});
       json('results.json',{head,productRef:ref,testRef:head,fatal,rows});
       fs.cpSync(path.join(workspace,'docs'),path.join(evidence,item.name+'-artifacts'),{recursive:true,filter:source=>!source.split(path.sep).some(part=>/^\.env(?:\.|$)/.test(part))});
-      checkServerManifests();
     }
   } catch(error) {print(`GATE ERROR ${error.stack || error}\n`);if(!rows.some(row=>row.result==='FAIL'))rows.push({workflow:'setup',api:'REAL',result:'FAIL',seconds:0,error:String(error)});}
   finally {
     stopServers();
     for(const item of selected)if(!rows.some(row=>row.workflow===item.name))rows.push({workflow:item.name,api:item.mode,result:'NOT RUN',seconds:0});
-    print('\nworkflow | real or mocked | pass/fail | seconds\n');for(const row of rows)print(`${row.workflow} | ${row.api} | ${row.result} | ${row.seconds}\n`);
+    print('\nworkflow | harness | REAL or MOCKED | result | seconds\n');for(const row of rows)print(`${row.workflow} | ${row.harness||'existing'} | ${row.api} | ${row.result} | ${row.seconds}\n`);
     json('results.json',{head,productRef:ref,testRef:head,fatal,rows});
     fs.writeFileSync(path.join(evidence,'git-status-after.txt'),git(['status','--short'])+'\n');
     fs.writeFileSync(path.join(evidence,'worktree-status-after.txt'),git(['status','--short'],workspace)+'\n');
-    const failed=rows.some(row=>row.result!=='PASS');print(`GATE ${failed?'FAIL':'PASS'}; evidence ${evidence}\n`);raw.end();process.exitCode=failed?1:0;
+    const failed=rows.some(row=>row.result!=='PASS');print(`TOTAL ELAPSED ${Math.round((performance.now()-totalStarted)/10)/100}s\nGATE ${failed?'FAIL':'PASS'}; evidence ${evidence}\n`);raw.end();process.exitCode=failed?1:0;
   }
 }

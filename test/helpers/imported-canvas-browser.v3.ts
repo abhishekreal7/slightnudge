@@ -1,0 +1,126 @@
+import { iframePageV3 } from './gate-page-v3';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import path from 'node:path';
+import net from 'node:net';
+import { spawn, execFileSync } from 'node:child_process';
+import type { Page } from 'playwright';
+import { prepareSourceProject } from './prepare-source-project.v3';
+
+export async function checkImportedCanvas(page: Page, baseURL: string, workspace: string) {
+ page=iframePageV3(page);
+
+  page.setDefaultTimeout(60000);
+  const repo = path.join(workspace, '.slightnudge/repositories/source-proof');
+  fs.mkdirSync(repo, { recursive: true });
+  const env: NodeJS.ProcessEnv = { NODE_ENV: 'development', CI: '1', NEXT_TELEMETRY_DISABLED: '1' };
+  for (const key of ['PATH', 'SystemRoot', 'TEMP', 'TMP', 'USERPROFILE', 'APPDATA', 'LOCALAPPDATA']) if (process.env[key]) env[key] = process.env[key];
+  prepareSourceProject(process.cwd(), workspace, repo, env);
+  fs.appendFileSync(path.join(repo, 'app/globals.css'), '\n#hero{min-height:100vh}html,body{overflow:scroll!important;scrollbar-gutter:stable both-edges!important}\n');
+  const files = ['components/Hero.tsx', 'components/Features.tsx'], originals = files.map(file => fs.readFileSync(path.join(repo, file), 'utf8'));
+  const port = await new Promise<number>(resolve => { const server = net.createServer(); server.listen(0, '127.0.0.1', () => { const port = (server.address() as net.AddressInfo).port; server.close(() => resolve(port)); }); });
+  const child = spawn(process.execPath, [path.join(repo, 'node_modules/next/dist/bin/next'), 'dev', '--webpack', '-H', '127.0.0.1', '-p', String(port)], { cwd: repo, env, stdio: ['ignore', 'pipe', 'pipe'] });
+  let diagnostic = '';
+  for (const stream of [child.stdout, child.stderr]) stream?.on('data', chunk => { diagnostic = (diagnostic + chunk).slice(-8000); });
+  const errors: string[] = []; page.on('pageerror', error => errors.push(error.message));
+  page.on('console', message => { if (message.type() === 'error' && /hydrat|server rendered.*match/i.test(message.text())) errors.push(message.text()); });
+  const previewURL = 'http://127.0.0.1:' + port + '/';
+  const frame = page.frameLocator('iframe[title="Actual project"]'), hero = frame.locator('#hero h1'), features = frame.locator('#features h2');
+  const idle = () => page.waitForFunction(() => document.querySelector('[aria-label="Visual editing workspace"]')?.getAttribute('aria-busy') === 'false', undefined, { timeout: 120000 });
+  const connected = () => page.locator('[data-source-ready="true"]').waitFor({ timeout: 120000 });
+  const select = async (element: typeof hero) => {
+    const identity = await element.evaluate(e => [e.getAttribute('data-source-file'), e.getAttribute('data-source-line'), e.getAttribute('data-source-column'), e.tagName.toLowerCase()].join(':'));
+    await element.click();
+    await page.waitForFunction(value => document.querySelector('[aria-label="Visual editing workspace"]')?.getAttribute('data-selected-source') === value, identity);
+  };
+  try {
+    let ready = false;
+    for (let i = 0; i < 100; i++) { try { if ((await fetch(previewURL, { signal: AbortSignal.timeout(5000) })).ok) { ready = true; break; } } catch {} await page.waitForTimeout(300); }
+    assert.ok(ready, diagnostic);
+    const navigate = () => page.goto(`${baseURL}/studio/source-proof/edit?preview=${encodeURIComponent(previewURL)}`, { waitUntil: 'domcontentloaded', timeout: 120000 });
+    await navigate(); await connected();
+    const stage = page.locator('[data-canvas-stage]'), iframe = page.locator('iframe[title="Actual project"]');
+    const zoom = page.getByRole('combobox', { name: 'Canvas zoom', exact: true });
+    await page.waitForFunction(() => (document.querySelector('iframe')?.clientHeight || 0) > 1500);
+    assert.equal(await iframe.count(), 1);
+    assert.equal(await hero.evaluate(() => innerWidth), 1200);
+    const height = await iframe.evaluate(e => e.clientHeight);
+    await page.waitForTimeout(400);
+    assert.equal(await iframe.evaluate(e => e.clientHeight), height, '100vh must not grow recursively with full-page measurement');
+    assert.equal(await frame.locator('#hero').evaluate(e => getComputedStyle(e).minHeight), '720px');
+    assert.equal(await hero.evaluate(() => innerWidth - document.documentElement.clientWidth), 0);
+    assert.equal(await hero.evaluate(() => getComputedStyle(document.documentElement).overflow), 'hidden');
+    await hero.evaluate(() => { const probe = document.createElement('div'); probe.id = 'canvas-size-probe'; probe.style.height = '600px'; document.body.append(probe); });
+    await page.waitForFunction(previous => (document.querySelector('iframe')?.clientHeight || 0) >= previous + 599, height);
+    await frame.locator('#canvas-size-probe').evaluate(element => element.remove());
+    await page.waitForFunction(previous => document.querySelector('iframe')?.clientHeight === previous, height);
+    const frameNavigation = page.waitForEvent('framenavigated', target => target.url().includes('__slightnudge_canvas=1'));
+    // Cross-origin reload through src preserves the session-bound canvas mode.
+    await iframe.evaluate(element => { const frame = element as HTMLIFrameElement; frame.src = frame.src; });
+    await frameNavigation; await connected();
+    await frame.locator('html[data-editor-canvas-page]').waitFor({ state: 'attached' });
+    await page.waitForFunction(previous => document.querySelector('iframe')?.clientHeight === previous, height);
+    const outer = await stage.boundingBox(), artboard = await iframe.boundingBox(); assert.ok(outer && artboard);
+    assert.ok(artboard.y >= outer.y + 25 && artboard.y + artboard.height <= outer.y + outer.height - 25, 'Fit shows the whole imported page');
+    await zoom.selectOption('0.5'); await select(features);
+    const tools = page.getByRole('toolbar', { name: 'Selection formatting', exact: true });
+    const actualSize = await features.evaluate(e => getComputedStyle(e).fontSize);
+    await tools.getByRole('button', { name: 'Edit text', exact: true }).click();
+    const editor = frame.getByRole('textbox', { name: 'Edit selected text', exact: true });
+    assert.equal(await editor.evaluate(e => getComputedStyle(e).fontSize), actualSize, 'Inline editing preserves actual typography');
+    await editor.fill('Built for the way you work.'); await editor.press('Enter'); await idle();
+    await page.getByLabel('Draft status', { exact: true }).filter({ hasText: '1 change' }).waitFor();
+    await select(hero);
+    const before = await hero.evaluate(e => e.getBoundingClientRect().x);
+    const move = page.getByRole('button', { name: 'Move element', exact: true });
+    const box = await move.boundingBox(); assert.ok(box && box.width >= 25 && box.width <= 29);
+    await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2); await page.mouse.down(); await page.mouse.move(box.x + box.width / 2 + 20, box.y + box.height / 2, { steps: 6 }); await page.mouse.up();
+    await page.getByLabel('Draft status', { exact: true }).filter({ hasText: '2 changes' }).waitFor(); await idle();
+    assert.ok(Math.abs(await hero.evaluate(e => e.getBoundingClientRect().x) - before - 40) < 2);
+    assert.deepEqual(files.map(file => fs.readFileSync(path.join(repo, file), 'utf8')), originals);
+    await page.getByRole('button', { name: 'Change history', exact: true }).click();
+    const history = page.getByRole('dialog', { name: 'Change history', exact: true });
+    await history.waitFor();
+    const dialogBox = await history.boundingBox(), viewportBox = page.viewportSize(); assert.ok(dialogBox && viewportBox);
+    assert.ok(Math.abs(dialogBox.x + dialogBox.width / 2 - viewportBox.width / 2) < 2 && Math.abs(dialogBox.y + dialogBox.height / 2 - viewportBox.height / 2) < 2, 'History opens centered in the workspace');
+    assert.equal(await history.getByText('Unsaved', { exact: true }).count(), 2);
+    await history.press('Control+z');
+    assert.equal(await history.getByText('Unsaved', { exact: true }).count(), 2, 'History dialog must not send Undo shortcuts to the canvas');
+    await history.press('Control+s'); await idle();
+    assert.deepEqual(files.map(file => fs.readFileSync(path.join(repo, file), 'utf8')), originals, 'Save shortcuts inside history must not write source');
+    await history.press('Escape'); await history.waitFor({ state: 'hidden' });
+    await page.reload({ waitUntil: 'domcontentloaded' }); await connected(); await idle();
+    await page.getByLabel('Draft status', { exact: true }).filter({ hasText: '2 changes' }).waitFor();
+    await features.filter({ hasText: 'Built for the way you work.' }).waitFor();
+    await page.getByRole('button', { name: 'Save changes', exact: true }).click(); await idle(); await connected();
+    assert.ok(fs.readFileSync(path.join(repo, files[0]), 'utf8').includes('translate-x-[40px]'));
+    assert.ok(fs.readFileSync(path.join(repo, files[1]), 'utf8').includes('Built for the way you work.'));
+    await page.getByRole('button', { name: 'Change history', exact: true }).click(); await history.waitFor();
+    await history.getByText('Saved changes across 2 files', { exact: true }).waitFor();
+    await history.getByText(/Saved to source/).waitFor();
+    const savedHistory = await page.request.post(baseURL + '/api/slightnudge/history', { data: { repositoryId: 'source-proof' } });
+    assert.equal(savedHistory.status(), 403, 'History requires a local session token');
+    await page.screenshot({ path: path.join(process.cwd(), 'docs/change-history.png') });
+    await history.press('Escape'); await history.waitFor({ state: 'hidden' });
+    await page.getByRole('button', { name: 'Undo', exact: true }).click(); await idle(); await connected();
+    assert.deepEqual(files.map(file => fs.readFileSync(path.join(repo, file), 'utf8')), originals);
+    await page.getByRole('button', { name: 'Change history', exact: true }).click(); await history.waitFor(); await history.getByText(/Save undone/).waitFor();
+    await history.getByRole('button', { name: 'Refresh saved history', exact: true }).click(); await history.getByText(/Save undone/).waitFor();
+    await history.press('Escape'); await history.waitFor({ state: 'hidden' });
+    await page.getByRole('button', { name: 'Fit page to canvas', exact: true }).click();
+    const priorScroll = await stage.evaluate(e => e.scrollTop), point = await hero.boundingBox(); assert.ok(point);
+    await page.mouse.move(point.x + 10, point.y + 5); await page.mouse.wheel(0, 120); await page.waitForTimeout(100);
+    assert.ok(await stage.evaluate(e => e.scrollTop) > priorScroll, 'Wheel over imported iframe pans outer canvas');
+    assert.equal(await hero.evaluate(() => scrollY), 0);
+    await page.getByRole('button', { name: 'Fit page to canvas', exact: true }).click();
+    await page.screenshot({ path: path.join(process.cwd(), 'docs/imported-canvas.png') });
+    // The separate editing window retains the site's native viewport/scrolling.
+    await page.goto(`${baseURL}/studio/source-proof/window?preview=${encodeURIComponent(previewURL)}`, { waitUntil: 'domcontentloaded', timeout: 120000 }); await connected();
+    assert.equal(await frame.locator('html').getAttribute('data-editor-canvas-page'), null);
+    assert.equal(await hero.evaluate(() => getComputedStyle(document.documentElement).overflow), 'scroll');
+    assert.deepEqual(errors, []);
+    console.log('PASS imported canvas: one full-height cross-origin page, stable 100vh design viewport, dynamic content grow/shrink, iframe-only reload, Fit/50%, native width/typography, inline editing, constant-size Move and scaled drag, multi-file refresh/Save/exact Undo, wheel forwarding, separate-window native scrolling; zero browser errors.');
+    return 1;
+  } catch (error) { console.log(diagnostic); throw error; }
+  finally { if (child.pid) { try { execFileSync('taskkill', ['/pid', String(child.pid), '/T', '/F'], { stdio: 'ignore' }); } catch {} } }
+}
