@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "next dev --webpack -H 127.0.0.1",
     "build": "next build --webpack",
-    "start": "next start",
+    "start": "next start -H 127.0.0.1",
     "worker": "tsx worker/index.ts",
     "test": "tsx test/unit.test.ts && tsx test/payments.test.ts && tsx test/security-hardening.test.ts && tsx test/analytics-funnel.test.ts",
     "test:payments": "tsx test/payments.test.ts",
