@@ -116,14 +116,14 @@ async function main() {
     });
     return invalid;
   }
-  async function command(name,args,extra={}) {
+  async function command(name,args,extra={},budget) {
     const started = performance.now(), chunks=[];
     print(`\nCOMMAND ${name}: node ${args.join(' ')}\n`);
     const fd = fs.openSync(path.join(evidence,name+'.log'),'wx');
     const workflowLogs=path.join(evidence,name+'-servers');fs.mkdirSync(workflowLogs,{recursive:true});
     const child = spawn(process.execPath,['--import',pathToFileURL(self).href,...args],{cwd:workspace,env:{...env,GATE_CHILD_OBSERVE:'1',GATE_LOG_DIR:workflowLogs,...extra},windowsHide:true,detached:process.platform!=='win32',stdio:['ignore','pipe','pipe']});
     let tail='',timedOut=false;
-    const cap=name.startsWith('shared-')?120000:300000;
+    const cap=budget??(name.startsWith('shared-')?120000:300000);
     const watchdog=setTimeout(()=>{timedOut=true;print(`TIMEOUT ${name} after ${cap/1000}s\n`);stop(child);},cap);
     const output = chunk => {
       const text=String(chunk);chunks.push(text);fs.writeSync(fd,text);print(text);
@@ -204,11 +204,14 @@ async function main() {
       try { await warmup(); } catch(error) { fatal=false;selectionSetupError=String(error);print(`Selection setup HARNESS-ERROR: ${error}\n`); }
       print(`Warm-up invalid manifest servers: ${checkServerManifests().join(', ')||'none'}\n`);
     }
+    let sharedDeadline;
     for(const item of selected) {
       if(fatal)break;
       if(item.surface&&selectionSetupError){rows.push({workflow:item.name,api:'REAL',result:'HARNESS-ERROR',seconds:0,error:selectionSetupError});continue;}
       if(!item.surface)stopServers();
-      const result=await command(item.name,item.args,item.surface?{SELECTION_ROUND:'1',SELECTION_SURFACE:item.surface}:item.extra||{});
+      if(item.name.startsWith('shared-')&&!sharedDeadline)sharedDeadline=performance.now()+480000;
+      const budget=item.name.startsWith('shared-')?Math.max(1,Math.min(120000,sharedDeadline-performance.now())):300000;
+      const result=await command(item.name,item.args,item.surface?{SELECTION_ROUND:'1',SELECTION_SURFACE:item.surface}:item.extra||{},budget);
       let passed=result.code===0&&!/GATE_BROWSER_PAGE_ERROR/.test(result.output);
       if(item.surface) {
         const file=selectionFile(item.surface,item.suite),data=fs.existsSync(file)?JSON.parse(fs.readFileSync(file,'utf8')):null;
@@ -218,7 +221,7 @@ async function main() {
       if(!item.surface&&!/PASS: \d+ review-consent browser cases/.test(result.output))passed=false;
       const api=/mocked API|MOCKED/.test(result.output)||item.mode.includes('MOCKED')?'MOCKED':'REAL';
       const invalid=checkServerManifests();
-      rows.push({workflow:item.name,harness:item.harness||'existing',api,result:result.timedOut?'TIMEOUT':/ERR_MODULE_NOT_FOUND|Cannot find module|SyntaxError:.*test\//.test(result.output)?'HARNESS-ERROR':passed&&!invalid.length?'PASS':'FAIL',seconds:result.seconds,exitCode:result.code,historical:item.historical,invalidManifestServers:invalid});
+      rows.push({workflow:item.name,harness:item.harness||'existing',api,result:result.timedOut?'TIMEOUT':/ERR_MODULE_NOT_FOUND|Cannot find module|SyntaxError:.*test\/|Filename too long|EADDRINUSE/.test(result.output)?'HARNESS-ERROR':passed&&!invalid.length?'PASS':'FAIL',seconds:result.seconds,exitCode:result.code,historical:item.historical,invalidManifestServers:invalid});
       json('results.json',{head,productRef:ref,testRef:head,fatal,rows});
       fs.cpSync(path.join(workspace,'docs'),path.join(evidence,item.name+'-artifacts'),{recursive:true,filter:source=>!source.split(path.sep).some(part=>/^\.env(?:\.|$)/.test(part))});
     }
