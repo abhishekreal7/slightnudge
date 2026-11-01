@@ -1,0 +1,107 @@
+diff --git a/app/editor/[[...project]]/page.tsx b/app/editor/[[...project]]/page.tsx
+index 858b368..e02a611 100644
+--- a/app/editor/[[...project]]/page.tsx
++++ b/app/editor/[[...project]]/page.tsx
+@@ -1,5 +1,5 @@
+ import { notFound } from 'next/navigation';
+-import { EditorWorkspace } from '@/components/slightnudge/EditorWorkspace';
++import { EditorClient as EditorWorkspace } from '@/components/slightnudge/EditorClient';
+ import { editorView, type EditorQuery } from '@/lib/slightnudge/editor-route';
+ 
+ export default async function EditorPage({ params, searchParams }: {
+diff --git a/app/layout.tsx b/app/layout.tsx
+index 127d078..422090a 100644
+--- a/app/layout.tsx
++++ b/app/layout.tsx
+@@ -1,5 +1,5 @@
+ import type { Metadata } from 'next';
+-import { Geist, Geist_Mono, Inter } from 'next/font/google';
++import { Geist, Geist_Mono, Inter, Manrope } from 'next/font/google';
+ import './globals.css';
+ import { headers } from 'next/headers';
+ import { Header } from '@/components/Header';
+@@ -39,6 +39,7 @@ export const metadata: Metadata = {
+ const geist = Geist({ variable: '--font-geist-sans', subsets: ['latin'], display: 'swap' });
+ const geistMono = Geist_Mono({ variable: '--font-geist-mono', subsets: ['latin'], display: 'swap' });
+ const inter = Inter({ variable: '--font-inter', subsets: ['latin'], display: 'swap' });
++const manrope = Manrope({ variable: '--font-manrope', subsets: ['latin'], display: 'swap', preload: false });
+ 
+ export default async function RootLayout({
+   children,
+@@ -49,7 +50,7 @@ export default async function RootLayout({
+   const allowToken = process.env.NODE_ENV !== 'production' && isRequestHostAllowed(headerList);
+   const sessionToken = allowToken ? getSessionToken() : null;
+   return (
+-    <html lang="en" className={`${geist.variable} ${geistMono.variable} ${inter.variable}`}>
++    <html lang="en" className={`${geist.variable} ${geistMono.variable} ${inter.variable} ${manrope.variable}`}>
+       <head>
+         {sessionToken ? (
+           <script
+diff --git a/app/studio/[repoId]/edit/page.tsx b/app/studio/[repoId]/edit/page.tsx
+index 5094f9b..6bba7fd 100644
+--- a/app/studio/[repoId]/edit/page.tsx
++++ b/app/studio/[repoId]/edit/page.tsx
+@@ -1,4 +1,4 @@
+-import { EditorWorkspace } from '@/components/slightnudge/EditorWorkspace';
++import { EditorClient as EditorWorkspace } from '@/components/slightnudge/EditorClient';
+ import { redirect } from 'next/navigation';
+ import { editorHref, legacyStudioEnabled, type EditorQuery } from '@/lib/slightnudge/editor-route';
+ export default async function Page({params,searchParams}:{params:Promise<{repoId:string}>;searchParams:Promise<EditorQuery>}) {
+diff --git a/app/studio/page.tsx b/app/studio/page.tsx
+index f7a3cfd..d40056a 100644
+--- a/app/studio/page.tsx
++++ b/app/studio/page.tsx
+@@ -1,4 +1,4 @@
+-import { EditorWorkspace } from '@/components/slightnudge/EditorWorkspace';
++import { EditorClient as EditorWorkspace } from '@/components/slightnudge/EditorClient';
+ import { redirect } from 'next/navigation';
+ import { editorHref, legacyStudioEnabled, type EditorQuery } from '@/lib/slightnudge/editor-route';
+ 
+diff --git a/components/slightnudge/EditorWorkspace.tsx b/components/slightnudge/EditorWorkspace.tsx
+index d9ef34e..c865d0f 100644
+--- a/components/slightnudge/EditorWorkspace.tsx
++++ b/components/slightnudge/EditorWorkspace.tsx
+@@ -2219,23 +2219,15 @@ title="Drag corner to resize width"
+ 
+   return (
+     <>
+-      {/* Google Fonts: Manrope & Inter */}
+-      <link rel="preconnect" href="https://fonts.googleapis.com" />
+-      <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
+-      <link
+-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap"
+-        rel="stylesheet"
+-      />
+-
+       <style jsx global>{`
+         body {
+-          font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
++          font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, sans-serif;
+           background-color: #F8F9FA;
+           color: #1E293B;
+           overflow: hidden;
+         }
+         .font-manrope {
+-          font-family: 'Manrope', 'Inter', sans-serif;
++          font-family: var(--font-manrope), var(--font-inter), sans-serif;
+         }
+         ::-webkit-scrollbar {
+           width: 4px;
+diff --git a/next.config.mjs b/next.config.mjs
+index de44da9..8078365 100644
+--- a/next.config.mjs
++++ b/next.config.mjs
+@@ -19,6 +19,13 @@ const nextConfig = {
+       config.module.rules.push({
+         test: /\.[jt]sx?$/,
+         include: [projectRoot],
++        // Editor controls are not editable source. Their transient HMR hashes
++        // must not become hydration attributes on the editor's own DOM.
++        // Preserve the real local-preview component and customer fixtures.
++        exclude: resource => {
++          const relative = path.relative(projectRoot, resource).replaceAll('\\', '/');
++          return relative.startsWith('components/slightnudge/') && relative !== 'components/slightnudge/LocalSourcePreview.tsx';
++        },
+         enforce: 'pre',
+         use: [{ loader: path.join(projectRoot, 'lib/slightnudge/next-source-loader.cjs'), options: { development: true, root: projectRoot } }],
+       });

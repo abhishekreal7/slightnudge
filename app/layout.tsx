@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Geist, Geist_Mono, Inter } from 'next/font/google';
+import { Geist, Geist_Mono, Inter, Manrope } from 'next/font/google';
 import './globals.css';
 import { headers } from 'next/headers';
 import { Header } from '@/components/Header';
@@ -39,6 +39,7 @@ export const metadata: Metadata = {
 const geist = Geist({ variable: '--font-geist-sans', subsets: ['latin'], display: 'swap' });
 const geistMono = Geist_Mono({ variable: '--font-geist-mono', subsets: ['latin'], display: 'swap' });
 const inter = Inter({ variable: '--font-inter', subsets: ['latin'], display: 'swap' });
+const manrope = Manrope({ variable: '--font-manrope', subsets: ['latin'], display: 'swap', preload: false });
 
 export default async function RootLayout({
   children,
@@ -49,7 +50,7 @@ export default async function RootLayout({
   const allowToken = process.env.NODE_ENV !== 'production' && isRequestHostAllowed(headerList);
   const sessionToken = allowToken ? getSessionToken() : null;
   return (
-    <html lang="en" className={`${geist.variable} ${geistMono.variable} ${inter.variable}`}>
+    <html lang="en" className={`${geist.variable} ${geistMono.variable} ${inter.variable} ${manrope.variable}`}>
       <head>
         {sessionToken ? (
           <script

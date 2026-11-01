@@ -1,4 +1,4 @@
-import { EditorWorkspace } from '@/components/slightnudge/EditorWorkspace';
+import { EditorClient as EditorWorkspace } from '@/components/slightnudge/EditorClient';
 import { redirect } from 'next/navigation';
 import { editorHref, legacyStudioEnabled, type EditorQuery } from '@/lib/slightnudge/editor-route';
 

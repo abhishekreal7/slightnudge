@@ -1,4 +1,4 @@
-import { EditorWorkspace } from '@/components/slightnudge/EditorWorkspace';
+import { EditorClient as EditorWorkspace } from '@/components/slightnudge/EditorClient';
 import { redirect } from 'next/navigation';
 import { editorHref, legacyStudioEnabled, type EditorQuery } from '@/lib/slightnudge/editor-route';
 export default async function Page({params,searchParams}:{params:Promise<{repoId:string}>;searchParams:Promise<EditorQuery>}) {

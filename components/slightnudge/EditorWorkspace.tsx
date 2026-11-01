@@ -2219,23 +2219,15 @@ title="Drag corner to resize width"
 
   return (
     <>
-      {/* Google Fonts: Manrope & Inter */}
-      <link rel="preconnect" href="https://fonts.googleapis.com" />
-      <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
-      <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap"
-        rel="stylesheet"
-      />
-
       <style jsx global>{`
         body {
-          font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+          font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, sans-serif;
           background-color: #F8F9FA;
           color: #1E293B;
           overflow: hidden;
         }
         .font-manrope {
-          font-family: 'Manrope', 'Inter', sans-serif;
+          font-family: var(--font-manrope), var(--font-inter), sans-serif;
         }
         ::-webkit-scrollbar {
           width: 4px;

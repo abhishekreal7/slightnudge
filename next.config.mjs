@@ -19,6 +19,13 @@ const nextConfig = {
       config.module.rules.push({
         test: /\.[jt]sx?$/,
         include: [projectRoot],
+        // Editor controls are not editable source. Their transient HMR hashes
+        // must not become hydration attributes on the editor's own DOM.
+        // Preserve the real local-preview component and customer fixtures.
+        exclude: resource => {
+          const relative = path.relative(projectRoot, resource).replaceAll('\\', '/');
+          return relative.startsWith('components/slightnudge/') && relative !== 'components/slightnudge/LocalSourcePreview.tsx';
+        },
         enforce: 'pre',
         use: [{ loader: path.join(projectRoot, 'lib/slightnudge/next-source-loader.cjs'), options: { development: true, root: projectRoot } }],
       });

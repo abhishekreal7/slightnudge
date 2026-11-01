@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation';
-import { EditorWorkspace } from '@/components/slightnudge/EditorWorkspace';
+import { EditorClient as EditorWorkspace } from '@/components/slightnudge/EditorClient';
 import { editorView, type EditorQuery } from '@/lib/slightnudge/editor-route';
 
 export default async function EditorPage({ params, searchParams }: {
