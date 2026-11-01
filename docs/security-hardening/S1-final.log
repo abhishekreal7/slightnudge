@@ -1,0 +1,16 @@
+{"name":"preview: no Origin with valid token","pass":true,"detail":{"expected":403,"actual":403,"body":{"error":"Access denied."}}}
+{"name":"preview: no Origin or token","pass":true,"detail":{"expected":403,"actual":403,"body":{"error":"Access denied."}}}
+{"name":"preview: foreign Origin","pass":true,"detail":{"expected":403,"actual":403,"body":{"error":"Access denied."}}}
+{"name":"preview: wrong Host","pass":true,"detail":{"expected":403,"actual":403,"body":{"error":"Access denied."}}}
+{"name":"apply: no Origin with valid token","pass":true,"detail":{"expected":403,"actual":403,"body":{"error":"Access denied."}}}
+{"name":"apply: no Origin or token","pass":true,"detail":{"expected":403,"actual":403,"body":{"error":"Access denied."}}}
+{"name":"apply: foreign Origin","pass":true,"detail":{"expected":403,"actual":403,"body":{"error":"Access denied."}}}
+{"name":"apply: wrong Host","pass":true,"detail":{"expected":403,"actual":403,"body":{"error":"Access denied."}}}
+{"name":"undo: no Origin with valid token","pass":true,"detail":{"expected":403,"actual":403,"body":{"error":"Access denied."}}}
+{"name":"undo: no Origin or token","pass":true,"detail":{"expected":403,"actual":403,"body":{"error":"Access denied."}}}
+{"name":"undo: foreign Origin","pass":true,"detail":{"expected":403,"actual":403,"body":{"error":"Access denied."}}}
+{"name":"undo: wrong Host","pass":true,"detail":{"expected":403,"actual":403,"body":{"error":"Access denied."}}}
+{"name":"App-controlled dev and start bind loopback","pass":true,"detail":{"dev":"next dev --webpack -H 127.0.0.1","start":"next start -H 127.0.0.1"}}
+{"name":"Test runner argument cannot bypass mutation authentication","pass":true,"detail":{"expected":403,"actual":403}}
+{"name":"Session token stays random and ignores a test environment override","pass":true}
+{"name":"Legitimate origin and session token reach body validation","pass":true,"detail":{"actual":400}}

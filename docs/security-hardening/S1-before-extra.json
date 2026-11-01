@@ -1,0 +1,156 @@
+[
+  {
+    "name": "preview: no Origin with valid token",
+    "pass": false,
+    "detail": {
+      "expected": 403,
+      "actual": 400,
+      "body": {
+        "error": "A source file and edit type are required."
+      }
+    }
+  },
+  {
+    "name": "preview: no Origin or token",
+    "pass": true,
+    "detail": {
+      "expected": 403,
+      "actual": 403,
+      "body": {
+        "error": "Access denied."
+      }
+    }
+  },
+  {
+    "name": "preview: foreign Origin",
+    "pass": true,
+    "detail": {
+      "expected": 403,
+      "actual": 403,
+      "body": {
+        "error": "Access denied."
+      }
+    }
+  },
+  {
+    "name": "preview: wrong Host",
+    "pass": true,
+    "detail": {
+      "expected": 403,
+      "actual": 403,
+      "body": {
+        "error": "Access denied."
+      }
+    }
+  },
+  {
+    "name": "apply: no Origin with valid token",
+    "pass": false,
+    "detail": {
+      "expected": 403,
+      "actual": 400,
+      "body": {
+        "error": "Review a change before applying it."
+      }
+    }
+  },
+  {
+    "name": "apply: no Origin or token",
+    "pass": true,
+    "detail": {
+      "expected": 403,
+      "actual": 403,
+      "body": {
+        "error": "Access denied."
+      }
+    }
+  },
+  {
+    "name": "apply: foreign Origin",
+    "pass": true,
+    "detail": {
+      "expected": 403,
+      "actual": 403,
+      "body": {
+        "error": "Access denied."
+      }
+    }
+  },
+  {
+    "name": "apply: wrong Host",
+    "pass": true,
+    "detail": {
+      "expected": 403,
+      "actual": 403,
+      "body": {
+        "error": "Access denied."
+      }
+    }
+  },
+  {
+    "name": "undo: no Origin with valid token",
+    "pass": false,
+    "detail": {
+      "expected": 403,
+      "actual": 400,
+      "body": {
+        "success": false,
+        "code": "UNDO_TARGET_REQUIRED",
+        "error": "Choose the accepted edit to undo. Unbound Undo requests are not supported."
+      }
+    }
+  },
+  {
+    "name": "undo: no Origin or token",
+    "pass": true,
+    "detail": {
+      "expected": 403,
+      "actual": 403,
+      "body": {
+        "error": "Access denied."
+      }
+    }
+  },
+  {
+    "name": "undo: foreign Origin",
+    "pass": true,
+    "detail": {
+      "expected": 403,
+      "actual": 403,
+      "body": {
+        "error": "Access denied."
+      }
+    }
+  },
+  {
+    "name": "undo: wrong Host",
+    "pass": true,
+    "detail": {
+      "expected": 403,
+      "actual": 403,
+      "body": {
+        "error": "Access denied."
+      }
+    }
+  },
+  {
+    "name": "App-controlled dev and start bind loopback",
+    "pass": false,
+    "detail": {
+      "dev": "next dev --webpack -H 127.0.0.1",
+      "start": "next start"
+    }
+  },
+  {
+    "name": "Test runner argument cannot bypass mutation authentication",
+    "pass": false,
+    "detail": {
+      "expected": 403,
+      "actual": 400
+    }
+  },
+  {
+    "name": "Session token stays random and ignores a test environment override",
+    "pass": false
+  }
+]

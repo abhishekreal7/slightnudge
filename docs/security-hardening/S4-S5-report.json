@@ -1,0 +1,53 @@
+{
+  "S4": {
+    "before": "export default function Page(){return <div id=\"target\" className=\"p-2\">Hello</div>}\n",
+    "applied": {
+      "success": true,
+      "editId": "0683565b-08ff-4de4-8b95-ca89e403da09",
+      "filePath": "app\\page.tsx",
+      "previewType": "className",
+      "value": "p-4",
+      "className": "p-4",
+      "message": "Applied temp padding edit."
+    },
+    "appliedSource": "export default function Page(){return <div id=\"target\" className=\"p-4\">Hello</div>}\n",
+    "formatter": "Prettier 3.6.2",
+    "formatterOutput": "app/page.tsx 50ms\n",
+    "formatted": "export default function Page() {\n  return (\n    <div id=\"target\" className=\"p-4\">\n      Hello\n    </div>\n  );\n}\n",
+    "undo": {
+      "success": true,
+      "previewId": "70b0a4af-3ae3-471a-a8cb-28470da67306",
+      "editId": "0683565b-08ff-4de4-8b95-ca89e403da09",
+      "sourceCurrent": true,
+      "message": "Undid temp padding edit."
+    },
+    "afterUndo": "export default function Page() {\n  return (\n    <div id=\"target\" className=\"p-2\">\n      Hello\n    </div>\n  );\n}\n",
+    "byteIdenticalToBefore": false,
+    "formattedPaddingRestored": true
+  },
+  "S5": [
+    {
+      "metadata": "declared-added-token",
+      "result": {
+        "success": false,
+        "error": "can't verify this class: \"definitely-not-a-tailwind-utility\" produced no CSS"
+      },
+      "sourceUnchanged": true,
+      "resultSource": "export default function Page() {\n  return (\n    <div id=\"target\" className=\"p-2\">\n      Hello\n    </div>\n  );\n}\n"
+    },
+    {
+      "metadata": "omitted-added-token",
+      "result": {
+        "success": true,
+        "editId": "d29cd676-0a4a-4c39-9896-9e3deed782eb",
+        "filePath": "app\\page.tsx",
+        "previewType": "className",
+        "value": "p-2 definitely-not-a-tailwind-utility",
+        "className": "p-2 definitely-not-a-tailwind-utility",
+        "message": "Applied temp invalid compiler class."
+      },
+      "sourceUnchanged": false,
+      "resultSource": "export default function Page() {\n  return (\n    <div id=\"target\" className=\"p-2 definitely-not-a-tailwind-utility\">\n      Hello\n    </div>\n  );\n}\n"
+    }
+  ]
+}

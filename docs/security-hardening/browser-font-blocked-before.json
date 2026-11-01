@@ -1,0 +1,15 @@
+{
+  "rows": [
+    {
+      "name": "Editor starts while external font CSS is unavailable",
+      "ready": false,
+      "blocked": [
+        "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap"
+      ],
+      "errors": [],
+      "error": "TimeoutError: locator.waitFor: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-source-ready=\"true\"]') to be visible\u001b[22m\n",
+      "pass": false
+    }
+  ],
+  "events": []
+}

@@ -1,0 +1,58 @@
+[
+  {
+    "isServer": true,
+    "file": "components/slightnudge/EditorWorkspace.tsx",
+    "wanted": false,
+    "actual": true,
+    "pass": false
+  },
+  {
+    "isServer": true,
+    "file": "components/slightnudge/EditorSessionControls.tsx",
+    "wanted": false,
+    "actual": true,
+    "pass": false
+  },
+  {
+    "isServer": true,
+    "file": "components/slightnudge/LocalSourcePreview.tsx",
+    "wanted": true,
+    "actual": true,
+    "pass": true
+  },
+  {
+    "isServer": true,
+    "file": "fixtures/1-plain-static.tsx",
+    "wanted": true,
+    "actual": true,
+    "pass": true
+  },
+  {
+    "isServer": false,
+    "file": "components/slightnudge/EditorWorkspace.tsx",
+    "wanted": false,
+    "actual": true,
+    "pass": false
+  },
+  {
+    "isServer": false,
+    "file": "components/slightnudge/EditorSessionControls.tsx",
+    "wanted": false,
+    "actual": true,
+    "pass": false
+  },
+  {
+    "isServer": false,
+    "file": "components/slightnudge/LocalSourcePreview.tsx",
+    "wanted": true,
+    "actual": true,
+    "pass": true
+  },
+  {
+    "isServer": false,
+    "file": "fixtures/1-plain-static.tsx",
+    "wanted": true,
+    "actual": true,
+    "pass": true
+  }
+]

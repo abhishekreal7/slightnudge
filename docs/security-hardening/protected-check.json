@@ -1,0 +1,24 @@
+{
+  "changed": [
+    "app/editor/[[...project]]/page.tsx",
+    "app/layout.tsx",
+    "app/studio/[repoId]/edit/page.tsx",
+    "app/studio/[repoId]/page.tsx",
+    "app/studio/page.tsx",
+    "components/slightnudge/ActionControls.tsx",
+    "components/slightnudge/ChangeHistory.tsx",
+    "components/slightnudge/EditorWorkspace.tsx",
+    "components/slightnudge/IconControls.tsx",
+    "components/slightnudge/ImageContent.tsx",
+    "components/slightnudge/SlightNudgeOverlay.tsx",
+    "components/slightnudge/SourceProjectCanvas.tsx",
+    "lib/slightnudge/auth.ts",
+    "lib/slightnudge/client.ts",
+    "lib/slightnudge/edit-history.ts",
+    "lib/slightnudge/next-source-adapter.ts",
+    "lib/slightnudge/repository-store.ts",
+    "next.config.mjs",
+    "package.json"
+  ],
+  "originalTestsChanged": []
+}

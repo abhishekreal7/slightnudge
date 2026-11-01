@@ -1,0 +1,23 @@
+▲ Next.js 16.4.3 (webpack)
+- Local:         http://127.0.0.1:3000
+- Network:       http://127.0.0.1:3000
+✓ Ready in 594ms
+⚠ Warning: Next.js inferred your workspace root, but it may not be correct.
+ We detected multiple lockfiles and selected the directory of C:\dev\vibecheck\package-lock.json as the root directory.
+ To silence this warning, set `outputFileTracingRoot` in your Next.js config, or consider removing one of the lockfiles if it's not needed.
+   See https://nextjs.org/docs/app/api-reference/config/next-config-js/output#caveats for more information.
+ Detected additional lockfiles: 
+   * C:\dev\vibecheck\scratch\security-hardening-20261101\runtime\package-lock.json
+
+✓ Running next.config.mjs took 40ms
+
+○ Compiling /studio/[repoId]/edit/page ...
+ GET /studio/m0-control-lab/edit?preview=http%3A%2F%2F127.0.0.1%3A3001&legacyStudio=1 200 in 1941ms (next.js: 1264ms, application-code: 678ms)
+○ Compiling proxy ...
+○ Compiling /api/slightnudge/repositories/[id]/route ...
+ GET /api/slightnudge/pages 200 in 7.7s (next.js: 7.2s, proxy.ts: 360ms, application-code: 103ms)
+ GET /api/slightnudge/pages 200 in 506ms (next.js: 402ms, proxy.ts: 65ms, application-code: 38ms)
+ GET /studio/m0-control-lab/edit?preview=http%3A%2F%2F127.0.0.1%3A3001&legacyStudio=1 200 in 997ms (next.js: 454ms, application-code: 543ms)
+ GET /api/slightnudge/repositories/m0-control-lab 200 in 8.8s (next.js: 8.0s, proxy.ts: 359ms, application-code: 445ms)
+ GET /api/slightnudge/repositories/m0-control-lab 200 in 230ms (next.js: 30ms, proxy.ts: 137ms, application-code: 63ms)
+ POST /api/slightnudge/repositories/m0-control-lab/preview-check 200 in 14.7s (next.js: 1652ms, proxy.ts: 12ms, application-code: 13.0s)

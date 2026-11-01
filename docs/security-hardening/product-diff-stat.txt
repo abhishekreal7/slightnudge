@@ -1,0 +1,23 @@
+ app/editor/[[...project]]/page.tsx             |  2 +-
+ app/layout.tsx                                 |  5 ++-
+ app/studio/[repoId]/edit/page.tsx              |  2 +-
+ app/studio/[repoId]/page.tsx                   | 36 +++++++++--------
+ app/studio/page.tsx                            |  2 +-
+ components/slightnudge/ActionControls.tsx      |  4 +-
+ components/slightnudge/ChangeHistory.tsx       |  4 +-
+ components/slightnudge/EditorClient.tsx        | 13 ++++++
+ components/slightnudge/EditorWorkspace.tsx     | 21 ++++------
+ components/slightnudge/IconControls.tsx        |  4 +-
+ components/slightnudge/ImageContent.tsx        |  4 +-
+ components/slightnudge/SlightNudgeOverlay.tsx  | 23 ++++++-----
+ components/slightnudge/SourceProjectCanvas.tsx |  6 ++-
+ lib/slightnudge/api-response.ts                | 14 +++++++
+ lib/slightnudge/auth.ts                        | 16 ++------
+ lib/slightnudge/client.ts                      | 55 +++++++++++++++-----------
+ lib/slightnudge/edit-history.ts                | 14 ++++++-
+ lib/slightnudge/next-source-adapter.ts         | 12 +++---
+ lib/slightnudge/repository-store.ts            | 18 ++-------
+ lib/slightnudge/source-paths.ts                | 42 ++++++++++++++++++++
+ next.config.mjs                                |  7 ++++
+ package.json                                   |  2 +-
+ 22 files changed, 197 insertions(+), 109 deletions(-)

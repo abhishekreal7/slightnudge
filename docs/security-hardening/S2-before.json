@@ -1,0 +1,86 @@
+[
+  {
+    "name": "workspace resolver rejects escaping parent",
+    "pass": true,
+    "detail": {
+      "error": "Error: The selected file must be inside the SlightNudge workspace."
+    }
+  },
+  {
+    "name": "workspace resolver rejects absolute outside path",
+    "pass": true,
+    "detail": {
+      "error": "Error: The selected file must be inside the SlightNudge workspace."
+    }
+  },
+  {
+    "name": "workspace resolver realpaths a directory junction before reading",
+    "pass": false,
+    "detail": {
+      "error": "Accepted unsafe path/state"
+    }
+  },
+  {
+    "name": "repository ID traversal rejected",
+    "pass": true,
+    "detail": {
+      "error": "Error: That repository could not be found."
+    }
+  },
+  {
+    "name": "sourcePath traversal rejected",
+    "pass": true,
+    "detail": {
+      "error": "Error: That source path is not valid."
+    }
+  },
+  {
+    "name": "repository junction cannot escape registered project",
+    "pass": true,
+    "detail": {
+      "error": "Error: The source file is outside this repository."
+    }
+  },
+  {
+    "name": "pending state rejects parent",
+    "pass": true,
+    "detail": {
+      "error": "Error: The target file must be inside the SlightNudge workspace."
+    }
+  },
+  {
+    "name": "pending state rejects absolute",
+    "pass": true,
+    "detail": {
+      "error": "Error: The preview data is invalid. Discard it and try again."
+    }
+  },
+  {
+    "name": "pending state rejects junction",
+    "pass": true,
+    "detail": {
+      "error": "Error: The target file must be inside the SlightNudge workspace."
+    }
+  },
+  {
+    "name": "pending state rejects cross-project",
+    "pass": false,
+    "detail": {
+      "error": "Accepted unsafe path/state"
+    }
+  },
+  {
+    "name": "previewId traversal rejected",
+    "pass": true,
+    "detail": {
+      "error": "Error: That preview is no longer available."
+    }
+  },
+  {
+    "name": "history state rejects a target outside its registered project",
+    "pass": false,
+    "detail": {
+      "error": "Accepted unsafe path/state"
+    }
+  }
+]

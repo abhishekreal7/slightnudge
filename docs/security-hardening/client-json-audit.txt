@@ -1,0 +1,7 @@
+lib/slightnudge/next-source-adapter.ts:832:    const state = JSON.parse(await readFile(statePath, 'utf8')) as AdapterState;
+lib/slightnudge/next-source-adapter.ts:853:  const packageInfo = JSON.parse(await readFile(packagePath, 'utf8')) as { dependencies?: Record<string, string>; devDependencies?: Record<string, string> };
+lib/slightnudge/next-source-adapter.ts:858:  try { nextVersion = (JSON.parse(await readFile(nextVersionPath, 'utf8')) as { version: string }).version; } catch { /* Resolve from manifest */ }
+components/slightnudge\EditorWorkspace.tsx:487:      const saved = JSON.parse(localStorage.getItem('slightnudge:workspace-layout') || 'null');
+components/slightnudge\EditorWorkspace.tsx:585:      const saved = JSON.parse(localStorage.getItem(responsivePreferenceKey) || 'null');
+components/slightnudge\EditorWorkspace.tsx:1289:      const value = JSON.parse(raw) as StudioDraft;
+components/slightnudge\EditorWorkspace.tsx:1353:            const stored = JSON.parse(localStorage.getItem(projectDraftStorageKey) || 'null');

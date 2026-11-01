@@ -1,0 +1,20 @@
+{
+  "round": 1,
+  "surface": "old-studio",
+  "suite": "regression",
+  "requestedUrl": "http://127.0.0.1:3000/studio/m0-control-lab/edit?preview=http%3A%2F%2F127.0.0.1%3A3001&legacyStudio=1",
+  "actualUrl": "http://127.0.0.1:3000/studio/m0-control-lab/edit?preview=http%3A%2F%2F127.0.0.1%3A3001&legacyStudio=1",
+  "cases": [],
+  "geometry": [],
+  "events": [
+    {
+      "kind": "requestfailed",
+      "url": "http://127.0.0.1:3000/studio/m0-control-lab/edit",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "kind": "harness-or-setup-error",
+      "message": "TimeoutError: locator.waitFor: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-source-ready=\"true\"]') to be visible\u001b[22m\n"
+    }
+  ]
+}

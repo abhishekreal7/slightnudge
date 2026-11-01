@@ -1,0 +1,221 @@
+ app/editor/[[...project]]/page.tsx                 |     2 +-
+ app/layout.tsx                                     |     5 +-
+ app/studio/[repoId]/edit/page.tsx                  |     2 +-
+ app/studio/[repoId]/page.tsx                       |    36 +-
+ app/studio/page.tsx                                |     2 +-
+ components/slightnudge/ActionControls.tsx          |     4 +-
+ components/slightnudge/ChangeHistory.tsx           |     4 +-
+ components/slightnudge/EditorClient.tsx            |    13 +
+ components/slightnudge/EditorWorkspace.tsx         |    21 +-
+ components/slightnudge/IconControls.tsx            |     4 +-
+ components/slightnudge/ImageContent.tsx            |     4 +-
+ components/slightnudge/SlightNudgeOverlay.tsx      |    23 +-
+ components/slightnudge/SourceProjectCanvas.tsx     |     6 +-
+ docs/security-hardening/REPORT.md                  |    60 +
+ docs/security-hardening/S1-after.json              |   161 +
+ docs/security-hardening/S1-after.log               |    16 +
+ docs/security-hardening/S1-before-complete.json    |   163 +
+ docs/security-hardening/S1-before-complete.log     |    16 +
+ docs/security-hardening/S1-before-extra.json       |   156 +
+ docs/security-hardening/S1-before-extra.log        |    15 +
+ docs/security-hardening/S1-before.json             |   144 +
+ docs/security-hardening/S1-before.log              |    13 +
+ docs/security-hardening/S1-final.json              |   161 +
+ docs/security-hardening/S1-final.log               |    16 +
+ docs/security-hardening/S1-loader-error.log        |    17 +
+ docs/security-hardening/S1.md                      |    16 +
+ docs/security-hardening/S2-after-complete.json     |   108 +
+ docs/security-hardening/S2-after-complete.log      |    16 +
+ docs/security-hardening/S2-after.json              |   101 +
+ docs/security-hardening/S2-after.log               |    15 +
+ docs/security-hardening/S2-before-complete.json    |   101 +
+ docs/security-hardening/S2-before-complete.log     |    15 +
+ .../S2-before-unbound-history.json                 |   108 +
+ .../S2-before-unbound-history.log                  |    16 +
+ docs/security-hardening/S2-before.json             |    86 +
+ docs/security-hardening/S2-before.log              |    12 +
+ docs/security-hardening/S2-final.json              |   108 +
+ docs/security-hardening/S2-final.log               |    16 +
+ docs/security-hardening/S2-loader-error.log        |    17 +
+ docs/security-hardening/S2-product-hunks.patch     |   126 +
+ docs/security-hardening/S2.md                      |    24 +
+ docs/security-hardening/S3-after.json              |    33 +
+ docs/security-hardening/S3-after.log               |     4 +
+ docs/security-hardening/S3-before-complete.json    |    33 +
+ docs/security-hardening/S3-before-complete.log     |     4 +
+ docs/security-hardening/S3-before.json             |    24 +
+ docs/security-hardening/S3-before.log              |     3 +
+ docs/security-hardening/S3-final.json              |    33 +
+ docs/security-hardening/S3-final.log               |     4 +
+ docs/security-hardening/S3-loader-error.log        |    17 +
+ docs/security-hardening/S3-product-hunks.patch     |    27 +
+ docs/security-hardening/S3.md                      |    14 +
+ docs/security-hardening/S4-S5-report.json          |    53 +
+ docs/security-hardening/S4-S5-report.log           |    53 +
+ .../after-shared-and-new-tests-git-status.txt      |   788 +
+ docs/security-hardening/all-product-hunks.patch    |   984 ++
+ docs/security-hardening/assert-client-mount.json   |     7 +
+ docs/security-hardening/assert-client-mount.log    |     1 +
+ .../security-hardening/assert-hydration-after.json |     7 +
+ docs/security-hardening/assert-hydration-after.log |     1 +
+ .../assert-hydration-before.json                   |     7 +
+ .../security-hardening/assert-hydration-before.log |     1 +
+ .../assert-self-hosted-cycles.json                 |     7 +
+ .../assert-self-hosted-cycles.log                  |     1 +
+ docs/security-hardening/browser-client-mount.json  |    84 +
+ docs/security-hardening/browser-client-mount.log   |    16 +
+ .../browser-font-blocked-after.json                |    13 +
+ .../browser-font-blocked-after.log                 |     1 +
+ .../browser-font-blocked-before.json               |    15 +
+ .../browser-font-blocked-before.log                |     1 +
+ .../browser-font-policy-after.json                 |    19 +
+ .../browser-font-policy-after.log                  |     1 +
+ .../browser-font-policy-before.json                |    14 +
+ .../browser-font-policy-before.log                 |     1 +
+ .../browser-font-policy-client-mount.json          |    14 +
+ .../browser-font-policy-client-mount.log           |     1 +
+ .../browser-hydration-after.json                   |    91 +
+ .../security-hardening/browser-hydration-after.log |    15 +
+ .../browser-hydration-before.json                  |   131 +
+ .../browser-hydration-before.log                   |    17 +
+ .../browser-hydration-final.json                   |    76 +
+ .../security-hardening/browser-hydration-final.log |    12 +
+ .../browser-responses-after.json                   |    22 +
+ .../security-hardening/browser-responses-after.log |     1 +
+ .../browser-responses-verified.json                |    23 +
+ .../browser-responses-verified.log                 |     1 +
+ .../browser-self-hosted-cycles.json                |    85 +
+ .../browser-self-hosted-final.json                 |   103 +
+ .../browser-self-hosted-final.log                  |    17 +
+ docs/security-hardening/client-json-audit.txt      |     7 +
+ .../evidence-commit-included.txt                   |   151 +
+ docs/security-hardening/fast-forward.txt           |     1 +
+ .../font-blocked-font-blocked-after.png            |   Bin 0 -> 55946 bytes
+ .../font-blocked-font-blocked-before.png           |   Bin 0 -> 5993 bytes
+ .../font-blocked-self-hosted-final.png             |   Bin 0 -> 55947 bytes
+ .../font-policy-font-policy-after.png              |   Bin 0 -> 55763 bytes
+ .../font-policy-font-policy-before.png             |   Bin 0 -> 55948 bytes
+ .../font-policy-font-policy-client-mount.png       |   Bin 0 -> 55759 bytes
+ .../font-policy-self-hosted-final.png              |   Bin 0 -> 55947 bytes
+ .../hydration-client-mount-14.html                 |     1 +
+ .../hydration-client-mount-14.png                  |   Bin 0 -> 7628 bytes
+ .../security-hardening/hydration-cold-restart.json |    12 +
+ .../hydration-final-summary.json                   |     6 +
+ .../hydration-hydration-after-13.html              |     1 +
+ .../hydration-hydration-after-13.png               |   Bin 0 -> 71869 bytes
+ .../hydration-hydration-final-10.html              |     1 +
+ .../hydration-hydration-final-10.png               |   Bin 0 -> 71869 bytes
+ .../hydration-product-hunks.patch                  |   107 +
+ docs/security-hardening/hydration.md               |    21 +
+ docs/security-hardening/initial-git-status.txt     |   670 +
+ docs/security-hardening/instrumentation-after.json |    58 +
+ docs/security-hardening/instrumentation-after.log  |     1 +
+ .../security-hardening/instrumentation-before.json |    58 +
+ docs/security-hardening/instrumentation-before.log |     1 +
+ docs/security-hardening/instrumentation-final.json |    58 +
+ docs/security-hardening/instrumentation-final.log  |     1 +
+ .../mutation-auth-route-audit.txt                  |    51 +
+ .../path-inputs-original-audit.txt                 |   107 +
+ .../pre-regression-git-status.txt                  |   774 +
+ docs/security-hardening/prettier-install.log       |     7 +
+ docs/security-hardening/product-diff-stat.txt      |    23 +
+ docs/security-hardening/protected-before.json      |   415 +
+ docs/security-hardening/protected-check.json       |    24 +
+ .../response-diagnostics-after.json                |   107 +
+ .../response-diagnostics-after.log                 |    15 +
+ .../response-diagnostics-before-extended.json      |   107 +
+ .../response-diagnostics-before-extended.log       |    15 +
+ .../response-diagnostics-before.json               |   107 +
+ .../response-diagnostics-before.log                |     6 +
+ .../response-diagnostics-final.log                 |    15 +
+ docs/security-hardening/response-diagnostics.md    |    22 +
+ docs/security-hardening/response-helper-final.log  |     1 +
+ .../response-helper-results.json                   |    30 +
+ .../security-hardening/response-helper-results.log |     1 +
+ .../response-product-hunks.patch                   |   654 +
+ .../response-ui-responses-after-1.png              |   Bin 0 -> 46058 bytes
+ .../response-ui-responses-after-2.png              |   Bin 0 -> 45677 bytes
+ .../response-ui-responses-verified-1.png           |   Bin 0 -> 46014 bytes
+ .../response-ui-responses-verified-2.png           |   Bin 0 -> 45677 bytes
+ .../response-ui-responses-verified-3.png           |   Bin 0 -> 46560 bytes
+ docs/security-hardening/route-path-inventory.txt   |    96 +
+ .../security-hardening/runtime-product-parity.json |    90 +
+ docs/security-hardening/runtime.json               |     9 +
+ docs/security-hardening/selection-report.log       |     9 +
+ docs/security-hardening/selection-runner.log       |     3 +
+ docs/security-hardening/selection/STOP.json        |     5 +
+ docs/security-hardening/selection/all-cases.json   | 15122 +++++++++++++++++++
+ docs/security-hardening/selection/all-cases.md     |   726 +
+ docs/security-hardening/selection/cells.json       |   242 +
+ .../selection/overfit-expected-copy.txt            |   231 +
+ .../selection/overfit-expected-original.txt        |   231 +
+ .../selection/overfit-expected.diff                |     0
+ .../selection/regression-expected-copy.txt         |   231 +
+ .../selection/regression-expected-original.txt     |   231 +
+ .../selection/regression-expected.diff             |     0
+ .../selection/round-1-git-status.txt               |   793 +
+ .../round-1-old-studio-regression-error.png        |   Bin 0 -> 44297 bytes
+ .../round-1-old-studio-regression.exit.json        |     3 +
+ .../selection/round-1-old-studio-regression.json   |    20 +
+ .../selection/round-1-old-studio-regression.log    |    12 +
+ docs/security-hardening/selection/round-1-raw.log  |    13 +
+ docs/security-hardening/selection/summary.json     |     9 +
+ docs/security-hardening/server-baseline-3000.log   |    28 +
+ docs/security-hardening/server-baseline-3001.log   |     8 +
+ docs/security-hardening/server-baseline-3002.log   |   240 +
+ docs/security-hardening/server-baseline-pids.json  |     1 +
+ .../server-client-mount-3000.log                   |  1365 ++
+ .../server-client-mount-pids.json                  |     1 +
+ docs/security-hardening/server-final-3000.log      |  1685 +++
+ docs/security-hardening/server-final-3001.log      |     8 +
+ docs/security-hardening/server-final-3002.log      |    78 +
+ docs/security-hardening/server-final-pids.json     |     1 +
+ .../server-hydration-before-3000.log               |  7024 +++++++++
+ .../server-hydration-before-pids.json              |     1 +
+ .../server-hydration-final-3000.log                |  1156 ++
+ .../server-hydration-final-pids.json               |     1 +
+ docs/security-hardening/server-matrix-3000.log     |    23 +
+ docs/security-hardening/server-matrix-3001.log     |     9 +
+ docs/security-hardening/server-matrix-3002.log     |     9 +
+ docs/security-hardening/server-matrix-pids.json    |     1 +
+ .../security-hardening/server-self-hosted-3000.log |   103 +
+ .../server-self-hosted-pids.json                   |     1 +
+ .../shared-imported-save-timeout.png               |   Bin 0 -> 51459 bytes
+ .../shared-workflows-imported-save-timeout.log     |   494 +
+ .../shared-workflows-setup-failure.log             |   247 +
+ docs/security-hardening/shared-workflows.log       |    34 +
+ .../shared-workflows/shared-instance-failure.png   |   Bin 0 -> 51459 bytes
+ .../shared-instance-imported-studio.png            |   Bin 0 -> 79439 bytes
+ .../shared-instance-imported-window.png            |   Bin 0 -> 71276 bytes
+ .../shared-instance-local-studio.png               |   Bin 0 -> 78476 bytes
+ .../shared-instance-local-window.png               |   Bin 0 -> 70400 bytes
+ .../source-project-compat-sample.json              |    12 +
+ .../stopped-final-probe-processes.json             |    32 +
+ .../stopped-matrix-processes.json                  |    32 +
+ .../unchanged-patcher-loader.diff                  |     0
+ lib/slightnudge/api-response.ts                    |    14 +
+ lib/slightnudge/auth.ts                            |    16 +-
+ lib/slightnudge/client.ts                          |    55 +-
+ lib/slightnudge/edit-history.ts                    |    14 +-
+ lib/slightnudge/next-source-adapter.ts             |    12 +-
+ lib/slightnudge/repository-store.ts                |    18 +-
+ lib/slightnudge/source-paths.ts                    |    42 +
+ next.config.mjs                                    |     7 +
+ package.json                                       |     2 +-
+ test/api-response-diagnostics.v2.test.ts           |    12 +
+ test/api-response-helper.v2.test.ts                |    11 +
+ test/assert-hydration.v2.cjs                       |     2 +
+ test/editor-instrumentation-hydration.v2.test.cjs  |    10 +
+ test/format-and-tailwind-report.v2.ts              |    25 +
+ test/helpers/security-selection.v2.ts              |    89 +
+ test/m0-overfit.security-v2.test.ts                |   233 +
+ test/m0-regression.security-v2.test.ts             |   233 +
+ test/security-client-browser.v2.ts                 |    38 +
+ test/security-hardening-v2.proofs.ts               |    68 +
+ test/security-runtime.v2.cjs                       |    17 +
+ test/security-selection-report.v2.cjs              |    14 +
+ test/security-selection-runner.v2.cjs              |    16 +
+ test/security-selection-setup.v2.cjs               |     9 +
+ test/security-shared-setup.v2.cjs                  |    25 +
+ test/shared-instance-security.v2.browser.ts        |   438 +
+ 220 files changed, 40446 insertions(+), 109 deletions(-)

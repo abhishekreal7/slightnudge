@@ -1,0 +1,32 @@
+[
+  {
+    "ProcessId": 6672,
+    "ParentProcessId": 20868,
+    "CommandLine": "C:\\nvm4w\\nodejs\\node.exe C:\\dev\\vibecheck\\node_modules\\next\\dist\\bin\\next dev --webpack --hostname 127.0.0.1 --port 3000"
+  },
+  {
+    "ProcessId": 18080,
+    "ParentProcessId": 20868,
+    "CommandLine": "C:\\nvm4w\\nodejs\\node.exe C:\\dev\\vibecheck\\node_modules\\next\\dist\\bin\\next dev --webpack --hostname 127.0.0.1 --port 3001"
+  },
+  {
+    "ProcessId": 21220,
+    "ParentProcessId": 20868,
+    "CommandLine": "C:\\nvm4w\\nodejs\\node.exe C:\\dev\\vibecheck\\node_modules\\next\\dist\\bin\\next dev --webpack --hostname 127.0.0.1 --port 3002"
+  },
+  {
+    "ProcessId": 10888,
+    "ParentProcessId": 21220,
+    "CommandLine": "C:\\nvm4w\\nodejs\\node.exe C:\\dev\\vibecheck\\node_modules\\next\\dist\\server\\lib\\start-server.js"
+  },
+  {
+    "ProcessId": 16388,
+    "ParentProcessId": 18080,
+    "CommandLine": "C:\\nvm4w\\nodejs\\node.exe C:\\dev\\vibecheck\\node_modules\\next\\dist\\server\\lib\\start-server.js"
+  },
+  {
+    "ProcessId": 7188,
+    "ParentProcessId": 6672,
+    "CommandLine": "C:\\nvm4w\\nodejs\\node.exe C:\\dev\\vibecheck\\node_modules\\next\\dist\\server\\lib\\start-server.js"
+  }
+]

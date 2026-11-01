@@ -1,0 +1,96 @@
+app/api/slightnudge\preview\route.ts:15:import { resolveRepositoryRoot, resolveRepositorySourcePath, resolveWorkspaceSourcePath } from '@/lib/slightnudge/repository-store';
+app/api/slightnudge\preview\route.ts:46:    const repositoryId = typeof body.repositoryId === 'string' ? body.repositoryId : undefined;
+app/api/slightnudge\preview\route.ts:47:    const sourcePath = typeof body.sourcePath === 'string' ? body.sourcePath : undefined;
+app/api/slightnudge\preview\route.ts:49:    if (!repositoryId && typeof body.filePath !== 'string') return NextResponse.json({ error: 'A source file is required.' }, { status: 400 });
+app/api/slightnudge\preview\route.ts:50:    const filePath = repositoryId ? (await resolveRepositorySourcePath(repositoryId, sourcePath!)).filePath : resolveWorkspaceSourcePath(body.filePath);
+app/api/slightnudge\preview\route.ts:55:      elementId: typeof body.elementId === 'string' ? body.elementId : undefined,
+app/api/slightnudge\preview\route.ts:62:    if (drafting && (!['component', 'style', 'text', 'image', 'action', 'icon', 'move', 'nudge', 'reorder', 'reparent'].includes(body.kind) || repositoryId && !['component', 'style', 'text', 'image', 'action', 'icon', 'move', 'reorder', 'reparent'].includes(body.kind))) return NextResponse.json({ error: 'This operation is not available in continuous drafts yet.' }, { status: 422 });
+app/api/slightnudge\preview\route.ts:63:    const scope = { repositoryId, root: repositoryId ? await resolveRepositoryRoot(repositoryId) : process.cwd(), component: body.kind === 'component', image: body.kind === 'image', action: body.kind === 'action', icon: body.kind === 'icon', structural: ['reorder', 'reparent'].includes(body.kind), text: body.kind === 'text' };
+app/api/slightnudge\preview\route.ts:64:    const parentId = typeof body.parentPreviewId === 'string' ? body.parentPreviewId : undefined;
+app/api/slightnudge\preview\route.ts:72:      if (!destination || destination.path !== (sourcePath || body.filePath) || !Number.isInteger(destination.line) || !Number.isInteger(destination.column) || destination.line < 1 || destination.column < 1) return NextResponse.json({ error: 'Choose a destination in the same source file.' }, { status: 422 });
+app/api/slightnudge\preview\route.ts:85:      } else if (!body.direction || !validDirections.has(body.direction)) {
+app/api/slightnudge\preview\route.ts:117:      if (!moving && !allowedDirections.has(body.direction)) return NextResponse.json({ error: 'Choose a valid direction.' }, { status: 400 });
+app/api/slightnudge\preview\route.ts:149:            const info=inspectInstanceComponent({root:scope.root,filePath:sourcePath||body.filePath,line:body.line,column:body.column,instance:body.instance});
+app/api/slightnudge\preview\route.ts:150:            const id=body.drafts?.[info.owner.filePath];
+app/api/slightnudge\preview\route.ts:152:              const callerPath=repositoryId?(await resolveRepositorySourcePath(repositoryId,info.owner.filePath)).filePath:resolveWorkspaceSourcePath(info.owner.filePath);
+app/api/slightnudge\preview\route.ts:163:          const definitionPath=repositoryId?sourcePath!:body.filePath;
+app/api/slightnudge\preview\route.ts:168:            const callerPath=repositoryId?(await resolveRepositorySourcePath(repositoryId,cross.owner.filePath)).filePath:resolveWorkspaceSourcePath(cross.owner.filePath);
+app/api/slightnudge\preview\route.ts:181:        const validated=repositoryId?(await resolveRepositorySourcePath(repositoryId,definition.filePath)).filePath:resolveWorkspaceSourcePath(definition.filePath);
+app/api/slightnudge\preview\route.ts:189:          return NextResponse.json({...await createPreview({filePath,...result,componentDependencies:[info.dependency],summary:`Change ${body.property} · this instance`,previewType:'reorder',repositoryId,sourcePath}),ownerPath:info.owner.filePath,success:true});
+app/api/slightnudge\preview\route.ts:196:        return NextResponse.json({...await createPreview({filePath,...result,componentDependencies:[cross.dependency],summary:`Change ${body.property} prop`,previewType:'reorder',repositoryId,sourcePath}),ownerPath:cross.owner.filePath,success:true});
+app/api/slightnudge\preview\route.ts:199:      return NextResponse.json({ ...await createPreview({ filePath, ...result, summary: `Change ${body.property} prop`, previewType: 'reorder', repositoryId, sourcePath }), success: true });
+app/api/slightnudge\preview\route.ts:216:      const result = body.property === 'icon' ? replaceLucideSource({ ...source, name: body.value }) : updateIconSource({ ...source, property: body.property, value: body.value });
+app/api/slightnudge\preview\route.ts:217:      return NextResponse.json({ ...await createPreview({ filePath, ...result, summary: `Change icon ${body.property}`, previewType: 'reorder', repositoryId, sourcePath }), success: true });
+app/api/slightnudge\preview\route.ts:226:      const preview = await createPreview({ filePath, ...result, summary: body.property === 'href' ? 'Change link destination' : body.property === 'target' ? 'Change link opening behavior' : body.property === 'type' ? 'Change button type' : 'Change button availability', previewType: 'reorder', repositoryId, sourcePath });
+app/api/slightnudge\preview\route.ts:240:      const preview = await createPreview({ filePath, ...result, summary: body.property === 'src' ? 'Replace image' : 'Edit image description', previewType: 'reorder', repositoryId, sourcePath });
+app/api/slightnudge\preview\route.ts:246:      if (typeof body.value !== 'string') return NextResponse.json({ error: 'Choose a valid style value.' }, { status: 400 });
+app/api/slightnudge\preview\route.ts:309:      const root = repositoryId ? await resolveRepositoryRoot(repositoryId) : process.cwd();
+app/api/slightnudge\preview\route.ts:349:    const id = new URL(request.url).searchParams.get('id');
+app/api/slightnudge\apply\route.ts:3:import { resolveRepositorySourcePath } from '@/lib/slightnudge/repository-store';
+app/api/slightnudge\apply\route.ts:17:    if (typeof body.previewId !== 'string') return NextResponse.json({ error: 'Review a change before applying it.' }, { status: 400, headers: corsHeaders(request) });
+app/api/slightnudge\apply\route.ts:18:    const repositoryId = typeof body.repositoryId === 'string' ? body.repositoryId : undefined;
+app/api/slightnudge\apply\route.ts:19:    const sourcePath = typeof body.sourcePath === 'string' ? body.sourcePath : undefined;
+app/api/slightnudge\apply\route.ts:20:    const validatedFilePath = repositoryId && sourcePath ? (await resolveRepositorySourcePath(repositoryId, sourcePath)).filePath : undefined;
+app/api/slightnudge\apply\route.ts:21:    const result = await applyPendingSourceEdit(body.previewId, typeof body.groupId === 'string' ? body.groupId : undefined, repositoryId, sourcePath, validatedFilePath);
+app/api/slightnudge\undo\status\route.ts:3:import { resolveRepositorySourcePath, resolveWorkspaceSourcePath } from '@/lib/slightnudge/repository-store';
+app/api/slightnudge\undo\status\route.ts:15:    if (typeof body.previewId !== 'string' || !/^[0-9a-f-]{36}$/i.test(body.previewId)) return NextResponse.json({ success: false, code: 'UNDO_TARGET_REQUIRED', error: 'An accepted edit reference is required.' }, { status: 400, headers });
+app/api/slightnudge\undo\status\route.ts:16:    if (body.repositoryId !== undefined && (typeof body.repositoryId !== 'string' || typeof body.sourcePath !== 'string')) return NextResponse.json({ success: false, code: 'UNDO_TARGET_REQUIRED', error: 'Choose the project and source file for this Undo.' }, { status: 400, headers });
+app/api/slightnudge\undo\status\route.ts:17:    const filePath = typeof body.repositoryId === 'string'
+app/api/slightnudge\undo\status\route.ts:18:      ? (await resolveRepositorySourcePath(body.repositoryId, body.sourcePath)).filePath
+app/api/slightnudge\undo\status\route.ts:19:      : typeof body.filePath === 'string' && body.filePath.trim() ? resolveWorkspaceSourcePath(body.filePath) : undefined;
+app/api/slightnudge\undo\status\route.ts:20:    const result = getSourceUndoOutcome(body.previewId, { filePath, repositoryId: body.repositoryId, sourcePath: body.sourcePath, editId: typeof body.editId === 'string' ? body.editId : undefined });
+app/api/slightnudge\assets\route.ts:5:import { resolveRepositoryRoot } from '@/lib/slightnudge/repository-store';
+app/api/slightnudge\assets\route.ts:11:  const repositoryId = new URL(request.url).searchParams.get('repositoryId');
+app/api/slightnudge\assets\route.ts:12:  const root = repositoryId ? await resolveRepositoryRoot(repositoryId) : process.cwd();
+app/api/slightnudge\history\route.ts:3:import { resolveRepositoryRoot } from '@/lib/slightnudge/repository-store';
+app/api/slightnudge\history\route.ts:14:    if (!body || typeof body !== 'object' || Array.isArray(body) || body.repositoryId !== undefined && (typeof body.repositoryId !== 'string' || !body.repositoryId)) return NextResponse.json({ error: 'Choose a valid project.' }, { status: 400, headers });
+app/api/slightnudge\history\route.ts:15:    const root = body.repositoryId ? await resolveRepositoryRoot(body.repositoryId) : process.cwd();
+app/api/slightnudge\history\route.ts:16:    return NextResponse.json({ entries: getHistorySummary(root, body.repositoryId) }, { headers });
+app/api/slightnudge\change-set\route.ts:4:import { resolveRepositoryRoot, resolveRepositorySourcePath, resolveWorkspaceSourcePath } from '@/lib/slightnudge/repository-store';
+app/api/slightnudge\change-set\route.ts:15:        if (!validGroupId(body.transactionId) || !['save', 'status', 'undo'].includes(body.operation) || body.repositoryId !== undefined && typeof body.repositoryId !== 'string')
+app/api/slightnudge\change-set\route.ts:17:        const repositoryId = body.repositoryId as string | undefined;
+app/api/slightnudge\change-set\route.ts:18:        const scope = { repositoryId, root: repositoryId ? await resolveRepositoryRoot(repositoryId) : process.cwd() };
+app/api/slightnudge\change-set\route.ts:21:            result = sourceGroupStatus(body.transactionId, scope);
+app/api/slightnudge\change-set\route.ts:23:            result = undoSourceGroup(body.transactionId, scope);
+app/api/slightnudge\change-set\route.ts:31:                const filePath = repositoryId ? (await resolveRepositorySourcePath(repositoryId, member.filePath)).filePath : resolveWorkspaceSourcePath(member.filePath);
+app/api/slightnudge\change-set\route.ts:34:            result = await saveSourceGroup(body.transactionId, members, scope);
+app/api/slightnudge\undo\route.ts:3:import { resolveRepositorySourcePath, resolveWorkspaceSourcePath } from '@/lib/slightnudge/repository-store';
+app/api/slightnudge\undo\route.ts:17:    if (typeof body.previewId !== 'string' || !/^[0-9a-f-]{36}$/i.test(body.previewId)) return NextResponse.json({ success: false, code: 'UNDO_TARGET_REQUIRED', error: 'Choose the accepted edit to undo. Unbound Undo requests are not supported.' }, { status: 400, headers: corsHeaders(request) });
+app/api/slightnudge\undo\route.ts:18:    if (body.repositoryId !== undefined && (typeof body.repositoryId !== 'string' || typeof body.sourcePath !== 'string')) return NextResponse.json({ success: false, code: 'UNDO_TARGET_REQUIRED', error: 'Choose the project and source file for this Undo.' }, { status: 400, headers: corsHeaders(request) });
+app/api/slightnudge\undo\route.ts:19:    const filePath = typeof body.repositoryId === 'string' && typeof body.sourcePath === 'string'
+app/api/slightnudge\undo\route.ts:20:      ? (await resolveRepositorySourcePath(body.repositoryId, body.sourcePath)).filePath
+app/api/slightnudge\undo\route.ts:21:      : typeof body.filePath === 'string' && body.filePath.trim() ? resolveWorkspaceSourcePath(body.filePath) : undefined;
+app/api/slightnudge\undo\route.ts:22:    const result = undoReviewedSourceEdit(body.previewId, { filePath, repositoryId: body.repositoryId, sourcePath: body.sourcePath, editId: typeof body.editId === 'string' ? body.editId : undefined });
+app/api/slightnudge\responsive\route.ts:3:import { resolveWorkspaceSourcePath, resolveRepositorySourcePath } from '@/lib/slightnudge/repository-store';
+app/api/slightnudge\responsive\route.ts:10:    if (typeof body.filePath !== 'string') return NextResponse.json({ error: 'Choose a project source file.' }, { status: 400 });
+app/api/slightnudge\responsive\route.ts:11:    const target = typeof body.repositoryId === 'string' ? (await resolveRepositorySourcePath(body.repositoryId, body.filePath)).filePath : resolveWorkspaceSourcePath(body.filePath);
+app/api/slightnudge\apply\status\route.ts:3:import { resolveRepositorySourcePath } from '@/lib/slightnudge/repository-store';
+app/api/slightnudge\apply\status\route.ts:19:    if (typeof body.previewId !== 'string') return NextResponse.json({ success: false, error: 'A reviewed change is required.' }, { status: 400, headers });
+app/api/slightnudge\apply\status\route.ts:20:    const repositoryId = typeof body.repositoryId === 'string' ? body.repositoryId : undefined;
+app/api/slightnudge\apply\status\route.ts:21:    const sourcePath = typeof body.sourcePath === 'string' ? body.sourcePath : undefined;
+app/api/slightnudge\apply\status\route.ts:22:    const filePath = repositoryId && sourcePath ? (await resolveRepositorySourcePath(repositoryId, sourcePath)).filePath : undefined;
+app/api/slightnudge\apply\status\route.ts:23:    const result = getSourceApplyOutcome(body.previewId, repositoryId, sourcePath, filePath);
+app/api/slightnudge\draft-view\route.ts:3:import { resolveWorkspaceSourcePath, resolveRepositorySourcePath, resolveRepositoryRoot } from '@/lib/slightnudge/repository-store';
+app/api/slightnudge\draft-view\route.ts:11:    if (typeof body.previewId !== 'string' || typeof body.filePath !== 'string') return NextResponse.json({ error: 'Choose a saved local draft.' }, { status: 400 });
+app/api/slightnudge\draft-view\route.ts:12:    const repositoryId = typeof body.repositoryId === 'string' ? body.repositoryId : undefined;
+app/api/slightnudge\draft-view\route.ts:13:    const file = repositoryId ? (await resolveRepositorySourcePath(repositoryId, body.sourcePath)).filePath : resolveWorkspaceSourcePath(body.filePath);
+app/api/slightnudge\draft-view\route.ts:14:    return NextResponse.json({ success: true, ...await readRenderableDraft(body.previewId, file, { repositoryId, root: repositoryId ? await resolveRepositoryRoot(repositoryId) : process.cwd() }) });
+app/api/slightnudge\inspect\route.ts:4:import { resolveWorkspaceSourcePath } from '@/lib/slightnudge/repository-store';
+app/api/slightnudge\inspect\route.ts:24:    const resolvedPath = resolveWorkspaceSourcePath(filePath);
+app/api/slightnudge\repositories\[id]\preview-check\route.ts:5:export async function POST(request: Request, context: { params: Promise<{ id: string }> }) {
+app/api/slightnudge\repositories\[id]\adapter\route.ts:12:export async function GET(_request: Request, context: { params: Promise<{ id: string }> }) {
+app/api/slightnudge\repositories\[id]\adapter\route.ts:21:export async function POST(request: Request, context: { params: Promise<{ id: string }> }) {
+app/api/slightnudge\repositories\[id]\adapter\route.ts:33:export async function DELETE(request: Request, context: { params: Promise<{ id: string }> }) {
+app/api/slightnudge\repositories\[id]\docker-preview\route.ts:11:export async function GET(request: Request, context: { params: Promise<{ id: string }> }) {
+app/api/slightnudge\repositories\[id]\docker-preview\route.ts:23:export async function POST(request: Request, context: { params: Promise<{ id: string }> }) {
+app/api/slightnudge\repositories\[id]\docker-preview\route.ts:36:export async function DELETE(request: Request, context: { params: Promise<{ id: string }> }) {
+app/api/slightnudge\repositories\[id]\route.ts:4:import { listLocalRepositories, resolveRepositoryRoot } from '@/lib/slightnudge/repository-store';
+app/api/slightnudge\repositories\[id]\route.ts:10:export async function GET(_request: Request, context: { params: Promise<{ id: string }> }) {
+app/api/slightnudge\repositories\[id]\route.ts:16:    const root = await resolveRepositoryRoot(id);
+app/api/slightnudge\repositories\[id]\source\route.ts:4:export async function GET(request: Request, context: { params: Promise<{ id: string }> }) {
+app/api/slightnudge\repositories\[id]\source\route.ts:7:    const sourcePath = new URL(request.url).searchParams.get('path');
+app/api/slightnudge\repositories\[id]\inspect\route.ts:3:import { resolveRepositorySourcePath } from '@/lib/slightnudge/repository-store';
+app/api/slightnudge\repositories\[id]\inspect\route.ts:11:export async function POST(request: Request, context: { params: Promise<{ id: string }> }) {
+app/api/slightnudge\repositories\[id]\inspect\route.ts:23:    if (typeof body.path !== 'string' || body.path.length > 1000) {
+app/api/slightnudge\repositories\[id]\inspect\route.ts:32:    const source = await resolveRepositorySourcePath(id, body.path);
+app/api/slightnudge\repositories\[id]\inspect\route.ts:37:      elementId: typeof body.elementId === 'string' ? body.elementId.slice(0, 200) : undefined,

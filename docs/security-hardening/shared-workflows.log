@@ -1,0 +1,34 @@
+GATE REQUEST FAILED /api/slightnudge/preview net::ERR_ABORTED
+GATE REQUEST FAILED /api/slightnudge/preview net::ERR_ABORTED
+GATE REQUEST FAILED /api/slightnudge/preview net::ERR_ABORTED
+GATE HTTP /api/slightnudge/apply/status 409 {"success":false,"code":"APPLY_NOT_APPLIED","error":"The reviewed source is unchanged and no save is recorded. Explicitly apply the review when you are ready."}
+GATE HTTP /api/slightnudge/apply/status 409 {"success":false,"code":"APPLY_NOT_APPLIED","error":"The reviewed source is unchanged and no save is recorded. Explicitly apply the review when you are ready."}
+GATE HTTP /api/slightnudge/apply 200 {"success":true,"editId":"dd159f75-4d43-4efe-acc4-82048ab326c9","filePath":"fixtures\\1-plain-static.tsx","previewType":"reorder","value":"/contact","className":"/contact","message":"Applied Save visual draft."}
+GATE HTTP /api/slightnudge/undo 200 {"success":true,"previewId":"e8282a31-e439-46f6-af9d-d2361202c70e","editId":"dd159f75-4d43-4efe-acc4-82048ab326c9","sourceCurrent":true,"message":"Undid Save visual draft."}
+PASS shared instances local Studio: identical callers, text/inline, destination, enabled state, variant, refresh, Save, exact Undo
+GATE REQUEST FAILED /api/slightnudge/preview net::ERR_ABORTED
+GATE REQUEST FAILED /api/slightnudge/preview net::ERR_ABORTED
+GATE REQUEST FAILED /api/slightnudge/preview net::ERR_ABORTED
+GATE HTTP /api/slightnudge/apply/status 409 {"success":false,"code":"APPLY_NOT_APPLIED","error":"The reviewed source is unchanged and no save is recorded. Explicitly apply the review when you are ready."}
+GATE HTTP /api/slightnudge/apply/status 409 {"success":false,"code":"APPLY_NOT_APPLIED","error":"The reviewed source is unchanged and no save is recorded. Explicitly apply the review when you are ready."}
+GATE HTTP /api/slightnudge/apply 200 {"success":true,"editId":"4c7c793f-d112-40ca-8865-a187adcc8ff8","filePath":"fixtures\\1-plain-static.tsx","previewType":"reorder","value":"/contact","className":"/contact","message":"Applied Save visual draft."}
+GATE HTTP /api/slightnudge/undo 200 {"success":true,"previewId":"2974b274-0bf9-4e15-9f5d-1dfff6808eb0","editId":"4c7c793f-d112-40ca-8865-a187adcc8ff8","sourceCurrent":true,"message":"Undid Save visual draft."}
+PASS shared instances local window: identical callers, text/inline, destination, enabled state, variant, refresh, Save, exact Undo
+Disposable source project: generated SaaS; Next.js 16.4.3; Tailwind 4.3.3; installed source adapter; no environment files checked out.
+GATE REQUEST FAILED /api/slightnudge/preview net::ERR_ABORTED
+GATE REQUEST FAILED /api/slightnudge/preview net::ERR_ABORTED
+GATE REQUEST FAILED /api/slightnudge/preview net::ERR_ABORTED
+GATE HTTP /api/slightnudge/apply/status 409 {"success":false,"code":"APPLY_NOT_APPLIED","error":"The reviewed source is unchanged and no save is recorded. Explicitly apply the review when you are ready."}
+GATE HTTP /api/slightnudge/apply/status 409 {"success":false,"code":"APPLY_NOT_APPLIED","error":"The reviewed source is unchanged and no save is recorded. Explicitly apply the review when you are ready."}
+GATE HTTP /api/slightnudge/apply 200 {"success":true,"editId":"f329de46-aee3-4f63-822a-b7fef69635be","filePath":".slightnudge\\repositories\\source-proof\\app\\page.tsx","previewType":"reorder","value":"/contact","className":"/contact","message":"Applied Save visual draft."}
+GATE HTTP /api/slightnudge/undo 200 {"success":true,"previewId":"755c4ae9-79b7-4a0a-8271-00715e4aa6e4","editId":"f329de46-aee3-4f63-822a-b7fef69635be","sourceCurrent":true,"message":"Undid Save visual draft."}
+PASS shared instances imported Studio: identical callers, text/inline, destination, enabled state, variant, refresh, Save, exact Undo
+GATE REQUEST FAILED /api/slightnudge/preview net::ERR_ABORTED
+GATE REQUEST FAILED /api/slightnudge/preview net::ERR_ABORTED
+GATE REQUEST FAILED /api/slightnudge/preview net::ERR_ABORTED
+GATE HTTP /api/slightnudge/apply/status 409 {"success":false,"code":"APPLY_NOT_APPLIED","error":"The reviewed source is unchanged and no save is recorded. Explicitly apply the review when you are ready."}
+GATE HTTP /api/slightnudge/apply/status 409 {"success":false,"code":"APPLY_NOT_APPLIED","error":"The reviewed source is unchanged and no save is recorded. Explicitly apply the review when you are ready."}
+GATE HTTP /api/slightnudge/apply 200 {"success":true,"editId":"1efbb5c5-b986-404e-bc81-a203f0b2af43","filePath":".slightnudge\\repositories\\source-proof\\app\\page.tsx","previewType":"reorder","value":"/contact","className":"/contact","message":"Applied Save visual draft."}
+GATE HTTP /api/slightnudge/undo 200 {"success":true,"previewId":"f89e3995-4a1e-41a7-8fc9-abc38044830c","editId":"1efbb5c5-b986-404e-bc81-a203f0b2af43","sourceCurrent":true,"message":"Undid Save visual draft."}
+PASS shared instances imported window: identical callers, text/inline, destination, enabled state, variant, refresh, Save, exact Undo
+PASS: 4 review-consent browser cases (real API; disposable source copy)

@@ -1,0 +1,12 @@
+NAVIGATION http://127.0.0.1:3000/studio/m0-control-lab/edit?preview=http%3A%2F%2F127.0.0.1%3A3001&legacyStudio=1
+locator.waitFor: Timeout 30000ms exceeded.
+Call log:
+[2m  - waiting for locator('[data-source-ready="true"]') to be visible[22m
+
+    at <anonymous> (C:\dev\vibecheck\test\helpers\security-selection.v2.ts:34:176)
+    at async runSelectionGate (C:\dev\vibecheck\test\helpers\security-selection.v2.ts:34:39) {
+  log: [
+    `  - waiting for locator('[data-source-ready="true"]') to be visible`
+  ],
+  name: 'TimeoutError'
+}

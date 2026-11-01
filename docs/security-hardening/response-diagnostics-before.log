@@ -1,0 +1,6 @@
+{"operation":"inspect","body":"","pass":false,"error":"I can't confirm which element this is. Nothing was changed."}
+{"operation":"preview","body":"","pass":false,"error":"Unexpected end of JSON input"}
+{"operation":"inspect","body":"{\"broken\":","pass":false,"error":"I can't confirm which element this is. Nothing was changed."}
+{"operation":"preview","body":"{\"broken\":","pass":false,"error":"Unexpected end of JSON input"}
+{"operation":"inspect","body":"<html>upstream failure</html>","pass":false,"error":"I can't confirm which element this is. Nothing was changed."}
+{"operation":"preview","body":"<html>upstream failure</html>","pass":false,"error":"Unexpected token '<', \"<html>upst\"... is not valid JSON"}

@@ -1,0 +1,28 @@
+▲ Next.js 16.4.3 (webpack)
+- Local:         http://127.0.0.1:3000
+- Network:       http://127.0.0.1:3000
+✓ Ready in 741ms
+⚠ Warning: Next.js inferred your workspace root, but it may not be correct.
+ We detected multiple lockfiles and selected the directory of C:\dev\vibecheck\package-lock.json as the root directory.
+ To silence this warning, set `outputFileTracingRoot` in your Next.js config, or consider removing one of the lockfiles if it's not needed.
+   See https://nextjs.org/docs/app/api-reference/config/next-config-js/output#caveats for more information.
+ Detected additional lockfiles: 
+   * C:\dev\vibecheck\scratch\security-hardening-20261101\runtime\package-lock.json
+
+✓ Running next.config.mjs took 47ms
+
+○ Compiling /editor/[[...project]]/page ...
+ GET /editor/m0-overfit-lab?view=full 200 in 1207ms (next.js: 895ms, application-code: 312ms)
+ GET /editor/m0-overfit-lab?view=full 200 in 7.3s (next.js: 7.0s, application-code: 315ms)
+ GET /editor/m0-overfit-lab?view=full 200 in 5.8s (next.js: 5.6s, application-code: 189ms)
+ GET /api/slightnudge/pages 200 in 137ms (next.js: 100ms, proxy.ts: 8ms, application-code: 30ms)
+ GET /api/slightnudge/pages 200 in 147ms (next.js: 131ms, proxy.ts: 8ms, application-code: 8ms)
+ GET /editor/m0-overfit-lab?view=full 200 in 155ms (next.js: 20ms, application-code: 135ms)
+ GET /api/slightnudge/pages 200 in 44ms (next.js: 4ms, proxy.ts: 17ms, application-code: 23ms)
+ GET /api/slightnudge/pages 200 in 59ms (next.js: 31ms, proxy.ts: 17ms, application-code: 11ms)
+ GET /editor/m0-overfit-lab?view=full 200 in 94ms (next.js: 14ms, application-code: 79ms)
+ GET /api/slightnudge/pages 200 in 33ms (next.js: 3ms, proxy.ts: 14ms, application-code: 16ms)
+ GET /api/slightnudge/pages 200 in 53ms (next.js: 22ms, proxy.ts: 14ms, application-code: 18ms)
+ GET /editor/m0-overfit-lab?view=full 200 in 84ms (next.js: 11ms, application-code: 72ms)
+ GET /api/slightnudge/pages 200 in 30ms (next.js: 3ms, proxy.ts: 11ms, application-code: 16ms)
+ GET /api/slightnudge/pages 200 in 40ms (next.js: 22ms, proxy.ts: 11ms, application-code: 7ms)

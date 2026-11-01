@@ -1,0 +1,16 @@
+{"iteration":0,"pass":true,"errors":[]}
+{"iteration":1,"pass":true,"errors":[]}
+{"iteration":2,"pass":true,"errors":[]}
+{"iteration":3,"pass":true,"errors":[]}
+{"iteration":4,"pass":true,"errors":[]}
+{"iteration":5,"pass":true,"errors":[]}
+{"iteration":6,"pass":true,"errors":[]}
+{"iteration":7,"pass":true,"errors":[]}
+{"iteration":8,"pass":true,"errors":[]}
+{"iteration":9,"pass":true,"errors":[]}
+{"iteration":10,"pass":true,"errors":[]}
+{"iteration":11,"pass":true,"errors":[]}
+{"iteration":12,"pass":true,"errors":[]}
+{"iteration":13,"pass":true,"errors":[]}
+{"iteration":14,"pass":false,"errors":[{"message":"TimeoutError: locator.waitFor: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-source-ready=\"true\"]') to be visible\u001b[22m\n"}]}
+{"rows":[{"iteration":0,"pass":true,"errors":[]},{"iteration":1,"pass":true,"errors":[]},{"iteration":2,"pass":true,"errors":[]},{"iteration":3,"pass":true,"errors":[]},{"iteration":4,"pass":true,"errors":[]},{"iteration":5,"pass":true,"errors":[]},{"iteration":6,"pass":true,"errors":[]},{"iteration":7,"pass":true,"errors":[]},{"iteration":8,"pass":true,"errors":[]},{"iteration":9,"pass":true,"errors":[]},{"iteration":10,"pass":true,"errors":[]},{"iteration":11,"pass":true,"errors":[]},{"iteration":12,"pass":true,"errors":[]},{"iteration":13,"pass":true,"errors":[]},{"iteration":14,"pass":false,"errors":[{"message":"TimeoutError: locator.waitFor: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-source-ready=\"true\"]') to be visible\u001b[22m\n"}]}],"events":[]}
