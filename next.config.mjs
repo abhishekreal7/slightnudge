@@ -1,5 +1,6 @@
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import AtomicBuildManifestPlugin from './lib/slightnudge/atomic-build-manifest.cjs';
 
 const projectRoot = path.dirname(fileURLToPath(import.meta.url));
 
@@ -11,6 +12,7 @@ const nextConfig = {
   },
   webpack(config, { dev, isServer }) {
     if (dev) {
+      config.plugins.push(new AtomicBuildManifestPlugin());
       if (!isServer) config.module.rules.push({
         test: /[\\/]next[\\/]dist[\\/]client[\\/]dev[\\/]hot-reloader[\\/]app[\\/]web-socket\.js$/,
         enforce: 'pre',
