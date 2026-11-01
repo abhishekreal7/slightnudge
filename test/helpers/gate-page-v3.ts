@@ -10,10 +10,10 @@ export function iframePageV3(page:Page):Page {
   };
   if(['locator','getByRole','getByText','getByLabel'].includes(String(key)))return (...args:any[])=>{
    const host=(target as any)[key](...args),frame=(target.frameLocator('iframe[title="Actual project"], iframe[title="Local source preview"]') as any)[key](...args);
-   return new Proxy(host,{get(locator,method){const member=(locator as any)[method];if(typeof member!=='function')return member;
-    if(['locator','getByRole','getByText','getByLabel','filter','first','last','nth'].includes(String(method)))return member.bind(locator);
-    return async(...values:any[])=>{if(await host.count())return member.apply(host,values);if(await target.locator('iframe[title="Actual project"], iframe[title="Local source preview"]').count())return (frame as any)[method](...values);return member.apply(host,values);};
-   }});
+   const wrap=(host:any,frame:any):any=>new Proxy(host,{get(locator,method){const member=locator[method];if(typeof member!=='function')return member;
+    if(['locator','getByRole','getByText','getByLabel','filter','first','last','nth'].includes(String(method)))return (...values:any[])=>wrap(member.apply(host,values),frame[method](...values));
+    return async(...values:any[])=>{if(await host.count())return member.apply(host,values);if(await target.locator('iframe[title="Actual project"], iframe[title="Local source preview"]').count())return frame[method](...values);return member.apply(host,values);};
+   }});return wrap(host,frame);
   };
   const value=Reflect.get(target,key,target);return typeof value==='function'?value.bind(target):value;
  }});

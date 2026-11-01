@@ -6,6 +6,7 @@ import net from 'node:net';
 import crypto from 'node:crypto';
 import {spawn, execFileSync} from 'node:child_process';
 import {fileURLToPath, pathToFileURL} from 'node:url';
+import {createRequire,syncBuiltinESMExports} from 'node:module';
 
 const project = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const self = fileURLToPath(import.meta.url);
@@ -13,11 +14,23 @@ const self = fileURLToPath(import.meta.url);
 // Observation, not new test assertions. Report errors from the actual browsers
 // launched by existing commands so the coordinator can enforce the stop rule.
 if (process.env.GATE_CHILD_OBSERVE === '1') {
+  const childProcess=createRequire(import.meta.url)('node:child_process');
+  const originalSpawn=childProcess.spawn;
+  let serverIndex=0;
+  childProcess.spawn=function(executable,args=[],options={}){
+    const next=args.some(value=>/next[\\/]dist[\\/]/.test(String(value)));
+    const start=Date.now();
+    const child=originalSpawn.call(this,executable,next?['--import',pathToFileURL(path.join(project,'tools/observe-next-manifests.mjs')).href,...args]:args,options);
+    if(next&&process.env.GATE_LOG_DIR){const file=path.join(process.env.GATE_LOG_DIR,`child-server-${++serverIndex}-${child.pid}.log`);fs.appendFileSync(file,JSON.stringify({start,cwd:options.cwd,args})+'\n');for(const stream of [child.stdout,child.stderr])stream?.on('data',chunk=>fs.appendFileSync(file,chunk));child.on('exit',(code)=>fs.appendFileSync(file,`\nEXIT ${code} elapsed ${Date.now()-start}ms\n`));}
+    return child;
+  };syncBuiltinESMExports();
   const {chromium} = await import('playwright');
   const launch = chromium.launch.bind(chromium), observed = new WeakSet();
   function observe(page) {
     if (observed.has(page)) return;
     observed.add(page);
+    page.on('request',request=>{if(request.isNavigationRequest()||/preview|repositories|responsive/.test(request.url()))process.stdout.write(`TIMING ${Date.now()} REQUEST ${request.url()}\n`);});
+    page.on('response',response=>{if(response.request().isNavigationRequest()||/preview|repositories|responsive/.test(response.url()))process.stdout.write(`TIMING ${Date.now()} RESPONSE ${response.status()} ${response.url()}\n`);});
     page.on('pageerror', error => process.stderr.write(`GATE_BROWSER_PAGE_ERROR ${page.url()}\n${error.stack || error.message}\n`));
   }
   chromium.launch = async (...args) => {
@@ -98,7 +111,8 @@ async function main() {
     const started = performance.now(), chunks=[];
     print(`\nCOMMAND ${name}: node ${args.join(' ')}\n`);
     const fd = fs.openSync(path.join(evidence,name+'.log'),'wx');
-    const child = spawn(process.execPath,['--import',pathToFileURL(self).href,...args],{cwd:workspace,env:{...env,GATE_CHILD_OBSERVE:'1',...extra},windowsHide:true,detached:process.platform!=='win32',stdio:['ignore','pipe','pipe']});
+    const workflowLogs=path.join(evidence,name+'-servers');fs.mkdirSync(workflowLogs,{recursive:true});
+    const child = spawn(process.execPath,['--import',pathToFileURL(self).href,...args],{cwd:workspace,env:{...env,GATE_CHILD_OBSERVE:'1',GATE_LOG_DIR:workflowLogs,...extra},windowsHide:true,detached:process.platform!=='win32',stdio:['ignore','pipe','pipe']});
     let tail='',timedOut=false;
     const cap=name.startsWith('shared-')?120000:300000;
     const watchdog=setTimeout(()=>{timedOut=true;print(`TIMEOUT ${name} after ${cap/1000}s\n`);stop(child);},cap);
