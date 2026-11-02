@@ -50,7 +50,7 @@ try {
  browser=await chromium.launch({headless:true});page=await browser.newPage({viewport:{width:1600,height:1000}});
  const errors:string[]=[];page.on('pageerror',error=>errors.push(error.stack||error.message));
  if(process.argv.includes('--prepare')){
-  await page.goto(editor.url+'/editor?panel=inspector',{waitUntil:'domcontentloaded'});
+  await page.goto(editor.url+'/editor?panel=inspector',{waitUntil:'domcontentloaded',timeout:180000});
   await page.locator('[data-source-ready="true"]').waitFor({timeout:120000});
   // GET cannot execute these POST-only mutations; it only primes route compilation.
   for(const endpoint of ['responsive','preview','apply','undo','history']){
@@ -65,7 +65,7 @@ try {
   else if(!external)fs.writeFileSync(path.join(workspace,'.slightnudge/repositories.json'),JSON.stringify([{id:'source-proof',localPath:repo,name:'Disposable source project',owner:'test'}]));
   const imported=process.env.GATE_SHARED_PREVIEW_URL?{url:process.env.GATE_SHARED_PREVIEW_URL,child:null}:await server(repo);if(imported.child)await ready(imported.url,imported.child);
   if(process.argv.includes('--prepare')){
-   await page.goto(`${editor.url}/editor/source-proof?preview=${encodeURIComponent(imported.url)}`,{waitUntil:'domcontentloaded'});
+   await page.goto(`${editor.url}/editor/source-proof?preview=${encodeURIComponent(imported.url)}`,{waitUntil:'domcontentloaded',timeout:180000});
    await page.locator('[data-source-ready="true"]').waitFor({timeout:120000});
    console.log(`WARMUP imported adapter, preview and editor ${Date.now()-started}ms`);
   }else await checkSharedInstances(page,editor.url,workspace,workspace,{id:'source-proof',root:repo,url:imported.url});
