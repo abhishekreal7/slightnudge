@@ -116,8 +116,8 @@ async function main() {
     try { if (process.platform==='win32') execFileSync('taskkill',['/pid',String(child.pid),'/T','/F'],{stdio:'ignore'}); else process.kill(-child.pid,'SIGTERM'); } catch { /* Already exited. */ }
   }
   function stopServers() { for (const child of servers) stop(child); servers.clear(); }
-  function checkServerManifests() {
-    const invalid=[...observedPorts].filter(port=>{
+  function checkServerManifests(ports=observedPorts) {
+    const invalid=[...ports].filter(port=>{
       const log=path.join(evidence,`server-${port}.log`);
       return fs.existsSync(log)&&fs.readFileSync(log,'utf8').includes('INVALID_NEXT_MANIFEST ');
     });
@@ -148,7 +148,7 @@ async function main() {
     observedPorts.add(port);
     const fd=fs.openSync(path.join(evidence,`server-${port}.log`),'wx');
     const child=spawn(process.execPath,['--import',pathToFileURL(path.join(project,'tools/observe-next-manifests.mjs')).href,path.join(project,'node_modules','next','dist','bin','next'),'dev','--webpack','--hostname','127.0.0.1','--port',String(port)],{cwd,env:{...env,PORT:String(port)},windowsHide:true,detached:process.platform!=='win32',stdio:['ignore',fd,fd]});
-    fs.closeSync(fd);servers.add(child);print(`SERVER ${port} PID ${child.pid} ${cwd}\n`);
+    fs.closeSync(fd);child.gatePort=port;servers.add(child);print(`SERVER ${port} PID ${child.pid} ${cwd}\n`);
     return child;
   }
   async function warmup() {
@@ -211,7 +211,9 @@ async function main() {
       const install=await command('prepare-lab-adapters',['--import','tsx','--input-type=module','-e',"const {installNextSourceAdapter,removeNextSourceAdapter,getNextSourceAdapterStatus}=await import('./lib/slightnudge/next-source-adapter.ts');for(const id of ['m0-control-lab','m0-overfit-lab']){if((await getNextSourceAdapterStatus(id)).needsUpdate)await removeNextSourceAdapter(id);await installNextSourceAdapter(id);}console.log('Temp adapters prepared at current protocol');"]);
       if(install.code!==0)throw Error('Temporary adapter setup failed');
       try { await warmup(); } catch(error) { selectionSetupError=String(error);print(`${fatal?'STOP pre-case page error':'Selection setup HARNESS-ERROR'}: ${error}\n`); }
-      print(`Warm-up invalid manifest servers: ${checkServerManifests().join(', ')||'none'}\n`);
+      const startupManifests=checkServerManifests();
+      print(`Warm-up invalid manifest servers: ${startupManifests.join(', ')||'none'}\n`);
+      rows.push({workflow:'warmup-manifests',api:'REAL',result:startupManifests.length?'FAIL':'PASS',seconds:0,invalidManifestServers:startupManifests});
     }
     let sharedDeadline,sharedEnv={},sharedSetupError;
     for(const item of selected) {
@@ -254,8 +256,10 @@ async function main() {
       }
       if(!item.surface&&!/PASS: \d+ review-consent browser cases/.test(result.output))passed=false;
       const api=/mocked API|MOCKED/.test(result.output)||item.mode.includes('MOCKED')?'MOCKED':'REAL';
-      const invalid=checkServerManifests();
-      rows.push({workflow:item.name,harness:item.harness||'existing',api,result:result.timedOut?'TIMEOUT':result.harnessError||/ERR_MODULE_NOT_FOUND|Cannot find module|SyntaxError:.*test\/|Filename too long|EADDRINUSE/.test(result.output)?'HARNESS-ERROR':passed&&!invalid.length?'PASS':'FAIL',seconds:result.seconds,exitCode:result.code,historical:item.historical,invalidManifestServers:invalid,error:result.harnessError});
+      const invalid=checkServerManifests([...servers].map(child=>child.gatePort));
+      const workflowServerLogs=path.join(evidence,item.name+'-servers');
+      const invalidChildren=fs.readdirSync(workflowServerLogs).filter(file=>file.endsWith('.log')&&fs.readFileSync(path.join(workflowServerLogs,file),'utf8').includes('INVALID_NEXT_MANIFEST '));
+      rows.push({workflow:item.name,harness:item.harness||'existing',api,result:result.timedOut?'TIMEOUT':result.harnessError||/ERR_MODULE_NOT_FOUND|Cannot find module|SyntaxError:.*test\/|Filename too long|EADDRINUSE/.test(result.output)?'HARNESS-ERROR':passed&&!invalid.length&&!invalidChildren.length?'PASS':'FAIL',testPassed:passed,seconds:result.seconds,exitCode:result.code,historical:item.historical,invalidManifestServers:invalid,invalidChildServerLogs:invalidChildren,error:result.harnessError});
       json('results.json',{head,productRef:ref,testRef:head,fatal,rows});
       fs.cpSync(path.join(workspace,'docs'),path.join(evidence,item.name+'-artifacts'),{recursive:true,filter:source=>!source.split(path.sep).some(part=>/^\.env(?:\.|$)/.test(part))});
     }

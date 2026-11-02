@@ -10,12 +10,14 @@ export async function checkDragMove(page: Page, baseURL: string, workspace: stri
   const file = path.join(workspace, 'fixtures/1-plain-static.tsx');
   const original = fs.readFileSync(file, 'utf8');
   let previews = 0;
-  page.on('request', request => { if (new URL(request.url()).pathname.endsWith('/preview') && request.method() === 'POST') previews++; });
+  page.on('request', request => { if (new URL(request.url()).pathname.endsWith('/preview') && request.method() === 'POST' && request.postDataJSON()?.operation !== 'inspect') previews++; });
   const ready = page.waitForResponse(response => new URL(response.url()).pathname.endsWith('/pages'), { timeout: 120000 });
-  await page.goto(`${baseURL}/studio`, { waitUntil: 'domcontentloaded', timeout: 120000 }); await ready;
+  await page.goto(`${baseURL}/studio?view=fit`, { waitUntil: 'domcontentloaded', timeout: 120000 }); await ready;
+  await page.locator('[data-source-ready="true"]').waitFor();
+  await page.getByRole('combobox', { name: 'Canvas zoom', exact: true }).selectOption('1');
   await page.locator('h1').click();
   const handle = page.getByRole('button', { name: 'Move element', exact: true });
-  const apply = page.getByRole('button', { name: 'Save changes', exact: true }).and(page.locator('button:enabled'));
+  const apply = page.getByLabel('Draft controls', { exact: true }).getByRole('button', { name: 'Save changes', exact: true }).and(page.locator('button:enabled'));
   const measurement = page.getByLabel('Move measurement', { exact: true });
   // Playwright's boundingBox includes the iframe offset and canvas transform.
   // The real preview selects the heading itself, not a synthetic parent wrapper.
@@ -40,14 +42,14 @@ export async function checkDragMove(page: Page, baseURL: string, workspace: stri
     if (cancellation === 'scope') await page.getByRole('group', { name: 'Element state' }).getByRole('button', { name: 'Default', exact: true }).click();
   }
   console.log('PASS: centered Move handle, live two-axis snapped geometry and six cancellation paths; no source proposals while dragging');
-  await page.locator('[data-selection-artboard]').evaluate(element => { (element as HTMLElement).style.transform = 'scale(.75)'; });
+  await page.getByRole('combobox', { name: 'Canvas zoom', exact: true }).selectOption('.75');
   await page.waitForFunction(() => { const element = document.querySelector('[data-selection-artboard]') as HTMLElement; return Math.abs(element.getBoundingClientRect().width / element.offsetWidth - .75) < .001; });
   const scaledOrigin = await rectangle();
   let scaledPoint = await start(); await page.mouse.move(scaledPoint.x + 18, scaledPoint.y + 12); await measurement.waitFor();
   const scaledRect = await rectangle(); assert.ok(Math.abs(scaledRect.x - scaledOrigin.x - 18) < 1); assert.ok(Math.abs(scaledRect.y - scaledOrigin.y - 12) < 1);
   assert.ok((await measurement.textContent())?.includes('24px'));
   await page.keyboard.press('Escape'); await page.mouse.up();
-  await page.locator('[data-selection-artboard]').evaluate(element => { (element as HTMLElement).style.transform = ''; }); await restored();
+  await page.getByRole('combobox', { name: 'Canvas zoom', exact: true }).selectOption('1'); await restored();
   assert.equal(previews, 0);
   console.log('PASS: scaled-canvas drag tracks CSS coordinates and cancels without preparing source');
   let point = await start(); await page.keyboard.down('Shift'); await page.mouse.move(point.x + 40, point.y + 27);

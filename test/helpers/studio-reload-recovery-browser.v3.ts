@@ -24,7 +24,8 @@ export async function checkStudioReloadRecovery(page: Page, baseURL: string, wor
   });
   const hydrated = page.waitForResponse(response => new URL(response.url()).pathname.endsWith('/pages'));
   await page.goto(`${baseURL}/studio`, { waitUntil: 'domcontentloaded' }); await hydrated;
-  const apply = page.getByRole('button', { name: 'Save changes', exact: true }).and(page.locator('button:enabled'));
+  await page.locator('[data-source-ready="true"]').waitFor();
+  const apply = page.getByLabel('Draft controls', { exact: true }).getByRole('button', { name: 'Save changes', exact: true }).and(page.locator('button:enabled'));
   const dialog = page.getByRole('dialog', { name: 'Recover previous source operation' });
   const idle = () => page.waitForFunction(() => document.querySelector('[aria-label="Visual editing workspace"]')?.getAttribute('aria-busy') === 'false');
   const renderCurrent = async () => {
@@ -35,7 +36,7 @@ export async function checkStudioReloadRecovery(page: Page, baseURL: string, wor
   const prepare = async () => {
     await renderCurrent(); await page.locator('h1').click();
     const prepared = page.waitForResponse(response => new URL(response.url()).pathname.endsWith('/preview') && response.request().method() === 'POST');
-    await page.getByTitle('Toggle bold', { exact: true }).click();
+    await page.getByRole('button', { name: 'Toggle bold', exact: true }).click();
     const proposal = await (await prepared).json(); assert.equal(proposal.success, true, proposal.error);
     await apply.waitFor(); return proposal;
   };

@@ -14,15 +14,16 @@ export async function checkM1Interactions(page: Page, baseURL: string, workspace
   const classes = original.match(/<h1\s+id="target"[^>]*className="([^"]*)"/)![1];
   const ready = page.waitForResponse(r => new URL(r.url()).pathname.endsWith('/pages'), { timeout: 120000 });
   await page.goto(`${baseURL}/studio`, { waitUntil: 'domcontentloaded' }); await ready;
+  await page.locator('[data-source-ready="true"]').waitFor();
   const heading = page.locator('h1'); await heading.click();
   const originalWeight = await heading.evaluate(el => getComputedStyle(el).fontWeight);
-  const apply = page.getByRole('button', { name: 'Save changes', exact: true }).and(page.locator('button:enabled'));
+  const apply = page.getByLabel('Draft controls', { exact: true }).getByRole('button', { name: 'Save changes', exact: true }).and(page.locator('button:enabled'));
   const state = page.getByRole('group', { name: 'Element state' });
   let passed = 0;
   for (const [label, prefix] of [['Hover', 'hover'], ['Focus', 'focus-visible'], ['Pressed', 'active']]) {
     await state.getByRole('button', { name: label, exact: true }).click();
     const prepared = page.waitForResponse(r => new URL(r.url()).pathname.endsWith('/preview') && r.request().method() === 'POST');
-    await page.getByTitle('Toggle bold', { exact: true }).click();
+    await page.getByRole('button', { name: 'Toggle bold', exact: true }).click();
     const proposal = await (await prepared).json();
     assert.equal(proposal.success, true, proposal.error);
     assert.equal(proposal.newClassName, `${classes} ${prefix}:font-bold`);

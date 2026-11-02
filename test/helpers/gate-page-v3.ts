@@ -11,7 +11,7 @@ export function iframePageV3(page:Page):Page {
    const url=new URL(address);if(url.pathname==='/studio'||url.pathname==='/studio/window'||/^\/studio\/[^/]+\/(edit|window)$/.test(url.pathname)){
     const studio=url.pathname==='/studio'||url.pathname.endsWith('/edit');
     const parts=url.pathname.split('/');url.pathname=parts.length===4?'/editor/'+parts[2]:'/editor';url.searchParams.delete('legacyStudio');
-    if(studio)url.searchParams.set('panel','inspector');
+    if(studio){url.searchParams.set('panel','inspector');if(!url.searchParams.has('view'))url.searchParams.set('view','fit');}
    }console.log('HARNESS-V3 NAVIGATION '+url.href);return target.goto(url.href,options);
   };
   if(['locator','getByRole','getByText','getByLabel'].includes(String(key)))return (...args:any[])=>{

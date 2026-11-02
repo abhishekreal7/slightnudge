@@ -13,10 +13,11 @@ export async function checkInlineText(page: Page, baseURL: string, workspace: st
   let previews = 0, saves = 0;
   page.on('request', request => {
     if (request.method() !== 'POST') return;
-    if (new URL(request.url()).pathname.endsWith('/preview')) previews++;
+    if (new URL(request.url()).pathname.endsWith('/preview') && request.postDataJSON()?.operation !== 'inspect') previews++;
     if (new URL(request.url()).pathname.endsWith('/apply')) saves++;
   });
   await page.goto(`${baseURL}/studio`, { waitUntil: 'networkidle', timeout: 120000 });
+  await page.locator('[data-source-ready="true"]').waitFor();
   const idle = () => page.waitForFunction(() => document.querySelector('[aria-label="Visual editing workspace"]')?.getAttribute('aria-busy') === 'false', undefined, { timeout: 30000 });
   await idle(); await page.locator('h1').click();
   const toolbar = page.getByRole('toolbar', { name: 'Selection formatting' });

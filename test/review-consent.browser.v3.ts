@@ -44,7 +44,7 @@ import { checkCoreEditing } from './helpers/core-editing-browser.v3';
 import { checkSingleCanvas } from './helpers/single-canvas-browser.v3';
 import { checkEditorErgonomics } from './helpers/editor-ergonomics-browser.v3';
 import { checkResponsiveEditing } from './helpers/responsive-editing-browser.v3';
-import { checkImportedResponsive } from './helpers/imported-responsive-browser.v3';
+import { checkImportedResponsive } from './helpers/imported-responsive-browser.v4';
 
 // Run the real UI in a disposable copy. API stubs deliberately make implicit
 // Apply observable without ever writing source or handling real session tokens.
