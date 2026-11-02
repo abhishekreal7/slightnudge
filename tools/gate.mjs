@@ -70,7 +70,7 @@ async function main() {
   const raw = fs.createWriteStream(path.join(evidence,'raw.log'),{flags:'wx'});
   const print = text => { process.stdout.write(text); raw.write(text); };
   const json = (file,value) => fs.writeFileSync(path.join(evidence,file),JSON.stringify(value,null,2));
-  const rows = [], servers = new Set(); let fatal = false,selectionSetupError;
+  const rows = [], servers = new Set(), observedPorts=new Set(); let fatal = false,selectionSetupError;
   const selectionPorts=[];
   for(let index=0;index<3;index++)selectionPorts.push(await new Promise((resolve,reject)=>{
     const socket=net.createServer();socket.once('error',reject);socket.listen(0,'127.0.0.1',()=>{const port=socket.address().port;socket.close(()=>resolve(port));});
@@ -117,7 +117,7 @@ async function main() {
   }
   function stopServers() { for (const child of servers) stop(child); servers.clear(); }
   function checkServerManifests() {
-    const invalid=selectionPorts.filter(port=>{
+    const invalid=[...observedPorts].filter(port=>{
       const log=path.join(evidence,`server-${port}.log`);
       return fs.existsSync(log)&&fs.readFileSync(log,'utf8').includes('INVALID_NEXT_MANIFEST ');
     });
@@ -145,6 +145,7 @@ async function main() {
     return {code,timedOut,harnessError,seconds:Math.round((performance.now()-started)/10)/100,output:chunks.join('')};
   }
   function startServer(port,cwd) {
+    observedPorts.add(port);
     const fd=fs.openSync(path.join(evidence,`server-${port}.log`),'wx');
     const child=spawn(process.execPath,['--import',pathToFileURL(path.join(project,'tools/observe-next-manifests.mjs')).href,path.join(project,'node_modules','next','dist','bin','next'),'dev','--webpack','--hostname','127.0.0.1','--port',String(port)],{cwd,env:{...env,PORT:String(port)},windowsHide:true,detached:process.platform!=='win32',stdio:['ignore',fd,fd]});
     fs.closeSync(fd);servers.add(child);print(`SERVER ${port} PID ${child.pid} ${cwd}\n`);
@@ -212,19 +213,31 @@ async function main() {
       try { await warmup(); } catch(error) { fatal=false;selectionSetupError=String(error);print(`Selection setup HARNESS-ERROR: ${error}\n`); }
       print(`Warm-up invalid manifest servers: ${checkServerManifests().join(', ')||'none'}\n`);
     }
-    let sharedDeadline;
+    let sharedDeadline,sharedEnv={},sharedSetupError;
     for(const item of selected) {
       if(fatal)break;
       if(item.surface&&selectionSetupError){rows.push({workflow:item.name,api:'REAL',result:'HARNESS-ERROR',seconds:0,error:selectionSetupError});continue;}
-      if(!item.surface)stopServers();
+      if(!item.surface&&!item.name.startsWith('shared-'))stopServers();
       if(item.name.startsWith('shared-')&&!sharedDeadline){
+        stopServers();
         sharedDeadline=performance.now()+480000;
-        const prepared=await command('shared-compiler-warmup',['--import','tsx','test/gate-shared-runner.v3.ts','--prepare'],{},180000);
+        const setup=await command('shared-runtime-setup',['--import','tsx','test/gate-shared-runner.v3.ts','--setup-only'],{},180000);
+        const match=setup.output.match(/^GATE_RUNTIMES (.+)$/m);
+        if(setup.code!==0||!match)sharedSetupError='Shared runtime setup failed; see shared-runtime-setup.log';
+        else {
+          const runtime=JSON.parse(match[1]),ports=[];
+          for(let index=0;index<2;index++)ports.push(await new Promise((resolve,reject)=>{const socket=net.createServer();socket.once('error',reject);socket.listen(0,'127.0.0.1',()=>{const port=socket.address().port;socket.close(()=>resolve(port));});}));
+          startServer(ports[0],safe(runtime.workspace));startServer(ports[1],safe(runtime.repo));
+          sharedEnv={GATE_SHARED_EDITOR_URL:`http://127.0.0.1:${ports[0]}`,GATE_SHARED_PREVIEW_URL:`http://127.0.0.1:${ports[1]}`};
+        }
+        const prepared=sharedSetupError?{timedOut:false,harnessError:sharedSetupError,code:1,seconds:setup.seconds}:await command('shared-compiler-warmup',['--import','tsx','test/gate-shared-runner.v3.ts','--prepare'],sharedEnv,180000);
         rows.push({workflow:'shared-compiler-warmup',harness:'HARNESS-V3',api:'REAL',result:prepared.timedOut?'TIMEOUT':prepared.harnessError?'HARNESS-ERROR':prepared.code===0?'PASS':'FAIL',seconds:prepared.seconds});
+        if(prepared.code!==0)sharedSetupError=sharedSetupError||'Shared compiler warm-up failed; see shared-compiler-warmup.log';
       }
+      if(item.name.startsWith('shared-')&&sharedSetupError){rows.push({workflow:item.name,harness:'HARNESS-V3',api:'REAL',result:'HARNESS-ERROR',seconds:0,error:sharedSetupError});continue;}
       const budget=item.name.startsWith('shared-')?Math.max(1,Math.min(120000,sharedDeadline-performance.now())):300000;
       const args=item.name.startsWith('shared-')?['--import','tsx','test/gate-shared-runner.v3.ts']:item.args;
-      const result=await command(item.name,args,item.surface?{SELECTION_ROUND:'1',SELECTION_SURFACE:item.surface}:item.extra||{},budget);
+      const result=await command(item.name,args,item.surface?{SELECTION_ROUND:'1',SELECTION_SURFACE:item.surface}:item.name.startsWith('shared-')?{...sharedEnv,...item.extra}:item.extra||{},budget);
       let passed=result.code===0&&!/GATE_BROWSER_PAGE_ERROR/.test(result.output);
       if(item.surface) {
         const file=selectionFile(item.surface,item.suite);let data=null;

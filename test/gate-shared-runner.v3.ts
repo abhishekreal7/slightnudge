@@ -9,13 +9,14 @@ import {prepareSourceProject} from './helpers/prepare-source-project.v3';
 // Preserve compilation cache, never test state. Every command starts fresh
 // processes, a fresh browser context, and an empty editor state directory.
 const root=process.cwd(),workspace=path.join(root,'scratch','shared-gate-runtime');
+const external=process.env.GATE_SHARED_EDITOR_URL;
 const relative=path.relative(root,workspace);
 if(!relative||relative.startsWith('..')||path.isAbsolute(relative))throw Error('Runtime must stay inside the disposable gate checkout');
 fs.mkdirSync(workspace,{recursive:true});
 const state=path.join(workspace,'.slightnudge');
-if(fs.existsSync(state))fs.renameSync(state,path.join(workspace,`state-archive-${Date.now()}`));
+if(!external&&fs.existsSync(state))fs.renameSync(state,path.join(workspace,`state-archive-${Date.now()}`));
 const tracked=execFileSync('git',['ls-files'],{cwd:root,encoding:'utf8'}).split(/\r?\n/).filter(Boolean);
-for(const file of tracked){
+for(const file of external?[]:tracked){
  if(!/^(app\/|components\/|lib\/|fixtures\/|public\/|types\/|proxy\.ts$|package\.json$|tsconfig\.json$|next-env\.d\.ts$|next\.config\.|postcss\.config\.)/.test(file)||/(^|\/)\.env(?:\.|$)|secret|credential|\.(pem|key)$/i.test(file))continue;
  const from=path.join(root,file),to=path.join(workspace,file),bytes=fs.readFileSync(from);
  if(fs.existsSync(to)&&fs.readFileSync(to).equals(bytes))continue;
@@ -36,9 +37,16 @@ async function server(cwd:string){
 async function ready(url:string,child:ReturnType<typeof spawn>){
  while(true){if(child.exitCode!==null)throw Error(`Server exited ${child.exitCode}: ${url}`);try{const response=await fetch(url,{signal:AbortSignal.timeout(5000)});if(response.ok)return;}catch{}await new Promise(resolve=>setTimeout(resolve,250));}
 }
+const repo=path.join(workspace,'projects','source-proof');
+if(process.argv.includes('--setup-only')){
+ fs.mkdirSync(state,{recursive:true});fs.mkdirSync(repo,{recursive:true});
+ prepareSourceProject(root,workspace,repo,env);
+ console.log('GATE_RUNTIMES '+JSON.stringify({workspace,repo}));
+ process.exit(0);
+}
 let browser:Awaited<ReturnType<typeof chromium.launch>>|undefined,page:Awaited<ReturnType<NonNullable<typeof browser>['newPage']>>|undefined;
 try {
- const started=Date.now(),editor=await server(workspace);await ready(editor.url+'/editor',editor.child);
+ const started=Date.now(),editor=external?{url:external,child:null}:await server(workspace);if(editor.child)await ready(editor.url+'/editor',editor.child);
  browser=await chromium.launch({headless:true});page=await browser.newPage({viewport:{width:1600,height:1000}});
  const errors:string[]=[];page.on('pageerror',error=>errors.push(error.stack||error.message));
  if(process.argv.includes('--prepare')){
@@ -52,10 +60,10 @@ try {
   console.log(`WARMUP local editor, preview and API compilers ${Date.now()-started}ms`);
  }
  if(process.argv.includes('--prepare')||process.env.GATE_SHARED_KIND==='imported'){
-  const repo=path.join(workspace,'projects','source-proof');fs.mkdirSync(repo,{recursive:true});
-  if(!fs.existsSync(path.join(repo,'node_modules')))prepareSourceProject(root,workspace,repo,env);
-  else {fs.mkdirSync(state,{recursive:true});fs.writeFileSync(path.join(workspace,'.slightnudge/repositories.json'),JSON.stringify([{id:'source-proof',localPath:repo,name:'Disposable source project',owner:'test'}]));}
-  const imported=await server(repo);await ready(imported.url,imported.child);
+  fs.mkdirSync(state,{recursive:true});fs.mkdirSync(repo,{recursive:true});
+  if(!external&&!fs.existsSync(path.join(repo,'node_modules')))prepareSourceProject(root,workspace,repo,env);
+  else if(!external)fs.writeFileSync(path.join(workspace,'.slightnudge/repositories.json'),JSON.stringify([{id:'source-proof',localPath:repo,name:'Disposable source project',owner:'test'}]));
+  const imported=process.env.GATE_SHARED_PREVIEW_URL?{url:process.env.GATE_SHARED_PREVIEW_URL,child:null}:await server(repo);if(imported.child)await ready(imported.url,imported.child);
   if(process.argv.includes('--prepare')){
    await page.goto(`${editor.url}/editor/source-proof?preview=${encodeURIComponent(imported.url)}`,{waitUntil:'domcontentloaded'});
    await page.locator('[data-source-ready="true"]').waitFor({timeout:120000});
