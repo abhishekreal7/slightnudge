@@ -208,7 +208,7 @@ async function main() {
         execFileSync('git',['init','--quiet'],{cwd:dest,stdio:'ignore'});records.push({id,localPath:dest,owner:'local',name:id,defaultBranch:'main'});
       }
       fs.writeFileSync(path.join(workspace,'.slightnudge/repositories.json'),JSON.stringify(records,null,2));
-      const install=await command('prepare-lab-adapters',['--import','tsx','--input-type=module','-e',"const {installNextSourceAdapter}=await import('./lib/slightnudge/next-source-adapter.ts');for(const id of ['m0-control-lab','m0-overfit-lab'])await installNextSourceAdapter(id);console.log('Temp adapters prepared');"]);
+      const install=await command('prepare-lab-adapters',['--import','tsx','--input-type=module','-e',"const {installNextSourceAdapter,removeNextSourceAdapter,getNextSourceAdapterStatus}=await import('./lib/slightnudge/next-source-adapter.ts');for(const id of ['m0-control-lab','m0-overfit-lab']){if((await getNextSourceAdapterStatus(id)).needsUpdate)await removeNextSourceAdapter(id);await installNextSourceAdapter(id);}console.log('Temp adapters prepared at current protocol');"]);
       if(install.code!==0)throw Error('Temporary adapter setup failed');
       try { await warmup(); } catch(error) { selectionSetupError=String(error);print(`${fatal?'STOP pre-case page error':'Selection setup HARNESS-ERROR'}: ${error}\n`); }
       print(`Warm-up invalid manifest servers: ${checkServerManifests().join(', ')||'none'}\n`);
