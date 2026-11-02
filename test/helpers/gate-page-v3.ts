@@ -12,7 +12,11 @@ export function iframePageV3(page:Page):Page {
    const host=(target as any)[key](...args),frame=(target.frameLocator('iframe[title="Actual project"], iframe[title="Local source preview"]') as any)[key](...args);
    const wrap=(host:any,frame:any):any=>new Proxy(host,{get(locator,method){const member=locator[method];if(typeof member!=='function')return member;
     if(['locator','getByRole','getByText','getByLabel','filter','first','last','nth'].includes(String(method)))return (...values:any[])=>wrap(member.apply(host,values),frame[method](...values));
-    return async(...values:any[])=>{if(await host.count())return member.apply(host,values);if(await target.locator('iframe[title="Actual project"], iframe[title="Local source preview"]').count())return frame[method](...values);return member.apply(host,values);};
+    return async(...values:any[])=>{
+     console.log(`HARNESS-V3 OP ${Date.now()} START ${String(method)} ${host}`);
+     try{let result;if(await host.count())result=await member.apply(host,values);else if(await target.locator('iframe[title="Actual project"], iframe[title="Local source preview"]').count())result=await frame[method](...values);else result=await member.apply(host,values);console.log(`HARNESS-V3 OP ${Date.now()} END ${String(method)} ${host}`);return result;}
+     catch(error){console.log(`HARNESS-V3 OP ${Date.now()} ERROR ${String(method)} ${host}`);throw error;}
+    };
    }});return wrap(host,frame);
   };
   const value=Reflect.get(target,key,target);return typeof value==='function'?value.bind(target):value;

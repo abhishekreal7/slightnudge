@@ -62,7 +62,8 @@ async function main() {
   const requested = comparisonFile?'failed-comparison':option('--workflow');
   const stamp = new Date().toISOString().replace(/[:.]/g,'-');
   const runId = `${stamp}-${ref.slice(0,7)}${requested ? '-' + requested : ''}`;
-  const scratch = path.join(project,'scratch','reliability-gate',runId);
+  // Keep nested disposable repositories below Windows Git's path limit.
+  const scratch = path.join(project,'scratch','g',crypto.randomBytes(4).toString('hex'));
   const evidence = path.join(project,'docs','reliability-gate',runId);
   const workspace = path.join(scratch,'worktree');
   fs.mkdirSync(scratch,{recursive:true}); fs.mkdirSync(evidence,{recursive:true});
@@ -70,15 +71,21 @@ async function main() {
   const print = text => { process.stdout.write(text); raw.write(text); };
   const json = (file,value) => fs.writeFileSync(path.join(evidence,file),JSON.stringify(value,null,2));
   const rows = [], servers = new Set(); let fatal = false,selectionSetupError;
+  const selectionPorts=[];
+  for(let index=0;index<3;index++)selectionPorts.push(await new Promise((resolve,reject)=>{
+    const socket=net.createServer();socket.once('error',reject);socket.listen(0,'127.0.0.1',()=>{const port=socket.address().port;socket.close(()=>resolve(port));});
+  }));
+  const [editorPort,controlPort,overfitPort]=selectionPorts;
   const safe = target => { const relative = path.relative(project,path.resolve(target)); if (!relative || relative === '..' || relative.startsWith('..'+path.sep) || path.isAbsolute(relative)) throw Error('Gate output must stay inside project: '+target); return target; };
   const envBase = {};
   for (const name of ['PATH','Path','SystemRoot','WINDIR','COMSPEC','PATHEXT','USERPROFILE','APPDATA','LOCALAPPDATA']) if (process.env[name]) envBase[name] = process.env[name];
   const temp = path.join(workspace,'scratch','security-hardening-20261101','os-temp');
   const env = {...envBase,TEMP:temp,TMP:temp,CI:'1',NODE_ENV:'development',NEXT_TELEMETRY_DISABLED:'1',SLIGHTNUDGE_LEGACY_STUDIO:'1'};
+  Object.assign(env,{GATE_EDITOR_URL:`http://127.0.0.1:${editorPort}`,GATE_CONTROL_PORT:String(controlPort),GATE_OVERFIT_PORT:String(overfitPort)});
   const selectionFile = (surface,suite) => path.join(workspace,'docs','editor-load-and-toolbar','selection',`round-1-${surface}-${suite}.json`);
   const browser = (name,flag,historical,mode='REAL') => ({name,args:['--import','tsx','test/review-consent.browser.v3.ts',flag],historical,mode,harness:'HARNESS-V3'});
   const plan = [
-    ...['full','fit'].flatMap(surface => ['regression','overfit'].map(suite => ({name:`selection-${surface}-${suite}`,surface,suite,mode:'REAL',args:['--import','tsx',`test/m0-${suite}.reliability.test.ts`],historical:'docs/editor-load-and-toolbar/selection/round-1-raw.log'}))),
+    ...['full','fit'].flatMap(surface => ['regression','overfit'].map(suite => ({name:`selection-${surface}-${suite}`,surface,suite,mode:'REAL',harness:'HARNESS-V3',args:['--import','tsx',`test/m0-${suite}.reliability.v3.test.ts`],historical:'docs/editor-load-and-toolbar/selection/round-1-raw.log'}))),
     ...['local','imported'].flatMap(kind=>[false,true].map(window=>({name:`shared-${kind}-${window?'window':'studio'}`,mode:'REAL',harness:'HARNESS-V3',extra:{GATE_SHARED_KIND:kind,GATE_SHARED_VIEW:String(window)},args:['--import','tsx','test/shared-instance-security.v2.browser.v3.ts','--shared-instances'],historical:'docs/security-hardening/shared-workflows.log'}))),
     browser('movement','--drag-move','docs/center-move-release.log'),
     browser('state-and-transitions','--m1','docs/m1-final-gates.log'),
@@ -110,7 +117,7 @@ async function main() {
   }
   function stopServers() { for (const child of servers) stop(child); servers.clear(); }
   function checkServerManifests() {
-    const invalid=[3000,3001,3002].filter(port=>{
+    const invalid=selectionPorts.filter(port=>{
       const log=path.join(evidence,`server-${port}.log`);
       return fs.existsSync(log)&&fs.readFileSync(log,'utf8').includes('INVALID_NEXT_MANIFEST ');
     });
@@ -131,10 +138,11 @@ async function main() {
       if (/STOP WRONG TARGET|STOP-WRONG-TARGET|"verdict"\s*:\s*"WRONG TARGET"/.test(tail)||(name.startsWith('selection-')&&/GATE_BROWSER_PAGE_ERROR/.test(tail)&&!chunks.join('').includes('"index":'))) {fatal=true;stop(child);}
     };
     child.stdout.on('data',output); child.stderr.on('data',output);
-    let code;
+    let code,harnessError;
     try { code=await new Promise((resolve,reject)=>{child.once('error',reject);child.once('exit',resolve);}); }
+    catch(error){code=1;harnessError=String(error);print(`HARNESS-ERROR ${name}: ${harnessError}\n`);}
     finally { clearTimeout(watchdog);stop(child);fs.closeSync(fd); }
-    return {code,timedOut,seconds:Math.round((performance.now()-started)/10)/100,output:chunks.join('')};
+    return {code,timedOut,harnessError,seconds:Math.round((performance.now()-started)/10)/100,output:chunks.join('')};
   }
   function startServer(port,cwd) {
     const fd=fs.openSync(path.join(evidence,`server-${port}.log`),'wx');
@@ -143,14 +151,14 @@ async function main() {
     return child;
   }
   async function warmup() {
-    for (const port of [3000,3001,3002]) await new Promise((resolve,reject)=>{const socket=net.createServer();socket.once('error',reject);socket.listen(port,'127.0.0.1',()=>socket.close(resolve));});
-    for (const [port,cwd] of [[3000,workspace],[3001,path.join(workspace,'.slightnudge/repositories/m0-control-lab')],[3002,path.join(workspace,'.slightnudge/repositories/m0-overfit-lab')]]) startServer(port,cwd);
+    for (const port of selectionPorts) await new Promise((resolve,reject)=>{const socket=net.createServer();socket.once('error',reject);socket.listen(port,'127.0.0.1',()=>socket.close(resolve));});
+    for (const [port,cwd] of [[editorPort,workspace],[controlPort,path.join(workspace,'.slightnudge/repositories/m0-control-lab')],[overfitPort,path.join(workspace,'.slightnudge/repositories/m0-overfit-lab')]]) startServer(port,cwd);
     const {chromium}=await import('playwright');const browser=await chromium.launch({headless:true,env:{...env}});
     try {
-      for (const [repo,port] of [['m0-control-lab',3001],['m0-overfit-lab',3002]]) for (const view of ['full','fit']) {
+      for (const [repo,port] of [['m0-control-lab',controlPort],['m0-overfit-lab',overfitPort]]) for (const view of ['full','fit']) {
         const started=performance.now(), deadline=started+180000;
         // Only server warm-up has a 180-second budget. Existing test waits are untouched.
-        while (performance.now()<deadline) {try{const r=await fetch('http://127.0.0.1:3000/api/slightnudge/repositories/'+repo,{signal:AbortSignal.timeout(Math.min(10000,Math.max(1,deadline-performance.now())))});if(r.ok)break;}catch{} await new Promise(resolve=>setTimeout(resolve,250));}
+        while (performance.now()<deadline) {try{const r=await fetch(`http://127.0.0.1:${editorPort}/api/slightnudge/repositories/`+repo,{signal:AbortSignal.timeout(Math.min(10000,Math.max(1,deadline-performance.now())))});if(r.ok)break;}catch{} await new Promise(resolve=>setTimeout(resolve,250));}
         // Compile the same iframe document before the editor's shorter preview
         // connection timeout is involved. This is still inside warm-up's budget.
         const preview=await fetch('http://127.0.0.1:'+port,{signal:AbortSignal.timeout(Math.max(1,Math.floor(deadline-performance.now())))});
@@ -164,7 +172,7 @@ async function main() {
         page.on('requestfailed',request=>trace({kind:'requestfailed',url:request.url(),error:request.failure()}));
         trace({kind:'warmup-page-created',remaining:deadline-performance.now()});
         const errorSignal=new Promise((_,reject)=>page.once('pageerror',error=>{pageError=error;fatal=true;reject(error);}));void errorSignal.catch(()=>{});
-        const url=`http://127.0.0.1:3000/editor/${repo}?view=${view}&preview=${encodeURIComponent('http://127.0.0.1:'+port)}`;
+        const url=`http://127.0.0.1:${editorPort}/editor/${repo}?view=${view}&preview=${encodeURIComponent('http://127.0.0.1:'+port)}`;
         try {
           await Promise.race([(async()=>{await page.goto(url,{waitUntil:'domcontentloaded',timeout:Math.max(1,deadline-performance.now())});await page.locator('[data-source-ready="true"]').waitFor({timeout:Math.max(1,deadline-performance.now())});})(),errorSignal]);
           if(pageError)throw pageError;
@@ -214,14 +222,16 @@ async function main() {
       const result=await command(item.name,item.args,item.surface?{SELECTION_ROUND:'1',SELECTION_SURFACE:item.surface}:item.extra||{},budget);
       let passed=result.code===0&&!/GATE_BROWSER_PAGE_ERROR/.test(result.output);
       if(item.surface) {
-        const file=selectionFile(item.surface,item.suite),data=fs.existsSync(file)?JSON.parse(fs.readFileSync(file,'utf8')):null;
+        const file=selectionFile(item.surface,item.suite);let data=null;
+        try{data=fs.existsSync(file)?JSON.parse(fs.readFileSync(file,'utf8')):null;}catch(error){result.harnessError='Invalid selection artifact: '+String(error);}
+        if(data&&(!Array.isArray(data.cases)||!Array.isArray(data.events))){result.harnessError='Invalid selection artifact schema';data=null;}
         passed=passed&&data?.cases.length===30&&!data.events.some(event=>event.kind==='pageerror')&&!data.cases.some(row=>['WRONG TARGET','MISSING-TARGET'].includes(row.verdict)||row.assertions.pointerSource.status==='FAIL'||row.assertions.expectedSource.status==='FAIL'||row.expectedResultMatch===false);
         if((data?.cases.length===0&&data?.events.some(event=>event.kind==='pageerror'))||data?.cases.some(row=>row.verdict==='WRONG TARGET'))fatal=true;
       }
       if(!item.surface&&!/PASS: \d+ review-consent browser cases/.test(result.output))passed=false;
       const api=/mocked API|MOCKED/.test(result.output)||item.mode.includes('MOCKED')?'MOCKED':'REAL';
       const invalid=checkServerManifests();
-      rows.push({workflow:item.name,harness:item.harness||'existing',api,result:result.timedOut?'TIMEOUT':/ERR_MODULE_NOT_FOUND|Cannot find module|SyntaxError:.*test\/|Filename too long|EADDRINUSE/.test(result.output)?'HARNESS-ERROR':passed&&!invalid.length?'PASS':'FAIL',seconds:result.seconds,exitCode:result.code,historical:item.historical,invalidManifestServers:invalid});
+      rows.push({workflow:item.name,harness:item.harness||'existing',api,result:result.timedOut?'TIMEOUT':result.harnessError||/ERR_MODULE_NOT_FOUND|Cannot find module|SyntaxError:.*test\/|Filename too long|EADDRINUSE/.test(result.output)?'HARNESS-ERROR':passed&&!invalid.length?'PASS':'FAIL',seconds:result.seconds,exitCode:result.code,historical:item.historical,invalidManifestServers:invalid,error:result.harnessError});
       json('results.json',{head,productRef:ref,testRef:head,fatal,rows});
       fs.cpSync(path.join(workspace,'docs'),path.join(evidence,item.name+'-artifacts'),{recursive:true,filter:source=>!source.split(path.sep).some(part=>/^\.env(?:\.|$)/.test(part))});
     }
