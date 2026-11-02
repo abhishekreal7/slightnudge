@@ -67,7 +67,7 @@ export async function checkM1Interactions(page: Page, baseURL: string, workspace
       const response = page.waitForResponse(r => new URL(r.url()).pathname.endsWith('/preview') && r.request().method() === 'POST');
       await page.getByLabel(label, { exact: true }).selectOption(value);
       assert.equal((await (await response).json()).changed, false);
-      await page.getByText('This style is already applied.', { exact: true }).waitFor();
+      await page.getByText('This value is already applied.', { exact: true }).waitFor();
       assert.equal(await apply.count(), 0);
       assert.equal(fs.readFileSync(file, 'utf8'), unchanged); passed++;
     }
@@ -76,6 +76,9 @@ export async function checkM1Interactions(page: Page, baseURL: string, workspace
     assert.equal((await (await undone).json()).success, true);
     assert.equal(fs.readFileSync(file, 'utf8'), original); passed++;
   }
+  // Arrangement is deliberately unavailable outside Default; its positive
+  // Default workflow is covered separately by the section-order gate.
+  await state.getByRole('button', { name: 'Hover', exact: true }).click();
   await page.getByRole('button', { name: 'More formatting options', exact: true }).click();
   assert.equal(await page.getByRole('button', { name: 'Move earlier', exact: true }).count(), 0);
   assert.equal(await page.getByTitle('Drag to reorder element (iOS style)').count(), 0);

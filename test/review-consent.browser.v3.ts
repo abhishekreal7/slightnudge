@@ -36,7 +36,7 @@ import { checkContainerMove } from './helpers/container-move-browser.v3';
 import { checkLayoutControls } from './helpers/layout-controls-browser.v3';
 import { checkMultiFile } from './helpers/multi-file-browser.v3';
 import { checkProjectCompatibility } from './helpers/project-compatibility-browser.v3';
-import { checkImportedCanvas } from './helpers/imported-canvas-browser.v3';
+import { checkImportedCanvas } from './helpers/imported-canvas-browser.v4';
 import { checkRealProjectCanvas } from './helpers/real-project-canvas-browser.v3';
 import { checkRealMultiFile } from './helpers/real-multi-file-browser.v3';
 import { checkHighFidelity } from './helpers/high-fidelity-browser.v3';
