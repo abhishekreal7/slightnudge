@@ -2147,7 +2147,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
     return <div ref={element => { elementRefs.current[layerKey] = element; }}
       className={reviewStyles.sourceSelection} aria-label="Selected source element"
       style={{ width: '100%', height: '100%', fontSize: selection.computed.fontSize, textAlign: selection.computed.textAlign as React.CSSProperties['textAlign'] }}>
-{usesDrafts && !selection.instance && !isInlineEditing && <div className={reviewStyles.moveAnchor}>{renderMoveControl()}</div>}
+{usesDrafts && (!selection.instance || definitionStyleKey === layerKey) && !isInlineEditing && <div className={reviewStyles.moveAnchor}>{renderMoveControl()}</div>}
 {liveMove?.key === layerKey && <output aria-label="Move measurement" aria-live="polite" className={`${reviewStyles.measurementBadge} ${reviewStyles.moveMeasurement}`}><span>X</span><strong>{liveMove.x}px</strong><span>Y</span><strong>{liveMove.y}px</strong><span>Snapped</span></output>}
       {!repositoryId && <>
 {/* Precision Handles System (Benchmark Match) */}
