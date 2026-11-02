@@ -18,6 +18,7 @@ function sourceCanvasRuntime(continuous: boolean, repositoryId = '', protocol = 
   try { sessionStorage.setItem('slightnudge:preview-session', JSON.stringify({ session, origin, continuous, canvas })); } catch {}
   (window as any).__slightnudge_bridge_active = true;
   const root = document.querySelector('[data-source-canvas-root]') || document.body;
+  let readyRetry: ReturnType<typeof setInterval> | undefined;
   let selected: HTMLElement | null = null, editing: HTMLElement | null = null, editingHost: HTMLElement | null = null, composing = false;
   let pendingReview = false;
   let inspectEnabled = true;
@@ -349,7 +350,9 @@ function sourceCanvasRuntime(continuous: boolean, repositoryId = '', protocol = 
     if ((event.ctrlKey || event.metaKey) && ['s', 'z', 'y'].includes(event.key.toLowerCase())) { event.preventDefault(); send('shortcut', { key: event.key, shift: event.shiftKey }); }
   }, true);
   window.addEventListener('message', async event => {
-    if (event.source !== window.parent || event.origin !== origin || event.data?.channel !== 'slightnudge' || event.data.session !== session || event.data.type !== 'source-edit') return;
+    if (event.source !== window.parent || event.origin !== origin || event.data?.channel !== 'slightnudge' || event.data.session !== session || !['source-edit', 'bridge-ack'].includes(event.data.type)) return;
+    clearInterval(readyRetry);
+    if (event.data.type === 'bridge-ack') return;
     const message = event.data;
     const reply = (success: boolean, reason = '', selection?: unknown) => send('edit-result', { requestId: message.requestId, success, reason, selection });
     try {
@@ -535,7 +538,13 @@ function sourceCanvasRuntime(continuous: boolean, repositoryId = '', protocol = 
   const routes = new MutationObserver(() => { const next = location.pathname + location.search; if (next === route) return; route = next; selected = null; catalog(); send('source-route'); });
   routes.observe(root, { childList: true, subtree: true });
   window.addEventListener('beforeunload', () => send('source-navigating'));
-  const ready = () => requestAnimationFrame(() => requestAnimationFrame(() => { if (canvas) setupCanvas?.(send); send('bridge-ready', { protocol }); viewport(); catalog(); }));
+  const ready = () => requestAnimationFrame(() => requestAnimationFrame(() => {
+    if (canvas) setupCanvas?.(send);
+    const announce = () => { send('bridge-ready', { protocol }); viewport(); catalog(); };
+    announce();
+    const deadline = Date.now() + 30000;
+    readyRetry = setInterval(() => { if (Date.now() >= deadline) clearInterval(readyRetry); else announce(); }, 500);
+  }));
   // Imported drafts must not modify server HTML before React hydrates it.
   if (repositoryId && continuous && !(window as any).__slightnudge_hydrated) window.addEventListener('slightnudge:hydrated', ready, { once: true });
   else ready();

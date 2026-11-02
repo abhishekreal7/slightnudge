@@ -40,6 +40,7 @@ export const SourceProjectCanvas = forwardRef<SourceCanvasHandle, {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [ready, setReady] = useState(false);
+  const acknowledgedSession = useRef<string | null>(null);
   const [pageHeight, setPageHeight] = useState(720);
   const [connectionHost, setConnectionHost] = useState<Element | null>(null);
   useEffect(() => { if (repositoryId && !windowMode) setConnectionHost(document.querySelector('[data-editor-canvas]')); }, [repositoryId, windowMode]);
@@ -125,6 +126,9 @@ export const SourceProjectCanvas = forwardRef<SourceCanvasHandle, {
       if (message.type === 'bridge-ready') {
         if (continuousDraft && repositoryId && message.protocol !== SOURCE_CANVAS_PROTOCOL) { readyRef.current = false; setReady(false); setError('This project’s editing adapter needs an update. Open project setup, remove and enable source mapping, then restart its local dev server and reconnect.'); return; }
         if (continuousDraft && repositoryId && message.repositoryId !== repositoryId) { setError('This preview does not have the current adapter for this project. Update its source adapter in project setup, then reconnect.'); return; }
+        frame.current?.contentWindow?.postMessage({ channel: 'slightnudge', session: session.current, type: 'bridge-ack' }, event.origin);
+        if (acknowledgedSession.current === session.current && readyRef.current) return;
+        acknowledgedSession.current = session.current;
         if (!syncFailed.current) { readyRef.current = true; const finish = () => { setReady(true); setError(''); props.current.onReady?.(); }; if (windowMode) void command('set-mode', null, { edit: !modeRef.current }).then(finish).catch(cause => setError(cause.message)); else finish(); }
         return;
       }
