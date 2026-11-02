@@ -220,7 +220,10 @@ async function main() {
       if(!item.surface&&!item.name.startsWith('shared-'))stopServers();
       if(item.name.startsWith('shared-')&&!sharedDeadline){
         stopServers();
-        sharedDeadline=performance.now()+480000;
+        // Warm-up has its own 180s budget. The eight-minute group budget is
+        // for the four editing workflows, each still capped at two minutes.
+        sharedDeadline=Infinity;
+        const warmupDeadline=performance.now()+180000;
         const setup=await command('shared-runtime-setup',['--import','tsx','test/gate-shared-runner.v3.ts','--setup-only'],{},180000);
         const match=setup.output.match(/^GATE_RUNTIMES (.+)$/m);
         if(setup.code!==0||!match)sharedSetupError='Shared runtime setup failed; see shared-runtime-setup.log';
@@ -230,9 +233,10 @@ async function main() {
           startServer(ports[0],safe(runtime.workspace));startServer(ports[1],safe(runtime.repo));
           sharedEnv={GATE_SHARED_EDITOR_URL:`http://127.0.0.1:${ports[0]}`,GATE_SHARED_PREVIEW_URL:`http://127.0.0.1:${ports[1]}`};
         }
-        const prepared=sharedSetupError?{timedOut:false,harnessError:sharedSetupError,code:1,seconds:setup.seconds}:await command('shared-compiler-warmup',['--import','tsx','test/gate-shared-runner.v3.ts','--prepare'],sharedEnv,180000);
+        const prepared=sharedSetupError?{timedOut:false,harnessError:sharedSetupError,code:1,seconds:setup.seconds}:await command('shared-compiler-warmup',['--import','tsx','test/gate-shared-runner.v3.ts','--prepare'],sharedEnv,Math.max(1,warmupDeadline-performance.now()));
         rows.push({workflow:'shared-compiler-warmup',harness:'HARNESS-V3',api:'REAL',result:prepared.timedOut?'TIMEOUT':prepared.harnessError?'HARNESS-ERROR':prepared.code===0?'PASS':'FAIL',seconds:prepared.seconds});
         if(prepared.code!==0)sharedSetupError=sharedSetupError||'Shared compiler warm-up failed; see shared-compiler-warmup.log';
+        sharedDeadline=performance.now()+480000;
       }
       if(item.name.startsWith('shared-')&&sharedSetupError){rows.push({workflow:item.name,harness:'HARNESS-V3',api:'REAL',result:'HARNESS-ERROR',seconds:0,error:sharedSetupError});continue;}
       const budget=item.name.startsWith('shared-')?Math.max(1,Math.min(120000,sharedDeadline-performance.now())):300000;
@@ -244,7 +248,8 @@ async function main() {
         const file=selectionFile(item.surface,item.suite);let data=null;
         try{data=fs.existsSync(file)?JSON.parse(fs.readFileSync(file,'utf8')):null;}catch(error){result.harnessError='Invalid selection artifact: '+String(error);}
         if(data&&(!Array.isArray(data.cases)||!Array.isArray(data.events))){result.harnessError='Invalid selection artifact schema';data=null;}
-        passed=passed&&data?.cases.length===30&&!data.events.some(event=>event.kind==='pageerror')&&!data.cases.some(row=>['WRONG TARGET','MISSING-TARGET'].includes(row.verdict)||row.assertions.pointerSource.status==='FAIL'||row.assertions.expectedSource.status==='FAIL'||row.expectedResultMatch===false);
+        const selections=data?[...data.cases,...(data.geometry||[])]:[];
+        passed=passed&&data?.cases.length===30&&(item.surface!=='fit'||data.geometry?.length===30&&data.geometry.every(row=>row.offset))&&!data.events.some(event=>event.kind==='pageerror')&&!selections.some(row=>['WRONG TARGET','MISSING-TARGET'].includes(row.verdict)||row.assertions.pointerSource.status==='FAIL'||row.assertions.expectedSource.status==='FAIL'||row.expectedResultMatch===false);
         if((data?.cases.length===0&&data?.events.some(event=>event.kind==='pageerror'))||data?.cases.some(row=>row.verdict==='WRONG TARGET'))fatal=true;
       }
       if(!item.surface&&!/PASS: \d+ review-consent browser cases/.test(result.output))passed=false;
