@@ -186,7 +186,7 @@ export const SourceProjectCanvas = forwardRef<SourceCanvasHandle, {
       syncFailed.current = false;
       const refreshDeadline = Date.now() + 30000;
       for (let attempt = 0; attempt < 5 && Date.now() < refreshDeadline; attempt++) {
-        const instanceTextPatches = expectedBatch?.filter(patch => patch.after.instance && typeof patch.text === 'string');
+        const instanceTextPatches = expectedBatch?.filter(patch => typeof patch.text === 'string' && (patch.after.instance || patch.text.length > 0) && !patch.nextImage);
         if (repositoryId && instanceTextPatches?.length) {
           try { await command('verify-document', null, { patches: instanceTextPatches }); }
           catch {
