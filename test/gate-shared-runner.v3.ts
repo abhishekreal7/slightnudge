@@ -37,7 +37,7 @@ async function server(cwd:string){
 async function ready(url:string,child:ReturnType<typeof spawn>){
  while(true){if(child.exitCode!==null)throw Error(`Server exited ${child.exitCode}: ${url}`);try{const response=await fetch(url,{signal:AbortSignal.timeout(5000)});if(response.ok)return;}catch{}await new Promise(resolve=>setTimeout(resolve,250));}
 }
-const repo=path.join(workspace,'projects','source-proof');
+const repo=path.join(state,'repositories','source-proof');
 if(process.argv.includes('--setup-only')){
  fs.mkdirSync(state,{recursive:true});fs.mkdirSync(repo,{recursive:true});
  prepareSourceProject(root,workspace,repo,env);
