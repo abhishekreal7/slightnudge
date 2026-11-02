@@ -115,12 +115,12 @@ export async function checkImportedCanvas(page: Page, baseURL: string, workspace
     await page.getByRole('button', { name: 'Change history', exact: true }).click(); await history.waitFor(); await history.getByText(/Save undone/).waitFor();
     await history.getByRole('button', { name: 'Refresh saved history', exact: true }).click(); await history.getByText(/Save undone/).waitFor();
     await history.press('Escape'); await history.waitFor({ state: 'hidden' });
-    await page.getByRole('button', { name: 'Fit page to canvas', exact: true }).click();
+    await zoom.selectOption('fit');
     const priorScroll = await stage.evaluate(e => e.scrollTop), point = await hero.boundingBox(); assert.ok(point);
     await page.mouse.move(point.x + 10, point.y + 5); await page.mouse.wheel(0, 120); await page.waitForTimeout(100);
     assert.ok(await stage.evaluate(e => e.scrollTop) > priorScroll, 'Wheel over imported iframe pans outer canvas');
     assert.equal(await hero.evaluate(() => scrollY), 0);
-    await page.getByRole('button', { name: 'Fit page to canvas', exact: true }).click();
+    await zoom.selectOption('fit');
     await page.screenshot({ path: path.join(process.cwd(), 'docs/imported-canvas.png') });
     // The separate editing window retains the site's native viewport/scrolling.
     await page.goto(`${baseURL}/studio/source-proof/window?preview=${encodeURIComponent(previewURL)}`, { waitUntil: 'domcontentloaded', timeout: 120000 }); await connected();
