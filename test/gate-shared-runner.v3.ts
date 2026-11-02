@@ -34,8 +34,8 @@ async function server(cwd:string){
  for(const stream of [child.stdout,child.stderr])stream?.on('data',data=>process.stdout.write(data));
  return {child,url};
 }
-async function ready(url:string,child:ReturnType<typeof spawn>){
- while(true){if(child.exitCode!==null)throw Error(`Server exited ${child.exitCode}: ${url}`);try{const response=await fetch(url,{signal:AbortSignal.timeout(5000)});if(response.ok)return;}catch{}await new Promise(resolve=>setTimeout(resolve,250));}
+async function ready(url:string,child:ReturnType<typeof spawn>|null){
+ while(true){if(child&&child.exitCode!==null)throw Error(`Server exited ${child.exitCode}: ${url}`);try{const response=await fetch(url,{signal:AbortSignal.timeout(5000)});if(response.ok)return;}catch{}await new Promise(resolve=>setTimeout(resolve,250));}
 }
 const repo=path.join(state,'repositories','source-proof');
 if(process.argv.includes('--setup-only')){
@@ -46,7 +46,7 @@ if(process.argv.includes('--setup-only')){
 }
 let browser:Awaited<ReturnType<typeof chromium.launch>>|undefined,page:Awaited<ReturnType<NonNullable<typeof browser>['newPage']>>|undefined;
 try {
- const started=Date.now(),editor=external?{url:external,child:null}:await server(workspace);if(editor.child)await ready(editor.url+'/editor',editor.child);
+ const started=Date.now(),editor=external?{url:external,child:null}:await server(workspace);await ready(editor.url+'/editor',editor.child);
  browser=await chromium.launch({headless:true});page=await browser.newPage({viewport:{width:1600,height:1000}});
  const errors:string[]=[];page.on('pageerror',error=>errors.push(error.stack||error.message));
  if(process.argv.includes('--prepare')){
@@ -63,7 +63,7 @@ try {
   fs.mkdirSync(state,{recursive:true});fs.mkdirSync(repo,{recursive:true});
   if(!external&&!fs.existsSync(path.join(repo,'node_modules')))prepareSourceProject(root,workspace,repo,env);
   else if(!external)fs.writeFileSync(path.join(workspace,'.slightnudge/repositories.json'),JSON.stringify([{id:'source-proof',localPath:repo,name:'Disposable source project',owner:'test'}]));
-  const imported=process.env.GATE_SHARED_PREVIEW_URL?{url:process.env.GATE_SHARED_PREVIEW_URL,child:null}:await server(repo);if(imported.child)await ready(imported.url,imported.child);
+  const imported=process.env.GATE_SHARED_PREVIEW_URL?{url:process.env.GATE_SHARED_PREVIEW_URL,child:null}:await server(repo);await ready(imported.url,imported.child);
   if(process.argv.includes('--prepare')){
    await page.goto(`${editor.url}/editor/source-proof?preview=${encodeURIComponent(imported.url)}`,{waitUntil:'domcontentloaded',timeout:180000});
    await page.locator('[data-source-ready="true"]').waitFor({timeout:120000});
