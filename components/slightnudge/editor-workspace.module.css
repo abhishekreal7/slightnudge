@@ -398,7 +398,7 @@
 .canvasViewTools select { height: 28px; width: 83px; padding: 0 4px; border: 0; border-radius: 5px; background: #f3f5f3; color: #4c5d51; font: inherit; font-size: 11px; }
 .canvasViewTools button:focus-visible, .canvasViewTools select:focus-visible { outline: 2px solid #93afa0; outline-offset: 2px; }
 .classicShell [data-free-canvas] .sourceSelection { border-width: calc(1px / var(--canvas-zoom, 1)); }
-.classicShell [data-free-canvas] .moveControl { scale: calc(1 / var(--canvas-zoom, 1)); transform-origin: center center; }
+[data-canvas-stage] .moveControl { scale: calc(1 / var(--canvas-zoom, 1)); transform-origin: center center; }
 .classicShell [data-free-canvas] .edgeResizeHandle, .classicShell [data-free-canvas] .cornerResizeHandle { scale: calc(1 / var(--canvas-zoom, 1)); }
 .classicShell [data-editor-breadcrumb] { display: none; }
 .classicShell[data-inspector-collapsed='true'] [data-editor-panel='inspector'],
