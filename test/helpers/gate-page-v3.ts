@@ -16,9 +16,9 @@ export function iframePageV3(page:Page):Page {
   };
   if(['locator','getByRole','getByText','getByLabel'].includes(String(key)))return (...args:any[])=>{
    const host=(target as any)[key](...args),frame=(target.frameLocator(preview) as any)[key](...args);
-   const mode=key==='getByRole'&&hostRoles.has(args[0])||key==='getByLabel'||key==='locator'&&/^\[(?:data-source-ready|data-editor|aria-)/.test(args[0])?'host':key==='locator'&&/^(?:h[1-6]|p(?:\b|\[)|#|\[data-source-file)/.test(args[0])?'content':'auto';
+   const mode=key==='getByRole'&&(hostRoles.has(args[0])||args[0]==='button')||key==='getByLabel'||key==='locator'&&/^\[(?:data-source-ready|data-editor|aria-)/.test(args[0])?'host':key==='locator'&&/^(?:h[1-6]|p(?:\b|\[)|#|\[data-source-file)/.test(args[0])?'content':'auto';
    const wrap=(host:any,frame:any):any=>new Proxy(host,{get(locator,method){const member=locator[method];if(typeof member!=='function')return member;
-    if(['locator','getByRole','getByText','getByLabel','filter','first','last','nth'].includes(String(method)))return (...values:any[])=>wrap(member.apply(host,values),frame[method](...values));
+    if(['locator','getByRole','getByText','getByLabel','filter','first','last','nth','and','or'].includes(String(method)))return (...values:any[])=>wrap(member.apply(host,values),frame[method](...values));
     return async(...values:any[])=>{
      console.log(`HARNESS-V3 OP ${Date.now()} START ${String(method)} ${host}`);
      try{const useFrame=mode==='content'||mode==='auto'&&!await host.count()&&await target.locator(preview).count();const value=await(useFrame?frame[method](...values):member.apply(host,values));console.log(`HARNESS-V3 OP ${Date.now()} END ${String(method)} ${host}`);return value;}

@@ -20,7 +20,7 @@ export async function checkInlineText(page: Page, baseURL: string, workspace: st
   const idle = () => page.waitForFunction(() => document.querySelector('[aria-label="Visual editing workspace"]')?.getAttribute('aria-busy') === 'false', undefined, { timeout: 30000 });
   await idle(); await page.locator('h1').click();
   const toolbar = page.getByRole('toolbar', { name: 'Selection formatting' });
-  const heading = page.getByRole('textbox', { name: 'Edit heading text', exact: true });
+  const heading = page.frameLocator('iframe[title="Actual project"]').getByRole('textbox', { name: 'Edit selected text', exact: true });
   const metrics = () => page.locator('h1').evaluate(element => {
     const style = getComputedStyle(element), rect = element.getBoundingClientRect();
     return { size: style.fontSize, family: style.fontFamily, weight: style.fontWeight, lineHeight: style.lineHeight, spacing: style.letterSpacing, align: style.textAlign, width: rect.width, height: rect.height };
@@ -61,7 +61,7 @@ export async function checkInlineText(page: Page, baseURL: string, workspace: st
   console.log('PASS live size/typeface/alignment preserve typed text; Ctrl+S saves text plus typography once; saved batch Undo restores bytes');
 
   const paragraphText = 'One thoughtful workspace for the people, projects, and plans that move your business forward.';
-  const paragraph = page.getByRole('textbox', { name: 'Edit paragraph text', exact: true });
+  const paragraph = page.frameLocator('iframe[title="Actual project"]').getByRole('textbox', { name: 'Edit selected text', exact: true });
   await page.getByText(paragraphText, { exact: true }).dblclick(); await paragraph.waitFor();
   const initialCount = previews;
   await paragraph.dispatchEvent('compositionstart', { data: '' }); await paragraph.press('Enter');

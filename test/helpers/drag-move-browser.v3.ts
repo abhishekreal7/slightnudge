@@ -15,16 +15,18 @@ export async function checkDragMove(page: Page, baseURL: string, workspace: stri
   await page.goto(`${baseURL}/studio`, { waitUntil: 'domcontentloaded', timeout: 120000 }); await ready;
   await page.locator('h1').click();
   const handle = page.getByRole('button', { name: 'Move element', exact: true });
-  const apply = page.getByRole('button', { name: 'Apply to code', exact: true });
+  const apply = page.getByRole('button', { name: 'Save changes', exact: true }).and(page.locator('button:enabled'));
   const measurement = page.getByLabel('Move measurement', { exact: true });
-  const rectangle = () => page.locator('h1').evaluate(element => { const r = element.parentElement!.getBoundingClientRect(); return { x: r.x, y: r.y, width: r.width }; });
+  // Playwright's boundingBox includes the iframe offset and canvas transform.
+  // The real preview selects the heading itself, not a synthetic parent wrapper.
+  const rectangle = async () => (await page.locator('h1').boundingBox())!;
   const origin = await rectangle();
   const button = (await handle.boundingBox())!;
   assert.ok(Math.abs(button.x + button.width / 2 - origin.x - origin.width / 2) < 1, 'Move handle is centered above the selection');
   await handle.click(); await page.getByRole('group', { name: 'Move selected element', exact: true }).waitFor();
   await handle.click(); assert.equal(await page.getByRole('group', { name: 'Move selected element', exact: true }).count(), 0, 'A second click closes the precise controls without creating a drag');
   const start = async () => { const box = (await handle.boundingBox())!; const point = { x: box.x + box.width / 2, y: box.y + box.height / 2 }; await page.mouse.move(point.x, point.y); await page.mouse.down(); return point; };
-  const restored = () => page.waitForFunction(expected => { const r = document.querySelector('h1')!.parentElement!.getBoundingClientRect(); return Math.abs(r.x - expected.x) < 1 && Math.abs(r.y - expected.y) < 1; }, origin);
+  const restored = () => page.waitForFunction(expected => { const iframe=document.querySelector('iframe')!;const r=iframe.contentDocument!.querySelector('h1')!.getBoundingClientRect(),outer=iframe.getBoundingClientRect(),sx=outer.width/iframe.offsetWidth,sy=outer.height/iframe.offsetHeight; return Math.abs(outer.x+r.x*sx - expected.x) < 1 && Math.abs(outer.y+r.y*sy - expected.y) < 1; }, origin);
   for (const cancellation of ['Escape', 'blur', 'pointercancel', 'capture', 'scroll', 'scope']) {
     const point = await start(); await page.mouse.move(point.x + 25, point.y + 15, { steps: 5 });
     await measurement.waitFor();
@@ -56,7 +58,7 @@ export async function checkDragMove(page: Page, baseURL: string, workspace: stri
   const locked = await (await proposed).json(); assert.equal(locked.success, true, locked.error);
   assert.ok(locked.newClassName.includes('translate-x-[40px]')); assert.ok(locked.newClassName.includes('translate-y-[0px]'));
   await apply.waitFor(); assert.equal(previews, 1);
-  await page.getByRole('button', { name: 'Discard', exact: true }).click(); await apply.waitFor({ state: 'hidden' }); await restored();
+  await page.getByRole('button', { name: 'Discard draft', exact: true }).click(); await apply.waitFor({ state: 'hidden' }); await restored();
   assert.equal(fs.readFileSync(file, 'utf8'), original);
   console.log('PASS: Shift axis lock, one review per completed drag, exact Discard restoration');
   point = await start(); await page.mouse.move(point.x + 24, point.y + 16, { steps: 4 }); await measurement.waitFor();
@@ -88,20 +90,21 @@ export async function checkDragMove(page: Page, baseURL: string, workspace: stri
     };
     await confirm({ x: 24, y: 16 });
     const undone = page.waitForResponse(response => new URL(response.url()).pathname.endsWith('/undo'));
-    await page.getByTitle('Undo visual adjustment (Ctrl+Z)').click(); assert.equal((await (await undone).json()).success, true);
+    await page.getByRole('button', { name: 'Undo', exact: true }).click(); assert.equal((await (await undone).json()).success, true);
     assert.equal(fs.readFileSync(file, 'utf8'), original); await restored();
     await actual.reload({ waitUntil: 'domcontentloaded' }); await confirm({ x: 0, y: 0 });
   } finally { await actualContext.close(); }
   console.log('PASS: Apply and exact Undo; actual source-rendered page confirms the same X/Y movement and restoration');
   await page.getByText('One thoughtful workspace for the people, projects, and plans that move your business forward.', { exact: true }).click();
-  const paragraph = await page.getByText('One thoughtful workspace for the people, projects, and plans that move your business forward.', { exact: true }).evaluate(element => { const r = element.parentElement!.getBoundingClientRect(); return { x: r.x, y: r.y, width: r.width, height: r.height }; });
+  const paragraph = (await page.getByText('One thoughtful workspace for the people, projects, and plans that move your business forward.', { exact: true }).boundingBox())!;
   const centered = (await handle.boundingBox())!;
   assert.ok(Math.abs(centered.x + centered.width / 2 - paragraph.x - paragraph.width / 2) < 1);
   await page.screenshot({ path: path.join(process.cwd(), 'docs/center-move-selection.png'), animations: 'disabled' });
   await page.screenshot({ path: path.join(process.cwd(), 'docs/center-move-detail.png'), clip: { x: Math.floor(paragraph.x - 18), y: Math.floor(paragraph.y - 38), width: Math.ceil(paragraph.width + 36), height: Math.ceil(paragraph.height + 58) }, animations: 'disabled' });
   await handle.click(); await page.getByRole('button', { name: 'Move right', exact: true }).click(); await apply.waitFor();
+  await page.getByRole('button', { name: 'Review changes', exact: true }).click();
   assert.ok((await page.getByLabel('After change').innerText()).includes('translate-x-[4px]'));
-  await page.getByRole('button', { name: 'Discard', exact: true }).click(); await apply.waitFor({ state: 'hidden' });
+  await page.getByRole('button', { name: 'Discard draft', exact: true }).click(); await apply.waitFor({ state: 'hidden' });
   assert.equal(fs.readFileSync(file, 'utf8'), original);
   console.log('PASS: paragraph selection matches the centered-handle design; click opens precise movement controls');
   return 4;

@@ -210,7 +210,7 @@ async function main() {
       fs.writeFileSync(path.join(workspace,'.slightnudge/repositories.json'),JSON.stringify(records,null,2));
       const install=await command('prepare-lab-adapters',['--import','tsx','--input-type=module','-e',"const {installNextSourceAdapter}=await import('./lib/slightnudge/next-source-adapter.ts');for(const id of ['m0-control-lab','m0-overfit-lab'])await installNextSourceAdapter(id);console.log('Temp adapters prepared');"]);
       if(install.code!==0)throw Error('Temporary adapter setup failed');
-      try { await warmup(); } catch(error) { fatal=false;selectionSetupError=String(error);print(`Selection setup HARNESS-ERROR: ${error}\n`); }
+      try { await warmup(); } catch(error) { selectionSetupError=String(error);print(`${fatal?'STOP pre-case page error':'Selection setup HARNESS-ERROR'}: ${error}\n`); }
       print(`Warm-up invalid manifest servers: ${checkServerManifests().join(', ')||'none'}\n`);
     }
     let sharedDeadline,sharedEnv={},sharedSetupError;
@@ -237,7 +237,8 @@ async function main() {
       if(item.name.startsWith('shared-')&&sharedSetupError){rows.push({workflow:item.name,harness:'HARNESS-V3',api:'REAL',result:'HARNESS-ERROR',seconds:0,error:sharedSetupError});continue;}
       const budget=item.name.startsWith('shared-')?Math.max(1,Math.min(120000,sharedDeadline-performance.now())):300000;
       const args=item.name.startsWith('shared-')?['--import','tsx','test/gate-shared-runner.v3.ts']:item.args;
-      const result=await command(item.name,args,item.surface?{SELECTION_ROUND:'1',SELECTION_SURFACE:item.surface}:item.name.startsWith('shared-')?{...sharedEnv,...item.extra}:item.extra||{},budget);
+      const result=await command(item.name,args,item.surface?{SELECTION_ROUND:'1',SELECTION_SURFACE:item.surface,RELIABILITY_GEOMETRY:item.surface==='fit'?'1':'0'}:item.name.startsWith('shared-')?{...sharedEnv,...item.extra}:item.extra||{},budget);
+      if(item.name.startsWith('shared-')&&result.timedOut){stopServers();sharedSetupError='Previous shared workflow timed out; refusing to reuse state while an Apply may be unconfirmed';}
       let passed=result.code===0&&!/GATE_BROWSER_PAGE_ERROR/.test(result.output);
       if(item.surface) {
         const file=selectionFile(item.surface,item.suite);let data=null;

@@ -16,7 +16,7 @@ export async function checkM1Interactions(page: Page, baseURL: string, workspace
   await page.goto(`${baseURL}/studio`, { waitUntil: 'domcontentloaded' }); await ready;
   const heading = page.locator('h1'); await heading.click();
   const originalWeight = await heading.evaluate(el => getComputedStyle(el).fontWeight);
-  const apply = page.getByRole('button', { name: 'Apply to code', exact: true });
+  const apply = page.getByRole('button', { name: 'Save changes', exact: true }).and(page.locator('button:enabled'));
   const state = page.getByRole('group', { name: 'Element state' });
   let passed = 0;
   for (const [label, prefix] of [['Hover', 'hover'], ['Focus', 'focus-visible'], ['Pressed', 'active']]) {
@@ -28,7 +28,7 @@ export async function checkM1Interactions(page: Page, baseURL: string, workspace
     assert.equal(proposal.newClassName, `${classes} ${prefix}:font-bold`);
     await apply.waitFor();
     assert.equal(fs.readFileSync(file, 'utf8'), original);
-    await page.waitForFunction(() => getComputedStyle(document.querySelector('h1')!).fontWeight === '700'); passed++;
+    await page.waitForFunction(() => getComputedStyle(document.querySelector('iframe')!.contentDocument!.querySelector('h1')!).fontWeight === '700'); passed++;
     if (process.argv.includes('--screenshot') && label === 'Hover') {
       const screenshot = path.join(os.tmpdir(), 'slightnudge-m1-studio.png');
       await page.screenshot({ path: screenshot, animations: 'disabled' });
@@ -39,9 +39,9 @@ export async function checkM1Interactions(page: Page, baseURL: string, workspace
     await page.getByText('Not saved to source', { exact: true }).waitFor({ state: 'hidden' });
     assert.equal(fs.readFileSync(file, 'utf8'), original.replace(`className="${classes}"`, `className="${classes} ${prefix}:font-bold"`)); passed++;
     await state.getByRole('button', { name: 'Default', exact: true }).click();
-    await page.waitForFunction(w => getComputedStyle(document.querySelector('h1')!).fontWeight === w, originalWeight); passed++;
+    await page.waitForFunction(w => getComputedStyle(document.querySelector('iframe')!.contentDocument!.querySelector('h1')!).fontWeight === w, originalWeight); passed++;
     const undone = page.waitForResponse(r => new URL(r.url()).pathname.endsWith('/undo'));
-    await page.getByTitle('Undo visual adjustment (Ctrl+Z)').click();
+    await page.getByRole('button', { name: 'Undo', exact: true }).click();
     assert.equal((await (await undone).json()).success, true);
     assert.equal(fs.readFileSync(file, 'utf8'), original); passed++;
   }
@@ -50,8 +50,9 @@ export async function checkM1Interactions(page: Page, baseURL: string, workspace
     await page.getByLabel(label, { exact: true }).selectOption(value);
     await apply.waitFor();
     assert.equal(fs.readFileSync(file, 'utf8'), original);
+    await page.getByRole('button', { name: 'Review changes', exact: true }).click();
     assert.ok((await page.getByLabel('After change').textContent())!.includes(value));
-    await page.getByRole('button', { name: 'Discard', exact: true }).click();
+    await page.getByRole('button', { name: 'Discard draft', exact: true }).click();
     await page.getByText('Not saved to source', { exact: true }).waitFor({ state: 'hidden' });
     assert.equal(fs.readFileSync(file, 'utf8'), original); passed++;
     await page.getByLabel(label, { exact: true }).selectOption(value);
@@ -70,11 +71,11 @@ export async function checkM1Interactions(page: Page, baseURL: string, workspace
       assert.equal(fs.readFileSync(file, 'utf8'), unchanged); passed++;
     }
     const undone = page.waitForResponse(r => new URL(r.url()).pathname.endsWith('/undo'));
-    await page.getByTitle('Undo visual adjustment (Ctrl+Z)').click();
+    await page.getByRole('button', { name: 'Undo', exact: true }).click();
     assert.equal((await (await undone).json()).success, true);
     assert.equal(fs.readFileSync(file, 'utf8'), original); passed++;
   }
-  await page.getByTitle('More actions').click();
+  await page.getByRole('button', { name: 'More formatting options', exact: true }).click();
   assert.equal(await page.getByRole('button', { name: 'Move earlier', exact: true }).count(), 0);
   assert.equal(await page.getByTitle('Drag to reorder element (iOS style)').count(), 0);
   assert.equal(await page.getByText('Overflow', { exact: true }).count(), 0);
