@@ -25,7 +25,7 @@ export async function checkImportedResponsive(page: Page, baseURL: string, works
   const openDefinitionStyles = async () => {
     const design = page.getByRole('button', { name: 'Toggle design panel', exact: true });
     if (await design.getAttribute('aria-expanded') !== 'true') await design.click();
-    const open = page.getByRole('button', { name: 'Edit definition styles', exact: true });
+    const open = page.getByRole('button', { name: 'Edit shared definition', exact: true });
     if (await open.count()) await open.click();
     await toolbar.getByRole('combobox', { name: 'Font size', exact: true }).waitFor();
   };

@@ -1,7 +1,7 @@
 import { checkAppearanceLayout } from './helpers/appearance-layout-browser.v3';
 import { checkSharedInstances } from './helpers/shared-instance-browser.v3';
 import { checkIconProperties } from './helpers/icon-properties-browser.v3';
-import { checkComponentActions } from './helpers/component-actions-browser.v3';
+import { checkComponentActions } from './helpers/component-actions-browser.v4';
 import { checkComponentProps } from './helpers/component-props-browser.v3';
 import { checkImportedAdvancedImages } from './helpers/imported-advanced-image-browser.v3';
 import { checkAdvancedImages } from './helpers/advanced-image-browser.v3';
@@ -27,7 +27,7 @@ import { checkStudioReloadRecovery } from './helpers/studio-reload-recovery-brow
 import { checkDirectManipulation } from './helpers/direct-manipulation-browser.v3';
 import { checkDragMove } from './helpers/drag-move-browser.v3';
 import { checkContinuousDraft } from './helpers/continuous-draft-browser.v3';
-import { checkInlineText } from './helpers/inline-text-browser.v3';
+import { checkInlineText } from './helpers/inline-text-browser.v4';
 import { checkUnifiedCanvas } from './helpers/unified-canvas-browser.v3';
 import { checkButtonEditing } from './helpers/button-editing-browser.v3';
 import { checkLiveWindow } from './helpers/live-window-browser.v3';

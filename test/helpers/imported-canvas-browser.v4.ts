@@ -31,7 +31,7 @@ export async function checkImportedCanvas(page: Page, baseURL: string, workspace
   const openDefinitionStyles = async () => {
     const design = page.getByRole('button', { name: 'Toggle design panel', exact: true });
     if (await design.getAttribute('aria-expanded') !== 'true') await design.click();
-    const open = page.getByRole('button', { name: 'Edit definition styles', exact: true });
+    const open = page.getByRole('button', { name: 'Edit shared definition', exact: true });
     if (await open.count()) await open.click();
     await page.getByRole('toolbar', { name: 'Selection formatting' }).getByRole('combobox', { name: 'Font size', exact: true }).waitFor();
   };
