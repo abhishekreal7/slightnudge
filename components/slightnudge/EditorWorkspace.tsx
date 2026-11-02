@@ -510,6 +510,8 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
 
   // Selection State: Default to null (shows Image 2 empty state when nothing is selected)
   const [selectedLayer, setSelectedLayerState] = useState<string | null>(null);
+  const [definitionStyleKey, setDefinitionStyleKey] = useState<string | null>(null);
+  useEffect(() => { setDefinitionStyleKey(null); }, [selectedLayer]);
   const reviewRef = useRef<PendingEdit | null>(null);
   const operationRef = useRef(true);
   const recoveryRecordRef = useRef<StudioRecoveryRecord | null>(null);
@@ -611,6 +613,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
   // Elements State
   const [elements, setElements] = useState<Record<string, ElementMeta>>(defaultElements);
   const activeElement = (selectedLayer && elements[selectedLayer]) ? elements[selectedLayer] : elements.hero;
+  const editingDefinitionStyles = Boolean(selectedLayer && definitionStyleKey === selectedLayer);
   const previewStyleFor = (element: ElementMeta): React.CSSProperties => ({
     ...element.previewStyle,
     ...(activeVariant ? element.stateStyles?.[activeVariant] : {}),
@@ -894,7 +897,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
     const menu = toolbar.querySelector<HTMLElement>('[data-formatting-details]'); if (menu) observer.observe(menu);
     window.addEventListener('scroll', schedule, true); window.addEventListener('resize', schedule);
     return () => { observer.disconnect(); cancelAnimationFrame(animation); window.removeEventListener('scroll', schedule, true); window.removeEventListener('resize', schedule); };
-  }, [selectedLayer, repositoryId, elements, breakpoint, showQuickActions, liveMove, isResizing, childOrder, elementDimensions, sourceLayers, windowMode, windowPanel, windowDock.position]);
+  }, [selectedLayer, repositoryId, elements, breakpoint, showQuickActions, liveMove, isResizing, childOrder, elementDimensions, sourceLayers, windowMode, windowPanel, windowDock.position, definitionStyleKey]);
 
   // Position movement preserves document flow and never reorders siblings.
   const startDragMove = (layerKey: string, e: React.PointerEvent) => {
@@ -992,7 +995,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
           kind,
           important: kind === 'style' && ['a', 'button'].includes(targetElem.tag),
           filePath: targetElem.filePath,
-          instance: renderedElement.instance,
+          instance: definitionStyleKey === activeKey && ['style', 'nudge', 'move'].includes(kind) ? undefined : renderedElement.instance,
           line: targetElem.line,
           column: targetElem.column,
           elementId: targetElem.id,
@@ -1085,7 +1088,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
         }
       }
     },
-    [activeBreakpoint, activeVariant, activeElement, elements, selectedLayer, childOrder, repositoryId, usesDrafts, responsiveScopes]
+    [activeBreakpoint, activeVariant, activeElement, elements, selectedLayer, childOrder, repositoryId, usesDrafts, responsiveScopes, definitionStyleKey]
   );
 
   useEffect(() => {
@@ -1939,6 +1942,17 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
   };
 
   const isTextElement = ['a', 'span', 'label'].includes(activeElement.tag) || ['text', 'paragraph', 'button', 'waitlist'].includes(selectedLayer || '') || activeElement.tag.startsWith('h') || activeElement.tag.startsWith('p') || activeElement.tag.startsWith('button');
+  const openDefinitionStyles = async () => {
+    const key = selectedLayer, selection = key ? sourceSelections.current[key] : undefined;
+    if (!key || !selection?.instance || operationRef.current || busy || isApplying || blocksReview() || moveGesture.current || resizeGesture.current) return;
+    operationRef.current = true; setBusy(true);
+    try {
+      const inspection = await inspectElementAPI({ repositoryId, filePath: selection.path, line: selection.line, column: selection.column, elementId: selection.elementId, tagName: selection.tagName });
+      if (!inspection.found || !inspection.safeToEdit) { showToast(inspection.reason || 'This definition cannot be edited safely. Nothing was changed.'); return; }
+      if (sourceSelection.current && sourceKey(sourceSelection.current) === key) setDefinitionStyleKey(key);
+    } catch (error) { showToast(error instanceof Error ? error.message : 'The definition could not be inspected.'); }
+    finally { operationRef.current = false; setBusy(false); }
+  };
   const currentGapClass = activeElement.classes.match(/gap-(\d+)/)?.[0] || 'gap-2';
   const currentGapLabel = currentGapClass.replace('gap-', '');
   const isBold = Number(previewStyleFor(activeElement).fontWeight) >= 700 || (!activeVariant && ['Bold', 'Extra Bold'].includes(activeElement.fontWeight)) || scopeTokens(activeElement.classes).some(token => ['font-bold','font-extrabold','font-black'].includes(token));
@@ -1987,14 +2001,14 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
   const renderHUDBar = () => {
     if (!selectedLayer || activeElement.tag === 'svg') return null;
     const locked = busy || isApplying || reviewBlocking || Boolean(uncertainUndoId) || destinationMode || viewportChanging || Boolean(activeBreakpoint) && scopeLoading;
-    if(activeElement.instance)return createPortal(<div ref={formattingRef} role="toolbar" aria-label="Selection formatting" className={reviewStyles.floatingFormatting} style={{position:'fixed',left:formattingPosition?.left||0,top:formattingPosition?.top||0,visibility:formattingPosition?.visible?'visible':'hidden'}} onClick={event=>event.stopPropagation()}><div className={reviewStyles.formattingBar}>
+    if(activeElement.instance && !editingDefinitionStyles)return createPortal(<div ref={formattingRef} role="toolbar" aria-label="Selection formatting" className={reviewStyles.floatingFormatting} style={{position:'fixed',left:formattingPosition?.left||0,top:formattingPosition?.top||0,visibility:formattingPosition?.visible?'visible':'hidden'}} onClick={event=>event.stopPropagation()}><div className={reviewStyles.formattingBar}>
       {isTextElement&&<button type="button" className={reviewStyles.editTextControl} disabled={locked} onClick={()=>beginInlineText(selectedLayer)}><Pencil size={13}/><span>Edit text</span></button>}
       <button type="button" className={reviewStyles.editTextControl} disabled={locked} onClick={()=>{setWindowPanel('inspector');requestAnimationFrame(()=>document.querySelector<HTMLElement>('[aria-label="Component properties"] textarea, [aria-label="Component properties"] select')?.focus())}}><SlidersHorizontal size={13}/><span>Instance props</span></button>
     </div></div>,document.body);
     const parentKey = sourceSelections.current[selectedLayer]?.parentKey;
     const siblings = parentKey ? sourceLayers.filter(layer => layer.parentKey === parentKey && layer.path === activeElement.filePath && (layer.computed.order || '0') === (sourceSelections.current[selectedLayer]?.computed.order || '0')) : [];
     const siblingIndex = siblings.findIndex(layer => layer.key === selectedLayer);
-    const canArrange = usesDrafts && !activeVariant && !activeBreakpoint && siblingIndex >= 0 && siblings.length > 1;
+    const canArrange = usesDrafts && !activeElement.instance && !activeVariant && !activeBreakpoint && siblingIndex >= 0 && siblings.length > 1;
     const tokens = scopeTokens(activeElement.classes);
     const alignmentToken = tokens.find(token => ['text-left', 'text-center', 'text-right'].includes(token)) || '';
     const selectedNode = elementRefs.current[selectedLayer];
@@ -2621,7 +2635,8 @@ title="Drag corner to resize width"
 
                 {/* Inspector Content */}
                 <div className={`${reviewStyles.inspectorControls} flex-1 overflow-y-auto`}>
-                  {activeElement.instance ? (<p className="px-4 py-4 text-xs leading-relaxed text-[#89938d]">Use the instance props above. Layout and styles belong to the shared definition.</p>) : activeTab === 'design' ? (
+                  {activeElement.instance && editingDefinitionStyles && <div className="border-b border-[#edf0ed] px-4 py-3 text-xs" role="note" aria-label="Definition style scope"><strong>Definition styles</strong><p className="mt-1 text-[#89938d]">Styles affect every use. Props above still change this instance.</p><button type="button" onClick={() => setDefinitionStyleKey(null)} className="mt-2 rounded border border-[#e6eae7] px-2 py-1">Return to instance controls</button></div>}
+                  {activeElement.instance && !editingDefinitionStyles ? (<div className="space-y-3 px-4 py-4 text-xs leading-relaxed text-[#89938d]"><p>Props above change this instance. Layout and typography belong to the shared definition.</p><button type="button" disabled={busy || isApplying || reviewBlocking || destinationMode || moveArmed || isResizing} onClick={() => void openDefinitionStyles()} className="rounded-md border border-[#e6eae7] bg-white px-3 py-2 font-medium text-[#3c4b41] disabled:opacity-50">Edit definition styles</button><p>Definition edits affect every use and must pass the source safety checks.</p></div>) : activeTab === 'design' ? (
                     <div className="p-3.5 space-y-4 text-xs text-slate-700">
 
                       <div className={reviewStyles.states}>
