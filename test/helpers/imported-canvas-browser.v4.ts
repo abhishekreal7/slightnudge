@@ -15,13 +15,14 @@ export async function checkImportedCanvas(page: Page, baseURL: string, workspace
   fs.mkdirSync(repo, { recursive: true });
   const env: NodeJS.ProcessEnv = { NODE_ENV: 'development', CI: '1', NEXT_TELEMETRY_DISABLED: '1' };
   for (const key of ['PATH', 'SystemRoot', 'TEMP', 'TMP', 'USERPROFILE', 'APPDATA', 'LOCALAPPDATA']) if (process.env[key]) env[key] = process.env[key];
-  prepareSourceProject(process.cwd(), workspace, repo, env);
+  const prepared = process.env.GATE_PREPARED_PROJECT === '1';
+  if (!prepared) prepareSourceProject(process.cwd(), workspace, repo, env);
   fs.appendFileSync(path.join(repo, 'app/globals.css'), '\n#hero{min-height:100vh}html,body{overflow:scroll!important;scrollbar-gutter:stable both-edges!important}\n');
   const files = ['components/Hero.tsx', 'components/Features.tsx'], originals = files.map(file => fs.readFileSync(path.join(repo, file), 'utf8'));
-  const port = await new Promise<number>(resolve => { const server = net.createServer(); server.listen(0, '127.0.0.1', () => { const port = (server.address() as net.AddressInfo).port; server.close(() => resolve(port)); }); });
-  const child = spawn(process.execPath, [path.join(repo, 'node_modules/next/dist/bin/next'), 'dev', '--webpack', '-H', '127.0.0.1', '-p', String(port)], { cwd: repo, env, stdio: ['ignore', 'pipe', 'pipe'] });
+  const port = prepared ? Number(new URL(process.env.GATE_SHARED_PREVIEW_URL!).port) : await new Promise<number>(resolve => { const server = net.createServer(); server.listen(0, '127.0.0.1', () => { const port = (server.address() as net.AddressInfo).port; server.close(() => resolve(port)); }); });
+  const child = prepared ? undefined : spawn(process.execPath, [path.join(repo, 'node_modules/next/dist/bin/next'), 'dev', '--webpack', '-H', '127.0.0.1', '-p', String(port)], { cwd: repo, env, stdio: ['ignore', 'pipe', 'pipe'] });
   let diagnostic = '';
-  for (const stream of [child.stdout, child.stderr]) stream?.on('data', chunk => { diagnostic = (diagnostic + chunk).slice(-8000); });
+  for (const stream of [child?.stdout, child?.stderr]) stream?.on('data', chunk => { diagnostic = (diagnostic + chunk).slice(-8000); });
   const errors: string[] = []; page.on('pageerror', error => errors.push(error.message));
   page.on('console', message => { if (message.type() === 'error' && /hydrat|server rendered.*match/i.test(message.text())) errors.push(message.text()); });
   const previewURL = 'http://127.0.0.1:' + port + '/';
@@ -129,5 +130,5 @@ export async function checkImportedCanvas(page: Page, baseURL: string, workspace
     console.log('PASS imported canvas: one full-height cross-origin page, stable 100vh design viewport, dynamic content grow/shrink, iframe-only reload, Fit/50%, native width/typography, inline editing, constant-size Move and scaled drag, multi-file refresh/Save/exact Undo, wheel forwarding, separate-window native scrolling; zero browser errors.');
     return 1;
   } catch (error) { console.log(diagnostic); throw error; }
-  finally { if (child.pid) { try { execFileSync('taskkill', ['/pid', String(child.pid), '/T', '/F'], { stdio: 'ignore' }); } catch {} } }
+  finally { if (child?.pid) { try { execFileSync('taskkill', ['/pid', String(child.pid), '/T', '/F'], { stdio: 'ignore' }); } catch {} } }
 }

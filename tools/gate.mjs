@@ -215,13 +215,13 @@ async function main() {
       print(`Warm-up invalid manifest servers: ${startupManifests.join(', ')||'none'}\n`);
       rows.push({workflow:'warmup-manifests',api:'REAL',result:startupManifests.length?'FAIL':'PASS',seconds:0,invalidManifestServers:startupManifests});
     }
-    let sharedDeadline,sharedEnv={},sharedSetupError,iconWarmConsumed=false;
-    const keepWarmForIcons=selected.some(item=>item.name==='icon-replacement');
+    let sharedDeadline,sharedEnv={},sharedSetupError;
+    const warmConsumers=new Set(selected.filter(item=>['icon-replacement','history'].includes(item.name)).map(item=>item.name));
     for(const item of selected) {
       if(fatal)break;
       if(item.surface&&selectionSetupError){rows.push({workflow:item.name,api:'REAL',result:'HARNESS-ERROR',seconds:0,error:selectionSetupError});continue;}
-      if(!item.surface&&!item.name.startsWith('shared-')&&!(keepWarmForIcons&&!iconWarmConsumed&&sharedEnv.GATE_SHARED_EDITOR_URL))stopServers();
-      if((item.name.startsWith('shared-')||item.name==='icon-replacement')&&!sharedDeadline){
+      if(!item.surface&&!item.name.startsWith('shared-')&&!(warmConsumers.size&&sharedEnv.GATE_SHARED_EDITOR_URL))stopServers();
+      if((item.name.startsWith('shared-')||['icon-replacement','history'].includes(item.name))&&!sharedDeadline){
         stopServers();
         // Warm-up has its own 180s budget. The eight-minute group budget is
         // for the four editing workflows, each still capped at two minutes.
@@ -241,12 +241,12 @@ async function main() {
         if(prepared.code!==0)sharedSetupError=sharedSetupError||'Shared compiler warm-up failed; see shared-compiler-warmup.log';
         sharedDeadline=performance.now()+480000;
       }
-      if((item.name.startsWith('shared-')||item.name==='icon-replacement')&&sharedSetupError){rows.push({workflow:item.name,harness:'HARNESS-V3',api:'REAL',result:'HARNESS-ERROR',seconds:0,error:sharedSetupError});continue;}
+      if((item.name.startsWith('shared-')||['icon-replacement','history'].includes(item.name))&&sharedSetupError){rows.push({workflow:item.name,harness:'HARNESS-V3',api:'REAL',result:'HARNESS-ERROR',seconds:0,error:sharedSetupError});continue;}
       const budget=item.name.startsWith('shared-')?Math.max(1,Math.min(120000,sharedDeadline-performance.now())):300000;
-      const args=item.name.startsWith('shared-')?['--import','tsx','test/gate-shared-runner.v3.ts']:item.name==='icon-replacement'?['--import','tsx','test/gate-icon-runner.v3.ts']:item.args;
-      const result=await command(item.name,args,item.surface?{SELECTION_ROUND:'1',SELECTION_SURFACE:item.surface,RELIABILITY_GEOMETRY:item.surface==='fit'?'1':'0'}:item.name.startsWith('shared-')||item.name==='icon-replacement'?{...sharedEnv,...item.extra}:item.extra||{},budget);
-      if(item.name==='icon-replacement')iconWarmConsumed=true;
-      if(item.name.startsWith('shared-')&&result.timedOut){stopServers();sharedSetupError='Previous shared workflow timed out; refusing to reuse state while an Apply may be unconfirmed';}
+      const args=item.name.startsWith('shared-')?['--import','tsx','test/gate-shared-runner.v3.ts']:item.name==='icon-replacement'?['--import','tsx','test/gate-icon-runner.v3.ts']:item.name==='history'?['--import','tsx','test/gate-history-runner.v3.ts']:item.args;
+      const result=await command(item.name,args,item.surface?{SELECTION_ROUND:'1',SELECTION_SURFACE:item.surface,RELIABILITY_GEOMETRY:item.surface==='fit'?'1':'0'}:item.name.startsWith('shared-')||['icon-replacement','history'].includes(item.name)?{...sharedEnv,GATE_PREPARED_PROJECT:'1',...item.extra}:item.extra||{},budget);
+      warmConsumers.delete(item.name);
+      if((item.name.startsWith('shared-')||['icon-replacement','history'].includes(item.name))&&result.timedOut){stopServers();sharedSetupError='Previous owned-runtime workflow timed out; refusing to reuse state while an Apply may be unconfirmed';}
       let passed=result.code===0&&!/GATE_BROWSER_PAGE_ERROR/.test(result.output);
       if(item.surface) {
         const file=selectionFile(item.surface,item.suite);let data=null;
@@ -258,7 +258,7 @@ async function main() {
       }
       if(!item.surface&&!/PASS: \d+ review-consent browser cases/.test(result.output))passed=false;
       const api=/mocked API|MOCKED/.test(result.output)||item.mode.includes('MOCKED')?'MOCKED':'REAL';
-      const invalid=checkServerManifests(item.surface||item.name.startsWith('shared-')||item.name==='icon-replacement'?[...servers].map(child=>child.gatePort):[]);
+      const invalid=checkServerManifests(item.surface||item.name.startsWith('shared-')||['icon-replacement','history'].includes(item.name)?[...servers].map(child=>child.gatePort):[]);
       const workflowServerLogs=path.join(evidence,item.name+'-servers');
       const invalidChildren=fs.readdirSync(workflowServerLogs).filter(file=>file.endsWith('.log')&&fs.readFileSync(path.join(workflowServerLogs,file),'utf8').includes('INVALID_NEXT_MANIFEST '));
       rows.push({workflow:item.name,harness:item.harness||'existing',api,result:result.timedOut?'TIMEOUT':result.harnessError||/ERR_MODULE_NOT_FOUND|Cannot find module|SyntaxError:.*test\/|Filename too long|EADDRINUSE/.test(result.output)?'HARNESS-ERROR':passed&&!invalid.length&&!invalidChildren.length?'PASS':'FAIL',testPassed:passed,seconds:result.seconds,exitCode:result.code,historical:item.historical,invalidManifestServers:invalid,invalidChildServerLogs:invalidChildren,error:result.harnessError});
