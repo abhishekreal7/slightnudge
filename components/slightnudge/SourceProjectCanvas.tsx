@@ -20,7 +20,7 @@ export interface SourceSelection {
 }
 export interface SourceCanvasHandle {
   openWindow(): void;
-  command(operation: 'preview' | 'check' | 'discard' | 'verify' | 'restore' | 'select' | 'catalog' | 'gesture' | 'cancel-gesture' | 'begin-text' | 'cancel-text' | 'finish-text' | 'verify-batch' | 'set-mode', selection?: SourceSelection | null, extra?: Record<string, unknown>): Promise<SourceSelection | undefined>;
+  command(operation: 'preview' | 'check' | 'discard' | 'verify' | 'verify-document' | 'restore' | 'select' | 'catalog' | 'gesture' | 'cancel-gesture' | 'begin-text' | 'cancel-text' | 'finish-text' | 'verify-batch' | 'set-mode', selection?: SourceSelection | null, extra?: Record<string, unknown>): Promise<SourceSelection | undefined>;
   reload(selection?: SourceSelection, expectedClass?: string, expectedText?: string, expectedBatch?: CanvasRenderPatch[]): Promise<void>;
 }
 
@@ -163,7 +163,7 @@ export const SourceProjectCanvas = forwardRef<SourceCanvasHandle, {
       return new Promise<SourceSelection | undefined>((resolve, reject) => {
         if (!url || !frame.current?.contentWindow) { reject(new Error('Connect the project preview first.')); return; }
         const requestId = crypto.randomUUID();
-        const hydrationOperation = ['begin-text', 'preview', 'restore', 'check', 'verify-batch'].includes(operation);
+        const hydrationOperation = ['begin-text', 'preview', 'restore', 'check', 'verify-batch', 'verify-document'].includes(operation);
         const timer = setTimeout(() => { requests.current.delete(requestId); reject(new Error('The live page did not acknowledge this operation.')); }, operation === 'verify' ? 1500 : hydrationOperation ? 15000 : 5000);
         requests.current.set(requestId, { resolve, reject, timer });
         frame.current.contentWindow.postMessage({ channel: 'slightnudge', session: session.current, type: 'source-edit', requestId, operation, selection, ...extra }, new URL(url).origin);
@@ -182,6 +182,14 @@ export const SourceProjectCanvas = forwardRef<SourceCanvasHandle, {
       syncFailed.current = false;
       const refreshDeadline = Date.now() + 30000;
       for (let attempt = 0; attempt < 5 && Date.now() < refreshDeadline; attempt++) {
+        const instanceTextPatches = expectedBatch?.filter(patch => patch.after.instance && typeof patch.text === 'string');
+        if (repositoryId && instanceTextPatches?.length) {
+          try { await command('verify-document', null, { patches: instanceTextPatches }); }
+          catch {
+            await new Promise(resolve => setTimeout(resolve, Math.min(4000, 500 * 2 ** attempt, Math.max(0, refreshDeadline - Date.now()))));
+            continue;
+          }
+        }
         readyRef.current = false; setReady(false); session.current = crypto.randomUUID();
         setUrl(current => { if (!current) return current; const next = new URL(documentUrl.current || current); next.searchParams.set('__slightnudge_parent', window.location.origin); next.searchParams.set('__slightnudge_session', session.current); next.searchParams.set('__slightnudge_refresh', crypto.randomUUID()); return next.toString(); });
         // Give this navigation time to finish a development rebuild. Starting

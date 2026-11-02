@@ -1,4 +1,4 @@
-export const SOURCE_CANVAS_PROTOCOL = 18;
+export const SOURCE_CANVAS_PROTOCOL = 19;
 
 // AOS owns these exact state tokens. Do not generalize this exception to an
 // arbitrary extra class: unknown class changes must still fail source checks.

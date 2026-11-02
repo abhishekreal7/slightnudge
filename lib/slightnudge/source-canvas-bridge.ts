@@ -355,6 +355,30 @@ function sourceCanvasRuntime(continuous: boolean, repositoryId = '', protocol = 
     try {
       if (message.operation === 'set-mode') { if (editing) finishText(true); inspectEnabled = message.edit !== false; destinationMode = inspectEnabled && message.destination === true; document.documentElement.toggleAttribute('data-slightnudge-destination', destinationMode); hoverSignature = ''; if (!destinationMode) { cancelAnimationFrame(hoverFrame); hoverFrame = 0; send('destination-hover', { selection: null }); } (window as any).__slightnudge_inspect = inspectEnabled; if (!inspectEnabled) selected = null; reply(true); return; }
       if (message.operation === 'catalog') { catalog(); reply(true); return; }
+      if (message.operation === 'verify-document') {
+        // Probe server HTML without hydrating it or touching the live draft.
+        // A visible draft can already match while Next still serves the saved
+        // revision after Undo; navigating that HTML races the newer client JS.
+        const address = new URL(location.href);
+        address.searchParams.set('__slightnudge_document_check', String(Date.now()));
+        const response = await fetch(address, { cache: 'no-store', signal: AbortSignal.timeout(5000) });
+        if (!response.ok || new URL(response.url).origin !== location.origin) throw new Error('The server document could not be verified.');
+        const document = new DOMParser().parseFromString(await response.text(), 'text/html');
+        const serverNodes = [...document.querySelectorAll<HTMLElement>('[data-source-file]')];
+        for (const patch of message.patches || []) {
+          const location = patch.after;
+          const inFile = serverNodes.filter(element => element.dataset.sourceFile === location?.path);
+          // Client-only targets are checked by the existing post-hydration
+          // verify-batch operation. Do not claim SSR evidence for those nodes.
+          if (!inFile.length) continue;
+          const found = inFile.filter(element => {
+            const value = locator(element);
+            return (!location.instance || value.instance === location.instance) && (location.elementId ? value.elementId === location.elementId : value.line === Number(location.line) && value.column === Number(location.column));
+          });
+          if (found.length !== 1 || patch.className !== undefined && !classMatches(found[0].getAttribute('class'), patch.className) || patch.text !== undefined && readText(found[0]) !== patch.text || Object.entries(patch.attributes || {}).some(([name, value]) => found[0].getAttribute(name) !== value)) throw new Error('The server is still rendering an older source revision.');
+        }
+        reply(true); return;
+      }
       if (message.operation === 'verify-batch') {
         await waitForTargets((message.patches || []).map((patch: any) => patch.after));
         for (const originalPatch of message.patches || []) {
