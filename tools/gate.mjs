@@ -105,7 +105,7 @@ async function main() {
     browser('recovery','--reload-recovery','docs/recovery-release-gates.log','REAL + MOCKED failure injection'),
   ];
   for (const item of plan) item.historicalEvidenceExists = fs.existsSync(path.join(project,item.historical));
-  const selected = failedNames?plan.filter(item=>failedNames.includes(item.name)):requested ? plan.filter(item=>item.name===requested) : plan;
+  const selected = failedNames?plan.filter(item=>failedNames.includes(item.name)):requested ? plan.filter(item=>item.name===requested||requested==='selection'&&item.surface||requested==='shared'&&item.name.startsWith('shared-')) : plan;
   if (!selected.length) throw Error('Unknown workflow '+requested);
   json('plan.json',{head,productRef:ref,testRef:head,workspace,requested:selected.map(item=>item.name),plan});
   fs.writeFileSync(path.join(evidence,'git-status-before.txt'),git(['status','--short'])+'\n');
@@ -217,9 +217,14 @@ async function main() {
       if(fatal)break;
       if(item.surface&&selectionSetupError){rows.push({workflow:item.name,api:'REAL',result:'HARNESS-ERROR',seconds:0,error:selectionSetupError});continue;}
       if(!item.surface)stopServers();
-      if(item.name.startsWith('shared-')&&!sharedDeadline)sharedDeadline=performance.now()+480000;
+      if(item.name.startsWith('shared-')&&!sharedDeadline){
+        sharedDeadline=performance.now()+480000;
+        const prepared=await command('shared-compiler-warmup',['--import','tsx','test/gate-shared-runner.v3.ts','--prepare'],{},180000);
+        rows.push({workflow:'shared-compiler-warmup',harness:'HARNESS-V3',api:'REAL',result:prepared.timedOut?'TIMEOUT':prepared.harnessError?'HARNESS-ERROR':prepared.code===0?'PASS':'FAIL',seconds:prepared.seconds});
+      }
       const budget=item.name.startsWith('shared-')?Math.max(1,Math.min(120000,sharedDeadline-performance.now())):300000;
-      const result=await command(item.name,item.args,item.surface?{SELECTION_ROUND:'1',SELECTION_SURFACE:item.surface}:item.extra||{},budget);
+      const args=item.name.startsWith('shared-')?['--import','tsx','test/gate-shared-runner.v3.ts']:item.args;
+      const result=await command(item.name,args,item.surface?{SELECTION_ROUND:'1',SELECTION_SURFACE:item.surface}:item.extra||{},budget);
       let passed=result.code===0&&!/GATE_BROWSER_PAGE_ERROR/.test(result.output);
       if(item.surface) {
         const file=selectionFile(item.surface,item.suite);let data=null;
