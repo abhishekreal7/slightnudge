@@ -155,7 +155,7 @@ try {
   let ready = false;
   for (let attempt = 0; attempt < 120; attempt++) {
     if (server && server.exitCode !== null) throw new Error('Isolated server exited before startup');
-    try { if ((await fetch(`${baseURL}/fixtures/1`, { signal: AbortSignal.timeout(10000) })).ok) { ready = true; break; } } catch {}
+    try { if ((await fetch(`${baseURL}/editor`, { signal: AbortSignal.timeout(10000) })).ok) { ready = true; break; } } catch {}
     await new Promise(resolve => setTimeout(resolve, 500));
   }
   assert.ok(ready, 'Isolated server must start');
