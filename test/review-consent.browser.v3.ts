@@ -25,7 +25,7 @@ import { checkSourceProject } from './helpers/source-project-browser.v3';
 import { checkWorkspaceRedesign } from './helpers/workspace-redesign-browser.v3';
 import { checkStudioReloadRecovery } from './helpers/studio-reload-recovery-browser.v3';
 import { checkDirectManipulation } from './helpers/direct-manipulation-browser.v3';
-import { checkDragMove } from './helpers/drag-move-browser.v3';
+import { checkDragMove } from './helpers/drag-move-browser.v4';
 import { checkContinuousDraft } from './helpers/continuous-draft-browser.v3';
 import { checkInlineText } from './helpers/inline-text-browser.v4';
 import { checkUnifiedCanvas } from './helpers/unified-canvas-browser.v3';
