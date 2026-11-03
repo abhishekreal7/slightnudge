@@ -16,11 +16,16 @@ export function snapWidth(requested: number, rem = 16, previousToken?: string): 
   return previous && Math.abs(previous.width - requested) <= Math.abs(nearest.width - requested) + rem / 2 ? previous : nearest;
 }
 
-export function widthFromPointer(startWidth: number, startX: number, clientX: number, handle: string, scale = 1): number {
+export type ResizeAnchor = 'start' | 'center' | 'end';
+
+export function widthFromPointer(startWidth: number, startX: number, clientX: number, handle: string, scale = 1, anchor: ResizeAnchor = 'center'): number {
   if (![startWidth, startX, clientX, scale].every(Number.isFinite) || startWidth <= 0 || scale <= 0) throw new Error('The canvas dimensions could not be measured.');
-  // These local elements are centered; both edges move around their center.
-  const sign = ['w', 'sw', 'nw'].includes(handle) ? -1 : 1;
-  return startWidth + (clientX - startX) / scale * sign * 2;
+  const west = ['w', 'sw', 'nw'].includes(handle);
+  if (anchor === 'start' && west) throw new Error('The left edge is anchored by this layout. Resize from the right.');
+  if (anchor === 'end' && !west) throw new Error('The right edge is anchored by this layout. Resize from the left.');
+  // Only a centered box moves both edges around its center. A flow-anchored
+  // box changes one CSS pixel for each pointer pixel on its movable edge.
+  return startWidth + (clientX - startX) / scale * (west ? -1 : 1) * (anchor === 'center' ? 2 : 1);
 }
 
 export function stepWidth(current: number, direction: -1 | 1, rem = 16): WidthSnap {

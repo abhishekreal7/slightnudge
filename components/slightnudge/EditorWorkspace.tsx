@@ -1,4 +1,5 @@
 'use client';
+import { backUpConflictedDraft, isDraftSourceConflict } from '@/lib/slightnudge/draft-conflict-recovery';
 import { readApiJson } from '@/lib/slightnudge/api-response';
 
 import { AppearanceControls } from './AppearanceControls';
@@ -31,7 +32,7 @@ import { interactionControls, interactionValue } from '@/lib/slightnudge/interac
 import type { ResponsiveScope } from '@/lib/slightnudge/tailwind-verifier';
 import { resolveResponsiveScopes, sourceClassesMatch } from '@/lib/slightnudge/source-canvas-contract';
 import { readStudioRecovery, saveStudioRecovery, clearStudioRecovery, type StudioRecoveryRecord } from '@/lib/slightnudge/studio-recovery';
-import { snapWidth, stepWidth, widthFromPointer } from '@/lib/slightnudge/direct-manipulation';
+import { snapWidth, stepWidth, widthFromPointer, widthSteps, type ResizeAnchor } from '@/lib/slightnudge/direct-manipulation';
 import { readTranslation, snappedMove, type Translation } from '@/lib/slightnudge/translation';
 import {
   Code2,
@@ -514,6 +515,12 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
   useEffect(() => { setDefinitionStyleKey(null); }, [selectedLayer]);
   const reviewRef = useRef<PendingEdit | null>(null);
   const operationRef = useRef(true);
+  // One ordered pipeline for released direct gestures, including width edits.
+  // Its latest visual intent may be ahead of its last verified source revision.
+  const movePipeline = useRef<{ key: string; queue: ({ kind: 'move'; position: Translation } | { kind: 'width'; width: number; token: string })[]; desired: Translation; width?: number; hasMove?: boolean; running: boolean; verifying: boolean } | null>(null);
+  const drainMoveRef = useRef<() => void>(() => {});
+  const enqueueMoveRef = useRef<(key: string, position: Translation) => void>(() => {});
+  const enqueueWidthRef = useRef<(key: string, width: number, token: string) => void>(() => {});
   const recoveryRecordRef = useRef<StudioRecoveryRecord | null>(null);
   const [recoveryBooting, setRecoveryBooting] = useState(true);
   const [restoredOperation, setRestoredOperation] = useState<StudioRecoveryRecord | null>(null);
@@ -543,7 +550,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
       }).catch(() => {});
       return;
     }
-    if (operationRef.current && usesDrafts) { queuedSelectionRef.current = key; return; }
+    if ((operationRef.current || movePipeline.current) && usesDrafts) { queuedSelectionRef.current = key; return; }
     if (operationRef.current || blocksReview() || undoRecoveryRef.current) { showToast(undoRecoveryRef.current ? 'Check Undo status before making another change.' : reviewNotice); return; }
     setSelectedLayerState(key);
     if (key && sourceSelections.current[key]) {
@@ -644,7 +651,8 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
   const [operationBusy, setBusy] = useState<boolean>(false);
   const [draftReplaying, setDraftReplaying] = useState(false);
   const draftReplayPromise = useRef<Promise<boolean> | null>(null);
-  const busy = operationBusy || draftReplaying;
+  const [movePending, setMovePending] = useState(false);
+  const busy = operationBusy || draftReplaying || movePending;
   const [showQuickActions, setShowQuickActions] = useState<boolean>(false);
   const formattingRef = useRef<HTMLDivElement>(null);
   const formattingMoreRef = useRef<HTMLButtonElement>(null);
@@ -699,6 +707,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
   const draftRef = useRef<StudioDraft | null>(null);
   const captureDraftRef = useRef(false);
   const [draftStored, setDraftStored] = useState(true);
+  const [sourceConflict, setSourceConflict] = useState(false);
   const [reviewOpen, setReviewOpen] = useState(false);
   const [saveRequested, setSaveRequested] = useState(false);
   const saveTextRef = useRef<{ key: string; text: string } | null>(null);
@@ -707,6 +716,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
   const storeDraft = (value: StudioDraft | null) => {
     if (value) value = { ...value, pageId: selectedPage.id, viewport: { width: viewportWidth, scope: activeBreakpoint, preset: breakpoint } };
     draftRef.current = value; setDraftState(value);
+    if (!value) setSourceConflict(false);
     try {
       if (value) localStorage.setItem(projectDraftStorageKey, JSON.stringify(value));
       else localStorage.removeItem(projectDraftStorageKey);
@@ -720,7 +730,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
     storeDraft(current);
   }, [viewportWidth, activeBreakpoint, breakpoint, recoveryBooting, recoveryChecking]);
   useLayoutEffect(() => {
-    if (!captureDraftRef.current || busy || !usesDrafts) return;
+    if (!captureDraftRef.current || operationBusy || draftReplaying || !usesDrafts) return;
     captureDraftRef.current = false;
     const previous = draftRef.current;
     if (!previous) return;
@@ -728,7 +738,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
     // Keep the original baseline plus the most recent gestures.
     if (frames.length > 51) frames.splice(1, frames.length - 51);
     storeDraft({ version: 1, frames, cursor: frames.length - 1 });
-  }, [elements, pendingEdit, busy]);
+  }, [elements, pendingEdit, operationBusy, draftReplaying]);
   const setReview = (edit: PendingEdit | null) => {
     reviewRef.current = edit;
     setPendingEdit(edit);
@@ -752,12 +762,24 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
   const [dragOffset, setDragOffset] = useState<number>(0);
   const [dropSlotIndex, setDropSlotIndex] = useState<number | null>(null);
   const moveGesture = useRef<{ key: string; pointerId: number; capture: HTMLElement; x: number; y: number; base: Translation; scale: number; bounds: { minX: number; maxX: number; minY: number; maxY: number }; next: Translation; moved: boolean } | null>(null);
-  const [liveMove, setLiveMove] = useState<({ key: string } & Translation) | null>(null);
+  const [liveMove, setLiveMoveState] = useState<({ key: string } & Translation) | null>(null);
+  const setLiveMove = (position: ({ key: string } & Translation) | null) => {
+    // Paint the iframe before scheduling inspector React work. During a drag
+    // the geometry message redraws the canvas; the entire inspector need not
+    // rerender for every pointer sample.
+    if (!movePipeline.current?.verifying) {
+      const selection = position ? sourceSelections.current[position.key] : sourceSelection.current;
+      if (selection) void sourceCanvas.current?.command(position ? 'gesture' : 'cancel-gesture', selection,
+        position ? { x: position.x, y: position.y } : undefined).catch(error => showToast(error.message));
+    }
+    setLiveMoveState(previous => position && moveGesture.current ? previous : position);
+  };
   const [moveArmed, setMoveArmed] = useState(false);
   const moveClickSuppressed = useRef(false);
 
   // Precision Drag to Resize State
   const [isResizing, setIsResizing] = useState<boolean>(false);
+  const [resizeCursor, setResizeCursor] = useState('ew-resize');
   const [resizeHandle, setResizeHandle] = useState<'e' | 'w' | 's' | 'se' | 'sw' | 'nw' | 'ne' | null>(null);
   const [resizeStartX, setResizeStartX] = useState<number>(0);
   const [resizeStartY, setResizeStartY] = useState<number>(0);
@@ -765,7 +787,8 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
   const [resizeStartHeight, setResizeStartHeight] = useState<number>(0);
   const [liveWidth, setLiveWidth] = useState<number | null>(null);
   const suppressResizeClick = useRef(false);
-  const resizeGesture = useRef<{ key: string; handle: string; pointerId: number; capture: HTMLElement; x: number; width: number; scale: number; rem: number; nextWidth: number; token: string; moved: boolean } | null>(null);
+  const resizeGesture = useRef<{ key: string; handle: string; pointerId: number; capture: HTMLElement; x: number; width: number; scale: number; rem: number; handleTop: number; overlayYRatio: number; previewWidth: number; nextWidth: number; token: string; moved: boolean; anchor: ResizeAnchor; source: SourceSelection; scopeKey: string } | null>(null);
+  const cancelResizeRef = useRef<() => void>(() => {});
   const [dimensionTooltip, setDimensionTooltip] = useState<string | null>(null);
 
   // Dynamic DOM refs & element bounding dimensions
@@ -789,14 +812,15 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
   const receiveSourceSelection = (selection: SourceSelection) => {
     const key = sourceKey(selection); sourceSelections.current[key] = selection;
     setElements(previous => ({ ...previous, [key]: elementFromSource(selection) }));
-    if (operationRef.current || draftReplayPromise.current) { if (usesDrafts) queuedSelectionRef.current = key; return; }
+    if (operationRef.current || movePipeline.current || draftReplayPromise.current) { if (usesDrafts) queuedSelectionRef.current = key; return; }
     if (blocksReview() || undoRecoveryRef.current) return;
     sourceSelection.current = selection; setSelectedLayerState(key); setActiveVariant('');
   };
   const receiveSourceGeometry = (selection: SourceSelection) => {
     const key = sourceKey(selection); sourceSelections.current[key] = selection;
     if (selectedLayer === key) sourceSelection.current = selection;
-    setElementDimensions(previous => ({ ...previous, [key]: { w: Math.round(selection.rect.width), h: Math.round(selection.rect.height) } }));
+    const w = Math.round(selection.rect.width), h = Math.round(selection.rect.height);
+    setElementDimensions(previous => previous[key]?.w === w && previous[key]?.h === h ? previous : { ...previous, [key]: { w, h } });
   };
   const replaySourceDraft = (edit: PendingEdit | null): Promise<boolean> => {
     if (!sourceReady) { needsDraftReplay.current = true; return Promise.resolve(false); }
@@ -902,13 +926,14 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
   // Position movement preserves document flow and never reorders siblings.
   const startDragMove = (layerKey: string, e: React.PointerEvent) => {
     e.stopPropagation();
-    if (e.button !== 0 || operationRef.current || blocksReview() || undoRecoveryRef.current || resizeGesture.current || moveGesture.current) return;
+    const continuing = movePipeline.current?.key === layerKey;
+    if (e.button !== 0 || operationRef.current && !continuing || isApplying || draftReplayPromise.current || blocksReview() || undoRecoveryRef.current || resizeGesture.current || moveGesture.current) return;
     if (!usesDrafts || !/^(h[1-6]|p|section|div|article|aside|header|footer|nav|main|a|button|img)$/.test(elements[layerKey]?.tag || '') || activeVariant || activeBreakpoint) { showToast('To move an element, choose All sizes and the Default state.'); return; }
     const node = elementRefs.current[layerKey];
     const frame = node?.closest('[data-selection-artboard]');
     if (!node || !frame) return;
     try {
-      const base = readTranslation(elements[layerKey].classes);
+      const base = continuing && movePipeline.current!.hasMove ? { ...movePipeline.current!.desired } : readTranslation(elements[layerKey].classes);
       const rect = node.getBoundingClientRect(); const canvas = frame.getBoundingClientRect();
       const scale = rect.width / node.offsetWidth;
       const container = /^(section|div|article|aside|header|footer|nav|main)$/.test(elements[layerKey].tag);
@@ -916,34 +941,38 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
       // instead of requiring the entire container to fit on the canvas.
       const bounds = { minX: Math.max((canvas.left + (container ? 24 - rect.width : 0) - rect.left) / scale, -2048 - base.x), maxX: Math.min((canvas.right - (container ? 24 : rect.width) - rect.left) / scale, 2048 - base.x), minY: Math.max((canvas.top + (container ? 24 - rect.height : 0) - rect.top) / scale, -2048 - base.y), maxY: Math.min((canvas.bottom - (container ? 24 : rect.height) - rect.top) / scale, 2048 - base.y) };
       snappedMove(0, 0, scale, bounds);
-      e.preventDefault(); e.currentTarget.focus({ preventScroll: true }); e.currentTarget.setPointerCapture(e.pointerId);
+      e.preventDefault(); (e.currentTarget as HTMLElement).focus({ preventScroll: true }); e.currentTarget.setPointerCapture(e.pointerId);
       moveClickSuppressed.current = false; setMoveArmed(true);
       moveGesture.current = { key: layerKey, pointerId: e.pointerId, capture: e.currentTarget as HTMLElement, x: e.clientX, y: e.clientY, base, scale, bounds, next: base, moved: false };
     } catch (error) { showToast(error instanceof Error ? error.message : 'This element cannot be moved safely.'); }
   };
 
   // Handler for Drag to Resize
-  const startResize = (handle: 'e' | 'w' | 's' | 'se' | 'sw' | 'nw' | 'ne', e: React.PointerEvent) => {
+  const startResize = (handle: 'e' | 'w' | 's' | 'se' | 'sw' | 'nw' | 'ne', e: React.PointerEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     e.preventDefault();
-    if (operationRef.current || blocksReview() || undoRecoveryRef.current) { showToast(undoRecoveryRef.current ? 'Check Undo status before making another change.' : reviewNotice); return; }
+    if (operationRef.current && movePipeline.current?.key !== selectedLayer || blocksReview() || undoRecoveryRef.current || isApplying || draftReplayPromise.current) { showToast(undoRecoveryRef.current ? 'Check Undo status before making another change.' : reviewNotice); return; }
     if (e.button !== 0) return;
-    if (moveGesture.current || liveMove) return;
+    if (moveGesture.current || liveMove && movePipeline.current?.key !== selectedLayer) return;
     if (resizeGesture.current) return;
-    e.currentTarget.setPointerCapture(e.pointerId);
-    setIsResizing(true);
-    setResizeHandle(handle);
-    setResizeStartX(e.clientX);
-    setResizeStartY(e.clientY);
-    const key = selectedLayer || 'text';
-    const currentW = elementRefs.current[key]?.offsetWidth || 672;
-    const currentH = elementRefs.current[key]?.offsetHeight || 114;
-    const scale = (elementRefs.current[key]?.getBoundingClientRect().width || currentW) / currentW;
-    const rem = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
-    resizeGesture.current = { key, handle, pointerId: e.pointerId, capture: e.currentTarget as HTMLElement, x: e.clientX, width: currentW, scale, rem, nextWidth: currentW, token: '', moved: false };
-    setResizeStartWidth(currentW);
-    setResizeStartHeight(currentH);
-    setLiveWidth(currentW);
+    const key = selectedLayer;
+    const node = key ? elementRefs.current[key] : undefined;
+    const selection = key ? sourceSelections.current[key] : undefined;
+    if (!key || !node || !selection || !sourceCanvas.current) return;
+    try {
+      const layout = sourceCanvas.current.measureResize(selection);
+      const scale = node.getBoundingClientRect().width / selection.rect.width;
+      // Refuse the fixed edge before capture; a max-width-only edit cannot
+      // move that edge without an additional position/layout mutation.
+      widthFromPointer(layout.width, e.clientX, e.clientX, handle, scale, layout.anchor);
+      e.currentTarget.focus({ preventScroll: true });
+      e.currentTarget.setPointerCapture(e.pointerId);
+      setResizeCursor(getComputedStyle(e.currentTarget).cursor);
+      resizeGesture.current = { key, handle, pointerId: e.pointerId, capture: e.currentTarget, x: e.clientX, width: layout.width, scale, rem: layout.rem, handleTop: e.currentTarget.offsetTop, overlayYRatio: node.offsetHeight / selection.rect.height, previewWidth: layout.width, nextWidth: layout.width, token: '', moved: false, anchor: layout.anchor, source: { ...selection }, scopeKey: JSON.stringify([repositoryId, activeBreakpoint, activeVariant]) };
+      setIsResizing(true); setResizeHandle(handle);
+      setResizeStartX(e.clientX); setResizeStartY(e.clientY);
+      setResizeStartWidth(layout.width); setResizeStartHeight(layout.height); setLiveWidth(layout.width);
+    } catch (error) { showToast(error instanceof Error ? error.message : 'This resize anchor cannot be determined safely.'); }
   };
 
   // Backend Integration: Trigger Preview on Style/Text/Nudge/Reorder
@@ -1022,6 +1051,12 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
           let rendered: SourceSelection | undefined;
           try {
             if (!sourceCanvas.current || !actualSelection) throw new Error('Select the actual source element again.');
+            if (movePipeline.current?.key === activeKey) {
+              // End transient painting before validating the authored revision.
+              // Pointer input continues; its latest position is repainted afterward.
+              movePipeline.current.verifying = true;
+              await sourceCanvas.current.command('cancel-gesture', actualSelection);
+            }
             if (kind !== 'text' && typeof result.oldClassName === 'string' && !sourceClassesMatch(actualSelection.className, result.oldClassName)) throw new Error('Rendered classes differ from the source. Select a stable source element.');
             rendered = kind === 'image' || kind === 'action' || kind === 'icon' || kind === 'component' || (kind === 'reorder' || kind === 'reparent') && result.draftClean ? await sourceCanvas.current.command('restore', null, { patches: kind === 'image' || kind === 'action' || kind === 'icon' || kind === 'component' ? composedPatches : otherPatches }) : await sourceCanvas.current.command('preview', actualSelection, {
               kind, property: kind === 'nudge' ? (payload.direction === 'left' || payload.direction === 'right' ? 'marginLeft' : 'marginTop') : payload.property,
@@ -1074,14 +1109,22 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
           return true;
         } else {
           // Backend refusal - never create fake client edits!
-          showToast(`⚠️ ${result.refusalReason || result.error || 'Edit refused'}`);
+          const message = result.refusalReason || result.error || 'Edit refused';
+          if (isDraftSourceConflict(message)) setSourceConflict(true);
+          showToast(`⚠️ ${message}`);
         }
       } catch (err: any) {
+        if (isDraftSourceConflict(err?.message || '')) setSourceConflict(true);
         showToast(`⚠️ ${err?.message || 'Could not prepare preview'}`);
       } finally {
         setBusy(false);
         operationRef.current = false;
-        if (queuedSelectionRef.current !== undefined) {
+        if (movePipeline.current?.key === activeKey) {
+          movePipeline.current.verifying = false;
+          if (movePipeline.current.hasMove) setLiveMove({ key: activeKey, ...movePipeline.current.desired });
+          if (movePipeline.current.width !== undefined) setLiveWidth(movePipeline.current.width);
+        }
+        if (!movePipeline.current && queuedSelectionRef.current !== undefined) {
           const key = queuedSelectionRef.current; queuedSelectionRef.current = undefined;
           setSelectedLayerState(key);
           if (key && sourceSelections.current[key]) { sourceSelection.current = sourceSelections.current[key]; void sourceCanvas.current?.command('select', sourceSelections.current[key]).catch(() => {}); }
@@ -1091,39 +1134,121 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
     [activeBreakpoint, activeVariant, activeElement, elements, selectedLayer, childOrder, repositoryId, usesDrafts, responsiveScopes, definitionStyleKey]
   );
 
+  // A released gesture is validated in order, but does not disable the next
+  // drag on the same source node. Never run two source previews concurrently.
+  const backendPreviewRef = useRef(triggerBackendPreview);
+  useLayoutEffect(() => { backendPreviewRef.current = triggerBackendPreview; });
+  drainMoveRef.current = () => {
+    const pipeline = movePipeline.current;
+    if (!pipeline || pipeline.running || moveGesture.current || resizeGesture.current) return;
+    pipeline.running = true;
+    void (async () => {
+      try {
+        while (movePipeline.current === pipeline && pipeline.queue.length && !moveGesture.current && !resizeGesture.current) {
+          const intent = pipeline.queue.shift()!;
+          const accepted = intent.kind === 'move'
+            ? await backendPreviewRef.current('move', intent.position, pipeline.key)
+            : await backendPreviewRef.current('style', { property: 'maxWidth', value: intent.token }, pipeline.key);
+          if (accepted !== true) {
+            pipeline.queue.length = 0;
+            movePipeline.current = null;
+            // A refused revision must not leave an unverified position on screen.
+            moveCancelRef.current();
+            cancelResizeRef.current();
+            await sourceCanvas.current?.command('cancel-gesture', sourceSelections.current[pipeline.key]).catch(() => {});
+            break;
+          }
+          // Allow React to capture this gesture's draft frame before the next
+          // preview reads its parent. Each release remains one Undo step.
+          await new Promise<void>(resolve => {
+            const captured = () => {
+              if (captureDraftRef.current) requestAnimationFrame(captured);
+              else resolve();
+            };
+            requestAnimationFrame(captured);
+          });
+        }
+      } catch (error) {
+        pipeline.queue.length = 0;
+        if (movePipeline.current === pipeline) movePipeline.current = null;
+        moveCancelRef.current();
+        cancelResizeRef.current();
+        await sourceCanvas.current?.command('cancel-gesture', sourceSelections.current[pipeline.key]).catch(() => {});
+        showToast(error instanceof Error ? error.message : 'The move could not be verified. Your last verified draft is preserved.');
+      } finally {
+        pipeline.running = false;
+        if (movePipeline.current !== pipeline || !pipeline.queue.length && !moveGesture.current && !resizeGesture.current) {
+          if (movePipeline.current === pipeline) movePipeline.current = null;
+          setMovePending(false); setLiveMove(null); setLiveWidth(null);
+        }
+      }
+    })();
+  };
+  enqueueMoveRef.current = (key, position) => {
+    const pipeline = movePipeline.current || (movePipeline.current = { key, queue: [], desired: position, running: false, verifying: false });
+    if (pipeline.key !== key) return;
+    pipeline.desired = { ...position }; pipeline.hasMove = true; pipeline.queue.push({ kind: 'move', position: { ...position } });
+    setMovePending(true); setLiveMove({ key, ...position });
+    drainMoveRef.current();
+  };
+  enqueueWidthRef.current = (key, width, token) => {
+    const pipeline = movePipeline.current || (movePipeline.current = { key, queue: [], desired: { x: 0, y: 0 }, running: false, verifying: false });
+    if (pipeline.key !== key) return;
+    pipeline.width = width; pipeline.queue.push({ kind: 'width', width, token });
+    setMovePending(true); setLiveWidth(width);
+    drainMoveRef.current();
+  };
+  const moveCancelRef = useRef<() => void>(() => {});
   useEffect(() => {
     let animation = 0;
+    let hiddenFormatting: { node: HTMLDivElement; visibility: string } | null = null;
     const reset = (cancel = true, keepPreview = false) => {
       const gesture = moveGesture.current;
       if (!gesture) return;
       cancelAnimationFrame(animation); moveGesture.current = null;
+      if (hiddenFormatting) {
+        hiddenFormatting.node.style.visibility = hiddenFormatting.visibility;
+        hiddenFormatting = null;
+      }
       setMoveArmed(false);
       if (cancel || gesture.moved) { moveClickSuppressed.current = true; suppressResizeClick.current = true; }
       if (gesture.capture.hasPointerCapture(gesture.pointerId)) gesture.capture.releasePointerCapture(gesture.pointerId);
-      if (!keepPreview) setLiveMove(null);
+      const pipeline = movePipeline.current;
+      if (cancel && pipeline && gesture) pipeline.desired = { ...gesture.base };
+      if (!keepPreview) {
+        if (pipeline) setLiveMove({ key: pipeline.key, ...pipeline.desired });
+        else setLiveMove(null);
+      }
+      if (cancel && pipeline && !pipeline.running) drainMoveRef.current();
     };
+    moveCancelRef.current = () => reset();
     const update = (event: PointerEvent) => {
       const gesture = moveGesture.current;
       if (!gesture || event.pointerId !== gesture.pointerId) return null;
       const delta = snappedMove(event.clientX - gesture.x, event.clientY - gesture.y, gesture.scale, gesture.bounds, event.shiftKey);
       gesture.moved = Math.hypot(event.clientX - gesture.x, event.clientY - gesture.y) / gesture.scale >= 4;
       gesture.next = { x: gesture.base.x + delta.x, y: gesture.base.y + delta.y };
+      if (movePipeline.current?.key === gesture.key) movePipeline.current.desired = { ...gesture.next };
       return gesture;
     };
     const move = (event: PointerEvent) => {
       const gesture = update(event); if (!gesture) return;
       if (gesture.moved) setMoveOpen(false);
       cancelAnimationFrame(animation);
-      animation = requestAnimationFrame(() => { setLiveMove(gesture.moved ? { key: gesture.key, ...gesture.next } : null); });
+      animation = requestAnimationFrame(() => {
+        if (gesture.moved && formattingRef.current && !hiddenFormatting) {
+          hiddenFormatting = { node: formattingRef.current, visibility: formattingRef.current.style.visibility };
+          hiddenFormatting.node.style.visibility = 'hidden';
+        }
+        setLiveMove(gesture.moved ? { key: gesture.key, ...gesture.next } : null);
+      });
     };
     const up = (event: PointerEvent) => {
       const gesture = update(event); if (!gesture) return;
       const changed = gesture.moved && (gesture.next.x !== gesture.base.x || gesture.next.y !== gesture.base.y);
       reset(false, changed);
-      if (changed) {
-        setLiveMove({ key: gesture.key, ...gesture.next });
-        void triggerBackendPreview('move', gesture.next, gesture.key).finally(() => setLiveMove(null));
-      }
+      if (changed) enqueueMoveRef.current(gesture.key, gesture.next);
+      else drainMoveRef.current();
     };
     const cancel = () => reset();
     const lost = (event: PointerEvent) => { if (event.pointerId === moveGesture.current?.pointerId) reset(); };
@@ -1142,15 +1267,19 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
       window.removeEventListener('keydown', escape, true); document.removeEventListener('visibilitychange', visibility);
       reset();
     };
-  }, [triggerBackendPreview]);
+  }, []);
 
   useEffect(() => {
-    if (!usesDrafts || !selectedLayer || !sourceReady) return;
+    // Scope changes cancel a live gesture; accepting a draft revision does not.
+    moveCancelRef.current();
+  }, [activeBreakpoint, activeVariant, repositoryId, selectedLayer]);
+
+  useEffect(() => {
+    if (!usesDrafts || !selectedLayer || !sourceReady || movePipeline.current?.verifying) return;
     const selection = sourceSelections.current[selectedLayer]; if (!selection) return;
-    if (liveMove) void sourceCanvas.current?.command('gesture', selection, { x: liveMove.x, y: liveMove.y }).catch(error => showToast(error.message));
-    else if (liveWidth !== null) void sourceCanvas.current?.command('gesture', selection, { maxWidth: liveWidth }).catch(error => showToast(error.message));
-    else void sourceCanvas.current?.command('cancel-gesture', selection).catch(() => {});
-  }, [liveMove, liveWidth, selectedLayer, sourceReady, repositoryId]);
+    if (liveWidth !== null) void sourceCanvas.current?.command('gesture', selection, { maxWidth: liveWidth }).catch(error => showToast(error.message));
+    else if (!liveMove) void sourceCanvas.current?.command('cancel-gesture', selection).catch(() => {});
+  }, [liveMove, liveWidth, selectedLayer, sourceReady, repositoryId, operationBusy]);
 
   // Keep the final pointer position independent of React render timing.
   useEffect(() => {
@@ -1160,38 +1289,43 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
       const gesture = resizeGesture.current; resizeGesture.current = null;
       if (gesture) suppressResizeClick.current = true;
       if (gesture?.capture.hasPointerCapture(gesture.pointerId)) gesture.capture.releasePointerCapture(gesture.pointerId);
-      setIsResizing(false); setResizeHandle(null); setLiveWidth(null); setDimensionTooltip(null);
+      if (gesture && movePipeline.current?.key === gesture.key) movePipeline.current.width = gesture.width;
+      setIsResizing(false); setResizeHandle(null); setLiveWidth(movePipeline.current?.width ?? null); setDimensionTooltip(null);
     };
     const update = (event: PointerEvent) => {
       const gesture = resizeGesture.current;
       if (!gesture || event.pointerId !== gesture.pointerId) return false;
-      const requested = widthFromPointer(gesture.width, gesture.x, event.clientX, gesture.handle, gesture.scale);
+      const requested = widthFromPointer(gesture.width, gesture.x, event.clientX, gesture.handle, gesture.scale, gesture.anchor);
       gesture.moved = Math.abs(event.clientX - gesture.x) / gesture.scale >= 4;
       const snapped = snapWidth(requested, gesture.rem, gesture.token);
+      // Snap the released source edit, not the continuously moving live edge.
+      gesture.previewWidth = Math.max(widthSteps[0][0] * gesture.rem, Math.min(widthSteps[widthSteps.length - 1][0] * gesture.rem, requested));
       gesture.nextWidth = snapped.width; gesture.token = snapped.token;
+      if (movePipeline.current?.key === gesture.key) movePipeline.current.width = gesture.moved ? gesture.previewWidth : gesture.width;
       return true;
     };
     const move = (event: PointerEvent) => {
       if (!update(event)) return;
       const gesture = resizeGesture.current!;
       cancelAnimationFrame(animation);
-      animation = requestAnimationFrame(() => { setLiveWidth(gesture.moved ? gesture.nextWidth : gesture.width); setDimensionTooltip(gesture.moved ? 'Snapped' : null); });
+      animation = requestAnimationFrame(() => { setLiveWidth(gesture.moved ? gesture.previewWidth : gesture.width); setDimensionTooltip(gesture.moved ? `Release: ${gesture.nextWidth}px` : null); });
     };
     const up = (event: PointerEvent) => {
       if (!update(event)) return;
       const gesture = resizeGesture.current;
       if (!gesture) return;
       reset();
-      if (gesture.moved && gesture.token && Math.abs(gesture.nextWidth - gesture.width) > .5) { setLiveWidth(gesture.nextWidth); void triggerBackendPreview('style', { property: 'maxWidth', value: gesture.token }, gesture.key, () => {
-        setElements(previous => ({ ...previous, [gesture.key]: { ...previous[gesture.key], maxWidth: gesture.token } }));
-      }).finally(() => setLiveWidth(null)); }
+      if (gesture.moved && gesture.token && Math.abs(gesture.nextWidth - gesture.width) > .5) enqueueWidthRef.current(gesture.key, gesture.nextWidth, gesture.token);
+      else drainMoveRef.current();
     };
     const keydown = (event: KeyboardEvent) => {
       if (event.key !== 'Escape' || !resizeGesture.current) return;
-      event.preventDefault(); event.stopImmediatePropagation(); reset();
+      event.preventDefault(); event.stopImmediatePropagation(); reset(); drainMoveRef.current();
     };
-    const lostCapture = (event: PointerEvent) => { if (event.pointerId === resizeGesture.current?.pointerId) reset(); };
-    const visibility = () => { if (document.hidden) reset(); };
+    const cancel = () => { reset(); drainMoveRef.current(); };
+    cancelResizeRef.current = cancel;
+    const lostCapture = (event: PointerEvent) => { if (event.pointerId === resizeGesture.current?.pointerId) cancel(); };
+    const visibility = () => { if (document.hidden) cancel(); };
     const pointerDown = () => { suppressResizeClick.current = false; };
     const click = (event: MouseEvent) => {
       if (!suppressResizeClick.current) return;
@@ -1201,20 +1335,40 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
       if (event.detail > 0) { event.preventDefault(); event.stopPropagation(); }
     };
     window.addEventListener('pointermove', move); window.addEventListener('pointerup', up);
-    window.addEventListener('pointercancel', reset); window.addEventListener('blur', reset); window.addEventListener('keydown', keydown, true);
-    window.addEventListener('lostpointercapture', lostCapture); window.addEventListener('scroll', reset, true); window.addEventListener('resize', reset);
+    window.addEventListener('pointercancel', cancel); window.addEventListener('blur', cancel); window.addEventListener('keydown', keydown, true);
+    window.addEventListener('lostpointercapture', lostCapture); window.addEventListener('scroll', cancel, true); window.addEventListener('resize', cancel);
     document.addEventListener('visibilitychange', visibility);
     window.addEventListener('pointerdown', pointerDown, true); window.addEventListener('click', click, true);
     return () => {
       cancelAnimationFrame(animation);
       window.removeEventListener('pointermove', move); window.removeEventListener('pointerup', up);
-      window.removeEventListener('pointercancel', reset); window.removeEventListener('blur', reset); window.removeEventListener('keydown', keydown, true);
-      window.removeEventListener('lostpointercapture', lostCapture); window.removeEventListener('scroll', reset, true); window.removeEventListener('resize', reset);
+      window.removeEventListener('pointercancel', cancel); window.removeEventListener('blur', cancel); window.removeEventListener('keydown', keydown, true);
+      window.removeEventListener('lostpointercapture', lostCapture); window.removeEventListener('scroll', cancel, true); window.removeEventListener('resize', cancel);
       document.removeEventListener('visibilitychange', visibility);
       window.removeEventListener('pointerdown', pointerDown, true); window.removeEventListener('click', click, true);
       if (resizeGesture.current) reset();
     };
-  }, [triggerBackendPreview]);
+  }, []);
+
+  useEffect(() => {
+    const gesture = resizeGesture.current;
+    if (gesture && (gesture.key !== selectedLayer || gesture.scopeKey !== JSON.stringify([repositoryId, activeBreakpoint, activeVariant]))) cancelResizeRef.current();
+  }, [activeBreakpoint, activeVariant, repositoryId, selectedLayer]);
+
+  useEffect(() => {
+    const gesture = resizeGesture.current;
+    if (!gesture) return;
+    const current = sourceLayers.find(layer => layer.key === gesture.key), source = gesture.source;
+    try {
+      const ownedRevision = movePipeline.current?.key === gesture.key && (operationRef.current || sourceClassesMatch(current?.className || '', elements[gesture.key]?.classes || ''));
+      if (!current || current.path !== source.path || current.line !== source.line || current.column !== source.column || current.tagName !== source.tagName || current.instance !== source.instance || current.elementId !== source.elementId || !sourceClassesMatch(current.className, source.className) && !ownedRevision) throw new Error('The source target changed. Resizing was canceled.');
+      const layout = sourceCanvas.current?.measureResize(current);
+      if (!layout || layout.anchor !== gesture.anchor || layout.rem !== gesture.rem) throw new Error('The layout anchor changed. Resizing was canceled.');
+    } catch (error) {
+      cancelResizeRef.current();
+      showToast(error instanceof Error ? error.message : 'The resize target changed.');
+    }
+  }, [sourceLayers]);
 
   const resizeWithKeyboard = (event: React.KeyboardEvent) => {
     if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
@@ -1504,7 +1658,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
 
   const applySourceEdit = async () => {
     let edit = reviewRef.current;
-    if (!edit || operationRef.current) return;
+    if (!edit || operationRef.current || movePipeline.current) return;
     if (edit.groupTransactionId || Object.keys(draftHeads(edit)).length > 1) { await runGroupOperation('save', edit); return; }
     let restoredForWrite = false;
     operationRef.current = true;
@@ -1545,7 +1699,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
       } else if (result.code === 'SOURCE_CHANGED' || result.code === 'APPLY_ALREADY_UNDONE' || result.code === 'PREVIEW_EXPIRED') {
         finishOperationRecovery();
         setUncertainApplyId(null);
-        if (usesDrafts && edit.draftBase) { showToast(result.error || 'Source changed. Your draft is preserved.'); return; }
+        if (usesDrafts && edit.draftBase) { setSourceConflict(true); showToast(result.error || 'Source changed. Your draft is preserved.'); return; }
         if (repositoryId) sourceCanvas.current?.reload();
         restoreSnapshot(edit);
         setReview(null);
@@ -1589,6 +1743,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
   }, [saveRequested, busy, elements, pendingEdit, isInlineEditing]);
 
   const discardPendingEdit = async () => {
+    if (movePipeline.current) return;
     if (usesDrafts && draftRef.current && !uncertainApplyId && !operationRef.current) {
       inlineSessionRef.current = null; setIsInlineEditing(false);
       const baseline = draftRef.current.frames[0];
@@ -1620,6 +1775,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
   };
 
   const handleUndo = async () => {
+    if (movePipeline.current) return;
     if (moveGesture.current) { showToast('Release the Move handle or press Escape to cancel.'); return; }
     if (resizeGesture.current) { showToast('Release the width handle or press Escape to cancel resizing.'); return; }
     if (navigateDraft(-1)) return;
@@ -1876,7 +2032,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
   };
 
   const nudgeTranslation = (direction: 'up' | 'down' | 'left' | 'right') => {
-    if (!selectedLayer) return;
+    if (!selectedLayer || movePipeline.current) return;
     if (!usesDrafts || !/^(h[1-6]|p|section|div|article|aside|header|footer|nav|main|a|button|img)$/.test(activeElement.tag) || activeVariant || activeBreakpoint) { showToast('To move an element, choose All sizes and the Default state.'); return; }
     try {
       const base = readTranslation(activeElement.classes);
@@ -1965,7 +2121,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
   // Contextual formatting controls share the inspector's neutral surfaces.
   const renderMoveControl = () => {
     const supported = usesDrafts && /^(h[1-6]|p|section|div|article|aside|header|footer|nav|main|a|button|img)$/.test(activeElement.tag) && !activeVariant && !activeBreakpoint;
-    const disabled = busy || isApplying || isResizing || reviewBlocking || Boolean(uncertainUndoId) || !supported;
+    const disabled = (busy && movePipeline.current?.key !== selectedLayer) || isApplying || isResizing || reviewBlocking || Boolean(uncertainUndoId) || !supported;
     return (
       <div ref={moveControlRef} className={reviewStyles.moveControl} onClick={event => event.stopPropagation()}
         onBlur={event => { if (!event.currentTarget.contains(event.relatedTarget as Node)) setMoveOpen(false); }}>
@@ -1977,7 +2133,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
             const direction = directions[event.key];
             if (!direction) return;
             event.preventDefault(); event.stopPropagation();
-            if (!event.repeat && !disabled) { setMoveOpen(false); nudgeTranslation(direction); }
+            if (!event.repeat && !disabled && !movePending) { setMoveOpen(false); nudgeTranslation(direction); }
           }}
           aria-controls="selection-move-controls" disabled={disabled} onClick={() => { if (moveClickSuppressed.current) { moveClickSuppressed.current = false; return; } setMoveOpen(value => !value); }}>
           <Move size={15} /><span className="sr-only">Move</span>
@@ -1990,7 +2146,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
               ['up', ArrowUp, 'Move up'], ['left', ArrowLeft, 'Move left'],
               ['down', ArrowDown, 'Move down'], ['right', ArrowRight, 'Move right'],
             ] as const).map(([direction, Icon, label]) => <button type="button" key={direction} aria-label={label}
-              data-direction={direction} disabled={disabled} onClick={() => { setMoveOpen(false); nudgeTranslation(direction); }}><Icon size={16} /></button>)}
+              data-direction={direction} disabled={disabled || movePending} onClick={() => { setMoveOpen(false); nudgeTranslation(direction); }}><Icon size={16} /></button>)}
           </div>
           <p>Preview a step. Apply when it feels right.</p>
         </div>}
@@ -2144,53 +2300,54 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
     const layerKey = sourceKey(selection);
     if (selectedLayer !== layerKey || !elements[layerKey]) return null;
     const dim = { w: Math.round(selection.rect.width), h: Math.round(selection.rect.height) };
+    const measuredMove = moveGesture.current?.key === layerKey ? moveGesture.current.next : liveMove?.key === layerKey ? liveMove : null;
+    const resize = resizeGesture.current?.key === layerKey ? resizeGesture.current : null;
+    // A width edit can reflow text. Keep the active grip at its picked height
+    // along the edge rather than moving it to the new content midpoint.
+    const gripTop = resize ? Math.max(0, Math.min(selection.rect.height * resize.overlayYRatio, resize.handleTop + (resize.source.rect.top - selection.rect.top) * resize.overlayYRatio)) : undefined;
     return <div ref={element => { elementRefs.current[layerKey] = element; }}
       className={reviewStyles.sourceSelection} aria-label="Selected source element"
       style={{ width: '100%', height: '100%', fontSize: selection.computed.fontSize, textAlign: selection.computed.textAlign as React.CSSProperties['textAlign'] }}>
 {usesDrafts && (!selection.instance || definitionStyleKey === layerKey) && !isInlineEditing && <div className={reviewStyles.moveAnchor}>{renderMoveControl()}</div>}
-{liveMove?.key === layerKey && <output aria-label="Move measurement" aria-live="polite" className={`${reviewStyles.measurementBadge} ${reviewStyles.moveMeasurement}`}><span>X</span><strong>{liveMove.x}px</strong><span>Y</span><strong>{liveMove.y}px</strong><span>Snapped</span></output>}
+{!isInlineEditing && !isDraggingMove && !isResizing && <output aria-label={measuredMove ? 'Move measurement' : 'Selection dimensions'} aria-live={measuredMove ? 'polite' : undefined} className={reviewStyles.selectionDimensions}>{measuredMove ? <><span>X {measuredMove.x}px</span><span className={reviewStyles.dimensionConstraint}>Y {measuredMove.y}px</span></> : <><span>{dim.w}</span><span aria-hidden="true">×</span><span>{dim.h}</span><span className="sr-only">pixels</span></>}</output>}
       {!repositoryId && <>
 {/* Precision Handles System (Benchmark Match) */}
 {!isInlineEditing && !isDraggingMove && (
 <>
 {/* Matching width handles at the side midpoints and bottom corners. */}
 <button type="button" aria-label="Resize width from left" onKeyDown={resizeWithKeyboard} onClick={event => event.stopPropagation()}
-aria-describedby="selection-width-hint" disabled={busy || isApplying || reviewBlocking || Boolean(uncertainUndoId)}
+aria-describedby="selection-width-hint" disabled={(busy && movePipeline.current?.key !== selectedLayer) || isApplying || reviewBlocking || Boolean(uncertainUndoId)}
 onPointerDown={(e) => startResize('w', e)}
 className={`${reviewStyles.edgeResizeHandle} ${reviewStyles.westHandle}`}
+style={resize?.handle === 'w' ? { top: gripTop } : undefined}
 aria-pressed={isResizing && resizeHandle === 'w'}
-title="Drag side to resize width"
 />
 {/* East midpoint width handle. */}
 <button type="button" aria-label="Resize width from right" onKeyDown={resizeWithKeyboard} onClick={event => event.stopPropagation()}
-aria-describedby="selection-width-hint" disabled={busy || isApplying || reviewBlocking || Boolean(uncertainUndoId)}
+aria-describedby="selection-width-hint" disabled={(busy && movePipeline.current?.key !== selectedLayer) || isApplying || reviewBlocking || Boolean(uncertainUndoId)}
 onPointerDown={(e) => startResize('e', e)}
 className={`${reviewStyles.edgeResizeHandle} ${reviewStyles.eastHandle}`}
+style={resize?.handle === 'e' ? { top: gripTop } : undefined}
 aria-pressed={isResizing && resizeHandle === 'e'}
-title="Drag side to resize width"
 />
-<span id="selection-width-hint" className="sr-only">Drag horizontally to snap to supported maximum widths. Left and Right choose a size; Home and End choose the limits. Escape cancels dragging.</span>
+<span id="selection-width-hint" className="sr-only">Drag a side handle to preview maximum width. Release snaps to a supported source size. Parent layout can limit width; height follows content. Two-axis corner resizing is unavailable. Left and Right choose a size; Home and End choose the limits. Escape cancels dragging.</span>
 {/* Southwest width handle. */}
 <button type="button" aria-label="Resize width from bottom left" onKeyDown={resizeWithKeyboard} onClick={event => event.stopPropagation()}
-aria-describedby="selection-width-hint" disabled={busy || isApplying || reviewBlocking || Boolean(uncertainUndoId)}
-onPointerDown={(e) => startResize('sw', e)}
+aria-describedby="selection-width-hint" disabled title="Two-axis corner resizing is unavailable: height follows content. Use a side dot to resize maximum width."
 className={`${reviewStyles.cornerResizeHandle} ${reviewStyles.westCorner}`} aria-pressed={isResizing && resizeHandle === 'sw'}
-title="Drag corner to resize width"
 />
 {/* Southeast width handle. */}
 <button type="button" aria-label="Resize width from bottom right" onKeyDown={resizeWithKeyboard} onClick={event => event.stopPropagation()}
-aria-describedby="selection-width-hint" disabled={busy || isApplying || reviewBlocking || Boolean(uncertainUndoId)}
-onPointerDown={(e) => startResize('se', e)}
+aria-describedby="selection-width-hint" disabled title="Two-axis corner resizing is unavailable: height follows content. Use a side dot to resize maximum width."
 className={`${reviewStyles.cornerResizeHandle} ${reviewStyles.eastCorner}`} aria-pressed={isResizing && resizeHandle === 'se'}
-title="Drag corner to resize width"
 />
 {/* Live Dimension Tooltip - Only visible while actively resizing */}
 {isResizing && (
 <>
 <span aria-hidden="true" className={`${reviewStyles.resizeGuide} ${reviewStyles.leftGuide}`} />
 <span aria-hidden="true" className={`${reviewStyles.resizeGuide} ${reviewStyles.rightGuide}`} />
-<output aria-live="polite" aria-label="Resize measurement" className={reviewStyles.measurementBadge}>
-<span>Max width</span><strong>{liveWidth || dim.w}px</strong><span>{dimensionTooltip || 'Drag to snap'}</span>
+<output aria-live="polite" aria-label="Resize measurement" className={reviewStyles.selectionDimensions}>
+<span>{dim.w} × {dim.h}</span><span className={reviewStyles.dimensionConstraint}>Max {liveWidth || dim.w}px · {dimensionTooltip || 'Drag to snap'}</span>
 </output>
 </>
 )}
@@ -2261,6 +2418,21 @@ title="Drag corner to resize width"
 
       {/* Main Studio Shell: Fullscreen SlightNudge SaaS Environment */}
       <div aria-label="Visual editing workspace" aria-busy={busy || isApplying || recoveryBooting || recoveryChecking} data-editor-view={unified ? view : undefined} data-editor-legacy={!unified || undefined} data-window-panel={windowPanel || ''} data-focus-mode={!windowMode && focusMode || undefined} data-inspector-collapsed={!windowMode && inspectorCollapsed || undefined} data-selected-source={repositoryId && selectedLayer ? `${activeElement.filePath}:${activeElement.line}:${activeElement.column}:${activeElement.tag}` : undefined} className={`${reviewStyles.studioShell} ${windowMode ? reviewStyles.windowShell : reviewStyles.classicShell} fixed inset-0 z-50 flex flex-col h-screen w-screen bg-[#F8F9FA] select-none text-slate-800 text-xs overflow-hidden`}>
+        {isResizing && <div aria-hidden="true" data-resize-capture className={reviewStyles.resizeCapture} style={{ cursor: resizeCursor }} />}
+        {sourceConflict && <section role="alert" aria-label="Source conflict" className={reviewStyles.sourceConflictNotice}>
+          <strong>The source changed outside this draft</strong>
+          <p>Your draft is preserved. Start from the current source with a backup of your draft kept in this browser.</p>
+          <button type="button" disabled={busy || isApplying || Boolean(uncertainApplyId || uncertainUndoId) || recoveryBooting || recoveryChecking}
+            onClick={() => {
+              if (operationRef.current || isApplying || uncertainApplyId || uncertainUndoId) return;
+              try {
+                backUpConflictedDraft(localStorage, projectDraftStorageKey, crypto.randomUUID(), !draftStored && draftRef.current ? JSON.stringify(draftRef.current) : undefined);
+                window.location.reload();
+              } catch (error) {
+                showToast(error instanceof Error ? error.message : 'Could not back up the draft. Your draft has been kept.');
+              }
+            }}>Back up draft and use current source</button>
+        </section>}
         {historyOpen && createPortal(<ChangeHistory repositoryId={repositoryId} draft={draft?.frames.slice(1).map((frame, index) => ({ summary: frame.edit?.summary || 'Restored original value', state: index < draft.cursor ? 'draft' as const : 'redo' as const })) || []} recovery={Boolean(uncertainApplyId || uncertainUndoId || restoredOperation || recoveryError)} onClose={() => setHistoryOpen(false)}/>, document.body)}
         {(recoveryBooting || restoredOperation || recoveryError) && <div className={reviewStyles.recoveryOverlay}>
           <section className={reviewStyles.recoveryCard} role="dialog" aria-modal="true" aria-label="Recover previous source operation">
@@ -2443,8 +2615,8 @@ title="Drag corner to resize width"
               </div>
 
               {unified && <div className={reviewStyles.unifiedViewTools}>
-                <label>View <select aria-label="Editor view" value={view} disabled={busy || isApplying || isInlineEditing || isResizing || Boolean(liveMove)} onChange={event=>changeView(event.target.value as EditorView)}><option value="full">Full page</option><option value="fit">Fit canvas</option></select></label>
-                <select aria-label="Canvas zoom" title="Fit starts with automatic scaling; zoom can also be adjusted manually." value={canvasZoom} disabled={busy || isApplying || isInlineEditing || isResizing || Boolean(liveMove)} onChange={event=>{const zoom=event.target.value==='fit'?'fit':Number(event.target.value);setCanvasZoom(zoom);if(view==='full'&&zoom!==1)changeView('fit');}}>
+                <label>View <select aria-label="Editor view" value={view} disabled={busy || isApplying || isInlineEditing || isResizing || moveArmed || Boolean(liveMove)} onChange={event=>changeView(event.target.value as EditorView)}><option value="full">Full page</option><option value="fit">Fit canvas</option></select></label>
+                <select aria-label="Canvas zoom" title="Fit starts with automatic scaling; zoom can also be adjusted manually." value={canvasZoom} disabled={busy || isApplying || isInlineEditing || isResizing || moveArmed || Boolean(liveMove)} onChange={event=>{const zoom=event.target.value==='fit'?'fit':Number(event.target.value);setCanvasZoom(zoom);if(view==='full'&&zoom!==1)changeView('fit');}}>
                   <option value="fit">Fit page</option>{[.1,.25,.5,.75,1,1.5,2].map(value=><option key={value} value={value}>{Math.round(value*100)}%</option>)}{typeof canvasZoom==='number'&&![.1,.25,.5,.75,1,1.5,2].includes(canvasZoom)&&<option value={canvasZoom}>{Math.round(canvasZoom*100)}%</option>}
                 </select>
               </div>}
@@ -2762,10 +2934,10 @@ title="Drag corner to resize width"
                             {!repositoryId && selectedLayer && <div className={reviewStyles.resizeBar}>
                               <button type="button" aria-label="Drag to resize width" aria-pressed={isResizing}
                                 aria-describedby="selection-width-hint" aria-keyshortcuts="ArrowLeft ArrowRight Home End" onKeyDown={resizeWithKeyboard}
-                                disabled={busy || isApplying || reviewBlocking || Boolean(uncertainUndoId) || Boolean(liveMove) || moveArmed}
+                                disabled={(busy && movePipeline.current?.key !== selectedLayer) || isApplying || reviewBlocking || Boolean(uncertainUndoId) || moveArmed}
                                 onPointerDown={event => startResize('ne', event)}>
                                 <ArrowUpDown size={12} style={{ transform: 'rotate(90deg)' }} />
-                                <span>Resize</span><span className={reviewStyles.resizeValue}>{liveWidth || elementDimensions[selectedLayer]?.w || 0}px</span>
+                                <span>Max width</span><span className={reviewStyles.resizeValue}>{liveWidth || elementDimensions[selectedLayer]?.w || 0}px</span>
                               </button>
                               <select aria-label="Maximum width" disabled={isResizing || busy || isApplying || reviewBlocking || Boolean(uncertainUndoId) || Boolean(liveMove) || moveArmed}
                                 value={scopeTokens(activeElement.classes).find(token => token.startsWith('max-w-')) || ''}

@@ -1,5 +1,6 @@
 'use client';
 import { readApiJson } from '@/lib/slightnudge/api-response';
+import { readResizeLayout, type ResizeLayout } from '@/lib/slightnudge/resize-layout';
 
 
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
@@ -19,6 +20,7 @@ export interface SourceSelection {
   rect: { top: number; left: number; width: number; height: number };
 }
 export interface SourceCanvasHandle {
+  measureResize(selection: SourceSelection): ResizeLayout;
   openWindow(): void;
   command(operation: 'preview' | 'check' | 'discard' | 'verify' | 'verify-document' | 'restore' | 'select' | 'catalog' | 'gesture' | 'cancel-gesture' | 'begin-text' | 'cancel-text' | 'finish-text' | 'verify-batch' | 'set-mode', selection?: SourceSelection | null, extra?: Record<string, unknown>): Promise<SourceSelection | undefined>;
   reload(selection?: SourceSelection, expectedClass?: string, expectedText?: string, expectedBatch?: CanvasRenderPatch[]): Promise<void>;
@@ -176,6 +178,16 @@ export const SourceProjectCanvas = forwardRef<SourceCanvasHandle, {
   useImperativeHandle(ref, () => ({
     command,
     openWindow,
+    measureResize(selection) {
+      if (repositoryId || !readyRef.current || syncFailed.current) throw new Error('Width dragging requires a ready local source preview.');
+      const doc = frame.current?.contentDocument;
+      const matches = [...(doc?.querySelectorAll<HTMLElement>('[data-source-file]') || [])].filter(element =>
+        element.dataset.sourceFile === selection.path &&
+        (selection.elementId ? element.id === selection.elementId : Number(element.dataset.sourceLine) === selection.line && Number(element.dataset.sourceColumn) === selection.column) &&
+        (!selection.instance || element.dataset.slightnudgeCallsite === selection.instance));
+      if (matches.length !== 1) throw new Error('The resize target is missing or ambiguous. Select it again.');
+      return readResizeLayout(matches[0]);
+    },
     async reload(selection, expectedClass, expectedText, expectedBatch) {
       // Recovery can finish before this newly mounted window has connected.
       // There is no document to reload yet; release the operation so the
