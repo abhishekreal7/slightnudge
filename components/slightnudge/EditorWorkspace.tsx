@@ -916,7 +916,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
       // instead of requiring the entire container to fit on the canvas.
       const bounds = { minX: Math.max((canvas.left + (container ? 24 - rect.width : 0) - rect.left) / scale, -2048 - base.x), maxX: Math.min((canvas.right - (container ? 24 : rect.width) - rect.left) / scale, 2048 - base.x), minY: Math.max((canvas.top + (container ? 24 - rect.height : 0) - rect.top) / scale, -2048 - base.y), maxY: Math.min((canvas.bottom - (container ? 24 : rect.height) - rect.top) / scale, 2048 - base.y) };
       snappedMove(0, 0, scale, bounds);
-      e.preventDefault(); e.currentTarget.setPointerCapture(e.pointerId);
+      e.preventDefault(); e.currentTarget.focus({ preventScroll: true }); e.currentTarget.setPointerCapture(e.pointerId);
       moveClickSuppressed.current = false; setMoveArmed(true);
       moveGesture.current = { key: layerKey, pointerId: e.pointerId, capture: e.currentTarget as HTMLElement, x: e.clientX, y: e.clientY, base, scale, bounds, next: base, moved: false };
     } catch (error) { showToast(error instanceof Error ? error.message : 'This element cannot be moved safely.'); }
