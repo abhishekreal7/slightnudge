@@ -8,6 +8,11 @@ export async function checkDragMove(page: Page, baseURL: string, workspace: stri
  page=iframePageV3(page);
 
   const file = path.join(workspace, 'fixtures/1-plain-static.tsx');
+  // The historical workflow expects a zero-offset fixture, not the author's
+  // saved playground positions. Only prepare the disposable checkout copy.
+  if (path.resolve(workspace) === path.resolve(process.cwd())) throw new Error('Movement fixture setup requires a disposable workspace');
+  const fixture = fs.readFileSync(file, 'utf8');
+  fs.writeFileSync(file, fixture.replace(/\btranslate-[xy]-\[-?\d+px\]/g, ''));
   const original = fs.readFileSync(file, 'utf8');
   let previews = 0;
   page.on('request', request => { if (new URL(request.url()).pathname.endsWith('/preview') && request.method() === 'POST' && request.postDataJSON()?.operation !== 'inspect') previews++; });
