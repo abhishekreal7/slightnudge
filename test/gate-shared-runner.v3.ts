@@ -5,6 +5,7 @@ import {spawn,execFileSync} from 'node:child_process';
 import {chromium} from 'playwright';
 import {checkSharedInstances} from './helpers/shared-instance-browser.v3';
 import {prepareSourceProject} from './helpers/prepare-source-project.v3';
+import {observeReadiness} from './helpers/readiness-evidence';
 
 // Preserve compilation cache, never test state. Every command starts fresh
 // processes, a fresh browser context, and an empty editor state directory.
@@ -48,6 +49,7 @@ let browser:Awaited<ReturnType<typeof chromium.launch>>|undefined,page:Awaited<R
 try {
  const started=Date.now(),editor=external?{url:external,child:null}:await server(workspace);await ready(editor.url+'/editor',editor.child);
  browser=await chromium.launch({headless:true});page=await browser.newPage({viewport:{width:1600,height:1000}});
+ await observeReadiness(page,root);
  const errors:string[]=[];page.on('pageerror',error=>errors.push(error.stack||error.message));
  if(process.argv.includes('--prepare')){
   await page.goto(editor.url+'/editor?panel=inspector',{waitUntil:'domcontentloaded',timeout:180000});
