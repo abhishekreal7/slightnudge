@@ -33,7 +33,7 @@ export async function checkDragMove(page: Page, baseURL: string, workspace: stri
   await handle.click(); await page.getByRole('group', { name: 'Move selected element', exact: true }).waitFor();
   await handle.click(); assert.equal(await page.getByRole('group', { name: 'Move selected element', exact: true }).count(), 0, 'A second click closes the precise controls without creating a drag');
   const start = async () => { const box = (await handle.boundingBox())!; const point = { x: box.x + box.width / 2, y: box.y + box.height / 2 }; await page.mouse.move(point.x, point.y); await page.mouse.down(); return point; };
-  const restored = () => page.waitForFunction(expected => { const iframe=document.querySelector('iframe')!;const r=iframe.contentDocument!.querySelector('h1')!.getBoundingClientRect(),outer=iframe.getBoundingClientRect(),sx=outer.width/iframe.offsetWidth,sy=outer.height/iframe.offsetHeight; return Math.abs(outer.x+r.x*sx - expected.x) < 1 && Math.abs(outer.y+r.y*sy - expected.y) < 1; }, origin);
+  const restored = () => page.waitForFunction(expected => { const iframe=document.querySelector('iframe');const heading=iframe?.contentDocument?.querySelector('h1');if(!iframe||!heading)return false;const r=heading.getBoundingClientRect(),outer=iframe.getBoundingClientRect(),sx=outer.width/iframe.offsetWidth,sy=outer.height/iframe.offsetHeight; return Math.abs(outer.x+r.x*sx - expected.x) < 1 && Math.abs(outer.y+r.y*sy - expected.y) < 1; }, origin);
   for (const cancellation of ['Escape', 'blur', 'pointercancel', 'capture', 'scroll', 'scope']) {
     const point = await start(); await page.mouse.move(point.x + 25, point.y + 15, { steps: 5 });
     await measurement.waitFor();
