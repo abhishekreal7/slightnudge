@@ -45,7 +45,7 @@ export async function checkDragMove(page: Page, baseURL: string, workspace: stri
     if (cancellation === 'scope') await page.getByRole('group', { name: 'Element state' }).getByRole('button', { name: 'Default', exact: true }).click();
   }
   console.log('PASS: centered Move handle, live two-axis snapped geometry and six cancellation paths; no source proposals while dragging');
-  await page.getByRole('combobox', { name: 'Canvas zoom', exact: true }).selectOption('.75');
+  await page.getByRole('combobox', { name: 'Canvas zoom', exact: true }).selectOption('0.75');
   await page.waitForFunction(() => { const element = document.querySelector('[data-selection-artboard]') as HTMLElement; return Math.abs(element.getBoundingClientRect().width / element.offsetWidth - .75) < .001; });
   const scaledOrigin = await rectangle();
   let scaledPoint = await start(); await page.mouse.move(scaledPoint.x + 18, scaledPoint.y + 12); await measurement.waitFor();
