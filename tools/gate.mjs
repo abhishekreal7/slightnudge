@@ -64,7 +64,12 @@ async function main() {
   const runId = `${stamp}-${ref.slice(0,7)}${requested ? '-' + requested : ''}`;
   // Keep nested disposable repositories below Windows Git's path limit.
   const scratch = path.join(project,'scratch','g',crypto.randomBytes(4).toString('hex'));
-  const evidence = path.join(project,'docs','reliability-gate',runId);
+  const evidence = (() => {
+    const base = path.resolve(project, option('--evidence-root') || 'docs/reliability-gate');
+    const relative = path.relative(project, base);
+    if (!relative || relative === '..' || relative.startsWith('..' + path.sep) || path.isAbsolute(relative)) throw Error('Evidence must stay inside the project');
+    return path.join(base, runId);
+  })();
   const workspace = path.join(scratch,'worktree');
   fs.mkdirSync(scratch,{recursive:true}); fs.mkdirSync(evidence,{recursive:true});
   const raw = fs.createWriteStream(path.join(evidence,'raw.log'),{flags:'wx'});
