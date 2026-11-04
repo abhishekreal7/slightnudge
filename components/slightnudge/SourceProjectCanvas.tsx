@@ -40,6 +40,7 @@ export const SourceProjectCanvas = forwardRef<SourceCanvasHandle, {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [ready, setReady] = useState(false);
+  const [elapsed, setElapsed] = useState(0);
   const acknowledgedSession = useRef<string | null>(null);
   const [pageHeight, setPageHeight] = useState(720);
   const [connectionHost, setConnectionHost] = useState<Element | null>(null);
@@ -265,6 +266,30 @@ export const SourceProjectCanvas = forwardRef<SourceCanvasHandle, {
     const timer = setTimeout(() => { if (!syncFailed.current) setError('The page has not connected yet. Check that its local server and source adapter are running, then reconnect.'); }, 45000);
     return () => clearTimeout(timer);
   }, [url, ready]);
+  useEffect(() => {
+    setElapsed(0);
+    if (ready || (!loading && !url)) return;
+    const started = Date.now();
+    const timer = setInterval(() => setElapsed(Math.floor((Date.now() - started) / 1000)), 1000);
+    return () => clearInterval(timer);
+  }, [loading, ready, url]);
+  function retryPreview() {
+    if (blocked || loading || ready) return;
+    setError('');
+    if (repositoryId) { void connectTo(input); return; }
+    const next = new URL(url);
+    session.current = crypto.randomUUID();
+    next.searchParams.set('__slightnudge_session', session.current);
+    documentUrl.current = next.toString();
+    syncFailed.current = false;
+    setUrl(next.toString());
+  }
+  const previewStatus = !ready && (url || loading) && (
+    <div role="status" aria-label="Preview connection status" className={windowMode ? windowStyles.status : 'text-xs text-slate-500'}>
+      {elapsed >= 60 ? 'The preview may still be compiling. Check the local server and source adapter.' : 'Connecting to the preview…'} {elapsed}s elapsed
+      {elapsed >= 60 && <button type="button" className="pointer-events-auto ml-2 underline" disabled={blocked || loading} onClick={retryPreview}>Retry preview</button>}
+    </div>
+  );
   function openWindow() {
     if (props.current.blocked || !readyRef.current) return;
     let target = '/studio/window';
@@ -287,10 +312,11 @@ export const SourceProjectCanvas = forwardRef<SourceCanvasHandle, {
     {repositoryId && !windowMode && connectionHost ? createPortal(<div className={canvasStyles.connection} onPointerDown={event => event.stopPropagation()} onClick={event => event.stopPropagation()}>
       <details open={!url}><summary>{ready ? 'Preview connected' : 'Connect local preview'}</summary>{connection}</details>
       {error && <p role="alert">{error}</p>}
-      {url && !ready && <p role="status">Connecting to the local page…</p>}
+      {previewStatus}
     </div>, connectionHost) : connection}
     {error && (windowMode || !repositoryId) && <p role="alert" className={windowMode ? windowStyles.error : 'text-xs text-red-700'}>{error}</p>}
-    {url && (windowMode || !repositoryId && !ready) && <p role="status" className={windowMode ? windowStyles.status : 'text-xs text-slate-500'}>{ready ? 'Live source connected' : repositoryId ? 'Connecting to the local page…' : 'Loading source page…'}</p>}
+    {(windowMode || !repositoryId || !connectionHost) && previewStatus}
+    {url && windowMode && ready && <p role="status" className={windowStyles.status}>Live source connected</p>}
     {url && <div data-selection-artboard className={windowMode ? windowStyles.artboard : 'relative mx-auto'} style={{ width, flexShrink: 0, maxWidth: width === '100%' ? '100%' : undefined }}>
       <iframe ref={frame} title="Actual project" src={url} onLoad={() => setDocumentRevision(value => value + 1)} scrolling={!windowMode ? 'no' : undefined} inert={!ready} tabIndex={ready ? 0 : -1} className="block w-full border-0 bg-white" style={{ height: windowMode ? '100dvh' : pageHeight, pointerEvents: ready ? 'auto' : 'none' }} />
       {geometry && ready && renderSelection && <div className="absolute pointer-events-none" style={{ inset: 0, overflow: 'clip' }}><div style={{ position: 'absolute', top: geometry.rect.top, left: geometry.rect.left, width: geometry.rect.width, height: geometry.rect.height }}>{renderSelection(geometry)}</div></div>}
