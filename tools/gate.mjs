@@ -243,7 +243,10 @@ async function main() {
         }
         const prepared=sharedSetupError?{timedOut:false,harnessError:sharedSetupError,code:1,seconds:setup.seconds}:await command('shared-compiler-warmup',['--import','tsx','test/gate-shared-runner.v3.ts','--prepare'],sharedEnv,Math.max(1,warmupDeadline-performance.now()));
         rows.push({workflow:'shared-compiler-warmup',harness:'HARNESS-V3',api:'REAL',result:prepared.timedOut?'TIMEOUT':prepared.harnessError?'HARNESS-ERROR':prepared.code===0?'PASS':'FAIL',seconds:prepared.seconds});
-        if(prepared.code!==0)sharedSetupError=sharedSetupError||'Shared compiler warm-up failed; see shared-compiler-warmup.log';
+        if(prepared.code!==0){
+          sharedSetupError=sharedSetupError||'Shared compiler warm-up failed; see shared-compiler-warmup.log';
+          stopServers();
+        }
         sharedDeadline=performance.now()+480000;
       }
       if((item.name.startsWith('shared-')||['icon-replacement','history'].includes(item.name))&&sharedSetupError){rows.push({workflow:item.name,harness:'HARNESS-V3',api:'REAL',result:'HARNESS-ERROR',seconds:0,error:sharedSetupError});continue;}
