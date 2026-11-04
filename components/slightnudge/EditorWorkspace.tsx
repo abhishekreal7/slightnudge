@@ -690,9 +690,12 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
     }
   }, []);
 
+  const initialPageDiscovery = useRef(false);
   useEffect(() => {
-    autoDetectPages(false);
-  }, [autoDetectPages]);
+    if (!sourceReady || initialPageDiscovery.current) return;
+    initialPageDiscovery.current = true;
+    void autoDetectPages(false);
+  }, [autoDetectPages, sourceReady]);
 
   // Pending Source Edits (SaaS Backend Integration)
   const [pendingEdit, setPendingEdit] = useState<PendingEdit | null>(null);
