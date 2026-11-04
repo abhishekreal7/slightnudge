@@ -444,7 +444,7 @@
 .draftSummary button span { padding: 1px 5px; border-radius: 4px; background: #eef5ef; font-variant-numeric: tabular-nums; }
 .draftSummary button:disabled { opacity: .4; cursor: default; }
 .draftSummary ol { flex-basis: 100%; max-height: 130px; overflow: auto; margin: 0; padding-left: 18px; color: #738076; font-size: 10px; line-height: 1.8; }
-.resizeBar button { display: flex; align-items: center; gap: 7px; height: 24px; padding: 0 8px; border: 0; border-radius: 4px; color: #4a5547; background: transparent; font-size: 10px; cursor: ew-resize; touch-action: none; }
+.resizeBar button { display: flex; align-items: center; gap: 7px; height: 24px; padding: 0 8px; border: 0; border-radius: 4px; color: #4a5547; background: transparent; font-size: 10px; cursor: var(--editor-resize-cursor), ew-resize; touch-action: none; }
 .resizeBar button:hover, .resizeBar button[aria-pressed='true'] { background: #edf2e9; color: #274b35; }
 .resizeValue { font-variant-numeric: tabular-nums; color: #7d8678; }
 .resizeBar select { height: 24px; width: 110px; border: 0; border-left: 1px solid #e5e9e7; background: transparent; font-size: 10px; color: #687261; padding-left: 8px; }
@@ -500,7 +500,7 @@
 .recoveryCard button:focus-visible { outline: 2px solid #729082; outline-offset: 3px; }
 .recoveryCard small { display: block; margin-top: 12px; color: #929b8d; text-align: center; font-size: 10px; }
 
-.edgeResizeHandle, .cornerResizeHandle { position: absolute; z-index: 35; padding: 0; border: 0; background: transparent; cursor: ew-resize; touch-action: none; }
+.edgeResizeHandle, .cornerResizeHandle { position: absolute; z-index: 35; padding: 0; border: 0; background: transparent; cursor: var(--editor-resize-cursor), ew-resize; touch-action: none; }
 .edgeResizeHandle { top: 50%; width: 18px; height: 40px; transform: translateY(-50%); }
 .westHandle { left: -9px; }
 .eastHandle { right: -9px; }
@@ -538,3 +538,7 @@
 .dockOptions a:hover { background: #f0f5f2; }
 
 .canvasDraftStatus { position: absolute; z-index: 25; top: 12px; right: 12px; display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px; border: 1px solid #e0e6e2; border-radius: 8px; background: #fff; color: #52665a; font-size: 11px; box-shadow: 0 2px 8px #223a2c12; pointer-events: none; }
+
+.studioShell { --editor-resize-cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cpath d='M16 3 9 12h14zM16 18a6 6 0 1 0 0 12a6 6 0 1 0 0 -12z' fill='%2315191d' stroke='white' stroke-width='2' stroke-linejoin='round'/%3E%3C/svg%3E") 16 16; }
+.westCorner { cursor: var(--editor-resize-cursor), nesw-resize; }
+.eastCorner { cursor: var(--editor-resize-cursor), nwse-resize; }
