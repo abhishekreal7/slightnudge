@@ -232,7 +232,7 @@ async function main() {
         // for the four editing workflows, each still capped at two minutes.
         sharedDeadline=Infinity;
         const warmupDeadline=performance.now()+180000;
-        const setup=await command('shared-runtime-setup',['--import','tsx','test/gate-shared-runner.v3.ts','--setup-only'],{},180000);
+        const setup=await command('shared-runtime-setup',['--import','tsx','test/program-gate-shared-runner.v3.ts','--setup-only'],{},180000);
         const match=setup.output.match(/^GATE_RUNTIMES (.+)$/m);
         if(setup.code!==0||!match)sharedSetupError='Shared runtime setup failed; see shared-runtime-setup.log';
         else {
@@ -241,7 +241,7 @@ async function main() {
           startServer(ports[0],safe(runtime.workspace));startServer(ports[1],safe(runtime.repo));
           sharedEnv={GATE_SHARED_EDITOR_URL:`http://127.0.0.1:${ports[0]}`,GATE_SHARED_PREVIEW_URL:`http://127.0.0.1:${ports[1]}`};
         }
-        const prepared=sharedSetupError?{timedOut:false,harnessError:sharedSetupError,code:1,seconds:setup.seconds}:await command('shared-compiler-warmup',['--import','tsx','test/gate-shared-runner.v3.ts','--prepare'],sharedEnv,Math.max(1,warmupDeadline-performance.now()));
+        const prepared=sharedSetupError?{timedOut:false,harnessError:sharedSetupError,code:1,seconds:setup.seconds}:await command('shared-compiler-warmup',['--import','tsx','test/program-gate-shared-runner.v3.ts','--prepare'],sharedEnv,Math.max(1,warmupDeadline-performance.now()));
         rows.push({workflow:'shared-compiler-warmup',harness:'HARNESS-V3',api:'REAL',result:prepared.timedOut?'TIMEOUT':prepared.harnessError?'HARNESS-ERROR':prepared.code===0?'PASS':'FAIL',seconds:prepared.seconds});
         if(prepared.code!==0){
           sharedSetupError=sharedSetupError||'Shared compiler warm-up failed; see shared-compiler-warmup.log';
@@ -251,7 +251,7 @@ async function main() {
       }
       if((item.name.startsWith('shared-')||['icon-replacement','history'].includes(item.name))&&sharedSetupError){rows.push({workflow:item.name,harness:'HARNESS-V3',api:'REAL',result:'HARNESS-ERROR',seconds:0,error:sharedSetupError});continue;}
       const budget=item.name.startsWith('shared-')?Math.max(1,Math.min(120000,sharedDeadline-performance.now())):300000;
-      const args=item.name.startsWith('shared-')?['--import','tsx','test/gate-shared-runner.v3.ts']:item.name==='icon-replacement'?['--import','tsx','test/gate-icon-runner.v3.ts']:item.name==='history'?['--import','tsx','test/gate-history-runner.v3.ts']:item.args;
+      const args=item.name.startsWith('shared-')?['--import','tsx','test/program-gate-shared-runner.v3.ts']:item.name==='icon-replacement'?['--import','tsx','test/gate-icon-runner.v3.ts']:item.name==='history'?['--import','tsx','test/gate-history-runner.v3.ts']:item.args;
       const result=await command(item.name,args,item.surface?{SELECTION_ROUND:'1',SELECTION_SURFACE:item.surface,RELIABILITY_GEOMETRY:item.surface==='fit'?'1':'0'}:item.name.startsWith('shared-')||['icon-replacement','history'].includes(item.name)?{...sharedEnv,GATE_PREPARED_PROJECT:'1',...item.extra}:item.extra||{},budget);
       warmConsumers.delete(item.name);
       if((item.name.startsWith('shared-')||['icon-replacement','history'].includes(item.name))&&result.timedOut){stopServers();sharedSetupError='Previous owned-runtime workflow timed out; refusing to reuse state while an Apply may be unconfirmed';}
