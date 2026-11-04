@@ -2444,9 +2444,9 @@ title="Drag corner to resize width"
 
               {unified && <div className={reviewStyles.unifiedViewTools}>
                 <label>View <select aria-label="Editor view" value={view} disabled={busy || isApplying || isInlineEditing || isResizing || Boolean(liveMove)} onChange={event=>changeView(event.target.value as EditorView)}><option value="full">Full page</option><option value="fit">Fit canvas</option></select></label>
-                <select aria-label="Canvas zoom" title="Fit starts with automatic scaling; zoom can also be adjusted manually." value={canvasZoom} disabled={busy || isApplying || isInlineEditing || isResizing || Boolean(liveMove)} onChange={event=>{const zoom=event.target.value==='fit'?'fit':Number(event.target.value);setCanvasZoom(zoom);if(view==='full'&&zoom!==1)changeView('fit');}}>
+                {view === 'fit' && <select aria-label="Canvas zoom" title="Fit starts with automatic scaling; zoom can also be adjusted manually." value={canvasZoom} disabled={busy || isApplying || isInlineEditing || isResizing || Boolean(liveMove)} onChange={event => setCanvasZoom(event.target.value === 'fit' ? 'fit' : Number(event.target.value))}>
                   <option value="fit">Fit page</option>{[.1,.25,.5,.75,1,1.5,2].map(value=><option key={value} value={value}>{Math.round(value*100)}%</option>)}{typeof canvasZoom==='number'&&![.1,.25,.5,.75,1,1.5,2].includes(canvasZoom)&&<option value={canvasZoom}>{Math.round(canvasZoom*100)}%</option>}
-                </select>
+                </select>}
               </div>}
               {renderCanvasControls()}
               <div className={reviewStyles.topbarActions}>{renderDraftControls()}</div>
