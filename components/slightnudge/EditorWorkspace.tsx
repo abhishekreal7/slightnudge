@@ -2262,11 +2262,12 @@ title="Drag corner to resize width"
       {/* Main Studio Shell: Fullscreen SlightNudge SaaS Environment */}
       <div aria-label="Visual editing workspace" aria-busy={busy || isApplying || recoveryBooting || recoveryChecking} data-editor-view={unified ? view : undefined} data-editor-legacy={!unified || undefined} data-window-panel={windowPanel || ''} data-focus-mode={!windowMode && focusMode || undefined} data-inspector-collapsed={!windowMode && inspectorCollapsed || undefined} data-selected-source={repositoryId && selectedLayer ? `${activeElement.filePath}:${activeElement.line}:${activeElement.column}:${activeElement.tag}` : undefined} className={`${reviewStyles.studioShell} ${windowMode ? reviewStyles.windowShell : reviewStyles.classicShell} fixed inset-0 z-50 flex flex-col h-screen w-screen bg-[#F8F9FA] select-none text-slate-800 text-xs overflow-hidden`}>
         {historyOpen && createPortal(<ChangeHistory repositoryId={repositoryId} draft={draft?.frames.slice(1).map((frame, index) => ({ summary: frame.edit?.summary || 'Restored original value', state: index < draft.cursor ? 'draft' as const : 'redo' as const })) || []} recovery={Boolean(uncertainApplyId || uncertainUndoId || restoredOperation || recoveryError)} onClose={() => setHistoryOpen(false)}/>, document.body)}
-        {(recoveryBooting || restoredOperation || recoveryError) && <div className={reviewStyles.recoveryOverlay}>
+        {recoveryBooting && <p role="status" className={reviewStyles.recoveryBootStatus}>Checking your saved draft…</p>}
+        {(restoredOperation || recoveryError) && <div className={reviewStyles.recoveryOverlay}>
           <section className={reviewStyles.recoveryCard} role="dialog" aria-modal="true" aria-label="Recover previous source operation">
             <span className={reviewStyles.recoveryIcon}><RotateCcw size={19} /></span>
-            <h2>{recoveryBooting ? 'Restoring your editing session' : restoredOperation ? `Confirm your last ${restoredOperation.kind === 'apply' ? 'save' : 'Undo'}` : 'Your editing session needs attention'}</h2>
-            <p>{recoveryBooting ? 'Checking for an unfinished source operation…' : 'The editor reopened before this operation was fully confirmed. Check its status to continue safely.'}</p>
+            <h2>{restoredOperation ? `Confirm your last ${restoredOperation.kind === 'apply' ? 'save' : 'Undo'}` : 'Your editing session needs attention'}</h2>
+            <p>The editor reopened before this operation was fully confirmed. Check its status to continue safely.</p>
             {restoredOperation && <code>{restoredOperation.sourcePath || restoredOperation.filePath}</code>}
             {recoveryError && <p role="alert" className={reviewStyles.recoveryError}>{recoveryError}</p>}
             {restoredOperation && <button type="button" autoFocus disabled={recoveryChecking}
