@@ -63,7 +63,7 @@ export function ReviewWorkflowSection() {
             <span><Check size={13} /> Clear diffs</span>
             <span><Check size={13} /> Your call</span>
           </div>
-          <Link className="sn-review-cta" href="/studio">Open the playground <ArrowUpRight size={15} /></Link>
+          <Link className="sn-review-cta" href="/editor">Open the playground <ArrowUpRight size={15} /></Link>
         </div>
 
         <div className="sn-review-visual">

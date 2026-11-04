@@ -26,7 +26,7 @@ export function MarketingFooter() {
         </nav>
 
         <div className="sn-footer-utilities" aria-label="More links">
-          <Link href="/studio" aria-label="Open playground" title="Open playground"><ArrowUpRight size={17} /></Link>
+          <Link href="/editor" aria-label="Open playground" title="Open playground"><ArrowUpRight size={17} /></Link>
           <Link href="/privacy" aria-label="Privacy policy" title="Privacy"><ShieldCheck size={17} /></Link>
           <Link href="/terms" aria-label="Terms of service" title="Terms"><FileText size={17} /></Link>
         </div>

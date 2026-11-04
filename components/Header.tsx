@@ -42,7 +42,7 @@ export function Header() {
           <Link className="sn-marketing-cta" href="/workspace" onClick={() => setOpen(false)}>Projects <ArrowRight size={15}/></Link>
         </>}
       </nav>
-      {marketing ? <Link className="sn-marketing-cta" href="/studio">Open playground <ArrowRight size={15}/></Link> : null}
+      {marketing ? <Link className="sn-marketing-cta" href="/editor">Open playground <ArrowRight size={15}/></Link> : null}
     </div>
   </header>;
 }
