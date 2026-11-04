@@ -7,7 +7,7 @@ import { ConstraintControls } from './ConstraintControls';
 
 import React, { useState, useEffect, useLayoutEffect, useCallback, useRef } from 'react';
 import { EditorSurface, type EditorMode } from './EditorSurface';
-import { EditorDraftControls, EditorHistoryControls, EditorViewportControls } from './EditorSessionControls';
+import { EditorDraftControls, EditorDraftStatus, EditorHistoryControls, EditorViewportControls } from './EditorSessionControls';
 import { useWindowDock } from '@/components/slightnudge/useWindowDock';
 import { ChangeHistory } from '@/components/slightnudge/ChangeHistory';
 import { createPortal } from 'react-dom';
@@ -2213,8 +2213,8 @@ title="Drag corner to resize width"
     undoLabel={uncertainUndoId ? undoRecoveryRef.current?.groupTransactionId ? 'Resume Undo' : 'Check Undo status' : 'Undo'}
     showRedo={usesDrafts} onHistory={() => setHistoryOpen(true)} onUndo={handleUndo} onRedo={() => navigateDraft(1)}
   />;
+  const draftStatus = isApplying ? 'Saving…' : uncertainApplyId ? 'Check save status' : draftReplaying ? 'Restoring draft…' : busy ? 'Updating draft…' : selectedLayer && typeof activeElement.text === 'string' && draftText !== activeElement.text ? 'Editing text…' : draft ? (draftStored ? `Draft saved · ${draft.cursor} ${draft.cursor === 1 ? 'change' : 'changes'}${Object.keys(draftHeads(pendingEdit)).length > 1 ? ' · ' + Object.keys(draftHeads(pendingEdit)).length + ' files' : ''}` : 'Draft in memory') : 'All changes saved';
   const renderDraftControls = () => usesDrafts && <EditorDraftControls
-    status={isApplying ? 'Saving…' : uncertainApplyId ? 'Check save status' : draftReplaying ? 'Restoring draft…' : busy ? 'Updating draft…' : selectedLayer && typeof activeElement.text === 'string' && draftText !== activeElement.text ? 'Editing text…' : draft ? (draftStored ? `Draft saved · ${draft.cursor} ${draft.cursor === 1 ? 'change' : 'changes'}${Object.keys(draftHeads(pendingEdit)).length > 1 ? ' · ' + Object.keys(draftHeads(pendingEdit)).length + ' files' : ''}` : 'Draft in memory') : 'All changes saved'}
     saveLabel={uncertainApplyId ? pendingEdit?.groupTransactionId ? 'Resume Save' : 'Check save' : 'Save changes'}
     disabled={(!pendingEdit && draftText === activeElement.text) || busy || isApplying || moveArmed || isResizing || destinationMode}
     onSave={requestSave}
@@ -2461,6 +2461,8 @@ title="Drag corner to resize width"
               <div className={reviewStyles.topbarActions}>{renderDraftControls()}</div>
             </header>
             )}
+
+            {usesDrafts && <EditorDraftStatus status={draftStatus}/>}
 
             {/* Canvas Main Scroll Area */}
             <main

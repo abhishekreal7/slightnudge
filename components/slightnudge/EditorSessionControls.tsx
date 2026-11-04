@@ -16,11 +16,18 @@ export function EditorHistoryControls({ historyDisabled, undoDisabled, redoDisab
   </div>;
 }
 
-export function EditorDraftControls({ status, saveLabel, disabled, onSave }: {
-  status: string; saveLabel: string; disabled: boolean; onSave(): void;
+export function EditorDraftStatus({ status }: { status: string }) {
+  const idle = status === 'All changes saved';
+  return <span role="status" aria-label="Draft status" className={idle ? 'sr-only' : styles.canvasDraftStatus}>
+    {status.startsWith('Draft saved') && <Check size={12} strokeWidth={1.8} aria-hidden="true"/>}
+    {status}
+  </span>;
+}
+
+export function EditorDraftControls({ saveLabel, disabled, onSave }: {
+  saveLabel: string; disabled: boolean; onSave(): void;
 }) {
   return <div className={styles.draftControls} aria-label="Draft controls">
-    <span role="status" aria-label="Draft status" className={status === 'All changes saved' || status.startsWith('Draft saved · ') ? 'sr-only' : undefined}><Check size={12} strokeWidth={1.8} aria-hidden="true"/>{status}</span>
     <button type="button" disabled={disabled} onMouseDown={event => event.preventDefault()} onClick={onSave} className={styles.draftSave}>{saveLabel}</button>
   </div>;
 }
