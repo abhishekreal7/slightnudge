@@ -639,6 +639,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
 
   // Text Draft & Inline Canvas Editing
   const [draftText, setDraftText] = useState<string>(activeElement.text || '');
+  const [preparingInlineText, setPreparingInlineText] = useState(false);
   const [isInlineEditing, setIsInlineEditing] = useState<boolean>(false);
   const [inlineCommitKey, setInlineCommitKey] = useState<string | null>(null);
   const [operationBusy, setBusy] = useState<boolean>(false);
@@ -1805,7 +1806,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
   const beginInlineText = async (key: string) => {
     if (!usesDrafts || operationRef.current || draftReplayPromise.current || busy || blocksReview() || undoRecoveryRef.current) return;
     const selection = sourceSelections.current[key]; if (!selection || !/^(h[1-6]|p|a|button|span|label)$/.test(selection.tagName)) return;
-    operationRef.current = true; setBusy(true); inlinePropRef.current = null;
+    operationRef.current = true; setBusy(true); setPreparingInlineText(true); inlinePropRef.current = null;
     try {
       const stableLocalId = !repositoryId ? selection.elementId : undefined;
       const inspection = await inspectElementAPI({ repositoryId, filePath: selection.path, line: selection.line, column: selection.column, elementId: stableLocalId, tagName: selection.tagName });
@@ -1824,7 +1825,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
       if (!sourceSelection.current || sourceKey(sourceSelection.current) !== key) return;
     } catch (error) {
       inlinePropRef.current = null; showToast(error instanceof Error ? error.message : 'The text source could not be inspected.'); return;
-    } finally { operationRef.current = false; setBusy(false); }
+    } finally { operationRef.current = false; setBusy(false); setPreparingInlineText(false); }
     inlineSessionRef.current = key; setSelectedLayerState(key);
     setDraftText(selection.textContent || ''); setIsInlineEditing(true); setShowQuickActions(false);
     void sourceCanvas.current?.command('begin-text', selection).catch(error => { inlineSessionRef.current = null; setIsInlineEditing(false); showToast(error.message); });
@@ -2002,7 +2003,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
     if (!selectedLayer || activeElement.tag === 'svg') return null;
     const locked = busy || isApplying || reviewBlocking || Boolean(uncertainUndoId) || destinationMode || viewportChanging || Boolean(activeBreakpoint) && scopeLoading;
     if(activeElement.instance && !editingDefinitionStyles)return createPortal(<div ref={formattingRef} role="toolbar" aria-label="Selection formatting" className={reviewStyles.floatingFormatting} style={{position:'fixed',left:formattingPosition?.left||0,top:formattingPosition?.top||0,visibility:formattingPosition?.visible?'visible':'hidden'}} onClick={event=>event.stopPropagation()}><div className={reviewStyles.formattingBar}>
-      {isTextElement&&<button type="button" className={reviewStyles.editTextControl} disabled={locked} onClick={()=>beginInlineText(selectedLayer)}><Pencil size={13}/><span>Edit text</span></button>}
+      {isTextElement&&<button type="button" className={reviewStyles.editTextControl} disabled={locked} onClick={()=>beginInlineText(selectedLayer)}><Pencil size={13}/><span>{preparingInlineText ? 'Checking text…' : 'Edit text'}</span></button>}
       <button type="button" className={reviewStyles.editTextControl} disabled={locked} onClick={()=>{setWindowPanel('inspector');requestAnimationFrame(()=>document.querySelector<HTMLElement>('[aria-label="Component properties"] textarea, [aria-label="Component properties"] select')?.focus())}}><SlidersHorizontal size={13}/><span>Instance props</span></button>
     </div></div>,document.body);
     const parentKey = sourceSelections.current[selectedLayer]?.parentKey;
@@ -2051,7 +2052,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
                   input?.focus(); input?.select();
                 });
               }
-            }}><Pencil size={13} strokeWidth={1.7} /><span>Edit text</span></button>
+            }}><Pencil size={13} strokeWidth={1.7} /><span>{preparingInlineText ? 'Checking text…' : 'Edit text'}</span></button>
             <span className={reviewStyles.formatDivider} aria-hidden="true" />
             <label className={reviewStyles.primaryFormatSelect}>
               <span aria-hidden="true">Aa<ChevronDown size={10} /></span>

@@ -495,7 +495,13 @@ function sourceCanvasRuntime(continuous: boolean, repositoryId = '', protocol = 
         if (label) { host = document.createElement('span'); host.textContent = original; host.style.cssText = 'font:inherit;color:inherit;letter-spacing:inherit;text-transform:inherit;line-height:inherit;padding:0;margin:0;min-width:1ch'; label.replaceWith(host); }
         selected = element; editing = element; editingHost = host;
         editingMeta = { text: original, role: host.getAttribute('role'), label: host.getAttribute('aria-label'), editable: host.getAttribute('contenteditable'), prefix: label ? raw.match(/^\s*/)?.[0] : '', suffix: label ? raw.match(/\s*$/)?.[0] : '' };
-        host.contentEditable = 'plaintext-only'; host.setAttribute('role', 'textbox'); host.setAttribute('aria-label', 'Edit selected text'); host.focus(); reply(true); return;
+        host.contentEditable = 'plaintext-only'; host.setAttribute('role', 'textbox'); host.setAttribute('aria-label', 'Edit selected text'); host.focus({ preventScroll: true });
+        if (document.activeElement !== host) { finishText(true); throw new Error('Could not focus the selected text. Try Edit text again.'); }
+        const caret = document.createRange();
+        caret.selectNodeContents(host); caret.collapse(false);
+        const selection = window.getSelection();
+        selection?.removeAllRanges(); selection?.addRange(caret);
+        reply(true); return;
       }
       if (message.operation === 'cancel-text') { finishText(true); const value = stagedText.get(element); if (value) { writeText(element, value.before); stagedText.delete(element); catalog(); geometry(); } reply(true); return; }
       if (message.operation === 'finish-text') { finishText(); reply(true); return; }
