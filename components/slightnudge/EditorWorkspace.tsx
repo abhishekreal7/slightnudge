@@ -623,6 +623,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
   const responsiveSourcePath = repositoryId && !selectedLayer ? sourceLayers[0]?.path : activeElement.filePath;
   useEffect(() => {
     let cancelled = false; setScopeLoading(true); setScopeError(''); setResponsiveScopes([]);
+    if (!sourceReady) return;
     if (!responsiveSourcePath) { setScopeLoading(false); return; }
     void (async () => {
       try {
@@ -634,7 +635,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
       finally { if (!cancelled) setScopeLoading(false); }
     })();
     return () => { cancelled = true; };
-  }, [repositoryId, responsiveSourcePath]);
+  }, [repositoryId, responsiveSourcePath, sourceReady]);
 
 
   // Text Draft & Inline Canvas Editing
