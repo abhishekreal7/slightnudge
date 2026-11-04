@@ -20,7 +20,7 @@ export function EditorDraftControls({ status, saveLabel, disabled, onSave }: {
   status: string; saveLabel: string; disabled: boolean; onSave(): void;
 }) {
   return <div className={styles.draftControls} aria-label="Draft controls">
-    <span role="status" aria-label="Draft status" className={status === 'All changes saved' ? 'sr-only' : undefined}><Check size={12} strokeWidth={1.8} aria-hidden="true"/>{status}</span>
+    <span role="status" aria-label="Draft status" className={status === 'All changes saved' || status.startsWith('Draft saved · ') ? 'sr-only' : undefined}><Check size={12} strokeWidth={1.8} aria-hidden="true"/>{status}</span>
     <button type="button" disabled={disabled} onMouseDown={event => event.preventDefault()} onClick={onSave} className={styles.draftSave}>{saveLabel}</button>
   </div>;
 }
