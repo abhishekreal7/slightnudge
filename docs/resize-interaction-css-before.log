@@ -1,0 +1,264 @@
+Actual heading width before resize: 368
+Width during max-width gesture: 368
+Focused host element: BUTTON
+Resize proposal: {"newValue":"max-w-2xl","newClassName":"sn-playground-hero p-3 translate-x-[-36px] translate-y-[0px] max-w-2xl","css":"@layer utilities {\n.max-w-2xl {\n  max-width: var(--container-2xl);\n}\n\n}"}
+Resize notices: [
+  '⚠️ Project CSS overrides this utility, or the utility is unavailable. The source was not changed.'
+]
+Section max-width after refusal: {
+  classes: 'sn-playground-hero p-3 translate-x-[-36px] translate-y-[0px]',
+  style: null,
+  maxWidth: '940px'
+}
+Isolated application diagnostics ▲ Next.js 16.4.3 (webpack)
+- Local:         http://127.0.0.1:63173
+- Network:       http://127.0.0.1:63173
+✓ Ready in 520ms
+✓ Running next.config.mjs took 37ms
+
+○ Compiling /editor/[[...project]]/page ...
+ GET /editor 200 in 3.0s (next.js: 2.1s, application-code: 992ms)
+ GET /editor?view=full 200 in 250ms (next.js: 21ms, application-code: 229ms)
+○ Compiling /studio/preview/[pageId]/page ...
+ GET /studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A63173&__slightnudge_session=[redacted] 200 in 3.6s (next.js: 2.4s, application-code: 1172ms)
+○ Compiling /api/slightnudge/responsive/route ...
+⚠ ./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+ GET /api/slightnudge/pages 200 in 8.0s (next.js: 5.2s, proxy.ts: 2.0s, application-code: 758ms)
+ POST /api/slightnudge/responsive 200 in 8.6s (next.js: 5.2s, proxy.ts: 2.0s, application-code: 1404ms)
+ POST /api/slightnudge/responsive 200 in 8.8s (next.js: 5.2s, proxy.ts: 2.0s, application-code: 1539ms)
+ GET /api/slightnudge/pages 200 in 430ms (next.js: 6ms, proxy.ts: 305ms, application-code: 119ms)
+ GET /editor?view=full 200 in 3.1s (next.js: 2.6s, application-code: 583ms)
+⚠ ./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+Error: aborted
+    at ignore-listed frames {
+  code: 'ECONNRESET'
+}
+⨯ uncaughtException: Error: aborted
+    at ignore-listed frames {
+  code: 'ECONNRESET'
+}
+⨯ uncaughtException:  Error: aborted
+    at ignore-listed frames {
+  code: 'ECONNRESET'
+}
+⚠ ./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+ POST /api/slightnudge/preview 200 in 3.6s (next.js: 769ms, proxy.ts: 27ms, application-code: 2.8s)
+ POST /api/slightnudge/preview 200 in 1633ms (next.js: 6ms, proxy.ts: 16ms, application-code: 1610ms)
+ DELETE /api/slightnudge/preview?id=b65bdcf0-e72f-4706-91c5-e2374c77b9e5 200 in 42ms (next.js: 3ms, proxy.ts: 15ms, application-code: 24ms)
+
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+page.waitForFunction: Timeout 30000ms exceeded.
+    at checkResizeInteraction (C:\dev\vibecheck\test\helpers\resize-interaction-browser.ts:55:14)
+    at async <anonymous> (C:\dev\vibecheck\test\resize-interaction.browser.ts:231:14) {
+  log: [],
+  name: 'TimeoutError'
+}
+
+Node.js v22.19.0

@@ -1,0 +1,97 @@
+{
+  "date": "2026-10-27T17:11:41.325Z",
+  "project": "https://github.com/bennyjoel/nextjs-saas-starter-lite",
+  "commit": "dff9c1f93c3d3b29d5a57a5741d9c90da5269cb5",
+  "next": "14.2.35",
+  "tailwind": "3.4.19",
+  "state": "passed",
+  "checks": [
+    "single full-page canvas with stable document height",
+    "project breakpoints discovered through the actual compiled API",
+    "original mapped text targets: physical selection, native typography, draft recovery, source Save and exact Undo",
+    "scaled Move, source Save and exact Undo",
+    "real breakpoint style edit, smaller-screen isolation, Save and exact Undo",
+    "native responsive widths: 375, 768 and 1200",
+    "separate-window native document, text edit, Save and exact Undo"
+  ],
+  "targets": [
+    {
+      "file": "src/app/page.tsx",
+      "line": "13",
+      "column": "13",
+      "tag": "a",
+      "text": "GitHub",
+      "outcome": "passed",
+      "operations": [
+        "physical selection",
+        "original-size inline text",
+        "draft refresh",
+        "save",
+        "exact undo"
+      ]
+    },
+    {
+      "file": "src/app/page.tsx",
+      "line": "45",
+      "column": "11",
+      "tag": "p",
+      "text": "A clean, modular starter built on Next.js 14 App Router, TypeScript, and Tailwind CSS. Skip the boilerplate and start building your product today.",
+      "outcome": "passed",
+      "operations": [
+        "physical selection",
+        "original-size inline text",
+        "draft refresh",
+        "save",
+        "exact undo"
+      ]
+    },
+    {
+      "file": "src/app/page.tsx",
+      "line": "72",
+      "column": "13",
+      "tag": "h3",
+      "text": "Next.js 14 App Router",
+      "outcome": "passed",
+      "operations": [
+        "physical selection",
+        "original-size inline text",
+        "draft refresh",
+        "save",
+        "exact undo"
+      ]
+    }
+  ],
+  "phase": "undo src/app/page.tsx:45",
+  "candidateCount": 15,
+  "responsive": {
+    "status": 200,
+    "breakpoints": [
+      {
+        "name": "sm",
+        "minWidth": 640,
+        "media": "(min-width: 640px)"
+      },
+      {
+        "name": "md",
+        "minWidth": 768,
+        "media": "(min-width: 768px)"
+      },
+      {
+        "name": "lg",
+        "minWidth": 1024,
+        "media": "(min-width: 1024px)"
+      },
+      {
+        "name": "xl",
+        "minWidth": 1280,
+        "media": "(min-width: 1280px)"
+      },
+      {
+        "name": "2xl",
+        "minWidth": 1536,
+        "media": "(min-width: 1536px)"
+      }
+    ]
+  },
+  "browserErrors": []
+}

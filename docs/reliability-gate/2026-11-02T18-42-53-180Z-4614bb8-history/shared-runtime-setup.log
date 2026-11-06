@@ -1,0 +1,12 @@
+SETUP 1793644977182 START git ["ls-files"]
+SETUP END elapsed 94ms
+SETUP 1793644977543 START git ["init","--quiet"]
+SETUP END elapsed 74ms
+SETUP 1793644977617 START git ["-c","core.autocrlf=false","add","app","components","package.json","LICENSE"]
+SETUP END elapsed 177ms
+SETUP 1793644977795 START C:\nvm4w\nodejs\node.exe ["--import","tsx","--input-type=module","-e","const {installNextSourceAdapter}=await import('./lib/slightnudge/next-source-adapter.ts');await installNextSourceAdapter('source-proof');"]
+SETUP END elapsed 496ms
+SETUP 1793644978291 START C:\nvm4w\nodejs\node.exe ["C:\\dev\\vibecheck\\scratch\\g\\94995019\\worktree\\scratch\\shared-gate-runtime\\.slightnudge\\repositories\\source-proof\\node_modules\\next\\dist\\bin\\next","dev","--help"]
+SETUP END elapsed 263ms
+Disposable source project: generated SaaS; Next.js 16.4.3; Tailwind 4.3.3; installed source adapter; no environment files checked out.
+GATE_RUNTIMES {"workspace":"C:\\dev\\vibecheck\\scratch\\g\\94995019\\worktree\\scratch\\shared-gate-runtime","repo":"C:\\dev\\vibecheck\\scratch\\g\\94995019\\worktree\\scratch\\shared-gate-runtime\\.slightnudge\\repositories\\source-proof"}

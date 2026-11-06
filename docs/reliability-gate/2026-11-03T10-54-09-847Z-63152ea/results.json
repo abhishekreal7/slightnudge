@@ -1,0 +1,328 @@
+{
+  "head": "63152eaba7fbd91bb5041c804c70cfe096d3b759",
+  "productRef": "63152eaba7fbd91bb5041c804c70cfe096d3b759",
+  "testRef": "63152eaba7fbd91bb5041c804c70cfe096d3b759",
+  "fatal": false,
+  "rows": [
+    {
+      "workflow": "warmup-m0-control-lab-full",
+      "api": "REAL",
+      "result": "PASS",
+      "seconds": 80.1
+    },
+    {
+      "workflow": "warmup-m0-control-lab-fit",
+      "api": "REAL",
+      "result": "PASS",
+      "seconds": 8.72
+    },
+    {
+      "workflow": "warmup-m0-overfit-lab-full",
+      "api": "REAL",
+      "result": "PASS",
+      "seconds": 22.23
+    },
+    {
+      "workflow": "warmup-m0-overfit-lab-fit",
+      "api": "REAL",
+      "result": "PASS",
+      "seconds": 6.45
+    },
+    {
+      "workflow": "warmup-manifests",
+      "api": "REAL",
+      "result": "FAIL",
+      "seconds": 0,
+      "invalidManifestServers": [
+        58515
+      ]
+    },
+    {
+      "workflow": "selection-full-regression",
+      "harness": "HARNESS-V3",
+      "api": "REAL",
+      "result": "FAIL",
+      "testPassed": true,
+      "seconds": 84.22,
+      "exitCode": 0,
+      "historical": "docs/editor-load-and-toolbar/selection/round-1-raw.log",
+      "invalidManifestServers": [
+        58515
+      ],
+      "invalidChildServerLogs": []
+    },
+    {
+      "workflow": "selection-full-overfit",
+      "harness": "HARNESS-V3",
+      "api": "REAL",
+      "result": "FAIL",
+      "testPassed": true,
+      "seconds": 75.9,
+      "exitCode": 0,
+      "historical": "docs/editor-load-and-toolbar/selection/round-1-raw.log",
+      "invalidManifestServers": [
+        58515
+      ],
+      "invalidChildServerLogs": []
+    },
+    {
+      "workflow": "selection-fit-regression",
+      "harness": "HARNESS-V3",
+      "api": "REAL",
+      "result": "FAIL",
+      "testPassed": true,
+      "seconds": 119.73,
+      "exitCode": 0,
+      "historical": "docs/editor-load-and-toolbar/selection/round-1-raw.log",
+      "invalidManifestServers": [
+        58515
+      ],
+      "invalidChildServerLogs": []
+    },
+    {
+      "workflow": "selection-fit-overfit",
+      "harness": "HARNESS-V3",
+      "api": "REAL",
+      "result": "FAIL",
+      "testPassed": true,
+      "seconds": 152.25,
+      "exitCode": 0,
+      "historical": "docs/editor-load-and-toolbar/selection/round-1-raw.log",
+      "invalidManifestServers": [
+        58515
+      ],
+      "invalidChildServerLogs": []
+    },
+    {
+      "workflow": "shared-compiler-warmup",
+      "harness": "HARNESS-V3",
+      "api": "REAL",
+      "result": "PASS",
+      "seconds": 100.36
+    },
+    {
+      "workflow": "shared-local-studio",
+      "harness": "HARNESS-V3",
+      "api": "REAL",
+      "result": "PASS",
+      "testPassed": true,
+      "seconds": 93.08,
+      "exitCode": 0,
+      "historical": "docs/security-hardening/shared-workflows.log",
+      "invalidManifestServers": [],
+      "invalidChildServerLogs": []
+    },
+    {
+      "workflow": "shared-local-window",
+      "harness": "HARNESS-V3",
+      "api": "REAL",
+      "result": "TIMEOUT",
+      "testPassed": false,
+      "seconds": 120.86,
+      "exitCode": 1,
+      "historical": "docs/security-hardening/shared-workflows.log",
+      "invalidManifestServers": [],
+      "invalidChildServerLogs": []
+    },
+    {
+      "workflow": "shared-imported-studio",
+      "harness": "HARNESS-V3",
+      "api": "REAL",
+      "result": "HARNESS-ERROR",
+      "seconds": 0,
+      "error": "Previous owned-runtime workflow timed out; refusing to reuse state while an Apply may be unconfirmed"
+    },
+    {
+      "workflow": "shared-imported-window",
+      "harness": "HARNESS-V3",
+      "api": "REAL",
+      "result": "HARNESS-ERROR",
+      "seconds": 0,
+      "error": "Previous owned-runtime workflow timed out; refusing to reuse state while an Apply may be unconfirmed"
+    },
+    {
+      "workflow": "movement",
+      "harness": "HARNESS-V3",
+      "api": "REAL",
+      "result": "PASS",
+      "testPassed": true,
+      "seconds": 131.27,
+      "exitCode": 0,
+      "historical": "docs/center-move-release.log",
+      "invalidManifestServers": [],
+      "invalidChildServerLogs": []
+    },
+    {
+      "workflow": "state-and-transitions",
+      "harness": "HARNESS-V3",
+      "api": "REAL",
+      "result": "FAIL",
+      "testPassed": false,
+      "seconds": 68,
+      "exitCode": 1,
+      "historical": "docs/m1-final-gates.log",
+      "invalidManifestServers": [],
+      "invalidChildServerLogs": []
+    },
+    {
+      "workflow": "responsive",
+      "harness": "HARNESS-V3",
+      "api": "REAL",
+      "result": "PASS",
+      "testPassed": true,
+      "seconds": 130.39,
+      "exitCode": 0,
+      "historical": "docs/responsive-editing-qualification.log",
+      "invalidManifestServers": [],
+      "invalidChildServerLogs": []
+    },
+    {
+      "workflow": "responsive-imported",
+      "harness": "HARNESS-V3",
+      "api": "REAL",
+      "result": "PASS",
+      "testPassed": true,
+      "seconds": 165.94,
+      "exitCode": 0,
+      "historical": "docs/responsive-imported-final.log",
+      "invalidManifestServers": [],
+      "invalidChildServerLogs": []
+    },
+    {
+      "workflow": "appearance-layout",
+      "harness": "HARNESS-V3",
+      "api": "REAL",
+      "result": "TIMEOUT",
+      "testPassed": false,
+      "seconds": 301.03,
+      "exitCode": 1,
+      "historical": "docs/appearance-layout.md",
+      "invalidManifestServers": [],
+      "invalidChildServerLogs": []
+    },
+    {
+      "workflow": "images-local",
+      "harness": "HARNESS-V3",
+      "api": "REAL",
+      "result": "FAIL",
+      "testPassed": false,
+      "seconds": 156.4,
+      "exitCode": 1,
+      "historical": "docs/advanced-image-local-final.log",
+      "invalidManifestServers": [],
+      "invalidChildServerLogs": []
+    },
+    {
+      "workflow": "images-imported",
+      "harness": "HARNESS-V3",
+      "api": "REAL",
+      "result": "PASS",
+      "testPassed": true,
+      "seconds": 289.03,
+      "exitCode": 0,
+      "historical": "docs/advanced-image-imported-final.log",
+      "invalidManifestServers": [],
+      "invalidChildServerLogs": []
+    },
+    {
+      "workflow": "component-actions-local",
+      "harness": "HARNESS-V3",
+      "api": "MOCKED",
+      "result": "TIMEOUT",
+      "testPassed": false,
+      "seconds": 301.45,
+      "exitCode": 1,
+      "historical": "docs/component-actions-local-final.log",
+      "invalidManifestServers": [],
+      "invalidChildServerLogs": []
+    },
+    {
+      "workflow": "component-actions-imported",
+      "harness": "HARNESS-V3",
+      "api": "MOCKED",
+      "result": "TIMEOUT",
+      "testPassed": false,
+      "seconds": 301.29,
+      "exitCode": 1,
+      "historical": "docs/component-actions-imported-final.log",
+      "invalidManifestServers": [],
+      "invalidChildServerLogs": []
+    },
+    {
+      "workflow": "icon-replacement",
+      "harness": "HARNESS-V3",
+      "api": "REAL",
+      "result": "HARNESS-ERROR",
+      "seconds": 0,
+      "error": "Previous owned-runtime workflow timed out; refusing to reuse state while an Apply may be unconfirmed"
+    },
+    {
+      "workflow": "icon-properties",
+      "harness": "HARNESS-V3",
+      "api": "REAL",
+      "result": "TIMEOUT",
+      "testPassed": false,
+      "seconds": 301.14,
+      "exitCode": 1,
+      "historical": "docs/icon-properties-imported-final.log",
+      "invalidManifestServers": [],
+      "invalidChildServerLogs": []
+    },
+    {
+      "workflow": "section-order",
+      "harness": "HARNESS-V3",
+      "api": "REAL",
+      "result": "PASS",
+      "testPassed": true,
+      "seconds": 134.76,
+      "exitCode": 0,
+      "historical": "docs/section-order-final.log",
+      "invalidManifestServers": [],
+      "invalidChildServerLogs": []
+    },
+    {
+      "workflow": "container-move",
+      "harness": "HARNESS-V3",
+      "api": "REAL",
+      "result": "PASS",
+      "testPassed": true,
+      "seconds": 143.05,
+      "exitCode": 0,
+      "historical": "docs/container-move-qualification.log",
+      "invalidManifestServers": [],
+      "invalidChildServerLogs": []
+    },
+    {
+      "workflow": "text-editing",
+      "harness": "HARNESS-V3",
+      "api": "REAL",
+      "result": "FAIL",
+      "testPassed": false,
+      "seconds": 123.7,
+      "exitCode": 1,
+      "historical": "docs/component-text-final.log",
+      "invalidManifestServers": [],
+      "invalidChildServerLogs": []
+    },
+    {
+      "workflow": "history",
+      "harness": "HARNESS-V3",
+      "api": "REAL",
+      "result": "HARNESS-ERROR",
+      "seconds": 0,
+      "error": "Previous owned-runtime workflow timed out; refusing to reuse state while an Apply may be unconfirmed"
+    },
+    {
+      "workflow": "recovery",
+      "harness": "HARNESS-V3",
+      "api": "MOCKED",
+      "result": "FAIL",
+      "testPassed": false,
+      "seconds": 99.87,
+      "exitCode": 1,
+      "historical": "docs/recovery-release-gates.log",
+      "invalidManifestServers": [],
+      "invalidChildServerLogs": []
+    }
+  ]
+}

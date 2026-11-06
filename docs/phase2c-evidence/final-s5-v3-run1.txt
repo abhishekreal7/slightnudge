@@ -1,0 +1,12 @@
+▶ S5: Tailwind v3 Verification and Project Isolation
+  ✔ verifies Tailwind v3 project tokens: standard, theme brand.500, stacked variants, arbitrary values, plugins, and refuses bogus (16066.5791ms)
+  ✔ confirms unchanged existing tokens are never verified in a v3 project during apply (15409.3264ms)
+✔ S5: Tailwind v3 Verification and Project Isolation (31477.0989ms)
+ℹ tests 2
+ℹ suites 1
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 31520.4656

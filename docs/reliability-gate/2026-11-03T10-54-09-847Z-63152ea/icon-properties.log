@@ -1,0 +1,303 @@
+SETUP 1793705972353 START git ["ls-files"]
+SETUP END elapsed 70ms
+Icon properties: local Studio
+HARNESS-V3 NAVIGATION about:blank
+HARNESS-V3 NAVIGATION http://127.0.0.1:56006/editor?panel=inspector&view=fit
+TIMING 1793706001500 REQUEST http://127.0.0.1:56006/editor?panel=inspector&view=fit
+TIMING 1793706001798 RESPONSE 200 http://127.0.0.1:56006/editor?panel=inspector&view=fit
+HARNESS-V3 OP 1793706002850 START waitFor locator('[data-source-ready="true"]')
+TIMING 1793706004885 REQUEST http://127.0.0.1:56006/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A56006&__slightnudge_session=c5d69b6a-a7c4-4a02-8e76-8ac70518975a&__slightnudge_canvas=1
+TIMING 1793706004914 REQUEST http://127.0.0.1:56006/api/slightnudge/responsive
+TIMING 1793706004914 REQUEST http://127.0.0.1:56006/api/slightnudge/responsive
+TIMING 1793706015479 RESPONSE 200 http://127.0.0.1:56006/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A56006&__slightnudge_session=c5d69b6a-a7c4-4a02-8e76-8ac70518975a&__slightnudge_canvas=1
+TIMING 1793706015499 REQUEST http://127.0.0.1:56006/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+TIMING 1793706016460 RESPONSE 200 http://127.0.0.1:56006/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+TIMING 1793706023217 RESPONSE 200 http://127.0.0.1:56006/api/slightnudge/responsive
+TIMING 1793706023559 RESPONSE 200 http://127.0.0.1:56006/api/slightnudge/responsive
+HARNESS-V3 OP 1793706025893 END waitFor locator('[data-source-ready="true"]')
+HARNESS-V3 OP 1793706026114 START selectOption getByRole('combobox', { name: 'Canvas zoom', exact: true })
+HARNESS-V3 OP 1793706026286 END selectOption getByRole('combobox', { name: 'Canvas zoom', exact: true })
+Icon properties: selecting mark
+TIMING 1793706027036 REQUEST http://127.0.0.1:56006/api/slightnudge/preview
+HARNESS-V3 OP 1793706027059 START waitFor getByRole('region', { name: 'Icon appearance', exact: true })
+HARNESS-V3 OP 1793706027369 END waitFor getByRole('region', { name: 'Icon appearance', exact: true })
+TIMING 1793706038144 RESPONSE 200 http://127.0.0.1:56006/api/slightnudge/preview
+HARNESS-V3 OP 1793706038165 START fill getByRole('region', { name: 'Icon appearance', exact: true }).getByRole('textbox', { name: 'Icon size (px)', exact: true })
+HARNESS-V3 OP 1793706038216 END fill getByRole('region', { name: 'Icon appearance', exact: true }).getByRole('textbox', { name: 'Icon size (px)', exact: true })
+HARNESS-V3 OP 1793706038217 START press getByRole('region', { name: 'Icon appearance', exact: true }).getByRole('textbox', { name: 'Icon size (px)', exact: true })
+HARNESS-V3 OP 1793706038265 END press getByRole('region', { name: 'Icon appearance', exact: true }).getByRole('textbox', { name: 'Icon size (px)', exact: true })
+HARNESS-V3 OP 1793706038265 START inputValue getByRole('region', { name: 'Icon appearance', exact: true }).getByRole('textbox', { name: 'Icon size (px)', exact: true })
+HARNESS-V3 OP 1793706038278 END inputValue getByRole('region', { name: 'Icon appearance', exact: true }).getByRole('textbox', { name: 'Icon size (px)', exact: true })
+HARNESS-V3 OP 1793706038279 START fill getByRole('region', { name: 'Icon appearance', exact: true }).getByRole('textbox', { name: 'Icon size (px)', exact: true })
+HARNESS-V3 OP 1793706038310 END fill getByRole('region', { name: 'Icon appearance', exact: true }).getByRole('textbox', { name: 'Icon size (px)', exact: true })
+HARNESS-V3 OP 1793706038310 START press getByRole('region', { name: 'Icon appearance', exact: true }).getByRole('textbox', { name: 'Icon size (px)', exact: true })
+HARNESS-V3 OP 1793706038341 END press getByRole('region', { name: 'Icon appearance', exact: true }).getByRole('textbox', { name: 'Icon size (px)', exact: true })
+HARNESS-V3 OP 1793706038342 START waitFor getByRole('region', { name: 'Icon appearance', exact: true }).getByText('Choose 8–256 px.', { exact: true })
+HARNESS-V3 OP 1793706038359 END waitFor getByRole('region', { name: 'Icon appearance', exact: true }).getByText('Choose 8–256 px.', { exact: true })
+HARNESS-V3 OP 1793706038381 START fill getByRole('region', { name: 'Icon appearance', exact: true }).getByRole('textbox', { name: 'Icon size (px)', exact: true })
+HARNESS-V3 OP 1793706038408 END fill getByRole('region', { name: 'Icon appearance', exact: true }).getByRole('textbox', { name: 'Icon size (px)', exact: true })
+HARNESS-V3 OP 1793706038413 START press getByRole('region', { name: 'Icon appearance', exact: true }).getByRole('textbox', { name: 'Icon size (px)', exact: true })
+TIMING 1793706038564 REQUEST http://127.0.0.1:56006/api/slightnudge/preview
+HARNESS-V3 OP 1793706038668 END press getByRole('region', { name: 'Icon appearance', exact: true }).getByRole('textbox', { name: 'Icon size (px)', exact: true })
+TIMING 1793706042361 RESPONSE 200 http://127.0.0.1:56006/api/slightnudge/preview
+TIMING 1793706043443 REQUEST http://127.0.0.1:56006/api/slightnudge/preview
+HARNESS-V3 OP 1793706043449 START count getByLabel('Editor notice', { exact: true })
+HARNESS-V3 OP 1793706043966 END count getByLabel('Editor notice', { exact: true })
+HARNESS-V3 OP 1793706043967 START fill getByRole('region', { name: 'Icon appearance', exact: true }).getByRole('textbox', { name: 'Icon stroke', exact: true })
+TIMING 1793706046686 RESPONSE 200 http://127.0.0.1:56006/api/slightnudge/preview
+HARNESS-V3 OP 1793706046790 END fill getByRole('region', { name: 'Icon appearance', exact: true }).getByRole('textbox', { name: 'Icon stroke', exact: true })
+HARNESS-V3 OP 1793706046792 START press getByRole('region', { name: 'Icon appearance', exact: true }).getByRole('textbox', { name: 'Icon stroke', exact: true })
+TIMING 1793706046984 REQUEST http://127.0.0.1:56006/api/slightnudge/preview
+HARNESS-V3 OP 1793706047099 END press getByRole('region', { name: 'Icon appearance', exact: true }).getByRole('textbox', { name: 'Icon stroke', exact: true })
+TIMING 1793706050802 RESPONSE 200 http://127.0.0.1:56006/api/slightnudge/preview
+TIMING 1793706051789 REQUEST http://127.0.0.1:56006/api/slightnudge/preview
+HARNESS-V3 OP 1793706051797 START count getByLabel('Editor notice', { exact: true })
+HARNESS-V3 OP 1793706051809 END count getByLabel('Editor notice', { exact: true })
+HARNESS-V3 OP 1793706051810 START fill getByRole('region', { name: 'Icon appearance', exact: true }).getByRole('textbox', { name: 'Icon color', exact: true })
+TIMING 1793706055128 RESPONSE 200 http://127.0.0.1:56006/api/slightnudge/preview
+HARNESS-V3 OP 1793706055651 END fill getByRole('region', { name: 'Icon appearance', exact: true }).getByRole('textbox', { name: 'Icon color', exact: true })
+HARNESS-V3 OP 1793706055654 START press getByRole('region', { name: 'Icon appearance', exact: true }).getByRole('textbox', { name: 'Icon color', exact: true })
+TIMING 1793706055854 REQUEST http://127.0.0.1:56006/api/slightnudge/preview
+HARNESS-V3 OP 1793706055969 END press getByRole('region', { name: 'Icon appearance', exact: true }).getByRole('textbox', { name: 'Icon color', exact: true })
+TIMING 1793706059927 RESPONSE 200 http://127.0.0.1:56006/api/slightnudge/preview
+TIMING 1793706060808 REQUEST http://127.0.0.1:56006/api/slightnudge/preview
+HARNESS-V3 OP 1793706060816 START count getByLabel('Editor notice', { exact: true })
+HARNESS-V3 OP 1793706060834 END count getByLabel('Editor notice', { exact: true })
+Icon properties: three Lucide props staged
+HARNESS-V3 OP 1793706060974 START click getByRole('button', { name: 'Undo', exact: true })
+HARNESS-V3 OP 1793706061341 END click getByRole('button', { name: 'Undo', exact: true })
+TIMING 1793706064530 RESPONSE 200 http://127.0.0.1:56006/api/slightnudge/preview
+TIMING 1793706069413 REQUEST http://127.0.0.1:56006/api/slightnudge/preview
+HARNESS-V3 OP 1793706069446 START click getByRole('button', { name: 'Redo', exact: true })
+HARNESS-V3 OP 1793706069752 END click getByRole('button', { name: 'Redo', exact: true })
+TIMING 1793706072765 RESPONSE 200 http://127.0.0.1:56006/api/slightnudge/preview
+TIMING 1793706076185 REQUEST http://127.0.0.1:56006/api/slightnudge/preview
+Icon properties: selecting native
+TIMING 1793706076802 REQUEST http://127.0.0.1:56006/api/slightnudge/preview
+HARNESS-V3 OP 1793706076814 START waitFor getByRole('region', { name: 'Icon appearance', exact: true })
+HARNESS-V3 OP 1793706077101 END waitFor getByRole('region', { name: 'Icon appearance', exact: true })
+TIMING 1793706082068 RESPONSE 200 http://127.0.0.1:56006/api/slightnudge/preview
+HARNESS-V3 OP 1793706082081 START fill getByRole('region', { name: 'Icon appearance', exact: true }).getByRole('textbox', { name: 'Icon size (px)', exact: true })
+HARNESS-V3 OP 1793706082113 END fill getByRole('region', { name: 'Icon appearance', exact: true }).getByRole('textbox', { name: 'Icon size (px)', exact: true })
+HARNESS-V3 OP 1793706082115 START press getByRole('region', { name: 'Icon appearance', exact: true }).getByRole('textbox', { name: 'Icon size (px)', exact: true })
+TIMING 1793706082307 REQUEST http://127.0.0.1:56006/api/slightnudge/preview
+HARNESS-V3 OP 1793706082422 END press getByRole('region', { name: 'Icon appearance', exact: true }).getByRole('textbox', { name: 'Icon size (px)', exact: true })
+TIMING 1793706085494 RESPONSE 200 http://127.0.0.1:56006/api/slightnudge/preview
+TIMING 1793706086538 REQUEST http://127.0.0.1:56006/api/slightnudge/preview
+HARNESS-V3 OP 1793706086543 START count getByLabel('Editor notice', { exact: true })
+HARNESS-V3 OP 1793706086555 END count getByLabel('Editor notice', { exact: true })
+Icon properties: selecting computed
+HARNESS-V3 OP 1793706086697 START waitFor getByRole('region', { name: 'Icon appearance', exact: true })
+TIMING 1793706087177 REQUEST http://127.0.0.1:56006/api/slightnudge/preview
+HARNESS-V3 OP 1793706087196 END waitFor getByRole('region', { name: 'Icon appearance', exact: true })
+TIMING 1793706092390 RESPONSE 200 http://127.0.0.1:56006/api/slightnudge/preview
+HARNESS-V3 OP 1793706092406 START isDisabled getByRole('region', { name: 'Icon appearance', exact: true }).getByRole('textbox', { name: 'Icon size (px)', exact: true })
+HARNESS-V3 OP 1793706092422 END isDisabled getByRole('region', { name: 'Icon appearance', exact: true }).getByRole('textbox', { name: 'Icon size (px)', exact: true })
+Icon properties: selecting styled
+TIMING 1793706093024 REQUEST http://127.0.0.1:56006/api/slightnudge/preview
+HARNESS-V3 OP 1793706093035 START waitFor getByRole('region', { name: 'Icon appearance', exact: true })
+HARNESS-V3 OP 1793706093323 END waitFor getByRole('region', { name: 'Icon appearance', exact: true })
+TIMING 1793706096318 RESPONSE 200 http://127.0.0.1:56006/api/slightnudge/preview
+HARNESS-V3 OP 1793706096333 START isDisabled getByRole('region', { name: 'Icon appearance', exact: true }).getByRole('textbox', { name: 'Icon size (px)', exact: true })
+HARNESS-V3 OP 1793706096347 END isDisabled getByRole('region', { name: 'Icon appearance', exact: true }).getByRole('textbox', { name: 'Icon size (px)', exact: true })
+Icon properties: native icon and ownership refusals verified
+TIMING 1793706096360 REQUEST http://127.0.0.1:56006/editor?panel=inspector&view=fit
+TIMING 1793706097402 RESPONSE 200 http://127.0.0.1:56006/editor?panel=inspector&view=fit
+HARNESS-V3 OP 1793706097499 START waitFor locator('[data-source-ready="true"]')
+TIMING 1793706098773 REQUEST http://127.0.0.1:56006/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A56006&__slightnudge_session=3f41af25-c7e9-4b29-8809-330e3df9e7d8&__slightnudge_canvas=1
+TIMING 1793706098811 REQUEST http://127.0.0.1:56006/api/slightnudge/responsive
+TIMING 1793706098811 REQUEST http://127.0.0.1:56006/api/slightnudge/responsive
+TIMING 1793706098976 RESPONSE 200 http://127.0.0.1:56006/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A56006&__slightnudge_session=3f41af25-c7e9-4b29-8809-330e3df9e7d8&__slightnudge_canvas=1
+TIMING 1793706099124 REQUEST http://127.0.0.1:56006/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+TIMING 1793706099247 RESPONSE 200 http://127.0.0.1:56006/api/slightnudge/responsive
+TIMING 1793706099339 RESPONSE 200 http://127.0.0.1:56006/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+TIMING 1793706100865 RESPONSE 200 http://127.0.0.1:56006/api/slightnudge/responsive
+HARNESS-V3 OP 1793706102133 END waitFor locator('[data-source-ready="true"]')
+Icon properties: refreshed draft restored
+HARNESS-V3 OP 1793706104954 START click getByRole('button', { name: 'Save changes', exact: true })
+HARNESS-V3 OP 1793706105207 END click getByRole('button', { name: 'Save changes', exact: true })
+TIMING 1793706107964 REQUEST http://127.0.0.1:56006/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A56006&__slightnudge_session=24ea7b9e-9489-4fb7-aca1-07b2348d397c&__slightnudge_canvas=1&__slightnudge_refresh=1636b128-13f7-4c50-bb7b-bf31b6b97dfc
+TIMING 1793706108650 RESPONSE 200 http://127.0.0.1:56006/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A56006&__slightnudge_session=24ea7b9e-9489-4fb7-aca1-07b2348d397c&__slightnudge_canvas=1&__slightnudge_refresh=1636b128-13f7-4c50-bb7b-bf31b6b97dfc
+TIMING 1793706108988 REQUEST http://127.0.0.1:56006/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+TIMING 1793706109186 RESPONSE 304 http://127.0.0.1:56006/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+TIMING 1793706116307 REQUEST http://127.0.0.1:56006/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A56006&__slightnudge_session=ac586095-921f-44af-bf11-e551107ac97a&__slightnudge_canvas=1&__slightnudge_refresh=36b5aca2-32a1-4c19-9bac-c1b327231984
+TIMING 1793706116703 RESPONSE 200 http://127.0.0.1:56006/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A56006&__slightnudge_session=ac586095-921f-44af-bf11-e551107ac97a&__slightnudge_canvas=1&__slightnudge_refresh=36b5aca2-32a1-4c19-9bac-c1b327231984
+TIMING 1793706116719 REQUEST http://127.0.0.1:56006/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+TIMING 1793706116814 RESPONSE 200 http://127.0.0.1:56006/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+Icon properties: selecting mark
+TIMING 1793706120606 REQUEST http://127.0.0.1:56006/api/slightnudge/preview
+HARNESS-V3 OP 1793706120616 START waitFor getByRole('region', { name: 'Icon appearance', exact: true })
+HARNESS-V3 OP 1793706120915 END waitFor getByRole('region', { name: 'Icon appearance', exact: true })
+TIMING 1793706124120 RESPONSE 200 http://127.0.0.1:56006/api/slightnudge/preview
+HARNESS-V3 OP 1793706124322 START click getByRole('button', { name: 'Undo', exact: true })
+HARNESS-V3 OP 1793706124673 END click getByRole('button', { name: 'Undo', exact: true })
+TIMING 1793706126984 REQUEST http://127.0.0.1:56006/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A56006&__slightnudge_session=3bf14b64-8215-433e-a56f-3f4afd346506&__slightnudge_canvas=1&__slightnudge_refresh=5ad6a539-c962-413a-acc9-095b73ac1774
+TIMING 1793706128444 RESPONSE 200 http://127.0.0.1:56006/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A56006&__slightnudge_session=3bf14b64-8215-433e-a56f-3f4afd346506&__slightnudge_canvas=1&__slightnudge_refresh=5ad6a539-c962-413a-acc9-095b73ac1774
+TIMING 1793706128461 REQUEST http://127.0.0.1:56006/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+TIMING 1793706128652 RESPONSE 200 http://127.0.0.1:56006/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+TIMING 1793706133934 REQUEST http://127.0.0.1:56006/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A56006&__slightnudge_session=3fdfd022-2f6d-48a7-b4d5-74119703d1d9&__slightnudge_canvas=1&__slightnudge_refresh=577d7b91-b14a-48f3-a91c-9ba1b33133e6
+TIMING 1793706134328 RESPONSE 200 http://127.0.0.1:56006/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A56006&__slightnudge_session=3fdfd022-2f6d-48a7-b4d5-74119703d1d9&__slightnudge_canvas=1&__slightnudge_refresh=577d7b91-b14a-48f3-a91c-9ba1b33133e6
+TIMING 1793706134345 REQUEST http://127.0.0.1:56006/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+TIMING 1793706134445 RESPONSE 200 http://127.0.0.1:56006/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+PASS icon properties local Studio: nested selection, properties, Escape, invalid/provider/class refusal, Undo/Redo, refresh recovery, Save and exact source Undo
+Icon properties: local window
+HARNESS-V3 NAVIGATION about:blank
+HARNESS-V3 NAVIGATION http://127.0.0.1:56006/editor
+TIMING 1793706137694 REQUEST http://127.0.0.1:56006/editor
+TIMING 1793706138195 RESPONSE 200 http://127.0.0.1:56006/editor
+HARNESS-V3 OP 1793706139242 START waitFor locator('[data-source-ready="true"]')
+TIMING 1793706144570 REQUEST http://127.0.0.1:56006/api/slightnudge/responsive
+TIMING 1793706144570 REQUEST http://127.0.0.1:56006/api/slightnudge/responsive
+TIMING 1793706144666 REQUEST http://127.0.0.1:56006/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A56006&__slightnudge_session=42c557ab-6de3-40fb-8418-125036eefc40
+TIMING 1793706145378 RESPONSE 200 http://127.0.0.1:56006/api/slightnudge/responsive
+TIMING 1793706145667 RESPONSE 200 http://127.0.0.1:56006/api/slightnudge/responsive
+TIMING 1793706146203 RESPONSE 200 http://127.0.0.1:56006/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A56006&__slightnudge_session=42c557ab-6de3-40fb-8418-125036eefc40
+TIMING 1793706146218 REQUEST http://127.0.0.1:56006/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+TIMING 1793706146298 RESPONSE 200 http://127.0.0.1:56006/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+HARNESS-V3 OP 1793706148939 END waitFor locator('[data-source-ready="true"]')
+HARNESS-V3 OP 1793706148994 START click getByRole('button', { name: 'Toggle design panel', exact: true })
+HARNESS-V3 OP 1793706149153 END click getByRole('button', { name: 'Toggle design panel', exact: true })
+Icon properties: selecting mark
+TIMING 1793706149916 REQUEST http://127.0.0.1:56006/api/slightnudge/preview
+HARNESS-V3 OP 1793706149933 START waitFor getByRole('region', { name: 'Icon appearance', exact: true })
+HARNESS-V3 OP 1793706150207 END waitFor getByRole('region', { name: 'Icon appearance', exact: true })
+TIMING 1793706153315 RESPONSE 200 http://127.0.0.1:56006/api/slightnudge/preview
+HARNESS-V3 OP 1793706153336 START fill getByRole('region', { name: 'Icon appearance', exact: true }).getByRole('textbox', { name: 'Icon size (px)', exact: true })
+HARNESS-V3 OP 1793706153369 END fill getByRole('region', { name: 'Icon appearance', exact: true }).getByRole('textbox', { name: 'Icon size (px)', exact: true })
+HARNESS-V3 OP 1793706153369 START press getByRole('region', { name: 'Icon appearance', exact: true }).getByRole('textbox', { name: 'Icon size (px)', exact: true })
+HARNESS-V3 OP 1793706153405 END press getByRole('region', { name: 'Icon appearance', exact: true }).getByRole('textbox', { name: 'Icon size (px)', exact: true })
+HARNESS-V3 OP 1793706153405 START inputValue getByRole('region', { name: 'Icon appearance', exact: true }).getByRole('textbox', { name: 'Icon size (px)', exact: true })
+HARNESS-V3 OP 1793706153414 END inputValue getByRole('region', { name: 'Icon appearance', exact: true }).getByRole('textbox', { name: 'Icon size (px)', exact: true })
+HARNESS-V3 OP 1793706153415 START fill getByRole('region', { name: 'Icon appearance', exact: true }).getByRole('textbox', { name: 'Icon size (px)', exact: true })
+HARNESS-V3 OP 1793706153441 END fill getByRole('region', { name: 'Icon appearance', exact: true }).getByRole('textbox', { name: 'Icon size (px)', exact: true })
+HARNESS-V3 OP 1793706153442 START press getByRole('region', { name: 'Icon appearance', exact: true }).getByRole('textbox', { name: 'Icon size (px)', exact: true })
+HARNESS-V3 OP 1793706153475 END press getByRole('region', { name: 'Icon appearance', exact: true }).getByRole('textbox', { name: 'Icon size (px)', exact: true })
+HARNESS-V3 OP 1793706153475 START waitFor getByRole('region', { name: 'Icon appearance', exact: true }).getByText('Choose 8–256 px.', { exact: true })
+HARNESS-V3 OP 1793706153490 END waitFor getByRole('region', { name: 'Icon appearance', exact: true }).getByText('Choose 8–256 px.', { exact: true })
+HARNESS-V3 OP 1793706153513 START fill getByRole('region', { name: 'Icon appearance', exact: true }).getByRole('textbox', { name: 'Icon size (px)', exact: true })
+HARNESS-V3 OP 1793706153541 END fill getByRole('region', { name: 'Icon appearance', exact: true }).getByRole('textbox', { name: 'Icon size (px)', exact: true })
+HARNESS-V3 OP 1793706153544 START press getByRole('region', { name: 'Icon appearance', exact: true }).getByRole('textbox', { name: 'Icon size (px)', exact: true })
+TIMING 1793706153738 REQUEST http://127.0.0.1:56006/api/slightnudge/preview
+HARNESS-V3 OP 1793706153855 END press getByRole('region', { name: 'Icon appearance', exact: true }).getByRole('textbox', { name: 'Icon size (px)', exact: true })
+TIMING 1793706157314 RESPONSE 200 http://127.0.0.1:56006/api/slightnudge/preview
+TIMING 1793706158672 REQUEST http://127.0.0.1:56006/api/slightnudge/preview
+HARNESS-V3 OP 1793706158677 START count getByLabel('Editor notice', { exact: true })
+HARNESS-V3 OP 1793706158695 END count getByLabel('Editor notice', { exact: true })
+HARNESS-V3 OP 1793706158696 START fill getByRole('region', { name: 'Icon appearance', exact: true }).getByRole('textbox', { name: 'Icon stroke', exact: true })
+TIMING 1793706162133 RESPONSE 200 http://127.0.0.1:56006/api/slightnudge/preview
+HARNESS-V3 OP 1793706162549 END fill getByRole('region', { name: 'Icon appearance', exact: true }).getByRole('textbox', { name: 'Icon stroke', exact: true })
+HARNESS-V3 OP 1793706162552 START press getByRole('region', { name: 'Icon appearance', exact: true }).getByRole('textbox', { name: 'Icon stroke', exact: true })
+TIMING 1793706162728 REQUEST http://127.0.0.1:56006/api/slightnudge/preview
+HARNESS-V3 OP 1793706162850 END press getByRole('region', { name: 'Icon appearance', exact: true }).getByRole('textbox', { name: 'Icon stroke', exact: true })
+TIMING 1793706166683 RESPONSE 200 http://127.0.0.1:56006/api/slightnudge/preview
+TIMING 1793706167735 REQUEST http://127.0.0.1:56006/api/slightnudge/preview
+HARNESS-V3 OP 1793706167742 START count getByLabel('Editor notice', { exact: true })
+HARNESS-V3 OP 1793706167763 END count getByLabel('Editor notice', { exact: true })
+HARNESS-V3 OP 1793706167763 START fill getByRole('region', { name: 'Icon appearance', exact: true }).getByRole('textbox', { name: 'Icon color', exact: true })
+TIMING 1793706171018 RESPONSE 200 http://127.0.0.1:56006/api/slightnudge/preview
+HARNESS-V3 OP 1793706171126 END fill getByRole('region', { name: 'Icon appearance', exact: true }).getByRole('textbox', { name: 'Icon color', exact: true })
+HARNESS-V3 OP 1793706171127 START press getByRole('region', { name: 'Icon appearance', exact: true }).getByRole('textbox', { name: 'Icon color', exact: true })
+TIMING 1793706171347 REQUEST http://127.0.0.1:56006/api/slightnudge/preview
+HARNESS-V3 OP 1793706171465 END press getByRole('region', { name: 'Icon appearance', exact: true }).getByRole('textbox', { name: 'Icon color', exact: true })
+TIMING 1793706175266 RESPONSE 200 http://127.0.0.1:56006/api/slightnudge/preview
+TIMING 1793706176341 REQUEST http://127.0.0.1:56006/api/slightnudge/preview
+HARNESS-V3 OP 1793706176351 START count getByLabel('Editor notice', { exact: true })
+HARNESS-V3 OP 1793706176362 END count getByLabel('Editor notice', { exact: true })
+Icon properties: three Lucide props staged
+HARNESS-V3 OP 1793706176456 START click getByRole('button', { name: 'Undo', exact: true })
+HARNESS-V3 OP 1793706176825 END click getByRole('button', { name: 'Undo', exact: true })
+TIMING 1793706179839 RESPONSE 200 http://127.0.0.1:56006/api/slightnudge/preview
+TIMING 1793706182862 REQUEST http://127.0.0.1:56006/api/slightnudge/preview
+HARNESS-V3 OP 1793706182889 START click getByRole('button', { name: 'Redo', exact: true })
+HARNESS-V3 OP 1793706183263 END click getByRole('button', { name: 'Redo', exact: true })
+TIMING 1793706186968 RESPONSE 200 http://127.0.0.1:56006/api/slightnudge/preview
+TIMING 1793706189927 REQUEST http://127.0.0.1:56006/api/slightnudge/preview
+Icon properties: selecting native
+HARNESS-V3 OP 1793706190056 START waitFor getByRole('region', { name: 'Icon appearance', exact: true })
+TIMING 1793706190585 REQUEST http://127.0.0.1:56006/api/slightnudge/preview
+HARNESS-V3 OP 1793706190595 END waitFor getByRole('region', { name: 'Icon appearance', exact: true })
+TIMING 1793706195511 RESPONSE 200 http://127.0.0.1:56006/api/slightnudge/preview
+HARNESS-V3 OP 1793706195527 START fill getByRole('region', { name: 'Icon appearance', exact: true }).getByRole('textbox', { name: 'Icon size (px)', exact: true })
+HARNESS-V3 OP 1793706195557 END fill getByRole('region', { name: 'Icon appearance', exact: true }).getByRole('textbox', { name: 'Icon size (px)', exact: true })
+HARNESS-V3 OP 1793706195559 START press getByRole('region', { name: 'Icon appearance', exact: true }).getByRole('textbox', { name: 'Icon size (px)', exact: true })
+TIMING 1793706195764 REQUEST http://127.0.0.1:56006/api/slightnudge/preview
+HARNESS-V3 OP 1793706195880 END press getByRole('region', { name: 'Icon appearance', exact: true }).getByRole('textbox', { name: 'Icon size (px)', exact: true })
+TIMING 1793706198708 RESPONSE 200 http://127.0.0.1:56006/api/slightnudge/preview
+TIMING 1793706199652 REQUEST http://127.0.0.1:56006/api/slightnudge/preview
+HARNESS-V3 OP 1793706199660 START count getByLabel('Editor notice', { exact: true })
+HARNESS-V3 OP 1793706199671 END count getByLabel('Editor notice', { exact: true })
+Icon properties: selecting computed
+TIMING 1793706200316 REQUEST http://127.0.0.1:56006/api/slightnudge/preview
+HARNESS-V3 OP 1793706200329 START waitFor getByRole('region', { name: 'Icon appearance', exact: true })
+HARNESS-V3 OP 1793706200628 END waitFor getByRole('region', { name: 'Icon appearance', exact: true })
+TIMING 1793706206647 RESPONSE 200 http://127.0.0.1:56006/api/slightnudge/preview
+HARNESS-V3 OP 1793706206661 START isDisabled getByRole('region', { name: 'Icon appearance', exact: true }).getByRole('textbox', { name: 'Icon size (px)', exact: true })
+HARNESS-V3 OP 1793706206672 END isDisabled getByRole('region', { name: 'Icon appearance', exact: true }).getByRole('textbox', { name: 'Icon size (px)', exact: true })
+Icon properties: selecting styled
+TIMING 1793706207252 REQUEST http://127.0.0.1:56006/api/slightnudge/preview
+HARNESS-V3 OP 1793706207262 START waitFor getByRole('region', { name: 'Icon appearance', exact: true })
+HARNESS-V3 OP 1793706207559 END waitFor getByRole('region', { name: 'Icon appearance', exact: true })
+TIMING 1793706211511 RESPONSE 200 http://127.0.0.1:56006/api/slightnudge/preview
+HARNESS-V3 OP 1793706211528 START isDisabled getByRole('region', { name: 'Icon appearance', exact: true }).getByRole('textbox', { name: 'Icon size (px)', exact: true })
+HARNESS-V3 OP 1793706211541 END isDisabled getByRole('region', { name: 'Icon appearance', exact: true }).getByRole('textbox', { name: 'Icon size (px)', exact: true })
+Icon properties: native icon and ownership refusals verified
+TIMING 1793706211556 REQUEST http://127.0.0.1:56006/editor
+TIMING 1793706211906 RESPONSE 200 http://127.0.0.1:56006/editor
+HARNESS-V3 OP 1793706212006 START waitFor locator('[data-source-ready="true"]')
+TIMING 1793706214549 REQUEST http://127.0.0.1:56006/api/slightnudge/responsive
+TIMING 1793706214552 REQUEST http://127.0.0.1:56006/api/slightnudge/responsive
+TIMING 1793706214649 REQUEST http://127.0.0.1:56006/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A56006&__slightnudge_session=e3c16c7e-ecc1-438f-95d2-f254340d8f84
+TIMING 1793706215498 RESPONSE 200 http://127.0.0.1:56006/api/slightnudge/responsive
+TIMING 1793706215770 RESPONSE 200 http://127.0.0.1:56006/api/slightnudge/responsive
+TIMING 1793706216078 RESPONSE 200 http://127.0.0.1:56006/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A56006&__slightnudge_session=e3c16c7e-ecc1-438f-95d2-f254340d8f84
+TIMING 1793706216096 REQUEST http://127.0.0.1:56006/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+TIMING 1793706216177 RESPONSE 200 http://127.0.0.1:56006/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+HARNESS-V3 OP 1793706218822 END waitFor locator('[data-source-ready="true"]')
+Icon properties: refreshed draft restored
+HARNESS-V3 OP 1793706221525 START click getByRole('button', { name: 'Save changes', exact: true })
+HARNESS-V3 OP 1793706221769 END click getByRole('button', { name: 'Save changes', exact: true })
+TIMING 1793706222831 REQUEST http://127.0.0.1:56006/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A56006&__slightnudge_session=f1837e2d-3972-4615-9589-fc9efb49eb3d&__slightnudge_refresh=74e0d687-8ec4-4f36-9dc4-4cc720698704
+TIMING 1793706224341 RESPONSE 200 http://127.0.0.1:56006/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A56006&__slightnudge_session=f1837e2d-3972-4615-9589-fc9efb49eb3d&__slightnudge_refresh=74e0d687-8ec4-4f36-9dc4-4cc720698704
+TIMING 1793706224360 REQUEST http://127.0.0.1:56006/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+TIMING 1793706224899 RESPONSE 304 http://127.0.0.1:56006/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+TIMING 1793706230889 REQUEST http://127.0.0.1:56006/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A56006&__slightnudge_session=4fda7066-eca1-4c28-afe1-2942fa800707&__slightnudge_refresh=6108830e-5295-4fab-a554-27d6b09430c3
+TIMING 1793706231565 RESPONSE 200 http://127.0.0.1:56006/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A56006&__slightnudge_session=4fda7066-eca1-4c28-afe1-2942fa800707&__slightnudge_refresh=6108830e-5295-4fab-a554-27d6b09430c3
+TIMING 1793706231578 REQUEST http://127.0.0.1:56006/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+TIMING 1793706231753 RESPONSE 200 http://127.0.0.1:56006/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+HARNESS-V3 OP 1793706234231 START click getByRole('button', { name: 'Browse', exact: true })
+HARNESS-V3 OP 1793706234465 END click getByRole('button', { name: 'Browse', exact: true })
+HARNESS-V3 OP 1793706234654 START click getByRole('button', { name: 'Edit', exact: true })
+HARNESS-V3 OP 1793706234766 END click getByRole('button', { name: 'Edit', exact: true })
+HARNESS-V3 OP 1793706234775 START getAttribute getByRole('button', { name: 'Toggle design panel', exact: true })
+HARNESS-V3 OP 1793706234788 END getAttribute getByRole('button', { name: 'Toggle design panel', exact: true })
+HARNESS-V3 OP 1793706234788 START click getByRole('button', { name: 'Toggle design panel', exact: true })
+HARNESS-V3 OP 1793706234933 END click getByRole('button', { name: 'Toggle design panel', exact: true })
+Icon properties: selecting mark
+TIMING 1793706235581 REQUEST http://127.0.0.1:56006/api/slightnudge/preview
+HARNESS-V3 OP 1793706235595 START waitFor getByRole('region', { name: 'Icon appearance', exact: true })
+HARNESS-V3 OP 1793706235888 END waitFor getByRole('region', { name: 'Icon appearance', exact: true })
+TIMING 1793706239068 RESPONSE 200 http://127.0.0.1:56006/api/slightnudge/preview
+HARNESS-V3 OP 1793706239274 START click getByRole('button', { name: 'Undo', exact: true })
+HARNESS-V3 OP 1793706239619 END click getByRole('button', { name: 'Undo', exact: true })
+TIMING 1793706241596 REQUEST http://127.0.0.1:56006/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A56006&__slightnudge_session=e5bba1a3-f4be-4a22-bf8e-8412895b4a0e&__slightnudge_refresh=bd06a126-a1c9-45cd-9c4f-e4f598341e42
+TIMING 1793706242183 RESPONSE 200 http://127.0.0.1:56006/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A56006&__slightnudge_session=e5bba1a3-f4be-4a22-bf8e-8412895b4a0e&__slightnudge_refresh=bd06a126-a1c9-45cd-9c4f-e4f598341e42
+TIMING 1793706242204 REQUEST http://127.0.0.1:56006/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+TIMING 1793706243319 RESPONSE 200 http://127.0.0.1:56006/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+TIMING 1793706248384 REQUEST http://127.0.0.1:56006/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A56006&__slightnudge_session=7342b6ee-c332-40e3-823f-3d3d8fe0d930&__slightnudge_refresh=99e48ef1-0bf1-4468-8d38-401e85bdac7e
+TIMING 1793706248920 RESPONSE 200 http://127.0.0.1:56006/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A56006&__slightnudge_session=7342b6ee-c332-40e3-823f-3d3d8fe0d930&__slightnudge_refresh=99e48ef1-0bf1-4468-8d38-401e85bdac7e
+TIMING 1793706248937 REQUEST http://127.0.0.1:56006/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+TIMING 1793706249119 RESPONSE 200 http://127.0.0.1:56006/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+PASS icon properties local window: nested selection, properties, Escape, invalid/provider/class refusal, Undo/Redo, refresh recovery, Save and exact source Undo
+SETUP 1793706252010 START git ["init","--quiet"]
+SETUP END elapsed 72ms
+SETUP 1793706252082 START git ["-c","core.autocrlf=false","add","app","components","package.json","LICENSE"]
+SETUP END elapsed 74ms
+SETUP 1793706252159 START C:\nvm4w\nodejs\node.exe ["--import","tsx","--input-type=module","-e","const {installNextSourceAdapter}=await import('./lib/slightnudge/next-source-adapter.ts');await installNextSourceAdapter('source-proof');"]
+SETUP END elapsed 286ms
+SETUP 1793706252445 START C:\nvm4w\nodejs\node.exe ["C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.slightnudge\\repositories\\source-proof\\node_modules\\next\\dist\\bin\\next","dev","--help"]
+SETUP END elapsed 181ms
+Disposable source project: generated SaaS; Next.js 16.4.3; Tailwind 4.3.3; installed source adapter; no environment files checked out.
+TIMING 1793706254327 REQUEST http://127.0.0.1:56006/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A56006&__slightnudge_session=7342b6ee-c332-40e3-823f-3d3d8fe0d930&__slightnudge_refresh=99e48ef1-0bf1-4468-8d38-401e85bdac7e&_rsc=t6FvMit4DBKVMidc
+TIMING 1793706255068 RESPONSE 200 http://127.0.0.1:56006/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A56006&__slightnudge_session=7342b6ee-c332-40e3-823f-3d3d8fe0d930&__slightnudge_refresh=99e48ef1-0bf1-4468-8d38-401e85bdac7e&_rsc=t6FvMit4DBKVMidc
+TIMING 1793706255080 REQUEST http://127.0.0.1:56006/_next/static/webpack/app/studio/preview/[pageId]/page.231db8e325b9d2ff.hot-update.js
+TIMING 1793706255190 RESPONSE 200 http://127.0.0.1:56006/_next/static/webpack/app/studio/preview/[pageId]/page.231db8e325b9d2ff.hot-update.js

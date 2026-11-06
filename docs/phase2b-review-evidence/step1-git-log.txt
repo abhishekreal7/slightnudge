@@ -1,0 +1,4 @@
+﻿f7d680a feat(verifier): add Tailwind v3 support with project-scoped resolution and test suite
+7cad99b fix(test): set SLIGHTNUDGE_TEST=1 in history-resilience test workspace
+2892bb5 fix(test): isolate s1, s2, s3, and s5 tests from real project state and ports
+d5a5b4e feat(test): add test isolation overrides and test-server helper

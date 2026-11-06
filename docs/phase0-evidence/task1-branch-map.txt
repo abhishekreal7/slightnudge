@@ -1,0 +1,177 @@
+=== TASK 1: BRANCH MAP EVIDENCE ===
+
+Current Branch: tools/coverage
+Is tools/coverage checked out?: YES
+
+--- BRANCH INVENTORY ---
+Branch: backup-move-fix
+  Last Commit: b4cdb85 | 2026-10-13 02:09:18 +0530 | fix(move): smooth drag reorder feel, hairline drop line, and Option A (Abhishek S B)
+Branch: codex/m0
+  Last Commit: 048664d | 2026-10-11 16:10:07 +0530 | slightnudge: ml-2 -> ml-2.5 in 1-plain-static.tsx (Abhishek S B)
+Branch: diag/move-feel
+  Last Commit: ba48948 | 2026-10-12 03:24:56 +0530 | fix(slightnudge): support negative margins and micro-moves to delete space between button and text (Abhishek S B)
+Branch: feat/studio-full-controls
+  Last Commit: 777c2f4 | 2026-10-20 15:53:29 +0530 | fix(studio): align curved corner pill seamlessly on top of 8px corner curve with zero gap (Abhishek S B)
+Branch: m0-fix
+  Last Commit: ba48948 | 2026-10-12 03:24:56 +0530 | fix(slightnudge): support negative margins and micro-moves to delete space between button and text (Abhishek S B)
+Branch: move-fix
+  Last Commit: 7047221 | 2026-10-13 11:40:27 +0530 | fix(move): smooth drag reorder feel, hairline drop line, same-line AST resolution, and multi-slot safety (Abhishek S B)
+Branch: restore/backend-wiring
+  Last Commit: 18f2187 | 2026-10-20 00:10:01 +0530 | fix(studio): remove misleading dropdown chevron from Edit text button (Abhishek S B)
+Branch: slightnudge
+  Last Commit: 048664d | 2026-10-11 16:10:07 +0530 | slightnudge: ml-2 -> ml-2.5 in 1-plain-static.tsx (Abhishek S B)
+Branch: tools/coverage
+  Last Commit: 23fc56c | 2026-10-20 17:26:22 +0530 | feat(audit): add reproducible coverage study audit suite and seed 42 (Abhishek S B)
+Branch: ui-extras
+  Last Commit: 4dbfb3e | 2026-10-13 01:59:16 +0530 | feat(ui): studio layout focus mode, zoom controls, and style polish (Abhishek S B)
+Branch: ui/layout-focus-mode
+  Last Commit: ba48948 | 2026-10-12 03:24:56 +0530 | fix(slightnudge): support negative margins and micro-moves to delete space between button and text (Abhishek S B)
+
+--- MERGE BASE & AHEAD/BEHIND COMPARISON (relative to feat/studio-full-controls) ---
+Branch: backup-move-fix vs feat/studio-full-controls:
+  Merge Base: ba489484f60794d2ac2efbb16365d5b7d0a18d5d
+  feat/studio-full-controls is ahead by: 21, backup-move-fix is ahead by: 1
+  Status: DIVERGED
+
+Branch: codex/m0 vs feat/studio-full-controls:
+  Merge Base: 048664da2947905fd2de8b7df3cd79bb53edad11
+  feat/studio-full-controls is ahead by: 23, codex/m0 is ahead by: 0
+  Status: MERGED/ANCESTOR of feat/studio-full-controls
+
+Branch: diag/move-feel vs feat/studio-full-controls:
+  Merge Base: ba489484f60794d2ac2efbb16365d5b7d0a18d5d
+  feat/studio-full-controls is ahead by: 21, diag/move-feel is ahead by: 0
+  Status: MERGED/ANCESTOR of feat/studio-full-controls
+
+Branch: m0-fix vs feat/studio-full-controls:
+  Merge Base: ba489484f60794d2ac2efbb16365d5b7d0a18d5d
+  feat/studio-full-controls is ahead by: 21, m0-fix is ahead by: 0
+  Status: MERGED/ANCESTOR of feat/studio-full-controls
+
+Branch: move-fix vs feat/studio-full-controls:
+  Merge Base: 70472214f6e59a77a3365f2b26cd59b568cc5538
+  feat/studio-full-controls is ahead by: 19, move-fix is ahead by: 0
+  Status: MERGED/ANCESTOR of feat/studio-full-controls
+
+Branch: restore/backend-wiring vs feat/studio-full-controls:
+  Merge Base: 18f2187509e6968462b68db7ee4f890febfba944
+  feat/studio-full-controls is ahead by: 8, restore/backend-wiring is ahead by: 0
+  Status: MERGED/ANCESTOR of feat/studio-full-controls
+
+Branch: slightnudge vs feat/studio-full-controls:
+  Merge Base: 048664da2947905fd2de8b7df3cd79bb53edad11
+  feat/studio-full-controls is ahead by: 23, slightnudge is ahead by: 0
+  Status: MERGED/ANCESTOR of feat/studio-full-controls
+
+Branch: tools/coverage vs feat/studio-full-controls:
+  Merge Base: 777c2f4c09369520bbe8d6494b34c9fb553a37b0
+  feat/studio-full-controls is ahead by: 0, tools/coverage is ahead by: 1
+  Status: DESCENDANT of feat/studio-full-controls
+
+Branch: ui-extras vs feat/studio-full-controls:
+  Merge Base: ba489484f60794d2ac2efbb16365d5b7d0a18d5d
+  feat/studio-full-controls is ahead by: 21, ui-extras is ahead by: 1
+  Status: DIVERGED
+
+Branch: ui/layout-focus-mode vs feat/studio-full-controls:
+  Merge Base: ba489484f60794d2ac2efbb16365d5b7d0a18d5d
+  feat/studio-full-controls is ahead by: 21, ui/layout-focus-mode is ahead by: 0
+  Status: MERGED/ANCESTOR of feat/studio-full-controls
+
+
+--- MERGE BASE & AHEAD/BEHIND COMPARISON (relative to restore/backend-wiring) ---
+Branch: backup-move-fix vs restore/backend-wiring:
+  Merge Base: ba489484f60794d2ac2efbb16365d5b7d0a18d5d
+  restore/backend-wiring is ahead by: 13, backup-move-fix is ahead by: 1
+  Status: DIVERGED
+
+Branch: codex/m0 vs restore/backend-wiring:
+  Merge Base: 048664da2947905fd2de8b7df3cd79bb53edad11
+  restore/backend-wiring is ahead by: 15, codex/m0 is ahead by: 0
+  Status: MERGED/ANCESTOR of restore/backend-wiring
+
+Branch: diag/move-feel vs restore/backend-wiring:
+  Merge Base: ba489484f60794d2ac2efbb16365d5b7d0a18d5d
+  restore/backend-wiring is ahead by: 13, diag/move-feel is ahead by: 0
+  Status: MERGED/ANCESTOR of restore/backend-wiring
+
+Branch: feat/studio-full-controls vs restore/backend-wiring:
+  Merge Base: 18f2187509e6968462b68db7ee4f890febfba944
+  restore/backend-wiring is ahead by: 0, feat/studio-full-controls is ahead by: 8
+  Status: DESCENDANT of restore/backend-wiring
+
+Branch: m0-fix vs restore/backend-wiring:
+  Merge Base: ba489484f60794d2ac2efbb16365d5b7d0a18d5d
+  restore/backend-wiring is ahead by: 13, m0-fix is ahead by: 0
+  Status: MERGED/ANCESTOR of restore/backend-wiring
+
+Branch: move-fix vs restore/backend-wiring:
+  Merge Base: 70472214f6e59a77a3365f2b26cd59b568cc5538
+  restore/backend-wiring is ahead by: 11, move-fix is ahead by: 0
+  Status: MERGED/ANCESTOR of restore/backend-wiring
+
+Branch: slightnudge vs restore/backend-wiring:
+  Merge Base: 048664da2947905fd2de8b7df3cd79bb53edad11
+  restore/backend-wiring is ahead by: 15, slightnudge is ahead by: 0
+  Status: MERGED/ANCESTOR of restore/backend-wiring
+
+Branch: tools/coverage vs restore/backend-wiring:
+  Merge Base: 18f2187509e6968462b68db7ee4f890febfba944
+  restore/backend-wiring is ahead by: 0, tools/coverage is ahead by: 9
+  Status: DESCENDANT of restore/backend-wiring
+
+Branch: ui-extras vs restore/backend-wiring:
+  Merge Base: ba489484f60794d2ac2efbb16365d5b7d0a18d5d
+  restore/backend-wiring is ahead by: 13, ui-extras is ahead by: 1
+  Status: DIVERGED
+
+Branch: ui/layout-focus-mode vs restore/backend-wiring:
+  Merge Base: ba489484f60794d2ac2efbb16365d5b7d0a18d5d
+  restore/backend-wiring is ahead by: 13, ui/layout-focus-mode is ahead by: 0
+  Status: MERGED/ANCESTOR of restore/backend-wiring
+
+
+--- UNCOMMITTED CHANGES (git status --porcelain) ---
+?? docs/coverage-study.md
+?? docs/phase0-evidence/
+?? scratch/actual-canvas-comparison.png
+?? scratch/analyze-40.js
+?? scratch/analyze-partials-wilson.js
+?? scratch/analyzed-40.json
+?? scratch/audit-results-detailed.json
+?? scratch/classify-unsupported.js
+?? scratch/compute-repo-mix.js
+?? scratch/curved-pill-test.png
+?? scratch/diffs/
+?? scratch/evaluate-40-detailed.ts
+?? scratch/fetch-diffs.js
+?? scratch/full-canvas-demo.png
+?? scratch/inspect-corner.js
+?? scratch/inspect-partials.js
+?? scratch/inspect-unsupported.js
+?? scratch/parse-study.js
+?? scratch/parsed-rows.json
+?? scratch/partial-breakdown.json
+?? scratch/perfect-fit-test.png
+?? scratch/pill-comparison.png
+?? scratch/pill-zoom.png
+?? scratch/print-disagreements.js
+?? scratch/print-reproduced.js
+?? scratch/repo-stats.json
+?? scratch/sample-40.js
+?? scratch/sampled-40.json
+?? scratch/studio-active-drag.png
+?? scratch/studio-hover-corner.png
+?? scratch/studio-idle-corner.png
+?? scratch/summarize-audit.js
+?? scratch/test-canvas-actual.js
+?? scratch/test-corner-drag.js
+?? scratch/test-engine-on-samples.ts
+?? scratch/test-full-demo.js
+?? scratch/test-perfect-fit.js
+?? scratch/test-pill-zoom.js
+?? scratch/test-pill.js
+?? scratch/test-zoomed-fit.js
+?? scratch/unsupported-classification.json
+?? scratch/zoom-corner-inspect.png
+?? scratch/zoomed-fit.png

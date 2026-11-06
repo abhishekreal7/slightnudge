@@ -1,0 +1,55 @@
+{
+  "head": "c72c47bbd7e82d616ad7ed1fb09dc3ec3d92f7b1",
+  "productRef": "c72c47bbd7e82d616ad7ed1fb09dc3ec3d92f7b1",
+  "testRef": "c72c47bbd7e82d616ad7ed1fb09dc3ec3d92f7b1",
+  "fatal": false,
+  "rows": [
+    {
+      "workflow": "shared-compiler-warmup",
+      "harness": "HARNESS-V3",
+      "api": "REAL",
+      "result": "PASS",
+      "seconds": 125.41
+    },
+    {
+      "workflow": "shared-local-studio",
+      "harness": "HARNESS-V3",
+      "api": "REAL",
+      "result": "PASS",
+      "seconds": 112.86,
+      "exitCode": 0,
+      "historical": "docs/security-hardening/shared-workflows.log",
+      "invalidManifestServers": []
+    },
+    {
+      "workflow": "shared-local-window",
+      "harness": "HARNESS-V3",
+      "api": "REAL",
+      "result": "PASS",
+      "seconds": 105.31,
+      "exitCode": 0,
+      "historical": "docs/security-hardening/shared-workflows.log",
+      "invalidManifestServers": []
+    },
+    {
+      "workflow": "shared-imported-studio",
+      "harness": "HARNESS-V3",
+      "api": "REAL",
+      "result": "FAIL",
+      "seconds": 95.79,
+      "exitCode": 1,
+      "historical": "docs/security-hardening/shared-workflows.log",
+      "invalidManifestServers": []
+    },
+    {
+      "workflow": "shared-imported-window",
+      "harness": "HARNESS-V3",
+      "api": "REAL",
+      "result": "TIMEOUT",
+      "seconds": 39.73,
+      "exitCode": 1,
+      "historical": "docs/security-hardening/shared-workflows.log",
+      "invalidManifestServers": []
+    }
+  ]
+}

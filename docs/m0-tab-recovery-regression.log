@@ -1,0 +1,42 @@
+
+> slightnudge@1.0.0 test:recovery
+> tsx test/apply-client-recovery.test.ts && tsx test/apply-denial.test.ts && tsx test/apply-outcome.test.ts && tsx test/apply-review-race.test.ts && tsx test/apply-crash-recovery.test.ts && tsx test/source-operation-lock.test.ts && tsx test/token-undo.test.ts && tsx test/undo-recovery.test.ts && tsx test/undo-client-recovery.test.ts
+
+PASS: client lost-response reconciliation, unknown outcome, read-only retry, restarted-session authorization, and changed-source result
+PASS: pre-write authorization denial, preserved review, no automatic write retry, explicit authorized Apply
+PASS: Apply outcome recovery (duplicate/concurrent requests, process restart, status auth/origin, no snapshots, outside edits, Undo, grouped receipts, project/file scope)
+PASS: 4 Apply race cases (late outside edit, normal Apply, exact Undo, discard during validation; disposable source)
+PASS: crash boundaries; no replay; exact Undo; grouped recovery; unrelated history preserved; conflict refusal; project/file scope; expiry/cache loss; history I/O failure; concurrent reconciliation
+PASS: live-owner exclusion, dead/reused-PID recovery, live worker-thread exclusion, 18 competing processes without overlapping mutation/lost updates, synchronous nesting
+🧪 RUNNING TOKEN-LEVEL UNDO TEST SUITE
+--- Test (j): Exact-match restores byte-for-byte ---
+  ✅ [PASS] (j) Exact match restores byte for byte
+--- Test (a): Prettier reformat preserved on undo ---
+  ✅ [PASS] (a) Prettier reformat preserved on undo
+--- Test (b): Unrelated file edit preserved ---
+  ✅ [PASS] (b) Unrelated file edit preserved
+--- Test (c): Other classes on same element preserved ---
+  ✅ [PASS] (c) Other classes on same element preserved
+--- Test (d): User changed same token -> refuse with manual instructions ---
+  ✅ [PASS] (d) User changed same token refused with instructions
+--- Test (e): Element deleted -> refuse ---
+  ✅ [PASS] (e) Element deleted refused
+--- Test (f): Two identical elements ambiguous -> refuse ---
+  ✅ [PASS] (f) Two identical elements ambiguous refused
+--- Test (g): File deleted -> clear error ---
+  ✅ [PASS] (g) File deleted returned clear error
+--- Test (h): Stacked edits on one element ---
+  ✅ [PASS] (h) Stacked edits on one element verified
+--- Test (i): Path escaping project root refused ---
+  ✅ [PASS] (i) Path escaping project root refused
+--- Test (k): Atomic write failure leaves file unchanged and clean ---
+  ✅ [PASS] (k) Atomic write failure leaves file unchanged and clean
+
+🎉 ALL 12 TOKEN-LEVEL UNDO TESTS PASSED!
+
+PASS: duplicate bound Undo retains the older accepted edit
+PASS: required target, authorization, scope, read-only status, and historical receipts
+PASS: eight real process-exit cases; exact and token Undo preserve outside edits, recover receipts, and block conflicts
+PASS: an obsolete proposal cannot Undo an extended edit group
+PASS: unrelated history growth preserves unfinished Undo recovery
+PASS: bound client Undo, lost-response recovery, read-only retries, restarted authorization, explicit retry, conflict, and denied write

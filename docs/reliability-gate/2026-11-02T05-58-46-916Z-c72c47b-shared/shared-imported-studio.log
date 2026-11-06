@@ -1,0 +1,238 @@
+SETUP 1793599474712 START git ["ls-files"]
+SETUP END elapsed 35ms
+HARNESS-V3 NAVIGATION about:blank
+HARNESS-V3 NAVIGATION http://127.0.0.1:61023/editor/source-proof?preview=http%3A%2F%2F127.0.0.1%3A61024&panel=inspector
+TIMING 1793599474901 REQUEST http://127.0.0.1:61023/editor/source-proof?preview=http%3A%2F%2F127.0.0.1%3A61024&panel=inspector
+TIMING 1793599475478 RESPONSE 200 http://127.0.0.1:61023/editor/source-proof?preview=http%3A%2F%2F127.0.0.1%3A61024&panel=inspector
+HARNESS-V3 OP 1793599475706 START waitFor locator('[data-source-ready="true"]')
+TIMING 1793599477563 REQUEST http://127.0.0.1:61023/api/slightnudge/repositories/source-proof
+TIMING 1793599477564 REQUEST http://127.0.0.1:61023/api/slightnudge/repositories/source-proof
+TIMING 1793599480463 RESPONSE 200 http://127.0.0.1:61023/api/slightnudge/repositories/source-proof
+TIMING 1793599480622 RESPONSE 200 http://127.0.0.1:61023/api/slightnudge/repositories/source-proof
+TIMING 1793599480629 REQUEST http://127.0.0.1:61023/api/slightnudge/repositories/source-proof/preview-check
+TIMING 1793599488101 RESPONSE 200 http://127.0.0.1:61023/api/slightnudge/repositories/source-proof/preview-check
+TIMING 1793599488126 REQUEST http://127.0.0.1:61024/?__slightnudge_session=a5bdd922-ddc0-45bb-86aa-1cee103a1458&__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A61023&__slightnudge_draft=1
+TIMING 1793599488269 RESPONSE 200 http://127.0.0.1:61024/?__slightnudge_session=a5bdd922-ddc0-45bb-86aa-1cee103a1458&__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A61023&__slightnudge_draft=1
+TIMING 1793599490845 REQUEST http://127.0.0.1:61023/api/slightnudge/responsive
+HARNESS-V3 OP 1793599490956 END waitFor locator('[data-source-ready="true"]')
+HARNESS-V3 OP 1793599490958 START selectOption getByRole('combobox', { name: 'Canvas zoom', exact: true })
+HARNESS-V3 OP 1793599490995 END selectOption getByRole('combobox', { name: 'Canvas zoom', exact: true })
+TIMING 1793599491059 RESPONSE 200 http://127.0.0.1:61023/api/slightnudge/responsive
+TIMING 1793599491608 REQUEST http://127.0.0.1:61023/api/slightnudge/responsive
+TIMING 1793599491609 REQUEST http://127.0.0.1:61023/api/slightnudge/preview
+HARNESS-V3 OP 1793599491621 START waitFor getByRole('region', { name: 'Component properties', exact: true }).getByText('This instance', { exact: true })
+TIMING 1793599492555 RESPONSE 200 http://127.0.0.1:61023/api/slightnudge/preview
+HARNESS-V3 OP 1793599492616 END waitFor getByRole('region', { name: 'Component properties', exact: true }).getByText('This instance', { exact: true })
+HARNESS-V3 OP 1793599492617 START waitFor getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop label', { exact: true })
+HARNESS-V3 OP 1793599492629 END waitFor getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop label', { exact: true })
+HARNESS-V3 OP 1793599492630 START fill getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop label', { exact: true })
+TIMING 1793599492645 RESPONSE 200 http://127.0.0.1:61023/api/slightnudge/responsive
+HARNESS-V3 OP 1793599492795 END fill getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop label', { exact: true })
+HARNESS-V3 OP 1793599492800 START press getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop label', { exact: true })
+TIMING 1793599492921 REQUEST http://127.0.0.1:61023/api/slightnudge/preview
+HARNESS-V3 OP 1793599492983 END press getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop label', { exact: true })
+TIMING 1793599494561 RESPONSE 200 http://127.0.0.1:61023/api/slightnudge/preview
+TIMING 1793599495105 REQUEST http://127.0.0.1:61023/api/slightnudge/preview
+HARNESS-V3 OP 1793599495157 START selectOption getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop variant', { exact: true })
+TIMING 1793599496067 RESPONSE 200 http://127.0.0.1:61023/api/slightnudge/preview
+TIMING 1793599496557 REQUEST http://127.0.0.1:61023/api/slightnudge/preview
+HARNESS-V3 OP 1793599496557 END selectOption getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop variant', { exact: true })
+TIMING 1793599498433 RESPONSE 200 http://127.0.0.1:61023/api/slightnudge/preview
+TIMING 1793599498951 REQUEST http://127.0.0.1:61023/api/slightnudge/preview
+HARNESS-V3 OP 1793599498998 START selectOption getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop disabled', { exact: true })
+TIMING 1793599499829 RESPONSE 200 http://127.0.0.1:61023/api/slightnudge/preview
+TIMING 1793599500317 REQUEST http://127.0.0.1:61023/api/slightnudge/preview
+HARNESS-V3 OP 1793599500317 END selectOption getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop disabled', { exact: true })
+TIMING 1793599502204 RESPONSE 200 http://127.0.0.1:61023/api/slightnudge/preview
+TIMING 1793599502690 REQUEST http://127.0.0.1:61023/api/slightnudge/preview
+HARNESS-V3 OP 1793599502730 START selectOption getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop disabled', { exact: true })
+TIMING 1793599503625 RESPONSE 200 http://127.0.0.1:61023/api/slightnudge/preview
+TIMING 1793599504077 REQUEST http://127.0.0.1:61023/api/slightnudge/preview
+HARNESS-V3 OP 1793599504077 END selectOption getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop disabled', { exact: true })
+TIMING 1793599505899 RESPONSE 200 http://127.0.0.1:61023/api/slightnudge/preview
+TIMING 1793599506411 REQUEST http://127.0.0.1:61023/api/slightnudge/preview
+TIMING 1793599506525 REQUEST http://127.0.0.1:61023/api/slightnudge/repositories/source-proof/inspect
+TIMING 1793599507471 RESPONSE 200 http://127.0.0.1:61023/api/slightnudge/preview
+TIMING 1793599513659 RESPONSE 200 http://127.0.0.1:61023/api/slightnudge/repositories/source-proof/inspect
+TIMING 1793599513660 REQUEST http://127.0.0.1:61023/api/slightnudge/preview
+TIMING 1793599514665 RESPONSE 200 http://127.0.0.1:61023/api/slightnudge/preview
+TIMING 1793599515445 REQUEST http://127.0.0.1:61023/api/slightnudge/preview
+TIMING 1793599517274 RESPONSE 200 http://127.0.0.1:61023/api/slightnudge/preview
+TIMING 1793599517772 REQUEST http://127.0.0.1:61023/api/slightnudge/preview
+TIMING 1793599518119 REQUEST http://127.0.0.1:61023/api/slightnudge/preview
+TIMING 1793599519598 RESPONSE 200 http://127.0.0.1:61023/api/slightnudge/preview
+HARNESS-V3 OP 1793599519609 START inputValue getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop label', { exact: true })
+HARNESS-V3 OP 1793599519620 END inputValue getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop label', { exact: true })
+HARNESS-V3 OP 1793599519620 START fill getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop label', { exact: true })
+HARNESS-V3 OP 1793599519648 END fill getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop label', { exact: true })
+HARNESS-V3 OP 1793599519649 START press getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop label', { exact: true })
+TIMING 1793599519757 REQUEST http://127.0.0.1:61023/api/slightnudge/preview
+HARNESS-V3 OP 1793599519818 END press getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop label', { exact: true })
+TIMING 1793599521700 RESPONSE 200 http://127.0.0.1:61023/api/slightnudge/preview
+TIMING 1793599522221 REQUEST http://127.0.0.1:61023/api/slightnudge/preview
+TIMING 1793599522563 REQUEST http://127.0.0.1:61023/api/slightnudge/preview
+HARNESS-V3 OP 1793599522569 START waitFor getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop to', { exact: true })
+TIMING 1793599524247 RESPONSE 200 http://127.0.0.1:61023/api/slightnudge/preview
+HARNESS-V3 OP 1793599524528 END waitFor getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop to', { exact: true })
+HARNESS-V3 OP 1793599524529 START fill getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop to', { exact: true })
+HARNESS-V3 OP 1793599524558 END fill getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop to', { exact: true })
+HARNESS-V3 OP 1793599524561 START press getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop to', { exact: true })
+TIMING 1793599524669 REQUEST http://127.0.0.1:61023/api/slightnudge/preview
+HARNESS-V3 OP 1793599524739 END press getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop to', { exact: true })
+TIMING 1793599526675 RESPONSE 200 http://127.0.0.1:61023/api/slightnudge/preview
+TIMING 1793599527139 REQUEST http://127.0.0.1:61023/api/slightnudge/preview
+TIMING 1793599527191 REQUEST http://127.0.0.1:61023/editor/source-proof?preview=http%3A%2F%2F127.0.0.1%3A61024&panel=inspector
+TIMING 1793599527336 REQUEST http://127.0.0.1:61023/api/slightnudge/responsive
+TIMING 1793599528688 RESPONSE 200 http://127.0.0.1:61023/editor/source-proof?preview=http%3A%2F%2F127.0.0.1%3A61024&panel=inspector
+HARNESS-V3 OP 1793599528895 START waitFor locator('[data-source-ready="true"]')
+TIMING 1793599531381 REQUEST http://127.0.0.1:61023/api/slightnudge/repositories/source-proof
+TIMING 1793599531383 REQUEST http://127.0.0.1:61023/api/slightnudge/repositories/source-proof
+TIMING 1793599536066 RESPONSE 200 http://127.0.0.1:61023/api/slightnudge/repositories/source-proof
+TIMING 1793599536255 RESPONSE 200 http://127.0.0.1:61023/api/slightnudge/repositories/source-proof
+TIMING 1793599536261 REQUEST http://127.0.0.1:61023/api/slightnudge/repositories/source-proof/preview-check
+TIMING 1793599536469 RESPONSE 200 http://127.0.0.1:61023/api/slightnudge/repositories/source-proof/preview-check
+TIMING 1793599536490 REQUEST http://127.0.0.1:61024/?__slightnudge_session=059d8a17-4e21-43d8-8a0f-52b74a730bc8&__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A61023&__slightnudge_draft=1
+TIMING 1793599536591 RESPONSE 200 http://127.0.0.1:61024/?__slightnudge_session=059d8a17-4e21-43d8-8a0f-52b74a730bc8&__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A61023&__slightnudge_draft=1
+TIMING 1793599539065 REQUEST http://127.0.0.1:61023/api/slightnudge/responsive
+HARNESS-V3 OP 1793599539205 END waitFor locator('[data-source-ready="true"]')
+TIMING 1793599539324 RESPONSE 200 http://127.0.0.1:61023/api/slightnudge/responsive
+HARNESS-V3 OP 1793599543043 START click getByRole('button', { name: 'Save changes', exact: true })
+HARNESS-V3 OP 1793599543265 END click getByRole('button', { name: 'Save changes', exact: true })
+TIMING 1793599548041 REQUEST http://127.0.0.1:61024/?__slightnudge_session=6313f763-ff94-4692-a094-1ce0b481d65b&__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A61023&__slightnudge_draft=1&__slightnudge_refresh=e7fbbd8d-3c78-48f0-9aa5-a1c4c090cfb9
+TIMING 1793599548679 RESPONSE 200 http://127.0.0.1:61024/?__slightnudge_session=6313f763-ff94-4692-a094-1ce0b481d65b&__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A61023&__slightnudge_draft=1&__slightnudge_refresh=e7fbbd8d-3c78-48f0-9aa5-a1c4c090cfb9
+TIMING 1793599551854 REQUEST http://127.0.0.1:61024/?__slightnudge_session=e650d83c-6030-4830-a9db-a8f645a0e10f&__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A61023&__slightnudge_draft=1&__slightnudge_refresh=b4fb2589-389b-4da4-a3a3-7db895a60873
+TIMING 1793599554109 RESPONSE 200 http://127.0.0.1:61024/?__slightnudge_session=e650d83c-6030-4830-a9db-a8f645a0e10f&__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A61023&__slightnudge_draft=1&__slightnudge_refresh=b4fb2589-389b-4da4-a3a3-7db895a60873
+TIMING 1793599557260 REQUEST http://127.0.0.1:61023/api/slightnudge/responsive
+TIMING 1793599557261 REQUEST http://127.0.0.1:61023/api/slightnudge/preview
+HARNESS-V3 OP 1793599557268 START waitFor getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop label', { exact: true })
+TIMING 1793599558248 RESPONSE 200 http://127.0.0.1:61023/api/slightnudge/preview
+TIMING 1793599558336 RESPONSE 200 http://127.0.0.1:61023/api/slightnudge/responsive
+HARNESS-V3 OP 1793599558730 END waitFor getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop label', { exact: true })
+HARNESS-V3 OP 1793599558924 START click getByRole('button', { name: 'Undo', exact: true })
+HARNESS-V3 OP 1793599559131 END click getByRole('button', { name: 'Undo', exact: true })
+TIMING 1793599562393 REQUEST http://127.0.0.1:61023/editor/source-proof?preview=http%3A%2F%2F127.0.0.1%3A61024&panel=inspector&_rsc=wt2CNLBkr5Lz8rr2
+TIMING 1793599563327 REQUEST http://127.0.0.1:61024/?__slightnudge_session=9d2f34af-03ee-4be8-9f56-196436009079&__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A61023&__slightnudge_draft=1&__slightnudge_refresh=016ff5b5-e889-49fb-ab2e-89a232b95127
+TIMING 1793599563397 REQUEST http://127.0.0.1:61023/api/slightnudge/responsive
+TIMING 1793599563576 RESPONSE 200 http://127.0.0.1:61023/editor/source-proof?preview=http%3A%2F%2F127.0.0.1%3A61024&panel=inspector&_rsc=wt2CNLBkr5Lz8rr2
+TIMING 1793599563665 RESPONSE 200 http://127.0.0.1:61024/?__slightnudge_session=9d2f34af-03ee-4be8-9f56-196436009079&__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A61023&__slightnudge_draft=1&__slightnudge_refresh=016ff5b5-e889-49fb-ab2e-89a232b95127
+TIMING 1793599563849 RESPONSE 200 http://127.0.0.1:61023/api/slightnudge/responsive
+GATE_BROWSER_PAGE_ERROR http://127.0.0.1:61023/editor/source-proof?preview=http%3A%2F%2F127.0.0.1%3A61024&panel=inspector
+Error: Hydration failed because the server rendered text didn't match the client. As a result this tree will be regenerated on the client. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <ErrorBoundary errorComponent={undefined} errorStyles={undefined} errorScripts={undefined}>
+      <LoadingBoundary name="/" loading={null}>
+        <HTTPAccessFallbackBoundary notFound={{...}} forbidden={undefined} unauthorized={undefined}>
+          <HTTPAccessFallbackErrorBoundary pathname="/" notFound={{...}} forbidden={undefined} unauthorized={undefined} ...>
+            <RedirectBoundary>
+              <RedirectErrorBoundary router={{...}}>
+                <InnerLayoutRouter url={"/?__slig..."} tree={[...]} params={{}} renderTree={{...}} segmentPath={[...]} ...>
+                  <SegmentViewNode type="page" pagePath="page.tsx">
+                    <SegmentTrieNode>
+                    <ClientPageRoot Component={function Page} serverProvidedParams={{...}}>
+                      <Page params={Promise} searchParams={Promise}>
+                        <main data-source-file="app/page.tsx" data-source-line="1" data-source-column="104" ...>
+                          <h1>
+                          <Action data-slightnudge-callsite={"[\"app/p..."} label="Same">
+                            <button
+                              data-source-file="app/InstanceAction.tsx"
+                              data-source-line="2"
+                              data-source-column="133"
++                             data-slightnudge-callsite={"[\"app/page.tsx\",2,\"79d4ad12c3bdd2b3b90e0250bc4c0d0d2477f..."}
+-                             data-slightnudge-callsite={"[\"app/page.tsx\",2,\"47955bde6cf1a9cbe0bb4698e8c890f4c3b50..."}
+                              disabled={false}
+                              className="bg-green-600 p-4 text-white"
+                              onClick={function onClick}
+                            >
++                             Same
+-                             Only first
+                          ...
+                  ...
+                ...
+    ...
+
+    at throwOnHydrationMismatch (webpack-internal:///(app-pages-browser)/../../../../../../../../../node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:5548:11)
+    at prepareToHydrateHostInstance (webpack-internal:///(app-pages-browser)/../../../../../../../../../node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:5644:21)
+    at completeWork (webpack-internal:///(app-pages-browser)/../../../../../../../../../node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:13010:15)
+    at runWithFiberInDEV (webpack-internal:///(app-pages-browser)/../../../../../../../../../node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:1046:30)
+    at completeUnitOfWork (webpack-internal:///(app-pages-browser)/../../../../../../../../../node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:19324:19)
+    at performUnitOfWork (webpack-internal:///(app-pages-browser)/../../../../../../../../../node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:19197:11)
+    at workLoopConcurrentByScheduler (webpack-internal:///(app-pages-browser)/../../../../../../../../../node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:19174:9)
+    at renderRootConcurrent (webpack-internal:///(app-pages-browser)/../../../../../../../../../node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:19156:15)
+    at performWorkOnRoot (webpack-internal:///(app-pages-browser)/../../../../../../../../../node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:18015:11)
+    at performWorkOnRootViaSchedulerTask (webpack-internal:///(app-pages-browser)/../../../../../../../../../node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:20669:7)
+    at MessagePort.performWorkUntilDeadline (webpack-internal:///(app-pages-browser)/../../../../../../../../../node_modules/next/dist/compiled/scheduler/cjs/scheduler.development.js:45:48)
+PASS shared instances imported Studio: identical callers, text/inline, destination, enabled state, variant, refresh, Save, exact Undo
+C:\dev\vibecheck\scratch\g\4f4eeb7f\worktree\test\gate-shared-runner.v3.ts:73
+ if(errors.length)throw Error(errors.join('\n'));
+                        ^
+
+
+Error: Error: Hydration failed because the server rendered text didn't match the client. As a result this tree will be regenerated on the client. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <ErrorBoundary errorComponent={undefined} errorStyles={undefined} errorScripts={undefined}>
+      <LoadingBoundary name="/" loading={null}>
+        <HTTPAccessFallbackBoundary notFound={{...}} forbidden={undefined} unauthorized={undefined}>
+          <HTTPAccessFallbackErrorBoundary pathname="/" notFound={{...}} forbidden={undefined} unauthorized={undefined} ...>
+            <RedirectBoundary>
+              <RedirectErrorBoundary router={{...}}>
+                <InnerLayoutRouter url={"/?__slig..."} tree={[...]} params={{}} renderTree={{...}} segmentPath={[...]} ...>
+                  <SegmentViewNode type="page" pagePath="page.tsx">
+                    <SegmentTrieNode>
+                    <ClientPageRoot Component={function Page} serverProvidedParams={{...}}>
+                      <Page params={Promise} searchParams={Promise}>
+                        <main data-source-file="app/page.tsx" data-source-line="1" data-source-column="104" ...>
+                          <h1>
+                          <Action data-slightnudge-callsite={"[\"app/p..."} label="Same">
+                            <button
+                              data-source-file="app/InstanceAction.tsx"
+                              data-source-line="2"
+                              data-source-column="133"
++                             data-slightnudge-callsite={"[\"app/page.tsx\",2,\"79d4ad12c3bdd2b3b90e0250bc4c0d0d2477f..."}
+-                             data-slightnudge-callsite={"[\"app/page.tsx\",2,\"47955bde6cf1a9cbe0bb4698e8c890f4c3b50..."}
+                              disabled={false}
+                              className="bg-green-600 p-4 text-white"
+                              onClick={function onClick}
+                            >
++                             Same
+-                             Only first
+                          ...
+                  ...
+                ...
+    ...
+
+    at throwOnHydrationMismatch (webpack-internal:///(app-pages-browser)/../../../../../../../../../node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:5548:11)
+    at prepareToHydrateHostInstance (webpack-internal:///(app-pages-browser)/../../../../../../../../../node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:5644:21)
+    at completeWork (webpack-internal:///(app-pages-browser)/../../../../../../../../../node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:13010:15)
+    at runWithFiberInDEV (webpack-internal:///(app-pages-browser)/../../../../../../../../../node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:1046:30)
+    at completeUnitOfWork (webpack-internal:///(app-pages-browser)/../../../../../../../../../node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:19324:19)
+    at performUnitOfWork (webpack-internal:///(app-pages-browser)/../../../../../../../../../node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:19197:11)
+    at workLoopConcurrentByScheduler (webpack-internal:///(app-pages-browser)/../../../../../../../../../node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:19174:9)
+    at renderRootConcurrent (webpack-internal:///(app-pages-browser)/../../../../../../../../../node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:19156:15)
+    at performWorkOnRoot (webpack-internal:///(app-pages-browser)/../../../../../../../../../node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:18015:11)
+    at performWorkOnRootViaSchedulerTask (webpack-internal:///(app-pages-browser)/../../../../../../../../../node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:20669:7)
+    at MessagePort.performWorkUntilDeadline (webpack-internal:///(app-pages-browser)/../../../../../../../../../node_modules/next/dist/compiled/scheduler/cjs/scheduler.development.js:45:48)
+    at <anonymous> (C:\dev\vibecheck\scratch\g\4f4eeb7f\worktree\test\gate-shared-runner.v3.ts:73:25)
+
+Node.js v22.19.0

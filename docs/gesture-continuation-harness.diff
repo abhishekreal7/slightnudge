@@ -1,0 +1,16 @@
+warning: in the working copy of 'test/helpers/consecutive-move-browser.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'test/helpers/gesture-move-regression-browser.ts', LF will be replaced by CRLF the next time Git touches it
+diff --git a/test/helpers/consecutive-move-browser.ts b/test/helpers/gesture-move-regression-browser.ts
+index 54a7c6f..1239ee0 100644
+--- a/test/helpers/consecutive-move-browser.ts
++++ b/test/helpers/gesture-move-regression-browser.ts
+@@ -6,7 +6,8 @@ import type { Page } from 'playwright';
+ export async function checkConsecutiveMove(page: Page, base: string, workspace: string) {
+   assert.notEqual(path.resolve(workspace), path.resolve(process.cwd()));
+   const file = path.join(workspace, 'fixtures/1-plain-static.tsx');
+-  fs.writeFileSync(file, fs.readFileSync(file, 'utf8').replace(/\btranslate-[xy]-\[-?\d+px\]/g, ''));
++  const normalized = fs.readFileSync(file, 'utf8').replace(/\btranslate-[xy]-\[-?\d+px\]/g, '');
++  if (normalized !== fs.readFileSync(file, 'utf8')) fs.writeFileSync(file, normalized);
+   const original = fs.readFileSync(file, 'utf8');
+   const pageErrors: string[] = [];
+   const recordPageError = (error: Error) => pageErrors.push(error.message);

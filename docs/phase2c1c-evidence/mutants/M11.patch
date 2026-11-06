@@ -1,0 +1,13 @@
+diff --git a/app/layout.tsx b/app/layout.tsx
+index 200b420..e706332 100644
+--- a/app/layout.tsx
++++ b/app/layout.tsx
+@@ -45,7 +45,7 @@ export default async function RootLayout({
+   children: React.ReactNode;
+ }) {
+   const headerList = await headers();
+-  const allowToken = isRequestHostAllowed(headerList);
++  const allowToken = true; /* M11 dropped */
+   const sessionToken = allowToken ? getSessionToken() : null;
+   return (
+     <html lang="en" className={`${geist.variable} ${geistMono.variable}`}>

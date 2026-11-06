@@ -1,0 +1,19 @@
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+1 !== 0
+
+    at checkWorkspaceRedesign (C:\dev\vibecheck\test\helpers\workspace-redesign-browser.ts:24:10)
+    at async <anonymous> (C:\dev\vibecheck\test\review-consent.browser.ts:89:14) {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: 1,
+  expected: 0,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v22.19.0

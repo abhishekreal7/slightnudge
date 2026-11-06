@@ -1,0 +1,509 @@
+{
+  "method": "physical click where exposed → real inspection → real preview → explicit Apply → iframe reload → exact source Undo",
+  "complete": true,
+  "selections": [
+    {
+      "file": "components/Hero.tsx",
+      "line": 1,
+      "column": 96,
+      "tag": "section",
+      "occurrence": 0,
+      "text": "NorthstarPricingA calmer way to buildMake room for your next idea.A thoughtful w",
+      "clicked": true,
+      "actualSelection": {
+        "file": "components/Hero.tsx",
+        "line": 1,
+        "column": 96,
+        "tag": "section"
+      },
+      "outcome": "allowed",
+      "reason": "Exact source Apply, rendered reload and exact Undo verified."
+    },
+    {
+      "file": "components/Hero.tsx",
+      "line": 1,
+      "column": 133,
+      "tag": "nav",
+      "occurrence": 0,
+      "text": "NorthstarPricing",
+      "clicked": true,
+      "actualSelection": {
+        "file": "components/Hero.tsx",
+        "line": 1,
+        "column": 133,
+        "tag": "nav"
+      },
+      "outcome": "allowed",
+      "reason": "Exact source Apply, rendered reload and exact Undo verified."
+    },
+    {
+      "file": "components/Hero.tsx",
+      "line": 1,
+      "column": 177,
+      "tag": "a",
+      "occurrence": 0,
+      "text": "Northstar",
+      "clicked": true,
+      "actualSelection": {
+        "file": "components/Hero.tsx",
+        "line": 1,
+        "column": 177,
+        "tag": "a"
+      },
+      "outcome": "allowed",
+      "reason": "Exact source Apply, rendered reload and exact Undo verified."
+    },
+    {
+      "file": "components/Hero.tsx",
+      "line": 1,
+      "column": 228,
+      "tag": "a",
+      "occurrence": 0,
+      "text": "Pricing",
+      "clicked": true,
+      "actualSelection": {
+        "file": "components/Hero.tsx",
+        "line": 1,
+        "column": 228,
+        "tag": "a"
+      },
+      "outcome": "allowed",
+      "reason": "Exact source Apply, rendered reload and exact Undo verified."
+    },
+    {
+      "file": "components/Hero.tsx",
+      "line": 1,
+      "column": 284,
+      "tag": "p",
+      "occurrence": 0,
+      "text": "A calmer way to build",
+      "clicked": true,
+      "actualSelection": {
+        "file": "components/Hero.tsx",
+        "line": 1,
+        "column": 284,
+        "tag": "p"
+      },
+      "outcome": "allowed",
+      "reason": "Exact source Apply, rendered reload and exact Undo verified."
+    },
+    {
+      "file": "components/Hero.tsx",
+      "line": 1,
+      "column": 354,
+      "tag": "h1",
+      "occurrence": 0,
+      "text": "Make room for your next idea.",
+      "clicked": true,
+      "actualSelection": {
+        "file": "components/Hero.tsx",
+        "line": 1,
+        "column": 354,
+        "tag": "h1"
+      },
+      "outcome": "allowed",
+      "reason": "Exact source Apply, rendered reload and exact Undo verified."
+    },
+    {
+      "file": "components/Hero.tsx",
+      "line": 1,
+      "column": 405,
+      "tag": "p",
+      "occurrence": 0,
+      "text": "A thoughtful workspace for people building something useful.",
+      "clicked": true,
+      "actualSelection": {
+        "file": "components/Hero.tsx",
+        "line": 1,
+        "column": 405,
+        "tag": "p"
+      },
+      "outcome": "allowed",
+      "reason": "Exact source Apply, rendered reload and exact Undo verified."
+    },
+    {
+      "file": "components/Hero.tsx",
+      "line": 1,
+      "column": 465,
+      "tag": "a",
+      "occurrence": 0,
+      "text": "Explore the workspace",
+      "clicked": true,
+      "actualSelection": {
+        "file": "components/Hero.tsx",
+        "line": 1,
+        "column": 465,
+        "tag": "a"
+      },
+      "outcome": "allowed",
+      "reason": "Exact source Apply, rendered reload and exact Undo verified."
+    },
+    {
+      "file": "components/Features.tsx",
+      "line": 2,
+      "column": 43,
+      "tag": "section",
+      "occurrence": 0,
+      "text": "Made for your everyday workLess friction. More progress.Projects with clarityKee",
+      "clicked": true,
+      "actualSelection": {
+        "file": "components/Features.tsx",
+        "line": 2,
+        "column": 43,
+        "tag": "section"
+      },
+      "outcome": "allowed",
+      "reason": "Exact source Apply, rendered reload and exact Undo verified."
+    },
+    {
+      "file": "components/Features.tsx",
+      "line": 2,
+      "column": 93,
+      "tag": "p",
+      "occurrence": 0,
+      "text": "Made for your everyday work",
+      "clicked": true,
+      "actualSelection": {
+        "file": "components/Features.tsx",
+        "line": 2,
+        "column": 93,
+        "tag": "p"
+      },
+      "outcome": "allowed",
+      "reason": "Exact source Apply, rendered reload and exact Undo verified."
+    },
+    {
+      "file": "components/Features.tsx",
+      "line": 2,
+      "column": 162,
+      "tag": "h2",
+      "occurrence": 0,
+      "text": "Less friction. More progress.",
+      "clicked": true,
+      "actualSelection": {
+        "file": "components/Features.tsx",
+        "line": 2,
+        "column": 162,
+        "tag": "h2"
+      },
+      "outcome": "allowed",
+      "reason": "Exact source Apply, rendered reload and exact Undo verified."
+    },
+    {
+      "file": "components/Features.tsx",
+      "line": 2,
+      "column": 240,
+      "tag": "div",
+      "occurrence": 0,
+      "text": "Projects with clarityKeep the next step in view.One shared workspaceBring people",
+      "outcome": "refused",
+      "reason": "No exposed click area belongs to this element; its children cover the visible area."
+    },
+    {
+      "file": "components/Features.tsx",
+      "line": 2,
+      "column": 311,
+      "tag": "article",
+      "occurrence": 0,
+      "text": "Projects with clarityKeep the next step in view.",
+      "clicked": true,
+      "actualSelection": {
+        "file": "components/Features.tsx",
+        "line": 2,
+        "column": 311,
+        "tag": "article"
+      },
+      "outcome": "refused",
+      "reason": "can't edit this safely: class built from a condition (call expression)"
+    },
+    {
+      "file": "components/Features.tsx",
+      "line": 2,
+      "column": 416,
+      "tag": "h3",
+      "occurrence": 0,
+      "text": "Projects with clarity",
+      "clicked": true,
+      "actualSelection": {
+        "file": "components/Features.tsx",
+        "line": 2,
+        "column": 416,
+        "tag": "h3"
+      },
+      "outcome": "refused",
+      "reason": "This element repeats from a list, so one edit would change every copy. Nothing was changed."
+    },
+    {
+      "file": "components/Features.tsx",
+      "line": 2,
+      "column": 473,
+      "tag": "p",
+      "occurrence": 0,
+      "text": "Keep the next step in view.",
+      "clicked": true,
+      "actualSelection": {
+        "file": "components/Features.tsx",
+        "line": 2,
+        "column": 473,
+        "tag": "p"
+      },
+      "outcome": "refused",
+      "reason": "This element repeats from a list, so one edit would change every copy. Nothing was changed."
+    },
+    {
+      "file": "components/Features.tsx",
+      "line": 2,
+      "column": 311,
+      "tag": "article",
+      "occurrence": 1,
+      "text": "One shared workspaceBring people and plans together.",
+      "clicked": true,
+      "actualSelection": {
+        "file": "components/Features.tsx",
+        "line": 2,
+        "column": 311,
+        "tag": "article"
+      },
+      "outcome": "refused",
+      "reason": "can't edit this safely: class built from a condition (call expression)"
+    },
+    {
+      "file": "components/Features.tsx",
+      "line": 2,
+      "column": 416,
+      "tag": "h3",
+      "occurrence": 1,
+      "text": "One shared workspace",
+      "clicked": true,
+      "actualSelection": {
+        "file": "components/Features.tsx",
+        "line": 2,
+        "column": 416,
+        "tag": "h3"
+      },
+      "outcome": "refused",
+      "reason": "This element repeats from a list, so one edit would change every copy. Nothing was changed."
+    },
+    {
+      "file": "components/Features.tsx",
+      "line": 2,
+      "column": 473,
+      "tag": "p",
+      "occurrence": 1,
+      "text": "Bring people and plans together.",
+      "clicked": true,
+      "actualSelection": {
+        "file": "components/Features.tsx",
+        "line": 2,
+        "column": 473,
+        "tag": "p"
+      },
+      "outcome": "refused",
+      "reason": "This element repeats from a list, so one edit would change every copy. Nothing was changed."
+    },
+    {
+      "file": "components/Features.tsx",
+      "line": 2,
+      "column": 311,
+      "tag": "article",
+      "occurrence": 2,
+      "text": "Room to focusBuild without the busywork.",
+      "clicked": true,
+      "actualSelection": {
+        "file": "components/Features.tsx",
+        "line": 2,
+        "column": 311,
+        "tag": "article"
+      },
+      "outcome": "refused",
+      "reason": "can't edit this safely: class built from a condition (call expression)"
+    },
+    {
+      "file": "components/Features.tsx",
+      "line": 2,
+      "column": 416,
+      "tag": "h3",
+      "occurrence": 2,
+      "text": "Room to focus",
+      "clicked": true,
+      "actualSelection": {
+        "file": "components/Features.tsx",
+        "line": 2,
+        "column": 416,
+        "tag": "h3"
+      },
+      "outcome": "refused",
+      "reason": "This element repeats from a list, so one edit would change every copy. Nothing was changed."
+    },
+    {
+      "file": "components/Features.tsx",
+      "line": 2,
+      "column": 473,
+      "tag": "p",
+      "occurrence": 2,
+      "text": "Build without the busywork.",
+      "clicked": true,
+      "actualSelection": {
+        "file": "components/Features.tsx",
+        "line": 2,
+        "column": 473,
+        "tag": "p"
+      },
+      "outcome": "refused",
+      "reason": "This element repeats from a list, so one edit would change every copy. Nothing was changed."
+    },
+    {
+      "file": "components/Features.tsx",
+      "line": 2,
+      "column": 546,
+      "tag": "p",
+      "occurrence": 0,
+      "text": "Your work stays yours.",
+      "clicked": true,
+      "actualSelection": {
+        "file": "components/Features.tsx",
+        "line": 2,
+        "column": 546,
+        "tag": "p"
+      },
+      "outcome": "allowed",
+      "reason": "Exact source Apply, rendered reload and exact Undo verified."
+    },
+    {
+      "file": "components/Pricing.tsx",
+      "line": 1,
+      "column": 42,
+      "tag": "section",
+      "occurrence": 0,
+      "text": "Simple plansStart small. Grow together.PersonalFreeA quiet place for your ideas.",
+      "clicked": true,
+      "actualSelection": {
+        "file": "components/Pricing.tsx",
+        "line": 1,
+        "column": 42,
+        "tag": "section"
+      },
+      "outcome": "allowed",
+      "reason": "Exact source Apply, rendered reload and exact Undo verified."
+    },
+    {
+      "file": "components/Pricing.tsx",
+      "line": 1,
+      "column": 91,
+      "tag": "p",
+      "occurrence": 0,
+      "text": "Simple plans",
+      "clicked": true,
+      "actualSelection": {
+        "file": "components/Pricing.tsx",
+        "line": 1,
+        "column": 91,
+        "tag": "p"
+      },
+      "outcome": "allowed",
+      "reason": "Exact source Apply, rendered reload and exact Undo verified."
+    },
+    {
+      "file": "components/Pricing.tsx",
+      "line": 1,
+      "column": 147,
+      "tag": "h2",
+      "occurrence": 0,
+      "text": "Start small. Grow together.",
+      "clicked": true,
+      "actualSelection": {
+        "file": "components/Pricing.tsx",
+        "line": 1,
+        "column": 147,
+        "tag": "h2"
+      },
+      "outcome": "allowed",
+      "reason": "Exact source Apply, rendered reload and exact Undo verified."
+    },
+    {
+      "file": "components/Pricing.tsx",
+      "line": 1,
+      "column": 223,
+      "tag": "div",
+      "occurrence": 0,
+      "text": "PersonalFreeA quiet place for your ideas.See what is includedTeam$12Per person, ",
+      "clicked": true,
+      "actualSelection": {
+        "file": "components/Pricing.tsx",
+        "line": 1,
+        "column": 223,
+        "tag": "div"
+      },
+      "outcome": "allowed",
+      "reason": "Exact source Apply, rendered reload and exact Undo verified."
+    },
+    {
+      "file": "components/Pricing.tsx",
+      "line": 1,
+      "column": 271,
+      "tag": "article",
+      "occurrence": 0,
+      "text": "PersonalFreeA quiet place for your ideas.See what is included",
+      "clicked": true,
+      "actualSelection": {
+        "file": "components/Pricing.tsx",
+        "line": 1,
+        "column": 271,
+        "tag": "article"
+      },
+      "outcome": "allowed",
+      "reason": "Exact source Apply, rendered reload and exact Undo verified."
+    },
+    {
+      "file": "components/Pricing.tsx",
+      "line": 1,
+      "column": 314,
+      "tag": "h3",
+      "occurrence": 0,
+      "text": "Personal",
+      "clicked": true,
+      "actualSelection": {
+        "file": "components/Pricing.tsx",
+        "line": 1,
+        "column": 314,
+        "tag": "h3"
+      },
+      "outcome": "allowed",
+      "reason": "Exact source Apply, rendered reload and exact Undo verified."
+    },
+    {
+      "file": "components/Pricing.tsx",
+      "line": 1,
+      "column": 365,
+      "tag": "p",
+      "occurrence": 0,
+      "text": "Free",
+      "clicked": true,
+      "actualSelection": {
+        "file": "components/Pricing.tsx",
+        "line": 1,
+        "column": 365,
+        "tag": "p"
+      },
+      "outcome": "allowed",
+      "reason": "Exact source Apply, rendered reload and exact Undo verified."
+    },
+    {
+      "file": "components/Pricing.tsx",
+      "line": 1,
+      "column": 412,
+      "tag": "p",
+      "occurrence": 0,
+      "text": "A quiet place for your ideas.",
+      "clicked": true,
+      "actualSelection": {
+        "file": "components/Pricing.tsx",
+        "line": 1,
+        "column": 412,
+        "tag": "p"
+      },
+      "outcome": "allowed",
+      "reason": "Exact source Apply, rendered reload and exact Undo verified."
+    }
+  ]
+}

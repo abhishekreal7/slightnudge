@@ -1,0 +1,21 @@
+Disposable source project: https://github.com/bennyjoel/nextjs-saas-starter-lite; Next.js 14.2.35; Tailwind 3.4.19; installed source adapter; no environment files checked out.
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+'400' !== '700'
+
+    at checkSourceSelections (C:\dev\vibecheck\test\helpers\source-selection-workflows.ts:80:12)
+    at async checkSourceProject (C:\dev\vibecheck\test\helpers\source-project-browser.ts:65:64)
+    at async <anonymous> (C:\dev\vibecheck\test\review-consent.browser.ts:88:14) {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: '400',
+  expected: '700',
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v22.19.0

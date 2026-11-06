@@ -1,0 +1,168 @@
+﻿====================================================
+≡ƒº¬ STEP 2: TOKEN STABILITY & RECOMPILE RESILIENCE
+====================================================
+
+[Step2] Copying tracked files to C:\Users\abhis\AppData\Local\Temp\vibecheck-step2-token-stability...
+[Step2] Temp workspace ready.
+[Step2] Starting Next.js dev server on port 3105...
+[Step2] Waiting for dev server at http://127.0.0.1:3105...
+[Step2] Dev server is ready.
+
+--- (a) Fetch initial token ---
+Token A: a04aa6ca2f3d0c3c... (length=64)
+
+--- (b) Trigger recompile by appending harmless comment ---
+Appended comment to C:\Users\abhis\AppData\Local\Temp\vibecheck-step2-token-stability\app\page.tsx. Waiting 5s for recompile...
+
+--- (c) Send mutating request using OLD token ---
+Mutating request with OLD token status: 400
+Body: {"error":"ENOENT: no such file or directory, open 'C:\\Users\\abhis\\AppData\\Local\\Temp\\vibecheck-step2-token-stability\\.slightnudge\\pending\\00000000-0000-0000-0000-000000000000.json'"}
+Token A survived recompile: YES (CONFIRMED)
+
+--- (d) Fetch new token and compare ---
+Token B: a04aa6ca2f3d0c3c...
+Token A === Token B: MATCH (CONFIRMED)
+
+--- (e) Check 20 consecutive requests for worker skew ---
+20 token requests completed. All tokens identical to Token A: CONFIRMED
+10 mutating requests with Token A: 10/10 passed (403 count: 0)
+[Step2] Stopping dev server...
+
+--- (f) Production Server Stability Check ---
+[Step2] Building production bundle (npm run build)...
+Γû▓ Next.js 16.4.0 (webpack)
+Γ£ô Running next.config.mjs took 28ms
+
+  Creating an optimized production build ...
+Γ£ô Compiled successfully in 39.3s
+  Running TypeScript ...
+  Finished TypeScript in 1650ms ...
+  Collecting page data using 19 workers ...
+  Generating static pages using 19 workers (0/38) ...
+  Generating static pages using 19 workers (9/38) 
+  Generating static pages using 19 workers (18/38) 
+  Generating static pages using 19 workers (28/38) 
+Γ£ô Generating static pages using 19 workers (38/38) in 8.2s
+  Finalizing page optimization ...
+  Collecting build traces ...
+
+Route (app)
+Γöî Γùï /
+Γö£ Γùï /_not-found
+Γö£ Γùï /admin
+Γö£ ╞Æ /api/admin/metrics
+Γö£ ╞Æ /api/checkout
+Γö£ ╞Æ /api/checkout/simulate
+Γö£ ╞Æ /api/runs
+Γö£ ╞Æ /api/runs/[id]
+Γö£ ╞Æ /api/runs/[id]/report.pdf
+Γö£ ╞Æ /api/sites
+Γö£ ╞Æ /api/sites/[id]/verify
+Γö£ ╞Æ /api/slightnudge/apply
+Γö£ ╞Æ /api/slightnudge/assets
+Γö£ ╞Æ /api/slightnudge/inspect
+Γö£ ╞Æ /api/slightnudge/nudge
+Γö£ ╞Æ /api/slightnudge/pages
+Γö£ ╞Æ /api/slightnudge/preview
+Γö£ ╞Æ /api/slightnudge/repositories
+Γö£ ╞Æ /api/slightnudge/repositories/[id]
+Γö£ ╞Æ /api/slightnudge/repositories/[id]/adapter
+Γö£ ╞Æ /api/slightnudge/repositories/[id]/docker-preview
+Γö£ ╞Æ /api/slightnudge/repositories/[id]/inspect
+Γö£ ╞Æ /api/slightnudge/repositories/[id]/preview-check
+Γö£ ╞Æ /api/slightnudge/repositories/[id]/source
+Γö£ ╞Æ /api/slightnudge/style
+Γö£ ╞Æ /api/slightnudge/token
+Γö£ ╞Æ /api/slightnudge/undo
+Γö£ ╞Æ /api/webhooks/dodo
+Γö£ Γùï /dashboard
+Γö£ Γùï /design
+Γö£ Γùï /fixtures
+Γö£ Γùï /fixtures/1
+Γö£ Γùï /fixtures/2
+Γö£ Γùï /fixtures/3
+Γö£ Γùï /fixtures/4
+Γö£ Γùï /fixtures/5
+Γö£ Γùï /how-it-works
+Γö£ Γùï /icon.svg
+Γö£ Γùï /new
+Γö£ Γùï /opengraph-image
+Γö£ Γùï /pricing
+Γö£ Γùï /privacy
+Γö£ ╞Æ /r/[token]
+Γö£ Γùï /refunds
+Γö£ ╞Æ /runs/[id]
+Γö£ Γùï /studio
+Γö£ ╞Æ /studio/[repoId]
+Γö£ Γùï /terms
+Γöö Γùï /workspace
+
+
+Γùï  (Static)   prerendered as static content
+╞Æ  (Dynamic)  server-rendered on demand
+
+[Step2] Build completed.
+[Step2] Starting production server on port 3105...
+[Step2] Waiting for prod server at http://127.0.0.1:3105...
+[Step2] Prod server is ready.
+Prod Token A: 3b0f66cad089c8bc...
+Prod mutating request status: 400 (expected: 400 not 403)
+Prod Token B: 3b0f66cad089c8bc...
+Prod Token A === Prod Token B: MATCH (CONFIRMED)
+Prod 20 consecutive token checks: ALL MATCH (CONFIRMED)
+[Step2] Stopping prod server...
+
+--- Running test/s1-auth-origin.test.ts 10 times against temp server ---
+[Step2] Restarting dev server on port 3105...
+[Step2] Dev server restarted on port 3105.
+
+>>> S1 Test Run 1/10...
+Run 1: PASS
+
+>>> S1 Test Run 2/10...
+Run 2: PASS
+
+>>> S1 Test Run 3/10...
+Run 3: PASS
+
+>>> S1 Test Run 4/10...
+Run 4: PASS
+
+>>> S1 Test Run 5/10...
+Run 5: PASS
+
+>>> S1 Test Run 6/10...
+Run 6: PASS
+
+>>> S1 Test Run 7/10...
+Run 7: PASS
+
+>>> S1 Test Run 8/10...
+Run 8: PASS
+
+>>> S1 Test Run 9/10...
+Run 9: PASS
+
+>>> S1 Test Run 10/10...
+Run 10: PASS
+
+====================================================
+≡ƒôè STEP 2 SUMMARY
+====================================================
+Dev Token survived recompile: CONFIRMED
+Dev Token match after recompile: CONFIRMED
+Dev Worker skew: NONE (CONFIRMED)
+Prod Token stability: CONFIRMED
+S1 10x Test Results:
+  Run 1: PASS
+  Run 2: PASS
+  Run 3: PASS
+  Run 4: PASS
+  Run 5: PASS
+  Run 6: PASS
+  Run 7: PASS
+  Run 8: PASS
+  Run 9: PASS
+  Run 10: PASS
+Overall S1 10x: 10/10 PASSED
+[Step2] Cleaning up tempDir C:\Users\abhis\AppData\Local\Temp\vibecheck-step2-token-stability...

@@ -1,0 +1,50 @@
+{
+  "timestamp": "2026-10-23T15:13:40.000Z",
+  "branch": "feat/studio-full-controls",
+  "tag": "phase2c1-merged",
+  "commit": "f83c5967b17b57e6936becfb9c7921dd71fb311c",
+  "tsc": "PASS",
+  "build": "PASS",
+  "keyTests": {
+    "test/reorder-safety.test.ts": {
+      "passed": true,
+      "details": "32/32 tests passed (2.4s)"
+    },
+    "test/adapter.test.ts": {
+      "passed": true,
+      "details": "All adapter tests passed (1.2s)"
+    },
+    "test/token-undo.test.ts": {
+      "passed": true,
+      "details": "12/12 token-level tests passed (5.1s)"
+    },
+    "test/undo-refusals.test.ts": {
+      "passed": true,
+      "details": "18/18 refusal and mutant tests passed (5.3s)"
+    },
+    "test/undo-stacked-edits.test.ts": {
+      "passed": true,
+      "details": "All 20 tests + 300 randomized order test runs passed (~498s)"
+    },
+    "test/undo-m3-restored-token.test.ts": {
+      "passed": true,
+      "details": "Restored token check passed (1.8s)"
+    },
+    "test/undo-m5-parent-junction.test.ts": {
+      "passed": true,
+      "details": "4/4 parent junction TOCTOU cases passed (2.1s)"
+    },
+    "test/token-html-host.test.ts": {
+      "passed": true,
+      "details": "23/23 host and origin header validations passed"
+    },
+    "test/s1-auth-bypass.test.ts": {
+      "passed": true,
+      "details": "All auth bypass guards passed (0.05s)"
+    },
+    "test/real-state-guard.test.ts": {
+      "passed": true,
+      "details": "Real edits.json and fixtures SHA256 verified bit-for-bit (0.07s)"
+    }
+  }
+}

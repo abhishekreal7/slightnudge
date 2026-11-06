@@ -1,0 +1,7 @@
+﻿ lib/slightnudge/edit-history.ts      | 107 +++++-
+ test/real-state-guard.test.ts        |  49 +++
+ test/undo-m3-restored-token.test.ts  | 203 +++++++++++
+ test/undo-m5-parent-junction.test.ts | 390 ++++++++++++++++++++
+ test/undo-stacked-edits.test.ts      | 664 +++++++++++++++++++++++++++++++++++
+ 5 files changed, 1408 insertions(+), 5 deletions(-)
+

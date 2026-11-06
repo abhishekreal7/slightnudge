@@ -1,0 +1,34 @@
+Move screenshot: C:\Users\abhis\AppData\Local\Temp\slightnudge-move-control.png
+Move pointer regression: {
+  direction: 'up',
+  disabled: false,
+  resizing: 'false',
+  busy: 'false',
+  pending: 0,
+  notice: [ 'Undid mt-1 → mt-1.5.' ]
+}
+Move pointer regression: {
+  direction: 'left',
+  disabled: true,
+  resizing: 'false',
+  busy: 'true',
+  pending: 0,
+  notice: [ 'Undid mt-1 → mt-1.5.' ]
+}
+Move pointer regression: {
+  direction: 'down',
+  disabled: true,
+  resizing: 'false',
+  busy: 'true',
+  pending: 0,
+  notice: [ 'Discarded visual adjustment' ]
+}
+Move pointer regression: {
+  direction: 'right',
+  disabled: true,
+  resizing: 'false',
+  busy: 'true',
+  pending: 0,
+  notice: [ 'Discarded visual adjustment' ]
+}
+PASS: 23 review-consent browser cases (real API; disposable source copy)

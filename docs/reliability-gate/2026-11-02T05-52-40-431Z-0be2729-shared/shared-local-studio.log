@@ -1,0 +1,498 @@
+SETUP 1793598852116 START git ["ls-files"]
+SETUP END elapsed 52ms
+▲ Next.js 16.4.3 (webpack)
+- Local:         http://127.0.0.1:55958
+- Network:       http://127.0.0.1:55958
+✓ Ready in 527ms
+✓ Running next.config.mjs took 37ms
+
+○ Compiling /editor/[[...project]]/page ...
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\3b826f19\\worktree\\scratch\\shared-gate-runtime\\.next\\dev\\build-manifest.json","pid":20184,"time":1793598876262,"bytes":344}
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\3b826f19\\worktree\\scratch\\shared-gate-runtime\\.next\\dev\\build-manifest.json","pid":27120,"time":1793598876584,"bytes":344}
+ GET /editor 200 in 2.9s (next.js: 1918ms, application-code: 1003ms)
+HARNESS-V3 NAVIGATION about:blank
+HARNESS-V3 NAVIGATION http://127.0.0.1:55958/editor?panel=inspector
+TIMING 1793598877837 REQUEST http://127.0.0.1:55958/editor?panel=inspector
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\3b826f19\\worktree\\scratch\\shared-gate-runtime\\.next\\dev\\build-manifest.json","pid":27120,"time":1793598877951,"bytes":344}
+TIMING 1793598878134 RESPONSE 200 http://127.0.0.1:55958/editor?panel=inspector
+ GET /editor?panel=inspector 200 in 1254ms (next.js: 38ms, application-code: 1216ms)
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\3b826f19\\worktree\\scratch\\shared-gate-runtime\\.next\\dev\\build-manifest.json","pid":14280,"time":1793598878269,"bytes":344}
+HARNESS-V3 OP 1793598879273 START waitFor locator('[data-source-ready="true"]')
+TIMING 1793598881367 REQUEST http://127.0.0.1:55958/api/slightnudge/responsive
+TIMING 1793598881380 REQUEST http://127.0.0.1:55958/api/slightnudge/responsive
+TIMING 1793598881665 REQUEST http://127.0.0.1:55958/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A55958&__slightnudge_session=ad1e00c9-65cb-4453-affa-654799bcacb8
+○ Compiling /studio/preview/[pageId]/page ...
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\3b826f19\\worktree\\scratch\\shared-gate-runtime\\.next\\dev\\build-manifest.json","pid":12812,"time":1793598893148,"bytes":344}
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\3b826f19\\worktree\\scratch\\shared-gate-runtime\\.next\\dev\\build-manifest.json","pid":27120,"time":1793598893590,"bytes":344}
+TIMING 1793598894265 RESPONSE 200 http://127.0.0.1:55958/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A55958&__slightnudge_session=ad1e00c9-65cb-4453-affa-654799bcacb8
+TIMING 1793598894285 REQUEST http://127.0.0.1:55958/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+ GET /studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A55958&__slightnudge_session=ad1e00c9-65cb-4453-affa-654799bcacb8 200 in 2.3s (next.js: 1448ms, application-code: 864ms)
+TIMING 1793598894622 RESPONSE 200 http://127.0.0.1:55958/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+○ Compiling /api/slightnudge/responsive/route ...
+HARNESS-V3 OP 1793598897229 END waitFor locator('[data-source-ready="true"]')
+HARNESS-V3 OP 1793598897230 START selectOption getByRole('combobox', { name: 'Canvas zoom', exact: true })
+HARNESS-V3 OP 1793598897310 END selectOption getByRole('combobox', { name: 'Canvas zoom', exact: true })
+TIMING 1793598897881 REQUEST http://127.0.0.1:55958/api/slightnudge/responsive
+TIMING 1793598897881 REQUEST http://127.0.0.1:55958/api/slightnudge/preview
+HARNESS-V3 OP 1793598897891 START waitFor getByRole('region', { name: 'Component properties', exact: true }).getByText('This instance', { exact: true })
+⚠ ./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\3b826f19\\worktree\\scratch\\shared-gate-runtime\\.next\\dev\\build-manifest.json","pid":27120,"time":1793598902605,"bytes":344}
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\3b826f19\\worktree\\scratch\\shared-gate-runtime\\.next\\dev\\build-manifest.json","pid":27120,"time":1793598902618,"bytes":344}
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\3b826f19\\worktree\\scratch\\shared-gate-runtime\\.next\\dev\\build-manifest.json","pid":27120,"time":1793598902627,"bytes":344}
+ GET /api/slightnudge/pages 200 in 11.5s (next.js: 9.5s, proxy.ts: 965ms, application-code: 1053ms)
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\3b826f19\\worktree\\scratch\\shared-gate-runtime\\.next\\dev\\build-manifest.json","pid":27120,"time":1793598904006,"bytes":344}
+ POST /api/slightnudge/responsive 200 in 12.3s (next.js: 9.5s, proxy.ts: 968ms, application-code: 1879ms)
+TIMING 1793598904466 RESPONSE 200 http://127.0.0.1:55958/api/slightnudge/responsive
+ POST /api/slightnudge/responsive 200 in 12.6s (next.js: 9.5s, proxy.ts: 969ms, application-code: 2.1s)
+TIMING 1793598904733 RESPONSE 200 http://127.0.0.1:55958/api/slightnudge/responsive
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\3b826f19\\worktree\\scratch\\shared-gate-runtime\\.next\\dev\\build-manifest.json","pid":27120,"time":1793598904742,"bytes":344}
+⚠ ./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\3b826f19\\worktree\\scratch\\shared-gate-runtime\\.next\\dev\\build-manifest.json","pid":21008,"time":1793598904345,"bytes":344}
+ POST /api/slightnudge/responsive 200 in 3.4s (next.js: 523ms, proxy.ts: 2.4s, application-code: 454ms)
+TIMING 1793598905197 RESPONSE 200 http://127.0.0.1:55958/api/slightnudge/responsive
+ GET /editor?panel=inspector 200 in 3.4s (next.js: 2.2s, application-code: 1228ms)
+⚠ ./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\3b826f19\\worktree\\scratch\\shared-gate-runtime\\.next\\dev\\build-manifest.json","pid":27120,"time":1793598909150,"bytes":344}
+ POST /api/slightnudge/preview 200 in 11.2s (next.js: 4.9s, proxy.ts: 2.4s, application-code: 3.8s)
+TIMING 1793598912968 RESPONSE 200 http://127.0.0.1:55958/api/slightnudge/preview
+HARNESS-V3 OP 1793598913271 END waitFor getByRole('region', { name: 'Component properties', exact: true }).getByText('This instance', { exact: true })
+HARNESS-V3 OP 1793598913272 START waitFor getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop label', { exact: true })
+HARNESS-V3 OP 1793598913288 END waitFor getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop label', { exact: true })
+HARNESS-V3 OP 1793598913289 START fill getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop label', { exact: true })
+HARNESS-V3 OP 1793598913331 END fill getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop label', { exact: true })
+HARNESS-V3 OP 1793598913338 START press getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop label', { exact: true })
+TIMING 1793598913494 REQUEST http://127.0.0.1:55958/api/slightnudge/preview
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\3b826f19\\worktree\\scratch\\shared-gate-runtime\\.next\\dev\\build-manifest.json","pid":27120,"time":1793598913546,"bytes":344}
+HARNESS-V3 OP 1793598913563 END press getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop label', { exact: true })
+ GET /api/slightnudge/pages 200 in 4.7s (next.js: 87ms, proxy.ts: 4.5s, application-code: 72ms)
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\3b826f19\\worktree\\scratch\\shared-gate-runtime\\.next\\dev\\build-manifest.json","pid":27120,"time":1793598913662,"bytes":344}
+ POST /api/slightnudge/preview 200 in 3.2s (next.js: 10ms, proxy.ts: 31ms, application-code: 3.1s)
+TIMING 1793598916801 RESPONSE 200 http://127.0.0.1:55958/api/slightnudge/preview
+TIMING 1793598917408 REQUEST http://127.0.0.1:55958/api/slightnudge/preview
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\3b826f19\\worktree\\scratch\\shared-gate-runtime\\.next\\dev\\build-manifest.json","pid":27120,"time":1793598917466,"bytes":344}
+HARNESS-V3 OP 1793598917470 START selectOption getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop variant', { exact: true })
+ POST /api/slightnudge/preview 200 in 1360ms (next.js: 8ms, proxy.ts: 30ms, application-code: 1322ms)
+TIMING 1793598918787 RESPONSE 200 http://127.0.0.1:55958/api/slightnudge/preview
+TIMING 1793598919376 REQUEST http://127.0.0.1:55958/api/slightnudge/preview
+HARNESS-V3 OP 1793598919376 END selectOption getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop variant', { exact: true })
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\3b826f19\\worktree\\scratch\\shared-gate-runtime\\.next\\dev\\build-manifest.json","pid":27120,"time":1793598919425,"bytes":344}
+ POST /api/slightnudge/preview 200 in 3.0s (next.js: 9ms, proxy.ts: 28ms, application-code: 3.0s)
+TIMING 1793598922421 RESPONSE 200 http://127.0.0.1:55958/api/slightnudge/preview
+TIMING 1793598923022 REQUEST http://127.0.0.1:55958/api/slightnudge/preview
+HARNESS-V3 OP 1793598923076 START selectOption getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop disabled', { exact: true })
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\3b826f19\\worktree\\scratch\\shared-gate-runtime\\.next\\dev\\build-manifest.json","pid":27120,"time":1793598923075,"bytes":344}
+TIMING 1793598924350 RESPONSE 200 http://127.0.0.1:55958/api/slightnudge/preview
+ POST /api/slightnudge/preview 200 in 1316ms (next.js: 10ms, proxy.ts: 28ms, application-code: 1278ms)
+TIMING 1793598924479 REQUEST http://127.0.0.1:55958/api/slightnudge/preview
+HARNESS-V3 OP 1793598924479 END selectOption getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop disabled', { exact: true })
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\3b826f19\\worktree\\scratch\\shared-gate-runtime\\.next\\dev\\build-manifest.json","pid":27120,"time":1793598924529,"bytes":344}
+ POST /api/slightnudge/preview 200 in 2.9s (next.js: 9ms, proxy.ts: 25ms, application-code: 2.9s)
+TIMING 1793598927406 RESPONSE 200 http://127.0.0.1:55958/api/slightnudge/preview
+TIMING 1793598927957 REQUEST http://127.0.0.1:55958/api/slightnudge/preview
+HARNESS-V3 OP 1793598928005 START selectOption getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop disabled', { exact: true })
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\3b826f19\\worktree\\scratch\\shared-gate-runtime\\.next\\dev\\build-manifest.json","pid":27120,"time":1793598928008,"bytes":344}
+ POST /api/slightnudge/preview 200 in 1345ms (next.js: 10ms, proxy.ts: 29ms, application-code: 1306ms)
+TIMING 1793598929314 RESPONSE 200 http://127.0.0.1:55958/api/slightnudge/preview
+TIMING 1793598929910 REQUEST http://127.0.0.1:55958/api/slightnudge/preview
+HARNESS-V3 OP 1793598929910 END selectOption getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop disabled', { exact: true })
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\3b826f19\\worktree\\scratch\\shared-gate-runtime\\.next\\dev\\build-manifest.json","pid":27120,"time":1793598929953,"bytes":344}
+ POST /api/slightnudge/preview 200 in 2.9s (next.js: 7ms, proxy.ts: 25ms, application-code: 2.9s)
+TIMING 1793598932840 RESPONSE 200 http://127.0.0.1:55958/api/slightnudge/preview
+TIMING 1793598933389 REQUEST http://127.0.0.1:55958/api/slightnudge/preview
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\3b826f19\\worktree\\scratch\\shared-gate-runtime\\.next\\dev\\build-manifest.json","pid":27120,"time":1793598933436,"bytes":344}
+ POST /api/slightnudge/preview 200 in 1299ms (next.js: 9ms, proxy.ts: 26ms, application-code: 1264ms)
+TIMING 1793598934702 RESPONSE 200 http://127.0.0.1:55958/api/slightnudge/preview
+⚠ ./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+⚠ ./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\3b826f19\\worktree\\scratch\\shared-gate-runtime\\.next\\dev\\build-manifest.json","pid":27120,"time":1793598937386,"bytes":344}
+ POST /api/slightnudge/inspect 200 in 3.5s (next.js: 2.6s, proxy.ts: 23ms, application-code: 796ms)
+TIMING 1793598938180 REQUEST http://127.0.0.1:55958/api/slightnudge/preview
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\3b826f19\\worktree\\scratch\\shared-gate-runtime\\.next\\dev\\build-manifest.json","pid":27120,"time":1793598938276,"bytes":344}
+ POST /api/slightnudge/preview 200 in 1984ms (next.js: 28ms, proxy.ts: 39ms, application-code: 1917ms)
+TIMING 1793598940191 RESPONSE 200 http://127.0.0.1:55958/api/slightnudge/preview
+TIMING 1793598940760 REQUEST http://127.0.0.1:55958/api/slightnudge/preview
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\3b826f19\\worktree\\scratch\\shared-gate-runtime\\.next\\dev\\build-manifest.json","pid":27120,"time":1793598940796,"bytes":344}
+ POST /api/slightnudge/preview 200 in 2.6s (next.js: 7ms, proxy.ts: 20ms, application-code: 2.6s)
+TIMING 1793598943358 RESPONSE 200 http://127.0.0.1:55958/api/slightnudge/preview
+TIMING 1793598943827 REQUEST http://127.0.0.1:55958/api/slightnudge/preview
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\3b826f19\\worktree\\scratch\\shared-gate-runtime\\.next\\dev\\build-manifest.json","pid":27120,"time":1793598943869,"bytes":344}
+TIMING 1793598944183 REQUEST http://127.0.0.1:55958/api/slightnudge/preview
+ POST /api/slightnudge/preview 200 in 1177ms (next.js: 10ms, proxy.ts: 20ms, application-code: 1147ms)
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\3b826f19\\worktree\\scratch\\shared-gate-runtime\\.next\\dev\\build-manifest.json","pid":27120,"time":1793598945055,"bytes":344}
+ POST /api/slightnudge/preview 200 in 1209ms (next.js: 8ms, proxy.ts: 21ms, application-code: 1181ms)
+TIMING 1793598946237 RESPONSE 200 http://127.0.0.1:55958/api/slightnudge/preview
+HARNESS-V3 OP 1793598946249 START inputValue getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop label', { exact: true })
+HARNESS-V3 OP 1793598946259 END inputValue getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop label', { exact: true })
+HARNESS-V3 OP 1793598946260 START fill getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop label', { exact: true })
+HARNESS-V3 OP 1793598946289 END fill getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop label', { exact: true })
+HARNESS-V3 OP 1793598946292 START press getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop label', { exact: true })
+TIMING 1793598946401 REQUEST http://127.0.0.1:55958/api/slightnudge/preview
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\3b826f19\\worktree\\scratch\\shared-gate-runtime\\.next\\dev\\build-manifest.json","pid":27120,"time":1793598946443,"bytes":344}
+HARNESS-V3 OP 1793598946464 END press getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop label', { exact: true })
+ POST /api/slightnudge/preview 200 in 2.7s (next.js: 8ms, proxy.ts: 23ms, application-code: 2.7s)
+TIMING 1793598949095 RESPONSE 200 http://127.0.0.1:55958/api/slightnudge/preview
+TIMING 1793598949620 REQUEST http://127.0.0.1:55958/api/slightnudge/preview
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\3b826f19\\worktree\\scratch\\shared-gate-runtime\\.next\\dev\\build-manifest.json","pid":27120,"time":1793598949680,"bytes":344}
+TIMING 1793598949961 REQUEST http://127.0.0.1:55958/api/slightnudge/preview
+HARNESS-V3 OP 1793598949967 START waitFor getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop to', { exact: true })
+ POST /api/slightnudge/preview 200 in 1102ms (next.js: 8ms, proxy.ts: 37ms, application-code: 1057ms)
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\3b826f19\\worktree\\scratch\\shared-gate-runtime\\.next\\dev\\build-manifest.json","pid":27120,"time":1793598950781,"bytes":344}
+ POST /api/slightnudge/preview 200 in 1108ms (next.js: 7ms, proxy.ts: 18ms, application-code: 1083ms)
+TIMING 1793598951864 RESPONSE 200 http://127.0.0.1:55958/api/slightnudge/preview
+HARNESS-V3 OP 1793598951912 END waitFor getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop to', { exact: true })
+HARNESS-V3 OP 1793598951913 START fill getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop to', { exact: true })
+HARNESS-V3 OP 1793598951941 END fill getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop to', { exact: true })
+HARNESS-V3 OP 1793598951943 START press getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop to', { exact: true })
+TIMING 1793598952060 REQUEST http://127.0.0.1:55958/api/slightnudge/preview
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\3b826f19\\worktree\\scratch\\shared-gate-runtime\\.next\\dev\\build-manifest.json","pid":27120,"time":1793598952101,"bytes":344}
+HARNESS-V3 OP 1793598952126 END press getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop to', { exact: true })
+TIMING 1793598954857 RESPONSE 200 http://127.0.0.1:55958/api/slightnudge/preview
+ POST /api/slightnudge/preview 200 in 2.8s (next.js: 8ms, proxy.ts: 25ms, application-code: 2.8s)
+TIMING 1793598955411 REQUEST http://127.0.0.1:55958/api/slightnudge/preview
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\3b826f19\\worktree\\scratch\\shared-gate-runtime\\.next\\dev\\build-manifest.json","pid":27120,"time":1793598955464,"bytes":344}
+TIMING 1793598955471 REQUEST http://127.0.0.1:55958/editor?panel=inspector
+TIMING 1793598955621 REQUEST http://127.0.0.1:55958/api/slightnudge/responsive
+ POST /api/slightnudge/preview 200 in 1380ms (next.js: 10ms, proxy.ts: 29ms, application-code: 1341ms)
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\3b826f19\\worktree\\scratch\\shared-gate-runtime\\.next\\dev\\build-manifest.json","pid":27120,"time":1793598957095,"bytes":344}
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\3b826f19\\worktree\\scratch\\shared-gate-runtime\\.next\\dev\\build-manifest.json","pid":27120,"time":1793598957301,"bytes":344}
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\3b826f19\\worktree\\scratch\\shared-gate-runtime\\.next\\dev\\build-manifest.json","pid":35652,"time":1793598957435,"bytes":344}

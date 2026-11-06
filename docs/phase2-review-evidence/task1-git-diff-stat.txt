@@ -1,0 +1,25 @@
+ app/api/slightnudge/apply/route.ts                 |  12 +-
+ app/api/slightnudge/assets/route.ts                |   4 +-
+ app/api/slightnudge/preview/route.ts               |  17 +-
+ .../slightnudge/repositories/[id]/adapter/route.ts |   9 +-
+ .../repositories/[id]/docker-preview/route.ts      |  11 +-
+ .../repositories/[id]/preview-check/route.ts       |  14 +-
+ app/api/slightnudge/repositories/route.ts          |   4 +
+ app/api/slightnudge/token/route.ts                 |  18 ++
+ app/api/slightnudge/undo/route.ts                  |  10 +-
+ app/layout.tsx                                     |   9 +
+ app/studio/[repoId]/page.tsx                       |  99 +++++++---
+ app/workspace/page.tsx                             |   7 +-
+ components/slightnudge/SlightNudgeOverlay.tsx      |  32 ++-
+ lib/slightnudge/auth.ts                            |  92 +++++++++
+ lib/slightnudge/client.ts                          |  44 ++++-
+ lib/slightnudge/cors.ts                            |   4 +-
+ lib/slightnudge/edit-history.ts                    |  98 +++++++---
+ lib/slightnudge/next-source-adapter.ts             |  26 ++-
+ lib/slightnudge/tailwind-verifier.ts               | 216 +++++++++++++++++++++
+ package.json                                       |   2 +-
+ test/s1-auth-origin.test.ts                        | 179 +++++++++++++++++
+ test/s2-path-traversal.test.ts                     | 120 ++++++++++++
+ test/s3-atomic-write.test.ts                       | 111 +++++++++++
+ test/s5-tailwind-compile.test.ts                   | 112 +++++++++++
+ 24 files changed, 1141 insertions(+), 109 deletions(-)

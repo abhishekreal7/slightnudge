@@ -14,9 +14,16 @@ export function ResponsiveControls({ width, requestedWidth, scope, scopes, loadi
   useEffect(() => { if (!focused.current) setInput(String(shownWidth || '')); }, [shownWidth]);
   const selected = scopes.find(item => item.name === scope);
   const outside = Boolean(selected && width < selected.minWidth);
-  const commit = (raw: string) => { const value = Number(raw); if (Number.isInteger(value) && value >= 240 && value <= 3840) onWidth(value); else setInput(String(shownWidth || '')); };
+  const commit = (raw: string) => {
+    const value = Number(raw);
+    if (!Number.isInteger(value) || value < 240 || value > 3840 || value === shownWidth) {
+      setInput(String(shownWidth || ''));
+      return;
+    }
+    onWidth(value);
+  };
   return <div className={styles.controls} aria-label="Responsive editing" onClick={event => event.stopPropagation()}>
-    <label className={styles.width} title="Preview width in CSS pixels. This does not choose where edits apply."><input aria-label="Preview width" type="number" min="240" max="3840" step="1" value={input} disabled={disabled || !width} onFocus={() => { focused.current = true; }} onChange={event => setInput(event.target.value)} onBlur={event => { focused.current = false; commit(event.currentTarget.value); }} onKeyDown={event => { if (event.key === 'Enter') { event.preventDefault(); commit(event.currentTarget.value); event.currentTarget.blur(); } }} /><span>px</span></label>
+    <label className={styles.width} title="Preview width in CSS pixels. This does not choose where edits apply."><input aria-label="Preview width" type="number" min="240" max="3840" step="1" value={input} disabled={disabled || !width} onFocus={() => { focused.current = true; }} onChange={event => setInput(event.target.value)} onBlur={event => { focused.current = false; commit(event.currentTarget.value); }} onKeyDown={event => { if (event.key === 'Enter') { event.preventDefault(); event.currentTarget.blur(); } }} /><span>px</span></label>
     <label className={styles.scope}><span>Edit</span><select aria-label="Responsive edit scope" value={scope} disabled={disabled || loading || scopeDisabled} title={scopeDisabled ? 'Open the editing window to edit responsive styles.' : error || 'All sizes changes the base style. A breakpoint changes that size and larger screens.'} onChange={event => onScope(event.target.value)}>
       <option value="">{loading ? 'Reading project…' : 'All sizes'}</option>
       {scope && !selected && <option value={scope} disabled>{scope} · unavailable</option>}

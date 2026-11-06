@@ -1,0 +1,193 @@
+{"start":1793567870763,"cwd":"C:\\dev\\vibecheck\\scratch\\reliability-gate\\2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-cWleQT","args":["C:\\dev\\vibecheck\\scratch\\reliability-gate\\2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison\\worktree\\node_modules\\next\\dist\\bin\\next","dev","--webpack","-H","127.0.0.1","-p","51990"]}
+▲ Next.js 16.4.3 (webpack)
+- Local:         http://127.0.0.1:51990
+- Network:       http://127.0.0.1:51990
+✓ Ready in 687ms
+✓ Running next.config.mjs took 108ms
+NEXT_MANIFEST_IO {"event":"write-start","file":"C:\\dev\\vibecheck\\scratch\\reliability-gate\\2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-cWleQT\\.next\\dev\\build-manifest.json","pid":31284,"time":1793567873790,"bytes":277,"stack":"Error: \n    at fs.writeFile (file:///C:/dev/vibecheck/tools/observe-next-manifests.mjs:10:63)\n    at go$writeFile (C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\webpack\\bundle5.js:1:267865)\n    at Object.writeFile (C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\webpack\\bundle5.js:1:267803)\n    at doWrite (C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\webpack\\bundle5.js:29:143731)\n    at processMissingFile (C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\webpack\\bundle5.js:29:144773)\n    at C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\webpack\\bundle5.js:29:145207\n    at callback (C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\webpack\\bundle5.js:1:277681)\n    at FSReqCallback.oncomplete (node:fs:197:21)"}
+NEXT_MANIFEST_IO {"event":"write-end","file":"C:\\dev\\vibecheck\\scratch\\reliability-gate\\2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-cWleQT\\.next\\dev\\build-manifest.json","pid":31284,"time":1793567873795}
+NEXT_MANIFEST_IO {"event":"write-start","file":"C:\\dev\\vibecheck\\scratch\\reliability-gate\\2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-cWleQT\\.next\\dev\\build-manifest.json","pid":31284,"time":1793567874538,"bytes":277,"stack":"Error: \n    at fs.writeFile (file:///C:/dev/vibecheck/tools/observe-next-manifests.mjs:10:63)\n    at go$writeFile (C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\webpack\\bundle5.js:1:267865)\n    at Object.writeFile (C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\webpack\\bundle5.js:1:267803)\n    at doWrite (C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\webpack\\bundle5.js:29:143731)\n    at processMissingFile (C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\webpack\\bundle5.js:29:144773)\n    at writeOut (C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\webpack\\bundle5.js:29:145018)\n    at C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\webpack\\bundle5.js:29:145358\n    at arrayIterator (C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\neo-async\\async.js:1:14262)\n    at timesSync (C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\neo-async\\async.js:1:5027)\n    at Object.eachLimit (C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\neo-async\\async.js:1:14208)"}
+NEXT_MANIFEST_IO {"event":"write-end","file":"C:\\dev\\vibecheck\\scratch\\reliability-gate\\2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-cWleQT\\.next\\dev\\build-manifest.json","pid":31284,"time":1793567874551}
+
+○ Compiling /fixtures/1/page ...
+NEXT_MANIFEST_IO {"event":"write-start","file":"C:\\dev\\vibecheck\\scratch\\reliability-gate\\2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-cWleQT\\.next\\dev\\build-manifest.json","pid":31284,"time":1793567914107,"bytes":344,"stack":"Error: \n    at fs.writeFile (file:///C:/dev/vibecheck/tools/observe-next-manifests.mjs:10:63)\n    at go$writeFile (C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\webpack\\bundle5.js:1:267865)\n    at Object.writeFile (C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\webpack\\bundle5.js:1:267803)\n    at doWrite (C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\webpack\\bundle5.js:29:143731)\n    at processMissingFile (C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\webpack\\bundle5.js:29:144773)\n    at writeOut (C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\webpack\\bundle5.js:29:145018)\n    at C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\webpack\\bundle5.js:29:145358\n    at arrayIterator (C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\neo-async\\async.js:1:14262)\n    at done (C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\neo-async\\async.js:1:14824)\n    at Hook.eval [as callAsync] (eval at create (C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\webpack\\bundle5.js:14:9222), <anonymous>:15:1)\n    at C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\webpack\\bundle5.js:29:143910\n    at C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\webpack\\bundle5.js:1:268024\n    at C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\watchpack\\watchpack.js:1:1974\n    at FSReqCallback.oncomplete (node:fs:187:23)"}
+NEXT_MANIFEST_IO {"event":"write-end","file":"C:\\dev\\vibecheck\\scratch\\reliability-gate\\2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-cWleQT\\.next\\dev\\build-manifest.json","pid":31284,"time":1793567915254}
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\reliability-gate\\2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-cWleQT\\.next\\dev\\build-manifest.json","pid":31284,"time":1793567923476,"bytes":344}
+ GET /fixtures/1 200 in 693ms (next.js: 428ms, application-code: 265ms)
+○ Compiling /editor/[[...project]]/page ...
+NEXT_MANIFEST_IO {"event":"write-start","file":"C:\\dev\\vibecheck\\scratch\\reliability-gate\\2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-cWleQT\\.next\\dev\\build-manifest.json","pid":31284,"time":1793567944131,"bytes":344,"stack":"Error: \n    at fs.writeFile (file:///C:/dev/vibecheck/tools/observe-next-manifests.mjs:10:63)\n    at go$writeFile (C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\webpack\\bundle5.js:1:267865)\n    at Object.writeFile (C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\webpack\\bundle5.js:1:267803)\n    at doWrite (C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\webpack\\bundle5.js:29:143731)\n    at processMissingFile (C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\webpack\\bundle5.js:29:144773)\n    at writeOut (C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\webpack\\bundle5.js:29:145018)\n    at C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\webpack\\bundle5.js:29:145358\n    at arrayIterator (C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\neo-async\\async.js:1:14262)\n    at done (C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\neo-async\\async.js:1:14824)\n    at writeOut (C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\webpack\\bundle5.js:29:144957)\n    at C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\webpack\\bundle5.js:29:1429039\n    at FSReqCallback.oncomplete (node:fs:187:23)\n    at FSReqCallback.callbackTrampoline (node:internal/async_hooks:130:17)"}
+NEXT_MANIFEST_IO {"event":"write-end","file":"C:\\dev\\vibecheck\\scratch\\reliability-gate\\2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-cWleQT\\.next\\dev\\build-manifest.json","pid":31284,"time":1793567944157}
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\reliability-gate\\2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-cWleQT\\.next\\dev\\build-manifest.json","pid":7256,"time":1793567945068,"bytes":344}
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\reliability-gate\\2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-cWleQT\\.next\\dev\\build-manifest.json","pid":31284,"time":1793567945486,"bytes":344}
+ GET /editor 200 in 2.9s (next.js: 1045ms, application-code: 1838ms)
+NEXT_MANIFEST_IO {"event":"write-start","file":"C:\\dev\\vibecheck\\scratch\\reliability-gate\\2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-cWleQT\\.next\\dev\\build-manifest.json","pid":31284,"time":1793567956822,"bytes":344,"stack":"Error: \n    at fs.writeFile (file:///C:/dev/vibecheck/tools/observe-next-manifests.mjs:10:63)\n    at go$writeFile (C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\webpack\\bundle5.js:1:267865)\n    at Object.writeFile (C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\webpack\\bundle5.js:1:267803)\n    at doWrite (C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\webpack\\bundle5.js:29:143731)\n    at processMissingFile (C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\webpack\\bundle5.js:29:144773)\n    at writeOut (C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\webpack\\bundle5.js:29:145018)\n    at C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\webpack\\bundle5.js:29:145358\n    at arrayIterator (C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\neo-async\\async.js:1:14262)\n    at done (C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\neo-async\\async.js:1:14824)\n    at writeOut (C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\webpack\\bundle5.js:29:144957)\n    at C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\webpack\\bundle5.js:29:1429039\n    at FSReqCallback.oncomplete (node:fs:187:23)\n    at FSReqCallback.callbackTrampoline (node:internal/async_hooks:130:17)"}
+NEXT_MANIFEST_IO {"event":"write-end","file":"C:\\dev\\vibecheck\\scratch\\reliability-gate\\2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-cWleQT\\.next\\dev\\build-manifest.json","pid":31284,"time":1793567956825}
+○ Compiling /studio/preview/[pageId]/page ...
+NEXT_MANIFEST_IO {"event":"write-start","file":"C:\\dev\\vibecheck\\scratch\\reliability-gate\\2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-cWleQT\\.next\\dev\\build-manifest.json","pid":31284,"time":1793567958444,"bytes":344,"stack":"Error: \n    at fs.writeFile (file:///C:/dev/vibecheck/tools/observe-next-manifests.mjs:10:63)\n    at go$writeFile (C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\webpack\\bundle5.js:1:267865)\n    at Object.writeFile (C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\webpack\\bundle5.js:1:267803)\n    at doWrite (C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\webpack\\bundle5.js:29:143731)\n    at processMissingFile (C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\webpack\\bundle5.js:29:144773)\n    at writeOut (C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\webpack\\bundle5.js:29:145018)\n    at C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\webpack\\bundle5.js:29:145358\n    at arrayIterator (C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\neo-async\\async.js:1:14262)\n    at done (C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\neo-async\\async.js:1:14824)\n    at writeOut (C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\webpack\\bundle5.js:29:144957)\n    at C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\webpack\\bundle5.js:29:1429039\n    at FSReqCallback.oncomplete (node:fs:187:23)\n    at FSReqCallback.callbackTrampoline (node:internal/async_hooks:130:17)"}
+NEXT_MANIFEST_IO {"event":"write-end","file":"C:\\dev\\vibecheck\\scratch\\reliability-gate\\2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-cWleQT\\.next\\dev\\build-manifest.json","pid":31284,"time":1793567958450}
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\reliability-gate\\2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-cWleQT\\.next\\dev\\build-manifest.json","pid":9240,"time":1793567963356,"bytes":344}
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\reliability-gate\\2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-cWleQT\\.next\\dev\\build-manifest.json","pid":31284,"time":1793567963839,"bytes":344}
+ GET /studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A51990&__slightnudge_session=8d6c3bd0-aab4-4fe2-b9b4-4036e001549f 200 in 7.1s (next.js: 5.3s, application-code: 1735ms)
+NEXT_MANIFEST_IO {"event":"write-start","file":"C:\\dev\\vibecheck\\scratch\\reliability-gate\\2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-cWleQT\\.next\\dev\\build-manifest.json","pid":31284,"time":1793567966101,"bytes":344,"stack":"Error: \n    at fs.writeFile (file:///C:/dev/vibecheck/tools/observe-next-manifests.mjs:10:63)\n    at go$writeFile (C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\webpack\\bundle5.js:1:267865)\n    at Object.writeFile (C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\webpack\\bundle5.js:1:267803)\n    at doWrite (C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\webpack\\bundle5.js:29:143731)\n    at processMissingFile (C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\webpack\\bundle5.js:29:144773)\n    at writeOut (C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\webpack\\bundle5.js:29:145018)\n    at C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\webpack\\bundle5.js:29:145358\n    at arrayIterator (C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\neo-async\\async.js:1:14262)\n    at done (C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\neo-async\\async.js:1:14824)\n    at writeOut (C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\webpack\\bundle5.js:29:144957)\n    at C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\webpack\\bundle5.js:29:1429039\n    at FSReqCallback.oncomplete (node:fs:187:23)\n    at FSReqCallback.callbackTrampoline (node:internal/async_hooks:130:17)"}
+NEXT_MANIFEST_IO {"event":"write-end","file":"C:\\dev\\vibecheck\\scratch\\reliability-gate\\2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-cWleQT\\.next\\dev\\build-manifest.json","pid":31284,"time":1793567966129}
+○ Compiling /api/slightnudge/responsive/route ...
+NEXT_MANIFEST_IO {"event":"write-start","file":"C:\\dev\\vibecheck\\scratch\\reliability-gate\\2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-cWleQT\\.next\\dev\\build-manifest.json","pid":31284,"time":1793567967212,"bytes":344,"stack":"Error: \n    at fs.writeFile (file:///C:/dev/vibecheck/tools/observe-next-manifests.mjs:10:63)\n    at go$writeFile (C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\webpack\\bundle5.js:1:267865)\n    at Object.writeFile (C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\webpack\\bundle5.js:1:267803)\n    at doWrite (C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\webpack\\bundle5.js:29:143731)\n    at processMissingFile (C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\webpack\\bundle5.js:29:144773)\n    at writeOut (C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\webpack\\bundle5.js:29:145018)\n    at C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\webpack\\bundle5.js:29:145358\n    at arrayIterator (C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\neo-async\\async.js:1:14262)\n    at done (C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\neo-async\\async.js:1:14824)\n    at writeOut (C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\webpack\\bundle5.js:29:144957)\n    at C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\webpack\\bundle5.js:29:1429039\n    at FSReqCallback.oncomplete (node:fs:187:23)\n    at FSReqCallback.callbackTrampoline (node:internal/async_hooks:130:17)"}
+NEXT_MANIFEST_IO {"event":"write-end","file":"C:\\dev\\vibecheck\\scratch\\reliability-gate\\2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-cWleQT\\.next\\dev\\build-manifest.json","pid":31284,"time":1793567967216}
+⚠ ./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\reliability-gate\\2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-cWleQT\\.next\\dev\\build-manifest.json","pid":31284,"time":1793567972407,"bytes":344}
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\reliability-gate\\2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-cWleQT\\.next\\dev\\build-manifest.json","pid":31284,"time":1793567972435,"bytes":344}
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\reliability-gate\\2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-cWleQT\\.next\\dev\\build-manifest.json","pid":31284,"time":1793567972457,"bytes":344}
+ GET /api/slightnudge/pages 200 in 14.3s (next.js: 9.1s, proxy.ts: 4.8s, application-code: 416ms)
+ POST /api/slightnudge/responsive 200 in 14.5s (next.js: 9.1s, proxy.ts: 4.8s, application-code: 594ms)
+ POST /api/slightnudge/responsive 200 in 14.6s (next.js: 9.1s, proxy.ts: 4.8s, application-code: 669ms)
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\reliability-gate\\2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-cWleQT\\.next\\dev\\build-manifest.json","pid":31284,"time":1793567973082,"bytes":344}
+ GET /api/slightnudge/pages 200 in 27ms (next.js: 3ms, proxy.ts: 11ms, application-code: 13ms)
+⚠ ./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+Error: aborted
+    at ignore-listed frames {
+  code: 'ECONNRESET'
+}
+⨯ uncaughtException: Error: aborted
+    at ignore-listed frames {
+  code: 'ECONNRESET'
+}
+⨯ uncaughtException:  Error: aborted
+    at ignore-listed frames {
+  code: 'ECONNRESET'
+}

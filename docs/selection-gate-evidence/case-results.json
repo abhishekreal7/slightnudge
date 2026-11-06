@@ -1,0 +1,428 @@
+{
+  "complete": false,
+  "stopped": true,
+  "completedCases": [
+    {
+      "index": 1,
+      "selector": "section#top",
+      "clickPosition": {
+        "x": 15,
+        "y": 15
+      },
+      "expected": {
+        "file": "Hero.tsx",
+        "line": 10,
+        "tag": "section",
+        "outcome": "allowed"
+      },
+      "selected": "src/components/sections/Hero.tsx:10:5:section",
+      "actual": {
+        "file": "Hero.tsx",
+        "line": 10,
+        "column": 5,
+        "tag": "section"
+      },
+      "dom": {
+        "file": "src/components/sections/Hero.tsx",
+        "line": 10,
+        "column": 5,
+        "tag": "section",
+        "classes": "mx-auto grid max-w-7xl gap-16 px-6 pb-28 pt-20 lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:px-10 lg:pb-36 lg:pt-28",
+        "markerRect": {
+          "top": 84,
+          "left": 0,
+          "width": 1200,
+          "height": 668
+        },
+        "clickedRect": {
+          "top": 84,
+          "left": 0,
+          "width": 1200,
+          "height": 668
+        }
+      },
+      "offset": {
+        "x": 0,
+        "y": -0.00506591796875,
+        "width": 0.005615234375,
+        "height": 0.0064697265625
+      },
+      "outcome": "allowed",
+      "inspection": {
+        "found": true,
+        "safeToEdit": true,
+        "filePath": "C:\\dev\\vibecheck\\.slightnudge\\repositories\\m0-control-lab\\src\\components\\sections\\Hero.tsx",
+        "line": 10,
+        "column": 5,
+        "tagName": "section",
+        "className": "mx-auto grid max-w-7xl gap-16 px-6 pb-28 pt-20 lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:px-10 lg:pb-36 lg:pt-28",
+        "textEditable": false,
+        "textReason": "For safety, text editing currently supports elements with one plain text value and no nested elements."
+      },
+      "verdict": "allowed"
+    },
+    {
+      "index": 2,
+      "selector": "section#top p.mb-6",
+      "clickPosition": "default centre",
+      "expected": {
+        "file": "Hero.tsx",
+        "line": 12,
+        "tag": "p",
+        "outcome": "allowed"
+      },
+      "selected": "src/components/sections/Hero.tsx:12:9:p",
+      "actual": {
+        "file": "Hero.tsx",
+        "line": 12,
+        "column": 9,
+        "tag": "p"
+      },
+      "dom": {
+        "file": "src/components/sections/Hero.tsx",
+        "line": 12,
+        "column": 9,
+        "tag": "p",
+        "classes": "mb-6 flex items-center gap-2 text-sm font-medium text-emerald-800",
+        "markerRect": {
+          "top": 217.84375,
+          "left": 40,
+          "width": 475.1875,
+          "height": 20
+        },
+        "clickedRect": {
+          "top": 217.84375,
+          "left": 40,
+          "width": 475.1875,
+          "height": 20
+        }
+      },
+      "offset": {
+        "x": -0.00244140625,
+        "y": 0.003173828125,
+        "width": 0.0001220703125,
+        "height": -0.001220703125
+      },
+      "outcome": "allowed",
+      "inspection": {
+        "found": true,
+        "safeToEdit": true,
+        "filePath": "C:\\dev\\vibecheck\\.slightnudge\\repositories\\m0-control-lab\\src\\components\\sections\\Hero.tsx",
+        "line": 12,
+        "column": 9,
+        "tagName": "p",
+        "className": "mb-6 flex items-center gap-2 text-sm font-medium text-emerald-800",
+        "textEditable": false,
+        "textReason": "This text comes from prop 'eyebrow' and cannot be edited directly. Nothing was changed.",
+        "propSource": "eyebrow"
+      },
+      "verdict": "allowed"
+    },
+    {
+      "index": 3,
+      "selector": "section#top h1",
+      "clickPosition": "default centre",
+      "expected": {
+        "file": "Hero.tsx",
+        "line": 13,
+        "tag": "h1",
+        "outcome": "allowed"
+      },
+      "selected": "src/components/sections/Hero.tsx:13:9:h1",
+      "actual": {
+        "file": "Hero.tsx",
+        "line": 13,
+        "column": 9,
+        "tag": "h1"
+      },
+      "dom": {
+        "file": "src/components/sections/Hero.tsx",
+        "line": 13,
+        "column": 9,
+        "tag": "h1",
+        "classes": "max-w-xl text-5xl font-semibold leading-[1.03] tracking-[-0.055em] text-slate-950 sm:text-6xl lg:text-7xl",
+        "markerRect": {
+          "top": 261.84375,
+          "left": 40,
+          "width": 475.1875,
+          "height": 148.3125
+        },
+        "clickedRect": {
+          "top": 261.84375,
+          "left": 40,
+          "width": 475.1875,
+          "height": 148.3125
+        }
+      },
+      "offset": {
+        "x": -0.00244140625,
+        "y": 0.00054931640625,
+        "width": 0.0001220703125,
+        "height": 0.00518798828125
+      },
+      "outcome": "allowed",
+      "inspection": {
+        "found": true,
+        "safeToEdit": true,
+        "filePath": "C:\\dev\\vibecheck\\.slightnudge\\repositories\\m0-control-lab\\src\\components\\sections\\Hero.tsx",
+        "line": 13,
+        "column": 9,
+        "tagName": "h1",
+        "className": "max-w-xl text-5xl font-semibold leading-[1.03] tracking-[-0.055em] text-slate-950 sm:text-6xl lg:text-7xl",
+        "textEditable": false,
+        "textReason": "This text comes from prop 'title' and cannot be edited directly. Nothing was changed.",
+        "propSource": "title"
+      },
+      "verdict": "allowed"
+    },
+    {
+      "index": 4,
+      "selector": "section#top p.leading-8",
+      "clickPosition": "default centre",
+      "expected": {
+        "file": "Hero.tsx",
+        "line": 14,
+        "tag": "p",
+        "outcome": "allowed"
+      },
+      "selected": "src/components/sections/Hero.tsx:14:9:p",
+      "actual": {
+        "file": "Hero.tsx",
+        "line": 14,
+        "column": 9,
+        "tag": "p"
+      },
+      "dom": {
+        "file": "src/components/sections/Hero.tsx",
+        "line": 14,
+        "column": 9,
+        "tag": "p",
+        "classes": "mt-7 max-w-lg text-lg leading-8 text-slate-600",
+        "markerRect": {
+          "top": 438.15625,
+          "left": 40,
+          "width": 475.1875,
+          "height": 64
+        },
+        "clickedRect": {
+          "top": 438.15625,
+          "left": 40,
+          "width": 475.1875,
+          "height": 64
+        }
+      },
+      "offset": {
+        "x": -0.00244140625,
+        "y": 0.0040283203125,
+        "width": 0.0001220703125,
+        "height": -0.00384521484375
+      },
+      "outcome": "allowed",
+      "inspection": {
+        "found": true,
+        "safeToEdit": true,
+        "filePath": "C:\\dev\\vibecheck\\.slightnudge\\repositories\\m0-control-lab\\src\\components\\sections\\Hero.tsx",
+        "line": 14,
+        "column": 9,
+        "tagName": "p",
+        "className": "mt-7 max-w-lg text-lg leading-8 text-slate-600",
+        "textEditable": false,
+        "textReason": "This text comes from prop 'description' and cannot be edited directly. Nothing was changed.",
+        "propSource": "description"
+      },
+      "verdict": "allowed"
+    },
+    {
+      "index": 5,
+      "selector": "section#top a[href=\"#pricing\"]",
+      "clickPosition": "default centre",
+      "expected": {
+        "file": "Hero.tsx",
+        "line": 16,
+        "tag": "a",
+        "outcome": "allowed"
+      },
+      "selected": "src/components/sections/Hero.tsx:16:11:a",
+      "actual": {
+        "file": "Hero.tsx",
+        "line": 16,
+        "column": 11,
+        "tag": "a"
+      },
+      "dom": {
+        "file": "src/components/sections/Hero.tsx",
+        "line": 16,
+        "column": 11,
+        "tag": "a",
+        "classes": "rounded-full bg-emerald-700 px-6 py-3.5 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-800 active:scale-[0.98]",
+        "markerRect": {
+          "top": 538.15625,
+          "left": 40,
+          "width": 226.515625,
+          "height": 48
+        },
+        "clickedRect": {
+          "top": 538.15625,
+          "left": 40,
+          "width": 226.515625,
+          "height": 48
+        }
+      },
+      "offset": {
+        "x": -0.00244140625,
+        "y": -0.00201416015625,
+        "width": 0.0089111328125,
+        "height": -0.00286865234375
+      },
+      "outcome": "allowed",
+      "inspection": {
+        "found": true,
+        "safeToEdit": true,
+        "filePath": "C:\\dev\\vibecheck\\.slightnudge\\repositories\\m0-control-lab\\src\\components\\sections\\Hero.tsx",
+        "line": 16,
+        "column": 11,
+        "tagName": "a",
+        "className": "rounded-full bg-emerald-700 px-6 py-3.5 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-800 active:scale-[0.98]",
+        "textEditable": false,
+        "textReason": "This text comes from prop 'primaryAction' and cannot be edited directly. Nothing was changed.",
+        "propSource": "primaryAction"
+      },
+      "verdict": "allowed"
+    },
+    {
+      "index": 6,
+      "selector": "section#features",
+      "clickPosition": {
+        "x": 15,
+        "y": 15
+      },
+      "expected": {
+        "file": "Features.tsx",
+        "line": 11,
+        "tag": "section",
+        "outcome": "allowed"
+      },
+      "selected": "src/components/sections/Features.tsx:11:5:section",
+      "actual": {
+        "file": "Features.tsx",
+        "line": 11,
+        "column": 5,
+        "tag": "section"
+      },
+      "dom": {
+        "file": "src/components/sections/Features.tsx",
+        "line": 11,
+        "column": 5,
+        "tag": "section",
+        "classes": "border-y border-slate-200 bg-white py-24 sm:py-32",
+        "markerRect": {
+          "top": 752,
+          "left": 0,
+          "width": 1200,
+          "height": 668
+        },
+        "clickedRect": {
+          "top": 752,
+          "left": 0,
+          "width": 1200,
+          "height": 668
+        }
+      },
+      "offset": {
+        "x": 0,
+        "y": 0.00140380859375,
+        "width": 0.005615234375,
+        "height": -0.00909423828125
+      },
+      "outcome": "allowed",
+      "inspection": {
+        "found": true,
+        "safeToEdit": true,
+        "filePath": "C:\\dev\\vibecheck\\.slightnudge\\repositories\\m0-control-lab\\src\\components\\sections\\Features.tsx",
+        "line": 11,
+        "column": 5,
+        "tagName": "section",
+        "className": "border-y border-slate-200 bg-white py-24 sm:py-32",
+        "textEditable": false,
+        "textReason": "This text is generated dynamically and cannot be edited safely."
+      },
+      "verdict": "allowed"
+    },
+    {
+      "index": 7,
+      "selector": "section#features h2",
+      "clickPosition": "default centre",
+      "expected": {
+        "file": "Features.tsx",
+        "line": 13,
+        "tag": "h2",
+        "outcome": "allowed"
+      },
+      "selected": "src/components/sections/Features.tsx:13:122:h2",
+      "actual": {
+        "file": "Features.tsx",
+        "line": 13,
+        "column": 122,
+        "tag": "h2"
+      },
+      "dom": {
+        "file": "src/components/sections/Features.tsx",
+        "line": 13,
+        "column": 122,
+        "tag": "h2",
+        "classes": "mt-4 text-4xl font-semibold tracking-[-0.045em] sm:text-5xl",
+        "markerRect": {
+          "top": 917,
+          "left": 40,
+          "width": 672,
+          "height": 96
+        },
+        "clickedRect": {
+          "top": 917,
+          "left": 40,
+          "width": 672,
+          "height": 96
+        }
+      },
+      "offset": {
+        "x": -0.00244140625,
+        "y": -0.000732421875,
+        "width": 0.00634765625,
+        "height": -0.005859375
+      },
+      "outcome": "allowed",
+      "inspection": {
+        "found": true,
+        "safeToEdit": true,
+        "filePath": "C:\\dev\\vibecheck\\.slightnudge\\repositories\\m0-control-lab\\src\\components\\sections\\Features.tsx",
+        "line": 13,
+        "column": 122,
+        "tagName": "h2",
+        "className": "mt-4 text-4xl font-semibold tracking-[-0.045em] sm:text-5xl",
+        "textEditable": true
+      },
+      "verdict": "allowed"
+    }
+  ],
+  "failure": {
+    "suite": "regression",
+    "round": 1,
+    "surface": "old-studio",
+    "index": 8,
+    "selector": "section#features div.mt-12.grid",
+    "clickPosition": {
+      "x": 2,
+      "y": 2
+    },
+    "expected": {
+      "file": "Features.tsx",
+      "line": 14,
+      "tag": "div",
+      "outcome": "allowed"
+    },
+    "actual": null,
+    "verdict": "WRONG TARGET (missing selection)",
+    "reason": "Original physical click completed, then the real editor data-selected-source did not become nonempty within the unchanged 30000ms default wait. No different source target was observed."
+  },
+  "remainingCases": "Unreached; not counted as allowed or refused"
+}

@@ -1,0 +1,399 @@
+TAP version 13
+# Subtest: P0: Token HTML Host Header Validation
+    # Subtest: disallows token in HTML for / with evil.localhost
+    not ok 1 - disallows token in HTML for / with evil.localhost
+      ---
+      duration_ms: 13569.2457
+      type: 'test'
+      location: 'C:\\dev\\vibecheck\\test\\token-html-host.test.ts:1:2078'
+      failureType: 'testCodeFailure'
+      error: 'Session token was leaked in response body for / under evil.localhost'
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: true
+      actual: false
+      operator: '=='
+      stack: |-
+        TestContext.<anonymous> (C:\dev\vibecheck\test\token-html-host.test.ts:72:16)
+        process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+        async Test.run (node:internal/test_runner/test:1054:7)
+        async Promise.all (index 0)
+        async Suite.run (node:internal/test_runner/test:1442:7)
+        async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+      ...
+    # Subtest: disallows token in HTML for / with attacker.example
+    not ok 2 - disallows token in HTML for / with attacker.example
+      ---
+      duration_ms: 181.649
+      type: 'test'
+      location: 'C:\\dev\\vibecheck\\test\\token-html-host.test.ts:1:2078'
+      failureType: 'testCodeFailure'
+      error: 'Session token was leaked in response body for / under attacker.example'
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: true
+      actual: false
+      operator: '=='
+      stack: |-
+        TestContext.<anonymous> (C:\dev\vibecheck\test\token-html-host.test.ts:72:16)
+        process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+        async Test.run (node:internal/test_runner/test:1054:7)
+        async Suite.processPendingSubtests (node:internal/test_runner/test:744:7)
+      ...
+    # Subtest: disallows token in HTML for / with wrong port (port+1)
+    not ok 3 - disallows token in HTML for / with wrong port (port+1)
+      ---
+      duration_ms: 164.9854
+      type: 'test'
+      location: 'C:\\dev\\vibecheck\\test\\token-html-host.test.ts:1:2078'
+      failureType: 'testCodeFailure'
+      error: 'Session token was leaked in response body for / under wrong port (port+1)'
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: true
+      actual: false
+      operator: '=='
+      stack: |-
+        TestContext.<anonymous> (C:\dev\vibecheck\test\token-html-host.test.ts:72:16)
+        process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+        async Test.run (node:internal/test_runner/test:1054:7)
+        async Suite.processPendingSubtests (node:internal/test_runner/test:744:7)
+      ...
+    # Subtest: disallows token in HTML for / with missing Host
+    not ok 4 - disallows token in HTML for / with missing Host
+      ---
+      duration_ms: 166.7955
+      type: 'test'
+      location: 'C:\\dev\\vibecheck\\test\\token-html-host.test.ts:1:2078'
+      failureType: 'testCodeFailure'
+      error: 'Session token was leaked in response body for / under missing Host'
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: true
+      actual: false
+      operator: '=='
+      stack: |-
+        TestContext.<anonymous> (C:\dev\vibecheck\test\token-html-host.test.ts:72:16)
+        process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+        async Test.run (node:internal/test_runner/test:1054:7)
+        async Suite.processPendingSubtests (node:internal/test_runner/test:744:7)
+      ...
+    # Subtest: disallows token in HTML for / with valid Host + X-Forwarded-Host: evil.localhost
+    not ok 5 - disallows token in HTML for / with valid Host + X-Forwarded-Host: evil.localhost
+      ---
+      duration_ms: 162.8457
+      type: 'test'
+      location: 'C:\\dev\\vibecheck\\test\\token-html-host.test.ts:1:2078'
+      failureType: 'testCodeFailure'
+      error: 'Session token was leaked in response body for / under valid Host + X-Forwarded-Host: evil.localhost'
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: true
+      actual: false
+      operator: '=='
+      stack: |-
+        TestContext.<anonymous> (C:\dev\vibecheck\test\token-html-host.test.ts:72:16)
+        process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+        async Test.run (node:internal/test_runner/test:1054:7)
+        async Suite.processPendingSubtests (node:internal/test_runner/test:744:7)
+      ...
+    # Subtest: disallows token in HTML for / with valid Host + Forwarded: host=evil.localhost
+    not ok 6 - disallows token in HTML for / with valid Host + Forwarded: host=evil.localhost
+      ---
+      duration_ms: 153.8774
+      type: 'test'
+      location: 'C:\\dev\\vibecheck\\test\\token-html-host.test.ts:1:2078'
+      failureType: 'testCodeFailure'
+      error: 'Session token was leaked in response body for / under valid Host + Forwarded: host=evil.localhost'
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: true
+      actual: false
+      operator: '=='
+      stack: |-
+        TestContext.<anonymous> (C:\dev\vibecheck\test\token-html-host.test.ts:72:16)
+        process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+        async Test.run (node:internal/test_runner/test:1054:7)
+        async Suite.processPendingSubtests (node:internal/test_runner/test:744:7)
+      ...
+    # Subtest: disallows token in HTML for / with valid 127.0.0.1 + X-Forwarded-Host: evil.localhost
+    not ok 7 - disallows token in HTML for / with valid 127.0.0.1 + X-Forwarded-Host: evil.localhost
+      ---
+      duration_ms: 161.6527
+      type: 'test'
+      location: 'C:\\dev\\vibecheck\\test\\token-html-host.test.ts:1:2078'
+      failureType: 'testCodeFailure'
+      error: 'Session token was leaked in response body for / under valid 127.0.0.1 + X-Forwarded-Host: evil.localhost'
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: true
+      actual: false
+      operator: '=='
+      stack: |-
+        TestContext.<anonymous> (C:\dev\vibecheck\test\token-html-host.test.ts:72:16)
+        process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+        async Test.run (node:internal/test_runner/test:1054:7)
+        async Suite.processPendingSubtests (node:internal/test_runner/test:744:7)
+      ...
+    # Subtest: disallows token in HTML for / with valid 127.0.0.1 + Forwarded: host=evil.localhost
+    not ok 8 - disallows token in HTML for / with valid 127.0.0.1 + Forwarded: host=evil.localhost
+      ---
+      duration_ms: 160.1909
+      type: 'test'
+      location: 'C:\\dev\\vibecheck\\test\\token-html-host.test.ts:1:2078'
+      failureType: 'testCodeFailure'
+      error: 'Session token was leaked in response body for / under valid 127.0.0.1 + Forwarded: host=evil.localhost'
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: true
+      actual: false
+      operator: '=='
+      stack: |-
+        TestContext.<anonymous> (C:\dev\vibecheck\test\token-html-host.test.ts:72:16)
+        process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+        async Test.run (node:internal/test_runner/test:1054:7)
+        async Suite.processPendingSubtests (node:internal/test_runner/test:744:7)
+      ...
+    # Subtest: renders token in HTML for / with valid Host localhost:PORT
+    ok 9 - renders token in HTML for / with valid Host localhost:PORT
+      ---
+      duration_ms: 176.382
+      type: 'test'
+      ...
+    # Subtest: renders token in HTML for / with valid Host 127.0.0.1:PORT
+    ok 10 - renders token in HTML for / with valid Host 127.0.0.1:PORT
+      ---
+      duration_ms: 149.5337
+      type: 'test'
+      ...
+    # Subtest: disallows token in HTML for /studio with evil.localhost
+    not ok 11 - disallows token in HTML for /studio with evil.localhost
+      ---
+      duration_ms: 8001.8313
+      type: 'test'
+      location: 'C:\\dev\\vibecheck\\test\\token-html-host.test.ts:1:2078'
+      failureType: 'testCodeFailure'
+      error: 'Session token was leaked in response body for /studio under evil.localhost'
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: true
+      actual: false
+      operator: '=='
+      stack: |-
+        TestContext.<anonymous> (C:\dev\vibecheck\test\token-html-host.test.ts:72:16)
+        process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+        async Test.run (node:internal/test_runner/test:1054:7)
+        async Suite.processPendingSubtests (node:internal/test_runner/test:744:7)
+      ...
+    # Subtest: disallows token in HTML for /studio with attacker.example
+    not ok 12 - disallows token in HTML for /studio with attacker.example
+      ---
+      duration_ms: 128.3947
+      type: 'test'
+      location: 'C:\\dev\\vibecheck\\test\\token-html-host.test.ts:1:2078'
+      failureType: 'testCodeFailure'
+      error: 'Session token was leaked in response body for /studio under attacker.example'
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: true
+      actual: false
+      operator: '=='
+      stack: |-
+        TestContext.<anonymous> (C:\dev\vibecheck\test\token-html-host.test.ts:72:16)
+        process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+        async Test.run (node:internal/test_runner/test:1054:7)
+        async Suite.processPendingSubtests (node:internal/test_runner/test:744:7)
+      ...
+    # Subtest: disallows token in HTML for /studio with wrong port (port+1)
+    not ok 13 - disallows token in HTML for /studio with wrong port (port+1)
+      ---
+      duration_ms: 123.214
+      type: 'test'
+      location: 'C:\\dev\\vibecheck\\test\\token-html-host.test.ts:1:2078'
+      failureType: 'testCodeFailure'
+      error: 'Session token was leaked in response body for /studio under wrong port (port+1)'
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: true
+      actual: false
+      operator: '=='
+      stack: |-
+        TestContext.<anonymous> (C:\dev\vibecheck\test\token-html-host.test.ts:72:16)
+        process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+        async Test.run (node:internal/test_runner/test:1054:7)
+        async Suite.processPendingSubtests (node:internal/test_runner/test:744:7)
+      ...
+    # Subtest: disallows token in HTML for /studio with missing Host
+    not ok 14 - disallows token in HTML for /studio with missing Host
+      ---
+      duration_ms: 135.823
+      type: 'test'
+      location: 'C:\\dev\\vibecheck\\test\\token-html-host.test.ts:1:2078'
+      failureType: 'testCodeFailure'
+      error: 'Session token was leaked in response body for /studio under missing Host'
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: true
+      actual: false
+      operator: '=='
+      stack: |-
+        TestContext.<anonymous> (C:\dev\vibecheck\test\token-html-host.test.ts:72:16)
+        process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+        async Test.run (node:internal/test_runner/test:1054:7)
+        async Suite.processPendingSubtests (node:internal/test_runner/test:744:7)
+      ...
+    # Subtest: disallows token in HTML for /studio with valid Host + X-Forwarded-Host: evil.localhost
+    not ok 15 - disallows token in HTML for /studio with valid Host + X-Forwarded-Host: evil.localhost
+      ---
+      duration_ms: 127.9527
+      type: 'test'
+      location: 'C:\\dev\\vibecheck\\test\\token-html-host.test.ts:1:2078'
+      failureType: 'testCodeFailure'
+      error: 'Session token was leaked in response body for /studio under valid Host + X-Forwarded-Host: evil.localhost'
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: true
+      actual: false
+      operator: '=='
+      stack: |-
+        TestContext.<anonymous> (C:\dev\vibecheck\test\token-html-host.test.ts:72:16)
+        process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+        async Test.run (node:internal/test_runner/test:1054:7)
+        async Suite.processPendingSubtests (node:internal/test_runner/test:744:7)
+      ...
+    # Subtest: disallows token in HTML for /studio with valid Host + Forwarded: host=evil.localhost
+    not ok 16 - disallows token in HTML for /studio with valid Host + Forwarded: host=evil.localhost
+      ---
+      duration_ms: 121.5128
+      type: 'test'
+      location: 'C:\\dev\\vibecheck\\test\\token-html-host.test.ts:1:2078'
+      failureType: 'testCodeFailure'
+      error: 'Session token was leaked in response body for /studio under valid Host + Forwarded: host=evil.localhost'
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: true
+      actual: false
+      operator: '=='
+      stack: |-
+        TestContext.<anonymous> (C:\dev\vibecheck\test\token-html-host.test.ts:72:16)
+        process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+        async Test.run (node:internal/test_runner/test:1054:7)
+        async Suite.processPendingSubtests (node:internal/test_runner/test:744:7)
+      ...
+    # Subtest: disallows token in HTML for /studio with valid 127.0.0.1 + X-Forwarded-Host: evil.localhost
+    not ok 17 - disallows token in HTML for /studio with valid 127.0.0.1 + X-Forwarded-Host: evil.localhost
+      ---
+      duration_ms: 136.3357
+      type: 'test'
+      location: 'C:\\dev\\vibecheck\\test\\token-html-host.test.ts:1:2078'
+      failureType: 'testCodeFailure'
+      error: 'Session token was leaked in response body for /studio under valid 127.0.0.1 + X-Forwarded-Host: evil.localhost'
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: true
+      actual: false
+      operator: '=='
+      stack: |-
+        TestContext.<anonymous> (C:\dev\vibecheck\test\token-html-host.test.ts:72:16)
+        process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+        async Test.run (node:internal/test_runner/test:1054:7)
+        async Suite.processPendingSubtests (node:internal/test_runner/test:744:7)
+      ...
+    # Subtest: disallows token in HTML for /studio with valid 127.0.0.1 + Forwarded: host=evil.localhost
+    not ok 18 - disallows token in HTML for /studio with valid 127.0.0.1 + Forwarded: host=evil.localhost
+      ---
+      duration_ms: 121.3137
+      type: 'test'
+      location: 'C:\\dev\\vibecheck\\test\\token-html-host.test.ts:1:2078'
+      failureType: 'testCodeFailure'
+      error: 'Session token was leaked in response body for /studio under valid 127.0.0.1 + Forwarded: host=evil.localhost'
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: true
+      actual: false
+      operator: '=='
+      stack: |-
+        TestContext.<anonymous> (C:\dev\vibecheck\test\token-html-host.test.ts:72:16)
+        process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+        async Test.run (node:internal/test_runner/test:1054:7)
+        async Suite.processPendingSubtests (node:internal/test_runner/test:744:7)
+      ...
+    # Subtest: renders token in HTML for /studio with valid Host localhost:PORT
+    ok 19 - renders token in HTML for /studio with valid Host localhost:PORT
+      ---
+      duration_ms: 139.7892
+      type: 'test'
+      ...
+    # Subtest: renders token in HTML for /studio with valid Host 127.0.0.1:PORT
+    ok 20 - renders token in HTML for /studio with valid Host 127.0.0.1:PORT
+      ---
+      duration_ms: 151.9589
+      type: 'test'
+      ...
+    # Subtest: refuses token endpoint for disallowed host (evil.localhost) with 403
+    ok 21 - refuses token endpoint for disallowed host (evil.localhost) with 403
+      ---
+      duration_ms: 46.853
+      type: 'test'
+      ...
+    # Subtest: refuses token endpoint when X-Forwarded-Host is evil.localhost with 403
+    not ok 22 - refuses token endpoint when X-Forwarded-Host is evil.localhost with 403
+      ---
+      duration_ms: 20.5501
+      type: 'test'
+      location: 'C:\\dev\\vibecheck\\test\\token-html-host.test.ts:1:3740'
+      failureType: 'testCodeFailure'
+      error: |-
+        Expected 403 on forwarded evil host, got 200
+        
+        200 !== 403
+        
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: 403
+      actual: 200
+      operator: 'strictEqual'
+      stack: |-
+        TestContext.<anonymous> (C:\dev\vibecheck\test\token-html-host.test.ts:120:12)
+        process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+        async Test.run (node:internal/test_runner/test:1054:7)
+        async Suite.processPendingSubtests (node:internal/test_runner/test:744:7)
+      ...
+    # Subtest: token endpoint response includes Cache-Control: no-store
+    not ok 23 - token endpoint response includes Cache-Control: no-store
+      ---
+      duration_ms: 18.2351
+      type: 'test'
+      location: 'C:\\dev\\vibecheck\\test\\token-html-host.test.ts:1:4033'
+      failureType: 'testCodeFailure'
+      error: 'Expected Cache-Control to include no-store, got: '
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: true
+      actual: false
+      operator: '=='
+      stack: |-
+        TestContext.<anonymous> (C:\dev\vibecheck\test\token-html-host.test.ts:127:12)
+        process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+        async Test.run (node:internal/test_runner/test:1054:7)
+        async Suite.processPendingSubtests (node:internal/test_runner/test:744:7)
+      ...
+    1..23
+not ok 1 - P0: Token HTML Host Header Validation
+  ---
+  duration_ms: 44502.9602
+  type: 'suite'
+  location: 'C:\\dev\\vibecheck\\test\\token-html-host.test.ts:1:274'
+  failureType: 'subtestsFailed'
+  error: '18 subtests failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+1..1
+# tests 23
+# suites 1
+# pass 5
+# fail 18
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 44508.434

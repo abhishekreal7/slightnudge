@@ -1,0 +1,190 @@
+{
+  "timestamp": "2026-10-23T08:38:08.011Z",
+  "totalCases": 3000,
+  "startSeed": 73000,
+  "elapsedMs": 8802585,
+  "totalAccepted": 1650,
+  "totalRefused": 1350,
+  "invariantViolations": 0,
+  "wrongTargetCount": 0,
+  "perActionStats": {
+    "exact_match": {
+      "total": 150,
+      "accepted": 150,
+      "refused": 0,
+      "passed": 150,
+      "failed": 0,
+      "refusalReasons": {}
+    },
+    "prettier_default": {
+      "total": 150,
+      "accepted": 150,
+      "refused": 0,
+      "passed": 150,
+      "failed": 0,
+      "refusalReasons": {}
+    },
+    "prettier_alt": {
+      "total": 150,
+      "accepted": 150,
+      "refused": 0,
+      "passed": 150,
+      "failed": 0,
+      "refusalReasons": {}
+    },
+    "tailwind_reorder": {
+      "total": 150,
+      "accepted": 150,
+      "refused": 0,
+      "passed": 150,
+      "failed": 0,
+      "refusalReasons": {}
+    },
+    "edit_unrelated_line": {
+      "total": 150,
+      "accepted": 150,
+      "refused": 0,
+      "passed": 150,
+      "failed": 0,
+      "refusalReasons": {}
+    },
+    "add_class_to_other_element": {
+      "total": 150,
+      "accepted": 150,
+      "refused": 0,
+      "passed": 150,
+      "failed": 0,
+      "refusalReasons": {}
+    },
+    "rename_variable": {
+      "total": 150,
+      "accepted": 150,
+      "refused": 0,
+      "passed": 150,
+      "failed": 0,
+      "refusalReasons": {}
+    },
+    "insert_import": {
+      "total": 150,
+      "accepted": 150,
+      "refused": 0,
+      "passed": 150,
+      "failed": 0,
+      "refusalReasons": {}
+    },
+    "duplicate_unrelated_element": {
+      "total": 150,
+      "accepted": 150,
+      "refused": 0,
+      "passed": 150,
+      "failed": 0,
+      "refusalReasons": {}
+    },
+    "move_unrelated_element": {
+      "total": 150,
+      "accepted": 150,
+      "refused": 0,
+      "passed": 150,
+      "failed": 0,
+      "refusalReasons": {}
+    },
+    "stacked_second_edit_on_a_DIFFERENT_element": {
+      "total": 150,
+      "accepted": 150,
+      "refused": 0,
+      "passed": 150,
+      "failed": 0,
+      "refusalReasons": {}
+    },
+    "delete_target": {
+      "total": 150,
+      "accepted": 0,
+      "refused": 150,
+      "passed": 150,
+      "failed": 0,
+      "refusalReasons": {
+        "This file changed after the visual edit: element could not be found. Open fixtures/pbt-target.tsx near line 11 and change the className to remove \"bg-blue-200\" and restore \"bg-blue-100\". Nothing was changed.": 150
+      }
+    },
+    "wrap_target_in_conditional": {
+      "total": 150,
+      "accepted": 0,
+      "refused": 150,
+      "passed": 150,
+      "failed": 0,
+      "refusalReasons": {
+        "This file changed after the visual edit: element is in a conditional expression. Open fixtures/pbt-target.tsx near line 10 and change the className to remove \"bg-blue-200\" and restore \"bg-blue-100\". Nothing was changed.": 150
+      }
+    },
+    "stacked_second_edit_on_SAME_element": {
+      "total": 150,
+      "accepted": 0,
+      "refused": 150,
+      "passed": 150,
+      "failed": 0,
+      "refusalReasons": {
+        "Cannot undo this edit because a newer edit (\"add ring-2 ring-blue-500\") on the same element depends on it. Undo the newer edit first.": 150
+      }
+    },
+    "user_changed_same_token": {
+      "total": 150,
+      "accepted": 0,
+      "refused": 150,
+      "passed": 150,
+      "failed": 0,
+      "refusalReasons": {
+        "This file changed after the visual edit: element could not be found. Open fixtures/pbt-target.tsx near line 11 and change the className to remove \"bg-blue-200\" and restore \"bg-blue-100\". Nothing was changed.": 150
+      }
+    },
+    "external_overwrite": {
+      "total": 150,
+      "accepted": 0,
+      "refused": 150,
+      "passed": 150,
+      "failed": 0,
+      "refusalReasons": {
+        "This file changed after the visual edit: element could not be found. Open fixtures/pbt-target.tsx near line 11 and change the className to remove \"bg-blue-200\" and restore \"bg-blue-100\". Nothing was changed.": 150
+      }
+    },
+    "rename_tag": {
+      "total": 150,
+      "accepted": 0,
+      "refused": 150,
+      "passed": 150,
+      "failed": 0,
+      "refusalReasons": {
+        "This file changed after the visual edit: element could not be found. Open fixtures/pbt-target.tsx near line 11 and change the className to remove \"bg-blue-200\" and restore \"bg-blue-100\". Nothing was changed.": 150
+      }
+    },
+    "duplicate_target": {
+      "total": 150,
+      "accepted": 0,
+      "refused": 150,
+      "passed": 150,
+      "failed": 0,
+      "refusalReasons": {
+        "This file changed after the visual edit: multiple matching elements found where uniqueness cannot be established. Open fixtures/pbt-target.tsx near line 11 and change the className to remove \"bg-blue-200\" and restore \"bg-blue-100\". Nothing was changed.": 150
+      }
+    },
+    "file_deleted": {
+      "total": 150,
+      "accepted": 0,
+      "refused": 150,
+      "passed": 150,
+      "failed": 0,
+      "refusalReasons": {
+        "That file no longer exists.": 150
+      }
+    },
+    "element_moved_into_loop": {
+      "total": 150,
+      "accepted": 0,
+      "refused": 150,
+      "passed": 150,
+      "failed": 0,
+      "refusalReasons": {
+        "This file changed after the visual edit: element is inside a repeating list. Open fixtures/pbt-target.tsx near line 10 and change the className to remove \"bg-blue-200\" and restore \"bg-blue-100\". Nothing was changed.": 150
+      }
+    }
+  }
+}

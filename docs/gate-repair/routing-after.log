@@ -1,0 +1,7 @@
+HARNESS-V3 OP 1793598758938 START click getByRole('region', { name: 'Component properties', exact: true }).getByRole('button', { name: 'Change', exact: true })
+HARNESS-V3 OP 1793598759461 END click getByRole('region', { name: 'Component properties', exact: true }).getByRole('button', { name: 'Change', exact: true })
+HARNESS-V3 OP 1793598759472 START waitFor locator('[data-source-ready="true"]')
+HARNESS-V3 OP 1793598759678 END waitFor locator('[data-source-ready="true"]')
+HARNESS-V3 OP 1793598759679 START textContent locator('h1')
+HARNESS-V3 OP 1793598759702 END textContent locator('h1')
+PASS HARNESS-ONLY: delayed host control, nested control scope, idempotence, readiness, website heading

@@ -1,0 +1,18 @@
+{
+  "head": "f11e47058a1ca0e0985ba5bbdff6dbe4c44133a6",
+  "productRef": "f11e47058a1ca0e0985ba5bbdff6dbe4c44133a6",
+  "testRef": "f11e47058a1ca0e0985ba5bbdff6dbe4c44133a6",
+  "fatal": false,
+  "rows": [
+    {
+      "workflow": "shared-local-studio",
+      "harness": "HARNESS-V3",
+      "api": "REAL",
+      "result": "TIMEOUT",
+      "seconds": 121.48,
+      "exitCode": 1,
+      "historical": "docs/security-hardening/shared-workflows.log",
+      "invalidManifestServers": []
+    }
+  ]
+}

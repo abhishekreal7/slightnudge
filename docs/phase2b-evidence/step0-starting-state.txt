@@ -1,0 +1,83 @@
+=== STEP 0: STARTING STATE ===
+
+Command: git branch --show-current; git status --porcelain; git log --oneline -3
+
+fix/phase2a-safety
+?? docs/coverage-study.md
+?? docs/phase0-evidence/
+?? docs/phase0-report.md
+?? docs/phase2-evidence/
+?? docs/phase2-review-evidence/
+?? docs/phase2a-closeout.md
+?? docs/phase2a-report.md
+?? docs/phase2a-review.md
+?? docs/phase2b-evidence/
+?? scratch/actual-canvas-comparison.png
+?? scratch/analyze-40.js
+?? scratch/analyze-partials-wilson.js
+?? scratch/analyzed-40.json
+?? scratch/audit-results-detailed.json
+?? scratch/classify-unsupported.js
+?? scratch/compute-repo-mix.js
+?? scratch/curved-pill-test.png
+?? scratch/debug-s1.cjs
+?? scratch/debug-s5.cjs
+?? scratch/diffs/
+?? scratch/evaluate-40-detailed.ts
+?? scratch/fetch-diffs.js
+?? scratch/full-canvas-demo.png
+?? scratch/inspect-corner.js
+?? scratch/inspect-partials.js
+?? scratch/inspect-unsupported.js
+?? scratch/parse-study.js
+?? scratch/parsed-rows.json
+?? scratch/partial-breakdown.json
+?? scratch/perfect-fit-test.png
+?? scratch/pill-comparison.png
+?? scratch/pill-zoom.png
+?? scratch/print-disagreements.js
+?? scratch/print-reproduced.js
+?? scratch/repo-stats.json
+?? scratch/run-verification.cjs
+?? scratch/sample-40.js
+?? scratch/sampled-40.json
+?? scratch/setup-temp-copy.cjs
+?? scratch/studio-active-drag.png
+?? scratch/studio-hover-corner.png
+?? scratch/studio-idle-corner.png
+?? scratch/summarize-audit.js
+?? scratch/test-canvas-actual.js
+?? scratch/test-corner-drag.js
+?? scratch/test-crash-direct.ts
+?? scratch/test-engine-on-samples.ts
+?? scratch/test-find-pkg.cjs
+?? scratch/test-full-demo.js
+?? scratch/test-http-apply.cjs
+?? scratch/test-http-s1.tsx
+?? scratch/test-parse.cjs
+?? scratch/test-perfect-fit.js
+?? scratch/test-pill-zoom.js
+?? scratch/test-pill.js
+?? scratch/test-require.ts
+?? scratch/test-s1-debug.tsx
+?? scratch/test-s2.cjs
+?? scratch/test-s5-debug.tsx
+?? scratch/test-step1b-verifier.cjs
+?? scratch/test-task5-security.cjs
+?? scratch/test-task6-atomic.cjs
+?? scratch/test-task7-engine-crash.cjs
+?? scratch/test-task7-verifier.cjs
+?? scratch/test-task8-playwright.cjs
+?? scratch/test-trace-apply.cjs
+?? scratch/test-tw-config.cjs
+?? scratch/test-tw-version.cjs
+?? scratch/test-tw.cjs
+?? scratch/test-tw.js
+?? scratch/test-verifier.cjs
+?? scratch/test-zoomed-fit.js
+?? scratch/unsupported-classification.json
+?? scratch/zoom-corner-inspect.png
+?? scratch/zoomed-fit.png
+e508d80 fix(safety): support __non_webpack_require__ in tailwind-verifier for Next.js webpack server
+e3151d2 fix(safety): refine ESM/CJS loader in tailwind-verifier and update assertion message
+d709584 test(safety): add automated suites for S1 token auth, S3 atomic write retry, and S5 compile verification

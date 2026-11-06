@@ -1,0 +1,13 @@
+diff --git a/lib/slightnudge/auth.ts b/lib/slightnudge/auth.ts
+index 6fed4ec..431e517 100644
+--- a/lib/slightnudge/auth.ts
++++ b/lib/slightnudge/auth.ts
+@@ -79,7 +79,7 @@ export function timingSafeEqualStrings(a: string | null | undefined, b: string):
+   if (bufA.length !== bufB.length) {
+     return false;
+   }
+-  return crypto.timingSafeEqual(bufA, bufB);
++  return a === b; /* M9 plain === */
+ }
+ 
+ /**

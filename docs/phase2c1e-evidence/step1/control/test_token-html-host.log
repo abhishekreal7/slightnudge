@@ -1,0 +1,141 @@
+▶ P0: Token HTML Host Header Validation
+  ✖ disallows token in HTML for / with evil.localhost
+  ✖ disallows token in HTML for / with attacker.example
+  ✖ disallows token in HTML for / with wrong port (port+1)
+  ✖ disallows token in HTML for / with missing Host
+  ✖ disallows token in HTML for / with valid Host + X-Forwarded-Host: evil.localhost
+  ✖ disallows token in HTML for / with valid Host + Forwarded: host=evil.localhost
+  ✖ disallows token in HTML for / with valid 127.0.0.1 + X-Forwarded-Host: evil.localhost
+  ✖ disallows token in HTML for / with valid 127.0.0.1 + Forwarded: host=evil.localhost
+  ✖ renders token in HTML for / with valid Host localhost:PORT
+  ✖ renders token in HTML for / with valid Host 127.0.0.1:PORT
+  ✖ disallows token in HTML for /studio with evil.localhost
+  ✖ disallows token in HTML for /studio with attacker.example
+  ✖ disallows token in HTML for /studio with wrong port (port+1)
+  ✖ disallows token in HTML for /studio with missing Host
+  ✖ disallows token in HTML for /studio with valid Host + X-Forwarded-Host: evil.localhost
+  ✖ disallows token in HTML for /studio with valid Host + Forwarded: host=evil.localhost
+  ✖ disallows token in HTML for /studio with valid 127.0.0.1 + X-Forwarded-Host: evil.localhost
+  ✖ disallows token in HTML for /studio with valid 127.0.0.1 + Forwarded: host=evil.localhost
+  ✖ renders token in HTML for /studio with valid Host localhost:PORT
+  ✖ renders token in HTML for /studio with valid Host 127.0.0.1:PORT
+  ✖ refuses token endpoint for disallowed host (evil.localhost) with 403
+  ✖ refuses token endpoint when X-Forwarded-Host is evil.localhost with 403
+  ✖ token endpoint response includes Cache-Control: no-store
+✖ P0: Token HTML Host Header Validation (10133.8492ms)
+ℹ tests 23
+ℹ suites 1
+ℹ pass 0
+ℹ fail 0
+ℹ cancelled 23
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 10144.2958
+
+✖ failing tests:
+
+test at test\token-html-host.test.ts:1:2197
+✖ disallows token in HTML for / with evil.localhost
+  'test did not finish before its parent and was cancelled'
+
+test at test\token-html-host.test.ts:1:2197
+✖ disallows token in HTML for / with attacker.example
+  'test did not finish before its parent and was cancelled'
+
+test at test\token-html-host.test.ts:1:2197
+✖ disallows token in HTML for / with wrong port (port+1)
+  'test did not finish before its parent and was cancelled'
+
+test at test\token-html-host.test.ts:1:2197
+✖ disallows token in HTML for / with missing Host
+  'test did not finish before its parent and was cancelled'
+
+test at test\token-html-host.test.ts:1:2197
+✖ disallows token in HTML for / with valid Host + X-Forwarded-Host: evil.localhost
+  'test did not finish before its parent and was cancelled'
+
+test at test\token-html-host.test.ts:1:2197
+✖ disallows token in HTML for / with valid Host + Forwarded: host=evil.localhost
+  'test did not finish before its parent and was cancelled'
+
+test at test\token-html-host.test.ts:1:2197
+✖ disallows token in HTML for / with valid 127.0.0.1 + X-Forwarded-Host: evil.localhost
+  'test did not finish before its parent and was cancelled'
+
+test at test\token-html-host.test.ts:1:2197
+✖ disallows token in HTML for / with valid 127.0.0.1 + Forwarded: host=evil.localhost
+  'test did not finish before its parent and was cancelled'
+
+test at test\token-html-host.test.ts:1:2603
+✖ renders token in HTML for / with valid Host localhost:PORT
+  'test did not finish before its parent and was cancelled'
+
+test at test\token-html-host.test.ts:1:3104
+✖ renders token in HTML for / with valid Host 127.0.0.1:PORT
+  'test did not finish before its parent and was cancelled'
+
+test at test\token-html-host.test.ts:1:2197
+✖ disallows token in HTML for /studio with evil.localhost
+  'test did not finish before its parent and was cancelled'
+
+test at test\token-html-host.test.ts:1:2197
+✖ disallows token in HTML for /studio with attacker.example
+  'test did not finish before its parent and was cancelled'
+
+test at test\token-html-host.test.ts:1:2197
+✖ disallows token in HTML for /studio with wrong port (port+1)
+  'test did not finish before its parent and was cancelled'
+
+test at test\token-html-host.test.ts:1:2197
+✖ disallows token in HTML for /studio with missing Host
+  'test did not finish before its parent and was cancelled'
+
+test at test\token-html-host.test.ts:1:2197
+✖ disallows token in HTML for /studio with valid Host + X-Forwarded-Host: evil.localhost
+  'test did not finish before its parent and was cancelled'
+
+test at test\token-html-host.test.ts:1:2197
+✖ disallows token in HTML for /studio with valid Host + Forwarded: host=evil.localhost
+  'test did not finish before its parent and was cancelled'
+
+test at test\token-html-host.test.ts:1:2197
+✖ disallows token in HTML for /studio with valid 127.0.0.1 + X-Forwarded-Host: evil.localhost
+  'test did not finish before its parent and was cancelled'
+
+test at test\token-html-host.test.ts:1:2197
+✖ disallows token in HTML for /studio with valid 127.0.0.1 + Forwarded: host=evil.localhost
+  'test did not finish before its parent and was cancelled'
+
+test at test\token-html-host.test.ts:1:2603
+✖ renders token in HTML for /studio with valid Host localhost:PORT
+  'test did not finish before its parent and was cancelled'
+
+test at test\token-html-host.test.ts:1:3104
+✖ renders token in HTML for /studio with valid Host 127.0.0.1:PORT
+  'test did not finish before its parent and was cancelled'
+
+test at test\token-html-host.test.ts:1:3605
+✖ refuses token endpoint for disallowed host (evil.localhost) with 403
+  'test did not finish before its parent and was cancelled'
+
+test at test\token-html-host.test.ts:1:3859
+✖ refuses token endpoint when X-Forwarded-Host is evil.localhost with 403
+  'test did not finish before its parent and was cancelled'
+
+test at test\token-html-host.test.ts:1:4152
+✖ token endpoint response includes Cache-Control: no-store
+  'test did not finish before its parent and was cancelled'
+
+test at test\token-html-host.test.ts:1:274
+✖ P0: Token HTML Host Header Validation (10133.8492ms)
+  Error: Test server exited prematurely with code 1
+      at startTestServer (C:\Users\abhis\AppData\Local\Temp\p2c1e-control-ede192b4-f01a-4a52-bcf9-cc311e2e7a89\test\helpers\test-server.ts:231:13)
+      at async SuiteContext.<anonymous> (C:\Users\abhis\AppData\Local\Temp\p2c1e-control-ede192b4-f01a-4a52-bcf9-cc311e2e7a89\test\token-html-host.test.ts:12:14)
+      at async TestHook.run (node:internal/test_runner/test:1113:7)
+      at async Suite.runHook (node:internal/test_runner/test:1024:9)
+      at async Suite.run (node:internal/test_runner/test:1512:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:358:3)
+
+--- STDERR ---
+(node:36168) [DEP0190] DeprecationWarning: Passing args to a child process with shell option true can lead to security vulnerabilities, as the arguments are not escaped, only concatenated.
+(Use `node --trace-deprecation ...` to show where the warning was created)

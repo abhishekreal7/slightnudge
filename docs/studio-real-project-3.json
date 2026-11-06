@@ -1,0 +1,814 @@
+{
+  "date": "2026-10-23T18:43:57.901Z",
+  "policy": "30 distinct application DOM targets per rendered project, sampled uniformly in document order. Includes section/container, heading, paragraph, link, button and list types; excludes development overlay shadow roots and tiny accessibility-only nodes. Scroll each selected target into view. Dispatch a DOM click through the installed embedded bridge and verify its reported source file/line/column/tag. Then inspect and dry-run a font-weight change; independently parse the result to ensure that only the selected class attribute changes. No Apply to imported project copies. This tests browser-to-source mapping and the edit engine; it is not a full imported Studio Apply test and does not test physical mouse hit-testing.",
+  "results": [
+    {
+      "url": "https://github.com/EdgeOneDev/saas-starter",
+      "next": "14.0.4",
+      "tailwind": "3.4.17",
+      "lockfiles": [
+        "package-lock.json"
+      ],
+      "adapter": "runtime source markers verified",
+      "vite": "unsupported",
+      "selections": [
+        {
+          "selection": 1,
+          "n": 0,
+          "tag": "div",
+          "text": "SaaS StarterHomeAIPricingBlogCasesContactBlocksEnglishSign InSign Up\ud83d\ude80 Ship Your SaaS in Hours, Not ",
+          "file": "src/components/layout/layout.tsx",
+          "line": 18,
+          "column": 5,
+          "classes": "min-h-screen bg-background ",
+          "rect": {
+            "top": -2074,
+            "left": 0,
+            "width": 1440,
+            "height": 5148
+          },
+          "clickedRect": {
+            "top": -2074,
+            "left": 0,
+            "width": 1440,
+            "height": 5148
+          },
+          "outcome": "refused",
+          "embeddedBridgeVerified": true,
+          "textEditable": false,
+          "textReason": "For safety, text editing currently supports elements with one plain text value and no nested elements.",
+          "reason": "can't edit this safely: class built from a variable"
+        },
+        {
+          "selection": 2,
+          "n": 10,
+          "tag": "a",
+          "text": "Cases",
+          "file": "src/components/layout/header.tsx",
+          "line": 72,
+          "column": 11,
+          "classes": "transition-colors duration-200 whitespace-nowrap text-foreground hover:text-primary",
+          "rect": {
+            "top": 19,
+            "left": 396.484375,
+            "width": 495.8125,
+            "height": 26
+          },
+          "clickedRect": {
+            "top": 19,
+            "left": 671.6875,
+            "width": 46.890625,
+            "height": 26
+          },
+          "outcome": "refused",
+          "embeddedBridgeVerified": true,
+          "reason": "I can't confirm which element this is. Nothing was changed."
+        },
+        {
+          "selection": 3,
+          "n": 20,
+          "tag": "a",
+          "text": "Sign Up",
+          "file": "src/components/layout/header.tsx",
+          "line": 132,
+          "column": 15,
+          "classes": "bg-primary w-16 text-white py-2 rounded-md text-sm font-medium hover:bg-primary/90 transition-colors whitespace-nowrap text-center",
+          "rect": {
+            "top": 14,
+            "left": 1192,
+            "width": 136,
+            "height": 36
+          },
+          "clickedRect": {
+            "top": 14,
+            "left": 1264,
+            "width": 64,
+            "height": 36
+          },
+          "outcome": "refused",
+          "embeddedBridgeVerified": true,
+          "reason": "I can't confirm which element this is. Nothing was changed."
+        },
+        {
+          "selection": 4,
+          "n": 30,
+          "tag": "div",
+          "text": "",
+          "file": "src/components/sections/hero.tsx",
+          "line": 89,
+          "column": 9,
+          "classes": "absolute bottom-20 right-10 w-12 h-12 bg-gradient-to-tr from-accent/15 to-primary/15 transform rotate-12 animate-float opacity-40",
+          "rect": {
+            "top": 491.7147216796875,
+            "left": 1352,
+            "width": 48,
+            "height": 48
+          },
+          "clickedRect": {
+            "top": 491.7147216796875,
+            "left": 1352,
+            "width": 48,
+            "height": 48
+          },
+          "outcome": "allowed",
+          "embeddedBridgeVerified": true,
+          "textEditable": false,
+          "textReason": "This element has no text content."
+        },
+        {
+          "selection": 5,
+          "n": 40,
+          "tag": "span",
+          "text": "Product",
+          "file": "src/components/sections/hero.tsx",
+          "line": 112,
+          "column": 15,
+          "classes": "text-primary",
+          "rect": {
+            "top": 224,
+            "left": 291.3125,
+            "width": 857.359375,
+            "height": 132
+          },
+          "clickedRect": {
+            "top": 224,
+            "left": 917.578125,
+            "width": 231.09375,
+            "height": 72
+          },
+          "outcome": "refused",
+          "embeddedBridgeVerified": true,
+          "reason": "I can't confirm which element this is. Nothing was changed."
+        },
+        {
+          "selection": 6,
+          "n": 50,
+          "tag": "div",
+          "text": "1",
+          "file": "src/components/sections/hero.tsx",
+          "line": 150,
+          "column": 19,
+          "classes": "w-8 h-8 rounded-full bg-gradient-to-r from-primary to-primary/80 border-2 border-background flex items-center justify-center text-white text-xs font-medium",
+          "rect": {
+            "top": 484,
+            "left": 363.609375,
+            "width": 32,
+            "height": 32
+          },
+          "clickedRect": {
+            "top": 484,
+            "left": 363.609375,
+            "width": 32,
+            "height": 32
+          },
+          "outcome": "refused",
+          "embeddedBridgeVerified": true,
+          "reason": "This element repeats from a list, so one edit would change every copy. Nothing was changed."
+        },
+        {
+          "selection": 7,
+          "n": 60,
+          "tag": "div",
+          "text": "",
+          "file": "src/components/sections/hero.tsx",
+          "line": 172,
+          "column": 9,
+          "classes": "mt-16 lg:mt-24",
+          "rect": {
+            "top": 330,
+            "left": 112,
+            "width": 1216,
+            "height": 340
+          },
+          "clickedRect": {
+            "top": 330,
+            "left": 112,
+            "width": 1216,
+            "height": 340
+          },
+          "outcome": "refused",
+          "embeddedBridgeVerified": true,
+          "textEditable": false,
+          "textReason": "This text is generated dynamically and cannot be edited safely.",
+          "reason": "can't edit this safely: dynamic className"
+        },
+        {
+          "selection": 8,
+          "n": 70,
+          "tag": "div",
+          "text": "",
+          "file": "src/components/sections/hero.tsx",
+          "line": 183,
+          "column": 19,
+          "classes": "h-4 bg-muted rounded w-1/2",
+          "rect": {
+            "top": 492,
+            "left": 282,
+            "width": 438,
+            "height": 16
+          },
+          "clickedRect": {
+            "top": 492,
+            "left": 282,
+            "width": 438,
+            "height": 16
+          },
+          "outcome": "allowed",
+          "embeddedBridgeVerified": true,
+          "textEditable": false,
+          "textReason": "This element has no text content."
+        },
+        {
+          "selection": 9,
+          "n": 80,
+          "tag": "span",
+          "text": "Ship Fast",
+          "file": "src/components/layout/section-layout.tsx",
+          "line": 124,
+          "column": 19,
+          "classes": "text-primary",
+          "rect": {
+            "top": 470,
+            "left": 331.3125,
+            "width": 777.359375,
+            "height": 59
+          },
+          "clickedRect": {
+            "top": 470,
+            "left": 893.015625,
+            "width": 215.65625,
+            "height": 59
+          },
+          "outcome": "refused",
+          "embeddedBridgeVerified": true,
+          "reason": "I can't confirm which element this is. Nothing was changed."
+        },
+        {
+          "selection": 10,
+          "n": 90,
+          "tag": "div",
+          "text": "Secure by DefaultAuthentication, authorization, and security best practices built-in from day one.",
+          "file": "src/components/ui/card.tsx",
+          "line": 8,
+          "column": 3,
+          "classes": "rounded-lg bg-card text-card-foreground border-0 shadow-sm hover:shadow-md transition-shadow duration-300",
+          "rect": {
+            "top": 379,
+            "left": 528,
+            "width": 384,
+            "height": 242
+          },
+          "clickedRect": {
+            "top": 379,
+            "left": 528,
+            "width": 384,
+            "height": 242
+          },
+          "outcome": "refused",
+          "embeddedBridgeVerified": true,
+          "textEditable": false,
+          "textReason": "This self-closing element has no editable text.",
+          "reason": "can't edit this safely: class built from a condition (call expression)"
+        },
+        {
+          "selection": 11,
+          "n": 101,
+          "tag": "p",
+          "text": "Easy theming system with light/dark mode support. Make it match your brand perfectly.",
+          "file": "src/components/ui/card.tsx",
+          "line": 50,
+          "column": 3,
+          "classes": "text-muted-foreground text-base",
+          "rect": {
+            "top": 464,
+            "left": 968,
+            "width": 336,
+            "height": 72
+          },
+          "clickedRect": {
+            "top": 464,
+            "left": 968,
+            "width": 336,
+            "height": 72
+          },
+          "outcome": "refused",
+          "embeddedBridgeVerified": true,
+          "textEditable": false,
+          "textReason": "This self-closing element has no editable text.",
+          "reason": "can't edit this safely: class built from a condition (call expression)"
+        },
+        {
+          "selection": 12,
+          "n": 111,
+          "tag": "h3",
+          "text": "SEO Optimized",
+          "file": "src/components/ui/card.tsx",
+          "line": 35,
+          "column": 3,
+          "classes": "font-semibold tracking-tight text-xl",
+          "rect": {
+            "top": 486,
+            "left": 552,
+            "width": 336,
+            "height": 28
+          },
+          "clickedRect": {
+            "top": 486,
+            "left": 552,
+            "width": 336,
+            "height": 28
+          },
+          "outcome": "refused",
+          "embeddedBridgeVerified": true,
+          "textEditable": false,
+          "textReason": "This self-closing element has no editable text.",
+          "reason": "can't edit this safely: class built from a condition (call expression)"
+        },
+        {
+          "selection": 13,
+          "n": 121,
+          "tag": "div",
+          "text": "And much more...\u219230+ Components Ready to Use",
+          "file": "src/components/sections/features.tsx",
+          "line": 30,
+          "column": 5,
+          "classes": "text-center",
+          "rect": {
+            "top": 488,
+            "left": 112,
+            "width": 1216,
+            "height": 24
+          },
+          "clickedRect": {
+            "top": 488,
+            "left": 112,
+            "width": 1216,
+            "height": 24
+          },
+          "outcome": "allowed",
+          "embeddedBridgeVerified": true,
+          "textEditable": false,
+          "textReason": "This text is generated dynamically and cannot be edited safely."
+        },
+        {
+          "selection": 14,
+          "n": 131,
+          "tag": "span",
+          "text": "Pricing",
+          "file": "src/components/layout/section-layout.tsx",
+          "line": 124,
+          "column": 19,
+          "classes": "text-primary",
+          "rect": {
+            "top": 470,
+            "left": 395.6875,
+            "width": 648.609375,
+            "height": 59
+          },
+          "clickedRect": {
+            "top": 470,
+            "left": 878.953125,
+            "width": 165.34375,
+            "height": 59
+          },
+          "outcome": "refused",
+          "embeddedBridgeVerified": true,
+          "reason": "I can't confirm which element this is. Nothing was changed."
+        },
+        {
+          "selection": 15,
+          "n": 141,
+          "tag": "div",
+          "text": "\"This template saved us months of development time. We launched our SaaS product in just 2 weeks ins",
+          "file": "src/components/ui/testimonials-grid.tsx",
+          "line": 85,
+          "column": 5,
+          "classes": "",
+          "rect": {
+            "top": 187,
+            "left": 112,
+            "width": 1216,
+            "height": 626
+          },
+          "clickedRect": {
+            "top": 187,
+            "left": 112,
+            "width": 1216,
+            "height": 626
+          },
+          "outcome": "refused",
+          "embeddedBridgeVerified": true,
+          "textEditable": false,
+          "textReason": "For safety, text editing currently supports elements with one plain text value and no nested elements.",
+          "reason": "can't edit this safely: class built from a variable"
+        },
+        {
+          "selection": 16,
+          "n": 151,
+          "tag": "div",
+          "text": "Founder at TechFlow",
+          "file": "src/components/ui/testimonials-grid.tsx",
+          "line": 47,
+          "column": 13,
+          "classes": "text-sm text-muted-foreground",
+          "rect": {
+            "top": 490,
+            "left": 188,
+            "width": 138.625,
+            "height": 20
+          },
+          "clickedRect": {
+            "top": 490,
+            "left": 188,
+            "width": 138.625,
+            "height": 20
+          },
+          "outcome": "allowed",
+          "embeddedBridgeVerified": true,
+          "textEditable": false,
+          "textReason": "This text comes from prop 'role' and cannot be edited directly. Nothing was changed."
+        },
+        {
+          "selection": 17,
+          "n": 161,
+          "tag": "div",
+          "text": "\"As a solo developer, this template gave me everything I needed to compete with larger teams. The co",
+          "file": "src/components/ui/card.tsx",
+          "line": 8,
+          "column": 3,
+          "classes": "rounded-lg bg-card text-card-foreground border-0 shadow-sm",
+          "rect": {
+            "top": 378,
+            "left": 944,
+            "width": 384,
+            "height": 244
+          },
+          "clickedRect": {
+            "top": 378,
+            "left": 944,
+            "width": 384,
+            "height": 244
+          },
+          "outcome": "refused",
+          "embeddedBridgeVerified": true,
+          "textEditable": false,
+          "textReason": "This self-closing element has no editable text.",
+          "reason": "can't edit this safely: class built from a condition (call expression)"
+        },
+        {
+          "selection": 18,
+          "n": 171,
+          "tag": "div",
+          "text": "\"The authentication and payment integration worked flawlessly. We were able to start accepting payme",
+          "file": "src/components/ui/card.tsx",
+          "line": 62,
+          "column": 3,
+          "classes": "p-6",
+          "rect": {
+            "top": 391,
+            "left": 112,
+            "width": 384,
+            "height": 218
+          },
+          "clickedRect": {
+            "top": 391,
+            "left": 112,
+            "width": 384,
+            "height": 218
+          },
+          "outcome": "refused",
+          "embeddedBridgeVerified": true,
+          "textEditable": false,
+          "textReason": "This self-closing element has no editable text.",
+          "reason": "can't edit this safely: class built from a condition (call expression)"
+        },
+        {
+          "selection": 19,
+          "n": 181,
+          "tag": "div",
+          "text": "",
+          "file": "src/components/ui/testimonials-grid.tsx",
+          "line": 19,
+          "column": 9,
+          "classes": "flex items-center mb-4",
+          "rect": {
+            "top": 492,
+            "left": 552,
+            "width": 336,
+            "height": 16
+          },
+          "clickedRect": {
+            "top": 492,
+            "left": 552,
+            "width": 336,
+            "height": 16
+          },
+          "outcome": "allowed",
+          "embeddedBridgeVerified": true,
+          "textEditable": false,
+          "textReason": "This text is generated dynamically and cannot be edited safely."
+        },
+        {
+          "selection": 20,
+          "n": 191,
+          "tag": "div",
+          "text": "Alex ThompsonFull-stack Developer",
+          "file": "src/components/ui/testimonials-grid.tsx",
+          "line": 31,
+          "column": 9,
+          "classes": "flex items-center",
+          "rect": {
+            "top": 478,
+            "left": 968,
+            "width": 336,
+            "height": 44
+          },
+          "clickedRect": {
+            "top": 478,
+            "left": 968,
+            "width": 336,
+            "height": 44
+          },
+          "outcome": "allowed",
+          "embeddedBridgeVerified": true,
+          "textEditable": false,
+          "textReason": "For safety, text editing currently supports elements with one plain text value and no nested elements."
+        },
+        {
+          "selection": 21,
+          "n": 202,
+          "tag": "div",
+          "text": "4.9/5Average Rating",
+          "file": "src/components/ui/testimonials-grid.tsx",
+          "line": 59,
+          "column": 9,
+          "classes": "",
+          "rect": {
+            "top": 466,
+            "left": 528,
+            "width": 384,
+            "height": 68
+          },
+          "clickedRect": {
+            "top": 466,
+            "left": 528,
+            "width": 384,
+            "height": 68
+          },
+          "outcome": "refused",
+          "embeddedBridgeVerified": true,
+          "textEditable": false,
+          "textReason": "For safety, text editing currently supports elements with one plain text value and no nested elements.",
+          "reason": "can't edit this safely: no className attribute found"
+        },
+        {
+          "selection": 22,
+          "n": 212,
+          "tag": "span",
+          "text": "Frequently Asked Questions",
+          "file": "src/components/layout/section-layout.tsx",
+          "line": 124,
+          "column": 19,
+          "classes": "",
+          "rect": {
+            "top": 470,
+            "left": 388.546875,
+            "width": 662.890625,
+            "height": 59
+          },
+          "clickedRect": {
+            "top": 470,
+            "left": 388.546875,
+            "width": 662.890625,
+            "height": 59
+          },
+          "outcome": "refused",
+          "embeddedBridgeVerified": true,
+          "textEditable": false,
+          "textReason": "This self-closing element has no editable text.",
+          "reason": "can't edit this safely: no className attribute found"
+        },
+        {
+          "selection": 23,
+          "n": 222,
+          "tag": "span",
+          "text": "Do I need to pay monthly fees?",
+          "file": "src/components/ui/faq-list.tsx",
+          "line": 29,
+          "column": 9,
+          "classes": "font-medium text-foreground pr-8",
+          "rect": {
+            "top": 488,
+            "left": 329,
+            "width": 267.9375,
+            "height": 24
+          },
+          "clickedRect": {
+            "top": 488,
+            "left": 329,
+            "width": 267.9375,
+            "height": 24
+          },
+          "outcome": "allowed",
+          "embeddedBridgeVerified": true,
+          "textEditable": false,
+          "textReason": "This text comes from prop 'question' and cannot be edited directly. Nothing was changed."
+        },
+        {
+          "selection": 24,
+          "n": 232,
+          "tag": "div",
+          "text": "Do you provide support and updates?",
+          "file": "src/components/ui/faq-list.tsx",
+          "line": 24,
+          "column": 5,
+          "classes": "border border-border rounded-lg overflow-hidden",
+          "rect": {
+            "top": 471,
+            "left": 304,
+            "width": 832,
+            "height": 58
+          },
+          "clickedRect": {
+            "top": 471,
+            "left": 304,
+            "width": 832,
+            "height": 58
+          },
+          "outcome": "allowed",
+          "embeddedBridgeVerified": true,
+          "textEditable": false,
+          "textReason": "For safety, text editing currently supports elements with one plain text value and no nested elements."
+        },
+        {
+          "selection": 25,
+          "n": 242,
+          "tag": "div",
+          "text": "Still have questions? We're here to help!Contact Support \u2192",
+          "file": "src/components/sections/faq.tsx",
+          "line": 29,
+          "column": 71,
+          "classes": "text-center",
+          "rect": {
+            "top": 468,
+            "left": 304,
+            "width": 832,
+            "height": 64
+          },
+          "clickedRect": {
+            "top": 468,
+            "left": 304,
+            "width": 832,
+            "height": 64
+          },
+          "outcome": "allowed",
+          "embeddedBridgeVerified": true,
+          "textEditable": false,
+          "textReason": "For safety, text editing currently supports elements with one plain text value and no nested elements."
+        },
+        {
+          "selection": 26,
+          "n": 252,
+          "tag": "div",
+          "text": "Instant Download30-Day Money BackLifetime Updates",
+          "file": "src/components/sections/cta-section.tsx",
+          "line": 168,
+          "column": 11,
+          "classes": "flex flex-col sm:flex-row items-center justify-center gap-6 text-sm opacity-80",
+          "rect": {
+            "top": 510,
+            "left": 272,
+            "width": 896,
+            "height": 20
+          },
+          "clickedRect": {
+            "top": 510,
+            "left": 272,
+            "width": 896,
+            "height": 20
+          },
+          "outcome": "refused",
+          "embeddedBridgeVerified": true,
+          "reason": "can't edit this safely: component used in several places"
+        },
+        {
+          "selection": 27,
+          "n": 262,
+          "tag": "footer",
+          "text": "SaaS StarterThe complete SaaS starter template to help you build and launch your next product faster",
+          "file": "src/components/layout/footer.tsx",
+          "line": 51,
+          "column": 5,
+          "classes": "bg-muted/30 border-t border-border",
+          "rect": {
+            "top": 610,
+            "left": 0,
+            "width": 1440,
+            "height": 390
+          },
+          "clickedRect": {
+            "top": 610,
+            "left": 0,
+            "width": 1440,
+            "height": 390
+          },
+          "outcome": "allowed",
+          "embeddedBridgeVerified": true,
+          "textEditable": false,
+          "textReason": "This text is generated dynamically and cannot be edited safely."
+        },
+        {
+          "selection": 28,
+          "n": 272,
+          "tag": "a",
+          "text": "",
+          "file": "src/components/layout/footer.tsx",
+          "line": 66,
+          "column": 19,
+          "classes": "text-muted-foreground hover:text-primary transition-colors",
+          "rect": {
+            "top": 779,
+            "left": 220,
+            "width": 20,
+            "height": 20
+          },
+          "clickedRect": {
+            "top": 779,
+            "left": 220,
+            "width": 20,
+            "height": 20
+          },
+          "outcome": "refused",
+          "embeddedBridgeVerified": true,
+          "reason": "This element repeats from a list, so one edit would change every copy. Nothing was changed."
+        },
+        {
+          "selection": 29,
+          "n": 282,
+          "tag": "a",
+          "text": "Case Studies",
+          "file": "src/components/layout/footer.tsx",
+          "line": 87,
+          "column": 19,
+          "classes": "text-muted-foreground hover:text-primary transition-colors",
+          "rect": {
+            "top": 795,
+            "left": 736,
+            "width": 280,
+            "height": 24
+          },
+          "clickedRect": {
+            "top": 797,
+            "left": 736,
+            "width": 99.359375,
+            "height": 20
+          },
+          "outcome": "refused",
+          "embeddedBridgeVerified": true,
+          "reason": "I can't confirm which element this is. Nothing was changed."
+        },
+        {
+          "selection": 30,
+          "n": 293,
+          "tag": "p",
+          "text": "Made with \u2764\ufe0f for developers worldwide",
+          "file": "src/components/layout/footer.tsx",
+          "line": 103,
+          "column": 11,
+          "classes": "text-muted-foreground text-sm mt-2 sm:mt-0",
+          "rect": {
+            "top": 932,
+            "left": 1063.671875,
+            "width": 264.328125,
+            "height": 20
+          },
+          "clickedRect": {
+            "top": 932,
+            "left": 1063.671875,
+            "width": 264.328125,
+            "height": 20
+          },
+          "outcome": "allowed",
+          "embeddedBridgeVerified": true,
+          "textEditable": false,
+          "textReason": "This text comes from prop 'tagline' and cannot be edited directly. Nothing was changed."
+        }
+      ],
+      "commit": "33781d2aedcfc5518498668ce703bc45f7bed9f3",
+      "license": [
+        "LICENSE"
+      ],
+      "routes": [
+        "src/app"
+      ],
+      "nextDeclared": "14.0.4",
+      "tailwindDeclared": "^3.3.0",
+      "installExit": 0,
+      "installedLockfiles": [
+        "package-lock.json"
+      ],
+      "visibleCandidates": 294
+    }
+  ],
+  "cleanup": []
+}

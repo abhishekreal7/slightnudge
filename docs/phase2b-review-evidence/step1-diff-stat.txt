@@ -1,0 +1,12 @@
+﻿ lib/slightnudge/auth.ts              |   3 +
+ lib/slightnudge/edit-history.ts      |  18 ++-
+ lib/slightnudge/tailwind-verifier.ts | 123 ++++++++++-----
+ test/helpers/test-server.ts          | 292 +++++++++++++++++++++++++++++++++++
+ test/history-resilience.test.ts      |   5 +
+ test/s1-auth-origin.test.ts          |  45 ++++--
+ test/s2-path-traversal.test.ts       |  16 +-
+ test/s3-atomic-write.test.ts         |   9 +-
+ test/s5-tailwind-compile.test.ts     |  11 +-
+ test/s5-theme-support.test.ts        |  11 +-
+ test/s5-v3-support.test.ts           | 153 ++++++++++++++++++
+ 11 files changed, 616 insertions(+), 70 deletions(-)

@@ -1,0 +1,23 @@
+﻿=== STEP 3: LEFTOVER AUDIT RESULTS ===
+
+1. Temp Folders in $env:TEMP matching ^(sn-test|s1-server|s2-|s3-|s5-|v3-):
+
+Name                                               CreationTime       
+----                                               ------------       
+s5-theme-test-0e4ab1dd-3d20-475e-9d56-b4a3111352dd 20-10-2026 22:53:11
+
+
+
+2. Listening Ports in 3000-3002 and 3100-3200:
+(Count: 0)
+
+3. Running Node / Next processes:
+
+   Id ProcessName StartTime           Path                            
+   -- ----------- ---------           ----                            
+16068 node        21-10-2026 17:38:04 C:\Program Files\nodejs\node.exe
+29128 node        21-10-2026 17:38:01 C:\Program Files\nodejs\node.exe
+31608 node        21-10-2026 17:38:04 C:\Program Files\nodejs\node.exe
+39556 node        21-10-2026 17:37:53 C:\Program Files\nodejs\node.exe
+
+

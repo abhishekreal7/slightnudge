@@ -1,0 +1,28 @@
+====================================================
+🧪 SLIGHTNUDGE - STEP 1: ELEMENT SELECTION SUITE
+====================================================
+
+--- Test 1: Click selection on Fixture 1 ---
+
+Test run failed: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3999/fixtures/1
+Call log:
+[2m  - navigating to "http://127.0.0.1:3999/fixtures/1", waiting until "load"[22m
+
+    at runStep1Tests (C:\dev\vibecheck\test\step1-selection.test.ts:32:16) {
+  log: [
+    '  - navigating to "http://127.0.0.1:3999/fixtures/1", waiting until "load"'
+  ],
+  name: 'Error'
+}
+
+Command failed: npx tsx test/step1-selection.test.ts
+Test run failed: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3999/fixtures/1
+Call log:
+[2m  - navigating to "http://127.0.0.1:3999/fixtures/1", waiting until "load"[22m
+
+    at runStep1Tests (C:\dev\vibecheck\test\step1-selection.test.ts:32:16) {
+  log: [
+    '  - navigating to "http://127.0.0.1:3999/fixtures/1", waiting until "load"'
+  ],
+  name: 'Error'
+}

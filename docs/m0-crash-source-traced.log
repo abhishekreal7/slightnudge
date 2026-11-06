@@ -1,0 +1,36 @@
+Disposable source project: generated SaaS; Next.js 16.4.3; Tailwind 4.3.3; installed source adapter; no environment files checked out.
+Source navigation: editor /studio/source-proof/edit
+Source lifecycle: editor document initialized
+Source navigation: editor /studio/source-proof/edit
+Source navigation: editor /studio/source-proof/edit
+Source navigation: project /
+Source navigation: project /
+Source API: {"api":"/api/slightnudge/preview","method":"POST","status":200,"success":true}
+Source proof: {"success":true,"reason":""}
+Source proof: {"success":true,"reason":""}
+Source notice: Discarded visual adjustment
+Source API: {"api":"/api/slightnudge/preview","method":"DELETE","status":200,"success":true}
+Source navigation: editor /studio/source-proof/edit
+Source API: {"api":"/api/slightnudge/preview","method":"POST","status":200,"success":true}
+Source proof: {"success":true,"reason":""}
+Source proof: {"success":true,"reason":"The page changed after preview. Reload and select again."}
+Source navigation: editor /studio/source-proof/edit
+Source navigation: editor /studio/source-proof/edit
+Source navigation: project /
+Source API: {"api":"/api/slightnudge/apply/status","method":"POST","status":200,"success":true}
+Source navigation: editor /studio/source-proof/edit
+Source navigation: project /
+Source navigation: project /
+Source proof: {"file":"components/Features.tsx","line":2,"column":162,"expectedClass":"mt-3 text-3xl font-bold","classes":["mt-3 text-3xl font-bold"]}
+Source proof: {"success":true,"reason":"The project is still rendering an older source revision."}
+Source notice: Applied change to .slightnudge\repositories\source-proof\components\Features.tsx
+Source navigation: editor /studio/source-proof/edit
+Source API: {"api":"/api/slightnudge/undo","method":"POST","status":200,"success":true}
+Source navigation: editor /studio/source-proof/edit
+Source navigation: project /
+Source navigation: project /
+Source proof: {"file":"components/Features.tsx","line":2,"column":162,"expectedClass":"mt-3 text-3xl font-semibold","classes":["mt-3 text-3xl font-semibold"]}
+Source proof: {"success":true,"reason":"The project is still rendering an older source revision."}
+Source notice: Undid font-semibold → font-bold.
+PASS: real worker exited at source-written; HTTP status reconciliation; 1 explicit Apply request(s); one history record; exact source/render Undo
+PASS: 7 review-consent browser cases (real API; disposable source copy)

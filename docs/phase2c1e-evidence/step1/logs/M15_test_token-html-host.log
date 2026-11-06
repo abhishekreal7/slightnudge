@@ -1,0 +1,15 @@
+▶ P0: Token HTML Host Header Validation
+  ✔ disallows token in HTML for / with evil.localhost (12975.4047ms)
+  ✔ disallows token in HTML for / with attacker.example (151.9458ms)
+  ✔ disallows token in HTML for / with wrong port (port+1) (129.7889ms)
+  ✔ disallows token in HTML for / with missing Host (3.3473ms)
+  ✔ disallows token in HTML for / with valid Host + X-Forwarded-Host: evil.localhost (129.9595ms)
+  ✔ disallows token in HTML for / with valid Host + Forwarded: host=evil.localhost (142.6496ms)
+  ✔ disallows token in HTML for / with valid 127.0.0.1 + X-Forwarded-Host: evil.localhost (131.4834ms)
+  ✔ disallows token in HTML for / with valid 127.0.0.1 + Forwarded: host=evil.localhost (134.5172ms)
+  ✔ renders token in HTML for / with valid Host localhost:PORT (130.6118ms)
+  ✔ renders token in HTML for / with valid Host 127.0.0.1:PORT (132.5911ms)
+
+--- STDERR ---
+(node:36648) [DEP0190] DeprecationWarning: Passing args to a child process with shell option true can lead to security vulnerabilities, as the arguments are not escaped, only concatenated.
+(Use `node --trace-deprecation ...` to show where the warning was created)

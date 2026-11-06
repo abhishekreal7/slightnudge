@@ -9,7 +9,12 @@ export function importedCanvasRuntime(send: (type: string, extra?: Record<string
   // Growing the iframe must not repeatedly grow a 100vh hero. Pin vertical
   // viewport units to the design viewport, keeping width breakpoints native.
   const originals = new WeakMap<CSSStyleDeclaration, Map<string, { authored: string; pinned: string }>>();
+  const pinnedDeclarations = new WeakMap<CSSStyleDeclaration, { cssText: string; width: number }>();
   const pin = (style: CSSStyleDeclaration) => {
+    // Geometry updates during gestures revisit the same stylesheets. Reuse
+    // unchanged declarations, but invalidate for CSSOM edits and vmin/vmax.
+    const cached = pinnedDeclarations.get(style);
+    if (cached?.cssText === style.cssText && cached.width === innerWidth) return;
     let values = originals.get(style);
     if (!values) { values = new Map(); originals.set(style, values); }
     for (const property of Array.from(style)) {
@@ -24,6 +29,7 @@ export function importedCanvasRuntime(send: (type: string, extra?: Record<string
       if (pinned !== current) style.setProperty(property, pinned, style.getPropertyPriority(property));
       values.set(property, { authored, pinned });
     }
+    pinnedDeclarations.set(style, { cssText: style.cssText, width: innerWidth });
   };
   const rules = (list: CSSRuleList) => {
     for (const rule of Array.from(list)) {

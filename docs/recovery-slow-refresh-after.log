@@ -1,0 +1,46 @@
+Disposable source project: generated SaaS; Next.js 16.4.3; Tailwind 4.3.3; installed source adapter; no environment files checked out.
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for getByRole('button', { name: 'Connect', exact: true })
+    - locator resolved to <button disabled data-source-line="139" data-source-column="7" class="rounded-md border border-slate-200 bg-white px-3 py-2" data-source-file="components/slightnudge/SourceProjectCanvas.tsx">Connect</button>
+  - attempting click action
+    2 × waiting for element to be visible, enabled and stable
+      - element is not enabled
+    - retrying click action
+    - waiting 20ms
+    2 × waiting for element to be visible, enabled and stable
+      - element is not enabled
+    - retrying click action
+      - waiting 100ms
+    52 × waiting for element to be visible, enabled and stable
+       - element is not enabled
+     - retrying click action
+       - waiting 500ms
+
+    at checkSourceProject (C:\dev\vibecheck\test\helpers\source-project-browser.ts:32:70)
+    at async <anonymous> (C:\dev\vibecheck\test\review-consent.browser.ts:91:14) {
+  log: [
+    "  - waiting for getByRole('button', { name: 'Connect', exact: true })",
+    '    - locator resolved to <button disabled data-source-line="139" data-source-column="7" class="rounded-md border border-slate-200 bg-white px-3 py-2" data-source-file="components/slightnudge/SourceProjectCanvas.tsx">Connect</button>',
+    '  - attempting click action',
+    '    2 × waiting for element to be visible, enabled and stable',
+    '      - element is not enabled',
+    '    - retrying click action',
+    '    - waiting 20ms',
+    '    2 × waiting for element to be visible, enabled and stable',
+    '      - element is not enabled',
+    '    - retrying click action',
+    '      - waiting 100ms',
+    '    52 × waiting for element to be visible, enabled and stable',
+    '       - element is not enabled',
+    '     - retrying click action',
+    '       - waiting 500ms'
+  ],
+  name: 'TimeoutError'
+}
+
+Node.js v22.19.0

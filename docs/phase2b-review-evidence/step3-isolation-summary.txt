@@ -1,0 +1,101 @@
+﻿========================================================================
+STEP 3: ISOLATION PROOF AND REGRESSION EXECUTION
+========================================================================
+
+Initial edits.json SHA-256: 29e3ff2cf25549fb7ed6165749ad5175934865ba6266ccf266dfe00cc8197b52
+Initial Hash Matches Baseline: true
+Initial .slightnudge listing:
+.slightnudge\history | size=0 | mtime=2026-10-20T17:48:57.333Z
+.slightnudge\history\edits.json | size=464405 | mtime=2026-10-20T17:48:57.338Z
+.slightnudge\pending | size=0 | mtime=2026-10-20T17:49:16.955Z
+.slightnudge\repositories | size=0 | mtime=2026-10-12T18:04:26.310Z
+.slightnudge\repositories.json | size=876 | mtime=2026-10-12T18:04:28.084Z
+
+------------------------------------------------------------------------
+>>> Running Suite: reorder-safety
+    Command: npx tsx test/reorder-safety.test.ts
+    Exit Code:       0 (PASS) in 1.51s
+    Hash Unchanged:  true (29e3ff2cf25549fb7ed6165749ad5175934865ba6266ccf266dfe00cc8197b52)
+    Listing Same:    true
+    Git Unchanged:   true
+------------------------------------------------------------------------
+>>> Running Suite: adapter
+    Command: npx tsx test/adapter.test.ts
+    Exit Code:       0 (PASS) in 0.92s
+    Hash Unchanged:  true (29e3ff2cf25549fb7ed6165749ad5175934865ba6266ccf266dfe00cc8197b52)
+    Listing Same:    true
+    Git Unchanged:   true
+------------------------------------------------------------------------
+>>> Running Suite: history-resilience
+    Command: npx tsx test/history-resilience.test.ts
+    Exit Code:       0 (PASS) in 1.71s
+    Hash Unchanged:  true (29e3ff2cf25549fb7ed6165749ad5175934865ba6266ccf266dfe00cc8197b52)
+    Listing Same:    true
+    Git Unchanged:   true
+------------------------------------------------------------------------
+>>> Running Suite: s1-auth-origin
+    Command: npx tsx test/s1-auth-origin.test.ts
+    Exit Code:       0 (PASS) in 27.51s
+    Hash Unchanged:  true (29e3ff2cf25549fb7ed6165749ad5175934865ba6266ccf266dfe00cc8197b52)
+    Listing Same:    true
+    Git Unchanged:   true
+------------------------------------------------------------------------
+>>> Running Suite: s2-path-traversal
+    Command: npx tsx test/s2-path-traversal.test.ts
+    Exit Code:       0 (PASS) in 1.29s
+    Hash Unchanged:  true (29e3ff2cf25549fb7ed6165749ad5175934865ba6266ccf266dfe00cc8197b52)
+    Listing Same:    true
+    Git Unchanged:   true
+------------------------------------------------------------------------
+>>> Running Suite: s3-atomic-write
+    Command: npx tsx test/s3-atomic-write.test.ts
+    Exit Code:       0 (PASS) in 3.28s
+    Hash Unchanged:  true (29e3ff2cf25549fb7ed6165749ad5175934865ba6266ccf266dfe00cc8197b52)
+    Listing Same:    true
+    Git Unchanged:   true
+------------------------------------------------------------------------
+>>> Running Suite: s5-tailwind-compile
+    Command: npx tsx test/s5-tailwind-compile.test.ts
+    Exit Code:       0 (PASS) in 2.30s
+    Hash Unchanged:  true (29e3ff2cf25549fb7ed6165749ad5175934865ba6266ccf266dfe00cc8197b52)
+    Listing Same:    true
+    Git Unchanged:   true
+------------------------------------------------------------------------
+>>> Running Suite: s5-theme-support
+    Command: npx tsx test/s5-theme-support.test.ts
+    Exit Code:       0 (PASS) in 2.36s
+    Hash Unchanged:  true (29e3ff2cf25549fb7ed6165749ad5175934865ba6266ccf266dfe00cc8197b52)
+    Listing Same:    true
+    Git Unchanged:   true
+------------------------------------------------------------------------
+>>> Running Suite: s5-v3-support
+    Command: npx tsx test/s5-v3-support.test.ts
+    Exit Code:       0 (PASS) in 18.51s
+    Hash Unchanged:  true (29e3ff2cf25549fb7ed6165749ad5175934865ba6266ccf266dfe00cc8197b52)
+    Listing Same:    true
+    Git Unchanged:   true
+------------------------------------------------------------------------
+>>> Running Suite: fixtures
+    Command: npx tsx test/fixtures.test.ts
+    Exit Code:       1 (FAIL) in 1.52s
+    Hash Unchanged:  true (29e3ff2cf25549fb7ed6165749ad5175934865ba6266ccf266dfe00cc8197b52)
+    Listing Same:    true
+    Git Unchanged:   true
+
+========================================================================
+STEP 3 SUMMARY TABLE
+========================================================================
+ΓöîΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö¼ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö¼ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö¼ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö¼ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö¼ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö¼ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö¼ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÉ
+Γöé (index) Γöé suite                 Γöé exitCode Γöé duration Γöé hashUnchanged Γöé listingUnchanged Γöé gitUnchanged Γöé afterHash                                                          Γöé
+Γö£ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö╝ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö╝ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö╝ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö╝ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö╝ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö╝ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö╝ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöñ
+Γöé 0       Γöé 'reorder-safety'      Γöé 0        Γöé '1.51s'  Γöé true          Γöé true             Γöé true         Γöé '29e3ff2cf25549fb7ed6165749ad5175934865ba6266ccf266dfe00cc8197b52' Γöé
+Γöé 1       Γöé 'adapter'             Γöé 0        Γöé '0.92s'  Γöé true          Γöé true             Γöé true         Γöé '29e3ff2cf25549fb7ed6165749ad5175934865ba6266ccf266dfe00cc8197b52' Γöé
+Γöé 2       Γöé 'history-resilience'  Γöé 0        Γöé '1.71s'  Γöé true          Γöé true             Γöé true         Γöé '29e3ff2cf25549fb7ed6165749ad5175934865ba6266ccf266dfe00cc8197b52' Γöé
+Γöé 3       Γöé 's1-auth-origin'      Γöé 0        Γöé '27.51s' Γöé true          Γöé true             Γöé true         Γöé '29e3ff2cf25549fb7ed6165749ad5175934865ba6266ccf266dfe00cc8197b52' Γöé
+Γöé 4       Γöé 's2-path-traversal'   Γöé 0        Γöé '1.29s'  Γöé true          Γöé true             Γöé true         Γöé '29e3ff2cf25549fb7ed6165749ad5175934865ba6266ccf266dfe00cc8197b52' Γöé
+Γöé 5       Γöé 's3-atomic-write'     Γöé 0        Γöé '3.28s'  Γöé true          Γöé true             Γöé true         Γöé '29e3ff2cf25549fb7ed6165749ad5175934865ba6266ccf266dfe00cc8197b52' Γöé
+Γöé 6       Γöé 's5-tailwind-compile' Γöé 0        Γöé '2.30s'  Γöé true          Γöé true             Γöé true         Γöé '29e3ff2cf25549fb7ed6165749ad5175934865ba6266ccf266dfe00cc8197b52' Γöé
+Γöé 7       Γöé 's5-theme-support'    Γöé 0        Γöé '2.36s'  Γöé true          Γöé true             Γöé true         Γöé '29e3ff2cf25549fb7ed6165749ad5175934865ba6266ccf266dfe00cc8197b52' Γöé
+Γöé 8       Γöé 's5-v3-support'       Γöé 0        Γöé '18.51s' Γöé true          Γöé true             Γöé true         Γöé '29e3ff2cf25549fb7ed6165749ad5175934865ba6266ccf266dfe00cc8197b52' Γöé
+Γöé 9       Γöé 'fixtures'            Γöé 1        Γöé '1.52s'  Γöé true          Γöé true             Γöé true         Γöé '29e3ff2cf25549fb7ed6165749ad5175934865ba6266ccf266dfe00cc8197b52' Γöé
+ΓööΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö┤ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö┤ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö┤ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö┤ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö┤ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö┤ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö┤ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÿ

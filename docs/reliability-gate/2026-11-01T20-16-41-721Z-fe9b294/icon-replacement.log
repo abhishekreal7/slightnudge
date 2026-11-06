@@ -1,0 +1,276 @@
+SETUP 1793566190987 START git ["ls-files"]
+SETUP END elapsed 85ms
+Icon properties: local Studio
+HARNESS-V3 NAVIGATION about:blank
+HARNESS-V3 NAVIGATION http://127.0.0.1:52164/editor
+TIMING 1793566226993 REQUEST http://127.0.0.1:52164/editor
+TIMING 1793566261180 RESPONSE 200 http://127.0.0.1:52164/editor
+TIMING 1793566269127 REQUEST http://127.0.0.1:52164/api/slightnudge/responsive
+TIMING 1793566269127 REQUEST http://127.0.0.1:52164/api/slightnudge/responsive
+TIMING 1793566269174 REQUEST http://127.0.0.1:52164/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A52164&__slightnudge_session=683a2e42-4c30-41e5-9907-b7361ccc76a2
+TIMING 1793566286242 RESPONSE 200 http://127.0.0.1:52164/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A52164&__slightnudge_session=683a2e42-4c30-41e5-9907-b7361ccc76a2
+TIMING 1793566286271 REQUEST http://127.0.0.1:52164/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+TIMING 1793566288110 RESPONSE 200 http://127.0.0.1:52164/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+TIMING 1793566300540 RESPONSE 200 http://127.0.0.1:52164/api/slightnudge/responsive
+TIMING 1793566301142 RESPONSE 200 http://127.0.0.1:52164/api/slightnudge/responsive
+Icon properties: selecting mark
+TIMING 1793566304748 REQUEST http://127.0.0.1:52164/api/slightnudge/preview
+TIMING 1793566323919 RESPONSE 200 http://127.0.0.1:52164/api/slightnudge/preview
+Isolated application diagnostics ▲ Next.js 16.4.3 (webpack)
+- Local:         http://127.0.0.1:52164
+- Network:       http://127.0.0.1:52164
+✓ Ready in 543ms
+✓ Running next.config.mjs took 43ms
+
+○ Compiling /fixtures/1/page ...
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\reliability-gate\\2026-11-01T20-16-41-721Z-fe9b294\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-p1nVe4\\.next\\dev\\build-manifest.json","pid":22584,"time":1793566226399,"bytes":344}
+ GET /fixtures/1 200 in 772ms (next.js: 421ms, application-code: 351ms)
+○ Compiling /editor/[[...project]]/page ...
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\reliability-gate\\2026-11-01T20-16-41-721Z-fe9b294\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-p1nVe4\\.next\\dev\\build-manifest.json","pid":1548,"time":1793566259735,"bytes":344}
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\reliability-gate\\2026-11-01T20-16-41-721Z-fe9b294\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-p1nVe4\\.next\\dev\\build-manifest.json","pid":22584,"time":1793566260000,"bytes":344}
+ GET /editor 200 in 2.4s (next.js: 1145ms, application-code: 1223ms)
+○ Compiling /studio/preview/[pageId]/page ...
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\reliability-gate\\2026-11-01T20-16-41-721Z-fe9b294\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-p1nVe4\\.next\\dev\\build-manifest.json","pid":20492,"time":1793566284669,"bytes":344}
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\reliability-gate\\2026-11-01T20-16-41-721Z-fe9b294\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-p1nVe4\\.next\\dev\\build-manifest.json","pid":22584,"time":1793566284948,"bytes":344}
+ GET /studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A52164&__slightnudge_session=683a2e42-4c30-41e5-9907-b7361ccc76a2 200 in 7.3s (next.js: 5.9s, application-code: 1448ms)
+○ Compiling /api/slightnudge/responsive/route ...
+⚠ ./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\reliability-gate\\2026-11-01T20-16-41-721Z-fe9b294\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-p1nVe4\\.next\\dev\\build-manifest.json","pid":22584,"time":1793566297583,"bytes":344}
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\reliability-gate\\2026-11-01T20-16-41-721Z-fe9b294\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-p1nVe4\\.next\\dev\\build-manifest.json","pid":22584,"time":1793566297646,"bytes":344}
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\reliability-gate\\2026-11-01T20-16-41-721Z-fe9b294\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-p1nVe4\\.next\\dev\\build-manifest.json","pid":22584,"time":1793566297698,"bytes":344}
+ GET /api/slightnudge/pages 200 in 20.3s (next.js: 12.8s, proxy.ts: 5.8s, application-code: 1821ms)
+ POST /api/slightnudge/responsive 200 in 21.5s (next.js: 12.8s, proxy.ts: 5.8s, application-code: 3.0s)
+ POST /api/slightnudge/responsive 200 in 22.1s (next.js: 12.8s, proxy.ts: 5.8s, application-code: 3.6s)
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\reliability-gate\\2026-11-01T20-16-41-721Z-fe9b294\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-p1nVe4\\.next\\dev\\build-manifest.json","pid":22584,"time":1793566301318,"bytes":344}
+ GET /api/slightnudge/pages 200 in 8.7s (next.js: 1120ms, proxy.ts: 7.4s, application-code: 230ms)
+⚠ ./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+⚠ ./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\reliability-gate\\2026-11-01T20-16-41-721Z-fe9b294\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-p1nVe4\\.next\\dev\\build-manifest.json","pid":22584,"time":1793566316135,"bytes":344}
+ POST /api/slightnudge/preview 200 in 19.2s (next.js: 11.1s, proxy.ts: 296ms, application-code: 7.8s)
+
+SETUP 1793566353304 START taskkill ["/pid","3464","/T","/F"]
+SETUP END elapsed 787ms
+Temporary copy requires manual cleanup: C:\dev\vibecheck\scratch\reliability-gate\2026-11-01T20-16-41-721Z-fe9b294\worktree\scratch\security-hardening-20261101\os-temp\sn-review-consent-p1nVe4
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+locator.waitFor: Timeout 45000ms exceeded.
+Call log:
+[2m  - waiting for locator('iframe[title="Actual project"], iframe[title="Local source preview"]').contentFrame().getByRole('region', { name: 'Icon appearance', exact: true }) to be visible[22m
+
+    at Proxy.<anonymous> (C:\dev\vibecheck\scratch\reliability-gate\2026-11-01T20-16-41-721Z-fe9b294\worktree\test\helpers\gate-page-v3.ts:15:215)
+    at async select (C:\dev\vibecheck\scratch\reliability-gate\2026-11-01T20-16-41-721Z-fe9b294\worktree\test\helpers\icon-properties-browser.v3.ts:35:44)
+    at async checkIconProperties (C:\dev\vibecheck\scratch\reliability-gate\2026-11-01T20-16-41-721Z-fe9b294\worktree\test\helpers\icon-properties-browser.v3.ts:52:7)
+    at async <anonymous> (C:\dev\vibecheck\scratch\reliability-gate\2026-11-01T20-16-41-721Z-fe9b294\worktree\test\review-consent.browser.v3.ts:167:73) {
+  log: [
+    `  - waiting for locator('iframe[title="Actual project"], iframe[title="Local source preview"]').contentFrame().getByRole('region', { name: 'Icon appearance', exact: true }) to be visible`
+  ],
+  name: 'TimeoutError'
+}
+
+Node.js v22.19.0

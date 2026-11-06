@@ -1,0 +1,27 @@
+====================================================
+🧪 OVERFITTING CHECK: SECOND TEST APP 30 SELECTIONS
+====================================================
+
+
+page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3002/
+Call log:
+[2m  - navigating to "http://127.0.0.1:3002/", waiting until "domcontentloaded"[22m
+
+    at runOverfitSuite (C:\dev\vibecheck\test\m0-overfit.test.ts:240:14) {
+  log: [
+    '  - navigating to "http://127.0.0.1:3002/", waiting until "domcontentloaded"'
+  ],
+  name: 'Error'
+}
+
+Command failed: npx tsx test/m0-overfit.test.ts
+page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3002/
+Call log:
+[2m  - navigating to "http://127.0.0.1:3002/", waiting until "domcontentloaded"[22m
+
+    at runOverfitSuite (C:\dev\vibecheck\test\m0-overfit.test.ts:240:14) {
+  log: [
+    '  - navigating to "http://127.0.0.1:3002/", waiting until "domcontentloaded"'
+  ],
+  name: 'Error'
+}

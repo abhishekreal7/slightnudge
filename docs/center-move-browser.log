@@ -1,0 +1,12 @@
+PASS: centered Move handle, live two-axis snapped geometry and six cancellation paths; no source proposals while dragging
+PASS: Shift axis lock, one review per completed drag, exact Discard restoration
+C:\dev\vibecheck\node_modules\playwright-core\lib\coreBundle.js:63967
+          throw new Error("Please use browser.newContext()");
+                ^
+
+Error: Please use browser.newContext()
+    at _BrowserContext.newPage (C:\dev\vibecheck\node_modules\playwright-core\lib\coreBundle.js:63967:17)
+    at checkDragMove (C:\dev\vibecheck\test\helpers\drag-move-browser.ts:53:39)
+    at async <anonymous> (C:\dev\vibecheck\test\review-consent.browser.ts:104:14)
+
+Node.js v22.19.0

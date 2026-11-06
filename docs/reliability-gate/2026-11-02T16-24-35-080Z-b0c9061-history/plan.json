@@ -1,0 +1,343 @@
+{
+  "head": "b0c9061bb634cb215cdf08d63c20f5bdb7bba4c6",
+  "productRef": "b0c9061bb634cb215cdf08d63c20f5bdb7bba4c6",
+  "testRef": "b0c9061bb634cb215cdf08d63c20f5bdb7bba4c6",
+  "workspace": "C:\\dev\\vibecheck\\scratch\\g\\b19f397f\\worktree",
+  "requested": [
+    "history"
+  ],
+  "plan": [
+    {
+      "name": "selection-full-regression",
+      "surface": "full",
+      "suite": "regression",
+      "mode": "REAL",
+      "harness": "HARNESS-V3",
+      "args": [
+        "--import",
+        "tsx",
+        "test/m0-regression.reliability.v3.test.ts"
+      ],
+      "historical": "docs/editor-load-and-toolbar/selection/round-1-raw.log",
+      "historicalEvidenceExists": true
+    },
+    {
+      "name": "selection-full-overfit",
+      "surface": "full",
+      "suite": "overfit",
+      "mode": "REAL",
+      "harness": "HARNESS-V3",
+      "args": [
+        "--import",
+        "tsx",
+        "test/m0-overfit.reliability.v3.test.ts"
+      ],
+      "historical": "docs/editor-load-and-toolbar/selection/round-1-raw.log",
+      "historicalEvidenceExists": true
+    },
+    {
+      "name": "selection-fit-regression",
+      "surface": "fit",
+      "suite": "regression",
+      "mode": "REAL",
+      "harness": "HARNESS-V3",
+      "args": [
+        "--import",
+        "tsx",
+        "test/m0-regression.reliability.v3.test.ts"
+      ],
+      "historical": "docs/editor-load-and-toolbar/selection/round-1-raw.log",
+      "historicalEvidenceExists": true
+    },
+    {
+      "name": "selection-fit-overfit",
+      "surface": "fit",
+      "suite": "overfit",
+      "mode": "REAL",
+      "harness": "HARNESS-V3",
+      "args": [
+        "--import",
+        "tsx",
+        "test/m0-overfit.reliability.v3.test.ts"
+      ],
+      "historical": "docs/editor-load-and-toolbar/selection/round-1-raw.log",
+      "historicalEvidenceExists": true
+    },
+    {
+      "name": "shared-local-studio",
+      "mode": "REAL",
+      "harness": "HARNESS-V3",
+      "extra": {
+        "GATE_SHARED_KIND": "local",
+        "GATE_SHARED_VIEW": "false"
+      },
+      "args": [
+        "--import",
+        "tsx",
+        "test/shared-instance-security.v2.browser.v3.ts",
+        "--shared-instances"
+      ],
+      "historical": "docs/security-hardening/shared-workflows.log",
+      "historicalEvidenceExists": true
+    },
+    {
+      "name": "shared-local-window",
+      "mode": "REAL",
+      "harness": "HARNESS-V3",
+      "extra": {
+        "GATE_SHARED_KIND": "local",
+        "GATE_SHARED_VIEW": "true"
+      },
+      "args": [
+        "--import",
+        "tsx",
+        "test/shared-instance-security.v2.browser.v3.ts",
+        "--shared-instances"
+      ],
+      "historical": "docs/security-hardening/shared-workflows.log",
+      "historicalEvidenceExists": true
+    },
+    {
+      "name": "shared-imported-studio",
+      "mode": "REAL",
+      "harness": "HARNESS-V3",
+      "extra": {
+        "GATE_SHARED_KIND": "imported",
+        "GATE_SHARED_VIEW": "false"
+      },
+      "args": [
+        "--import",
+        "tsx",
+        "test/shared-instance-security.v2.browser.v3.ts",
+        "--shared-instances"
+      ],
+      "historical": "docs/security-hardening/shared-workflows.log",
+      "historicalEvidenceExists": true
+    },
+    {
+      "name": "shared-imported-window",
+      "mode": "REAL",
+      "harness": "HARNESS-V3",
+      "extra": {
+        "GATE_SHARED_KIND": "imported",
+        "GATE_SHARED_VIEW": "true"
+      },
+      "args": [
+        "--import",
+        "tsx",
+        "test/shared-instance-security.v2.browser.v3.ts",
+        "--shared-instances"
+      ],
+      "historical": "docs/security-hardening/shared-workflows.log",
+      "historicalEvidenceExists": true
+    },
+    {
+      "name": "movement",
+      "args": [
+        "--import",
+        "tsx",
+        "test/review-consent.browser.v3.ts",
+        "--drag-move"
+      ],
+      "historical": "docs/center-move-release.log",
+      "mode": "REAL",
+      "harness": "HARNESS-V3",
+      "historicalEvidenceExists": true
+    },
+    {
+      "name": "state-and-transitions",
+      "args": [
+        "--import",
+        "tsx",
+        "test/review-consent.browser.v3.ts",
+        "--m1"
+      ],
+      "historical": "docs/m1-final-gates.log",
+      "mode": "REAL",
+      "harness": "HARNESS-V3",
+      "historicalEvidenceExists": true
+    },
+    {
+      "name": "responsive",
+      "args": [
+        "--import",
+        "tsx",
+        "test/review-consent.browser.v3.ts",
+        "--responsive"
+      ],
+      "historical": "docs/responsive-editing-qualification.log",
+      "mode": "REAL",
+      "harness": "HARNESS-V3",
+      "historicalEvidenceExists": true
+    },
+    {
+      "name": "responsive-imported",
+      "args": [
+        "--import",
+        "tsx",
+        "test/review-consent.browser.v3.ts",
+        "--responsive-project"
+      ],
+      "historical": "docs/responsive-imported-final.log",
+      "mode": "REAL",
+      "harness": "HARNESS-V3",
+      "historicalEvidenceExists": true
+    },
+    {
+      "name": "appearance-layout",
+      "args": [
+        "--import",
+        "tsx",
+        "test/review-consent.browser.v3.ts",
+        "--appearance-layout"
+      ],
+      "historical": "docs/appearance-layout.md",
+      "mode": "REAL",
+      "harness": "HARNESS-V3",
+      "historicalEvidenceExists": true
+    },
+    {
+      "name": "images-local",
+      "args": [
+        "--import",
+        "tsx",
+        "test/review-consent.browser.v3.ts",
+        "--image-advanced"
+      ],
+      "historical": "docs/advanced-image-local-final.log",
+      "mode": "REAL",
+      "harness": "HARNESS-V3",
+      "historicalEvidenceExists": true
+    },
+    {
+      "name": "images-imported",
+      "args": [
+        "--import",
+        "tsx",
+        "test/review-consent.browser.v3.ts",
+        "--image-advanced-project"
+      ],
+      "historical": "docs/advanced-image-imported-final.log",
+      "mode": "REAL",
+      "harness": "HARNESS-V3",
+      "historicalEvidenceExists": true
+    },
+    {
+      "name": "component-actions-local",
+      "args": [
+        "--import",
+        "tsx",
+        "test/review-consent.browser.v3.ts",
+        "--component-actions"
+      ],
+      "historical": "docs/component-actions-local-final.log",
+      "mode": "REAL + MOCKED failure injection",
+      "harness": "HARNESS-V3",
+      "historicalEvidenceExists": true
+    },
+    {
+      "name": "component-actions-imported",
+      "args": [
+        "--import",
+        "tsx",
+        "test/review-consent.browser.v3.ts",
+        "--component-actions-project"
+      ],
+      "historical": "docs/component-actions-imported-final.log",
+      "mode": "REAL + MOCKED failure injection",
+      "harness": "HARNESS-V3",
+      "historicalEvidenceExists": true
+    },
+    {
+      "name": "icon-replacement",
+      "args": [
+        "--import",
+        "tsx",
+        "test/review-consent.browser.v3.ts",
+        "--icon-replacement-all"
+      ],
+      "historical": "docs/icon-replacement-qualification.log",
+      "mode": "REAL",
+      "harness": "HARNESS-V3",
+      "historicalEvidenceExists": true
+    },
+    {
+      "name": "icon-properties",
+      "args": [
+        "--import",
+        "tsx",
+        "test/review-consent.browser.v3.ts",
+        "--icon-properties-all"
+      ],
+      "historical": "docs/icon-properties-imported-final.log",
+      "mode": "REAL",
+      "harness": "HARNESS-V3",
+      "historicalEvidenceExists": true
+    },
+    {
+      "name": "section-order",
+      "args": [
+        "--import",
+        "tsx",
+        "test/review-consent.browser.v3.ts",
+        "--section-order"
+      ],
+      "historical": "docs/section-order-final.log",
+      "mode": "REAL",
+      "harness": "HARNESS-V3",
+      "historicalEvidenceExists": true
+    },
+    {
+      "name": "container-move",
+      "args": [
+        "--import",
+        "tsx",
+        "test/review-consent.browser.v3.ts",
+        "--container-move"
+      ],
+      "historical": "docs/container-move-qualification.log",
+      "mode": "REAL",
+      "harness": "HARNESS-V3",
+      "historicalEvidenceExists": true
+    },
+    {
+      "name": "text-editing",
+      "args": [
+        "--import",
+        "tsx",
+        "test/review-consent.browser.v3.ts",
+        "--inline-text"
+      ],
+      "historical": "docs/component-text-final.log",
+      "mode": "REAL",
+      "harness": "HARNESS-V3",
+      "historicalEvidenceExists": true
+    },
+    {
+      "name": "history",
+      "args": [
+        "--import",
+        "tsx",
+        "test/review-consent.browser.v3.ts",
+        "--imported-canvas"
+      ],
+      "historical": "docs/change-history-release.log",
+      "mode": "REAL",
+      "harness": "HARNESS-V3",
+      "historicalEvidenceExists": true
+    },
+    {
+      "name": "recovery",
+      "args": [
+        "--import",
+        "tsx",
+        "test/review-consent.browser.v3.ts",
+        "--reload-recovery"
+      ],
+      "historical": "docs/recovery-release-gates.log",
+      "mode": "REAL + MOCKED failure injection",
+      "harness": "HARNESS-V3",
+      "historicalEvidenceExists": true
+    }
+  ]
+}

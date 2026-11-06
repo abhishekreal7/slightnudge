@@ -1,0 +1,92 @@
+[
+  {
+    "id": "M1",
+    "name": "accept first of several matching elements",
+    "targetFile": "lib/slightnudge/edit-history.ts",
+    "status": "KILLED",
+    "killedBy": "test/token-undo.test.ts",
+    "reason": "  ✅ [PASS] (d) User changed same token refused with instructions;   ✅ [PASS] (e) Element deleted refused; AssertionError [ERR_ASSERTION]: Must refuse when element candidate is ambiguous\r",
+    "isSafetyRelevant": true
+  },
+  {
+    "id": "M2",
+    "name": "skip the \"contains every added token\" check",
+    "targetFile": "lib/slightnudge/edit-history.ts",
+    "status": "KILLED",
+    "killedBy": "test/token-undo.test.ts",
+    "reason": "  ✅ [PASS] (b) Unrelated file edit preserved;   ✅ [PASS] (c) Other classes on same element preserved; AssertionError [ERR_ASSERTION]: Must refuse when user changed the token\r",
+    "isSafetyRelevant": true
+  },
+  {
+    "id": "M3",
+    "name": "skip the \"none of the removed tokens present\" check",
+    "targetFile": "lib/slightnudge/edit-history.ts",
+    "status": "KILLED",
+    "killedBy": "Step 3 harness (500 seeds)",
+    "reason": "Worker exited abnormally",
+    "isSafetyRelevant": true
+  },
+  {
+    "id": "M4",
+    "name": "drop the loop/conditional refusal",
+    "targetFile": "lib/slightnudge/edit-history.ts",
+    "status": "KILLED",
+    "killedBy": "Step 3 harness (500 seeds)",
+    "reason": "Worker exited abnormally",
+    "isSafetyRelevant": true
+  },
+  {
+    "id": "M5",
+    "name": "drop the realpath containment check before the undo write",
+    "targetFile": "lib/slightnudge/edit-history.ts",
+    "status": "KILLED",
+    "killedBy": "Step 3 harness (500 seeds)",
+    "reason": "Worker exited abnormally",
+    "isSafetyRelevant": true
+  },
+  {
+    "id": "M6",
+    "name": "skip the post-edit parse check",
+    "targetFile": "lib/slightnudge/edit-history.ts",
+    "status": "KILLED",
+    "killedBy": "Step 3 harness (500 seeds)",
+    "reason": "Worker exited abnormally",
+    "isSafetyRelevant": true
+  },
+  {
+    "id": "M7",
+    "name": "undo older edit while a newer one is stacked",
+    "targetFile": "lib/slightnudge/edit-history.ts",
+    "status": "KILLED",
+    "killedBy": "test/token-undo.test.ts",
+    "reason": "  ✅ [PASS] (f) Two identical elements ambiguous refused;   ✅ [PASS] (g) File deleted returned clear error; AssertionError [ERR_ASSERTION]: Refusal must mention newer edit\r",
+    "isSafetyRelevant": true
+  },
+  {
+    "id": "M8",
+    "name": "restore the unguarded argv bypass in auth",
+    "targetFile": "lib/slightnudge/auth.ts",
+    "status": "KILLED",
+    "killedBy": "test/s1-auth-bypass.test.ts",
+    "reason": "AssertionError [ERR_ASSERTION]: Requests lacking token must be refused when SLIGHTNUDGE_TEST is unset, even if argv contains reorder-safety\r",
+    "isSafetyRelevant": true
+  },
+  {
+    "id": "M9",
+    "name": "compare tokens with plain === instead of timingSafeEqual (informational)",
+    "targetFile": "lib/slightnudge/auth.ts",
+    "status": "SURVIVED",
+    "killedBy": null,
+    "reason": null,
+    "isSafetyRelevant": false
+  },
+  {
+    "id": "M10",
+    "name": "accept any non-empty token",
+    "targetFile": "lib/slightnudge/auth.ts",
+    "status": "KILLED",
+    "killedBy": "test/s1-auth-origin.test.ts",
+    "reason": "✖ failing tests:;   AssertionError [ERR_ASSERTION]: Expected 403 on invalid token, got 400",
+    "isSafetyRelevant": true
+  }
+]

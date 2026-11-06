@@ -1,0 +1,141 @@
+{
+  "head": "32c62f8b107b81ea1a4e96314222c317401fdbf3",
+  "productRef": "32c62f8b107b81ea1a4e96314222c317401fdbf3",
+  "testRef": "32c62f8b107b81ea1a4e96314222c317401fdbf3",
+  "fatal": false,
+  "rows": [
+    {
+      "workflow": "warmup-m0-control-lab-full",
+      "api": "REAL",
+      "result": "FAIL",
+      "seconds": 406.12,
+      "error": "TimeoutError: locator.waitFor: Timeout 119430.0395ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-source-ready=\"true\"]') to be visible\u001b[22m\n\u001b[2m    - waiting for \"http://127.0.0.1:3000/editor/m0-control-lab?view=full&preview=http%3A%2F%2F127.0.0.1%3A3001\" navigation to finish...\u001b[22m\n\u001b[2m    - navigated to \"http://127.0.0.1:3000/editor/m0-control-lab?view=full&preview=http%3A%2F%2F127.0.0.1%3A3001\"\u001b[22m\n"
+    },
+    {
+      "workflow": "selection-full-regression",
+      "api": "REAL",
+      "result": "NOT RUN",
+      "seconds": 0
+    },
+    {
+      "workflow": "selection-full-overfit",
+      "api": "REAL",
+      "result": "NOT RUN",
+      "seconds": 0
+    },
+    {
+      "workflow": "selection-fit-regression",
+      "api": "REAL",
+      "result": "NOT RUN",
+      "seconds": 0
+    },
+    {
+      "workflow": "selection-fit-overfit",
+      "api": "REAL",
+      "result": "NOT RUN",
+      "seconds": 0
+    },
+    {
+      "workflow": "shared-instances-four",
+      "api": "REAL",
+      "result": "NOT RUN",
+      "seconds": 0
+    },
+    {
+      "workflow": "movement",
+      "api": "REAL",
+      "result": "NOT RUN",
+      "seconds": 0
+    },
+    {
+      "workflow": "state-and-transitions",
+      "api": "REAL",
+      "result": "NOT RUN",
+      "seconds": 0
+    },
+    {
+      "workflow": "responsive",
+      "api": "REAL",
+      "result": "NOT RUN",
+      "seconds": 0
+    },
+    {
+      "workflow": "responsive-imported",
+      "api": "REAL",
+      "result": "NOT RUN",
+      "seconds": 0
+    },
+    {
+      "workflow": "appearance-layout",
+      "api": "REAL",
+      "result": "NOT RUN",
+      "seconds": 0
+    },
+    {
+      "workflow": "images-local",
+      "api": "REAL",
+      "result": "NOT RUN",
+      "seconds": 0
+    },
+    {
+      "workflow": "images-imported",
+      "api": "REAL",
+      "result": "NOT RUN",
+      "seconds": 0
+    },
+    {
+      "workflow": "component-actions-local",
+      "api": "REAL + MOCKED failure injection",
+      "result": "NOT RUN",
+      "seconds": 0
+    },
+    {
+      "workflow": "component-actions-imported",
+      "api": "REAL + MOCKED failure injection",
+      "result": "NOT RUN",
+      "seconds": 0
+    },
+    {
+      "workflow": "icon-replacement",
+      "api": "REAL",
+      "result": "NOT RUN",
+      "seconds": 0
+    },
+    {
+      "workflow": "icon-properties",
+      "api": "REAL",
+      "result": "NOT RUN",
+      "seconds": 0
+    },
+    {
+      "workflow": "section-order",
+      "api": "REAL",
+      "result": "NOT RUN",
+      "seconds": 0
+    },
+    {
+      "workflow": "container-move",
+      "api": "REAL",
+      "result": "NOT RUN",
+      "seconds": 0
+    },
+    {
+      "workflow": "text-editing",
+      "api": "REAL",
+      "result": "NOT RUN",
+      "seconds": 0
+    },
+    {
+      "workflow": "history",
+      "api": "REAL",
+      "result": "NOT RUN",
+      "seconds": 0
+    },
+    {
+      "workflow": "recovery",
+      "api": "REAL + MOCKED failure injection",
+      "result": "NOT RUN",
+      "seconds": 0
+    }
+  ]
+}

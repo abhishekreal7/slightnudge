@@ -1,0 +1,61 @@
+{
+  "head": "63152eaba7fbd91bb5041c804c70cfe096d3b759",
+  "fatal": false,
+  "counts": {
+    "FAIL": 8,
+    "PASS": 7,
+    "TIMEOUT": 5,
+    "HARNESS-ERROR": 4
+  },
+  "selections": [
+    {
+      "view": "full",
+      "suite": "regression",
+      "cases": 30,
+      "verdicts": {
+        "allowed": 18,
+        "refused": 12
+      },
+      "pageErrors": 0,
+      "geometry": 0,
+      "maxOffset": 0
+    },
+    {
+      "view": "full",
+      "suite": "overfit",
+      "cases": 30,
+      "verdicts": {
+        "allowed": 26,
+        "refused": 4
+      },
+      "pageErrors": 0,
+      "geometry": 0,
+      "maxOffset": 0
+    },
+    {
+      "view": "fit",
+      "suite": "regression",
+      "cases": 30,
+      "verdicts": {
+        "allowed": 18,
+        "refused": 12
+      },
+      "pageErrors": 0,
+      "geometry": 30,
+      "maxOffset": 0.0078125
+    },
+    {
+      "view": "fit",
+      "suite": "overfit",
+      "cases": 30,
+      "verdicts": {
+        "NOT-CLICKABLE": 1,
+        "allowed": 25,
+        "refused": 4
+      },
+      "pageErrors": 0,
+      "geometry": 30,
+      "maxOffset": 0.0078125
+    }
+  ]
+}

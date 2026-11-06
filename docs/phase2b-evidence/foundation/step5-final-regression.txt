@@ -1,0 +1,1298 @@
+=== STEP 5: FINAL REGRESSION RUNS (3x EACH) ===
+Baseline edits.json SHA-256: 29e3ff2cf25549fb7ed6165749ad5175934865ba6266ccf266dfe00cc8197b52
+Baseline git dirt: NONE
+
+
+=================== RUN 1 / 3 ===================
+--- [Run 1] reorder-safety (npx tsx test/reorder-safety.test.ts) ---
+Exit Code: 0 (PASS) in 1.70s
+edits.json SHA-256: 29e3ff2cf25549fb7ed6165749ad5175934865ba6266ccf266dfe00cc8197b52 (matches baseline: true)
+git dirt: NONE
+Output:
+====================================================
+🧪 RUNNING REORDER SAFETY & SAME-LINE RESOLUTION TESTS
+====================================================
+
+--- 1. Same-line Element Resolution (Column + Tag Name) ---
+  ✅ [PASS] Same-line without column does not succeed
+  ✅ [PASS] Same-line without column refuses safely
+  ✅ [PASS] Refusal exact message: "I can't tell which element on this line you mean. Nothing was changed."
+  ✅ [PASS] Targets First button using col 7 + tagName
+  ✅ [PASS] First button correctly swapped later
+  ✅ [PASS] Targets Second button using col 52 + tagName
+  ✅ [PASS] Second button correctly swapped earlier
+  ✅ [PASS] Non-matching column refuses
+  ✅ [PASS] Non-matching column returns exact refusal message
+
+--- 2. Multi-slot Reorder Safety (Loops, Conditionals, Permutation) ---
+  ✅ [PASS] Reorder across map() list refused
+  ✅ [PASS] map() list refused safely
+  ✅ [PASS] Reorder across conditional element refused
+  ✅ [PASS] Conditional element refused safely
+  ✅ [PASS] Permutation swap succeeded
+  ✅ [PASS] Unchanged sibling item-c has identical bytes
+  ✅ [PASS] Whitespace and all comments are preserved byte-for-byte
+  ✅ [PASS] Order is pure permutation (item-b before item-a)
+
+--- 3. Preview Route targetIndex Validation ---
+  ✅ [PASS] targetIndex NaN returns status 400
+  ✅ [PASS] targetIndex float (1.5) returns status 400
+  ✅ [PASS] targetIndex negative (-2) returns status 400
+
+--- 4. Interaction Safety Tests (Failed Preview, Rapid Drag, Alt+Drag, Resize) ---
+  ✅ [PASS] Failed preview returns error status 422
+  ✅ [PASS] Failed preview returns informative error message
+  ✅ [PASS] Rapid drag: First reorder succeeds
+  ✅ [PASS] Rapid drag: Second immediate reorder succeeds
+  ✅ [PASS] Rapid drag: Final order is item-2, item-3, item-1 without corruption
+  ✅ [PASS] Alt+drag (spacing nudge down) succeeds
+  ✅ [PASS] Alt+drag nudged margin from mt-1 to mt-1.5
+  ✅ [PASS] Undo Alt+drag (nudge back up) succeeds
+  ✅ [PASS] Undo restores original mt-1 spacing cleanly
+  ✅ [PASS] Heading resize (width update) succeeds
+  ✅ [PASS] Resized heading contains new width class w-full
+  ✅ [PASS] Heading resize leaves typography classes (text-2xl, font-bold, text color) 100% unchanged
+
+====================================================
+🎉 ALL 32/32 REORDER & VALIDATION TESTS PASSED!
+====================================================
+
+
+
+--- [Run 1] adapter (npx tsx test/adapter.test.ts) ---
+Exit Code: 0 (PASS) in 1.00s
+edits.json SHA-256: 29e3ff2cf25549fb7ed6165749ad5175934865ba6266ccf266dfe00cc8197b52 (matches baseline: true)
+git dirt: NONE
+Output:
+====================================================
+🧪 SLIGHTNUDGE ADAPTER & ASSET REGEX TESTS
+====================================================
+
+✅ [PASS] next-source-loader.cjs starts with /* eslint-disable */
+✅ [PASS] bridgeClient script is generated as a string
+✅ [PASS] bridgeClient does NOT contain malformed /^/slightnudge-assets/ regex
+✅ [PASS] Found asset-path regex pattern in bridgeClient script
+✅ [PASS] Regex matches valid PNG asset path
+✅ [PASS] Regex matches valid JPG asset path
+✅ [PASS] Regex matches valid JPEG asset path
+✅ [PASS] Regex matches valid WEBP asset path
+✅ [PASS] Regex matches valid GIF asset path
+✅ [PASS] Regex is case-insensitive for UUID and extension
+✅ [PASS] Regex rejects unsupported SVG extension
+✅ [PASS] Regex rejects executable extension
+✅ [PASS] Regex rejects invalid UUID
+✅ [PASS] Regex rejects non-slightnudge path
+✅ [PASS] Regex rejects absolute URL
+✅ [PASS] Regex rejects path with trailing segment
+✅ [PASS] bridgeClient script parses cleanly as valid JavaScript in Function()
+
+====================================================
+🎉 ALL ADAPTER TESTS PASSED!
+====================================================
+
+
+
+--- [Run 1] history-resilience (npx tsx test/history-resilience.test.ts) ---
+Exit Code: 0 (PASS) in 1.97s
+edits.json SHA-256: 29e3ff2cf25549fb7ed6165749ad5175934865ba6266ccf266dfe00cc8197b52 (matches baseline: true)
+git dirt: NONE
+Output:
+TAP version 13
+# Subtest: History Resilience: Resilient readHistory and Safe File Validation
+    # Subtest: (a) a history entry whose file was deleted must not make apply throw: apply on a different existing file succeeds
+    ok 1 - (a) a history entry whose file was deleted must not make apply throw: apply on a different existing file succeeds
+      ---
+      duration_ms: 451.7883
+      type: 'test'
+      ...
+    # Subtest: (b) a history entry whose file was deleted must not break undo of a different edit
+    ok 2 - (b) a history entry whose file was deleted must not break undo of a different edit
+      ---
+      duration_ms: 10.6081
+      type: 'test'
+      ...
+    # Subtest: (c) a missing-file entry stays in the history file (never auto-deleted) and is returned marked missing so the UI can show it unavailable
+    ok 3 - (c) a missing-file entry stays in the history file (never auto-deleted) and is returned marked missing so the UI can show it unavailable
+      ---
+      duration_ms: 5.7969
+      type: 'test'
+      ...
+    # Subtest: (d) an entry whose path escapes the project root is skipped and reported, never followed
+    ok 4 - (d) an entry whose path escapes the project root is skipped and reported, never followed
+      ---
+      duration_ms: 9.1073
+      type: 'test'
+      ...
+    # Subtest: (e) undo of the entry whose file is missing returns a clear error ("that file no longer exists"), not a crash
+    ok 5 - (e) undo of the entry whose file is missing returns a clear error ("that file no longer exists"), not a crash
+      ---
+      duration_ms: 6.378
+      type: 'test'
+      ...
+    # Subtest: (f) a corrupt history file (invalid JSON) produces a clear error and does not overwrite or truncate the file
+    ok 6 - (f) a corrupt history file (invalid JSON) produces a clear error and does not overwrite or truncate the file
+      ---
+      duration_ms: 5.1775
+      type: 'test'
+      ...
+    1..6
+ok 1 - History Resilience: Resilient readHistory and Safe File Validation
+  ---
+  duration_ms: 490.0352
+  type: 'suite'
+  ...
+1..1
+# tests 6
+# suites 1
+# pass 6
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 495.5826
+
+
+--- [Run 1] s2-path-traversal (npx tsx test/s2-path-traversal.test.ts) ---
+Exit Code: 0 (PASS) in 1.55s
+edits.json SHA-256: 29e3ff2cf25549fb7ed6165749ad5175934865ba6266ccf266dfe00cc8197b52 (matches baseline: true)
+git dirt: NONE
+Output:
+TAP version 13
+# Subtest: S2: Path traversal refusal regression test
+    # Subtest: refuses pending-preview with ..\\ traversing outside project root, leaving target file unchanged
+    ok 1 - refuses pending-preview with ..\\ traversing outside project root, leaving target file unchanged
+      ---
+      duration_ms: 4.5029
+      type: 'test'
+      ...
+    # Subtest: refuses pending-preview using symlink/junction pointing outside project root, leaving target file unchanged
+    ok 2 - refuses pending-preview using symlink/junction pointing outside project root, leaving target file unchanged
+      ---
+      duration_ms: 3.256
+      type: 'test'
+      ...
+    1..2
+ok 1 - S2: Path traversal refusal regression test
+  ---
+  duration_ms: 12.0834
+  type: 'suite'
+  ...
+1..1
+# tests 2
+# suites 1
+# pass 2
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 27.9864
+
+
+--- [Run 1] s3-atomic-write (npx tsx test/s3-atomic-write.test.ts) ---
+Exit Code: 0 (PASS) in 3.35s
+edits.json SHA-256: 29e3ff2cf25549fb7ed6165749ad5175934865ba6266ccf266dfe00cc8197b52 (matches baseline: true)
+git dirt: NONE
+Output:
+TAP version 13
+# Subtest: S3: Atomic or refuse in atomicWrite
+    # Subtest: refuses and leaves target file unchanged when rename fails permanently without fallback overwrite
+    ok 1 - refuses and leaves target file unchanged when rename fails permanently without fallback overwrite
+      ---
+      duration_ms: 1614.7371
+      type: 'test'
+      ...
+    # Subtest: retries with backoff and succeeds when rename fails twice then succeeds
+    ok 2 - retries with backoff and succeeds when rename fails twice then succeeds
+      ---
+      duration_ms: 176.1353
+      type: 'test'
+      ...
+    1..2
+ok 1 - S3: Atomic or refuse in atomicWrite
+  ---
+  duration_ms: 1795.7406
+  type: 'suite'
+  ...
+1..1
+# tests 2
+# suites 1
+# pass 2
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1813.9802
+
+
+--- [Run 1] s5-tailwind-compile (npx tsx test/s5-tailwind-compile.test.ts) ---
+Exit Code: 0 (PASS) in 2.17s
+edits.json SHA-256: 29e3ff2cf25549fb7ed6165749ad5175934865ba6266ccf266dfe00cc8197b52 (matches baseline: true)
+git dirt: NONE
+Output:
+TAP version 13
+# Subtest: S5: Verify Tailwind compilation and AST parse before write
+    # Subtest: refuses applying an edit with a bogus non-compiling class and leaves file unchanged
+    ok 1 - refuses applying an edit with a bogus non-compiling class and leaves file unchanged
+      ---
+      duration_ms: 207.3588
+      type: 'test'
+      ...
+    # Subtest: accepts valid classes, stacked variant (dark:hover:bg-blue-500), and arbitrary value (w-[37px])
+    ok 2 - accepts valid classes, stacked variant (dark:hover:bg-blue-500), and arbitrary value (w-[37px])
+      ---
+      duration_ms: 269.3842
+      type: 'test'
+      ...
+    # Subtest: refuses content that would break the AST parse and leaves file unchanged
+    ok 3 - refuses content that would break the AST parse and leaves file unchanged
+      ---
+      duration_ms: 108.3697
+      type: 'test'
+      ...
+    1..3
+ok 1 - S5: Verify Tailwind compilation and AST parse before write
+  ---
+  duration_ms: 589.6438
+  type: 'suite'
+  ...
+1..1
+# tests 3
+# suites 1
+# pass 3
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 595.9851
+
+
+--- [Run 1] s5-theme-support (npx tsx test/s5-theme-support.test.ts) ---
+Exit Code: 0 (PASS) in 2.22s
+edits.json SHA-256: 29e3ff2cf25549fb7ed6165749ad5175934865ba6266ccf266dfe00cc8197b52 (matches baseline: true)
+git dirt: NONE
+Output:
+TAP version 13
+# Subtest: S5: Theme Support and Config Detection in Tailwind Verifier
+    # Subtest: a. Tailwind v4 project with @theme defining --color-brand-500 accepts bg-brand-500, stacked variant, and arbitrary value, and refuses bogus
+    ok 1 - a. Tailwind v4 project with @theme defining --color-brand-500 accepts bg-brand-500, stacked variant, and arbitrary value, and refuses bogus
+      ---
+      duration_ms: 138.5343
+      type: 'test'
+      ...
+    # Subtest: b. Tailwind v4 project with legacy tailwind.config.js and CSS @config accepts bg-brand-500, stacked variant, and arbitrary value, and refuses bogus
+    ok 2 - b. Tailwind v4 project with legacy tailwind.config.js and CSS @config accepts bg-brand-500, stacked variant, and arbitrary value, and refuses bogus
+      ---
+      duration_ms: 55.6561
+      type: 'test'
+      ...
+NOTICE [d. Tailwind v3]: UNVERIFIED offline. Node_modules has Tailwind v4.3.3 installed, v3 package not present offline.
+    # Subtest: c. Tailwind v4 project with tailwind.config.js but CSS entry WITHOUT @config refuses bg-brand-500 (matches v4 build behavior) while accepting standard utilities
+    ok 3 - c. Tailwind v4 project with tailwind.config.js but CSS entry WITHOUT @config refuses bg-brand-500 (matches v4 build behavior) while accepting standard utilities
+      ---
+      duration_ms: 20.7908
+      type: 'test'
+      ...
+    # Subtest: d. Tailwind v3 project: verify offline availability or report UNVERIFIED
+    ok 4 - d. Tailwind v3 project: verify offline availability or report UNVERIFIED
+      ---
+      duration_ms: 0.5664
+      type: 'test'
+      ...
+    # Subtest: f. Project where no Tailwind is installed or engine fails: refuses and writes nothing
+    ok 5 - f. Project where no Tailwind is installed or engine fails: refuses and writes nothing
+      ---
+      duration_ms: 2.7768
+      type: 'test'
+      ...
+    # Subtest: g. Unchanged existing tokens in className are never verified and never cause refusal; only added tokens are verified
+    ok 6 - g. Unchanged existing tokens in className are never verified and never cause refusal; only added tokens are verified
+      ---
+      duration_ms: 321.8546
+      type: 'test'
+      ...
+    1..6
+ok 1 - S5: Theme Support and Config Detection in Tailwind Verifier
+  ---
+  duration_ms: 541.3441
+  type: 'suite'
+  ...
+1..1
+# tests 6
+# suites 1
+# pass 6
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 547.2017
+
+
+--- [Run 1] s1-auth-origin (npx tsx test/s1-auth-origin.test.ts) ---
+Exit Code: 0 (PASS) in 24.21s
+edits.json SHA-256: 29e3ff2cf25549fb7ed6165749ad5175934865ba6266ccf266dfe00cc8197b52 (matches baseline: true)
+git dirt: NONE
+Output:
+TAP version 13
+# Subtest: S1: Authenticated, local-only mutating requests
+    # Subtest: rejects mutating request with no Origin and no token with 403 (not 404)
+    ok 1 - rejects mutating request with no Origin and no token with 403 (not 404)
+      ---
+      duration_ms: 2245.3078
+      type: 'test'
+      ...
+    # Subtest: rejects mutating request with wrong Host with 403
+    ok 2 - rejects mutating request with wrong Host with 403
+      ---
+      duration_ms: 31.8448
+      type: 'test'
+      ...
+    # Subtest: rejects mutating request with valid Origin but missing token with 403
+    ok 3 - rejects mutating request with valid Origin but missing token with 403
+      ---
+      duration_ms: 8.9874
+      type: 'test'
+      ...
+    # Subtest: rejects mutating request with valid Origin but invalid token with 403
+    ok 4 - rejects mutating request with valid Origin but invalid token with 403
+      ---
+      duration_ms: 9.7107
+      type: 'test'
+      ...
+    # Subtest: returns normal not-found error for fake previewId with valid token and valid Origin
+    ok 5 - returns normal not-found error for fake previewId with valid token and valid Origin
+      ---
+      duration_ms: 21.2974
+      type: 'test'
+      ...
+    # Subtest: allows missing Origin when valid token is present and proceeds to normal handling
+    ok 6 - allows missing Origin when valid token is present and proceeds to normal handling
+      ---
+      duration_ms: 16.0425
+      type: 'test'
+      ...
+    # Subtest: completes preview, apply, and undo flow in a temp copy with valid token and Origin
+    ok 7 - completes preview, apply, and undo flow in a temp copy with valid token and Origin
+      ---
+      duration_ms: 1455.2854
+      type: 'test'
+      ...
+    1..7
+ok 1 - S1: Authenticated, local-only mutating requests
+  ---
+  duration_ms: 22757.6946
+  type: 'suite'
+  ...
+1..1
+# tests 7
+# suites 1
+# pass 7
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 22763.842
+
+
+--- [Run 1] s5-v3-support (npx tsx test/s5-v3-support.test.ts) ---
+Exit Code: 0 (PASS) in 10.35s
+edits.json SHA-256: 29e3ff2cf25549fb7ed6165749ad5175934865ba6266ccf266dfe00cc8197b52 (matches baseline: true)
+git dirt: NONE
+Output:
+TAP version 13
+# Subtest: S5: Tailwind v3 Verification and Project Isolation
+    # Subtest: verifies Tailwind v3 project tokens: standard, theme brand.500, stacked variants, arbitrary values, plugins, and refuses bogus
+    ok 1 - verifies Tailwind v3 project tokens: standard, theme brand.500, stacked variants, arbitrary values, plugins, and refuses bogus
+      ---
+      duration_ms: 3881.7764
+      type: 'test'
+      ...
+    # Subtest: confirms unchanged existing tokens are never verified in a v3 project during apply
+    ok 2 - confirms unchanged existing tokens are never verified in a v3 project during apply
+      ---
+      duration_ms: 4928.1711
+      type: 'test'
+      ...
+    1..2
+ok 1 - S5: Tailwind v3 Verification and Project Isolation
+  ---
+  duration_ms: 8811.0449
+  type: 'suite'
+  ...
+1..1
+# tests 2
+# suites 1
+# pass 2
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 8818.2843
+
+
+
+=================== RUN 2 / 3 ===================
+--- [Run 2] reorder-safety (npx tsx test/reorder-safety.test.ts) ---
+Exit Code: 0 (PASS) in 1.76s
+edits.json SHA-256: 29e3ff2cf25549fb7ed6165749ad5175934865ba6266ccf266dfe00cc8197b52 (matches baseline: true)
+git dirt: NONE
+Output:
+====================================================
+🧪 RUNNING REORDER SAFETY & SAME-LINE RESOLUTION TESTS
+====================================================
+
+--- 1. Same-line Element Resolution (Column + Tag Name) ---
+  ✅ [PASS] Same-line without column does not succeed
+  ✅ [PASS] Same-line without column refuses safely
+  ✅ [PASS] Refusal exact message: "I can't tell which element on this line you mean. Nothing was changed."
+  ✅ [PASS] Targets First button using col 7 + tagName
+  ✅ [PASS] First button correctly swapped later
+  ✅ [PASS] Targets Second button using col 52 + tagName
+  ✅ [PASS] Second button correctly swapped earlier
+  ✅ [PASS] Non-matching column refuses
+  ✅ [PASS] Non-matching column returns exact refusal message
+
+--- 2. Multi-slot Reorder Safety (Loops, Conditionals, Permutation) ---
+  ✅ [PASS] Reorder across map() list refused
+  ✅ [PASS] map() list refused safely
+  ✅ [PASS] Reorder across conditional element refused
+  ✅ [PASS] Conditional element refused safely
+  ✅ [PASS] Permutation swap succeeded
+  ✅ [PASS] Unchanged sibling item-c has identical bytes
+  ✅ [PASS] Whitespace and all comments are preserved byte-for-byte
+  ✅ [PASS] Order is pure permutation (item-b before item-a)
+
+--- 3. Preview Route targetIndex Validation ---
+  ✅ [PASS] targetIndex NaN returns status 400
+  ✅ [PASS] targetIndex float (1.5) returns status 400
+  ✅ [PASS] targetIndex negative (-2) returns status 400
+
+--- 4. Interaction Safety Tests (Failed Preview, Rapid Drag, Alt+Drag, Resize) ---
+  ✅ [PASS] Failed preview returns error status 422
+  ✅ [PASS] Failed preview returns informative error message
+  ✅ [PASS] Rapid drag: First reorder succeeds
+  ✅ [PASS] Rapid drag: Second immediate reorder succeeds
+  ✅ [PASS] Rapid drag: Final order is item-2, item-3, item-1 without corruption
+  ✅ [PASS] Alt+drag (spacing nudge down) succeeds
+  ✅ [PASS] Alt+drag nudged margin from mt-1 to mt-1.5
+  ✅ [PASS] Undo Alt+drag (nudge back up) succeeds
+  ✅ [PASS] Undo restores original mt-1 spacing cleanly
+  ✅ [PASS] Heading resize (width update) succeeds
+  ✅ [PASS] Resized heading contains new width class w-full
+  ✅ [PASS] Heading resize leaves typography classes (text-2xl, font-bold, text color) 100% unchanged
+
+====================================================
+🎉 ALL 32/32 REORDER & VALIDATION TESTS PASSED!
+====================================================
+
+
+
+--- [Run 2] adapter (npx tsx test/adapter.test.ts) ---
+Exit Code: 0 (PASS) in 1.17s
+edits.json SHA-256: 29e3ff2cf25549fb7ed6165749ad5175934865ba6266ccf266dfe00cc8197b52 (matches baseline: true)
+git dirt: NONE
+Output:
+====================================================
+🧪 SLIGHTNUDGE ADAPTER & ASSET REGEX TESTS
+====================================================
+
+✅ [PASS] next-source-loader.cjs starts with /* eslint-disable */
+✅ [PASS] bridgeClient script is generated as a string
+✅ [PASS] bridgeClient does NOT contain malformed /^/slightnudge-assets/ regex
+✅ [PASS] Found asset-path regex pattern in bridgeClient script
+✅ [PASS] Regex matches valid PNG asset path
+✅ [PASS] Regex matches valid JPG asset path
+✅ [PASS] Regex matches valid JPEG asset path
+✅ [PASS] Regex matches valid WEBP asset path
+✅ [PASS] Regex matches valid GIF asset path
+✅ [PASS] Regex is case-insensitive for UUID and extension
+✅ [PASS] Regex rejects unsupported SVG extension
+✅ [PASS] Regex rejects executable extension
+✅ [PASS] Regex rejects invalid UUID
+✅ [PASS] Regex rejects non-slightnudge path
+✅ [PASS] Regex rejects absolute URL
+✅ [PASS] Regex rejects path with trailing segment
+✅ [PASS] bridgeClient script parses cleanly as valid JavaScript in Function()
+
+====================================================
+🎉 ALL ADAPTER TESTS PASSED!
+====================================================
+
+
+
+--- [Run 2] history-resilience (npx tsx test/history-resilience.test.ts) ---
+Exit Code: 0 (PASS) in 2.01s
+edits.json SHA-256: 29e3ff2cf25549fb7ed6165749ad5175934865ba6266ccf266dfe00cc8197b52 (matches baseline: true)
+git dirt: NONE
+Output:
+TAP version 13
+# Subtest: History Resilience: Resilient readHistory and Safe File Validation
+    # Subtest: (a) a history entry whose file was deleted must not make apply throw: apply on a different existing file succeeds
+    ok 1 - (a) a history entry whose file was deleted must not make apply throw: apply on a different existing file succeeds
+      ---
+      duration_ms: 469.7214
+      type: 'test'
+      ...
+    # Subtest: (b) a history entry whose file was deleted must not break undo of a different edit
+    ok 2 - (b) a history entry whose file was deleted must not break undo of a different edit
+      ---
+      duration_ms: 14.1617
+      type: 'test'
+      ...
+    # Subtest: (c) a missing-file entry stays in the history file (never auto-deleted) and is returned marked missing so the UI can show it unavailable
+    ok 3 - (c) a missing-file entry stays in the history file (never auto-deleted) and is returned marked missing so the UI can show it unavailable
+      ---
+      duration_ms: 7.7119
+      type: 'test'
+      ...
+    # Subtest: (d) an entry whose path escapes the project root is skipped and reported, never followed
+    ok 4 - (d) an entry whose path escapes the project root is skipped and reported, never followed
+      ---
+      duration_ms: 11.9909
+      type: 'test'
+      ...
+    # Subtest: (e) undo of the entry whose file is missing returns a clear error ("that file no longer exists"), not a crash
+    ok 5 - (e) undo of the entry whose file is missing returns a clear error ("that file no longer exists"), not a crash
+      ---
+      duration_ms: 7.2884
+      type: 'test'
+      ...
+    # Subtest: (f) a corrupt history file (invalid JSON) produces a clear error and does not overwrite or truncate the file
+    ok 6 - (f) a corrupt history file (invalid JSON) produces a clear error and does not overwrite or truncate the file
+      ---
+      duration_ms: 6.3889
+      type: 'test'
+      ...
+    1..6
+ok 1 - History Resilience: Resilient readHistory and Safe File Validation
+  ---
+  duration_ms: 518.7163
+  type: 'suite'
+  ...
+1..1
+# tests 6
+# suites 1
+# pass 6
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 526.0175
+
+
+--- [Run 2] s2-path-traversal (npx tsx test/s2-path-traversal.test.ts) ---
+Exit Code: 0 (PASS) in 1.57s
+edits.json SHA-256: 29e3ff2cf25549fb7ed6165749ad5175934865ba6266ccf266dfe00cc8197b52 (matches baseline: true)
+git dirt: NONE
+Output:
+TAP version 13
+# Subtest: S2: Path traversal refusal regression test
+    # Subtest: refuses pending-preview with ..\\ traversing outside project root, leaving target file unchanged
+    ok 1 - refuses pending-preview with ..\\ traversing outside project root, leaving target file unchanged
+      ---
+      duration_ms: 3.8641
+      type: 'test'
+      ...
+    # Subtest: refuses pending-preview using symlink/junction pointing outside project root, leaving target file unchanged
+    ok 2 - refuses pending-preview using symlink/junction pointing outside project root, leaving target file unchanged
+      ---
+      duration_ms: 3.2417
+      type: 'test'
+      ...
+    1..2
+ok 1 - S2: Path traversal refusal regression test
+  ---
+  duration_ms: 11.7313
+  type: 'suite'
+  ...
+1..1
+# tests 2
+# suites 1
+# pass 2
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 29.3269
+
+
+--- [Run 2] s3-atomic-write (npx tsx test/s3-atomic-write.test.ts) ---
+Exit Code: 0 (PASS) in 3.61s
+edits.json SHA-256: 29e3ff2cf25549fb7ed6165749ad5175934865ba6266ccf266dfe00cc8197b52 (matches baseline: true)
+git dirt: NONE
+Output:
+TAP version 13
+# Subtest: S3: Atomic or refuse in atomicWrite
+    # Subtest: refuses and leaves target file unchanged when rename fails permanently without fallback overwrite
+    ok 1 - refuses and leaves target file unchanged when rename fails permanently without fallback overwrite
+      ---
+      duration_ms: 1590.3192
+      type: 'test'
+      ...
+    # Subtest: retries with backoff and succeeds when rename fails twice then succeeds
+    ok 2 - retries with backoff and succeeds when rename fails twice then succeeds
+      ---
+      duration_ms: 175.3354
+      type: 'test'
+      ...
+    1..2
+ok 1 - S3: Atomic or refuse in atomicWrite
+  ---
+  duration_ms: 1770.3162
+  type: 'suite'
+  ...
+1..1
+# tests 2
+# suites 1
+# pass 2
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1786.1863
+
+
+--- [Run 2] s5-tailwind-compile (npx tsx test/s5-tailwind-compile.test.ts) ---
+Exit Code: 0 (PASS) in 2.23s
+edits.json SHA-256: 29e3ff2cf25549fb7ed6165749ad5175934865ba6266ccf266dfe00cc8197b52 (matches baseline: true)
+git dirt: NONE
+Output:
+TAP version 13
+# Subtest: S5: Verify Tailwind compilation and AST parse before write
+    # Subtest: refuses applying an edit with a bogus non-compiling class and leaves file unchanged
+    ok 1 - refuses applying an edit with a bogus non-compiling class and leaves file unchanged
+      ---
+      duration_ms: 195.9895
+      type: 'test'
+      ...
+    # Subtest: accepts valid classes, stacked variant (dark:hover:bg-blue-500), and arbitrary value (w-[37px])
+    ok 2 - accepts valid classes, stacked variant (dark:hover:bg-blue-500), and arbitrary value (w-[37px])
+      ---
+      duration_ms: 321.151
+      type: 'test'
+      ...
+    # Subtest: refuses content that would break the AST parse and leaves file unchanged
+    ok 3 - refuses content that would break the AST parse and leaves file unchanged
+      ---
+      duration_ms: 157.7406
+      type: 'test'
+      ...
+    1..3
+ok 1 - S5: Verify Tailwind compilation and AST parse before write
+  ---
+  duration_ms: 686.3271
+  type: 'suite'
+  ...
+1..1
+# tests 3
+# suites 1
+# pass 3
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 694.8435
+
+
+--- [Run 2] s5-theme-support (npx tsx test/s5-theme-support.test.ts) ---
+Exit Code: 0 (PASS) in 2.56s
+edits.json SHA-256: 29e3ff2cf25549fb7ed6165749ad5175934865ba6266ccf266dfe00cc8197b52 (matches baseline: true)
+git dirt: NONE
+Output:
+TAP version 13
+# Subtest: S5: Theme Support and Config Detection in Tailwind Verifier
+    # Subtest: a. Tailwind v4 project with @theme defining --color-brand-500 accepts bg-brand-500, stacked variant, and arbitrary value, and refuses bogus
+    ok 1 - a. Tailwind v4 project with @theme defining --color-brand-500 accepts bg-brand-500, stacked variant, and arbitrary value, and refuses bogus
+      ---
+      duration_ms: 180.4948
+      type: 'test'
+      ...
+    # Subtest: b. Tailwind v4 project with legacy tailwind.config.js and CSS @config accepts bg-brand-500, stacked variant, and arbitrary value, and refuses bogus
+    ok 2 - b. Tailwind v4 project with legacy tailwind.config.js and CSS @config accepts bg-brand-500, stacked variant, and arbitrary value, and refuses bogus
+      ---
+      duration_ms: 74.5074
+      type: 'test'
+      ...
+NOTICE [d. Tailwind v3]: UNVERIFIED offline. Node_modules has Tailwind v4.3.3 installed, v3 package not present offline.
+    # Subtest: c. Tailwind v4 project with tailwind.config.js but CSS entry WITHOUT @config refuses bg-brand-500 (matches v4 build behavior) while accepting standard utilities
+    ok 3 - c. Tailwind v4 project with tailwind.config.js but CSS entry WITHOUT @config refuses bg-brand-500 (matches v4 build behavior) while accepting standard utilities
+      ---
+      duration_ms: 32.717
+      type: 'test'
+      ...
+    # Subtest: d. Tailwind v3 project: verify offline availability or report UNVERIFIED
+    ok 4 - d. Tailwind v3 project: verify offline availability or report UNVERIFIED
+      ---
+      duration_ms: 0.7679
+      type: 'test'
+      ...
+    # Subtest: f. Project where no Tailwind is installed or engine fails: refuses and writes nothing
+    ok 5 - f. Project where no Tailwind is installed or engine fails: refuses and writes nothing
+      ---
+      duration_ms: 4.4059
+      type: 'test'
+      ...
+    # Subtest: g. Unchanged existing tokens in className are never verified and never cause refusal; only added tokens are verified
+    ok 6 - g. Unchanged existing tokens in className are never verified and never cause refusal; only added tokens are verified
+      ---
+      duration_ms: 499.9234
+      type: 'test'
+      ...
+    1..6
+ok 1 - S5: Theme Support and Config Detection in Tailwind Verifier
+  ---
+  duration_ms: 794.9918
+  type: 'suite'
+  ...
+1..1
+# tests 6
+# suites 1
+# pass 6
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 803.7935
+
+
+--- [Run 2] s1-auth-origin (npx tsx test/s1-auth-origin.test.ts) ---
+Exit Code: 0 (PASS) in 23.47s
+edits.json SHA-256: 29e3ff2cf25549fb7ed6165749ad5175934865ba6266ccf266dfe00cc8197b52 (matches baseline: true)
+git dirt: NONE
+Output:
+TAP version 13
+# Subtest: S1: Authenticated, local-only mutating requests
+    # Subtest: rejects mutating request with no Origin and no token with 403 (not 404)
+    ok 1 - rejects mutating request with no Origin and no token with 403 (not 404)
+      ---
+      duration_ms: 3841.5892
+      type: 'test'
+      ...
+    # Subtest: rejects mutating request with wrong Host with 403
+    ok 2 - rejects mutating request with wrong Host with 403
+      ---
+      duration_ms: 69.8485
+      type: 'test'
+      ...
+    # Subtest: rejects mutating request with valid Origin but missing token with 403
+    ok 3 - rejects mutating request with valid Origin but missing token with 403
+      ---
+      duration_ms: 24.1073
+      type: 'test'
+      ...
+    # Subtest: rejects mutating request with valid Origin but invalid token with 403
+    ok 4 - rejects mutating request with valid Origin but invalid token with 403
+      ---
+      duration_ms: 22.7813
+      type: 'test'
+      ...
+    # Subtest: returns normal not-found error for fake previewId with valid token and valid Origin
+    ok 5 - returns normal not-found error for fake previewId with valid token and valid Origin
+      ---
+      duration_ms: 51.7428
+      type: 'test'
+      ...
+    # Subtest: allows missing Origin when valid token is present and proceeds to normal handling
+    ok 6 - allows missing Origin when valid token is present and proceeds to normal handling
+      ---
+      duration_ms: 42.5564
+      type: 'test'
+      ...
+    # Subtest: completes preview, apply, and undo flow in a temp copy with valid token and Origin
+    ok 7 - completes preview, apply, and undo flow in a temp copy with valid token and Origin
+      ---
+      duration_ms: 2905.8645
+      type: 'test'
+      ...
+    1..7
+ok 1 - S1: Authenticated, local-only mutating requests
+  ---
+  duration_ms: 22240.0508
+  type: 'suite'
+  ...
+1..1
+# tests 7
+# suites 1
+# pass 7
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 22250.3307
+
+
+--- [Run 2] s5-v3-support (npx tsx test/s5-v3-support.test.ts) ---
+Exit Code: 0 (PASS) in 14.79s
+edits.json SHA-256: 29e3ff2cf25549fb7ed6165749ad5175934865ba6266ccf266dfe00cc8197b52 (matches baseline: true)
+git dirt: NONE
+Output:
+TAP version 13
+# Subtest: S5: Tailwind v3 Verification and Project Isolation
+    # Subtest: verifies Tailwind v3 project tokens: standard, theme brand.500, stacked variants, arbitrary values, plugins, and refuses bogus
+    ok 1 - verifies Tailwind v3 project tokens: standard, theme brand.500, stacked variants, arbitrary values, plugins, and refuses bogus
+      ---
+      duration_ms: 6763.569
+      type: 'test'
+      ...
+    # Subtest: confirms unchanged existing tokens are never verified in a v3 project during apply
+    ok 2 - confirms unchanged existing tokens are never verified in a v3 project during apply
+      ---
+      duration_ms: 6516.1874
+      type: 'test'
+      ...
+    1..2
+ok 1 - S5: Tailwind v3 Verification and Project Isolation
+  ---
+  duration_ms: 13281.8598
+  type: 'suite'
+  ...
+1..1
+# tests 2
+# suites 1
+# pass 2
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 13302.2064
+
+
+
+=================== RUN 3 / 3 ===================
+--- [Run 3] reorder-safety (npx tsx test/reorder-safety.test.ts) ---
+Exit Code: 0 (PASS) in 1.79s
+edits.json SHA-256: 29e3ff2cf25549fb7ed6165749ad5175934865ba6266ccf266dfe00cc8197b52 (matches baseline: true)
+git dirt: NONE
+Output:
+====================================================
+🧪 RUNNING REORDER SAFETY & SAME-LINE RESOLUTION TESTS
+====================================================
+
+--- 1. Same-line Element Resolution (Column + Tag Name) ---
+  ✅ [PASS] Same-line without column does not succeed
+  ✅ [PASS] Same-line without column refuses safely
+  ✅ [PASS] Refusal exact message: "I can't tell which element on this line you mean. Nothing was changed."
+  ✅ [PASS] Targets First button using col 7 + tagName
+  ✅ [PASS] First button correctly swapped later
+  ✅ [PASS] Targets Second button using col 52 + tagName
+  ✅ [PASS] Second button correctly swapped earlier
+  ✅ [PASS] Non-matching column refuses
+  ✅ [PASS] Non-matching column returns exact refusal message
+
+--- 2. Multi-slot Reorder Safety (Loops, Conditionals, Permutation) ---
+  ✅ [PASS] Reorder across map() list refused
+  ✅ [PASS] map() list refused safely
+  ✅ [PASS] Reorder across conditional element refused
+  ✅ [PASS] Conditional element refused safely
+  ✅ [PASS] Permutation swap succeeded
+  ✅ [PASS] Unchanged sibling item-c has identical bytes
+  ✅ [PASS] Whitespace and all comments are preserved byte-for-byte
+  ✅ [PASS] Order is pure permutation (item-b before item-a)
+
+--- 3. Preview Route targetIndex Validation ---
+  ✅ [PASS] targetIndex NaN returns status 400
+  ✅ [PASS] targetIndex float (1.5) returns status 400
+  ✅ [PASS] targetIndex negative (-2) returns status 400
+
+--- 4. Interaction Safety Tests (Failed Preview, Rapid Drag, Alt+Drag, Resize) ---
+  ✅ [PASS] Failed preview returns error status 422
+  ✅ [PASS] Failed preview returns informative error message
+  ✅ [PASS] Rapid drag: First reorder succeeds
+  ✅ [PASS] Rapid drag: Second immediate reorder succeeds
+  ✅ [PASS] Rapid drag: Final order is item-2, item-3, item-1 without corruption
+  ✅ [PASS] Alt+drag (spacing nudge down) succeeds
+  ✅ [PASS] Alt+drag nudged margin from mt-1 to mt-1.5
+  ✅ [PASS] Undo Alt+drag (nudge back up) succeeds
+  ✅ [PASS] Undo restores original mt-1 spacing cleanly
+  ✅ [PASS] Heading resize (width update) succeeds
+  ✅ [PASS] Resized heading contains new width class w-full
+  ✅ [PASS] Heading resize leaves typography classes (text-2xl, font-bold, text color) 100% unchanged
+
+====================================================
+🎉 ALL 32/32 REORDER & VALIDATION TESTS PASSED!
+====================================================
+
+
+
+--- [Run 3] adapter (npx tsx test/adapter.test.ts) ---
+Exit Code: 0 (PASS) in 1.16s
+edits.json SHA-256: 29e3ff2cf25549fb7ed6165749ad5175934865ba6266ccf266dfe00cc8197b52 (matches baseline: true)
+git dirt: NONE
+Output:
+====================================================
+🧪 SLIGHTNUDGE ADAPTER & ASSET REGEX TESTS
+====================================================
+
+✅ [PASS] next-source-loader.cjs starts with /* eslint-disable */
+✅ [PASS] bridgeClient script is generated as a string
+✅ [PASS] bridgeClient does NOT contain malformed /^/slightnudge-assets/ regex
+✅ [PASS] Found asset-path regex pattern in bridgeClient script
+✅ [PASS] Regex matches valid PNG asset path
+✅ [PASS] Regex matches valid JPG asset path
+✅ [PASS] Regex matches valid JPEG asset path
+✅ [PASS] Regex matches valid WEBP asset path
+✅ [PASS] Regex matches valid GIF asset path
+✅ [PASS] Regex is case-insensitive for UUID and extension
+✅ [PASS] Regex rejects unsupported SVG extension
+✅ [PASS] Regex rejects executable extension
+✅ [PASS] Regex rejects invalid UUID
+✅ [PASS] Regex rejects non-slightnudge path
+✅ [PASS] Regex rejects absolute URL
+✅ [PASS] Regex rejects path with trailing segment
+✅ [PASS] bridgeClient script parses cleanly as valid JavaScript in Function()
+
+====================================================
+🎉 ALL ADAPTER TESTS PASSED!
+====================================================
+
+
+
+--- [Run 3] history-resilience (npx tsx test/history-resilience.test.ts) ---
+Exit Code: 0 (PASS) in 2.02s
+edits.json SHA-256: 29e3ff2cf25549fb7ed6165749ad5175934865ba6266ccf266dfe00cc8197b52 (matches baseline: true)
+git dirt: NONE
+Output:
+TAP version 13
+# Subtest: History Resilience: Resilient readHistory and Safe File Validation
+    # Subtest: (a) a history entry whose file was deleted must not make apply throw: apply on a different existing file succeeds
+    ok 1 - (a) a history entry whose file was deleted must not make apply throw: apply on a different existing file succeeds
+      ---
+      duration_ms: 500.2882
+      type: 'test'
+      ...
+    # Subtest: (b) a history entry whose file was deleted must not break undo of a different edit
+    ok 2 - (b) a history entry whose file was deleted must not break undo of a different edit
+      ---
+      duration_ms: 15.7609
+      type: 'test'
+      ...
+    # Subtest: (c) a missing-file entry stays in the history file (never auto-deleted) and is returned marked missing so the UI can show it unavailable
+    ok 3 - (c) a missing-file entry stays in the history file (never auto-deleted) and is returned marked missing so the UI can show it unavailable
+      ---
+      duration_ms: 8.0638
+      type: 'test'
+      ...
+    # Subtest: (d) an entry whose path escapes the project root is skipped and reported, never followed
+    ok 4 - (d) an entry whose path escapes the project root is skipped and reported, never followed
+      ---
+      duration_ms: 9.9059
+      type: 'test'
+      ...
+    # Subtest: (e) undo of the entry whose file is missing returns a clear error ("that file no longer exists"), not a crash
+    ok 5 - (e) undo of the entry whose file is missing returns a clear error ("that file no longer exists"), not a crash
+      ---
+      duration_ms: 6.51
+      type: 'test'
+      ...
+    # Subtest: (f) a corrupt history file (invalid JSON) produces a clear error and does not overwrite or truncate the file
+    ok 6 - (f) a corrupt history file (invalid JSON) produces a clear error and does not overwrite or truncate the file
+      ---
+      duration_ms: 8.817
+      type: 'test'
+      ...
+    1..6
+ok 1 - History Resilience: Resilient readHistory and Safe File Validation
+  ---
+  duration_ms: 550.8156
+  type: 'suite'
+  ...
+1..1
+# tests 6
+# suites 1
+# pass 6
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 558.845
+
+
+--- [Run 3] s2-path-traversal (npx tsx test/s2-path-traversal.test.ts) ---
+Exit Code: 0 (PASS) in 1.61s
+edits.json SHA-256: 29e3ff2cf25549fb7ed6165749ad5175934865ba6266ccf266dfe00cc8197b52 (matches baseline: true)
+git dirt: NONE
+Output:
+TAP version 13
+# Subtest: S2: Path traversal refusal regression test
+    # Subtest: refuses pending-preview with ..\\ traversing outside project root, leaving target file unchanged
+    ok 1 - refuses pending-preview with ..\\ traversing outside project root, leaving target file unchanged
+      ---
+      duration_ms: 4.0719
+      type: 'test'
+      ...
+    # Subtest: refuses pending-preview using symlink/junction pointing outside project root, leaving target file unchanged
+    ok 2 - refuses pending-preview using symlink/junction pointing outside project root, leaving target file unchanged
+      ---
+      duration_ms: 3.6566
+      type: 'test'
+      ...
+    1..2
+ok 1 - S2: Path traversal refusal regression test
+  ---
+  duration_ms: 13.1819
+  type: 'suite'
+  ...
+1..1
+# tests 2
+# suites 1
+# pass 2
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 30.3807
+
+
+--- [Run 3] s3-atomic-write (npx tsx test/s3-atomic-write.test.ts) ---
+Exit Code: 0 (PASS) in 3.37s
+edits.json SHA-256: 29e3ff2cf25549fb7ed6165749ad5175934865ba6266ccf266dfe00cc8197b52 (matches baseline: true)
+git dirt: NONE
+Output:
+TAP version 13
+# Subtest: S3: Atomic or refuse in atomicWrite
+    # Subtest: refuses and leaves target file unchanged when rename fails permanently without fallback overwrite
+    ok 1 - refuses and leaves target file unchanged when rename fails permanently without fallback overwrite
+      ---
+      duration_ms: 1596.0062
+      type: 'test'
+      ...
+    # Subtest: retries with backoff and succeeds when rename fails twice then succeeds
+    ok 2 - retries with backoff and succeeds when rename fails twice then succeeds
+      ---
+      duration_ms: 191.5024
+      type: 'test'
+      ...
+    1..2
+ok 1 - S3: Atomic or refuse in atomicWrite
+  ---
+  duration_ms: 1792.9596
+  type: 'suite'
+  ...
+1..1
+# tests 2
+# suites 1
+# pass 2
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1813.0981
+
+
+--- [Run 3] s5-tailwind-compile (npx tsx test/s5-tailwind-compile.test.ts) ---
+Exit Code: 0 (PASS) in 2.42s
+edits.json SHA-256: 29e3ff2cf25549fb7ed6165749ad5175934865ba6266ccf266dfe00cc8197b52 (matches baseline: true)
+git dirt: NONE
+Output:
+TAP version 13
+# Subtest: S5: Verify Tailwind compilation and AST parse before write
+    # Subtest: refuses applying an edit with a bogus non-compiling class and leaves file unchanged
+    ok 1 - refuses applying an edit with a bogus non-compiling class and leaves file unchanged
+      ---
+      duration_ms: 216.0837
+      type: 'test'
+      ...
+    # Subtest: accepts valid classes, stacked variant (dark:hover:bg-blue-500), and arbitrary value (w-[37px])
+    ok 2 - accepts valid classes, stacked variant (dark:hover:bg-blue-500), and arbitrary value (w-[37px])
+      ---
+      duration_ms: 390.3254
+      type: 'test'
+      ...
+    # Subtest: refuses content that would break the AST parse and leaves file unchanged
+    ok 3 - refuses content that would break the AST parse and leaves file unchanged
+      ---
+      duration_ms: 135.7852
+      type: 'test'
+      ...
+    1..3
+ok 1 - S5: Verify Tailwind compilation and AST parse before write
+  ---
+  duration_ms: 747.9742
+  type: 'suite'
+  ...
+1..1
+# tests 3
+# suites 1
+# pass 3
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 755.2542
+
+
+--- [Run 3] s5-theme-support (npx tsx test/s5-theme-support.test.ts) ---
+Exit Code: 0 (PASS) in 2.23s
+edits.json SHA-256: 29e3ff2cf25549fb7ed6165749ad5175934865ba6266ccf266dfe00cc8197b52 (matches baseline: true)
+git dirt: NONE
+Output:
+TAP version 13
+# Subtest: S5: Theme Support and Config Detection in Tailwind Verifier
+    # Subtest: a. Tailwind v4 project with @theme defining --color-brand-500 accepts bg-brand-500, stacked variant, and arbitrary value, and refuses bogus
+    ok 1 - a. Tailwind v4 project with @theme defining --color-brand-500 accepts bg-brand-500, stacked variant, and arbitrary value, and refuses bogus
+      ---
+      duration_ms: 170.4849
+      type: 'test'
+      ...
+    # Subtest: b. Tailwind v4 project with legacy tailwind.config.js and CSS @config accepts bg-brand-500, stacked variant, and arbitrary value, and refuses bogus
+    ok 2 - b. Tailwind v4 project with legacy tailwind.config.js and CSS @config accepts bg-brand-500, stacked variant, and arbitrary value, and refuses bogus
+      ---
+      duration_ms: 66.3168
+      type: 'test'
+      ...
+NOTICE [d. Tailwind v3]: UNVERIFIED offline. Node_modules has Tailwind v4.3.3 installed, v3 package not present offline.
+    # Subtest: c. Tailwind v4 project with tailwind.config.js but CSS entry WITHOUT @config refuses bg-brand-500 (matches v4 build behavior) while accepting standard utilities
+    ok 3 - c. Tailwind v4 project with tailwind.config.js but CSS entry WITHOUT @config refuses bg-brand-500 (matches v4 build behavior) while accepting standard utilities
+      ---
+      duration_ms: 29.0383
+      type: 'test'
+      ...
+    # Subtest: d. Tailwind v3 project: verify offline availability or report UNVERIFIED
+    ok 4 - d. Tailwind v3 project: verify offline availability or report UNVERIFIED
+      ---
+      duration_ms: 0.8815
+      type: 'test'
+      ...
+    # Subtest: f. Project where no Tailwind is installed or engine fails: refuses and writes nothing
+    ok 5 - f. Project where no Tailwind is installed or engine fails: refuses and writes nothing
+      ---
+      duration_ms: 4.1078
+      type: 'test'
+      ...
+    # Subtest: g. Unchanged existing tokens in className are never verified and never cause refusal; only added tokens are verified
+    ok 6 - g. Unchanged existing tokens in className are never verified and never cause refusal; only added tokens are verified
+      ---
+      duration_ms: 361.0447
+      type: 'test'
+      ...
+    1..6
+ok 1 - S5: Theme Support and Config Detection in Tailwind Verifier
+  ---
+  duration_ms: 633.4739
+  type: 'suite'
+  ...
+1..1
+# tests 6
+# suites 1
+# pass 6
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 639.0262
+
+
+--- [Run 3] s1-auth-origin (npx tsx test/s1-auth-origin.test.ts) ---
+Exit Code: 0 (PASS) in 15.45s
+edits.json SHA-256: 29e3ff2cf25549fb7ed6165749ad5175934865ba6266ccf266dfe00cc8197b52 (matches baseline: true)
+git dirt: NONE
+Output:
+TAP version 13
+# Subtest: S1: Authenticated, local-only mutating requests
+    # Subtest: rejects mutating request with no Origin and no token with 403 (not 404)
+    ok 1 - rejects mutating request with no Origin and no token with 403 (not 404)
+      ---
+      duration_ms: 941.1642
+      type: 'test'
+      ...
+    # Subtest: rejects mutating request with wrong Host with 403
+    ok 2 - rejects mutating request with wrong Host with 403
+      ---
+      duration_ms: 26.93
+      type: 'test'
+      ...
+    # Subtest: rejects mutating request with valid Origin but missing token with 403
+    ok 3 - rejects mutating request with valid Origin but missing token with 403
+      ---
+      duration_ms: 9.623
+      type: 'test'
+      ...
+    # Subtest: rejects mutating request with valid Origin but invalid token with 403
+    ok 4 - rejects mutating request with valid Origin but invalid token with 403
+      ---
+      duration_ms: 8.7817
+      type: 'test'
+      ...
+    # Subtest: returns normal not-found error for fake previewId with valid token and valid Origin
+    ok 5 - returns normal not-found error for fake previewId with valid token and valid Origin
+      ---
+      duration_ms: 29.1146
+      type: 'test'
+      ...
+    # Subtest: allows missing Origin when valid token is present and proceeds to normal handling
+    ok 6 - allows missing Origin when valid token is present and proceeds to normal handling
+      ---
+      duration_ms: 19.1276
+      type: 'test'
+      ...
+    # Subtest: completes preview, apply, and undo flow in a temp copy with valid token and Origin
+    ok 7 - completes preview, apply, and undo flow in a temp copy with valid token and Origin
+      ---
+      duration_ms: 1380.0192
+      type: 'test'
+      ...
+    1..7
+ok 1 - S1: Authenticated, local-only mutating requests
+  ---
+  duration_ms: 14271.699
+  type: 'suite'
+  ...
+1..1
+# tests 7
+# suites 1
+# pass 7
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 14282.3841
+
+
+--- [Run 3] s5-v3-support (npx tsx test/s5-v3-support.test.ts) ---
+Exit Code: 0 (PASS) in 9.69s
+edits.json SHA-256: 29e3ff2cf25549fb7ed6165749ad5175934865ba6266ccf266dfe00cc8197b52 (matches baseline: true)
+git dirt: NONE
+Output:
+TAP version 13
+# Subtest: S5: Tailwind v3 Verification and Project Isolation
+    # Subtest: verifies Tailwind v3 project tokens: standard, theme brand.500, stacked variants, arbitrary values, plugins, and refuses bogus
+    ok 1 - verifies Tailwind v3 project tokens: standard, theme brand.500, stacked variants, arbitrary values, plugins, and refuses bogus
+      ---
+      duration_ms: 4582.243
+      type: 'test'
+      ...
+    # Subtest: confirms unchanged existing tokens are never verified in a v3 project during apply
+    ok 2 - confirms unchanged existing tokens are never verified in a v3 project during apply
+      ---
+      duration_ms: 3695.4432
+      type: 'test'
+      ...
+    1..2
+ok 1 - S5: Tailwind v3 Verification and Project Isolation
+  ---
+  duration_ms: 8278.8532
+  type: 'suite'
+  ...
+1..1
+# tests 2
+# suites 1
+# pass 2
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 8288.8674
+
+
+
+=== FINAL STEP 5 REGRESSION SUMMARY TABLE ===
+| Suite | Run 1 | Run 2 | Run 3 | Hash Preserved | Git Dirt |
+|-------|-------|-------|-------|----------------|----------|
+| reorder-safety | PASS (1.70s) | PASS (1.76s) | PASS (1.79s) | CONFIRMED | None |
+| adapter | PASS (1.00s) | PASS (1.17s) | PASS (1.16s) | CONFIRMED | None |
+| history-resilience | PASS (1.97s) | PASS (2.01s) | PASS (2.02s) | CONFIRMED | None |
+| s2-path-traversal | PASS (1.55s) | PASS (1.57s) | PASS (1.61s) | CONFIRMED | None |
+| s3-atomic-write | PASS (3.35s) | PASS (3.61s) | PASS (3.37s) | CONFIRMED | None |
+| s5-tailwind-compile | PASS (2.17s) | PASS (2.23s) | PASS (2.42s) | CONFIRMED | None |
+| s5-theme-support | PASS (2.22s) | PASS (2.56s) | PASS (2.23s) | CONFIRMED | None |
+| s1-auth-origin | PASS (24.21s) | PASS (23.47s) | PASS (15.45s) | CONFIRMED | None |
+| s5-v3-support | PASS (10.35s) | PASS (14.79s) | PASS (9.69s) | CONFIRMED | None |

@@ -1,0 +1,94 @@
+PASS separate editing window: full real viewport, optional panels without breakpoint changes, attached inline controls, grouped local draft, Save/Undo, Edit/Browse behavior, untouched parent window
+Disposable source project: generated SaaS; Next.js 16.4.3; Tailwind 4.3.3; installed source adapter; no environment files checked out.
+Connection check {"url":"http://127.0.0.1:61273"} 200 {"success":true,"url":"http://127.0.0.1:61273/","status":200}
+PASS imported localhost window: project-paired adapter, automatic connection, real in-place text and style drafts, refresh recovery, one Save and exact Undo; separate local project source only
+PASS: 2 review-consent browser cases (real API; disposable source copy)
+test/helpers/live-window-browser.ts(69,105): error TS2345: Argument of type 'string' is not assignable to parameter of type 'never'.
+Application typecheck: exit 1 (disposable application plus new harness; excludes historical tests/docs/scratch)
+▲ Next.js 16.4.3 (webpack)
+✓ Running next.config.mjs took 23ms
+⚠ No build cache found. Please configure build caching for faster rebuilds. Read more: https://nextjs.org/docs/messages/no-cache
+
+  Creating an optimized production build ...
+⚠ Compiled with warnings in 33.8s
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/preview/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/preview/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/preview/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/preview/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/preview/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/preview/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/preview/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/preview/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/preview/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/preview/route.ts
+
+  Running TypeScript ...
+test/helpers/live-window-browser.ts(69,105): error TS2345: Argument of type 'string' is not assignable to parameter of type 'never'.
+Failed to type check.
+
+Application build: exit 1 (disposable application plus new harness; excludes historical tests/docs/scratch)
+npm notice
+npm notice New major version of npm available! 10.9.3 -> 12.2.1
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.1
+npm notice To update run: npm install -g npm@12.2.1
+npm notice

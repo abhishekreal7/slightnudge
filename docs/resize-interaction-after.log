@@ -1,0 +1,7 @@
+Actual heading width before resize: 368
+Width during max-width gesture: 368
+Focused host element: BUTTON
+Resize proposal: {"newValue":"max-w-2xl","newClassName":"sn-playground-hero p-3 translate-x-[-36px] translate-y-[0px] max-w-2xl","css":"@layer utilities {\n.max-w-2xl {\n  max-width: var(--container-2xl);\n}\n\n}"}
+PASS Escape cancels resize, subsequent resize creates one real draft, source remains unchanged
+PASS resize Save and byte-identical source Undo
+PASS: 1 review-consent browser cases (real API; disposable source copy)

@@ -1,0 +1,160 @@
+{
+  "head": "94a05082435520c0d948c2922dd670d586b3bf2a",
+  "productRef": "94a05082435520c0d948c2922dd670d586b3bf2a",
+  "testRef": "94a05082435520c0d948c2922dd670d586b3bf2a",
+  "fatal": true,
+  "rows": [
+    {
+      "workflow": "warmup-m0-control-lab-full",
+      "api": "REAL",
+      "result": "PASS",
+      "seconds": 64.7
+    },
+    {
+      "workflow": "warmup-m0-control-lab-fit",
+      "api": "REAL",
+      "result": "PASS",
+      "seconds": 7.9
+    },
+    {
+      "workflow": "warmup-m0-overfit-lab-full",
+      "api": "REAL",
+      "result": "PASS",
+      "seconds": 20.78
+    },
+    {
+      "workflow": "warmup-m0-overfit-lab-fit",
+      "api": "REAL",
+      "result": "PASS",
+      "seconds": 3.64
+    },
+    {
+      "workflow": "selection-full-regression",
+      "api": "REAL",
+      "result": "FAIL",
+      "seconds": 20.3,
+      "exitCode": 1,
+      "historical": "docs/editor-load-and-toolbar/selection/round-1-raw.log"
+    },
+    {
+      "workflow": "selection-full-overfit",
+      "api": "REAL",
+      "result": "NOT RUN",
+      "seconds": 0
+    },
+    {
+      "workflow": "selection-fit-regression",
+      "api": "REAL",
+      "result": "NOT RUN",
+      "seconds": 0
+    },
+    {
+      "workflow": "selection-fit-overfit",
+      "api": "REAL",
+      "result": "NOT RUN",
+      "seconds": 0
+    },
+    {
+      "workflow": "shared-instances-four",
+      "api": "REAL",
+      "result": "NOT RUN",
+      "seconds": 0
+    },
+    {
+      "workflow": "movement",
+      "api": "REAL",
+      "result": "NOT RUN",
+      "seconds": 0
+    },
+    {
+      "workflow": "state-and-transitions",
+      "api": "REAL",
+      "result": "NOT RUN",
+      "seconds": 0
+    },
+    {
+      "workflow": "responsive",
+      "api": "REAL",
+      "result": "NOT RUN",
+      "seconds": 0
+    },
+    {
+      "workflow": "responsive-imported",
+      "api": "REAL",
+      "result": "NOT RUN",
+      "seconds": 0
+    },
+    {
+      "workflow": "appearance-layout",
+      "api": "REAL",
+      "result": "NOT RUN",
+      "seconds": 0
+    },
+    {
+      "workflow": "images-local",
+      "api": "REAL",
+      "result": "NOT RUN",
+      "seconds": 0
+    },
+    {
+      "workflow": "images-imported",
+      "api": "REAL",
+      "result": "NOT RUN",
+      "seconds": 0
+    },
+    {
+      "workflow": "component-actions-local",
+      "api": "REAL + MOCKED failure injection",
+      "result": "NOT RUN",
+      "seconds": 0
+    },
+    {
+      "workflow": "component-actions-imported",
+      "api": "REAL + MOCKED failure injection",
+      "result": "NOT RUN",
+      "seconds": 0
+    },
+    {
+      "workflow": "icon-replacement",
+      "api": "REAL",
+      "result": "NOT RUN",
+      "seconds": 0
+    },
+    {
+      "workflow": "icon-properties",
+      "api": "REAL",
+      "result": "NOT RUN",
+      "seconds": 0
+    },
+    {
+      "workflow": "section-order",
+      "api": "REAL",
+      "result": "NOT RUN",
+      "seconds": 0
+    },
+    {
+      "workflow": "container-move",
+      "api": "REAL",
+      "result": "NOT RUN",
+      "seconds": 0
+    },
+    {
+      "workflow": "text-editing",
+      "api": "REAL",
+      "result": "NOT RUN",
+      "seconds": 0
+    },
+    {
+      "workflow": "history",
+      "api": "REAL",
+      "result": "NOT RUN",
+      "seconds": 0
+    },
+    {
+      "workflow": "recovery",
+      "api": "REAL + MOCKED failure injection",
+      "result": "NOT RUN",
+      "seconds": 0
+    }
+  ]
+}

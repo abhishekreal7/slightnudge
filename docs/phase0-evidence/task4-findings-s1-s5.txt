@@ -1,0 +1,110 @@
+=== TASK 4: REVIEWER FINDINGS VERIFICATION (S1 - S5) ===
+Timestamp: 2026-10-20T12:13:11.656Z
+Temp Directory: C:\Users\abhis\AppData\Local\Temp\slightnudge-task4-1792498391654
+
+----------------------------------------------------------------------
+S1: ORIGIN CHECK & HOST VALIDATION & DEV SERVER BINDING
+----------------------------------------------------------------------
+[S1.1] POST /api/slightnudge/preview with NO Origin header:
+  Status: 400 (Expected 403 if blocked, got 400)
+  Body: {"error":"That style property is not supported."}
+  Result: Origin check BYPASSED when missing (REFUTED security claim: allows requests with no origin)
+
+[S1.2] POST /api/slightnudge/apply with NO Origin header & fake previewId:
+  Status: 400
+  Body: {"error":"ENOENT: no such file or directory, open 'C:\\dev\\vibecheck\\.slightnudge\\pending\\1683d6c3-b183-48a6-9097-59ed4b808c34.json'"}
+  Does origin check block before the not-found / read error?: NO - it evaluated the body and failed on preview not found (Status 400)
+
+[S1.3] POST /api/slightnudge/apply with malicious Host: attacker-domain.evil.com:
+  Status: 400
+  Body: {"error":"ENOENT: no such file or directory, open 'C:\\dev\\vibecheck\\.slightnudge\\pending\\7126b520-4303-4e88-ac0f-1e2273312d2d.json'"}
+  Is Host header validated?: NO (Unvalidated Host header)
+
+[S1.4] Dev Server Binding Address:
+  Command in package.json: "next dev --webpack"
+  Next.js default bind address: localhost (127.0.0.1 / ::1)
+
+----------------------------------------------------------------------
+S2: PENDING-PREVIEW PATH TRAVERSAL IN TEMP WORKSPACE
+----------------------------------------------------------------------
+S2 Test Execution Output:
+Testing relative path traversal...
+Relative threw error: ENOENT: no such file or directory, lstat 'C:\Users\abhis\AppData\Local\Temp\s2-outside'
+Testing absolute path traversal...
+Absolute threw error: The edited file must be inside the SlightNudge workspace.
+
+Outside file content after test: "CRITICAL OUTSIDE DATA"
+Verdict S2: CONFIRMED: Apply refused traversal and outside file was NOT modified
+
+----------------------------------------------------------------------
+S3: ATOMIC WRITE FALLBACK ON RENAME FAILURE
+----------------------------------------------------------------------
+Code inspection of atomicWrite in lib/slightnudge/edit-history.ts:
+function atomicWrite(filePath: string, contents: string) {
+  mkdirSync(path.dirname(filePath), { recursive: true });
+  const tempPath = `${filePath}.${randomUUID()}.tmp`;
+  const existingMode = (() => {
+    try { return statSync(filePath).mode; } catch { return undefined; }
+  })();
+  writeFileSync(tempPath, contents, { encoding: 'utf8', mode: existingMode });
+  if (existingMode !== undefined) chmodSync(tempPath, existingMode);
+
+  // On Windows, dev file watchers can hold brief read locks during file change events.
+  let retries = 5;
+  while (retries > 0) {
+    try {
+      renameSync(tempPath, filePath);
+      return;
+    } catch (err: any) {
+      if ((err.code === 'EPERM' || err.code === 'EBUSY') && retries > 1) {
+        retries--;
+        const start = Date.now();
+        while (Date.now() - start < 50) {}
+      } else {
+        try {
+          writeFileSync(filePath, contents, { encoding: 'utf8', mode: existingMode });
+          try { unlinkSync(tempPath); } catch {}
+          return;
+        } catch {
+          throw err;
+        }
+      }
+    }
+  }
+}
+
+S3 Experiment Execution Output:
+Rename attempts before fallback: 5
+Fallback writeFileSync executed?: true
+Final target content: NEW OVERWRITTEN CONTENT
+
+Verdict S3: CONFIRMED. When renameSync repeatedly fails with EPERM/EBUSY, atomicWrite explicitly falls back to a non-atomic writeFileSync(filePath, contents).
+
+----------------------------------------------------------------------
+S4: UNDO AFTER EXTERNAL REFORMATTING (PRETTIER)
+----------------------------------------------------------------------
+S4 Execution Output:
+Undo Result: {
+  "success": false,
+  "error": "This file changed after the visual edit. Nothing was overwritten; review the source before undoing."
+}
+
+Verdict S4: CONFIRMED. Undo refuses with: "This file changed after the visual edit. Nothing was overwritten; review the source before undoing."
+
+----------------------------------------------------------------------
+S5: TAILWIND COMPILE CHECK ON APPLY
+----------------------------------------------------------------------
+S5 Execution Output:
+Apply Result: {
+  "success": true,
+  "editId": "837c188f-af46-4bc4-bc92-edd540b5d5f5",
+  "filePath": "page.tsx",
+  "previewType": "className",
+  "value": "completely-bogus-tailwind-class-99999-invalid",
+  "className": "completely-bogus-tailwind-class-99999-invalid",
+  "message": "Applied Add bogus class."
+}
+Disk File Content: export default function Page() { return <div className="completely-bogus-tailwind-class-99999-invalid">Hello</div>; }
+
+Verdict S5: CONFIRMED. Apply performs ZERO compile verification. It unconditionally wrote "completely-bogus-tailwind-class-99999-invalid" directly to disk without compiling Tailwind CSS or verifying PostCSS.
+

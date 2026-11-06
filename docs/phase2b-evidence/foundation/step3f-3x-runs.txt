@@ -1,0 +1,114 @@
+﻿========================================================================
+≡ƒº¬ STEP 3f: 3x REGRESSION RUNS WITH HASH & GIT STATUS CHECKS
+========================================================================
+
+Baseline edits.json SHA-256: 29e3ff2cf25549fb7ed6165749ad5175934865ba6266ccf266dfe00cc8197b52
+Baseline git dirt:            none
+
+------------------------------------------------------------------------
+Running Suite: reorder-safety (3 times)
+Command: npx tsx test/reorder-safety.test.ts
+------------------------------------------------------------------------
+  Run 1/3: PASS
+  Run 2/3: PASS
+  Run 3/3: PASS
+------------------------------------------------------------------------
+Running Suite: adapter (3 times)
+Command: npx tsx test/adapter.test.ts
+------------------------------------------------------------------------
+  Run 1/3: PASS
+  Run 2/3: PASS
+  Run 3/3: PASS
+------------------------------------------------------------------------
+Running Suite: history-resilience (3 times)
+Command: npx tsx test/history-resilience.test.ts
+------------------------------------------------------------------------
+  Run 1/3: PASS
+  Run 2/3: PASS
+  Run 3/3: PASS
+------------------------------------------------------------------------
+Running Suite: s2-path-traversal (3 times)
+Command: npx tsx test/s2-path-traversal.test.ts
+------------------------------------------------------------------------
+  Run 1/3: PASS
+  Run 2/3: PASS
+  Run 3/3: PASS
+------------------------------------------------------------------------
+Running Suite: s3-atomic-write (3 times)
+Command: npx tsx test/s3-atomic-write.test.ts
+------------------------------------------------------------------------
+  Run 1/3: PASS
+  Run 2/3: PASS
+  Run 3/3: PASS
+------------------------------------------------------------------------
+Running Suite: s5-tailwind-compile (3 times)
+Command: npx tsx test/s5-tailwind-compile.test.ts
+------------------------------------------------------------------------
+  Run 1/3: PASS
+  Run 2/3: PASS
+  Run 3/3: PASS
+------------------------------------------------------------------------
+Running Suite: s5-theme-support (3 times)
+Command: npx tsx test/s5-theme-support.test.ts
+------------------------------------------------------------------------
+  Run 1/3: PASS
+  Run 2/3: PASS
+  Run 3/3: PASS
+------------------------------------------------------------------------
+Running Suite: s1-auth-origin (3 times)
+Command: npx tsx test/s1-auth-origin.test.ts
+------------------------------------------------------------------------
+  Run 1/3: PASS
+  Run 2/3: PASS
+  Run 3/3: PASS
+------------------------------------------------------------------------
+Running Suite: fixtures (test:fixtures) (3 times)
+Command: npx tsx test/fixtures.test.ts
+------------------------------------------------------------------------
+  Run 1/3: FAIL (  Γ¥î [FAIL] Fixture 1 starts with ml-2; Test suite failed: Error: Test failed: Fixture 1 starts with ml-2;     at assert (C:\dev\vibecheck\test\fixtures.test.ts:21:13))
+  Run 2/3: FAIL (  Γ¥î [FAIL] Fixture 1 starts with ml-2; Test suite failed: Error: Test failed: Fixture 1 starts with ml-2;     at assert (C:\dev\vibecheck\test\fixtures.test.ts:21:13))
+  Run 3/3: FAIL (  Γ¥î [FAIL] Fixture 1 starts with ml-2; Test suite failed: Error: Test failed: Fixture 1 starts with ml-2;     at assert (C:\dev\vibecheck\test\fixtures.test.ts:21:13))
+------------------------------------------------------------------------
+Running Suite: step1 (test:step1) (3 times)
+Command: npx tsx test/step1-selection.test.ts
+------------------------------------------------------------------------
+  Run 1/3: FAIL (Test run failed: page.waitForSelector: Timeout 30000ms exceeded.; Call log:; [2m  - waiting for locator('#slightnudge-file-display') to be visible[22m)
+  Run 2/3: FAIL (Test run failed: page.waitForSelector: Timeout 30000ms exceeded.; Call log:; [2m  - waiting for locator('#slightnudge-file-display') to be visible[22m)
+  Run 3/3: FAIL (Test run failed: page.waitForSelector: Timeout 30000ms exceeded.; Call log:; [2m  - waiting for locator('#slightnudge-file-display') to be visible[22m)
+------------------------------------------------------------------------
+Running Suite: step2 (test:step2) (3 times)
+Command: npx tsx test/step2-nudging.test.ts
+------------------------------------------------------------------------
+  Run 1/3: FAIL (  Γ¥î [FAIL] ArrowRight nudges ml-2 -> ml-2.5; Step 2 tests failed: Error: Test failed: ArrowRight nudges ml-2 -> ml-2.5;     at assert (C:\dev\vibecheck\test\step2-nudging.test.ts:21:13))
+  Run 2/3: FAIL (  Γ¥î [FAIL] ArrowRight nudges ml-2 -> ml-2.5; Step 2 tests failed: Error: Test failed: ArrowRight nudges ml-2 -> ml-2.5;     at assert (C:\dev\vibecheck\test\step2-nudging.test.ts:21:13))
+  Run 3/3: FAIL (  Γ¥î [FAIL] ArrowRight nudges ml-2 -> ml-2.5; Step 2 tests failed: Error: Test failed: ArrowRight nudges ml-2 -> ml-2.5;     at assert (C:\dev\vibecheck\test\step2-nudging.test.ts:21:13))
+------------------------------------------------------------------------
+Running Suite: step3 (test:step3) (3 times)
+Command: npx tsx test/step3-file-git.test.ts
+------------------------------------------------------------------------
+  Run 1/3: FAIL (  Γ¥î [FAIL] Fixture 1 begins with className="ml-2"; Step 3 tests failed: Error: Test failed: Fixture 1 begins with className="ml-2";     at assert (C:\dev\vibecheck\test\step3-file-git.test.ts:22:13))
+  Run 2/3: FAIL (  Γ¥î [FAIL] Fixture 1 begins with className="ml-2"; Step 3 tests failed: Error: Test failed: Fixture 1 begins with className="ml-2";     at assert (C:\dev\vibecheck\test\step3-file-git.test.ts:22:13))
+  Run 3/3: FAIL (  Γ¥î [FAIL] Fixture 1 begins with className="ml-2"; Step 3 tests failed: Error: Test failed: Fixture 1 begins with className="ml-2";     at assert (C:\dev\vibecheck\test\step3-file-git.test.ts:22:13))
+
+========================================================================
+≡ƒôè STEP 3f RESULTS TABLE
+========================================================================
+
+| Suite | Run 1 | Run 2 | Run 3 | Real-Project Dirt | Failure Reason (if any) |
+|---|---|---|---|---|---|
+| `reorder-safety` | PASS | PASS | PASS | none | N/A (All Passed) |
+| `adapter` | PASS | PASS | PASS | none | N/A (All Passed) |
+| `history-resilience` | PASS | PASS | PASS | none | N/A (All Passed) |
+| `s2-path-traversal` | PASS | PASS | PASS | none | N/A (All Passed) |
+| `s3-atomic-write` | PASS | PASS | PASS | none | N/A (All Passed) |
+| `s5-tailwind-compile` | PASS | PASS | PASS | none | N/A (All Passed) |
+| `s5-theme-support` | PASS | PASS | PASS | none | N/A (All Passed) |
+| `s1-auth-origin` | PASS | PASS | PASS | none | N/A (All Passed) |
+| `fixtures (test:fixtures)` | FAIL | FAIL | FAIL | none |   Γ¥î [FAIL] Fixture 1 starts with ml-2; Test suite failed: Error: Test failed: Fixture 1 starts with ml-2;     at assert (C:\dev\vibecheck\test\fixtures.test.ts:21:13) |
+| `step1 (test:step1)` | FAIL | FAIL | FAIL | none | Test run failed: page.waitForSelector: Timeout 30000ms exceeded.; Call log:; [2m  - waiting for locator('#slightnudge-file-display') to be visible[22m |
+| `step2 (test:step2)` | FAIL | FAIL | FAIL | none |   Γ¥î [FAIL] ArrowRight nudges ml-2 -> ml-2.5; Step 2 tests failed: Error: Test failed: ArrowRight nudges ml-2 -> ml-2.5;     at assert (C:\dev\vibecheck\test\step2-nudging.test.ts:21:13) |
+| `step3 (test:step3)` | FAIL | FAIL | FAIL | none |   Γ¥î [FAIL] Fixture 1 begins with className="ml-2"; Step 3 tests failed: Error: Test failed: Fixture 1 begins with className="ml-2";     at assert (C:\dev\vibecheck\test\step3-file-git.test.ts:22:13) |
+
+Final edits.json SHA-256: 29e3ff2cf25549fb7ed6165749ad5175934865ba6266ccf266dfe00cc8197b52
+Final hash matches baseline: YES (CONFIRMED)
+Final git dirt:            none

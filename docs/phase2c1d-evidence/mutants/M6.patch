@@ -1,0 +1,37 @@
+diff --git a/lib/slightnudge/edit-history.ts b/lib/slightnudge/edit-history.ts
+index b0267e5..784c043 100644
+--- a/lib/slightnudge/edit-history.ts
++++ b/lib/slightnudge/edit-history.ts
+@@ -963,9 +963,7 @@ export function undoSourceEdit(target?: string | { filePath?: string; editId?: s
+   const newContent = current.slice(0, litStart) + newLiteralSnippet + current.slice(litEnd);
+ 
+   // Re-parse verification
+-  const parseCheck = verifySyntacticParse(absolutePath, newContent);
+-  if (!parseCheck.valid) {
+-    return refuseWithInstructions(`re-parse verification failed (${parseCheck.error})`, targetLine);
++  /* M6 parse check dropped */)`, targetLine);
+   }
+ 
+   // M6 post-condition check: confirm only target element's className literal range changed
+@@ -973,9 +971,7 @@ export function undoSourceEdit(target?: string | { filePath?: string; editId?: s
+   const afterSlice = current.slice(litEnd);
+   const newBeforeSlice = newContent.slice(0, litStart);
+   const newAfterSlice = newContent.slice(litStart + newLiteralSnippet.length);
+-  if (beforeSlice !== newBeforeSlice || afterSlice !== newAfterSlice) {
+-    return refuseWithInstructions('scope violation outside className literal', targetLine);
+-  }
++  /* M6 scope check dropped */
+ 
+   // M6 post-condition check: confirm target element's token multiset equals (currentTokens minus addedTokens plus removedTokens)
+   const expectedTokens = [...currentTokens];
+@@ -987,9 +983,7 @@ export function undoSourceEdit(target?: string | { filePath?: string; editId?: s
+   expectedTokens.sort();
+ 
+   const actualTokens = [...newTokens].sort();
+-  if (expectedTokens.length !== actualTokens.length || !expectedTokens.every((t, i) => t === actualTokens[i])) {
+-    return refuseWithInstructions('token multiset mismatch after substitution', targetLine);
+-  }
++  /* M6 multiset check dropped */
+ 
+   // Hook for M5 test before pre-write containment check
+   invokePreWriteHook(absolutePath);

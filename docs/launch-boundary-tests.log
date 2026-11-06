@@ -1,0 +1,8 @@
+
+> slightnudge@1.0.0 test:launch-boundaries
+> tsx test/production-boundaries.test.ts && tsx test/account-isolation.test.ts && tsx test/payment-fulfillment.test.ts && tsx test/database-launch.test.ts
+
+PASS production boundaries: simulated payment disabled, no missing-configuration payment/database/analysis fallback, simulated checkout rejects markup injection
+PASS account boundaries: production auth required before payment/report access, local filesystem endpoints disabled in production, owner checks, local demo confinement, paid export gate, report escaping and truthful missing-score display
+PASS payment fulfillment: canonical paid-event/product/status/currency/amount validation, 50 concurrent retries produce one unlock/job, correct owner, cross-run payment reuse refused, duplicate purchase recorded without duplicate work, missing-run refusal
+PASS PostgreSQL launch migrations: unchanged schema/profile trigger, real planning/analysis output persists with UUIDs, correct owner, paid unlock+job transaction, idempotency, injected queue failure rolls everything back, own-profile RLS, browser cannot unlock scans/change verification/read raw paid findings/enumerate share tokens

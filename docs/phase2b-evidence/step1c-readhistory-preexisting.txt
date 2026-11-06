@@ -1,0 +1,59 @@
+=== STEP 1.C: COMPARISON OF readHistory() PRE-PHASE2 VS CURRENT ===
+
+Command: git show pre-phase2:lib/slightnudge/edit-history.ts
+
+[PRE-PHASE2 lib/slightnudge/edit-history.ts Lines 40-61]
+function readHistory(): EditRecord[] {
+  let contents: string;
+  try {
+    contents = readFileSync(historyPath, 'utf8');
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code === 'ENOENT') return [];
+    throw error;
+  }
+
+  const records = JSON.parse(contents);
+  if (!Array.isArray(records)) throw new Error('The local edit history is invalid.');
+  for (const record of records) {
+    if (!record || typeof record.id !== 'string' || typeof record.filePath !== 'string' ||
+        typeof record.before !== 'string' || typeof record.after !== 'string' ||
+        typeof record.summary !== 'string' || !['applied', 'undoing', 'undone'].includes(record.status)) {
+      throw new Error('The local edit history is invalid.');
+    }
+    relativeFilePath(path.resolve(process.cwd(), record.filePath));
+  }
+  return records;
+}
+
+[CURRENT lib/slightnudge/edit-history.ts Lines 41-62]
+function readHistory(): EditRecord[] {
+  let contents: string;
+  try {
+    contents = readFileSync(historyPath, 'utf8');
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code === 'ENOENT') return [];
+    throw error;
+  }
+
+  const records = JSON.parse(contents);
+  if (!Array.isArray(records)) throw new Error('The local edit history is invalid.');
+  for (const record of records) {
+    if (!record || typeof record.id !== 'string' || typeof record.filePath !== 'string' ||
+        typeof record.before !== 'string' || typeof record.after !== 'string' ||
+        typeof record.summary !== 'string' || !['applied', 'undoing', 'undone'].includes(record.status)) {
+      throw new Error('The local edit history is invalid.');
+    }
+    relativeFilePath(path.resolve(process.cwd(), record.filePath));
+  }
+  return records;
+}
+
+[FINDING]
+The two implementations are 100% IDENTICAL, byte-for-byte.
+Line 57/58 in both:
+  relativeFilePath(path.resolve(process.cwd(), record.filePath));
+where relativeFilePath() calls realpathSync(filePath).
+
+Verdict:
+CONFIRMED: The fragility in readHistory() was PRE-EXISTING in pre-phase2.
+Phase 2A did NOT introduce this behavior; it only EXPOSED it because Phase 2A automated tests generated and unlinked temporary scratch files that remained referenced in .slightnudge/history/edits.json.

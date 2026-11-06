@@ -1,0 +1,29 @@
+diff --git a/lib/slightnudge/edit-history.ts b/lib/slightnudge/edit-history.ts
+index b0267e5..e94a4f6 100644
+--- a/lib/slightnudge/edit-history.ts
++++ b/lib/slightnudge/edit-history.ts
+@@ -779,7 +779,6 @@ export function undoSourceEdit(target?: string | { filePath?: string; editId?: s
+     writeHistory(records);
+     invokePreWriteHook(absolutePath);
+     try {
+-      assertWriteTargetInsideWorkspace(absolutePath);
+       atomicWrite(absolutePath, record.before);
+       records[index] = { ...record, status: 'undone' };
+       writeHistory(records);
+@@ -995,13 +994,10 @@ export function undoSourceEdit(target?: string | { filePath?: string; editId?: s
+   invokePreWriteHook(absolutePath);
+ 
+   // Containment check
+-  assertWriteTargetInsideWorkspace(absolutePath);
+-
+-  // Write through atomic write path
+   records[index] = { ...record, status: 'undoing' };
+-  writeHistory(records);
+-  try {
+-    atomicWrite(absolutePath, newContent);
++    writeHistory(records);
++    try {
++      atomicWrite(absolutePath, newContent);
+     records[index] = { ...record, status: 'undone' };
+     writeHistory(records);
+   } catch (error) {

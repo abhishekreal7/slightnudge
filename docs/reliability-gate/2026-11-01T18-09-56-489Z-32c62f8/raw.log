@@ -1,0 +1,44 @@
+GATE evidence C:\dev\vibecheck\docs\reliability-gate\2026-11-01T18-09-56-489Z-32c62f8
+PRODUCT 32c62f8b107b81ea1a4e96314222c317401fdbf3 TESTS 32c62f8b107b81ea1a4e96314222c317401fdbf3
+No test assertions or limits changed; same HEAD tests at every historical product ref.
+
+COMMAND prepare-lab-adapters: node --import tsx --input-type=module -e const {installNextSourceAdapter}=await import('./lib/slightnudge/next-source-adapter.ts');for(const id of ['m0-control-lab','m0-overfit-lab'])await installNextSourceAdapter(id);console.log('Temp adapters prepared');
+Temp adapters prepared
+SERVER 3000 PID 34288 C:\dev\vibecheck\scratch\reliability-gate\2026-11-01T18-09-56-489Z-32c62f8\worktree
+SERVER 3001 PID 32540 C:\dev\vibecheck\scratch\reliability-gate\2026-11-01T18-09-56-489Z-32c62f8\worktree\.slightnudge\repositories\m0-control-lab
+SERVER 3002 PID 2652 C:\dev\vibecheck\scratch\reliability-gate\2026-11-01T18-09-56-489Z-32c62f8\worktree\.slightnudge\repositories\m0-overfit-lab
+GATE ERROR locator.waitFor: Timeout 119430.0395ms exceeded.
+Call log:
+[2m  - waiting for locator('[data-source-ready="true"]') to be visible[22m
+[2m    - waiting for "http://127.0.0.1:3000/editor/m0-control-lab?view=full&preview=http%3A%2F%2F127.0.0.1%3A3001" navigation to finish...[22m
+[2m    - navigated to "http://127.0.0.1:3000/editor/m0-control-lab?view=full&preview=http%3A%2F%2F127.0.0.1%3A3001"[22m
+
+    at C:\dev\vibecheck\tools\gate.mjs:129:190
+    at async warmup (C:\dev\vibecheck\tools\gate.mjs:129:11)
+    at async main (C:\dev\vibecheck\tools\gate.mjs:164:7)
+    at async file:///C:/dev/vibecheck/tools/gate.mjs:31:3
+
+workflow | real or mocked | pass/fail | seconds
+warmup-m0-control-lab-full | REAL | FAIL | 406.12
+selection-full-regression | REAL | NOT RUN | 0
+selection-full-overfit | REAL | NOT RUN | 0
+selection-fit-regression | REAL | NOT RUN | 0
+selection-fit-overfit | REAL | NOT RUN | 0
+shared-instances-four | REAL | NOT RUN | 0
+movement | REAL | NOT RUN | 0
+state-and-transitions | REAL | NOT RUN | 0
+responsive | REAL | NOT RUN | 0
+responsive-imported | REAL | NOT RUN | 0
+appearance-layout | REAL | NOT RUN | 0
+images-local | REAL | NOT RUN | 0
+images-imported | REAL | NOT RUN | 0
+component-actions-local | REAL + MOCKED failure injection | NOT RUN | 0
+component-actions-imported | REAL + MOCKED failure injection | NOT RUN | 0
+icon-replacement | REAL | NOT RUN | 0
+icon-properties | REAL | NOT RUN | 0
+section-order | REAL | NOT RUN | 0
+container-move | REAL | NOT RUN | 0
+text-editing | REAL | NOT RUN | 0
+history | REAL | NOT RUN | 0
+recovery | REAL + MOCKED failure injection | NOT RUN | 0
+GATE FAIL; evidence C:\dev\vibecheck\docs\reliability-gate\2026-11-01T18-09-56-489Z-32c62f8

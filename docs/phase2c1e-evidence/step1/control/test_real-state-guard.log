@@ -1,0 +1,38 @@
+▶ Real State Integrity Guard
+  ✖ verifies SHA256 of real edits.json and fixtures/* match recorded baseline exactly (1.5882ms)
+  ✔ verifies git status porcelain shows zero changes on real edits.json and fixtures/* (42.4823ms)
+✖ Real State Integrity Guard (44.681ms)
+ℹ tests 2
+ℹ suites 1
+ℹ pass 1
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 65.0474
+
+✖ failing tests:
+
+test at test\real-state-guard.test.ts:1:895
+✖ verifies SHA256 of real edits.json and fixtures/* match recorded baseline exactly (1.5882ms)
+  AssertionError [ERR_ASSERTION]: Required file must exist: .slightnudge/history/edits.json
+  
+  false !== true
+  
+      at TestContext.<anonymous> (C:\Users\abhis\AppData\Local\Temp\p2c1e-control-ede192b4-f01a-4a52-bcf9-cc311e2e7a89\test\real-state-guard.test.ts:23:14)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1106:25)
+      at Test.start (node:internal/test_runner/test:1003:17)
+      at node:internal/test_runner/test:1516:71
+      at node:internal/per_context/primordials:466:82
+      at new Promise (<anonymous>)
+      at new SafePromise (node:internal/per_context/primordials:435:3)
+      at node:internal/per_context/primordials:466:9
+      at Array.map (<anonymous>) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

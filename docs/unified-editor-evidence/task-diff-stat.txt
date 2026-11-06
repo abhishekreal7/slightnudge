@@ -1,0 +1,16 @@
+Task-relative changes against pre-task snapshots (not HEAD)
+6	2	"docs\\unified-editor-evidence\\before\\app\\studio\\page.tsx" => app/studio/page.tsx
+3	2	"docs\\unified-editor-evidence\\before\\app\\studio\\window\\page.tsx" => app/studio/window/page.tsx
+7	1	"docs\\unified-editor-evidence\\before\\app\\studio\\[repoId]\\edit\\page.tsx" => app/studio/[repoId]/edit/page.tsx
+3	2	"docs\\unified-editor-evidence\\before\\app\\studio\\[repoId]\\window\\page.tsx" => app/studio/[repoId]/window/page.tsx
+21	10	"docs\\unified-editor-evidence\\before\\components\\slightnudge\\EditorWorkspace.tsx" => components/slightnudge/EditorWorkspace.tsx
+3	2	"docs\\unified-editor-evidence\\before\\components\\slightnudge\\EditorSurface.tsx" => components/slightnudge/EditorSurface.tsx
+6	0	"docs\\unified-editor-evidence\\before\\components\\slightnudge\\editor-workspace.module.css" => components/slightnudge/editor-workspace.module.css
+1	1	"docs\\unified-editor-evidence\\before\\components\\Header.tsx" => components/Header.tsx
+
+New implementation/test files:
+app/editor/[[...project]]/page.tsx: 12 lines
+lib/slightnudge/editor-route.ts: 15 lines
+test/unified-editor-routing.test.ts: 11 lines
+test/unified-editor.browser.ts: 211 lines
+test/unified-navigation-preload.cjs: 23 lines

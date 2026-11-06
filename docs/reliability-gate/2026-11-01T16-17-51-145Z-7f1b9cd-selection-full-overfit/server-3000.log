@@ -1,0 +1,341 @@
+▲ Next.js 16.4.3 (webpack)
+- Local:         http://127.0.0.1:3000
+- Network:       http://127.0.0.1:3000
+✓ Ready in 598ms
+✓ Running next.config.mjs took 35ms
+
+○ Compiling proxy ...
+○ Compiling /api/slightnudge/repositories/[id]/route ...
+ GET /api/slightnudge/repositories/m0-control-lab 200 in 908ms (next.js: 695ms, proxy.ts: 36ms, application-code: 178ms)
+○ Compiling /editor/[[...project]]/page ...
+ GET /editor/m0-control-lab?view=full&preview=http%3A%2F%2F127.0.0.1%3A3001 200 in 2.7s (next.js: 1087ms, application-code: 1591ms)
+ GET /api/slightnudge/pages 200 in 2.7s (next.js: 2.5s, proxy.ts: 42ms, application-code: 151ms)
+ GET /api/slightnudge/pages 200 in 44ms (next.js: 6ms, proxy.ts: 16ms, application-code: 22ms)
+ GET /api/slightnudge/repositories/m0-control-lab 200 in 2.8s (next.js: 2.5s, proxy.ts: 50ms, application-code: 252ms)
+ GET /api/slightnudge/repositories/m0-control-lab 200 in 89ms (next.js: 8ms, proxy.ts: 12ms, application-code: 70ms)
+ POST /api/slightnudge/repositories/m0-control-lab/preview-check 200 in 1519ms (next.js: 1271ms, proxy.ts: 13ms, application-code: 234ms)
+Error: aborted
+    at ignore-listed frames {
+  code: 'ECONNRESET'
+}
+⨯ uncaughtException: Error: aborted
+    at ignore-listed frames {
+  code: 'ECONNRESET'
+}
+⨯ uncaughtException:  Error: aborted
+    at ignore-listed frames {
+  code: 'ECONNRESET'
+}
+⚠ ./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+ GET /api/slightnudge/repositories/m0-control-lab 200 in 267ms (next.js: 77ms, proxy.ts: 22ms, application-code: 168ms)
+○ Compiling /api/slightnudge/responsive/route ...
+ GET /editor/m0-control-lab?view=fit&preview=http%3A%2F%2F127.0.0.1%3A3001 200 in 1220ms (next.js: 238ms, application-code: 983ms)
+ GET /api/slightnudge/pages 200 in 65ms (next.js: 9ms, proxy.ts: 19ms, application-code: 38ms)
+ GET /api/slightnudge/pages 200 in 75ms (next.js: 8ms, proxy.ts: 48ms, application-code: 19ms)
+ GET /api/slightnudge/repositories/m0-control-lab 200 in 389ms (next.js: 92ms, proxy.ts: 19ms, application-code: 279ms)
+ GET /api/slightnudge/repositories/m0-control-lab 200 in 116ms (next.js: 6ms, proxy.ts: 10ms, application-code: 100ms)
+ POST /api/slightnudge/repositories/m0-control-lab/preview-check 200 in 175ms (next.js: 29ms, proxy.ts: 10ms, application-code: 135ms)
+ POST /api/slightnudge/responsive 200 in 838ms (next.js: 143ms, proxy.ts: 22ms, application-code: 673ms)
+ GET /api/slightnudge/repositories/m0-overfit-lab 200 in 206ms (next.js: 115ms, proxy.ts: 13ms, application-code: 78ms)
+ GET /editor/m0-overfit-lab?view=full&preview=http%3A%2F%2F127.0.0.1%3A3002 200 in 242ms (next.js: 18ms, application-code: 224ms)
+ GET /api/slightnudge/pages 200 in 173ms (next.js: 6ms, proxy.ts: 43ms, application-code: 125ms)
+ GET /api/slightnudge/pages 200 in 57ms (next.js: 4ms, proxy.ts: 30ms, application-code: 22ms)
+ GET /api/slightnudge/repositories/m0-overfit-lab 200 in 533ms (next.js: 179ms, proxy.ts: 36ms, application-code: 318ms)
+ GET /api/slightnudge/repositories/m0-overfit-lab 200 in 111ms (next.js: 7ms, proxy.ts: 22ms, application-code: 83ms)
+ POST /api/slightnudge/repositories/m0-overfit-lab/preview-check 200 in 248ms (next.js: 22ms, proxy.ts: 14ms, application-code: 212ms)
+ POST /api/slightnudge/responsive 200 in 115ms (next.js: 4ms, proxy.ts: 13ms, application-code: 97ms)
+ GET /api/slightnudge/repositories/m0-overfit-lab 200 in 155ms (next.js: 44ms, proxy.ts: 48ms, application-code: 63ms)
+ GET /editor/m0-overfit-lab?view=fit&preview=http%3A%2F%2F127.0.0.1%3A3002 200 in 176ms (next.js: 16ms, application-code: 160ms)
+ GET /api/slightnudge/pages 200 in 44ms (next.js: 5ms, proxy.ts: 15ms, application-code: 23ms)
+ GET /api/slightnudge/pages 200 in 65ms (next.js: 3ms, proxy.ts: 43ms, application-code: 19ms)
+ GET /api/slightnudge/repositories/m0-overfit-lab 200 in 191ms (next.js: 67ms, proxy.ts: 15ms, application-code: 108ms)
+ GET /api/slightnudge/repositories/m0-overfit-lab 200 in 87ms (next.js: 5ms, proxy.ts: 10ms, application-code: 71ms)
+ POST /api/slightnudge/repositories/m0-overfit-lab/preview-check 200 in 130ms (next.js: 19ms, proxy.ts: 11ms, application-code: 101ms)
+ POST /api/slightnudge/responsive 200 in 110ms (next.js: 4ms, proxy.ts: 15ms, application-code: 92ms)
+⚠ ./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+⨯ SyntaxError: Unexpected end of JSON input
+    at JSON.parse (<anonymous>) {
+  page: '/editor/m0-overfit-lab'
+}
+⨯ Failed to generate static paths for /editor/[[...project]]:
+SyntaxError: Unexpected end of JSON input
+    at JSON.parse (<anonymous>) {
+  type: 'SyntaxError'
+}
+⚠ ./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+⚠ ./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+ GET /editor/m0-overfit-lab?preview=http%3A%2F%2F127.0.0.1%3A3002&view=full 500 in 15.4s (next.js: 15.1s, application-code: 280ms)
+[browser] Uncaught SyntaxError: Unexpected end of JSON input
+    at JSON.parse (<anonymous>)

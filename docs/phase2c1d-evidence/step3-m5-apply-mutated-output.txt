@@ -1,0 +1,33 @@
+Case 1 parent junction refusal message: The target file must be inside the SlightNudge workspace.
+Case 3 file swap refusal message: The target file must be inside the SlightNudge workspace.
+[INFO UNVERIFIED] Windows file symlinks require Developer Mode (SeCreateSymbolicLinkPrivilege).
+To enable: Settings -> System -> For developers -> Developer Mode: ON.
+[INFO CONFIRMED] Directory junctions verified without admin; file symlinks marked UNVERIFIED as expected.
+▶ Mutant M5 Closeout: Parent Directory Junction TOCTOU Attack Battery
+  ✔ case 1 (undoSourceEdit): swaps PARENT directory for junction to outside folder -> containment refusal identifies guard, outside sentinel unchanged (403.9846ms)
+  ✖ case 2 (applyPendingSourceEdit): swaps PARENT directory for junction -> containment refusal identifies guard, outside file unchanged (143.885ms)
+  ✔ case 3 (swapping file itself - old test case with error identity): asserts specific containment guard identity (132.8906ms)
+  ✔ case 4 (symlink privilege audit): checks Developer Mode / SeCreateSymbolicLinkPrivilege (1.7467ms)
+✖ Mutant M5 Closeout: Parent Directory Junction TOCTOU Attack Battery (685.0659ms)
+ℹ tests 4
+ℹ suites 1
+ℹ pass 3
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 714.3955
+
+✖ failing tests:
+
+test at test\undo-m5-parent-junction.test.ts:1:4435
+✖ case 2 (applyPendingSourceEdit): swaps PARENT directory for junction -> containment refusal identifies guard, outside file unchanged (143.885ms)
+  Error: The target file must be inside the SlightNudge workspace.
+      at assertWriteTargetInsideWorkspace (C:\Users\abhis\AppData\Local\Temp\test-m5-apply-014e82e9-82cb-4cb5-b723-213ad9f268f9\lib\slightnudge\edit-history.ts:270:11)
+      at relativeFilePath (C:\Users\abhis\AppData\Local\Temp\test-m5-apply-014e82e9-82cb-4cb5-b723-213ad9f268f9\lib\slightnudge\edit-history.ts:277:10)
+      at recordSourceEdit (C:\Users\abhis\AppData\Local\Temp\test-m5-apply-014e82e9-82cb-4cb5-b723-213ad9f268f9\lib\slightnudge\edit-history.ts:391:15)
+      at applyPendingSourceEdit (C:\Users\abhis\AppData\Local\Temp\test-m5-apply-014e82e9-82cb-4cb5-b723-213ad9f268f9\lib\slightnudge\edit-history.ts:580:15)
+      at async TestContext.<anonymous> (C:\Users\abhis\AppData\Local\Temp\test-m5-apply-014e82e9-82cb-4cb5-b723-213ad9f268f9\test\undo-m5-parent-junction.test.ts:224:24)
+      at async Test.run (node:internal/test_runner/test:1113:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:788:7)
+

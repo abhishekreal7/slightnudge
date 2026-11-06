@@ -1,0 +1,27 @@
+{
+  "head": "22e17ec84597ea832ffbaaeca142bb6ea26454e6",
+  "productRef": "22e17ec84597ea832ffbaaeca142bb6ea26454e6",
+  "testRef": "22e17ec84597ea832ffbaaeca142bb6ea26454e6",
+  "fatal": false,
+  "rows": [
+    {
+      "workflow": "shared-compiler-warmup",
+      "harness": "HARNESS-V3",
+      "api": "REAL",
+      "result": "PASS",
+      "seconds": 140.56
+    },
+    {
+      "workflow": "history",
+      "harness": "HARNESS-V3",
+      "api": "REAL",
+      "result": "FAIL",
+      "testPassed": false,
+      "seconds": 296.13,
+      "exitCode": 1,
+      "historical": "docs/change-history-release.log",
+      "invalidManifestServers": [],
+      "invalidChildServerLogs": []
+    }
+  ]
+}

@@ -1,0 +1,141 @@
+{
+  "head": "a4ff43ad73c7fd4e5336d217a49c727bc98a8768",
+  "productRef": "a4ff43ad73c7fd4e5336d217a49c727bc98a8768",
+  "testRef": "a4ff43ad73c7fd4e5336d217a49c727bc98a8768",
+  "fatal": false,
+  "rows": [
+    {
+      "workflow": "setup",
+      "api": "REAL",
+      "result": "FAIL",
+      "seconds": 0,
+      "error": "Error: Temporary adapter setup failed"
+    },
+    {
+      "workflow": "selection-full-regression",
+      "api": "REAL",
+      "result": "NOT RUN",
+      "seconds": 0
+    },
+    {
+      "workflow": "selection-full-overfit",
+      "api": "REAL",
+      "result": "NOT RUN",
+      "seconds": 0
+    },
+    {
+      "workflow": "selection-fit-regression",
+      "api": "REAL",
+      "result": "NOT RUN",
+      "seconds": 0
+    },
+    {
+      "workflow": "selection-fit-overfit",
+      "api": "REAL",
+      "result": "NOT RUN",
+      "seconds": 0
+    },
+    {
+      "workflow": "shared-instances-four",
+      "api": "REAL",
+      "result": "NOT RUN",
+      "seconds": 0
+    },
+    {
+      "workflow": "movement",
+      "api": "REAL",
+      "result": "NOT RUN",
+      "seconds": 0
+    },
+    {
+      "workflow": "state-and-transitions",
+      "api": "REAL",
+      "result": "NOT RUN",
+      "seconds": 0
+    },
+    {
+      "workflow": "responsive",
+      "api": "REAL",
+      "result": "NOT RUN",
+      "seconds": 0
+    },
+    {
+      "workflow": "responsive-imported",
+      "api": "REAL",
+      "result": "NOT RUN",
+      "seconds": 0
+    },
+    {
+      "workflow": "appearance-layout",
+      "api": "REAL",
+      "result": "NOT RUN",
+      "seconds": 0
+    },
+    {
+      "workflow": "images-local",
+      "api": "REAL",
+      "result": "NOT RUN",
+      "seconds": 0
+    },
+    {
+      "workflow": "images-imported",
+      "api": "REAL",
+      "result": "NOT RUN",
+      "seconds": 0
+    },
+    {
+      "workflow": "component-actions-local",
+      "api": "REAL + MOCKED failure injection",
+      "result": "NOT RUN",
+      "seconds": 0
+    },
+    {
+      "workflow": "component-actions-imported",
+      "api": "REAL + MOCKED failure injection",
+      "result": "NOT RUN",
+      "seconds": 0
+    },
+    {
+      "workflow": "icon-replacement",
+      "api": "REAL",
+      "result": "NOT RUN",
+      "seconds": 0
+    },
+    {
+      "workflow": "icon-properties",
+      "api": "REAL",
+      "result": "NOT RUN",
+      "seconds": 0
+    },
+    {
+      "workflow": "section-order",
+      "api": "REAL",
+      "result": "NOT RUN",
+      "seconds": 0
+    },
+    {
+      "workflow": "container-move",
+      "api": "REAL",
+      "result": "NOT RUN",
+      "seconds": 0
+    },
+    {
+      "workflow": "text-editing",
+      "api": "REAL",
+      "result": "NOT RUN",
+      "seconds": 0
+    },
+    {
+      "workflow": "history",
+      "api": "REAL",
+      "result": "NOT RUN",
+      "seconds": 0
+    },
+    {
+      "workflow": "recovery",
+      "api": "REAL + MOCKED failure injection",
+      "result": "NOT RUN",
+      "seconds": 0
+    }
+  ]
+}

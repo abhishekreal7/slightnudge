@@ -1,0 +1,1999 @@
+{
+  "timestamp": "2026-10-21T19:16:12.847Z",
+  "totalElementsTested": 210,
+  "passedInvariants": 210,
+  "failedInvariants": 0,
+  "acceptedUndos": 154,
+  "refusedUndos": 56,
+  "benignRefusalRatePercent": 26.67,
+  "breakdownByRepo": [
+    {
+      "repo": "taxonomy",
+      "total": 108,
+      "accepted": 80,
+      "refused": 28,
+      "passed": 108,
+      "failed": 0
+    },
+    {
+      "repo": "precedent",
+      "total": 34,
+      "accepted": 24,
+      "refused": 10,
+      "passed": 34,
+      "failed": 0
+    },
+    {
+      "repo": "commerce",
+      "total": 68,
+      "accepted": 50,
+      "refused": 18,
+      "passed": 68,
+      "failed": 0
+    },
+    {
+      "repo": "site",
+      "total": 0,
+      "accepted": 0,
+      "refused": 0,
+      "passed": 0,
+      "failed": 0
+    },
+    {
+      "repo": "next-saas",
+      "total": 0,
+      "accepted": 0,
+      "refused": 0,
+      "passed": 0,
+      "failed": 0
+    }
+  ],
+  "results": [
+    {
+      "repo": "taxonomy",
+      "componentFile": "layout.tsx",
+      "tagName": "div",
+      "line": 6,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "page.tsx",
+      "tagName": "div",
+      "line": 16,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "page.tsx",
+      "tagName": "div",
+      "line": 25,
+      "undoSuccess": false,
+      "undoError": "This file changed after the visual edit: element could not be found. Open corpus-taxonomy-3.tsx near line 25 and change the className to remove \"shadow-sm\" and restore \"none\". Nothing was changed.",
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "page.tsx",
+      "tagName": "div",
+      "line": 29,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "page.tsx",
+      "tagName": "div",
+      "line": 15,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "page.tsx",
+      "tagName": "div",
+      "line": 25,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "page.tsx",
+      "tagName": "div",
+      "line": 26,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "loading.tsx",
+      "tagName": "div",
+      "line": 12,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "page.tsx",
+      "tagName": "div",
+      "line": 49,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "page.tsx",
+      "tagName": "Alert",
+      "line": 50,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "page.tsx",
+      "tagName": "a",
+      "line": 56,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "layout.tsx",
+      "tagName": "div",
+      "line": 24,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "layout.tsx",
+      "tagName": "header",
+      "line": 25,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "layout.tsx",
+      "tagName": "div",
+      "line": 26,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "loading.tsx",
+      "tagName": "div",
+      "line": 12,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "page.tsx",
+      "tagName": "div",
+      "line": 45,
+      "undoSuccess": false,
+      "undoError": "This file changed after the visual edit: element is in a conditional expression. Open corpus-taxonomy-16.tsx near line 45 and change the className to remove \"opacity-95\" and restore \"none\". Nothing was changed.",
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "loading.tsx",
+      "tagName": "div",
+      "line": 13,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "page.tsx",
+      "tagName": "div",
+      "line": 27,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "layout.tsx",
+      "tagName": "div",
+      "line": 10,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "layout.tsx",
+      "tagName": "aside",
+      "line": 11,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "page.tsx",
+      "tagName": "main",
+      "line": 93,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "page.tsx",
+      "tagName": "div",
+      "line": 94,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "page.tsx",
+      "tagName": "hr",
+      "line": 97,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "layout.tsx",
+      "tagName": "div",
+      "line": 6,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "page.tsx",
+      "tagName": "div",
+      "line": 22,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "page.tsx",
+      "tagName": "div",
+      "line": 28,
+      "undoSuccess": false,
+      "undoError": "This file changed after the visual edit: element is in a conditional expression. Open corpus-taxonomy-26.tsx near line 27 and change the className to remove \"shadow-sm\" and restore \"none\". Nothing was changed.",
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "page.tsx",
+      "tagName": "article",
+      "line": 30,
+      "undoSuccess": false,
+      "undoError": "This file changed after the visual edit: element is inside a repeating list. Open corpus-taxonomy-27.tsx near line 29 and change the className to remove \"tracking-normal\" and restore \"none\". Nothing was changed.",
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "page.tsx",
+      "tagName": "main",
+      "line": 95,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "page.tsx",
+      "tagName": "hr",
+      "line": 99,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "page.tsx",
+      "tagName": "div",
+      "line": 100,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "layout.tsx",
+      "tagName": "div",
+      "line": 17,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "layout.tsx",
+      "tagName": "header",
+      "line": 18,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "layout.tsx",
+      "tagName": "div",
+      "line": 19,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "layout.tsx",
+      "tagName": "div",
+      "line": 7,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "loading.tsx",
+      "tagName": "div",
+      "line": 5,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "loading.tsx",
+      "tagName": "div",
+      "line": 6,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "loading.tsx",
+      "tagName": "Skeleton",
+      "line": 7,
+      "undoSuccess": false,
+      "undoError": "This file changed after the visual edit: element is in a component used in several places. Open corpus-taxonomy-37.tsx near line 7 and change the className to remove \"tracking-normal\" and restore \"none\". Nothing was changed.",
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "not-found.tsx",
+      "tagName": "EmptyPlaceholder",
+      "line": 8,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "page.tsx",
+      "tagName": "div",
+      "line": 20,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "page.tsx",
+      "tagName": "div",
+      "line": 21,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "page.tsx",
+      "tagName": "div",
+      "line": 22,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "page.tsx",
+      "tagName": "article",
+      "line": 98,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "page.tsx",
+      "tagName": "div",
+      "line": 106,
+      "undoSuccess": false,
+      "undoError": "This file changed after the visual edit: element could not be found. Open corpus-taxonomy-43.tsx near line 106 and change the className to remove \"shadow-sm\" and restore \"none\". Nothing was changed.",
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "page.tsx",
+      "tagName": "time",
+      "line": 111,
+      "undoSuccess": false,
+      "undoError": "This file changed after the visual edit: element is in a conditional expression. Open corpus-taxonomy-44.tsx near line 107 and change the className to remove \"tracking-normal\" and restore \"none\". Nothing was changed.",
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "layout.tsx",
+      "tagName": "div",
+      "line": 17,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "layout.tsx",
+      "tagName": "header",
+      "line": 18,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "layout.tsx",
+      "tagName": "div",
+      "line": 19,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "page.tsx",
+      "tagName": "section",
+      "line": 40,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "page.tsx",
+      "tagName": "div",
+      "line": 41,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "page.tsx",
+      "tagName": "Link",
+      "line": 42,
+      "undoSuccess": false,
+      "undoError": "This file changed after the visual edit: element is in a component used in several places. Open corpus-taxonomy-50.tsx near line 39 and change the className to remove \"tracking-normal\" and restore \"none\". Nothing was changed.",
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "page.tsx",
+      "tagName": "section",
+      "line": 13,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "page.tsx",
+      "tagName": "div",
+      "line": 14,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "page.tsx",
+      "tagName": "h2",
+      "line": 15,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "page.tsx",
+      "tagName": "article",
+      "line": 86,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "page.tsx",
+      "tagName": "div",
+      "line": 87,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "page.tsx",
+      "tagName": "h1",
+      "line": 88,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "billing-form.tsx",
+      "tagName": "CardFooter",
+      "line": 67,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "billing-form.tsx",
+      "tagName": "div",
+      "line": 74,
+      "undoSuccess": false,
+      "undoError": "This file changed after the visual edit: element could not be found. Open corpus-taxonomy-58.tsx near line 74 and change the className to remove \"shadow-sm\" and restore \"none\". Nothing was changed.",
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "billing-form.tsx",
+      "tagName": "p",
+      "line": 79,
+      "undoSuccess": false,
+      "undoError": "This file changed after the visual edit: element is in a conditional expression. Open corpus-taxonomy-59.tsx near line 68 and change the className to remove \"tracking-normal\" and restore \"none\". Nothing was changed.",
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "callout.tsx",
+      "tagName": "span",
+      "line": 23,
+      "undoSuccess": false,
+      "undoError": "This file changed after the visual edit: element is in a conditional expression. Open corpus-taxonomy-60.tsx near line 18 and change the className to remove \"opacity-95\" and restore \"none\". Nothing was changed.",
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "card-skeleton.tsx",
+      "tagName": "CardHeader",
+      "line": 7,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "card-skeleton.tsx",
+      "tagName": "Skeleton",
+      "line": 8,
+      "undoSuccess": false,
+      "undoError": "This file changed after the visual edit: element is in a component used in several places. Open corpus-taxonomy-62.tsx near line 8 and change the className to remove \"shadow-sm\" and restore \"none\". Nothing was changed.",
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "card-skeleton.tsx",
+      "tagName": "Skeleton",
+      "line": 9,
+      "undoSuccess": false,
+      "undoError": "This file changed after the visual edit: element is in a component used in several places. Open corpus-taxonomy-63.tsx near line 9 and change the className to remove \"tracking-normal\" and restore \"none\". Nothing was changed.",
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "editor.tsx",
+      "tagName": "div",
+      "line": 125,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "editor.tsx",
+      "tagName": "div",
+      "line": 126,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "editor.tsx",
+      "tagName": "div",
+      "line": 127,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "empty-placeholder.tsx",
+      "tagName": "div",
+      "line": 21,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "empty-placeholder.tsx",
+      "tagName": "div",
+      "line": 45,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "header.tsx",
+      "tagName": "div",
+      "line": 13,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "header.tsx",
+      "tagName": "div",
+      "line": 14,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "header.tsx",
+      "tagName": "h1",
+      "line": 15,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "main-nav.tsx",
+      "tagName": "div",
+      "line": 23,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "main-nav.tsx",
+      "tagName": "Link",
+      "line": 24,
+      "undoSuccess": false,
+      "undoError": "This file changed after the visual edit: element is in a component used in several places. Open corpus-taxonomy-73.tsx near line 24 and change the className to remove \"shadow-sm\" and restore \"none\". Nothing was changed.",
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "main-nav.tsx",
+      "tagName": "span",
+      "line": 26,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "mdx-card.tsx",
+      "tagName": "div",
+      "line": 26,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "mdx-card.tsx",
+      "tagName": "div",
+      "line": 27,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "mdx-card.tsx",
+      "tagName": "Link",
+      "line": 32,
+      "undoSuccess": false,
+      "undoError": "This file changed after the visual edit: element is in a conditional expression. Open corpus-taxonomy-77.tsx near line 26 and change the className to remove \"tracking-normal\" and restore \"none\". Nothing was changed.",
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "mdx-components.tsx",
+      "tagName": "hr",
+      "line": 102,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "mdx-components.tsx",
+      "tagName": "div",
+      "line": 104,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "mdx-components.tsx",
+      "tagName": "div",
+      "line": 163,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "mobile-nav.tsx",
+      "tagName": "div",
+      "line": 24,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "mobile-nav.tsx",
+      "tagName": "Link",
+      "line": 25,
+      "undoSuccess": false,
+      "undoError": "This file changed after the visual edit: element is in a component used in several places. Open corpus-taxonomy-82.tsx near line 25 and change the className to remove \"shadow-sm\" and restore \"none\". Nothing was changed.",
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "mobile-nav.tsx",
+      "tagName": "span",
+      "line": 27,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "mode-toggle.tsx",
+      "tagName": "Button",
+      "line": 21,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "mode-toggle.tsx",
+      "tagName": "div",
+      "line": 22,
+      "undoSuccess": false,
+      "undoError": "This file changed after the visual edit: element could not be found. Open corpus-taxonomy-85.tsx near line 22 and change the className to remove \"shadow-sm\" and restore \"none\". Nothing was changed.",
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "mode-toggle.tsx",
+      "tagName": "div",
+      "line": 23,
+      "undoSuccess": false,
+      "undoError": "This file changed after the visual edit: element could not be found. Open corpus-taxonomy-86.tsx near line 23 and change the className to remove \"tracking-normal\" and restore \"none\". Nothing was changed.",
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "nav.tsx",
+      "tagName": "nav",
+      "line": 22,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "nav.tsx",
+      "tagName": "Icon",
+      "line": 35,
+      "undoSuccess": false,
+      "undoError": "This file changed after the visual edit: element is inside a repeating list. Open corpus-taxonomy-88.tsx near line 35 and change the className to remove \"shadow-sm\" and restore \"none\". Nothing was changed.",
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "page-header.tsx",
+      "tagName": "h1",
+      "line": 17,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "page-header.tsx",
+      "tagName": "p",
+      "line": 20,
+      "undoSuccess": false,
+      "undoError": "This file changed after the visual edit: element is in a conditional expression. Open corpus-taxonomy-90.tsx near line 18 and change the className to remove \"shadow-sm\" and restore \"none\". Nothing was changed.",
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "page-header.tsx",
+      "tagName": "hr",
+      "line": 22,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "pager.tsx",
+      "tagName": "div",
+      "line": 21,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "pager.tsx",
+      "tagName": "div",
+      "line": 27,
+      "undoSuccess": false,
+      "undoError": "This file changed after the visual edit: element could not be found. Open corpus-taxonomy-93.tsx near line 27 and change the className to remove \"shadow-sm\" and restore \"none\". Nothing was changed.",
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "pager.tsx",
+      "tagName": "div",
+      "line": 37,
+      "undoSuccess": false,
+      "undoError": "This file changed after the visual edit: element could not be found. Open corpus-taxonomy-94.tsx near line 37 and change the className to remove \"tracking-normal\" and restore \"none\". Nothing was changed.",
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "post-create-button.tsx",
+      "tagName": "div",
+      "line": 74,
+      "undoSuccess": false,
+      "undoError": "This file changed after the visual edit: element could not be found. Open corpus-taxonomy-95.tsx near line 74 and change the className to remove \"opacity-95\" and restore \"none\". Nothing was changed.",
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "post-create-button.tsx",
+      "tagName": "div",
+      "line": 76,
+      "undoSuccess": false,
+      "undoError": "This file changed after the visual edit: element could not be found. Open corpus-taxonomy-96.tsx near line 76 and change the className to remove \"shadow-sm\" and restore \"none\". Nothing was changed.",
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "post-item.tsx",
+      "tagName": "div",
+      "line": 14,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "post-item.tsx",
+      "tagName": "div",
+      "line": 15,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "post-item.tsx",
+      "tagName": "Link",
+      "line": 16,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "post-operations.tsx",
+      "tagName": "DropdownMenuTrigger",
+      "line": 56,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "post-operations.tsx",
+      "tagName": "div",
+      "line": 57,
+      "undoSuccess": false,
+      "undoError": "This file changed after the visual edit: element could not be found. Open corpus-taxonomy-101.tsx near line 57 and change the className to remove \"shadow-sm\" and restore \"none\". Nothing was changed.",
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "post-operations.tsx",
+      "tagName": "span",
+      "line": 58,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "search.tsx",
+      "tagName": "Input",
+      "line": 27,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "search.tsx",
+      "tagName": "kbd",
+      "line": 32,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "search.tsx",
+      "tagName": "span",
+      "line": 33,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "sidebar-nav.tsx",
+      "tagName": "div",
+      "line": 17,
+      "undoSuccess": false,
+      "undoError": "This file changed after the visual edit: element is in a conditional expression. Open corpus-taxonomy-106.tsx near line 17 and change the className to remove \"opacity-95\" and restore \"none\". Nothing was changed.",
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "sidebar-nav.tsx",
+      "tagName": "h4",
+      "line": 20,
+      "undoSuccess": false,
+      "undoError": "This file changed after the visual edit: element is inside a repeating list. Open corpus-taxonomy-107.tsx near line 20 and change the className to remove \"shadow-sm\" and restore \"none\". Nothing was changed.",
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "taxonomy",
+      "componentFile": "sidebar-nav.tsx",
+      "tagName": "div",
+      "line": 42,
+      "undoSuccess": false,
+      "undoError": "This file changed after the visual edit: element is in a conditional expression. Open corpus-taxonomy-108.tsx near line 37 and change the className to remove \"tracking-normal\" and restore \"none\". Nothing was changed.",
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "precedent",
+      "componentFile": "layout.tsx",
+      "tagName": "div",
+      "line": 26,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "precedent",
+      "componentFile": "layout.tsx",
+      "tagName": "main",
+      "line": 30,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "precedent",
+      "componentFile": "page.tsx",
+      "tagName": "div",
+      "line": 28,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "precedent",
+      "componentFile": "page.tsx",
+      "tagName": "a",
+      "line": 29,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "precedent",
+      "componentFile": "page.tsx",
+      "tagName": "Twitter",
+      "line": 35,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "precedent",
+      "componentFile": "card.tsx",
+      "tagName": "div",
+      "line": 21,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "precedent",
+      "componentFile": "card.tsx",
+      "tagName": "div",
+      "line": 22,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "precedent",
+      "componentFile": "card.tsx",
+      "tagName": "h2",
+      "line": 23,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "precedent",
+      "componentFile": "component-grid.tsx",
+      "tagName": "div",
+      "line": 13,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "precedent",
+      "componentFile": "component-grid.tsx",
+      "tagName": "button",
+      "line": 15,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "precedent",
+      "componentFile": "component-grid.tsx",
+      "tagName": "p",
+      "line": 19,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "precedent",
+      "componentFile": "demo-modal.tsx",
+      "tagName": "div",
+      "line": 20,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "precedent",
+      "componentFile": "demo-modal.tsx",
+      "tagName": "div",
+      "line": 21,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "precedent",
+      "componentFile": "demo-modal.tsx",
+      "tagName": "Image",
+      "line": 23,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "precedent",
+      "componentFile": "web-vitals.tsx",
+      "tagName": "div",
+      "line": 8,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "precedent",
+      "componentFile": "web-vitals.tsx",
+      "tagName": "div",
+      "line": 9,
+      "undoSuccess": false,
+      "undoError": "This file changed after the visual edit: element could not be found. Open corpus-precedent-124.tsx near line 9 and change the className to remove \"shadow-sm\" and restore \"none\". Nothing was changed.",
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "precedent",
+      "componentFile": "web-vitals.tsx",
+      "tagName": "CountingNumbers",
+      "line": 32,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "precedent",
+      "componentFile": "footer.tsx",
+      "tagName": "div",
+      "line": 5,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "precedent",
+      "componentFile": "footer.tsx",
+      "tagName": "p",
+      "line": 6,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "precedent",
+      "componentFile": "footer.tsx",
+      "tagName": "a",
+      "line": 8,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "precedent",
+      "componentFile": "navbar.tsx",
+      "tagName": "div",
+      "line": 21,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "precedent",
+      "componentFile": "navbar.tsx",
+      "tagName": "Link",
+      "line": 22,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "precedent",
+      "componentFile": "navbar.tsx",
+      "tagName": "Image",
+      "line": 23,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "precedent",
+      "componentFile": "expanding-arrow.tsx",
+      "tagName": "div",
+      "line": 3,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "precedent",
+      "componentFile": "loading-circle.tsx",
+      "tagName": "svg",
+      "line": 3,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "precedent",
+      "componentFile": "modal.tsx",
+      "tagName": "div",
+      "line": 25,
+      "undoSuccess": false,
+      "undoError": "This file changed after the visual edit: element could not be found. Open corpus-precedent-134.tsx near line 25 and change the className to remove \"opacity-95\" and restore \"none\". Nothing was changed.",
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "precedent",
+      "componentFile": "modal.tsx",
+      "tagName": "div",
+      "line": 33,
+      "undoSuccess": false,
+      "undoError": "This file changed after the visual edit: element is in a conditional statement. Open corpus-precedent-135.tsx near line 33 and change the className to remove \"shadow-sm\" and restore \"none\". Nothing was changed.",
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "precedent",
+      "componentFile": "modal.tsx",
+      "tagName": "div",
+      "line": 34,
+      "undoSuccess": false,
+      "undoError": "This file changed after the visual edit: element is in a conditional statement. Open corpus-precedent-136.tsx near line 34 and change the className to remove \"tracking-normal\" and restore \"none\". Nothing was changed.",
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "precedent",
+      "componentFile": "popover.tsx",
+      "tagName": "div",
+      "line": 27,
+      "undoSuccess": false,
+      "undoError": "This file changed after the visual edit: element is in a conditional statement. Open corpus-precedent-137.tsx near line 27 and change the className to remove \"opacity-95\" and restore \"none\". Nothing was changed.",
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "precedent",
+      "componentFile": "popover.tsx",
+      "tagName": "div",
+      "line": 28,
+      "undoSuccess": false,
+      "undoError": "This file changed after the visual edit: element could not be found. Open corpus-precedent-138.tsx near line 28 and change the className to remove \"shadow-sm\" and restore \"none\". Nothing was changed.",
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "precedent",
+      "componentFile": "popover.tsx",
+      "tagName": "div",
+      "line": 30,
+      "undoSuccess": false,
+      "undoError": "This file changed after the visual edit: element could not be found. Open corpus-precedent-139.tsx near line 30 and change the className to remove \"tracking-normal\" and restore \"none\". Nothing was changed.",
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "precedent",
+      "componentFile": "tooltip.tsx",
+      "tagName": "div",
+      "line": 30,
+      "undoSuccess": false,
+      "undoError": "This file changed after the visual edit: element could not be found. Open corpus-precedent-140.tsx near line 30 and change the className to remove \"opacity-95\" and restore \"none\". Nothing was changed.",
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "precedent",
+      "componentFile": "tooltip.tsx",
+      "tagName": "div",
+      "line": 32,
+      "undoSuccess": false,
+      "undoError": "This file changed after the visual edit: element could not be found. Open corpus-precedent-141.tsx near line 32 and change the className to remove \"shadow-sm\" and restore \"none\". Nothing was changed.",
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "precedent",
+      "componentFile": "tooltip.tsx",
+      "tagName": "div",
+      "line": 33,
+      "undoSuccess": false,
+      "undoError": "This file changed after the visual edit: element is in a conditional statement. Open corpus-precedent-142.tsx near line 33 and change the className to remove \"tracking-normal\" and restore \"none\". Nothing was changed.",
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "commerce",
+      "componentFile": "error.tsx",
+      "tagName": "div",
+      "line": 5,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "commerce",
+      "componentFile": "error.tsx",
+      "tagName": "h2",
+      "line": 6,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "commerce",
+      "componentFile": "error.tsx",
+      "tagName": "p",
+      "line": 7,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "commerce",
+      "componentFile": "layout.tsx",
+      "tagName": "body",
+      "line": 35,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "commerce",
+      "componentFile": "page.tsx",
+      "tagName": "div",
+      "line": 83,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "commerce",
+      "componentFile": "page.tsx",
+      "tagName": "div",
+      "line": 84,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "commerce",
+      "componentFile": "page.tsx",
+      "tagName": "div",
+      "line": 85,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "commerce",
+      "componentFile": "layout.tsx",
+      "tagName": "div",
+      "line": 15,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "commerce",
+      "componentFile": "layout.tsx",
+      "tagName": "div",
+      "line": 16,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "commerce",
+      "componentFile": "layout.tsx",
+      "tagName": "div",
+      "line": 19,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "commerce",
+      "componentFile": "loading.tsx",
+      "tagName": "div",
+      "line": 6,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "commerce",
+      "componentFile": "loading.tsx",
+      "tagName": "Grid",
+      "line": 7,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "commerce",
+      "componentFile": "loading.tsx",
+      "tagName": "div",
+      "line": 12,
+      "undoSuccess": false,
+      "undoError": "This file changed after the visual edit: element could not be found. Open corpus-commerce-155.tsx near line 12 and change the className to remove \"tracking-normal\" and restore \"none\". Nothing was changed.",
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "commerce",
+      "componentFile": "page.tsx",
+      "tagName": "p",
+      "line": 25,
+      "undoSuccess": false,
+      "undoError": "This file changed after the visual edit: element is in a conditional expression. Open corpus-commerce-156.tsx near line 24 and change the className to remove \"opacity-95\" and restore \"none\". Nothing was changed.",
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "commerce",
+      "componentFile": "page.tsx",
+      "tagName": "span",
+      "line": 29,
+      "undoSuccess": false,
+      "undoError": "This file changed after the visual edit: element is in a conditional expression. Open corpus-commerce-157.tsx near line 28 and change the className to remove \"shadow-sm\" and restore \"none\". Nothing was changed.",
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "commerce",
+      "componentFile": "page.tsx",
+      "tagName": "Grid",
+      "line": 33,
+      "undoSuccess": false,
+      "undoError": "This file changed after the visual edit: element is in a conditional expression. Open corpus-commerce-158.tsx near line 32 and change the className to remove \"tracking-normal\" and restore \"none\". Nothing was changed.",
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "commerce",
+      "componentFile": "page.tsx",
+      "tagName": "p",
+      "line": 44,
+      "undoSuccess": false,
+      "undoError": "This file changed after the visual edit: element is in a conditional expression. Open corpus-commerce-159.tsx near line 43 and change the className to remove \"opacity-95\" and restore \"none\". Nothing was changed.",
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "commerce",
+      "componentFile": "page.tsx",
+      "tagName": "Grid",
+      "line": 46,
+      "undoSuccess": false,
+      "undoError": "This file changed after the visual edit: element is in a conditional expression. Open corpus-commerce-160.tsx near line 45 and change the className to remove \"shadow-sm\" and restore \"none\". Nothing was changed.",
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "commerce",
+      "componentFile": "layout.tsx",
+      "tagName": "div",
+      "line": 6,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "commerce",
+      "componentFile": "layout.tsx",
+      "tagName": "div",
+      "line": 7,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "commerce",
+      "componentFile": "page.tsx",
+      "tagName": "h1",
+      "line": 36,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "commerce",
+      "componentFile": "page.tsx",
+      "tagName": "Prose",
+      "line": 37,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "commerce",
+      "componentFile": "page.tsx",
+      "tagName": "p",
+      "line": 38,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "commerce",
+      "componentFile": "carousel.tsx",
+      "tagName": "div",
+      "line": 17,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "commerce",
+      "componentFile": "carousel.tsx",
+      "tagName": "ul",
+      "line": 18,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "commerce",
+      "componentFile": "carousel.tsx",
+      "tagName": "li",
+      "line": 20,
+      "undoSuccess": false,
+      "undoError": "This file changed after the visual edit: element is inside a repeating list. Open corpus-commerce-168.tsx near line 20 and change the className to remove \"tracking-normal\" and restore \"none\". Nothing was changed.",
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "commerce",
+      "componentFile": "add-to-cart.tsx",
+      "tagName": "div",
+      "line": 37,
+      "undoSuccess": false,
+      "undoError": "This file changed after the visual edit: element is in a conditional statement. Open corpus-commerce-169.tsx near line 37 and change the className to remove \"opacity-95\" and restore \"none\". Nothing was changed.",
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "commerce",
+      "componentFile": "add-to-cart.tsx",
+      "tagName": "PlusIcon",
+      "line": 38,
+      "undoSuccess": false,
+      "undoError": "This file changed after the visual edit: element is in a component used in several places. Open corpus-commerce-170.tsx near line 38 and change the className to remove \"shadow-sm\" and restore \"none\". Nothing was changed.",
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "commerce",
+      "componentFile": "add-to-cart.tsx",
+      "tagName": "div",
+      "line": 52,
+      "undoSuccess": false,
+      "undoError": "This file changed after the visual edit: element is in a conditional statement. Open corpus-commerce-171.tsx near line 37 and change the className to remove \"tracking-normal\" and restore \"none\". Nothing was changed.",
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "commerce",
+      "componentFile": "delete-item-button.tsx",
+      "tagName": "button",
+      "line": 26,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "commerce",
+      "componentFile": "delete-item-button.tsx",
+      "tagName": "XMarkIcon",
+      "line": 31,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "commerce",
+      "componentFile": "delete-item-button.tsx",
+      "tagName": "p",
+      "line": 33,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "commerce",
+      "componentFile": "edit-item-quantity-button.tsx",
+      "tagName": "PlusIcon",
+      "line": 24,
+      "undoSuccess": false,
+      "undoError": "This file changed after the visual edit: element is in a conditional expression. Open corpus-commerce-175.tsx near line 22 and change the className to remove \"opacity-95\" and restore \"none\". Nothing was changed.",
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "commerce",
+      "componentFile": "edit-item-quantity-button.tsx",
+      "tagName": "MinusIcon",
+      "line": 26,
+      "undoSuccess": false,
+      "undoError": "This file changed after the visual edit: element could not be found. Open corpus-commerce-176.tsx near line 26 and change the className to remove \"shadow-sm\" and restore \"none\". Nothing was changed.",
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "commerce",
+      "componentFile": "edit-item-quantity-button.tsx",
+      "tagName": "p",
+      "line": 56,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "commerce",
+      "componentFile": "modal.tsx",
+      "tagName": "Dialog",
+      "line": 56,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "commerce",
+      "componentFile": "modal.tsx",
+      "tagName": "div",
+      "line": 66,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "commerce",
+      "componentFile": "modal.tsx",
+      "tagName": "div",
+      "line": 77,
+      "undoSuccess": false,
+      "undoError": "This file changed after the visual edit: element could not be found. Open corpus-commerce-180.tsx near line 77 and change the className to remove \"tracking-normal\" and restore \"none\". Nothing was changed.",
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "commerce",
+      "componentFile": "open-cart.tsx",
+      "tagName": "div",
+      "line": 12,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "commerce",
+      "componentFile": "open-cart.tsx",
+      "tagName": "div",
+      "line": 21,
+      "undoSuccess": false,
+      "undoError": "This file changed after the visual edit: element is in a conditional expression. Open corpus-commerce-182.tsx near line 18 and change the className to remove \"shadow-sm\" and restore \"none\". Nothing was changed.",
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "commerce",
+      "componentFile": "three-items.tsx",
+      "tagName": "Link",
+      "line": 23,
+      "undoSuccess": false,
+      "undoError": "This file changed after the visual edit: element is in a component used in several places. Open corpus-commerce-183.tsx near line 21 and change the className to remove \"opacity-95\" and restore \"none\". Nothing was changed.",
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "commerce",
+      "componentFile": "three-items.tsx",
+      "tagName": "section",
+      "line": 61,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "commerce",
+      "componentFile": "label.tsx",
+      "tagName": "div",
+      "line": 24,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "commerce",
+      "componentFile": "label.tsx",
+      "tagName": "h3",
+      "line": 25,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "commerce",
+      "componentFile": "label.tsx",
+      "tagName": "Price",
+      "line": 28,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "commerce",
+      "componentFile": "footer.tsx",
+      "tagName": "footer",
+      "line": 19,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "commerce",
+      "componentFile": "footer.tsx",
+      "tagName": "div",
+      "line": 20,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "commerce",
+      "componentFile": "footer.tsx",
+      "tagName": "Link",
+      "line": 22,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "commerce",
+      "componentFile": "index.tsx",
+      "tagName": "nav",
+      "line": 16,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "commerce",
+      "componentFile": "index.tsx",
+      "tagName": "div",
+      "line": 17,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "commerce",
+      "componentFile": "index.tsx",
+      "tagName": "div",
+      "line": 22,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "commerce",
+      "componentFile": "mobile-menu.tsx",
+      "tagName": "button",
+      "line": 35,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "commerce",
+      "componentFile": "mobile-menu.tsx",
+      "tagName": "Bars3Icon",
+      "line": 40,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "commerce",
+      "componentFile": "mobile-menu.tsx",
+      "tagName": "Dialog",
+      "line": 43,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "commerce",
+      "componentFile": "search.tsx",
+      "tagName": "Form",
+      "line": 11,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "commerce",
+      "componentFile": "search.tsx",
+      "tagName": "input",
+      "line": 15,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "commerce",
+      "componentFile": "search.tsx",
+      "tagName": "div",
+      "line": 24,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "commerce",
+      "componentFile": "product-grid-items.tsx",
+      "tagName": "div",
+      "line": 14,
+      "undoSuccess": false,
+      "undoError": "This file changed after the visual edit: element could not be found. Open corpus-commerce-200.tsx near line 14 and change the className to remove \"opacity-95\" and restore \"none\". Nothing was changed.",
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "commerce",
+      "componentFile": "product-grid-items.tsx",
+      "tagName": "Link",
+      "line": 15,
+      "undoSuccess": false,
+      "undoError": "This file changed after the visual edit: element is inside a repeating list. Open corpus-commerce-201.tsx near line 11 and change the className to remove \"shadow-sm\" and restore \"none\". Nothing was changed.",
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "commerce",
+      "componentFile": "collections.tsx",
+      "tagName": "div",
+      "line": 20,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "commerce",
+      "componentFile": "dropdown.tsx",
+      "tagName": "div",
+      "line": 40,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "commerce",
+      "componentFile": "dropdown.tsx",
+      "tagName": "div",
+      "line": 41,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "commerce",
+      "componentFile": "dropdown.tsx",
+      "tagName": "ChevronDownIcon",
+      "line": 48,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "commerce",
+      "componentFile": "index.tsx",
+      "tagName": "h3",
+      "line": 30,
+      "undoSuccess": false,
+      "undoError": "This file changed after the visual edit: element is in a conditional expression. Open corpus-commerce-206.tsx near line 30 and change the className to remove \"opacity-95\" and restore \"none\". Nothing was changed.",
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "commerce",
+      "componentFile": "index.tsx",
+      "tagName": "ul",
+      "line": 34,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "commerce",
+      "componentFile": "index.tsx",
+      "tagName": "ul",
+      "line": 39,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "commerce",
+      "componentFile": "item.tsx",
+      "tagName": "li",
+      "line": 20,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    },
+    {
+      "repo": "commerce",
+      "componentFile": "item.tsx",
+      "tagName": "li",
+      "line": 51,
+      "undoSuccess": true,
+      "passed": true,
+      "failReason": null
+    }
+  ]
+}

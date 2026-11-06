@@ -1,0 +1,341 @@
+
+========================================================================
+RUN: test-override-guard (Run 1/3) (exit 0 in 1.22s)
+COMMAND: npx tsx test/test-override-guard.test.ts
+HASH BEFORE: 29e3ff2cf25549fb7ed6165749ad5175934865ba6266ccf266dfe00cc8197b52
+HASH AFTER:  29e3ff2cf25549fb7ed6165749ad5175934865ba6266ccf266dfe00cc8197b52 (Matches baseline: true)
+LISTING MATCH: true
+GIT STATUS MATCH: true
+--- STDOUT ---
+🧪 RUNNING TEST OVERRIDE GUARD SUITE
+  ✅ [PASS] NODE_ENV=production strictly ignores all SLIGHTNUDGE_* overrides even when SLIGHTNUDGE_TEST=1
+  ✅ [PASS] NODE_ENV=development with SLIGHTNUDGE_TEST=1 honors overrides
+  ✅ [PASS] SLIGHTNUDGE_TEST unset ignores overrides even in development
+🎉 ALL TEST OVERRIDE GUARD CHECKS PASSED!
+
+
+--- STDERR ---
+
+
+========================================================================
+RUN: test-override-guard (Run 2/3) (exit 0 in 1.27s)
+COMMAND: npx tsx test/test-override-guard.test.ts
+HASH BEFORE: 29e3ff2cf25549fb7ed6165749ad5175934865ba6266ccf266dfe00cc8197b52
+HASH AFTER:  29e3ff2cf25549fb7ed6165749ad5175934865ba6266ccf266dfe00cc8197b52 (Matches baseline: true)
+LISTING MATCH: true
+GIT STATUS MATCH: true
+--- STDOUT ---
+🧪 RUNNING TEST OVERRIDE GUARD SUITE
+  ✅ [PASS] NODE_ENV=production strictly ignores all SLIGHTNUDGE_* overrides even when SLIGHTNUDGE_TEST=1
+  ✅ [PASS] NODE_ENV=development with SLIGHTNUDGE_TEST=1 honors overrides
+  ✅ [PASS] SLIGHTNUDGE_TEST unset ignores overrides even in development
+🎉 ALL TEST OVERRIDE GUARD CHECKS PASSED!
+
+
+--- STDERR ---
+
+
+========================================================================
+RUN: test-override-guard (Run 3/3) (exit 0 in 1.30s)
+COMMAND: npx tsx test/test-override-guard.test.ts
+HASH BEFORE: 29e3ff2cf25549fb7ed6165749ad5175934865ba6266ccf266dfe00cc8197b52
+HASH AFTER:  29e3ff2cf25549fb7ed6165749ad5175934865ba6266ccf266dfe00cc8197b52 (Matches baseline: true)
+LISTING MATCH: true
+GIT STATUS MATCH: true
+--- STDOUT ---
+🧪 RUNNING TEST OVERRIDE GUARD SUITE
+  ✅ [PASS] NODE_ENV=production strictly ignores all SLIGHTNUDGE_* overrides even when SLIGHTNUDGE_TEST=1
+  ✅ [PASS] NODE_ENV=development with SLIGHTNUDGE_TEST=1 honors overrides
+  ✅ [PASS] SLIGHTNUDGE_TEST unset ignores overrides even in development
+🎉 ALL TEST OVERRIDE GUARD CHECKS PASSED!
+
+
+--- STDERR ---
+
+
+========================================================================
+RUN: reorder-safety (exit 0 in 1.52s)
+COMMAND: npx tsx test/reorder-safety.test.ts
+HASH BEFORE: 29e3ff2cf25549fb7ed6165749ad5175934865ba6266ccf266dfe00cc8197b52
+HASH AFTER:  29e3ff2cf25549fb7ed6165749ad5175934865ba6266ccf266dfe00cc8197b52 (Matches baseline: true)
+LISTING MATCH: true
+GIT STATUS MATCH: true
+--- STDOUT ---
+====================================================
+🧪 RUNNING REORDER SAFETY & SAME-LINE RESOLUTION TESTS
+====================================================
+
+--- 1. Same-line Element Resolution (Column + Tag Name) ---
+  ✅ [PASS] Same-line without column does not succeed
+  ✅ [PASS] Same-line without column refuses safely
+  ✅ [PASS] Refusal exact message: "I can't tell which element on this line you mean. Nothing was changed."
+  ✅ [PASS] Targets First button using col 7 + tagName
+  ✅ [PASS] First button correctly swapped later
+  ✅ [PASS] Targets Second button using col 52 + tagName
+  ✅ [PASS] Second button correctly swapped earlier
+  ✅ [PASS] Non-matching column refuses
+  ✅ [PASS] Non-matching column returns exact refusal message
+
+--- 2. Multi-slot Reorder Safety (Loops, Conditionals, Permutation) ---
+  ✅ [PASS] Reorder across map() list refused
+  ✅ [PASS] map() list refused safely
+  ✅ [PASS] Reorder across conditional element refused
+  ✅ [PASS] Conditional element refused safely
+  ✅ [PASS] Permutation swap succeeded
+  ✅ [PASS] Unchanged sibling item-c has identical bytes
+  ✅ [PASS] Whitespace and all comments are preserved byte-for-byte
+  ✅ [PASS] Order is pure permutation (item-b before item-a)
+
+--- 3. Preview Route targetIndex Validation ---
+  ✅ [PASS] targetIndex NaN returns status 400
+  ✅ [PASS] targetIndex float (1.5) returns status 400
+  ✅ [PASS] targetIndex negative (-2) returns status 400
+
+--- 4. Interaction Safety Tests (Failed Preview, Rapid Drag, Alt+Drag, Resize) ---
+  ✅ [PASS] Failed preview returns error status 422
+  ✅ [PASS] Failed preview returns informative error message
+  ✅ [PASS] Rapid drag: First reorder succeeds
+  ✅ [PASS] Rapid drag: Second immediate reorder succeeds
+  ✅ [PASS] Rapid drag: Final order is item-2, item-3, item-1 without corruption
+  ✅ [PASS] Alt+drag (spacing nudge down) succeeds
+  ✅ [PASS] Alt+drag nudged margin from mt-1 to mt-1.5
+  ✅ [PASS] Undo Alt+drag (nudge back up) succeeds
+  ✅ [PASS] Undo restores original mt-1 spacing cleanly
+  ✅ [PASS] Heading resize (width update) succeeds
+  ✅ [PASS] Resized heading contains new width class w-full
+  ✅ [PASS] Heading resize leaves typography classes (text-2xl, font-bold, text color) 100% unchanged
+
+====================================================
+🎉 ALL 32/32 REORDER & VALIDATION TESTS PASSED!
+====================================================
+
+
+--- STDERR ---
+
+
+========================================================================
+RUN: adapter (exit 0 in 0.79s)
+COMMAND: npx tsx test/adapter.test.ts
+HASH BEFORE: 29e3ff2cf25549fb7ed6165749ad5175934865ba6266ccf266dfe00cc8197b52
+HASH AFTER:  29e3ff2cf25549fb7ed6165749ad5175934865ba6266ccf266dfe00cc8197b52 (Matches baseline: true)
+LISTING MATCH: true
+GIT STATUS MATCH: true
+--- STDOUT ---
+====================================================
+🧪 SLIGHTNUDGE ADAPTER & ASSET REGEX TESTS
+====================================================
+
+✅ [PASS] next-source-loader.cjs starts with /* eslint-disable */
+✅ [PASS] bridgeClient script is generated as a string
+✅ [PASS] bridgeClient does NOT contain malformed /^/slightnudge-assets/ regex
+✅ [PASS] Found asset-path regex pattern in bridgeClient script
+✅ [PASS] Regex matches valid PNG asset path
+✅ [PASS] Regex matches valid JPG asset path
+✅ [PASS] Regex matches valid JPEG asset path
+✅ [PASS] Regex matches valid WEBP asset path
+✅ [PASS] Regex matches valid GIF asset path
+✅ [PASS] Regex is case-insensitive for UUID and extension
+✅ [PASS] Regex rejects unsupported SVG extension
+✅ [PASS] Regex rejects executable extension
+✅ [PASS] Regex rejects invalid UUID
+✅ [PASS] Regex rejects non-slightnudge path
+✅ [PASS] Regex rejects absolute URL
+✅ [PASS] Regex rejects path with trailing segment
+✅ [PASS] bridgeClient script parses cleanly as valid JavaScript in Function()
+
+====================================================
+🎉 ALL ADAPTER TESTS PASSED!
+====================================================
+
+
+--- STDERR ---
+
+
+========================================================================
+RUN: history-resilience (exit 0 in 1.70s)
+COMMAND: npx tsx test/history-resilience.test.ts
+HASH BEFORE: 29e3ff2cf25549fb7ed6165749ad5175934865ba6266ccf266dfe00cc8197b52
+HASH AFTER:  29e3ff2cf25549fb7ed6165749ad5175934865ba6266ccf266dfe00cc8197b52 (Matches baseline: true)
+LISTING MATCH: true
+GIT STATUS MATCH: true
+--- STDOUT ---
+▶ History Resilience: Resilient readHistory and Safe File Validation
+  ✔ (a) a history entry whose file was deleted must not make apply throw: apply on a different existing file succeeds (374.0949ms)
+  ✔ (b) a history entry whose file was deleted must not break undo of a different edit (36.8737ms)
+  ✔ (c) a missing-file entry stays in the history file (never auto-deleted) and is returned marked missing so the UI can show it unavailable (13.8258ms)
+  ✔ (d) an entry whose path escapes the project root is skipped and reported, never followed (16.4334ms)
+  ✔ (e) undo of the entry whose file is missing returns a clear error ("that file no longer exists"), not a crash (9.6277ms)
+  ✔ (f) a corrupt history file (invalid JSON) produces a clear error and does not overwrite or truncate the file (8.7549ms)
+✔ History Resilience: Resilient readHistory and Safe File Validation (461.0906ms)
+ℹ tests 6
+ℹ suites 1
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 472.1561
+
+--- STDERR ---
+Skipping history record whose path escapes workspace root: ../../etc/passwd
+
+
+========================================================================
+RUN: s1-auth-origin (exit 0 in 19.61s)
+COMMAND: npx tsx test/s1-auth-origin.test.ts
+HASH BEFORE: 29e3ff2cf25549fb7ed6165749ad5175934865ba6266ccf266dfe00cc8197b52
+HASH AFTER:  29e3ff2cf25549fb7ed6165749ad5175934865ba6266ccf266dfe00cc8197b52 (Matches baseline: true)
+LISTING MATCH: true
+GIT STATUS MATCH: true
+--- STDOUT ---
+▶ S1: Authenticated, local-only mutating requests
+  ✔ rejects mutating request with no Origin and no token with 403 (not 404) (3295.5747ms)
+  ✔ rejects mutating request with wrong Host with 403 (54.8066ms)
+  ✔ rejects mutating request with valid Origin but missing token with 403 (19.7464ms)
+  ✔ rejects mutating request with valid Origin but invalid token with 403 (20.3381ms)
+  ✔ returns normal not-found error for fake previewId with valid token and valid Origin (43.4741ms)
+  ✔ allows missing Origin when valid token is present and proceeds to normal handling (37.5961ms)
+  ✔ completes preview, apply, and undo flow in a temp copy with valid token and Origin (2622.7264ms)
+✔ S1: Authenticated, local-only mutating requests (18800.7764ms)
+ℹ tests 7
+ℹ suites 1
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 18805.7661
+
+--- STDERR ---
+(node:22256) [DEP0190] DeprecationWarning: Passing args to a child process with shell option true can lead to security vulnerabilities, as the arguments are not escaped, only concatenated.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+
+
+========================================================================
+RUN: s2-path-traversal (exit 0 in 1.25s)
+COMMAND: npx tsx test/s2-path-traversal.test.ts
+HASH BEFORE: 29e3ff2cf25549fb7ed6165749ad5175934865ba6266ccf266dfe00cc8197b52
+HASH AFTER:  29e3ff2cf25549fb7ed6165749ad5175934865ba6266ccf266dfe00cc8197b52 (Matches baseline: true)
+LISTING MATCH: true
+GIT STATUS MATCH: true
+--- STDOUT ---
+▶ S2: Path traversal refusal regression test
+  ✔ refuses pending-preview with ..\ traversing outside project root, leaving target file unchanged (6.8534ms)
+  ✔ refuses pending-preview using symlink/junction pointing outside project root, leaving target file unchanged (6.7534ms)
+✔ S2: Path traversal refusal regression test (16.7912ms)
+ℹ tests 2
+ℹ suites 1
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 22.3017
+
+--- STDERR ---
+
+
+========================================================================
+RUN: s3-atomic-write (exit 0 in 3.17s)
+COMMAND: npx tsx test/s3-atomic-write.test.ts
+HASH BEFORE: 29e3ff2cf25549fb7ed6165749ad5175934865ba6266ccf266dfe00cc8197b52
+HASH AFTER:  29e3ff2cf25549fb7ed6165749ad5175934865ba6266ccf266dfe00cc8197b52 (Matches baseline: true)
+LISTING MATCH: true
+GIT STATUS MATCH: true
+--- STDOUT ---
+▶ S3: Atomic or refuse in atomicWrite
+  ✔ refuses and leaves target file unchanged when rename fails permanently without fallback overwrite (1604.9414ms)
+  ✔ retries with backoff and succeeds when rename fails twice then succeeds (201.1402ms)
+✔ S3: Atomic or refuse in atomicWrite (1810.4285ms)
+ℹ tests 2
+ℹ suites 1
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1818.9754
+
+--- STDERR ---
+
+
+========================================================================
+RUN: s5-tailwind-compile (exit 0 in 1.65s)
+COMMAND: npx tsx test/s5-tailwind-compile.test.ts
+HASH BEFORE: 29e3ff2cf25549fb7ed6165749ad5175934865ba6266ccf266dfe00cc8197b52
+HASH AFTER:  29e3ff2cf25549fb7ed6165749ad5175934865ba6266ccf266dfe00cc8197b52 (Matches baseline: true)
+LISTING MATCH: true
+GIT STATUS MATCH: true
+--- STDOUT ---
+▶ S5: Verify Tailwind compilation and AST parse before write
+  ✔ refuses applying an edit with a bogus non-compiling class and leaves file unchanged (174.3376ms)
+  ✔ accepts valid classes, stacked variant (dark:hover:bg-blue-500), and arbitrary value (w-[37px]) (227.1024ms)
+  ✔ refuses content that would break the AST parse and leaves file unchanged (117.7714ms)
+✔ S5: Verify Tailwind compilation and AST parse before write (523.0785ms)
+ℹ tests 3
+ℹ suites 1
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 529.7761
+
+--- STDERR ---
+
+
+========================================================================
+RUN: s5-theme-support (exit 0 in 1.64s)
+COMMAND: npx tsx test/s5-theme-support.test.ts
+HASH BEFORE: 29e3ff2cf25549fb7ed6165749ad5175934865ba6266ccf266dfe00cc8197b52
+HASH AFTER:  29e3ff2cf25549fb7ed6165749ad5175934865ba6266ccf266dfe00cc8197b52 (Matches baseline: true)
+LISTING MATCH: true
+GIT STATUS MATCH: true
+--- STDOUT ---
+▶ S5: Theme Support and Config Detection in Tailwind Verifier
+  ✔ a. Tailwind v4 project with @theme defining --color-brand-500 accepts bg-brand-500, stacked variant, and arbitrary value, and refuses bogus (139.6591ms)
+  ✔ b. Tailwind v4 project with legacy tailwind.config.js and CSS @config accepts bg-brand-500, stacked variant, and arbitrary value, and refuses bogus (58.4444ms)
+NOTICE [d. Tailwind v3]: UNVERIFIED offline. Node_modules has Tailwind v4.3.3 installed, v3 package not present offline.
+  ✔ c. Tailwind v4 project with tailwind.config.js but CSS entry WITHOUT @config refuses bg-brand-500 (matches v4 build behavior) while accepting standard utilities (34.2245ms)
+  ✔ d. Tailwind v3 project: verify offline availability or report UNVERIFIED (0.43ms)
+  ✔ f. Project where no Tailwind is installed or engine fails: refuses and writes nothing (5.8614ms)
+  ✔ g. Unchanged existing tokens in className are never verified and never cause refusal; only added tokens are verified (240.2699ms)
+✔ S5: Theme Support and Config Detection in Tailwind Verifier (480.2683ms)
+ℹ tests 6
+ℹ suites 1
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 495.6625
+
+--- STDERR ---
+
+
+========================================================================
+RUN: s5-v3-support (exit 0 in 33.23s)
+COMMAND: npx tsx test/s5-v3-support.test.ts
+HASH BEFORE: 29e3ff2cf25549fb7ed6165749ad5175934865ba6266ccf266dfe00cc8197b52
+HASH AFTER:  29e3ff2cf25549fb7ed6165749ad5175934865ba6266ccf266dfe00cc8197b52 (Matches baseline: true)
+LISTING MATCH: true
+GIT STATUS MATCH: true
+--- STDOUT ---
+▶ S5: Tailwind v3 Verification and Project Isolation
+  ✔ verifies Tailwind v3 project tokens: standard, theme brand.500, stacked variants, arbitrary values, plugins, and refuses bogus (16202.9317ms)
+  ✔ confirms unchanged existing tokens are never verified in a v3 project during apply (15769.7175ms)
+✔ S5: Tailwind v3 Verification and Project Isolation (31973.6591ms)
+ℹ tests 2
+ℹ suites 1
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 31999.7121
+
+--- STDERR ---
+
+[1m[33mwarn[39m[22m - No utility classes were detected in your source files. If this is unexpected, double-check the `content` option in your Tailwind CSS configuration.
+[1m[33mwarn[39m[22m - https://tailwindcss.com/docs/content-configuration
+

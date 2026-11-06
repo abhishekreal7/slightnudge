@@ -1,0 +1,155 @@
+PASS actual source DOM identity, real layer tree, rendered size/move, draft Undo/Redo, real device viewport, CSS-layer conflict refusal, untouched source
+PASS source Save confirms classes and computed appearance, saved refresh, native inline editing plus live typography, second Save and successive batch Undo
+PASS draft refresh replays the actual document without source writes; a second source page has its own real DOM, draft recovery, Save and Undo
+Disposable source project: generated SaaS; Next.js 16.4.3; Tailwind 4.3.3; installed source adapter; no environment files checked out.
+PASS imported Next project uses the shared source canvas, actual layers and compiled preview; explicit Save verifies rendered appearance; Undo restores source
+PASS: 4 review-consent browser cases (real API; disposable source copy)
+Application typecheck: exit 0 (disposable application plus new harness; excludes historical tests/docs/scratch)
+▲ Next.js 16.4.3 (webpack)
+✓ Running next.config.mjs took 42ms
+⚠ No build cache found. Please configure build caching for faster rebuilds. Read more: https://nextjs.org/docs/messages/no-cache
+
+  Creating an optimized production build ...
+⚠ Compiled with warnings in 12.3s
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/preview/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/preview/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/preview/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/preview/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/preview/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/preview/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/preview/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/preview/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/preview/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/preview/route.ts
+
+  Running TypeScript ...
+  Finished TypeScript in 1253ms ...
+  Collecting page data using 19 workers ...
+  Generating static pages using 19 workers (0/41) ...
+  Generating static pages using 19 workers (10/41) 
+  Generating static pages using 19 workers (20/41) 
+  Generating static pages using 19 workers (30/41) 
+✓ Generating static pages using 19 workers (41/41) in 1152ms
+  Finalizing page optimization ...
+  Collecting build traces ...
+
+Route (app)
+┌ ƒ /
+├ ƒ /_not-found
+├ ƒ /admin
+├ ƒ /api/admin/metrics
+├ ƒ /api/checkout
+├ ƒ /api/checkout/simulate
+├ ƒ /api/runs
+├ ƒ /api/runs/[id]
+├ ƒ /api/runs/[id]/report.pdf
+├ ƒ /api/sites
+├ ƒ /api/sites/[id]/verify
+├ ƒ /api/slightnudge/apply
+├ ƒ /api/slightnudge/apply/status
+├ ƒ /api/slightnudge/assets
+├ ƒ /api/slightnudge/draft-view
+├ ƒ /api/slightnudge/inspect
+├ ƒ /api/slightnudge/nudge
+├ ƒ /api/slightnudge/pages
+├ ƒ /api/slightnudge/preview
+├ ƒ /api/slightnudge/repositories
+├ ƒ /api/slightnudge/repositories/[id]
+├ ƒ /api/slightnudge/repositories/[id]/adapter
+├ ƒ /api/slightnudge/repositories/[id]/docker-preview
+├ ƒ /api/slightnudge/repositories/[id]/inspect
+├ ƒ /api/slightnudge/repositories/[id]/preview-check
+├ ƒ /api/slightnudge/repositories/[id]/source
+├ ƒ /api/slightnudge/style
+├ ƒ /api/slightnudge/token
+├ ƒ /api/slightnudge/undo
+├ ƒ /api/slightnudge/undo/status
+├ ƒ /api/webhooks/dodo
+├ ƒ /dashboard
+├ ƒ /design
+├ ƒ /fixtures
+├ ƒ /fixtures/1
+├ ƒ /fixtures/2
+├ ƒ /fixtures/3
+├ ƒ /fixtures/4
+├ ƒ /fixtures/5
+├ ƒ /how-it-works
+├ ○ /icon.svg
+├ ƒ /new
+├ ○ /opengraph-image
+├ ƒ /pricing
+├ ƒ /privacy
+├ ƒ /refunds
+├ ƒ /runs/[id]
+├ ƒ /studio
+├ ƒ /studio/[repoId]
+├ ƒ /studio/[repoId]/edit
+├ ƒ /studio/preview/[pageId]
+├ ƒ /terms
+└ ƒ /workspace
+
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+
+Application build: exit 0 (disposable application plus new harness; excludes historical tests/docs/scratch)

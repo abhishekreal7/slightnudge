@@ -1,0 +1,20 @@
+{
+  "suite": "regression",
+  "round": 1,
+  "surface": "old-studio",
+  "index": 8,
+  "selector": "section#features div.mt-12.grid",
+  "clickPosition": {
+    "x": 2,
+    "y": 2
+  },
+  "expected": {
+    "file": "Features.tsx",
+    "line": 14,
+    "tag": "div",
+    "outcome": "allowed"
+  },
+  "actual": null,
+  "verdict": "WRONG TARGET (missing selection)",
+  "reason": "Original physical click completed, then the real editor data-selected-source did not become nonempty within the unchanged 30000ms default wait. No different source target was observed."
+}

@@ -1,0 +1,28 @@
+SETUP 1793564450060 START git ["ls-files"]
+SETUP END elapsed 65ms
+SETUP 1793564487491 START git ["init","--quiet"]
+SETUP END elapsed 91ms
+SETUP 1793564487582 START git ["-c","core.autocrlf=false","add","app","components","package.json","LICENSE"]
+SETUP END elapsed 92ms
+SETUP 1793564487678 START C:\nvm4w\nodejs\node.exe ["--import","tsx","--input-type=module","-e","const {installNextSourceAdapter}=await import('./lib/slightnudge/next-source-adapter.ts');await installNextSourceAdapter('source-proof');"]
+SETUP END elapsed 308ms
+SETUP 1793564487986 START C:\nvm4w\nodejs\node.exe ["C:\\dev\\vibecheck\\scratch\\reliability-gate\\2026-11-01T20-16-41-721Z-fe9b294\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-4CuqCh\\.slightnudge\\repositories\\source-proof\\node_modules\\next\\dist\\bin\\next","dev","--help"]
+SETUP END elapsed 191ms
+Disposable source project: generated SaaS; Next.js 16.4.3; Tailwind 4.3.3; installed source adapter; no environment files checked out.
+HARNESS-V3 NAVIGATION about:blank
+HARNESS-V3 NAVIGATION about:blank
+HARNESS-V3 NAVIGATION http://127.0.0.1:50922/editor/source-proof?preview=http%3A%2F%2F127.0.0.1%3A60554%2F
+HARNESS-V3 NAVIGATION http://127.0.0.1:50922/editor/source-proof?preview=http%3A%2F%2F127.0.0.1%3A60554%2F
+TIMING 1793564518359 REQUEST http://127.0.0.1:50922/editor/source-proof?preview=http%3A%2F%2F127.0.0.1%3A60554%2F
+TIMING 1793564533461 RESPONSE 200 http://127.0.0.1:50922/editor/source-proof?preview=http%3A%2F%2F127.0.0.1%3A60554%2F
+TIMING 1793564538055 REQUEST http://127.0.0.1:50922/api/slightnudge/repositories/source-proof
+TIMING 1793564538059 REQUEST http://127.0.0.1:50922/api/slightnudge/repositories/source-proof
+TIMING 1793564558047 RESPONSE 200 http://127.0.0.1:50922/api/slightnudge/repositories/source-proof
+TIMING 1793564558422 RESPONSE 200 http://127.0.0.1:50922/api/slightnudge/repositories/source-proof
+TIMING 1793564558432 REQUEST http://127.0.0.1:50922/api/slightnudge/repositories/source-proof/preview-check
+TIMING 1793564562698 RESPONSE 200 http://127.0.0.1:50922/api/slightnudge/repositories/source-proof/preview-check
+TIMING 1793564562734 REQUEST http://127.0.0.1:60554/?__slightnudge_session=8253db78-fb35-47aa-8fab-06e807b25fbf&__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A50922&__slightnudge_draft=1
+TIMING 1793564562909 RESPONSE 200 http://127.0.0.1:60554/?__slightnudge_session=8253db78-fb35-47aa-8fab-06e807b25fbf&__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A50922&__slightnudge_draft=1
+TIMING 1793564565770 REQUEST http://127.0.0.1:50922/api/slightnudge/responsive
+TIMING 1793564566498 REQUEST http://127.0.0.1:50922/api/slightnudge/responsive
+TIMING 1793564566499 REQUEST http://127.0.0.1:50922/api/slightnudge/preview

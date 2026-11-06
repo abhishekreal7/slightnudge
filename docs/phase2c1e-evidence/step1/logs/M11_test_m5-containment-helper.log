@@ -1,0 +1,24 @@
+Symlink creation requires elevated privileges (marked UNVERIFIED per instructions)
+▶ M5: Pre-write containment check & helper verification
+  ▶ Unit tests for assertWriteTargetInsideWorkspace
+    ✔ refuses path with .. segments escaping workspace root (1.29ms)
+    ✔ refuses relative .. path traversal (0.4805ms)
+    ✔ refuses UNC paths (0.1275ms)
+    ✔ refuses \\?\ paths pointing outside workspace (0.107ms)
+    ✔ refuses 8.3 short names pointing outside workspace (0.4485ms)
+    ✔ refuses junction to an outside directory (1.7804ms)
+    ✔ verifies or marks symlink test UNVERIFIED if admin rights are missing (0.8108ms)
+    ✔ accepts valid path inside workspace (0.977ms)
+  ✔ Unit tests for assertWriteTargetInsideWorkspace (6.6101ms)
+  ▶ Wiring test for TOCTOU pre-write swap via hook
+    ✔ refuses undo and preserves outside sentinel when target is swapped for junction before write (178.8925ms)
+  ✔ Wiring test for TOCTOU pre-write swap via hook (179.02ms)
+✔ M5: Pre-write containment check & helper verification (196.7778ms)
+ℹ tests 9
+ℹ suites 3
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 219.1039

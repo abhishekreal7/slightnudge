@@ -1,0 +1,20 @@
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: A confirmed pre-write denial must not trap the review in an unknown outcome
++ actual - expected
+
++ 'APPLY_UNCERTAIN'
+- 'AUTH_REQUIRED'
+
+    at <anonymous> (C:\dev\vibecheck\test\apply-denial.test.ts:21:10) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 'APPLY_UNCERTAIN',
+  expected: 'AUTH_REQUIRED',
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v22.19.0

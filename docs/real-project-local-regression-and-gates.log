@@ -1,0 +1,6 @@
+PASS actual source DOM identity, real layer tree, rendered size/move, draft Undo/Redo, real device viewport, CSS-layer conflict refusal, untouched source
+PASS source Save confirms classes and computed appearance, saved refresh, native inline editing plus live typography, second Save and successive batch Undo
+PASS draft refresh replays the actual document without source writes; a second source page has its own real DOM, draft recovery, Save and Undo
+Disposable source project: generated SaaS; Next.js 16.4.3; Tailwind 4.3.3; installed source adapter; no environment files checked out.
+PASS imported Next project uses the shared source canvas, actual layers and compiled preview; explicit Save verifies rendered appearance; Undo restores source
+PASS: 4 review-consent browser cases (real API; disposable source copy)

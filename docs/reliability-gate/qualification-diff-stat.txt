@@ -1,0 +1,8 @@
+ lib/slightnudge/atomic-build-manifest.cjs    | 48 ++++++++++++++++++++++++++++
+ next.config.mjs                              |  2 ++
+ test/next-loadable-manifest-webpack.test.cjs | 42 ++++++++++++++++++++++++
+ test/next-manifest-publication.test.cjs      | 30 +++++++++++++++++
+ test/next-manifest-webpack.test.cjs          | 41 ++++++++++++++++++++++++
+ tools/gate.mjs                               | 11 +++++--
+ tools/observe-next-manifests.mjs             | 25 +++++++++++++++
+ 7 files changed, 197 insertions(+), 2 deletions(-)

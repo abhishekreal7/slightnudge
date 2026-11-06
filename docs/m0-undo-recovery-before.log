@@ -1,0 +1,20 @@
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: A repeated Undo must never fall through to an older edit
++ actual - expected
+
++ 'export default function Page() { return <h1>Original</h1>; }\n'
+- 'export default function Page() { return <h1>First</h1>; }\n'
+
+    at <anonymous> (C:\dev\vibecheck\test\undo-recovery.test.ts:33:10) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 'export default function Page() { return <h1>Original</h1>; }\n',
+  expected: 'export default function Page() { return <h1>First</h1>; }\n',
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v22.19.0

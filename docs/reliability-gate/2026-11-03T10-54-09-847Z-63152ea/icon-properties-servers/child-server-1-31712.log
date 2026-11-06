@@ -1,0 +1,1514 @@
+{"start":1793705972652,"cwd":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4","args":["C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\node_modules\\next\\dist\\bin\\next","dev","--webpack","-H","127.0.0.1","-p","56006"]}
+▲ Next.js 16.4.3 (webpack)
+- Local:         http://127.0.0.1:56006
+- Network:       http://127.0.0.1:56006
+✓ Ready in 509ms
+✓ Running next.config.mjs took 37ms
+
+○ Compiling /editor/[[...project]]/page ...
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":28320,"time":1793705999180,"bytes":344}
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":36368,"time":1793705999964,"bytes":344}
+ GET /editor 200 in 3.4s (next.js: 2.1s, application-code: 1216ms)
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":36368,"time":1793706001588,"bytes":344}
+ GET /editor?panel=inspector&view=fit 200 in 1246ms (next.js: 43ms, application-code: 1203ms)
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":34732,"time":1793706001880,"bytes":344}
+○ Compiling /studio/preview/[pageId]/page ...
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":29280,"time":1793706014431,"bytes":344}
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":36368,"time":1793706014739,"bytes":344}
+ GET /studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A56006&__slightnudge_session=c5d69b6a-a7c4-4a02-8e76-8ac70518975a&__slightnudge_canvas=1 200 in 3.4s (next.js: 2.7s, application-code: 796ms)
+○ Compiling /api/slightnudge/responsive/route ...
+⚠ ./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":36368,"time":1793706020926,"bytes":344}
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":36368,"time":1793706020968,"bytes":344}
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":36368,"time":1793706020990,"bytes":344}
+ GET /api/slightnudge/pages 200 in 10.1s (next.js: 6.4s, proxy.ts: 2.4s, application-code: 1309ms)
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":36368,"time":1793706022679,"bytes":344}
+ POST /api/slightnudge/responsive 200 in 11.1s (next.js: 6.4s, proxy.ts: 2.4s, application-code: 2.3s)
+ POST /api/slightnudge/responsive 200 in 11.5s (next.js: 6.4s, proxy.ts: 2.4s, application-code: 2.7s)
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":26904,"time":1793706022960,"bytes":344}
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":36368,"time":1793706023594,"bytes":344}
+ GET /api/slightnudge/pages 200 in 759ms (next.js: 13ms, proxy.ts: 690ms, application-code: 56ms)
+ GET /editor?panel=inspector&view=fit 200 in 5.2s (next.js: 4.3s, application-code: 987ms)
+⚠ ./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+⚠ ./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":36368,"time":1793706032698,"bytes":344}
+ POST /api/slightnudge/preview 200 in 11.1s (next.js: 5.6s, proxy.ts: 37ms, application-code: 5.5s)
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":36368,"time":1793706038611,"bytes":344}
+ POST /api/slightnudge/preview 200 in 3.8s (next.js: 9ms, proxy.ts: 26ms, application-code: 3.8s)
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":36368,"time":1793706043496,"bytes":344}
+ POST /api/slightnudge/preview 200 in 3.2s (next.js: 7ms, proxy.ts: 25ms, application-code: 3.2s)
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":36368,"time":1793706047033,"bytes":344}
+ POST /api/slightnudge/preview 200 in 3.8s (next.js: 9ms, proxy.ts: 27ms, application-code: 3.8s)
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":36368,"time":1793706051861,"bytes":344}
+ POST /api/slightnudge/preview 200 in 3.3s (next.js: 8ms, proxy.ts: 51ms, application-code: 3.3s)
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":36368,"time":1793706055906,"bytes":344}
+ POST /api/slightnudge/preview 200 in 4.1s (next.js: 8ms, proxy.ts: 32ms, application-code: 4.0s)
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":36368,"time":1793706060896,"bytes":344}
+ POST /api/slightnudge/preview 200 in 3.7s (next.js: 9ms, proxy.ts: 57ms, application-code: 3.6s)
+⚠ ./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+⚠ ./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":36368,"time":1793706066258,"bytes":344}
+ POST /api/slightnudge/draft-view 200 in 4.4s (next.js: 1678ms, proxy.ts: 24ms, application-code: 2.7s)
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":36368,"time":1793706069487,"bytes":344}
+ POST /api/slightnudge/preview 200 in 3.3s (next.js: 26ms, proxy.ts: 30ms, application-code: 3.3s)
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":36368,"time":1793706072818,"bytes":344}
+ POST /api/slightnudge/draft-view 200 in 2.9s (next.js: 8ms, proxy.ts: 25ms, application-code: 2.9s)
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":36368,"time":1793706076237,"bytes":344}
+ POST /api/slightnudge/preview 200 in 3.4s (next.js: 9ms, proxy.ts: 27ms, application-code: 3.3s)
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":36368,"time":1793706079630,"bytes":344}
+ POST /api/slightnudge/preview 200 in 2.5s (next.js: 9ms, proxy.ts: 25ms, application-code: 2.4s)
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":36368,"time":1793706082351,"bytes":344}
+ POST /api/slightnudge/preview 200 in 3.2s (next.js: 8ms, proxy.ts: 26ms, application-code: 3.1s)
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":36368,"time":1793706086588,"bytes":344}
+ POST /api/slightnudge/preview 200 in 2.4s (next.js: 9ms, proxy.ts: 28ms, application-code: 2.4s)
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":36368,"time":1793706089035,"bytes":344}
+ POST /api/slightnudge/preview 200 in 3.4s (next.js: 10ms, proxy.ts: 23ms, application-code: 3.4s)
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":36368,"time":1793706093075,"bytes":344}
+ POST /api/slightnudge/preview 200 in 3.3s (next.js: 8ms, proxy.ts: 27ms, application-code: 3.2s)
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":36368,"time":1793706096662,"bytes":344}
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":12144,"time":1793706096937,"bytes":344}
+ GET /editor?panel=inspector&view=fit 200 in 1034ms (next.js: 275ms, application-code: 758ms)
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":36368,"time":1793706098746,"bytes":344}
+ GET /api/slightnudge/pages 200 in 36ms (next.js: 5ms, proxy.ts: 9ms, application-code: 22ms)
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":36368,"time":1793706098785,"bytes":344}
+ GET /api/slightnudge/pages 200 in 32ms (next.js: 3ms, proxy.ts: 10ms, application-code: 19ms)
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":36368,"time":1793706098843,"bytes":344}
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":36368,"time":1793706098987,"bytes":344}
+⚠ ./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+ POST /api/slightnudge/responsive 200 in 328ms (next.js: 15ms, proxy.ts: 51ms, application-code: 262ms)
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":27060,"time":1793706099229,"bytes":344}
+ GET /studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A56006&__slightnudge_session=3f41af25-c7e9-4b29-8809-330e3df9e7d8&__slightnudge_canvas=1 200 in 447ms (next.js: 30ms, application-code: 417ms)
+⚠ ./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":36368,"time":1793706100613,"bytes":344}
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":36368,"time":1793706100616,"bytes":344}
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":36368,"time":1793706100618,"bytes":344}
+ POST /api/slightnudge/apply/status 409 in 1835ms (next.js: 1635ms, proxy.ts: 51ms, application-code: 148ms)
+ POST /api/slightnudge/apply/status 409 in 1835ms (next.js: 1635ms, proxy.ts: 51ms, application-code: 149ms)
+ POST /api/slightnudge/responsive 200 in 1944ms (next.js: 1635ms, proxy.ts: 51ms, application-code: 258ms)
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":36368,"time":1793706101948,"bytes":344}
+ POST /api/slightnudge/draft-view 200 in 2.6s (next.js: 38ms, proxy.ts: 29ms, application-code: 2.5s)
+⚠ ./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+⚠ ./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":36368,"time":1793706106940,"bytes":344}
+ POST /api/slightnudge/apply 200 in 2.7s (next.js: 1697ms, proxy.ts: 26ms, application-code: 935ms)
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":36368,"time":1793706108122,"bytes":344}
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":30664,"time":1793706108410,"bytes":344}
+⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET /studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A56006&__slightnudge_session=24ea7b9e-9489-4fb7-aca1-07b2348d397c&__slightnudge_canvas=1&__slightnudge_refresh=1636b128-13f7-4c50-bb7b-bf31b6b97dfc 200 in 1139ms (next.js: 134ms, application-code: 1005ms)
+⚠ ./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":36368,"time":1793706114016,"bytes":344}
+ GET /editor?panel=inspector&view=fit 200 in 400ms (next.js: 253ms, application-code: 148ms)
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":13036,"time":1793706114308,"bytes":344}
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":36368,"time":1793706116382,"bytes":344}
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":18808,"time":1793706116666,"bytes":344}
+ GET /studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A56006&__slightnudge_session=ac586095-921f-44af-bf11-e551107ac97a&__slightnudge_canvas=1&__slightnudge_refresh=36b5aca2-32a1-4c19-9bac-c1b327231984 200 in 390ms (next.js: 56ms, application-code: 334ms)
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":36368,"time":1793706120674,"bytes":344}
+ POST /api/slightnudge/preview 200 in 3.5s (next.js: 25ms, proxy.ts: 31ms, application-code: 3.4s)
+⚠ ./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+⚠ ./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":36368,"time":1793706126489,"bytes":344}
+ POST /api/slightnudge/undo 200 in 2.3s (next.js: 1898ms, proxy.ts: 30ms, application-code: 410ms)
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":36368,"time":1793706127276,"bytes":344}
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":5688,"time":1793706127602,"bytes":344}
+ GET /studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A56006&__slightnudge_session=3bf14b64-8215-433e-a56f-3f4afd346506&__slightnudge_canvas=1&__slightnudge_refresh=5ad6a539-c962-413a-acc9-095b73ac1774 200 in 1331ms (next.js: 127ms, application-code: 1203ms)
+⚠ ./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":36368,"time":1793706130836,"bytes":344}
+ GET /editor?panel=inspector&view=fit 200 in 395ms (next.js: 245ms, application-code: 150ms)
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":22080,"time":1793706131138,"bytes":344}
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":36368,"time":1793706134004,"bytes":344}
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":20040,"time":1793706134268,"bytes":344}
+ GET /studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A56006&__slightnudge_session=3fdfd022-2f6d-48a7-b4d5-74119703d1d9&__slightnudge_canvas=1&__slightnudge_refresh=577d7b91-b14a-48f3-a91c-9ba1b33133e6 200 in 379ms (next.js: 49ms, application-code: 330ms)
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":36368,"time":1793706137780,"bytes":344}
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":24868,"time":1793706138047,"bytes":344}
+ GET /editor 200 in 1425ms (next.js: 43ms, application-code: 1382ms)
+⚠ ./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":36368,"time":1793706144709,"bytes":344}
+ GET /api/slightnudge/pages 200 in 207ms (next.js: 96ms, proxy.ts: 41ms, application-code: 70ms)
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":36368,"time":1793706144793,"bytes":344}
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":36368,"time":1793706144951,"bytes":344}
+ POST /api/slightnudge/responsive 200 in 806ms (next.js: 178ms, proxy.ts: 44ms, application-code: 584ms)
+ POST /api/slightnudge/responsive 200 in 1094ms (next.js: 335ms, proxy.ts: 44ms, application-code: 715ms)
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":36368,"time":1793706145828,"bytes":344}
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":36368,"time":1793706145973,"bytes":344}
+ GET /api/slightnudge/pages 200 in 941ms (next.js: 298ms, proxy.ts: 598ms, application-code: 45ms)
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":35928,"time":1793706146105,"bytes":344}
+ GET /studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A56006&__slightnudge_session=42c557ab-6de3-40fb-8418-125036eefc40 200 in 525ms (next.js: 143ms, application-code: 382ms)
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":36368,"time":1793706149982,"bytes":344}
+ POST /api/slightnudge/preview 200 in 3.4s (next.js: 27ms, proxy.ts: 27ms, application-code: 3.3s)
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":36368,"time":1793706153785,"bytes":344}
+ POST /api/slightnudge/preview 200 in 3.6s (next.js: 10ms, proxy.ts: 27ms, application-code: 3.5s)
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":36368,"time":1793706158746,"bytes":344}
+ POST /api/slightnudge/preview 200 in 3.4s (next.js: 7ms, proxy.ts: 49ms, application-code: 3.4s)
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":36368,"time":1793706162770,"bytes":344}
+ POST /api/slightnudge/preview 200 in 4.0s (next.js: 7ms, proxy.ts: 23ms, application-code: 3.9s)
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":36368,"time":1793706167830,"bytes":344}
+ POST /api/slightnudge/preview 200 in 3.3s (next.js: 25ms, proxy.ts: 47ms, application-code: 3.2s)
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":36368,"time":1793706171398,"bytes":344}
+ POST /api/slightnudge/preview 200 in 3.9s (next.js: 8ms, proxy.ts: 32ms, application-code: 3.9s)
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":36368,"time":1793706176392,"bytes":344}
+ POST /api/slightnudge/preview 200 in 3.5s (next.js: 8ms, proxy.ts: 31ms, application-code: 3.4s)
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":36368,"time":1793706179906,"bytes":344}
+ POST /api/slightnudge/draft-view 200 in 2.5s (next.js: 25ms, proxy.ts: 28ms, application-code: 2.4s)
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":36368,"time":1793706182913,"bytes":344}
+ POST /api/slightnudge/preview 200 in 4.1s (next.js: 8ms, proxy.ts: 29ms, application-code: 4.1s)
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":36368,"time":1793706187023,"bytes":344}
+ POST /api/slightnudge/draft-view 200 in 2.5s (next.js: 7ms, proxy.ts: 25ms, application-code: 2.4s)
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":36368,"time":1793706189984,"bytes":344}
+ POST /api/slightnudge/preview 200 in 3.3s (next.js: 11ms, proxy.ts: 32ms, application-code: 3.3s)
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":36368,"time":1793706193308,"bytes":344}
+ POST /api/slightnudge/preview 200 in 2.2s (next.js: 8ms, proxy.ts: 21ms, application-code: 2.2s)
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":36368,"time":1793706195813,"bytes":344}
+ POST /api/slightnudge/preview 200 in 2.9s (next.js: 9ms, proxy.ts: 28ms, application-code: 2.9s)
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":36368,"time":1793706199704,"bytes":344}
+ POST /api/slightnudge/preview 200 in 2.5s (next.js: 11ms, proxy.ts: 28ms, application-code: 2.5s)
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":36368,"time":1793706203248,"bytes":344}
+ POST /api/slightnudge/preview 200 in 4.4s (next.js: 18ms, proxy.ts: 976ms, application-code: 3.4s)
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":36368,"time":1793706207951,"bytes":344}
+ POST /api/slightnudge/preview 200 in 3.7s (next.js: 14ms, proxy.ts: 151ms, application-code: 3.6s)
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":36368,"time":1793706211655,"bytes":344}
+ GET /editor 200 in 341ms (next.js: 76ms, application-code: 264ms)
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":31012,"time":1793706211932,"bytes":344}
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":36368,"time":1793706214635,"bytes":344}
+ GET /api/slightnudge/pages 200 in 146ms (next.js: 34ms, proxy.ts: 55ms, application-code: 56ms)
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":36368,"time":1793706214699,"bytes":344}
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":36368,"time":1793706214885,"bytes":344}
+ POST /api/slightnudge/apply/status 409 in 432ms (next.js: 255ms, proxy.ts: 53ms, application-code: 124ms)
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":36368,"time":1793706215014,"bytes":344}
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":36368,"time":1793706215113,"bytes":344}
+ POST /api/slightnudge/apply/status 409 in 641ms (next.js: 488ms, proxy.ts: 53ms, application-code: 99ms)
+ POST /api/slightnudge/responsive 200 in 926ms (next.js: 74ms, proxy.ts: 53ms, application-code: 799ms)
+ POST /api/slightnudge/responsive 200 in 1197ms (next.js: 389ms, proxy.ts: 53ms, application-code: 754ms)
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":36368,"time":1793706215779,"bytes":344}
+ GET /api/slightnudge/pages 200 in 609ms (next.js: 274ms, proxy.ts: 288ms, application-code: 47ms)
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":36368,"time":1793706215916,"bytes":344}
+ GET /studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A56006&__slightnudge_session=e3c16c7e-ecc1-438f-95d2-f254340d8f84 200 in 248ms (next.js: 80ms, application-code: 168ms)
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":10980,"time":1793706216207,"bytes":344}
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":36368,"time":1793706218850,"bytes":344}
+ POST /api/slightnudge/draft-view 200 in 2.4s (next.js: 7ms, proxy.ts: 25ms, application-code: 2.4s)
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":36368,"time":1793706221832,"bytes":344}
+ POST /api/slightnudge/apply 200 in 963ms (next.js: 28ms, proxy.ts: 22ms, application-code: 913ms)
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":36368,"time":1793706223037,"bytes":344}
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":13344,"time":1793706223299,"bytes":344}
+ GET /studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A56006&__slightnudge_session=f1837e2d-3972-4615-9589-fc9efb49eb3d&__slightnudge_refresh=74e0d687-8ec4-4f36-9dc4-4cc720698704 200 in 1356ms (next.js: 37ms, application-code: 1320ms)
+⚠ ./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":36368,"time":1793706227699,"bytes":344}
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":31556,"time":1793706227957,"bytes":344}
+ GET /editor 200 in 776ms (next.js: 467ms, application-code: 308ms)
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":36368,"time":1793706231065,"bytes":344}
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":31636,"time":1793706231351,"bytes":344}
+ GET /studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A56006&__slightnudge_session=4fda7066-eca1-4c28-afe1-2942fa800707&__slightnudge_refresh=6108830e-5295-4fab-a554-27d6b09430c3 200 in 662ms (next.js: 157ms, application-code: 505ms)
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":36368,"time":1793706235669,"bytes":344}
+ POST /api/slightnudge/preview 200 in 3.5s (next.js: 45ms, proxy.ts: 28ms, application-code: 3.4s)
+⚠ ./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+⚠ ./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":36368,"time":1793706241016,"bytes":344}
+ POST /api/slightnudge/undo 200 in 1999ms (next.js: 1472ms, proxy.ts: 23ms, application-code: 504ms)
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":36368,"time":1793706241763,"bytes":344}
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":11400,"time":1793706242035,"bytes":344}
+ GET /studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A56006&__slightnudge_session=e5bba1a3-f4be-4a22-bf8e-8412895b4a0e&__slightnudge_refresh=bd06a126-a1c9-45cd-9c4f-e4f598341e42 200 in 1582ms (next.js: 139ms, application-code: 1443ms)
+⚠ ./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":36368,"time":1793706245547,"bytes":344}
+ GET /editor 200 in 415ms (next.js: 246ms, application-code: 169ms)
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":27524,"time":1793706245878,"bytes":344}
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":36368,"time":1793706248560,"bytes":344}
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":24672,"time":1793706248844,"bytes":344}
+ GET /studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A56006&__slightnudge_session=7342b6ee-c332-40e3-823f-3d3d8fe0d930&__slightnudge_refresh=99e48ef1-0bf1-4468-8d38-401e85bdac7e 200 in 517ms (next.js: 149ms, application-code: 367ms)
+⚠ ./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":36368,"time":1793706254614,"bytes":344}
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":36368,"time":1793706254953,"bytes":344}
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":13700,"time":1793706254895,"bytes":344}
+ GET /editor 200 in 769ms (next.js: 278ms, application-code: 491ms)
+ GET /studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A56006&__slightnudge_session=7342b6ee-c332-40e3-823f-3d3d8fe0d930&__slightnudge_refresh=99e48ef1-0bf1-4468-8d38-401e85bdac7e 200 in 320ms (next.js: 152ms, application-code: 168ms)
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-jsyet4\\.next\\dev\\build-manifest.json","pid":15996,"time":1793706255273,"bytes":344}

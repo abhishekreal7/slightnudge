@@ -1,0 +1,51 @@
+GATE evidence C:\dev\vibecheck\docs\reliability-gate\2026-11-01T16-07-00-984Z-a4ff43a
+PRODUCT a4ff43ad73c7fd4e5336d217a49c727bc98a8768 TESTS a4ff43ad73c7fd4e5336d217a49c727bc98a8768
+No test assertions or limits changed; same HEAD tests at every historical product ref.
+
+COMMAND prepare-lab-adapters: node --import tsx --input-type=module -e const {installNextSourceAdapter}=await import('./lib/slightnudge/next-source-adapter.ts');for(const id of ['m0-control-lab','m0-overfit-lab'])await installNextSourceAdapter(id);console.log('Temp adapters prepared');
+node:internal/modules/esm/load:184
+    throw new ERR_UNSUPPORTED_ESM_URL_SCHEME(parsed, schemes);
+          ^
+
+Error [ERR_UNSUPPORTED_ESM_URL_SCHEME]: Only URLs with a scheme in: file, data, and node are supported by the default ESM loader. On Windows, absolute paths must be valid file:// URLs. Received protocol 'c:'
+    at throwIfUnsupportedURLScheme (node:internal/modules/esm/load:184:11)
+    at defaultLoad (node:internal/modules/esm/load:82:3)
+    at ModuleLoader.load (node:internal/modules/esm/loader:801:12)
+    at ModuleLoader.loadAndTranslate (node:internal/modules/esm/loader:586:43)
+    at #createModuleJob (node:internal/modules/esm/loader:610:36)
+    at #getJobFromResolveResult (node:internal/modules/esm/loader:341:34)
+    at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:309:41)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:650:25) {
+  code: 'ERR_UNSUPPORTED_ESM_URL_SCHEME'
+}
+
+Node.js v22.19.0
+GATE ERROR Error: Temporary adapter setup failed
+    at main (file:///C:/dev/vibecheck/tools/gate.mjs:163:33)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///C:/dev/vibecheck/tools/gate.mjs:31:3
+
+workflow | real or mocked | pass/fail | seconds
+setup | REAL | FAIL | 0
+selection-full-regression | REAL | NOT RUN | 0
+selection-full-overfit | REAL | NOT RUN | 0
+selection-fit-regression | REAL | NOT RUN | 0
+selection-fit-overfit | REAL | NOT RUN | 0
+shared-instances-four | REAL | NOT RUN | 0
+movement | REAL | NOT RUN | 0
+state-and-transitions | REAL | NOT RUN | 0
+responsive | REAL | NOT RUN | 0
+responsive-imported | REAL | NOT RUN | 0
+appearance-layout | REAL | NOT RUN | 0
+images-local | REAL | NOT RUN | 0
+images-imported | REAL | NOT RUN | 0
+component-actions-local | REAL + MOCKED failure injection | NOT RUN | 0
+component-actions-imported | REAL + MOCKED failure injection | NOT RUN | 0
+icon-replacement | REAL | NOT RUN | 0
+icon-properties | REAL | NOT RUN | 0
+section-order | REAL | NOT RUN | 0
+container-move | REAL | NOT RUN | 0
+text-editing | REAL | NOT RUN | 0
+history | REAL | NOT RUN | 0
+recovery | REAL + MOCKED failure injection | NOT RUN | 0
+GATE FAIL; evidence C:\dev\vibecheck\docs\reliability-gate\2026-11-01T16-07-00-984Z-a4ff43a

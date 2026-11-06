@@ -1,0 +1,60 @@
+﻿========================================================================
+STEP 2: TEST-OVERRIDE AUDIT RESULTS
+========================================================================
+
+--- Test Case: SLIGHTNUDGE_TEST unset ---
+  Session Token:  IGNORED (random 64-char hex: 2a14e5fbd9aee7d6...)
+  Pending Dir:    IGNORED (ENOENT in real .slightnudge/pending)
+  History Path:   IGNORED (read default edits.json)
+  Data Dir:       IGNORED (read default data dir history)
+  Workspace Root: IGNORED (anchored to process.cwd())
+  VERDICT:        ALL OVERRIDES INERT/IGNORED
+
+--- Test Case: SLIGHTNUDGE_TEST="true" ---
+  Session Token:  IGNORED (random 64-char hex: 01f02c1b3f0b6193...)
+  Pending Dir:    IGNORED (ENOENT in real .slightnudge/pending)
+  History Path:   IGNORED (read default edits.json)
+  Data Dir:       IGNORED (read default data dir history)
+  Workspace Root: IGNORED (anchored to process.cwd())
+  VERDICT:        ALL OVERRIDES INERT/IGNORED
+
+--- Test Case: SLIGHTNUDGE_TEST="0" ---
+  Session Token:  IGNORED (random 64-char hex: a56d3ae48c1ae7c2...)
+  Pending Dir:    IGNORED (ENOENT in real .slightnudge/pending)
+  History Path:   IGNORED (read default edits.json)
+  Data Dir:       IGNORED (read default data dir history)
+  Workspace Root: IGNORED (anchored to process.cwd())
+  VERDICT:        ALL OVERRIDES INERT/IGNORED
+
+--- Test Case: SLIGHTNUDGE_TEST="" ---
+  Session Token:  IGNORED (random 64-char hex: 35346335a228f2db...)
+  Pending Dir:    IGNORED (ENOENT in real .slightnudge/pending)
+  History Path:   IGNORED (read default edits.json)
+  Data Dir:       IGNORED (read default data dir history)
+  Workspace Root: IGNORED (anchored to process.cwd())
+  VERDICT:        ALL OVERRIDES INERT/IGNORED
+
+--- Test Case: SLIGHTNUDGE_TEST="2" ---
+  Session Token:  IGNORED (random 64-char hex: a4e1e66d1c012757...)
+  Pending Dir:    IGNORED (ENOENT in real .slightnudge/pending)
+  History Path:   IGNORED (read default edits.json)
+  Data Dir:       IGNORED (read default data dir history)
+  Workspace Root: IGNORED (anchored to process.cwd())
+  VERDICT:        ALL OVERRIDES INERT/IGNORED
+
+--- Test Case: SLIGHTNUDGE_TEST="1" (Control) ---
+  Session Token:  OVERRIDDEN (canary-secret-token-override-12345)
+  Pending Dir:    OVERRIDDEN (read canary pending file from canary pending dir)
+  History Path:   OVERRIDDEN (read canary history file)
+  Data Dir:       OVERRIDDEN (read canary data history)
+  Workspace Root: OVERRIDDEN (resolved files inside canary workspace)
+  VERDICT:        OVERRIDES ACTIVE
+
+--- Test Case: SLIGHTNUDGE_TEST="1" with NODE_ENV="production" (Step 2f) ---
+  Session Token:  OVERRIDDEN (canary-secret-token-override-12345)
+  Pending Dir:    OVERRIDDEN (found canary pending in C:\Users\abhis\AppData\Local\Temp\sn-step2-audit-17e4c95c6770\canary-pending)
+  History Path:   OVERRIDDEN (read canary history file)
+  Data Dir:       OVERRIDDEN (read canary data history)
+  Workspace Root: OVERRIDDEN (resolved files inside canary workspace)
+  VERDICT:        OVERRIDES ACTIVE
+

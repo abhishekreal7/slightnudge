@@ -1,0 +1,35 @@
+Disposable source project: https://github.com/bennyjoel/nextjs-saas-starter-lite; Next.js 14.2.35; Tailwind 3.4.19; installed source adapter; no environment files checked out.
+Source navigation: editor /studio/source-proof/edit
+Source lifecycle: editor document initialized
+Source navigation: editor /studio/source-proof/edit
+Source navigation: editor /studio/source-proof/edit
+Source navigation: project /
+Source navigation: project /
+Source stage: select src/app/page.tsx:72:13
+Source API: {"api":"/api/slightnudge/preview","status":200,"success":true}
+Source proof: {"success":true,"reason":""}
+Source stage: apply src/app/page.tsx:72:13
+Source proof: {"success":true,"reason":"The page changed after preview. Reload and select again."}
+Source navigation: project /
+Source API: {"api":"/api/slightnudge/apply/status","status":200,"success":true}
+Source navigation: project /
+Source navigation: project /
+Source proof: {"file":"src/app/page.tsx","line":72,"column":13,"expectedClass":"text-lg font-normal text-white mb-2","classes":["text-lg font-normal text-white mb-2"]}
+Source proof: {"success":true,"reason":"The project is still rendering an older source revision."}
+Source notice: Applied change to .slightnudge\repositories\source-proof\src\app\page.tsx
+Source navigation: editor /studio/source-proof/edit
+Source proof failure notice: none
+Source proof failure alert: [ '' ]
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+page.waitForResponse: Timeout 30000ms exceeded while waiting for event "response"
+    at checkSourceSelections (C:\dev\vibecheck\test\helpers\source-selection-workflows.ts:108:27)
+    at async checkSourceProject (C:\dev\vibecheck\test\helpers\source-project-browser.ts:151:64)
+    at async <anonymous> (C:\dev\vibecheck\test\review-consent.browser.ts:96:14) {
+  log: [],
+  name: 'TimeoutError'
+}
+
+Node.js v22.19.0

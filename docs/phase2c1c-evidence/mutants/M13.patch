@@ -1,0 +1,24 @@
+diff --git a/lib/slightnudge/edit-history.ts b/lib/slightnudge/edit-history.ts
+index 493373a..4cff209 100644
+--- a/lib/slightnudge/edit-history.ts
++++ b/lib/slightnudge/edit-history.ts
+@@ -214,15 +214,13 @@ function writeHistory(records: EditRecord[]) {
+ let preWriteTestHook: ((filePath: string) => void) | null = null;
+ 
+ export function setPreWriteTestHook(hook: ((filePath: string) => void) | null): void {
+-  if (process.env.SLIGHTNUDGE_TEST === '1' && process.env.NODE_ENV !== 'production') {
+-    preWriteTestHook = hook;
+-  }
++  preWriteTestHook = hook;
++}
+ }
+ 
+ export function invokePreWriteHook(filePath: string): void {
+-  if (process.env.SLIGHTNUDGE_TEST === '1' && process.env.NODE_ENV !== 'production' && preWriteTestHook) {
+-    preWriteTestHook(filePath);
+-  }
++  if (preWriteTestHook) preWriteTestHook(filePath);
++}
+ }
+ 
+ export function assertWriteTargetInsideWorkspace(targetPath: string): string {

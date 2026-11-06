@@ -1,0 +1,117 @@
+﻿=== STEP 2: End-to-End Verification in Temp Copy ===
+
+1. Setting up temp workspace at: C:\Users\abhis\AppData\Local\Temp\vibecheck-p2a-verify-1792518146529
+Copied 186 tracked files.
+Junctioned node_modules.
+Added @theme with --color-brand-500 to temp app/globals.css.
+Created test fixture at fixtures\step2-verify.tsx
+
+2. Running production build (npm run build) in temp copy...
+Build completed in 17008 ms
+Γö£ Γùï /studio
+Γö£ ╞Æ /studio/[repoId]
+Γö£ Γùï /terms
+Γöö Γùï /workspace
+
+
+Γùï  (Static)   prerendered as static content
+╞Æ  (Dynamic)  server-rendered on demand
+
+
+3. Starting Next.js production server (next start) on port 3100...
+Γû▓ Next.js 16.4.0
+- Local:         http://127.0.0.1:3100
+- Network:       http://127.0.0.1:3100
+Γ£ô Ready in 193ms
+Γ£ô Running next.config.mjs took 24ms
+Production server ready on 127.0.0.1:3100
+
+======================================================
+Testing on Production server on 127.0.0.1:3100
+======================================================
+Fetched session token: a7ef4b84a961c836...
+
+--- (i) Testing bogus class application: bg-nonexistent-999 ---
+Created pending edit for bogus class, id: 75383662-e377-4325-b386-901c234d7541
+Bogus apply HTTP status (expect 409): 409
+Bogus apply response body: {
+  success: false,
+  error: `can't verify this class: "bg-nonexistent-999" produced no CSS`
+}
+File unchanged check: PASS (unchanged)
+
+--- (ii) Testing valid classes: p-4, dark:hover:bg-blue-500, w-[37px], and bg-brand-500 ---
+
+Applying: Standard utility p-4 (p-4)
+Apply status for p-4 (expect 200): 200 {"success":true,"editId":"f9555440-20a4-4141-b997-c050758bd607","filePath":"fixtures\\step2-verify.tsx","previewType":"className","value":"existing-token-custom container text-sm p-4","className":"existing-token-custom container text-sm p-4","message":"Applied Change: existing-token-custom container text-sm p-4."}
+File on disk contains p-4: PASS
+
+Applying: Stacked variant dark:hover:bg-blue-500 (dark:hover:bg-blue-500)
+Apply status for dark:hover:bg-blue-500 (expect 200): 200 {"success":true,"editId":"038cfdf3-e3cd-4f86-95d4-1ed22041dd14","filePath":"fixtures\\step2-verify.tsx","previewType":"className","value":"existing-token-custom container text-sm p-4 dark:hover:bg-blue-500","className":"existing-token-custom container text-sm p-4 dark:hover:bg-blue-500","message":"Applied Change: existing-token-custom container text-sm p-4 dark:hover:bg-blue-500."}
+File on disk contains dark:hover:bg-blue-500: PASS
+
+Applying: Arbitrary value w-[37px] (w-[37px])
+Apply status for w-[37px] (expect 200): 200 {"success":true,"editId":"8110909e-1829-4f47-be7e-36504a513c80","filePath":"fixtures\\step2-verify.tsx","previewType":"className","value":"existing-token-custom container text-sm p-4 dark:hover:bg-blue-500 w-[37px]","className":"existing-token-custom container text-sm p-4 dark:hover:bg-blue-500 w-[37px]","message":"Applied Change: existing-token-custom container text-sm p-4 dark:hover:bg-blue-500 w-[37px]."}
+File on disk contains w-[37px]: PASS
+
+Applying: Project theme color bg-brand-500 (bg-brand-500)
+Apply status for bg-brand-500 (expect 200): 200 {"success":true,"editId":"ef44ba6a-4850-4c85-9408-d29cffdb0963","filePath":"fixtures\\step2-verify.tsx","previewType":"className","value":"existing-token-custom container text-sm p-4 dark:hover:bg-blue-500 w-[37px] bg-brand-500","className":"existing-token-custom container text-sm p-4 dark:hover:bg-blue-500 w-[37px] bg-brand-500","message":"Applied Change: existing-token-custom container text-sm p-4 dark:hover:bg-blue-500 w-[37px] bg-brand-500."}
+File on disk contains bg-brand-500: PASS
+
+--- (iii) Confirming existing tokens in className do not trigger refusal ---
+Contains existing-token-custom: true
+Contains container: true
+Unchanged existing tokens check: PASS
+
+>>> Production server tests ALL PASSED <<<
+
+Stopping production server...
+
+4. Starting Next.js dev server (next dev) on port 3100...
+Dev server ready on 127.0.0.1:3100
+
+======================================================
+Testing on Dev server on 127.0.0.1:3100
+======================================================
+Fetched session token: a7ef4b84a961c836...
+
+--- (i) Testing bogus class application: bg-nonexistent-999 ---
+Created pending edit for bogus class, id: 921fb2f7-65c6-4a62-a07d-3bd7a13c4733
+Bogus apply HTTP status (expect 409): 409
+Bogus apply response body: {
+  success: false,
+  error: `can't verify this class: "bg-nonexistent-999" produced no CSS`
+}
+File unchanged check: PASS (unchanged)
+
+--- (ii) Testing valid classes: p-4, dark:hover:bg-blue-500, w-[37px], and bg-brand-500 ---
+
+Applying: Standard utility p-4 (p-4)
+Apply status for p-4 (expect 200): 200 {"success":true,"editId":"1ab43ee8-d708-4444-b680-f2e01242e38b","filePath":"fixtures\\step2-verify.tsx","previewType":"className","value":"existing-token-custom container text-sm p-4","className":"existing-token-custom container text-sm p-4","message":"Applied Change: existing-token-custom container text-sm p-4."}
+File on disk contains p-4: PASS
+
+Applying: Stacked variant dark:hover:bg-blue-500 (dark:hover:bg-blue-500)
+Apply status for dark:hover:bg-blue-500 (expect 200): 200 {"success":true,"editId":"90531a82-8822-4e24-be62-ca595d87d293","filePath":"fixtures\\step2-verify.tsx","previewType":"className","value":"existing-token-custom container text-sm p-4 dark:hover:bg-blue-500","className":"existing-token-custom container text-sm p-4 dark:hover:bg-blue-500","message":"Applied Change: existing-token-custom container text-sm p-4 dark:hover:bg-blue-500."}
+File on disk contains dark:hover:bg-blue-500: PASS
+
+Applying: Arbitrary value w-[37px] (w-[37px])
+Apply status for w-[37px] (expect 200): 200 {"success":true,"editId":"bae852e6-300b-4ea3-b972-02505b090716","filePath":"fixtures\\step2-verify.tsx","previewType":"className","value":"existing-token-custom container text-sm p-4 dark:hover:bg-blue-500 w-[37px]","className":"existing-token-custom container text-sm p-4 dark:hover:bg-blue-500 w-[37px]","message":"Applied Change: existing-token-custom container text-sm p-4 dark:hover:bg-blue-500 w-[37px]."}
+File on disk contains w-[37px]: PASS
+
+Applying: Project theme color bg-brand-500 (bg-brand-500)
+Apply status for bg-brand-500 (expect 200): 200 {"success":true,"editId":"2d988721-1706-4968-aa29-2b70baa0f456","filePath":"fixtures\\step2-verify.tsx","previewType":"className","value":"existing-token-custom container text-sm p-4 dark:hover:bg-blue-500 w-[37px] bg-brand-500","className":"existing-token-custom container text-sm p-4 dark:hover:bg-blue-500 w-[37px] bg-brand-500","message":"Applied Change: existing-token-custom container text-sm p-4 dark:hover:bg-blue-500 w-[37px] bg-brand-500."}
+File on disk contains bg-brand-500: PASS
+
+--- (iii) Confirming existing tokens in className do not trigger refusal ---
+Contains existing-token-custom: true
+Contains container: true
+Unchanged existing tokens check: PASS
+
+>>> Dev server tests ALL PASSED <<<
+
+Stopping dev server...
+[?25h
+
+5. Cleaning up temp workspace...
+
+=== STEP 2 Server E2E Verification Complete ===

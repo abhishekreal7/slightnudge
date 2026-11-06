@@ -1,0 +1,257 @@
+SETUP 1793622267272 START git ["ls-files"]
+SETUP END elapsed 39ms
+HARNESS-V3 NAVIGATION about:blank
+HARNESS-V3 NAVIGATION http://127.0.0.1:58604/editor?panel=inspector
+TIMING 1793622292777 REQUEST http://127.0.0.1:58604/editor?panel=inspector
+TIMING 1793622293040 RESPONSE 200 http://127.0.0.1:58604/editor?panel=inspector
+HARNESS-V3 OP 1793622293365 START waitFor locator('[data-source-ready="true"]')
+TIMING 1793622294466 REQUEST http://127.0.0.1:58604/api/slightnudge/responsive
+TIMING 1793622294466 REQUEST http://127.0.0.1:58604/api/slightnudge/responsive
+TIMING 1793622294488 REQUEST http://127.0.0.1:58604/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A58604&__slightnudge_session=75cc42e3-09c1-421f-870a-baa6b702c365
+TIMING 1793622301625 RESPONSE 200 http://127.0.0.1:58604/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A58604&__slightnudge_session=75cc42e3-09c1-421f-870a-baa6b702c365
+TIMING 1793622301634 REQUEST http://127.0.0.1:58604/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+TIMING 1793622301683 RESPONSE 200 http://127.0.0.1:58604/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+HARNESS-V3 OP 1793622302434 END waitFor locator('[data-source-ready="true"]')
+HARNESS-V3 OP 1793622302435 START selectOption getByRole('combobox', { name: 'Canvas zoom', exact: true })
+HARNESS-V3 OP 1793622302467 END selectOption getByRole('combobox', { name: 'Canvas zoom', exact: true })
+Advanced image Studio next-static
+HARNESS-V3 OP 1793622302793 START waitFor getByRole('region', { name: 'Image content', exact: true })
+HARNESS-V3 OP 1793622302903 END waitFor getByRole('region', { name: 'Image content', exact: true })
+HARNESS-V3 OP 1793622302915 START setInputFiles getByLabel('Replace image', { exact: true })
+HARNESS-V3 OP 1793622302939 END setInputFiles getByLabel('Replace image', { exact: true })
+TIMING 1793622306434 RESPONSE 200 http://127.0.0.1:58604/api/slightnudge/responsive
+TIMING 1793622306506 RESPONSE 200 http://127.0.0.1:58604/api/slightnudge/responsive
+TIMING 1793622307571 REQUEST http://127.0.0.1:58604/api/slightnudge/preview
+TIMING 1793622310713 RESPONSE 200 http://127.0.0.1:58604/api/slightnudge/preview
+HARNESS-V3 OP 1793622311654 START fill getByRole('textbox', { name: 'Image alt text', exact: true })
+HARNESS-V3 OP 1793622311677 END fill getByRole('textbox', { name: 'Image alt text', exact: true })
+HARNESS-V3 OP 1793622311678 START press getByRole('textbox', { name: 'Image alt text', exact: true })
+TIMING 1793622311757 REQUEST http://127.0.0.1:58604/api/slightnudge/preview
+HARNESS-V3 OP 1793622311821 END press getByRole('textbox', { name: 'Image alt text', exact: true })
+TIMING 1793622312527 RESPONSE 200 http://127.0.0.1:58604/api/slightnudge/preview
+Advanced image Studio next-literal
+HARNESS-V3 OP 1793622313010 START waitFor getByRole('region', { name: 'Image content', exact: true })
+HARNESS-V3 OP 1793622313015 END waitFor getByRole('region', { name: 'Image content', exact: true })
+HARNESS-V3 OP 1793622313159 START setInputFiles getByLabel('Replace image', { exact: true })
+HARNESS-V3 OP 1793622313168 END setInputFiles getByLabel('Replace image', { exact: true })
+TIMING 1793622313195 REQUEST http://127.0.0.1:58604/api/slightnudge/preview
+TIMING 1793622313766 RESPONSE 200 http://127.0.0.1:58604/api/slightnudge/preview
+HARNESS-V3 OP 1793622314350 START selectOption getByRole('combobox', { name: 'Image fit', exact: true })
+TIMING 1793622314435 REQUEST http://127.0.0.1:58604/api/slightnudge/preview
+HARNESS-V3 OP 1793622314435 END selectOption getByRole('combobox', { name: 'Image fit', exact: true })
+TIMING 1793622315311 RESPONSE 200 http://127.0.0.1:58604/api/slightnudge/preview
+HARNESS-V3 OP 1793622315675 START fill getByRole('textbox', { name: 'Image alt text', exact: true })
+HARNESS-V3 OP 1793622315688 END fill getByRole('textbox', { name: 'Image alt text', exact: true })
+HARNESS-V3 OP 1793622315688 START press getByRole('textbox', { name: 'Image alt text', exact: true })
+TIMING 1793622315754 REQUEST http://127.0.0.1:58604/api/slightnudge/preview
+HARNESS-V3 OP 1793622315800 END press getByRole('textbox', { name: 'Image alt text', exact: true })
+TIMING 1793622316285 RESPONSE 200 http://127.0.0.1:58604/api/slightnudge/preview
+Advanced image Studio next-fill
+HARNESS-V3 OP 1793622316675 START waitFor getByRole('region', { name: 'Image content', exact: true })
+HARNESS-V3 OP 1793622316678 END waitFor getByRole('region', { name: 'Image content', exact: true })
+HARNESS-V3 OP 1793622316910 START setInputFiles getByLabel('Replace image', { exact: true })
+HARNESS-V3 OP 1793622316920 END setInputFiles getByLabel('Replace image', { exact: true })
+TIMING 1793622316941 REQUEST http://127.0.0.1:58604/api/slightnudge/preview
+TIMING 1793622317495 RESPONSE 200 http://127.0.0.1:58604/api/slightnudge/preview
+HARNESS-V3 OP 1793622318065 START fill getByRole('textbox', { name: 'Image alt text', exact: true })
+HARNESS-V3 OP 1793622318081 END fill getByRole('textbox', { name: 'Image alt text', exact: true })
+HARNESS-V3 OP 1793622318082 START press getByRole('textbox', { name: 'Image alt text', exact: true })
+TIMING 1793622318146 REQUEST http://127.0.0.1:58604/api/slightnudge/preview
+HARNESS-V3 OP 1793622318191 END press getByRole('textbox', { name: 'Image alt text', exact: true })
+TIMING 1793622318715 RESPONSE 200 http://127.0.0.1:58604/api/slightnudge/preview
+Advanced image Studio native-set
+HARNESS-V3 OP 1793622319140 START waitFor getByRole('region', { name: 'Image content', exact: true })
+HARNESS-V3 OP 1793622319144 END waitFor getByRole('region', { name: 'Image content', exact: true })
+HARNESS-V3 OP 1793622319328 START setInputFiles getByLabel('Replace image', { exact: true })
+HARNESS-V3 OP 1793622319345 END setInputFiles getByLabel('Replace image', { exact: true })
+TIMING 1793622319366 REQUEST http://127.0.0.1:58604/api/slightnudge/preview
+TIMING 1793622319961 RESPONSE 200 http://127.0.0.1:58604/api/slightnudge/preview
+HARNESS-V3 OP 1793622320470 START fill getByRole('textbox', { name: 'Image alt text', exact: true })
+HARNESS-V3 OP 1793622320481 END fill getByRole('textbox', { name: 'Image alt text', exact: true })
+HARNESS-V3 OP 1793622320481 START press getByRole('textbox', { name: 'Image alt text', exact: true })
+TIMING 1793622320549 REQUEST http://127.0.0.1:58604/api/slightnudge/preview
+HARNESS-V3 OP 1793622320588 END press getByRole('textbox', { name: 'Image alt text', exact: true })
+TIMING 1793622321112 RESPONSE 200 http://127.0.0.1:58604/api/slightnudge/preview
+Advanced image Studio native-picture
+HARNESS-V3 OP 1793622321542 START waitFor getByRole('region', { name: 'Image content', exact: true })
+HARNESS-V3 OP 1793622321564 END waitFor getByRole('region', { name: 'Image content', exact: true })
+HARNESS-V3 OP 1793622321753 START setInputFiles getByLabel('Replace image', { exact: true })
+HARNESS-V3 OP 1793622321763 END setInputFiles getByLabel('Replace image', { exact: true })
+TIMING 1793622321784 REQUEST http://127.0.0.1:58604/api/slightnudge/preview
+TIMING 1793622322529 RESPONSE 200 http://127.0.0.1:58604/api/slightnudge/preview
+HARNESS-V3 OP 1793622323125 START fill getByRole('textbox', { name: 'Image alt text', exact: true })
+HARNESS-V3 OP 1793622323150 END fill getByRole('textbox', { name: 'Image alt text', exact: true })
+HARNESS-V3 OP 1793622323150 START press getByRole('textbox', { name: 'Image alt text', exact: true })
+TIMING 1793622323229 REQUEST http://127.0.0.1:58604/api/slightnudge/preview
+HARNESS-V3 OP 1793622323281 END press getByRole('textbox', { name: 'Image alt text', exact: true })
+TIMING 1793622323882 RESPONSE 200 http://127.0.0.1:58604/api/slightnudge/preview
+HARNESS-V3 OP 1793622324261 START fill getByRole('spinbutton', { name: 'Preview width', exact: true })
+HARNESS-V3 OP 1793622324273 END fill getByRole('spinbutton', { name: 'Preview width', exact: true })
+HARNESS-V3 OP 1793622324273 START press getByRole('spinbutton', { name: 'Preview width', exact: true })
+HARNESS-V3 OP 1793622324435 END press getByRole('spinbutton', { name: 'Preview width', exact: true })
+HARNESS-V3 OP 1793622324574 START fill getByRole('spinbutton', { name: 'Preview width', exact: true })
+HARNESS-V3 OP 1793622324585 END fill getByRole('spinbutton', { name: 'Preview width', exact: true })
+HARNESS-V3 OP 1793622324585 START press getByRole('spinbutton', { name: 'Preview width', exact: true })
+HARNESS-V3 OP 1793622324622 END press getByRole('spinbutton', { name: 'Preview width', exact: true })
+TIMING 1793622324764 REQUEST http://127.0.0.1:58604/editor?panel=inspector
+TIMING 1793622325059 RESPONSE 200 http://127.0.0.1:58604/editor?panel=inspector
+HARNESS-V3 OP 1793622325098 START waitFor locator('[data-source-ready="true"]')
+TIMING 1793622325886 REQUEST http://127.0.0.1:58604/api/slightnudge/responsive
+TIMING 1793622325886 REQUEST http://127.0.0.1:58604/api/slightnudge/responsive
+TIMING 1793622325919 REQUEST http://127.0.0.1:58604/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A58604&__slightnudge_session=3b80e643-1154-4e34-b349-f659599f7b2d
+TIMING 1793622326124 RESPONSE 200 http://127.0.0.1:58604/api/slightnudge/responsive
+TIMING 1793622327722 RESPONSE 200 http://127.0.0.1:58604/api/slightnudge/responsive
+TIMING 1793622327730 RESPONSE 200 http://127.0.0.1:58604/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A58604&__slightnudge_session=3b80e643-1154-4e34-b349-f659599f7b2d
+TIMING 1793622327736 REQUEST http://127.0.0.1:58604/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+TIMING 1793622327776 RESPONSE 200 http://127.0.0.1:58604/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+HARNESS-V3 OP 1793622329057 END waitFor locator('[data-source-ready="true"]')
+HARNESS-V3 OP 1793622329058 START waitFor getByLabel('Draft status', { exact: true }).filter({ hasText: '11 changes' })
+HARNESS-V3 OP 1793622330881 END waitFor getByLabel('Draft status', { exact: true }).filter({ hasText: '11 changes' })
+HARNESS-V3 OP 1793622330898 START click getByRole('button', { name: 'Save changes', exact: true })
+HARNESS-V3 OP 1793622330989 END click getByRole('button', { name: 'Save changes', exact: true })
+TIMING 1793622332135 REQUEST http://127.0.0.1:58604/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A58604&__slightnudge_session=622f572b-4634-44a1-af64-e15427d06849&__slightnudge_refresh=91134f20-baa9-4d66-b23a-ac7c76f5ee48
+TIMING 1793622332417 RESPONSE 200 http://127.0.0.1:58604/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A58604&__slightnudge_session=622f572b-4634-44a1-af64-e15427d06849&__slightnudge_refresh=91134f20-baa9-4d66-b23a-ac7c76f5ee48
+TIMING 1793622332424 REQUEST http://127.0.0.1:58604/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+TIMING 1793622332456 RESPONSE 200 http://127.0.0.1:58604/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+TIMING 1793622335505 REQUEST http://127.0.0.1:58604/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A58604&__slightnudge_session=e2dc0c9a-57d7-4e19-a9a8-e94b319e8757&__slightnudge_refresh=06de31a0-2967-4415-a8e9-cb3d050a4461
+TIMING 1793622335794 RESPONSE 200 http://127.0.0.1:58604/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A58604&__slightnudge_session=e2dc0c9a-57d7-4e19-a9a8-e94b319e8757&__slightnudge_refresh=06de31a0-2967-4415-a8e9-cb3d050a4461
+TIMING 1793622335802 REQUEST http://127.0.0.1:58604/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+TIMING 1793622336385 RESPONSE 200 http://127.0.0.1:58604/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+HARNESS-V3 OP 1793622336712 START click getByRole('button', { name: 'Undo', exact: true })
+HARNESS-V3 OP 1793622336786 END click getByRole('button', { name: 'Undo', exact: true })
+TIMING 1793622337666 REQUEST http://127.0.0.1:58604/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A58604&__slightnudge_session=d1cd0639-9028-4995-a4cb-01f831b27495&__slightnudge_refresh=739d6dcb-e25b-4f4c-af00-14e2ee465307
+TIMING 1793622338148 RESPONSE 200 http://127.0.0.1:58604/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A58604&__slightnudge_session=d1cd0639-9028-4995-a4cb-01f831b27495&__slightnudge_refresh=739d6dcb-e25b-4f4c-af00-14e2ee465307
+TIMING 1793622338156 REQUEST http://127.0.0.1:58604/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+TIMING 1793622338610 RESPONSE 200 http://127.0.0.1:58604/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+PASS advanced images local Studio: actual optimized next/image static/literal/fill, native density and picture AVIF/WebP sources, pixels across breakpoints, dimensions/sizes, alt, refresh, grouped Save and exact source/DOM Undo
+HARNESS-V3 NAVIGATION about:blank
+HARNESS-V3 NAVIGATION http://127.0.0.1:58604/editor
+TIMING 1793622340210 REQUEST http://127.0.0.1:58604/editor
+TIMING 1793622340385 RESPONSE 200 http://127.0.0.1:58604/editor
+HARNESS-V3 OP 1793622340711 START waitFor locator('[data-source-ready="true"]')
+TIMING 1793622342182 REQUEST http://127.0.0.1:58604/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A58604&__slightnudge_session=4fead77d-3552-4978-9dab-05abddb877e8
+TIMING 1793622342182 REQUEST http://127.0.0.1:58604/api/slightnudge/responsive
+TIMING 1793622342182 REQUEST http://127.0.0.1:58604/api/slightnudge/responsive
+TIMING 1793622342736 RESPONSE 200 http://127.0.0.1:58604/api/slightnudge/responsive
+TIMING 1793622342792 RESPONSE 200 http://127.0.0.1:58604/api/slightnudge/responsive
+TIMING 1793622342797 RESPONSE 200 http://127.0.0.1:58604/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A58604&__slightnudge_session=4fead77d-3552-4978-9dab-05abddb877e8
+TIMING 1793622342804 REQUEST http://127.0.0.1:58604/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+TIMING 1793622342828 RESPONSE 200 http://127.0.0.1:58604/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+HARNESS-V3 OP 1793622343595 END waitFor locator('[data-source-ready="true"]')
+HARNESS-V3 OP 1793622343595 START click getByRole('button', { name: 'Toggle design panel', exact: true })
+HARNESS-V3 OP 1793622343645 END click getByRole('button', { name: 'Toggle design panel', exact: true })
+Advanced image window next-static
+HARNESS-V3 OP 1793622344036 START waitFor getByRole('region', { name: 'Image content', exact: true })
+HARNESS-V3 OP 1793622344041 END waitFor getByRole('region', { name: 'Image content', exact: true })
+HARNESS-V3 OP 1793622344049 START setInputFiles getByLabel('Replace image', { exact: true })
+HARNESS-V3 OP 1793622344058 END setInputFiles getByLabel('Replace image', { exact: true })
+TIMING 1793622344092 REQUEST http://127.0.0.1:58604/api/slightnudge/preview
+TIMING 1793622344654 RESPONSE 200 http://127.0.0.1:58604/api/slightnudge/preview
+HARNESS-V3 OP 1793622345132 START fill getByRole('textbox', { name: 'Image alt text', exact: true })
+HARNESS-V3 OP 1793622345142 END fill getByRole('textbox', { name: 'Image alt text', exact: true })
+HARNESS-V3 OP 1793622345142 START press getByRole('textbox', { name: 'Image alt text', exact: true })
+TIMING 1793622345202 REQUEST http://127.0.0.1:58604/api/slightnudge/preview
+HARNESS-V3 OP 1793622345249 END press getByRole('textbox', { name: 'Image alt text', exact: true })
+TIMING 1793622345732 RESPONSE 200 http://127.0.0.1:58604/api/slightnudge/preview
+Advanced image window next-literal
+HARNESS-V3 OP 1793622346125 START waitFor getByRole('region', { name: 'Image content', exact: true })
+HARNESS-V3 OP 1793622346128 END waitFor getByRole('region', { name: 'Image content', exact: true })
+HARNESS-V3 OP 1793622346260 START setInputFiles getByLabel('Replace image', { exact: true })
+HARNESS-V3 OP 1793622346269 END setInputFiles getByLabel('Replace image', { exact: true })
+TIMING 1793622346287 REQUEST http://127.0.0.1:58604/api/slightnudge/preview
+TIMING 1793622346800 RESPONSE 200 http://127.0.0.1:58604/api/slightnudge/preview
+HARNESS-V3 OP 1793622347317 START selectOption getByRole('combobox', { name: 'Image fit', exact: true })
+TIMING 1793622347377 REQUEST http://127.0.0.1:58604/api/slightnudge/preview
+HARNESS-V3 OP 1793622347377 END selectOption getByRole('combobox', { name: 'Image fit', exact: true })
+TIMING 1793622348213 RESPONSE 200 http://127.0.0.1:58604/api/slightnudge/preview
+HARNESS-V3 OP 1793622348616 START fill getByRole('textbox', { name: 'Image alt text', exact: true })
+HARNESS-V3 OP 1793622348630 END fill getByRole('textbox', { name: 'Image alt text', exact: true })
+HARNESS-V3 OP 1793622348630 START press getByRole('textbox', { name: 'Image alt text', exact: true })
+TIMING 1793622348701 REQUEST http://127.0.0.1:58604/api/slightnudge/preview
+HARNESS-V3 OP 1793622348753 END press getByRole('textbox', { name: 'Image alt text', exact: true })
+TIMING 1793622349268 RESPONSE 200 http://127.0.0.1:58604/api/slightnudge/preview
+Advanced image window next-fill
+HARNESS-V3 OP 1793622349641 START waitFor getByRole('region', { name: 'Image content', exact: true })
+HARNESS-V3 OP 1793622349644 END waitFor getByRole('region', { name: 'Image content', exact: true })
+HARNESS-V3 OP 1793622349797 START setInputFiles getByLabel('Replace image', { exact: true })
+HARNESS-V3 OP 1793622349805 END setInputFiles getByLabel('Replace image', { exact: true })
+TIMING 1793622349822 REQUEST http://127.0.0.1:58604/api/slightnudge/preview
+TIMING 1793622350362 RESPONSE 200 http://127.0.0.1:58604/api/slightnudge/preview
+HARNESS-V3 OP 1793622350917 START fill getByRole('textbox', { name: 'Image alt text', exact: true })
+HARNESS-V3 OP 1793622350928 END fill getByRole('textbox', { name: 'Image alt text', exact: true })
+HARNESS-V3 OP 1793622350928 START press getByRole('textbox', { name: 'Image alt text', exact: true })
+TIMING 1793622350989 REQUEST http://127.0.0.1:58604/api/slightnudge/preview
+HARNESS-V3 OP 1793622351035 END press getByRole('textbox', { name: 'Image alt text', exact: true })
+TIMING 1793622351532 RESPONSE 200 http://127.0.0.1:58604/api/slightnudge/preview
+Advanced image window native-set
+HARNESS-V3 OP 1793622351960 START waitFor getByRole('region', { name: 'Image content', exact: true })
+HARNESS-V3 OP 1793622351964 END waitFor getByRole('region', { name: 'Image content', exact: true })
+HARNESS-V3 OP 1793622352132 START setInputFiles getByLabel('Replace image', { exact: true })
+HARNESS-V3 OP 1793622352142 END setInputFiles getByLabel('Replace image', { exact: true })
+TIMING 1793622352162 REQUEST http://127.0.0.1:58604/api/slightnudge/preview
+TIMING 1793622352763 RESPONSE 200 http://127.0.0.1:58604/api/slightnudge/preview
+HARNESS-V3 OP 1793622353250 START fill getByRole('textbox', { name: 'Image alt text', exact: true })
+HARNESS-V3 OP 1793622353260 END fill getByRole('textbox', { name: 'Image alt text', exact: true })
+HARNESS-V3 OP 1793622353260 START press getByRole('textbox', { name: 'Image alt text', exact: true })
+TIMING 1793622353321 REQUEST http://127.0.0.1:58604/api/slightnudge/preview
+HARNESS-V3 OP 1793622353367 END press getByRole('textbox', { name: 'Image alt text', exact: true })
+TIMING 1793622353892 RESPONSE 200 http://127.0.0.1:58604/api/slightnudge/preview
+Advanced image window native-picture
+HARNESS-V3 OP 1793622354273 START waitFor getByRole('region', { name: 'Image content', exact: true })
+HARNESS-V3 OP 1793622354276 END waitFor getByRole('region', { name: 'Image content', exact: true })
+HARNESS-V3 OP 1793622354425 START setInputFiles getByLabel('Replace image', { exact: true })
+HARNESS-V3 OP 1793622354432 END setInputFiles getByLabel('Replace image', { exact: true })
+TIMING 1793622354449 REQUEST http://127.0.0.1:58604/api/slightnudge/preview
+TIMING 1793622355072 RESPONSE 200 http://127.0.0.1:58604/api/slightnudge/preview
+HARNESS-V3 OP 1793622355565 START fill getByRole('textbox', { name: 'Image alt text', exact: true })
+HARNESS-V3 OP 1793622355582 END fill getByRole('textbox', { name: 'Image alt text', exact: true })
+HARNESS-V3 OP 1793622355583 START press getByRole('textbox', { name: 'Image alt text', exact: true })
+TIMING 1793622355644 REQUEST http://127.0.0.1:58604/api/slightnudge/preview
+HARNESS-V3 OP 1793622355682 END press getByRole('textbox', { name: 'Image alt text', exact: true })
+TIMING 1793622356246 RESPONSE 200 http://127.0.0.1:58604/api/slightnudge/preview
+HARNESS-V3 OP 1793622356595 START fill getByRole('spinbutton', { name: 'Preview width', exact: true })
+HARNESS-V3 OP 1793622356603 END fill getByRole('spinbutton', { name: 'Preview width', exact: true })
+HARNESS-V3 OP 1793622356603 START press getByRole('spinbutton', { name: 'Preview width', exact: true })
+HARNESS-V3 OP 1793622356675 END press getByRole('spinbutton', { name: 'Preview width', exact: true })
+HARNESS-V3 OP 1793622356873 START fill getByRole('spinbutton', { name: 'Preview width', exact: true })
+HARNESS-V3 OP 1793622356881 END fill getByRole('spinbutton', { name: 'Preview width', exact: true })
+HARNESS-V3 OP 1793622356881 START press getByRole('spinbutton', { name: 'Preview width', exact: true })
+HARNESS-V3 OP 1793622356902 END press getByRole('spinbutton', { name: 'Preview width', exact: true })
+TIMING 1793622357030 REQUEST http://127.0.0.1:58604/editor
+TIMING 1793622357160 RESPONSE 200 http://127.0.0.1:58604/editor
+HARNESS-V3 OP 1793622357183 START waitFor locator('[data-source-ready="true"]')
+TIMING 1793622357884 REQUEST http://127.0.0.1:58604/api/slightnudge/responsive
+TIMING 1793622357884 REQUEST http://127.0.0.1:58604/api/slightnudge/responsive
+TIMING 1793622357913 REQUEST http://127.0.0.1:58604/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A58604&__slightnudge_session=1cc9aac8-969c-4fd7-b2f7-058a2d3401ee
+TIMING 1793622358138 RESPONSE 200 http://127.0.0.1:58604/api/slightnudge/responsive
+TIMING 1793622358178 RESPONSE 200 http://127.0.0.1:58604/api/slightnudge/responsive
+TIMING 1793622358249 RESPONSE 200 http://127.0.0.1:58604/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A58604&__slightnudge_session=1cc9aac8-969c-4fd7-b2f7-058a2d3401ee
+TIMING 1793622358256 REQUEST http://127.0.0.1:58604/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+TIMING 1793622358276 RESPONSE 304 http://127.0.0.1:58604/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+HARNESS-V3 OP 1793622359063 END waitFor locator('[data-source-ready="true"]')
+HARNESS-V3 OP 1793622359063 START waitFor getByLabel('Draft status', { exact: true }).filter({ hasText: '11 changes' })
+HARNESS-V3 OP 1793622359873 END waitFor getByLabel('Draft status', { exact: true }).filter({ hasText: '11 changes' })
+HARNESS-V3 OP 1793622359890 START click getByRole('button', { name: 'Save changes', exact: true })
+HARNESS-V3 OP 1793622359973 END click getByRole('button', { name: 'Save changes', exact: true })
+TIMING 1793622360247 REQUEST http://127.0.0.1:58604/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A58604&__slightnudge_session=fbcdcb22-c318-4fd1-bfae-592c4b30c7cf&__slightnudge_refresh=fec38823-21ac-412b-a2de-647dc021a239
+TIMING 1793622360545 RESPONSE 200 http://127.0.0.1:58604/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A58604&__slightnudge_session=fbcdcb22-c318-4fd1-bfae-592c4b30c7cf&__slightnudge_refresh=fec38823-21ac-412b-a2de-647dc021a239
+TIMING 1793622360552 REQUEST http://127.0.0.1:58604/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+TIMING 1793622360603 RESPONSE 304 http://127.0.0.1:58604/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+TIMING 1793622362849 REQUEST http://127.0.0.1:58604/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A58604&__slightnudge_session=1814c7a0-2c97-47af-a793-c0b715b3f0ef&__slightnudge_refresh=c1aa471c-c8ef-4ec5-8620-83d671a96417
+TIMING 1793622363150 RESPONSE 200 http://127.0.0.1:58604/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A58604&__slightnudge_session=1814c7a0-2c97-47af-a793-c0b715b3f0ef&__slightnudge_refresh=c1aa471c-c8ef-4ec5-8620-83d671a96417
+TIMING 1793622363158 REQUEST http://127.0.0.1:58604/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+TIMING 1793622363757 RESPONSE 200 http://127.0.0.1:58604/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+HARNESS-V3 OP 1793622364126 START click getByRole('button', { name: 'Undo', exact: true })
+HARNESS-V3 OP 1793622364202 END click getByRole('button', { name: 'Undo', exact: true })
+TIMING 1793622364337 REQUEST http://127.0.0.1:58604/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A58604&__slightnudge_session=9cb16a27-e93a-40cb-adef-77d75e390711&__slightnudge_refresh=5fe2d14e-81c7-44d1-ab8c-d0d052543d4a
+TIMING 1793622364405 RESPONSE 200 http://127.0.0.1:58604/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A58604&__slightnudge_session=9cb16a27-e93a-40cb-adef-77d75e390711&__slightnudge_refresh=5fe2d14e-81c7-44d1-ab8c-d0d052543d4a
+TIMING 1793622364412 REQUEST http://127.0.0.1:58604/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+TIMING 1793622364699 RESPONSE 200 http://127.0.0.1:58604/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+TIMING 1793622367097 REQUEST http://127.0.0.1:58604/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A58604&__slightnudge_session=83ee6e26-2429-4f07-ac91-dd08dc05d1bd&__slightnudge_refresh=425e711a-86a0-4ae5-9ed9-2cf7c7c2e112
+TIMING 1793622367385 RESPONSE 200 http://127.0.0.1:58604/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A58604&__slightnudge_session=83ee6e26-2429-4f07-ac91-dd08dc05d1bd&__slightnudge_refresh=425e711a-86a0-4ae5-9ed9-2cf7c7c2e112
+TIMING 1793622367393 REQUEST http://127.0.0.1:58604/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+TIMING 1793622367979 RESPONSE 200 http://127.0.0.1:58604/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+PASS advanced images local window: actual optimized next/image static/literal/fill, native density and picture AVIF/WebP sources, pixels across breakpoints, dimensions/sizes, alt, refresh, grouped Save and exact source/DOM Undo
+PASS: 2 review-consent browser cases (real API; disposable source copy)
+SETUP 1793622369909 START taskkill ["/pid","21036","/T","/F"]
+SETUP END elapsed 391ms

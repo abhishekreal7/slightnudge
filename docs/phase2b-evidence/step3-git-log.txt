@@ -1,0 +1,10 @@
+﻿41b5442 fix(test): resolve typescript nullability check in s5-theme-support test
+ed11713 fix(slightnudge): support project theme colors and CSS config in tailwind verifier
+e508d80 fix(safety): support __non_webpack_require__ in tailwind-verifier for Next.js webpack server
+e3151d2 fix(safety): refine ESM/CJS loader in tailwind-verifier and update assertion message
+d709584 test(safety): add automated suites for S1 token auth, S3 atomic write retry, and S5 compile verification
+d2bced7 test(safety): S2 regression test for path traversal and junction refusal
+2c198d1 fix(safety): S5 verify Tailwind compilation and AST syntax parse before write
+6174f12 fix(safety): S3 atomic or refuse with retry backoff and no non-atomic fallback
+325e835 fix(safety): S1 authenticated local-only mutating requests with per-session token
+777c2f4 fix(studio): align curved corner pill seamlessly on top of 8px corner curve with zero gap

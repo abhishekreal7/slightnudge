@@ -1,0 +1,17 @@
+diff --git a/lib/slightnudge/edit-history.ts b/lib/slightnudge/edit-history.ts
+index b0267e5..298a4bb 100644
+--- a/lib/slightnudge/edit-history.ts
++++ b/lib/slightnudge/edit-history.ts
+@@ -731,11 +731,7 @@ export function undoSourceEdit(target?: string | { filePath?: string; editId?: s
+       }
+ 
+       // Rule 3: Edits targeting the same element block undo
+-      const sameElementId = Boolean(
+-        recordIdentity.elementId &&
+-        newerIdentity.elementId &&
+-        recordIdentity.elementId === newerIdentity.elementId
+-      );
++      const sameElementId = false; /* N4: use line number only (drop elementId) */
+       const sameDerivedLocator = Boolean(
+         (!recordIdentity.elementId || !newerIdentity.elementId) &&
+         recordIdentity.line &&

@@ -1,0 +1,14 @@
+﻿diff --git a/lib/slightnudge/auth.ts b/lib/slightnudge/auth.ts
+index ae089b4..65b7c0b 100644
+--- a/lib/slightnudge/auth.ts
++++ b/lib/slightnudge/auth.ts
+@@ -6,6 +6,9 @@ const GLOBAL_TOKEN_KEY = Symbol.for('slightnudge.sessionToken');
+ const GLOBAL_PORT_KEY = Symbol.for('slightnudge.serverPort');
+ 
+ export function getSessionToken(): string {
++  if (process.env.SLIGHTNUDGE_TEST === '1' && process.env.SLIGHTNUDGE_SESSION_TOKEN) {
++    return process.env.SLIGHTNUDGE_SESSION_TOKEN;
++  }
+   const g = globalThis as any;
+   if (!g[GLOBAL_TOKEN_KEY]) {
+     g[GLOBAL_TOKEN_KEY] = crypto.randomBytes(32).toString('hex');

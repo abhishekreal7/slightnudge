@@ -1,0 +1,6 @@
+
+> slightnudge@1.0.0 test:adapter
+> tsx test/adapter-webpack-regression.test.ts && tsx test/move-css-compatibility.test.ts
+
+PASS adapter compatibility and integrity: existing webpack hook, loader/entry, protocol detection, modified config/bridge, missing backup, invalid state paths, preserved unknown files, install rollback
+PASS move CSS compatibility: imported bridge supports individual translate and legacy matrix transforms, consecutive gestures do not double offsets, exact cancel/preview, custom transforms refused

@@ -1,0 +1,103 @@
+Isolated application diagnostics ▲ Next.js 16.4.3 (webpack)
+- Local:         http://127.0.0.1:65467
+- Network:       http://127.0.0.1:65467
+✓ Ready in 461ms
+✓ Running next.config.mjs took 38ms
+
+○ Compiling /fixtures/1/page ...
+ GET /fixtures/1 200 in 2.5s (next.js: 1123ms, application-code: 1343ms)
+○ Compiling /studio/page ...
+ GET /studio 307 in 1509ms (next.js: 725ms, application-code: 784ms)
+ GET /editor 200 in 3.2s (next.js: 2.3s, application-code: 866ms)
+○ Compiling /studio/preview/[pageId]/page ...
+ GET /studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A65467&__slightnudge_session=2495729c-6a8f-409d-8d2e-3828d79c27be 200 in 8.0s (next.js: 7.3s, application-code: 731ms)
+○ Compiling /api/slightnudge/responsive/route ...
+⚠ ./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+ GET /api/slightnudge/pages 200 in 20.4s (next.js: 11.9s, proxy.ts: 7.2s, application-code: 1344ms)
+ POST /api/slightnudge/responsive 200 in 21.2s (next.js: 11.9s, proxy.ts: 7.2s, application-code: 2.1s)
+ POST /api/slightnudge/responsive 200 in 21.4s (next.js: 11.9s, proxy.ts: 7.2s, application-code: 2.4s)
+ GET /api/slightnudge/pages 200 in 700ms (next.js: 15ms, proxy.ts: 638ms, application-code: 47ms)
+
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+locator.click: Timeout 30000ms exceeded.
+Call log:
+[2m  - waiting for locator('h1')[22m
+
+    at checkM1Interactions (C:\dev\vibecheck\scratch\reliability-gate\2026-11-01T19-13-27-120Z-2b26542\worktree\test\helpers\m1-interactions-browser.ts:14:53)
+    at async <anonymous> (C:\dev\vibecheck\scratch\reliability-gate\2026-11-01T19-13-27-120Z-2b26542\worktree\test\review-consent.browser.ts:249:14) {
+  log: [ "  - waiting for locator('h1')" ],
+  name: 'TimeoutError'
+}
+
+Node.js v22.19.0

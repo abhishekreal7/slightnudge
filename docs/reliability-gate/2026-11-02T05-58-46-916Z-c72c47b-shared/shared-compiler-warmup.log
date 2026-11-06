@@ -1,0 +1,28 @@
+SETUP 1793599131171 START git ["ls-files"]
+SETUP END elapsed 45ms
+TIMING 1793599131402 REQUEST http://127.0.0.1:61023/editor?panel=inspector
+TIMING 1793599164327 RESPONSE 200 http://127.0.0.1:61023/editor?panel=inspector
+TIMING 1793599166841 REQUEST http://127.0.0.1:61023/api/slightnudge/responsive
+TIMING 1793599166842 REQUEST http://127.0.0.1:61023/api/slightnudge/responsive
+TIMING 1793599166905 REQUEST http://127.0.0.1:61023/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A61023&__slightnudge_session=3a96c701-29bf-4ce1-9a6f-697125a0bc4e
+TIMING 1793599181738 RESPONSE 200 http://127.0.0.1:61023/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A61023&__slightnudge_session=3a96c701-29bf-4ce1-9a6f-697125a0bc4e
+TIMING 1793599181758 REQUEST http://127.0.0.1:61023/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+TIMING 1793599182115 RESPONSE 200 http://127.0.0.1:61023/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+TIMING 1793599192824 RESPONSE 200 http://127.0.0.1:61023/api/slightnudge/responsive
+TIMING 1793599193130 RESPONSE 200 http://127.0.0.1:61023/api/slightnudge/responsive
+WARMUP local editor, preview and API compilers 79678ms
+TIMING 1793599210913 REQUEST http://127.0.0.1:61023/editor/source-proof?preview=http%3A%2F%2F127.0.0.1%3A61024
+TIMING 1793599211936 RESPONSE 200 http://127.0.0.1:61023/editor/source-proof?preview=http%3A%2F%2F127.0.0.1%3A61024
+TIMING 1793599214774 REQUEST http://127.0.0.1:61023/api/slightnudge/repositories/source-proof
+TIMING 1793599214779 REQUEST http://127.0.0.1:61023/api/slightnudge/repositories/source-proof
+TIMING 1793599220411 RESPONSE 200 http://127.0.0.1:61023/api/slightnudge/repositories/source-proof
+TIMING 1793599220634 RESPONSE 200 http://127.0.0.1:61023/api/slightnudge/repositories/source-proof
+TIMING 1793599220642 REQUEST http://127.0.0.1:61023/api/slightnudge/repositories/source-proof/preview-check
+TIMING 1793599237890 RESPONSE 504 http://127.0.0.1:61023/api/slightnudge/repositories/source-proof/preview-check
+TIMING 1793599238393 REQUEST http://127.0.0.1:61023/api/slightnudge/repositories/source-proof/preview-check
+TIMING 1793599249667 RESPONSE 200 http://127.0.0.1:61023/api/slightnudge/repositories/source-proof/preview-check
+TIMING 1793599249693 REQUEST http://127.0.0.1:61024/?__slightnudge_session=6d0067b1-259e-4538-8e55-4b6a1c3ac5ef&__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A61023&__slightnudge_draft=1
+TIMING 1793599249861 RESPONSE 200 http://127.0.0.1:61024/?__slightnudge_session=6d0067b1-259e-4538-8e55-4b6a1c3ac5ef&__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A61023&__slightnudge_draft=1
+TIMING 1793599253324 REQUEST http://127.0.0.1:61023/api/slightnudge/responsive
+WARMUP imported adapter, preview and editor 122293ms
+PASS: 0 review-consent browser cases (REAL API; compiler warm-up only)

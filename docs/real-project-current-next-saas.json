@@ -1,0 +1,98 @@
+{
+  "date": "2026-10-27T17:54:32.407Z",
+  "project": "https://github.com/nextjs/saas-starter",
+  "commit": "6e33e58b1e553a41fe22e6b941a7229a002de361",
+  "next": "15.6.0-canary.59",
+  "tailwind": "4.1.7",
+  "serviceConfiguration": "Nonfunctional loopback PostgreSQL / Stripe / auth placeholders for module validation; no service flows tested",
+  "state": "passed",
+  "checks": [
+    "single full-page canvas with stable document height",
+    "project breakpoints discovered through the actual compiled API",
+    "original mapped text targets: physical selection, native typography, draft recovery, source Save and exact Undo",
+    "scaled Move, source Save and exact Undo",
+    "real breakpoint style edit, smaller-screen isolation, Save and exact Undo",
+    "native responsive widths: 375, 768 and 1200",
+    "separate-window native document, text edit, Save and exact Undo"
+  ],
+  "targets": [
+    {
+      "file": "app/(dashboard)/page.tsx",
+      "line": "16",
+      "column": "15",
+      "tag": "p",
+      "text": "Launch your SaaS product in record time with our powerful, ready-to-use template. Packed with modern technologies and essential integrations.",
+      "outcome": "passed",
+      "operations": [
+        "physical selection",
+        "original-size inline text",
+        "draft refresh",
+        "save",
+        "exact undo"
+      ]
+    },
+    {
+      "file": "app/(dashboard)/page.tsx",
+      "line": "57",
+      "column": "17",
+      "tag": "h2",
+      "text": "Next.js and React",
+      "outcome": "passed",
+      "operations": [
+        "physical selection",
+        "original-size inline text",
+        "draft refresh",
+        "save",
+        "exact undo"
+      ]
+    },
+    {
+      "file": "app/(dashboard)/page.tsx",
+      "line": "60",
+      "column": "17",
+      "tag": "p",
+      "text": "Leverage the power of modern web technologies for optimal performance and developer experience.",
+      "outcome": "passed",
+      "operations": [
+        "physical selection",
+        "original-size inline text",
+        "draft refresh",
+        "save",
+        "exact undo"
+      ]
+    }
+  ],
+  "phase": "undo app/(dashboard)/page.tsx:16",
+  "candidateCount": 9,
+  "responsive": {
+    "status": 200,
+    "breakpoints": [
+      {
+        "name": "sm",
+        "minWidth": 640,
+        "media": "(width >= 40rem)"
+      },
+      {
+        "name": "md",
+        "minWidth": 768,
+        "media": "(width >= 48rem)"
+      },
+      {
+        "name": "lg",
+        "minWidth": 1024,
+        "media": "(width >= 64rem)"
+      },
+      {
+        "name": "xl",
+        "minWidth": 1280,
+        "media": "(width >= 80rem)"
+      },
+      {
+        "name": "2xl",
+        "minWidth": 1536,
+        "media": "(width >= 96rem)"
+      }
+    ]
+  },
+  "browserErrors": []
+}

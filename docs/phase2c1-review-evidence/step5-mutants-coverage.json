@@ -1,0 +1,140 @@
+{
+  "timestamp": "2026-10-21T19:37:51.694Z",
+  "mutantsEvaluated": 10,
+  "mutantsKilled": 9,
+  "mutantsSurvived": 1,
+  "branchMutationScorePercent": 30,
+  "totalMutationScorePercent": 90,
+  "mutants": [
+    {
+      "mutantId": "M1",
+      "name": "Undo exact-match bypasses atomic write (writes directly with fs.writeFileSync)",
+      "targetFile": "lib/slightnudge/edit-history.ts",
+      "caughtByBranchTests": false,
+      "branchCatchers": [],
+      "caughtByIndependentOracle": false,
+      "oracleCatcherReason": "",
+      "survived": true,
+      "analysis": "SURVIVED branch unit tests. Neither branch unit tests nor functional undo tests assert atomic replacement or file lock recovery during exact match. This is a minor test coverage gap for concurrency edge cases, though exact-match functionality passes."
+    },
+    {
+      "mutantId": "M2",
+      "name": "Token-level undo drops removedTokens restoration (only deletes addedTokens)",
+      "targetFile": "lib/slightnudge/edit-history.ts",
+      "caughtByBranchTests": false,
+      "branchCatchers": [],
+      "caughtByIndependentOracle": true,
+      "oracleCatcherReason": "Caught by I3: target element missing restored pre-edit tokens",
+      "survived": false,
+      "analysis": "KILLED by Independent Oracle"
+    },
+    {
+      "mutantId": "M3",
+      "name": "Token-level undo deletes addedTokens but leaves leading/trailing whitespace uncleaned",
+      "targetFile": "lib/slightnudge/edit-history.ts",
+      "caughtByBranchTests": false,
+      "branchCatchers": [],
+      "caughtByIndependentOracle": true,
+      "oracleCatcherReason": "Caught by Prettier AST & token checks",
+      "survived": false,
+      "analysis": "KILLED by Independent Oracle"
+    },
+    {
+      "mutantId": "M4",
+      "name": "Undo does not update records[index].status to 'undone'",
+      "targetFile": "lib/slightnudge/edit-history.ts",
+      "caughtByBranchTests": true,
+      "branchCatchers": [
+        "token-undo.test.ts"
+      ],
+      "caughtByIndependentOracle": true,
+      "oracleCatcherReason": "Caught by I5: subsequent undo permitted on same edit",
+      "survived": false,
+      "analysis": "KILLED by token-undo.test.ts and Independent Oracle"
+    },
+    {
+      "mutantId": "M5",
+      "name": "Undo skips the isElementInsideLoop check",
+      "targetFile": "lib/slightnudge/edit-history.ts",
+      "caughtByBranchTests": false,
+      "branchCatchers": [],
+      "caughtByIndependentOracle": true,
+      "oracleCatcherReason": "Caught by I4: element inside loop accepted instead of refused",
+      "survived": false,
+      "analysis": "KILLED by Independent Oracle"
+    },
+    {
+      "mutantId": "M6",
+      "name": "Undo skips the isComponentUsedMultipleTimes check",
+      "targetFile": "lib/slightnudge/edit-history.ts",
+      "caughtByBranchTests": false,
+      "branchCatchers": [],
+      "caughtByIndependentOracle": true,
+      "oracleCatcherReason": "Caught by I4: element in reused component accepted instead of refused",
+      "survived": false,
+      "analysis": "KILLED by Independent Oracle"
+    },
+    {
+      "mutantId": "M7",
+      "name": "Undo skips the conditional-expression check",
+      "targetFile": "lib/slightnudge/edit-history.ts",
+      "caughtByBranchTests": false,
+      "branchCatchers": [],
+      "caughtByIndependentOracle": true,
+      "oracleCatcherReason": "Caught by I4: wrap_conditional accepted instead of refused",
+      "survived": false,
+      "analysis": "KILLED by Independent Oracle"
+    },
+    {
+      "mutantId": "M8",
+      "name": "auth.ts re-introduces the argv check without SLIGHTNUDGE_TEST === '1'",
+      "targetFile": "lib/slightnudge/auth.ts",
+      "caughtByBranchTests": true,
+      "branchCatchers": [
+        "s1-auth-bypass.test.ts"
+      ],
+      "caughtByIndependentOracle": true,
+      "oracleCatcherReason": "Caught by Step 1a/1b auth battery: forged mutating request with reorder-safety in argv",
+      "survived": false,
+      "analysis": "KILLED by s1-auth-bypass.test.ts and Independent Oracle"
+    },
+    {
+      "mutantId": "M9",
+      "name": "auth.ts checks Origin with startsWith instead of exact origin match",
+      "targetFile": "lib/slightnudge/cors.ts",
+      "caughtByBranchTests": true,
+      "branchCatchers": [
+        "s1-auth-origin.test.ts"
+      ],
+      "caughtByIndependentOracle": true,
+      "oracleCatcherReason": "Caught by Step 1d browser battery: attacker origin accepted",
+      "survived": false,
+      "analysis": "KILLED by s1-auth-origin.test.ts and Independent Oracle"
+    },
+    {
+      "mutantId": "M10",
+      "name": "edit-history.ts relativeFilePath drops the path.isAbsolute(relative) check",
+      "targetFile": "lib/slightnudge/edit-history.ts",
+      "caughtByBranchTests": false,
+      "branchCatchers": [],
+      "caughtByIndependentOracle": true,
+      "oracleCatcherReason": "Caught by cross-drive path containment check: D:\\sentinel.tsx does not start with ..",
+      "survived": false,
+      "analysis": "SURVIVED branch unit tests because all tests run on a single drive (C:), where path.relative always produces ..\\ paths. Caught by independent cross-drive path oracle (path.relative across Windows drive volumes returns absolute path)."
+    }
+  ],
+  "coverage": {
+    "lines": {
+      "pct": 86.8
+    },
+    "statements": {
+      "pct": 86.8
+    },
+    "functions": {
+      "pct": 88.5
+    },
+    "branches": {
+      "pct": 79.2
+    }
+  }
+}

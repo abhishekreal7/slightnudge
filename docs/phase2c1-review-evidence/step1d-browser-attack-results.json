@@ -1,0 +1,125 @@
+{
+  "evilLocalhostOrigin": {
+    "corsTokenGet": {
+      "sent": true,
+      "readable": false,
+      "error": "Failed to fetch"
+    },
+    "noCorsTokenGet": {
+      "sent": true,
+      "type": "opaque",
+      "status": 0,
+      "readable": false
+    },
+    "postJson_apply": {
+      "sent": true,
+      "error": "Failed to fetch"
+    },
+    "postText_apply": {
+      "sent": true,
+      "error": "Failed to fetch"
+    },
+    "postJson_preview": {
+      "sent": true,
+      "error": "Failed to fetch"
+    },
+    "postText_preview": {
+      "sent": true,
+      "error": "Failed to fetch"
+    },
+    "postJson_undo": {
+      "sent": true,
+      "error": "Failed to fetch"
+    },
+    "postText_undo": {
+      "sent": true,
+      "error": "Failed to fetch"
+    },
+    "formPost": {
+      "sent": true,
+      "frameLoaded": true
+    },
+    "iframeStudio": {
+      "loaded": true,
+      "readableDom": false,
+      "timedOutWait": true
+    },
+    "rebindingStandIn": {
+      "injectedTokenFound": true,
+      "injectedToken": "f74d5def27...",
+      "tokenApiRes": {
+        "status": 403,
+        "body": "{\"error\":\"Access denied.\"}"
+      },
+      "applyRes": {
+        "status": 403,
+        "body": "{\"error\":\"Access denied.\"}"
+      }
+    }
+  },
+  "numericLoopbackOrigin": {
+    "corsTokenGet": {
+      "sent": true,
+      "readable": false,
+      "error": "Failed to fetch"
+    },
+    "noCorsTokenGet": {
+      "sent": true,
+      "type": "opaque",
+      "status": 0,
+      "readable": false
+    },
+    "postJson_apply": {
+      "sent": true,
+      "status": 403,
+      "body": "{\"error\":\"Access denied.\"}"
+    },
+    "postText_apply": {
+      "sent": true,
+      "status": 403,
+      "body": "{\"error\":\"Access denied.\"}"
+    },
+    "postJson_preview": {
+      "sent": true,
+      "status": 403,
+      "body": "{\"error\":\"Access denied.\"}"
+    },
+    "postText_preview": {
+      "sent": true,
+      "status": 403,
+      "body": "{\"error\":\"Access denied.\"}"
+    },
+    "postJson_undo": {
+      "sent": true,
+      "status": 403,
+      "body": "{\"error\":\"Access denied.\"}"
+    },
+    "postText_undo": {
+      "sent": true,
+      "status": 403,
+      "body": "{\"error\":\"Access denied.\"}"
+    },
+    "formPost": {
+      "sent": true,
+      "frameLoaded": true
+    },
+    "iframeStudio": {
+      "loaded": true,
+      "readableDom": false,
+      "crossOriginBlocked": true
+    },
+    "rebindingStandIn": {
+      "injectedTokenFound": true,
+      "injectedToken": "f74d5def27...",
+      "tokenApiRes": {
+        "status": 403,
+        "body": "{\"error\":\"Access denied.\"}"
+      },
+      "applyRes": {
+        "status": 403,
+        "body": "{\"error\":\"Access denied.\"}"
+      }
+    }
+  },
+  "historyFilesWritten": 0
+}

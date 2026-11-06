@@ -1,0 +1,49 @@
+GATE evidence C:\dev\vibecheck\docs\reliability-gate\2026-11-02T06-18-43-399Z-5990617-shared
+PRODUCT 59906170550b171609453af37d56c9c827c5e647 TESTS 59906170550b171609453af37d56c9c827c5e647
+No test assertions or limits changed; same HEAD tests at every historical product ref.
+
+COMMAND shared-runtime-setup: node --import tsx test/gate-shared-runner.v3.ts --setup-only
+SETUP 1793600325435 START git ["ls-files"]
+SETUP END elapsed 88ms
+SETUP 1793600325662 START git ["init","--quiet"]
+SETUP END elapsed 70ms
+SETUP 1793600325732 START git ["-c","core.autocrlf=false","add","app","components","package.json","LICENSE"]
+SETUP END elapsed 95ms
+SETUP 1793600325827 START C:\nvm4w\nodejs\node.exe ["--import","tsx","--input-type=module","-e","const {installNextSourceAdapter}=await import('./lib/slightnudge/next-source-adapter.ts');await installNextSourceAdapter('source-proof');"]
+SETUP END elapsed 264ms
+SETUP 1793600326092 START C:\nvm4w\nodejs\node.exe ["C:\\dev\\vibecheck\\scratch\\g\\aa531eeb\\worktree\\scratch\\shared-gate-runtime\\.slightnudge\\repositories\\source-proof\\node_modules\\next\\dist\\bin\\next","dev","--help"]
+SETUP END elapsed 166ms
+Disposable source project: generated SaaS; Next.js 16.4.3; Tailwind 4.3.3; installed source adapter; no environment files checked out.
+GATE_RUNTIMES {"workspace":"C:\\dev\\vibecheck\\scratch\\g\\aa531eeb\\worktree\\scratch\\shared-gate-runtime","repo":"C:\\dev\\vibecheck\\scratch\\g\\aa531eeb\\worktree\\scratch\\shared-gate-runtime\\.slightnudge\\repositories\\source-proof"}
+SERVER 56168 PID 10420 C:\dev\vibecheck\scratch\g\aa531eeb\worktree\scratch\shared-gate-runtime
+SERVER 56169 PID 29824 C:\dev\vibecheck\scratch\g\aa531eeb\worktree\scratch\shared-gate-runtime\.slightnudge\repositories\source-proof
+
+COMMAND shared-compiler-warmup: node --import tsx test/gate-shared-runner.v3.ts --prepare
+SETUP 1793600327487 START git ["ls-files"]
+SETUP END elapsed 56ms
+TIMING 1793600327739 REQUEST http://127.0.0.1:56168/editor?panel=inspector
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:56168/editor?panel=inspector
+Call log:
+[2m  - navigating to "http://127.0.0.1:56168/editor?panel=inspector", waiting until "domcontentloaded"[22m
+
+    at <anonymous> (C:\dev\vibecheck\scratch\g\aa531eeb\worktree\test\gate-shared-runner.v3.ts:53:14) {
+  log: [
+    '  - navigating to "http://127.0.0.1:56168/editor?panel=inspector", waiting until "domcontentloaded"'
+  ],
+  name: 'Error'
+}
+
+Node.js v22.19.0
+
+workflow | harness | REAL or MOCKED | result | seconds
+shared-compiler-warmup | HARNESS-V3 | REAL | FAIL | 3.41
+shared-local-studio | HARNESS-V3 | REAL | HARNESS-ERROR | 0
+shared-local-window | HARNESS-V3 | REAL | HARNESS-ERROR | 0
+shared-imported-studio | HARNESS-V3 | REAL | HARNESS-ERROR | 0
+shared-imported-window | HARNESS-V3 | REAL | HARNESS-ERROR | 0
+TOTAL ELAPSED 8.2s
+GATE FAIL; evidence C:\dev\vibecheck\docs\reliability-gate\2026-11-02T06-18-43-399Z-5990617-shared

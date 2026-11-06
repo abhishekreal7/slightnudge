@@ -1,0 +1,168 @@
+▲ Next.js 16.4.3 (webpack)
+- Local:         http://127.0.0.1:53864
+- Network:       http://127.0.0.1:53864
+✓ Ready in 632ms
+✓ Running next.config.mjs took 36ms
+
+○ Compiling proxy ...
+○ Compiling /api/slightnudge/repositories/[id]/route ...
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\ef621fd7\\worktree\\.next\\dev\\build-manifest.json","pid":27888,"time":1793600389876,"bytes":344}
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\ef621fd7\\worktree\\.next\\dev\\build-manifest.json","pid":12892,"time":1793600390067,"bytes":344}
+ GET /api/slightnudge/repositories/m0-control-lab 200 in 874ms (next.js: 705ms, proxy.ts: 13ms, application-code: 156ms)
+○ Compiling /editor/[[...project]]/page ...
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\ef621fd7\\worktree\\.next\\dev\\build-manifest.json","pid":21136,"time":1793600416560,"bytes":344}
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\ef621fd7\\worktree\\.next\\dev\\build-manifest.json","pid":12892,"time":1793600416846,"bytes":344}
+ GET /editor/m0-control-lab?view=full&preview=http%3A%2F%2F127.0.0.1%3A53865 200 in 1044ms (next.js: 813ms, application-code: 230ms)
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\ef621fd7\\worktree\\.next\\dev\\build-manifest.json","pid":12892,"time":1793600418363,"bytes":344}
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\ef621fd7\\worktree\\.next\\dev\\build-manifest.json","pid":12892,"time":1793600418367,"bytes":344}
+ GET /api/slightnudge/pages 200 in 648ms (next.js: 593ms, proxy.ts: 8ms, application-code: 47ms)
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\ef621fd7\\worktree\\.next\\dev\\build-manifest.json","pid":12892,"time":1793600418436,"bytes":344}
+ GET /api/slightnudge/pages 200 in 39ms (next.js: 1.8ms, proxy.ts: 28ms, application-code: 8ms)
+ GET /api/slightnudge/repositories/m0-control-lab 200 in 730ms (next.js: 605ms, proxy.ts: 8ms, application-code: 118ms)
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\ef621fd7\\worktree\\.next\\dev\\build-manifest.json","pid":12892,"time":1793600418490,"bytes":344}
+ GET /api/slightnudge/repositories/m0-control-lab 200 in 64ms (next.js: 3ms, proxy.ts: 5ms, application-code: 56ms)
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\ef621fd7\\worktree\\.next\\dev\\build-manifest.json","pid":18880,"time":1793600418687,"bytes":344}
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\ef621fd7\\worktree\\.next\\dev\\build-manifest.json","pid":33708,"time":1793600419326,"bytes":344}
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\ef621fd7\\worktree\\.next\\dev\\build-manifest.json","pid":12892,"time":1793600419567,"bytes":344}
+ POST /api/slightnudge/repositories/m0-control-lab/preview-check 200 in 1087ms (next.js: 1010ms, proxy.ts: 6ms, application-code: 72ms)
+⚠ ./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\ef621fd7\\worktree\\.next\\dev\\build-manifest.json","pid":12892,"time":1793600421342,"bytes":344}
+ POST /api/slightnudge/responsive 200 in 912ms (next.js: 611ms, proxy.ts: 7ms, application-code: 294ms)
+○ Compiling /api/slightnudge/responsive/route ...
+⚠ ./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts

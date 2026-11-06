@@ -1,0 +1,60 @@
+Same element refusal message: Cannot undo this edit because a newer edit ("font-normal → font-bold") on the same element depends on it. Undo the newer edit first.
+Legacy record refusal message: This file changed after the visual edit: element identity cannot be established. Open fixtures/page4.tsx near line 1 and change the className to remove "none" and restore "none". Nothing was changed.
+Structural edit refusal message: Cannot undo this edit because a structural edit ("reorder: move earlier") was applied to this file. Undo the structural edit first.
+Same-line refusal message: Cannot undo this edit because a newer edit ("text-sm → text-xl") on the same element depends on it. Undo the newer edit first.
+Starting 300 randomized order test runs (seed base: 771234)...
+▶ Multi-Element Stacked Edits Undo Battery
+  ✖ (1) edit A on elem1, edit B on elem2: undo A accepted, then undo B accepted -> byte-identical (566.365ms)
+  ✔ (2) edit A then B, undo B first then A -> byte-identical (334.3421ms)
+  ✔ (3) edit A then edit B on the SAME element: undo A refused naming newer edit, undo B accepted, then undo A accepted (431.3879ms)
+  ✔ (4) legacy records without elementId and without derivable identity: undo of older refused with manual instructions (28.6885ms)
+  ✔ (5) newer record of structural kind (reorder) in same file: undo of older edit refused (372.0265ms)
+  ✔ (6) different elements on the SAME line: refused due to same-line ambiguity (228.1153ms)
+  ✖ (7) randomized order test: 300 seeded runs with N (2..5) edits undone in random order (822.0977ms)
+✖ Multi-Element Stacked Edits Undo Battery (2787.0914ms)
+ℹ tests 7
+ℹ suites 1
+ℹ pass 5
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2832.305
+
+✖ failing tests:
+
+test at test\undo-stacked-edits.test.ts:1:1236
+✖ (1) edit A on elem1, edit B on elem2: undo A accepted, then undo B accepted -> byte-identical (566.365ms)
+  AssertionError [ERR_ASSERTION]: Undo of older edit A must be ACCEPTED, got: Cannot undo this edit because a newer edit ("mt-2 → mt-4") on the same element depends on it. Undo the newer edit first.
+  
+  false !== true
+  
+      at TestContext.<anonymous> (C:\Users\abhis\AppData\Local\Temp\mutant-m14-49574ac7-fb50-4c9d-abb2-ceb996bfd321\test\undo-stacked-edits.test.ts:115:14)
+      at async Test.run (node:internal/test_runner/test:1113:7)
+      at async Promise.all (index 0)
+      at async Suite.run (node:internal/test_runner/test:1518:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:358:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test\undo-stacked-edits.test.ts:1:13872
+✖ (7) randomized order test: 300 seeded runs with N (2..5) edits undone in random order (822.0977ms)
+  AssertionError [ERR_ASSERTION]: Undo of el-btn in run 0 failed: Cannot undo this edit because a newer edit ("text-xs → text-sm") on the same element depends on it. Undo the newer edit first.
+  
+  false !== true
+  
+      at TestContext.<anonymous> (C:\Users\abhis\AppData\Local\Temp\mutant-m14-49574ac7-fb50-4c9d-abb2-ceb996bfd321\test\undo-stacked-edits.test.ts:597:18)
+      at async Test.run (node:internal/test_runner/test:1113:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:788:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

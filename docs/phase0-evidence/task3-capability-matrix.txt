@@ -1,0 +1,39 @@
+=== TASK 3: CAPABILITY MATRIX & PLAYWRIGHT BROWSER AUDIT ===
+
+| Control | UI Location | Handler | API Route | AST Function | Status | Evidence / Notes |
+| :--- | :--- | :--- | :--- | :--- | :---: | :--- |
+| **Edit text** | In-situ HUD pill | `handleEditTextClick -> setInlineEditing` | `/api/slightnudge/preview (kind: text)` | `updateStaticJsxText` | **WORKING** | Inline input rendered above selected element ([Screenshot](file:///C:/dev/vibecheck/docs/phase0-evidence/screenshots/03-edit-text-active.png)) |
+| **Bold toggle** | In-situ HUD pill / Inspector | `toggleStyleValue("fontWeight", "font-bold")` | `/api/slightnudge/preview` | `updateStaticTailwindClass` | **WORKING** | POST preview returned status 200 ([Screenshot](file:///C:/dev/vibecheck/docs/phase0-evidence/screenshots/04-bold-toggled.png)) |
+| **Italic toggle** | Inspector Typography | `toggleStyleValue("fontStyle", "italic")` | `/api/slightnudge/preview` | `updateStaticTailwindClass` | **WORKING** | Available in typography controls |
+| **Underline toggle** | Inspector Typography | `toggleStyleValue("textDecoration", "underline")` | `/api/slightnudge/preview` | `updateStaticTailwindClass` | **WORKING** | Available in typography controls |
+| **Font size - / +** | In-situ HUD / Inspector Text Size | `nudgeStyleProperty("fontSize", "down" | "up")` | `/api/slightnudge/preview` | `updateStaticTailwindClass` | **WORKING** | Steps through Tailwind text-xs to text-7xl in inspector |
+| **Text Alignment** | Inspector Typography / HUD | `setStyleValue("alignment", val)` | `/api/slightnudge/preview` | `updateStaticTailwindClass` | **WORKING** | Aligns text left, center, right via utility classes |
+| **Color controls** | Inspector Colors | `setStyleValue("textColor" | "backgroundColor", hex)` | `/api/slightnudge/preview` | `updateStaticTailwindClass` | **WORKING** | Selects from curated palette swatches; arbitrary hex is not compiled by Tailwind |
+| **HUD "..." menu** | In-situ HUD pill right end | `toggleMoreActions` | `None (Client popover)` | `None` | **UI-ONLY** | Client-side menu for inspect and utility copying ([Screenshot](file:///C:/dev/vibecheck/docs/phase0-evidence/screenshots/05-hud-more-menu.png)) |
+| **Layers panel (Select, Expand, Reorder, Hide)** | Left Sidebar: Layers tab | `selectLayer / toggleLayerVisibility` | `/api/slightnudge/preview (reorder)` | `reorderElement` | **WORKING** | Renders DOM elements tree in left sidebar |
+| **Pages switcher** | Left Sidebar: Pages tab | `switchActiveRoute` | `Next.js client router` | `None` | **WORKING** | Lists workspace pages and routes |
+| **Design Panel: Display** | Right Inspector: Layout section | `setStyleValue("display", val)` | `/api/slightnudge/preview` | `updateStaticTailwindClass` | **WORKING** | block, flex, grid, hidden |
+| **Design Panel: Width & Height** | Right Inspector: Dimensions section | `setStyleValue("width" | "height", val)` | `/api/slightnudge/preview` | `updateStaticTailwindClass` | **WORKING** | w-auto, w-full, h-auto, h-full |
+| **Design Panel: Overflow** | Right Inspector: Dimensions section | `setStyleValue("overflow", val)` | `/api/slightnudge/preview` | `updateStaticTailwindClass` | **WORKING** | overflow-hidden, overflow-auto |
+| **Design Panel: Object** | Right Inspector: Image controls | `updateStaticImageSource` | `/api/slightnudge/preview` | `updateStaticImageSource` | **WORKING** | object-cover, object-contain for <img> / <Image> |
+| **Design Panel: Position** | Right Inspector: Layout section | `setStyleValue("position", val)` | `/api/slightnudge/preview` | `updateStaticTailwindClass` | **WORKING** | static, relative, absolute, fixed, sticky |
+| **Design Panel: Dimensions options menu** | Right Inspector: Dimensions header (...) | `toggleDimensionsOptionsMenu` | `None (Client UI)` | `None` | **UI-ONLY** | Min/max dimensions and aspect-ratio helper |
+| **Design Panel: Spacing box** | Right Inspector: Spacing section | `nudgeSpacingProperty(prop, dir)` | `/api/slightnudge/preview` | `updateStaticTailwindClass` | **WORKING** | Margin & padding interactive box model |
+| **Design Panel: Typeface and other Text controls** | Right Inspector: Typography section | `setStyleValue("fontFamily" | "lineHeight" | "letterSpacing", val)` | `/api/slightnudge/preview` | `updateStaticTailwindClass` | **WORKING** | Font family, line height, letter spacing, text case |
+| **Settings tab** | Right Inspector: Settings tab | `setActiveTab("settings")` | `None (Client UI)` | `None` | **UI-ONLY** | Workspace preferences and canvas overlay toggles ([Screenshot](file:///C:/dev/vibecheck/docs/phase0-evidence/screenshots/07-settings-panel.png)) |
+| **Apply to code** | Right Inspector: Pending edit box | `applySourceEdit` | `POST /api/slightnudge/apply` | `applyPendingSourceEdit` | **WORKING** | Applies pending edit to source disk file |
+| **Apply to Source** | Bottom Floating Review Bar | `applySourceEdit` | `POST /api/slightnudge/apply` | `applyPendingSourceEdit` | **DUPLICATE** | EXACT same code path as "Apply to code". Redundant duplicate button triggering applySourceEdit. |
+| **Discard button** | Pending edit dock / review bar | `discardPendingEdit` | `DELETE /api/slightnudge/preview?id=...` | `discardPendingSourceEdit` | **WORKING** | Reverts DOM and unlinks pending preview JSON |
+| **Undo and Ctrl+Z** | Header / In-situ HUD / Shortcut key | `undoLastEdit / handleKeyDown(Ctrl+Z)` | `POST /api/slightnudge/undo` | `undoSourceEdit` | **WORKING** | Reverts preceding source snapshot from .slightnudge/history |
+| **Deselect** | Canvas background click / Escape key | `setSelected(null)` | `None (Client state)` | `None` | **WORKING** | Clears active selection and removes HUD |
+| **Desktop / Tablet / Mobile** | Studio Header / Canvas frame controls | `setViewportWidth(1440 | 768 | 375)` | `None (Client iframe / container style)` | `None` | **WORKING** | Resizes canvas preview container |
+| **Project switcher** | Studio Top Header (Repository select) | `onSelectRepository(repoId)` | `GET /api/slightnudge/repositories` | `None` | **WORKING** | Switches active repository in workspace |
+| **Explore card and its tabs** | Bottom right canvas / Inspector tab | `setActiveExploreTab` | `None (Client presets)` | `None` | **UI-ONLY** | Static recommendations and presets |
+
+=== S6 STUDIO UI REFUSAL RESULTS ===
+• Fixture 3 (Conditional cn): ArrowRight blocked in UI. DOM class remained unchanged: "ml-2 p-4 text-white rounded bg-slate-700". Screenshot: docs/phase0-evidence/screenshots/09-s6-fixture3-refusal.png
+• Fixture 4 (Repeated loop item): ArrowRight blocked in UI. DOM class remained unchanged: "Navigation / eval note: page.waitForSelector: Timeout 8000ms exceeded.
+Call log:
+[2m  - waiting for locator('#target') to be visible[22m
+". Screenshot: docs/phase0-evidence/screenshots/10-s6-fixture4-refusal.png
+• Fixture 5 (Same-line sibling elements): ArrowRight blocked in UI. DOM class remained unchanged: "ml-2 md:ml-4 lg:ml-8 p-4 bg-purple-600 text-white rounded". Screenshot: docs/phase0-evidence/screenshots/11-s6-fixture5-refusal.png

@@ -1,0 +1,21 @@
+▶ S1: Authenticated, local-only mutating requests
+  ✔ rejects mutating request with no Origin and no token with 403 (not 404) (6430.8683ms)
+  ✔ rejects mutating request with wrong Host with 403 (168.5288ms)
+  ✔ rejects mutating request with valid Origin but missing token with 403 (102.2431ms)
+  ✔ rejects mutating request with valid Origin but invalid token with 403 (44.7963ms)
+  ✔ returns normal not-found error for fake previewId with valid token and valid Origin (124.9184ms)
+  ✔ allows missing Origin when valid token is present and proceeds to normal handling (48.9761ms)
+  ✔ completes preview, apply, and undo flow in a temp copy with valid token and Origin (3991.0843ms)
+✔ S1: Authenticated, local-only mutating requests (27019.6321ms)
+ℹ tests 7
+ℹ suites 1
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 27024.6259
+
+--- STDERR ---
+(node:36792) [DEP0190] DeprecationWarning: Passing args to a child process with shell option true can lead to security vulnerabilities, as the arguments are not escaped, only concatenated.
+(Use `node --trace-deprecation ...` to show where the warning was created)

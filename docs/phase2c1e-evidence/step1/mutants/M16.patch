@@ -1,0 +1,20 @@
+diff --git a/lib/slightnudge/edit-history.ts b/lib/slightnudge/edit-history.ts
+index b0267e5..0c9fae1 100644
+--- a/lib/slightnudge/edit-history.ts
++++ b/lib/slightnudge/edit-history.ts
+@@ -721,14 +721,7 @@ export function undoSourceEdit(target?: string | { filePath?: string; editId?: s
+       }
+ 
+       // Rule 2: If either record's identity cannot be established (legacy records), refuse conservatively with manual instructions
+-      if (!recordIdentity.known || !newerIdentity.known) {
+-        const toRemoveStr = record.addedTokens?.length ? record.addedTokens.join(' ') : 'none';
+-        const toRestoreStr = record.removedTokens?.length ? record.removedTokens.join(' ') : 'none';
+-        return {
+-          success: false as const,
+-          error: `This file changed after the visual edit: element identity cannot be established. Open ${record.filePath} near line ${record.line || 1} and change the className to remove "${toRemoveStr}" and restore "${toRestoreStr}". Nothing was changed.`,
+-        };
+-      }
++      /* M16: treat unknown identity as different element */
+ 
+       // Rule 3: Edits targeting the same element block undo
+       const sameElementId = Boolean(

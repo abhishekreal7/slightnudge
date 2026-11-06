@@ -1,0 +1,22 @@
+
+--- STDERR ---
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+Error: Transform failed with 1 error:
+C:\Users\abhis\AppData\Local\Temp\mutant-m13-f86ed963-d2ae-4d4a-9a92-c6624ac61aca\lib\slightnudge\edit-history.ts:219:0: ERROR: Unexpected "}"
+    at failureErrorWithLog (C:\dev\vibecheck\node_modules\esbuild\lib\main.js:1752:15)
+    at C:\dev\vibecheck\node_modules\esbuild\lib\main.js:1019:50
+    at responseCallbacks.<computed> (C:\dev\vibecheck\node_modules\esbuild\lib\main.js:886:9)
+    at handleIncomingPacket (C:\dev\vibecheck\node_modules\esbuild\lib\main.js:941:12)
+    at Socket.readFromStdout (C:\dev\vibecheck\node_modules\esbuild\lib\main.js:864:7)
+    at Socket.emit (node:events:508:28)
+    at addChunk (node:internal/streams/readable:559:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:510:3)
+    at Readable.push (node:internal/streams/readable:390:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:189:23) {
+  name: 'TransformError'
+}
+
+Node.js v24.13.0

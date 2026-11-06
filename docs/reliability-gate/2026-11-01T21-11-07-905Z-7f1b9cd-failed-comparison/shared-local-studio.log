@@ -1,0 +1,14 @@
+SETUP 1793567473654 START git ["ls-files"]
+SETUP END elapsed 122ms
+HARNESS-V3 NAVIGATION about:blank
+HARNESS-V3 NAVIGATION http://127.0.0.1:60379/editor
+TIMING 1793567522081 REQUEST http://127.0.0.1:60379/editor
+TIMING 1793567552239 RESPONSE 200 http://127.0.0.1:60379/editor
+TIMING 1793567559993 REQUEST http://127.0.0.1:60379/api/slightnudge/responsive
+TIMING 1793567559994 REQUEST http://127.0.0.1:60379/api/slightnudge/responsive
+TIMING 1793567560028 REQUEST http://127.0.0.1:60379/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A60379&__slightnudge_session=6543dd45-7b94-4791-8d99-b1cd607000a0
+TIMING 1793567578627 RESPONSE 200 http://127.0.0.1:60379/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A60379&__slightnudge_session=6543dd45-7b94-4791-8d99-b1cd607000a0
+TIMING 1793567578640 REQUEST http://127.0.0.1:60379/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+TIMING 1793567579597 RESPONSE 200 http://127.0.0.1:60379/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+TIMING 1793567585274 REQUEST http://127.0.0.1:60379/api/slightnudge/responsive
+TIMING 1793567585274 REQUEST http://127.0.0.1:60379/api/slightnudge/preview

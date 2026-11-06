@@ -1,0 +1,67 @@
+=== TASK 5: TOKEN ENDPOINT & MUTATING ROUTE SECURITY AUDIT ===
+
+--- 1a. GET /api/slightnudge/token (No Origin) ---
+Status: 200
+Access-Control-Allow-Origin header: (none)
+Body: {"token":"da4c49b69ffefae959ec5ac3c74e9afc4d71ada5b28619a11b028970c43e5af9"}
+Token received length: 64
+
+--- 1b. GET /api/slightnudge/token (Origin: https://evil.example) ---
+Status: 403
+Access-Control-Allow-Origin header: (none)
+Body: {"error":"Access denied."}
+
+--- 1c. GET /api/slightnudge/token (Host: attacker.evil.com) ---
+Status: 403
+Body: {"error":"Access denied."}
+
+--- 2. Mutating routes without token (Host: 127.0.0.1:3100) ---
+POST /api/slightnudge/apply -> Status: 403, Body: {"error":"Access denied."}
+POST /api/slightnudge/preview -> Status: 403, Body: {"error":"Access denied."}
+DELETE /api/slightnudge/preview?id=fake -> Status: 403, Body: {"error":"Access denied."}
+POST /api/slightnudge/undo -> Status: 403, Body: {"error":"Access denied."}
+POST /api/slightnudge/assets -> Status: 403, Body: {"error":"Access denied."}
+POST /api/slightnudge/repositories -> Status: 403, Body: {"error":"Access denied."}
+POST /api/slightnudge/repositories/test-id/adapter -> Status: 403, Body: {"error":"Access denied."}
+DELETE /api/slightnudge/repositories/test-id/adapter -> Status: 403, Body: {"error":"Access denied."}
+POST /api/slightnudge/repositories/test-id/docker-preview -> Status: 403, Body: {"error":"Access denied."}
+DELETE /api/slightnudge/repositories/test-id/docker-preview -> Status: 403, Body: {"error":"Access denied."}
+POST /api/slightnudge/repositories/test-id/preview-check -> Status: 403, Body: {"error":"Access denied."}
+
+--- 3. Mutating routes with INVALID token (x-slightnudge-token: bad-token-67890) ---
+POST /api/slightnudge/apply -> Status: 403, Body: {"error":"Access denied."}
+POST /api/slightnudge/preview -> Status: 403, Body: {"error":"Access denied."}
+DELETE /api/slightnudge/preview?id=fake -> Status: 403, Body: {"error":"Access denied."}
+POST /api/slightnudge/undo -> Status: 403, Body: {"error":"Access denied."}
+POST /api/slightnudge/assets -> Status: 403, Body: {"error":"Access denied."}
+POST /api/slightnudge/repositories -> Status: 403, Body: {"error":"Access denied."}
+POST /api/slightnudge/repositories/test-id/adapter -> Status: 403, Body: {"error":"Access denied."}
+DELETE /api/slightnudge/repositories/test-id/adapter -> Status: 403, Body: {"error":"Access denied."}
+POST /api/slightnudge/repositories/test-id/docker-preview -> Status: 403, Body: {"error":"Access denied."}
+DELETE /api/slightnudge/repositories/test-id/docker-preview -> Status: 403, Body: {"error":"Access denied."}
+POST /api/slightnudge/repositories/test-id/preview-check -> Status: 403, Body: {"error":"Access denied."}
+
+--- 4. Mutating routes with VALID token but SPOOFED Host (attacker.evil.com) ---
+POST /api/slightnudge/apply -> Status: 403, Body: {"error":"Access denied."}
+POST /api/slightnudge/preview -> Status: 403, Body: {"error":"Access denied."}
+DELETE /api/slightnudge/preview?id=fake -> Status: 403, Body: {"error":"Access denied."}
+POST /api/slightnudge/undo -> Status: 403, Body: {"error":"Access denied."}
+POST /api/slightnudge/assets -> Status: 403, Body: {"error":"Access denied."}
+POST /api/slightnudge/repositories -> Status: 403, Body: {"error":"Access denied."}
+POST /api/slightnudge/repositories/test-id/adapter -> Status: 403, Body: {"error":"Access denied."}
+DELETE /api/slightnudge/repositories/test-id/adapter -> Status: 403, Body: {"error":"Access denied."}
+POST /api/slightnudge/repositories/test-id/docker-preview -> Status: 403, Body: {"error":"Access denied."}
+DELETE /api/slightnudge/repositories/test-id/docker-preview -> Status: 403, Body: {"error":"Access denied."}
+POST /api/slightnudge/repositories/test-id/preview-check -> Status: 403, Body: {"error":"Access denied."}
+
+--- 5. OPTIONS Preflight with Origin: https://evil.example ---
+OPTIONS /api/slightnudge/apply -> Status: 403, ACAO: (none)
+OPTIONS /api/slightnudge/preview -> Status: 403, ACAO: (none)
+OPTIONS /api/slightnudge/undo -> Status: 403, ACAO: (none)
+OPTIONS /api/slightnudge/inspect -> Status: 403, ACAO: (none)
+
+--- 6. Wrong HTTP Methods ---
+POST /api/slightnudge/token -> Status: 405, Body: 
+GET /api/slightnudge/apply -> Status: 405, Body: 
+GET /api/slightnudge/undo -> Status: 405, Body: 
+PUT /api/slightnudge/preview -> Status: 405, Body: 

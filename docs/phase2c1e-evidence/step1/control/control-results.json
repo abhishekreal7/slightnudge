@@ -1,0 +1,119 @@
+[
+  {
+    "testFile": "test/token-undo.test.ts",
+    "exitCode": 0,
+    "durationMs": 4315,
+    "durationSec": 4.32,
+    "passed": true,
+    "timedOut": false,
+    "logFile": "docs/phase2c1e-evidence/step1/control/test_token-undo.log"
+  },
+  {
+    "testFile": "test/undo-refusals.test.ts",
+    "exitCode": 0,
+    "durationMs": 4549,
+    "durationSec": 4.55,
+    "passed": true,
+    "timedOut": false,
+    "logFile": "docs/phase2c1e-evidence/step1/control/test_undo-refusals.log"
+  },
+  {
+    "testFile": "test/undo-m3-restored-token.test.ts",
+    "exitCode": 0,
+    "durationMs": 2020,
+    "durationSec": 2.02,
+    "passed": true,
+    "timedOut": false,
+    "logFile": "docs/phase2c1e-evidence/step1/control/test_undo-m3-restored-token.log"
+  },
+  {
+    "testFile": "test/m5-containment-helper.test.ts",
+    "exitCode": 0,
+    "durationMs": 1353,
+    "durationSec": 1.35,
+    "passed": true,
+    "timedOut": false,
+    "logFile": "docs/phase2c1e-evidence/step1/control/test_m5-containment-helper.log"
+  },
+  {
+    "testFile": "test/undo-m5-parent-junction.test.ts",
+    "exitCode": 0,
+    "durationMs": 1951,
+    "durationSec": 1.95,
+    "passed": true,
+    "timedOut": false,
+    "logFile": "docs/phase2c1e-evidence/step1/control/test_undo-m5-parent-junction.log"
+  },
+  {
+    "testFile": "test/undo-stacked-edits.test.ts",
+    "exitCode": 0,
+    "durationMs": 498225,
+    "durationSec": 498.23,
+    "passed": true,
+    "timedOut": false,
+    "logFile": "docs/phase2c1e-evidence/step1/control/test_undo-stacked-edits.log"
+  },
+  {
+    "testFile": "test/prewrite-hook-guard.test.ts",
+    "exitCode": 0,
+    "durationMs": 1805,
+    "durationSec": 1.8,
+    "passed": true,
+    "timedOut": false,
+    "logFile": "docs/phase2c1e-evidence/step1/control/test_prewrite-hook-guard.log"
+  },
+  {
+    "testFile": "test/s1-auth-bypass.test.ts",
+    "exitCode": 0,
+    "durationMs": 1311,
+    "durationSec": 1.31,
+    "passed": true,
+    "timedOut": false,
+    "logFile": "docs/phase2c1e-evidence/step1/control/test_s1-auth-bypass.log"
+  },
+  {
+    "testFile": "test/s1-auth-origin.test.ts",
+    "exitCode": 1,
+    "durationMs": 12469,
+    "durationSec": 12.47,
+    "passed": false,
+    "timedOut": false,
+    "logFile": "docs/phase2c1e-evidence/step1/control/test_s1-auth-origin.log"
+  },
+  {
+    "testFile": "test/token-html-host.test.ts",
+    "exitCode": 1,
+    "durationMs": 11081,
+    "durationSec": 11.08,
+    "passed": false,
+    "timedOut": false,
+    "logFile": "docs/phase2c1e-evidence/step1/control/test_token-html-host.log"
+  },
+  {
+    "testFile": "test/test-override-guard.test.ts",
+    "exitCode": 0,
+    "durationMs": 1621,
+    "durationSec": 1.62,
+    "passed": true,
+    "timedOut": false,
+    "logFile": "docs/phase2c1e-evidence/step1/control/test_test-override-guard.log"
+  },
+  {
+    "testFile": "test/history-resilience.test.ts",
+    "exitCode": 0,
+    "durationMs": 1868,
+    "durationSec": 1.87,
+    "passed": true,
+    "timedOut": false,
+    "logFile": "docs/phase2c1e-evidence/step1/control/test_history-resilience.log"
+  },
+  {
+    "testFile": "test/real-state-guard.test.ts",
+    "exitCode": 1,
+    "durationMs": 829,
+    "durationSec": 0.83,
+    "passed": false,
+    "timedOut": false,
+    "logFile": "docs/phase2c1e-evidence/step1/control/test_real-state-guard.log"
+  }
+]

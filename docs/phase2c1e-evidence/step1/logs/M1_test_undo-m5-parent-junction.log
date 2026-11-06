@@ -1,0 +1,20 @@
+Case 1 parent junction refusal message: The target file must be inside the SlightNudge workspace.
+Case 2 apply parent junction refusal message: The target file must be inside the SlightNudge workspace.
+Case 3 file swap refusal message: The target file must be inside the SlightNudge workspace.
+[INFO UNVERIFIED] Windows file symlinks require Developer Mode (SeCreateSymbolicLinkPrivilege).
+To enable: Settings -> System -> For developers -> Developer Mode: ON.
+[INFO CONFIRMED] Directory junctions verified without admin; file symlinks marked UNVERIFIED as expected.
+▶ Mutant M5 Closeout: Parent Directory Junction TOCTOU Attack Battery
+  ✔ case 1 (undoSourceEdit): swaps PARENT directory for junction to outside folder -> containment refusal identifies guard, outside sentinel unchanged (458.5708ms)
+  ✔ case 2 (applyPendingSourceEdit): swaps PARENT directory for junction -> containment refusal identifies guard, outside file unchanged (125.4713ms)
+  ✔ case 3 (swapping file itself - old test case with error identity): asserts specific containment guard identity (235.8105ms)
+  ✔ case 4 (symlink privilege audit): checks Developer Mode / SeCreateSymbolicLinkPrivilege (1.4909ms)
+✔ Mutant M5 Closeout: Parent Directory Junction TOCTOU Attack Battery (823.4498ms)
+ℹ tests 4
+ℹ suites 1
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 834.3943

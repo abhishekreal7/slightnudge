@@ -1,0 +1,20 @@
+warning: in the working copy of 'LICENSE', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/globals.css', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/page.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'components/Features.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'package.json', LF will be replaced by CRLF the next time Git touches it
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for getByTitle('Toggle bold', { exact: true })
+
+    at checkSourceProject (C:\dev\vibecheck\test\helpers\source-project-browser.ts:44:59)
+    at async <anonymous> (C:\dev\vibecheck\test\review-consent.browser.ts:88:14) {
+  log: [ "  - waiting for getByTitle('Toggle bold', { exact: true })" ],
+  name: 'TimeoutError'
+}
+
+Node.js v22.19.0

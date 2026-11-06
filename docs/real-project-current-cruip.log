@@ -1,0 +1,23 @@
+Isolated application diagnostics ▲ Next.js 16.4.3 (webpack)
+- Local:         http://127.0.0.1:57110
+- Network:       http://127.0.0.1:57110
+✓ Ready in 861ms
+✓ Running next.config.mjs took 76ms
+
+○ Compiling /fixtures/1/page ...
+ GET /fixtures/1 200 in 1425ms (next.js: 687ms, application-code: 738ms)
+
+C:\dev\vibecheck\test\helpers\prepare-source-project.ts:14
+    if (!files.some(file => /^licen[sc]e(?:\.|$)/i.test(file))) throw new Error('Skip: no root LICENSE file.');
+                                                                      ^
+
+
+Error: Skip: no root LICENSE file.
+    at prepareSourceProject (C:\dev\vibecheck\test\helpers\prepare-source-project.ts:14:71)
+    at checkRealProjectCanvas (C:\dev\vibecheck\test\helpers\real-project-canvas-browser.ts:19:20)
+    at <anonymous> (C:\dev\vibecheck\test\review-consent.browser.ts:139:20)
+    at runNextTicks (node:internal/process/task_queues:65:5)
+    at process.processImmediate (node:internal/timers:453:9)
+    at process.callbackTrampoline (node:internal/async_hooks:130:17)
+
+Node.js v22.19.0

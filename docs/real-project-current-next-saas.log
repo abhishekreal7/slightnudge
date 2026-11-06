@@ -1,0 +1,29 @@
+Disposable source project: https://github.com/nextjs/saas-starter; Next.js 15.6.0-canary.59; Tailwind 4.1.7; installed source adapter; no environment files checked out.
+Real project next-saas: start public application with development adapter
+Real project next-saas: connect current full-page canvas
+PASS next-saas: single full-page canvas with stable document height
+PASS next-saas: project breakpoints discovered through the actual compiled API
+Real project next-saas: edit original p: app/(dashboard)/page.tsx:16
+Real project next-saas: save app/(dashboard)/page.tsx:16
+Real project next-saas: undo app/(dashboard)/page.tsx:16
+Real project next-saas: edit original h2: app/(dashboard)/page.tsx:57
+Real project next-saas: save app/(dashboard)/page.tsx:57
+Real project next-saas: undo app/(dashboard)/page.tsx:57
+Real project next-saas: edit original p: app/(dashboard)/page.tsx:60
+Real project next-saas: save app/(dashboard)/page.tsx:60
+Real project next-saas: undo app/(dashboard)/page.tsx:60
+PASS next-saas: original mapped text targets: physical selection, native typography, draft recovery, source Save and exact Undo
+Real project next-saas: scaled movement on original element
+Real project next-saas: save app/(dashboard)/page.tsx:16
+Real project next-saas: undo app/(dashboard)/page.tsx:16
+PASS next-saas: scaled Move, source Save and exact Undo
+Real project next-saas: save app/(dashboard)/page.tsx:16
+Real project next-saas: undo app/(dashboard)/page.tsx:16
+PASS next-saas: real breakpoint style edit, smaller-screen isolation, Save and exact Undo
+PASS next-saas: native responsive widths: 375, 768 and 1200
+Real project next-saas: separate window
+Real project next-saas: save app/(dashboard)/page.tsx:16
+Real project next-saas: undo app/(dashboard)/page.tsx:16
+PASS next-saas: separate-window native document, text edit, Save and exact Undo
+PASS: 7 review-consent browser cases (real API; disposable source copy)
+Temporary copy requires manual cleanup: C:\Users\abhis\AppData\Local\Temp\sn-review-consent-JzV7Se

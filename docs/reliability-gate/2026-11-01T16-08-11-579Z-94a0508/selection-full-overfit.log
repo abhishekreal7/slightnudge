@@ -1,0 +1,67 @@
+NAVIGATION http://127.0.0.1:3000/editor/m0-overfit-lab?preview=http%3A%2F%2F127.0.0.1%3A3002&view=full
+GATE_BROWSER_PAGE_ERROR http://127.0.0.1:3000/editor/m0-overfit-lab?preview=http%3A%2F%2F127.0.0.1%3A3002&view=full
+Error: Hydration failed because the server rendered HTML didn't match the client. As a result this tree will be regenerated on the client. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
+      <AppDevOverlayErrorBoundary globalError={[...]}>
+        <ReplaySsrOnlyErrors>
+        <DevRootHTTPAccessFallbackBoundary>
+          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
+            <HTTPAccessFallbackErrorBoundary pathname="/editor/m0..." notFound={<NotAllowedRootHTTPFallbackError>} ...>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <Head>
+                  <__next_root_layout_boundary__>
+                    <SegmentViewNode type="layout" pagePath="layout.tsx">
+                      <SegmentTrieNode>
+                      <link>
+                      <RootLayout>
+                        <html data-source-file="app/layout..." data-source-line="53" data-source-column="5" lang="en" ...>
+                          <head>
+                          <body data-source-file="app/layout..." data-source-line="63" data-source-column="7" ...>
+                            <Header>
+                            <div
++                             data-source-file="app/layout.tsx"
+-                             data-source-file={null}
++                             data-source-line="65"
+-                             data-source-line={null}
++                             data-source-column="9"
+-                             data-source-column={null}
++                             className="sn-main-content"
+-                             className={null}
+-                             hidden=""
+                            >
+                              ...
+                                <SegmentViewNode type="page" pagePath="editor/[[....">
+                                  <SegmentTrieNode>
+                                  <EditorPage>
+                                    <EditorClient mode="window" unified={true} view="full" projectId="m0-overfit..." ...>
++                                     <div
++                                       role="status"
++                                       aria-label="Loading editor"
++                                       style={{minHeight:"100dvh",display:"grid",placeItems:"center",background:"#f8f9fa",color:"#637269", ...}}
++                                     >
+-                                     <Suspense>
+                                ...
+                  ...
+
+    at throwOnHydrationMismatch (webpack-internal:///(app-pages-browser)/../../../../node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:5548:11)
+    at beginWork (webpack-internal:///(app-pages-browser)/../../../../node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:12447:17)
+    at runWithFiberInDEV (webpack-internal:///(app-pages-browser)/../../../../node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:1046:30)
+    at performUnitOfWork (webpack-internal:///(app-pages-browser)/../../../../node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:19180:22)
+    at workLoopConcurrentByScheduler (webpack-internal:///(app-pages-browser)/../../../../node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:19174:9)
+    at renderRootConcurrent (webpack-internal:///(app-pages-browser)/../../../../node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:19156:15)
+    at performWorkOnRoot (webpack-internal:///(app-pages-browser)/../../../../node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:18015:11)
+    at performWorkOnRootViaSchedulerTask (webpack-internal:///(app-pages-browser)/../../../../node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:20669:7)
+    at MessagePort.performWorkUntilDeadline (webpack-internal:///(app-pages-browser)/../../../../node_modules/next/dist/compiled/scheduler/cjs/scheduler.development.js:45:48)

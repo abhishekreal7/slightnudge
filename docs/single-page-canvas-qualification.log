@@ -1,0 +1,30 @@
+Isolated application diagnostics ▲ Next.js 16.4.3 (webpack)
+- Local:         http://127.0.0.1:61542
+- Network:       http://127.0.0.1:61542
+✓ Ready in 802ms
+✓ Running next.config.mjs took 162ms
+
+○ Compiling /fixtures/1/page ...
+ GET /fixtures/1 200 in 2.2s (next.js: 810ms, application-code: 1430ms)
+○ Compiling /studio/page ...
+ GET /studio 200 in 1597ms (next.js: 598ms, application-code: 999ms)
+○ Compiling /studio/preview/[pageId]/page ...
+ GET /studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A61542&__slightnudge_session=59f6f1b6-0503-48d0-9c99-a7d14607960b 200 in 2.4s (next.js: 1476ms, application-code: 953ms)
+○ Compiling /api/slightnudge/responsive/route ...
+
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Move stays usable when zoomed out
+    at checkSingleCanvas (C:\dev\vibecheck\test\helpers\single-canvas-browser.ts:26:76)
+    at async <anonymous> (C:\dev\vibecheck\test\review-consent.browser.ts:131:14) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v22.19.0

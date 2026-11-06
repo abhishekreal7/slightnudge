@@ -1,0 +1,164 @@
+Isolated application diagnostics ▲ Next.js 16.4.3 (webpack)
+- Local:         http://127.0.0.1:49781
+- Network:       http://127.0.0.1:49781
+✓ Ready in 741ms
+✓ Running next.config.mjs took 48ms
+
+○ Compiling /editor/[[...project]]/page ...
+⨯ ./components/slightnudge/EditorWorkspace.tsx:2:1
+Module not found: Can't resolve '@/lib/slightnudge/draft-conflict-recovery'
+  1 | 'use client';
+> 2 | import { backUpConflictedDraft, isDraftSourceConflict } from '@/lib/slightnudge/draft-conflict-recovery';
+    | ^
+  3 | import { readApiJson } from '@/lib/slightnudge/api-response';
+  4 |
+  5 | import { AppearanceControls } from './AppearanceControls';
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./components/slightnudge/EditorClient.tsx
+ GET /editor 500 in 1571ms
+ GET /editor 500 in 10.6s
+⨯ ./components/slightnudge/EditorWorkspace.tsx:2:1
+Module not found: Can't resolve '@/lib/slightnudge/draft-conflict-recovery'
+  1 | 'use client';
+> 2 | import { backUpConflictedDraft, isDraftSourceConflict } from '@/lib/slightnudge/draft-conflict-recovery';
+    | ^
+  3 | import { readApiJson } from '@/lib/slightnudge/api-response';
+  4 |
+  5 | import { AppearanceControls } from './AppearanceControls';
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./components/slightnudge/EditorClient.tsx
+ GET /editor 500 in 10.0s (next.js: 9.2s, application-code: 794ms)
+ GET /editor 500 in 109ms (next.js: 84ms, application-code: 25ms)
+ GET /editor 500 in 87ms (next.js: 54ms, application-code: 33ms)
+ GET /editor 500 in 26ms (next.js: 3ms, application-code: 23ms)
+ GET /editor 500 in 18ms (next.js: 4ms, application-code: 14ms)
+ GET /editor 500 in 18ms (next.js: 4ms, application-code: 13ms)
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: ENOENT: no such file or directory, rename 'C:\Users\abhis\AppData\Local\Temp\sn-review-consent-0pf6ni\.next\dev\cache\webpack\client-development-fallback\0.pack.gz_' -> 'C:\Users\abhis\AppData\Local\Temp\sn-review-consent-0pf6ni\.next\dev\cache\webpack\client-development-fallback\0.pack.gz'
+ GET /editor 500 in 26ms (next.js: 9ms, application-code: 17ms)
+ GET /editor 500 in 21ms (next.js: 4ms, application-code: 17ms)
+ GET /editor 500 in 21ms (next.js: 5ms, application-code: 16ms)
+ GET /editor 500 in 14ms (next.js: 3ms, application-code: 11ms)
+ GET /editor 500 in 13ms (next.js: 3ms, application-code: 10ms)
+ GET /editor 500 in 20ms (next.js: 3ms, application-code: 17ms)
+ GET /editor 500 in 13ms (next.js: 3ms, application-code: 10ms)
+ GET /editor 500 in 15ms (next.js: 3ms, application-code: 12ms)
+ GET /editor 500 in 10ms (next.js: 1.6ms, application-code: 8ms)
+ GET /editor 500 in 15ms (next.js: 3ms, application-code: 12ms)
+ GET /editor 500 in 20ms (next.js: 3ms, application-code: 16ms)
+ GET /editor 500 in 15ms (next.js: 4ms, application-code: 10ms)
+ GET /editor 500 in 14ms (next.js: 3ms, application-code: 11ms)
+ GET /editor 500 in 16ms (next.js: 4ms, application-code: 12ms)
+ GET /editor 500 in 12ms (next.js: 3ms, application-code: 10ms)
+ GET /editor 500 in 16ms (next.js: 4ms, application-code: 12ms)
+ GET /editor 500 in 14ms (next.js: 3ms, application-code: 11ms)
+ GET /editor 500 in 44ms (next.js: 14ms, application-code: 30ms)
+ GET /editor 500 in 14ms (next.js: 2ms, application-code: 11ms)
+ GET /editor 500 in 26ms (next.js: 6ms, application-code: 20ms)
+ GET /editor 500 in 10ms (next.js: 2ms, application-code: 8ms)
+ GET /editor 500 in 16ms (next.js: 4ms, application-code: 12ms)
+ GET /editor 500 in 30ms (next.js: 10ms, application-code: 20ms)
+ GET /editor 500 in 13ms (next.js: 3ms, application-code: 10ms)
+ GET /editor 500 in 14ms (next.js: 5ms, application-code: 9ms)
+ GET /editor 500 in 106ms (next.js: 3ms, application-code: 103ms)
+ GET /editor 500 in 13ms (next.js: 3ms, application-code: 11ms)
+ GET /editor 500 in 17ms (next.js: 3ms, application-code: 14ms)
+ GET /editor 500 in 12ms (next.js: 3ms, application-code: 9ms)
+ GET /editor 500 in 26ms (next.js: 6ms, application-code: 20ms)
+ GET /editor 500 in 24ms (next.js: 3ms, application-code: 21ms)
+ GET /editor 500 in 14ms (next.js: 3ms, application-code: 11ms)
+ GET /editor 500 in 20ms (next.js: 3ms, application-code: 17ms)
+ GET /editor 500 in 12ms (next.js: 3ms, application-code: 9ms)
+ GET /editor 500 in 15ms (next.js: 1.9ms, application-code: 13ms)
+ GET /editor 500 in 13ms (next.js: 3ms, application-code: 10ms)
+ GET /editor 500 in 18ms (next.js: 4ms, application-code: 14ms)
+ GET /editor 500 in 13ms (next.js: 2ms, application-code: 11ms)
+ GET /editor 500 in 157ms (next.js: 3ms, application-code: 154ms)
+ GET /editor 500 in 11ms (next.js: 3ms, application-code: 9ms)
+ GET /editor 500 in 17ms (next.js: 4ms, application-code: 13ms)
+ GET /editor 500 in 16ms (next.js: 3ms, application-code: 13ms)
+ GET /editor 500 in 16ms (next.js: 4ms, application-code: 13ms)
+ GET /editor 500 in 16ms (next.js: 3ms, application-code: 13ms)
+ GET /editor 500 in 19ms (next.js: 3ms, application-code: 15ms)
+ GET /editor 500 in 23ms (next.js: 4ms, application-code: 19ms)
+ GET /editor 500 in 133ms (next.js: 19ms, application-code: 114ms)
+ GET /editor 500 in 149ms (next.js: 87ms, application-code: 62ms)
+ GET /editor 500 in 51ms (next.js: 16ms, application-code: 35ms)
+ GET /editor 500 in 27ms (next.js: 3ms, application-code: 24ms)
+ GET /editor 500 in 11ms (next.js: 3ms, application-code: 9ms)
+ GET /editor 500 in 127ms (next.js: 8ms, application-code: 119ms)
+ GET /editor 500 in 15ms (next.js: 3ms, application-code: 12ms)
+ GET /editor 500 in 11ms (next.js: 2ms, application-code: 8ms)
+ GET /editor 500 in 11ms (next.js: 3ms, application-code: 8ms)
+ GET /editor 500 in 21ms (next.js: 2ms, application-code: 19ms)
+ GET /editor 500 in 14ms (next.js: 3ms, application-code: 12ms)
+ GET /editor 500 in 24ms (next.js: 4ms, application-code: 20ms)
+ GET /editor 500 in 18ms (next.js: 3ms, application-code: 15ms)
+ GET /editor 500 in 16ms (next.js: 3ms, application-code: 13ms)
+ GET /editor 500 in 18ms (next.js: 7ms, application-code: 11ms)
+ GET /editor 500 in 37ms (next.js: 3ms, application-code: 33ms)
+ GET /editor 500 in 14ms (next.js: 3ms, application-code: 11ms)
+ GET /editor 500 in 15ms (next.js: 3ms, application-code: 12ms)
+ GET /editor 500 in 17ms (next.js: 3ms, application-code: 13ms)
+ GET /editor 500 in 18ms (next.js: 4ms, application-code: 15ms)
+ GET /editor 500 in 15ms (next.js: 3ms, application-code: 12ms)
+ GET /editor 500 in 18ms (next.js: 3ms, application-code: 15ms)
+ GET /editor 500 in 16ms (next.js: 3ms, application-code: 13ms)
+ GET /editor 500 in 15ms (next.js: 3ms, application-code: 12ms)
+ GET /editor 500 in 22ms (next.js: 4ms, application-code: 18ms)
+ GET /editor 500 in 16ms (next.js: 4ms, application-code: 12ms)
+ GET /editor 500 in 16ms (next.js: 3ms, application-code: 13ms)
+ GET /editor 500 in 20ms (next.js: 4ms, application-code: 16ms)
+ GET /editor 500 in 17ms (next.js: 3ms, application-code: 15ms)
+ GET /editor 500 in 18ms (next.js: 5ms, application-code: 13ms)
+ GET /editor 500 in 14ms (next.js: 3ms, application-code: 11ms)
+ GET /editor 500 in 15ms (next.js: 3ms, application-code: 12ms)
+ GET /editor 500 in 15ms (next.js: 3ms, application-code: 12ms)
+ GET /editor 500 in 13ms (next.js: 3ms, application-code: 10ms)
+ GET /editor 500 in 19ms (next.js: 3ms, application-code: 16ms)
+ GET /editor 500 in 19ms (next.js: 3ms, application-code: 16ms)
+ GET /editor 500 in 14ms (next.js: 3ms, application-code: 11ms)
+ GET /editor 500 in 32ms (next.js: 4ms, application-code: 28ms)
+ GET /editor 500 in 17ms (next.js: 4ms, application-code: 13ms)
+ GET /editor 500 in 15ms (next.js: 4ms, application-code: 12ms)
+ GET /editor 500 in 13ms (next.js: 3ms, application-code: 10ms)
+ GET /editor 500 in 23ms (next.js: 4ms, application-code: 19ms)
+ GET /editor 500 in 14ms (next.js: 3ms, application-code: 12ms)
+ GET /editor 500 in 12ms (next.js: 3ms, application-code: 10ms)
+ GET /editor 500 in 20ms (next.js: 3ms, application-code: 17ms)
+ GET /editor 500 in 24ms (next.js: 4ms, application-code: 20ms)
+ GET /editor 500 in 14ms (next.js: 3ms, application-code: 11ms)
+ GET /editor 500 in 15ms (next.js: 3ms, application-code: 12ms)
+ GET /editor 500 in 21ms (next.js: 7ms, application-code: 14ms)
+ GET /editor 500 in 14ms (next.js: 3ms, application-code: 11ms)
+ GET /editor 500 in 16ms (next.js: 3ms, application-code: 12ms)
+ GET /editor 500 in 17ms (next.js: 2ms, application-code: 15ms)
+ GET /editor 500 in 16ms (next.js: 4ms, application-code: 12ms)
+ GET /editor 500 in 17ms (next.js: 3ms, application-code: 14ms)
+ GET /editor 500 in 16ms (next.js: 3ms, application-code: 13ms)
+ GET /editor 500 in 28ms (next.js: 13ms, application-code: 15ms)
+ GET /editor 500 in 175ms (next.js: 20ms, application-code: 156ms)
+ GET /editor 500 in 215ms (next.js: 7ms, application-code: 208ms)
+ GET /editor 500 in 18ms (next.js: 5ms, application-code: 13ms)
+ GET /editor 500 in 19ms (next.js: 3ms, application-code: 16ms)
+
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Isolated server must start
+    at <anonymous> (C:\dev\vibecheck\test\draft-conflict-recovery.browser.ts:149:10) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v22.19.0

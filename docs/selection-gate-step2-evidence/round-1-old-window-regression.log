@@ -1,0 +1,11 @@
+NAVIGATION http://127.0.0.1:3000/studio/m0-control-lab/window?preview=http%3A%2F%2F127.0.0.1%3A3001&panel=inspector
+locator.waitFor: Timeout 30000ms exceeded.
+Call log:
+[2m  - waiting for locator('[data-source-ready="true"]') to be visible[22m
+
+    at runIframeSelections (C:\dev\vibecheck\test\helpers\m0-iframe-selection-gate.ts:25:52) {
+  log: [
+    `  - waiting for locator('[data-source-ready="true"]') to be visible`
+  ],
+  name: 'TimeoutError'
+}

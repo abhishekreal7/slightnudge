@@ -1,0 +1,226 @@
+GATE evidence C:\dev\vibecheck\docs\reliability-gate\2026-11-02T18-42-53-180Z-4614bb8-history
+PRODUCT 4614bb8ef0d898357c6b26766978dcfa3557739f TESTS 4614bb8ef0d898357c6b26766978dcfa3557739f
+No test assertions or limits changed; same HEAD tests at every historical product ref.
+
+COMMAND shared-runtime-setup: node --import tsx test/gate-shared-runner.v3.ts --setup-only
+SETUP 1793644977182 START git ["ls-files"]
+SETUP END elapsed 94ms
+SETUP 1793644977543 START git ["init","--quiet"]
+SETUP END elapsed 74ms
+SETUP 1793644977617 START git ["-c","core.autocrlf=false","add","app","components","package.json","LICENSE"]
+SETUP END elapsed 177ms
+SETUP 1793644977795 START C:\nvm4w\nodejs\node.exe ["--import","tsx","--input-type=module","-e","const {installNextSourceAdapter}=await import('./lib/slightnudge/next-source-adapter.ts');await installNextSourceAdapter('source-proof');"]
+SETUP END elapsed 496ms
+SETUP 1793644978291 START C:\nvm4w\nodejs\node.exe ["C:\\dev\\vibecheck\\scratch\\g\\94995019\\worktree\\scratch\\shared-gate-runtime\\.slightnudge\\repositories\\source-proof\\node_modules\\next\\dist\\bin\\next","dev","--help"]
+SETUP END elapsed 263ms
+Disposable source project: generated SaaS; Next.js 16.4.3; Tailwind 4.3.3; installed source adapter; no environment files checked out.
+GATE_RUNTIMES {"workspace":"C:\\dev\\vibecheck\\scratch\\g\\94995019\\worktree\\scratch\\shared-gate-runtime","repo":"C:\\dev\\vibecheck\\scratch\\g\\94995019\\worktree\\scratch\\shared-gate-runtime\\.slightnudge\\repositories\\source-proof"}
+SERVER 61068 PID 12240 C:\dev\vibecheck\scratch\g\94995019\worktree\scratch\shared-gate-runtime
+SERVER 61069 PID 3328 C:\dev\vibecheck\scratch\g\94995019\worktree\scratch\shared-gate-runtime\.slightnudge\repositories\source-proof
+
+COMMAND shared-compiler-warmup: node --import tsx test/gate-shared-runner.v3.ts --prepare
+SETUP 1793644980423 START git ["ls-files"]
+SETUP END elapsed 83ms
+TIMING 1793645000950 REQUEST http://127.0.0.1:61068/editor?panel=inspector
+TIMING 1793645001186 RESPONSE 200 http://127.0.0.1:61068/editor?panel=inspector
+TIMING 1793645002436 REQUEST http://127.0.0.1:61068/api/slightnudge/responsive
+TIMING 1793645002436 REQUEST http://127.0.0.1:61068/api/slightnudge/responsive
+TIMING 1793645002467 REQUEST http://127.0.0.1:61068/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A61068&__slightnudge_session=50733cc6-5f0c-4b6c-9cc1-25eca8958b15
+TIMING 1793645017605 RESPONSE 200 http://127.0.0.1:61068/api/slightnudge/responsive
+TIMING 1793645017669 RESPONSE 200 http://127.0.0.1:61068/api/slightnudge/responsive
+TIMING 1793645017683 RESPONSE 500 http://127.0.0.1:61068/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A61068&__slightnudge_session=50733cc6-5f0c-4b6c-9cc1-25eca8958b15
+TIMING 1793645018305 REQUEST http://127.0.0.1:61068/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+TIMING 1793645018546 RESPONSE 200 http://127.0.0.1:61068/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+WARMUP local editor, preview and API compilers 43032ms
+TIMING 1793645033000 REQUEST http://127.0.0.1:61068/editor/source-proof?preview=http%3A%2F%2F127.0.0.1%3A61069
+TIMING 1793645033386 RESPONSE 200 http://127.0.0.1:61068/editor/source-proof?preview=http%3A%2F%2F127.0.0.1%3A61069
+TIMING 1793645034634 REQUEST http://127.0.0.1:61068/api/slightnudge/repositories/source-proof
+TIMING 1793645034636 REQUEST http://127.0.0.1:61068/api/slightnudge/repositories/source-proof
+TIMING 1793645037954 RESPONSE 200 http://127.0.0.1:61068/api/slightnudge/repositories/source-proof
+TIMING 1793645038088 RESPONSE 200 http://127.0.0.1:61068/api/slightnudge/repositories/source-proof
+TIMING 1793645038094 REQUEST http://127.0.0.1:61068/api/slightnudge/repositories/source-proof/preview-check
+TIMING 1793645039651 RESPONSE 200 http://127.0.0.1:61068/api/slightnudge/repositories/source-proof/preview-check
+TIMING 1793645039656 REQUEST http://127.0.0.1:61069/?__slightnudge_session=1a013302-484f-40cb-85ba-4437b92dc415&__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A61068&__slightnudge_draft=1
+TIMING 1793645039701 RESPONSE 200 http://127.0.0.1:61069/?__slightnudge_session=1a013302-484f-40cb-85ba-4437b92dc415&__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A61068&__slightnudge_draft=1
+TIMING 1793645040587 REQUEST http://127.0.0.1:61068/api/slightnudge/responsive
+WARMUP imported adapter, preview and editor 60098ms
+PASS: 0 review-consent browser cases (REAL API; compiler warm-up only)
+
+COMMAND history: node --import tsx test/gate-history-runner.v3.ts
+HARNESS-V3 NAVIGATION http://127.0.0.1:61068/editor/source-proof?preview=http%3A%2F%2F127.0.0.1%3A61069%2F&panel=inspector&view=fit
+TIMING 1793645045943 REQUEST http://127.0.0.1:61068/editor/source-proof?preview=http%3A%2F%2F127.0.0.1%3A61069%2F&panel=inspector&view=fit
+TIMING 1793645046139 RESPONSE 200 http://127.0.0.1:61068/editor/source-proof?preview=http%3A%2F%2F127.0.0.1%3A61069%2F&panel=inspector&view=fit
+HARNESS-V3 OP 1793645046165 START waitFor locator('[data-source-ready="true"]')
+TIMING 1793645047081 REQUEST http://127.0.0.1:61068/api/slightnudge/repositories/source-proof
+TIMING 1793645047081 REQUEST http://127.0.0.1:61068/api/slightnudge/repositories/source-proof
+TIMING 1793645047265 RESPONSE 200 http://127.0.0.1:61068/api/slightnudge/repositories/source-proof
+TIMING 1793645047365 RESPONSE 200 http://127.0.0.1:61068/api/slightnudge/repositories/source-proof
+TIMING 1793645047369 REQUEST http://127.0.0.1:61068/api/slightnudge/repositories/source-proof/preview-check
+TIMING 1793645047455 RESPONSE 200 http://127.0.0.1:61068/api/slightnudge/repositories/source-proof/preview-check
+TIMING 1793645047469 REQUEST http://127.0.0.1:61069/?__slightnudge_session=a5331e63-1972-42e1-a2bd-f84268336fdf&__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A61068&__slightnudge_draft=1&__slightnudge_canvas=1
+TIMING 1793645047514 RESPONSE 200 http://127.0.0.1:61069/?__slightnudge_session=a5331e63-1972-42e1-a2bd-f84268336fdf&__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A61068&__slightnudge_draft=1&__slightnudge_canvas=1
+TIMING 1793645048614 REQUEST http://127.0.0.1:61068/api/slightnudge/responsive
+HARNESS-V3 OP 1793645048646 END waitFor locator('[data-source-ready="true"]')
+TIMING 1793645048762 RESPONSE 200 http://127.0.0.1:61068/api/slightnudge/responsive
+HARNESS-V3 OP 1793645048813 START count locator('iframe[title="Actual project"]')
+HARNESS-V3 OP 1793645048819 END count locator('iframe[title="Actual project"]')
+HARNESS-V3 OP 1793645048862 START evaluate locator('iframe[title="Actual project"]')
+HARNESS-V3 OP 1793645048873 END evaluate locator('iframe[title="Actual project"]')
+HARNESS-V3 OP 1793645049280 START evaluate locator('iframe[title="Actual project"]')
+HARNESS-V3 OP 1793645049290 END evaluate locator('iframe[title="Actual project"]')
+HARNESS-V3 OP 1793645049403 START evaluate locator('iframe[title="Actual project"]')
+TIMING 1793645049512 REQUEST http://127.0.0.1:61069/?__slightnudge_session=a5331e63-1972-42e1-a2bd-f84268336fdf&__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A61068&__slightnudge_draft=1&__slightnudge_canvas=1
+HARNESS-V3 OP 1793645049513 END evaluate locator('iframe[title="Actual project"]')
+TIMING 1793645049546 RESPONSE 200 http://127.0.0.1:61069/?__slightnudge_session=a5331e63-1972-42e1-a2bd-f84268336fdf&__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A61068&__slightnudge_draft=1&__slightnudge_canvas=1
+HARNESS-V3 OP 1793645049550 START waitFor locator('[data-source-ready="true"]')
+HARNESS-V3 OP 1793645050431 END waitFor locator('[data-source-ready="true"]')
+HARNESS-V3 OP 1793645050456 START boundingBox locator('[data-canvas-stage]')
+HARNESS-V3 OP 1793645050466 END boundingBox locator('[data-canvas-stage]')
+HARNESS-V3 OP 1793645050466 START boundingBox locator('iframe[title="Actual project"]')
+HARNESS-V3 OP 1793645050474 END boundingBox locator('iframe[title="Actual project"]')
+HARNESS-V3 OP 1793645050474 START selectOption getByRole('combobox', { name: 'Canvas zoom', exact: true })
+HARNESS-V3 OP 1793645050536 END selectOption getByRole('combobox', { name: 'Canvas zoom', exact: true })
+TIMING 1793645050744 REQUEST http://127.0.0.1:61068/api/slightnudge/responsive
+TIMING 1793645050744 REQUEST http://127.0.0.1:61068/api/slightnudge/preview
+HARNESS-V3 OP 1793645050816 START getAttribute getByRole('button', { name: 'Toggle design panel', exact: true })
+HARNESS-V3 OP 1793645050836 END getAttribute getByRole('button', { name: 'Toggle design panel', exact: true })
+HARNESS-V3 OP 1793645050836 START count getByRole('button', { name: 'Edit shared definition', exact: true })
+HARNESS-V3 OP 1793645050847 END count getByRole('button', { name: 'Edit shared definition', exact: true })
+HARNESS-V3 OP 1793645050847 START click getByRole('button', { name: 'Edit shared definition', exact: true })
+TIMING 1793645050949 REQUEST http://127.0.0.1:61068/api/slightnudge/repositories/source-proof/inspect
+HARNESS-V3 OP 1793645050971 END click getByRole('button', { name: 'Edit shared definition', exact: true })
+HARNESS-V3 OP 1793645050972 START waitFor getByRole('toolbar', { name: 'Selection formatting' }).getByRole('combobox', { name: 'Font size', exact: true })
+TIMING 1793645051400 RESPONSE 200 http://127.0.0.1:61068/api/slightnudge/preview
+TIMING 1793645051480 RESPONSE 200 http://127.0.0.1:61068/api/slightnudge/responsive
+TIMING 1793645054794 RESPONSE 200 http://127.0.0.1:61068/api/slightnudge/repositories/source-proof/inspect
+HARNESS-V3 OP 1793645055055 END waitFor getByRole('toolbar', { name: 'Selection formatting' }).getByRole('combobox', { name: 'Font size', exact: true })
+HARNESS-V3 OP 1793645055079 START click getByRole('toolbar', { name: 'Selection formatting', exact: true }).getByRole('button', { name: 'Edit text', exact: true })
+TIMING 1793645055225 REQUEST http://127.0.0.1:61068/api/slightnudge/repositories/source-proof/inspect
+HARNESS-V3 OP 1793645055278 END click getByRole('toolbar', { name: 'Selection formatting', exact: true }).getByRole('button', { name: 'Edit text', exact: true })
+TIMING 1793645055374 RESPONSE 200 http://127.0.0.1:61068/api/slightnudge/repositories/source-proof/inspect
+HARNESS-V3 OP 1793645055544 START waitFor getByLabel('Draft status', { exact: true }).filter({ hasText: '1 change' })
+TIMING 1793645055557 REQUEST http://127.0.0.1:61068/api/slightnudge/preview
+TIMING 1793645056032 RESPONSE 200 http://127.0.0.1:61068/api/slightnudge/preview
+TIMING 1793645056498 REQUEST http://127.0.0.1:61068/api/slightnudge/preview
+HARNESS-V3 OP 1793645056505 END waitFor getByLabel('Draft status', { exact: true }).filter({ hasText: '1 change' })
+TIMING 1793645056595 REQUEST http://127.0.0.1:61068/api/slightnudge/responsive
+TIMING 1793645056595 REQUEST http://127.0.0.1:61068/api/slightnudge/preview
+HARNESS-V3 OP 1793645056598 START getAttribute getByRole('button', { name: 'Toggle design panel', exact: true })
+HARNESS-V3 OP 1793645056611 END getAttribute getByRole('button', { name: 'Toggle design panel', exact: true })
+HARNESS-V3 OP 1793645056611 START count getByRole('button', { name: 'Edit shared definition', exact: true })
+HARNESS-V3 OP 1793645056615 END count getByRole('button', { name: 'Edit shared definition', exact: true })
+HARNESS-V3 OP 1793645056615 START click getByRole('button', { name: 'Edit shared definition', exact: true })
+TIMING 1793645056667 REQUEST http://127.0.0.1:61068/api/slightnudge/repositories/source-proof/inspect
+HARNESS-V3 OP 1793645056671 END click getByRole('button', { name: 'Edit shared definition', exact: true })
+HARNESS-V3 OP 1793645056672 START waitFor getByRole('toolbar', { name: 'Selection formatting' }).getByRole('combobox', { name: 'Font size', exact: true })
+TIMING 1793645057000 RESPONSE 200 http://127.0.0.1:61068/api/slightnudge/preview
+TIMING 1793645057045 RESPONSE 200 http://127.0.0.1:61068/api/slightnudge/responsive
+TIMING 1793645057277 RESPONSE 200 http://127.0.0.1:61068/api/slightnudge/repositories/source-proof/inspect
+HARNESS-V3 OP 1793645057563 END waitFor getByRole('toolbar', { name: 'Selection formatting' }).getByRole('combobox', { name: 'Font size', exact: true })
+HARNESS-V3 OP 1793645057575 START boundingBox getByRole('button', { name: 'Move element', exact: true })
+HARNESS-V3 OP 1793645057592 END boundingBox getByRole('button', { name: 'Move element', exact: true })
+HARNESS-V3 OP 1793645057875 START waitFor getByLabel('Draft status', { exact: true }).filter({ hasText: '2 changes' })
+TIMING 1793645057877 REQUEST http://127.0.0.1:61068/api/slightnudge/preview
+TIMING 1793645058286 RESPONSE 200 http://127.0.0.1:61068/api/slightnudge/preview
+TIMING 1793645058622 REQUEST http://127.0.0.1:61068/api/slightnudge/preview
+HARNESS-V3 OP 1793645058712 END waitFor getByLabel('Draft status', { exact: true }).filter({ hasText: '2 changes' })
+HARNESS-V3 OP 1793645058738 START click getByRole('button', { name: 'Change history', exact: true })
+HARNESS-V3 OP 1793645058820 END click getByRole('button', { name: 'Change history', exact: true })
+HARNESS-V3 OP 1793645058820 START waitFor getByRole('dialog', { name: 'Change history', exact: true })
+HARNESS-V3 OP 1793645058828 END waitFor getByRole('dialog', { name: 'Change history', exact: true })
+HARNESS-V3 OP 1793645058829 START boundingBox getByRole('dialog', { name: 'Change history', exact: true })
+HARNESS-V3 OP 1793645058840 END boundingBox getByRole('dialog', { name: 'Change history', exact: true })
+HARNESS-V3 OP 1793645058840 START count getByRole('dialog', { name: 'Change history', exact: true }).getByText('Unsaved', { exact: true })
+HARNESS-V3 OP 1793645058845 END count getByRole('dialog', { name: 'Change history', exact: true }).getByText('Unsaved', { exact: true })
+HARNESS-V3 OP 1793645058845 START press getByRole('dialog', { name: 'Change history', exact: true })
+HARNESS-V3 OP 1793645058864 END press getByRole('dialog', { name: 'Change history', exact: true })
+HARNESS-V3 OP 1793645058864 START count getByRole('dialog', { name: 'Change history', exact: true }).getByText('Unsaved', { exact: true })
+HARNESS-V3 OP 1793645058868 END count getByRole('dialog', { name: 'Change history', exact: true }).getByText('Unsaved', { exact: true })
+HARNESS-V3 OP 1793645058868 START press getByRole('dialog', { name: 'Change history', exact: true })
+HARNESS-V3 OP 1793645058881 END press getByRole('dialog', { name: 'Change history', exact: true })
+HARNESS-V3 OP 1793645058888 START press getByRole('dialog', { name: 'Change history', exact: true })
+HARNESS-V3 OP 1793645058926 END press getByRole('dialog', { name: 'Change history', exact: true })
+HARNESS-V3 OP 1793645058926 START waitFor getByRole('dialog', { name: 'Change history', exact: true })
+HARNESS-V3 OP 1793645058930 END waitFor getByRole('dialog', { name: 'Change history', exact: true })
+TIMING 1793645058939 REQUEST http://127.0.0.1:61068/editor/source-proof?preview=http%3A%2F%2F127.0.0.1%3A61069%2F&panel=inspector&view=fit
+TIMING 1793645058951 REQUEST http://127.0.0.1:61068/api/slightnudge/responsive
+TIMING 1793645059385 RESPONSE 200 http://127.0.0.1:61068/editor/source-proof?preview=http%3A%2F%2F127.0.0.1%3A61069%2F&panel=inspector&view=fit
+HARNESS-V3 OP 1793645059516 START waitFor locator('[data-source-ready="true"]')
+TIMING 1793645060553 REQUEST http://127.0.0.1:61068/api/slightnudge/repositories/source-proof
+TIMING 1793645060554 REQUEST http://127.0.0.1:61068/api/slightnudge/repositories/source-proof
+TIMING 1793645060840 RESPONSE 200 http://127.0.0.1:61068/api/slightnudge/repositories/source-proof
+TIMING 1793645061058 RESPONSE 200 http://127.0.0.1:61068/api/slightnudge/repositories/source-proof
+TIMING 1793645061063 REQUEST http://127.0.0.1:61068/api/slightnudge/repositories/source-proof/preview-check
+TIMING 1793645061204 RESPONSE 200 http://127.0.0.1:61068/api/slightnudge/repositories/source-proof/preview-check
+TIMING 1793645061213 REQUEST http://127.0.0.1:61069/?__slightnudge_session=196f1d90-06ed-4c31-ab2a-edbcc6b22074&__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A61068&__slightnudge_draft=1&__slightnudge_canvas=1
+TIMING 1793645061270 RESPONSE 200 http://127.0.0.1:61069/?__slightnudge_session=196f1d90-06ed-4c31-ab2a-edbcc6b22074&__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A61068&__slightnudge_draft=1&__slightnudge_canvas=1
+TIMING 1793645062287 REQUEST http://127.0.0.1:61068/api/slightnudge/responsive
+TIMING 1793645062434 RESPONSE 200 http://127.0.0.1:61068/api/slightnudge/responsive
+HARNESS-V3 OP 1793645062604 END waitFor locator('[data-source-ready="true"]')
+HARNESS-V3 OP 1793645064151 START waitFor getByLabel('Draft status', { exact: true }).filter({ hasText: '2 changes' })
+HARNESS-V3 OP 1793645064198 END waitFor getByLabel('Draft status', { exact: true }).filter({ hasText: '2 changes' })
+HARNESS-V3 OP 1793645064224 START click getByRole('button', { name: 'Save changes', exact: true })
+HARNESS-V3 OP 1793645064394 END click getByRole('button', { name: 'Save changes', exact: true })
+TIMING 1793645067153 REQUEST http://127.0.0.1:61069/?__slightnudge_session=146b50b5-586d-467e-b7aa-fd6cb9095a71&__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A61068&__slightnudge_draft=1&__slightnudge_canvas=1&__slightnudge_refresh=b3a007b2-b690-4af0-88bc-05bd4f77a309
+TIMING 1793645067207 RESPONSE 200 http://127.0.0.1:61069/?__slightnudge_session=146b50b5-586d-467e-b7aa-fd6cb9095a71&__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A61068&__slightnudge_draft=1&__slightnudge_canvas=1&__slightnudge_refresh=b3a007b2-b690-4af0-88bc-05bd4f77a309
+HARNESS-V3 OP 1793645068290 START waitFor locator('[data-source-ready="true"]')
+HARNESS-V3 OP 1793645068315 END waitFor locator('[data-source-ready="true"]')
+HARNESS-V3 OP 1793645068315 START click getByRole('button', { name: 'Change history', exact: true })
+HARNESS-V3 OP 1793645068433 END click getByRole('button', { name: 'Change history', exact: true })
+HARNESS-V3 OP 1793645068433 START waitFor getByRole('dialog', { name: 'Change history', exact: true })
+HARNESS-V3 OP 1793645068440 END waitFor getByRole('dialog', { name: 'Change history', exact: true })
+HARNESS-V3 OP 1793645068440 START waitFor getByRole('dialog', { name: 'Change history', exact: true }).getByText('Saved changes across 2 files', { exact: true })
+HARNESS-V3 OP 1793645068638 END waitFor getByRole('dialog', { name: 'Change history', exact: true }).getByText('Saved changes across 2 files', { exact: true })
+HARNESS-V3 OP 1793645068638 START waitFor getByRole('dialog', { name: 'Change history', exact: true }).getByText(/Saved to source/)
+HARNESS-V3 OP 1793645068644 END waitFor getByRole('dialog', { name: 'Change history', exact: true }).getByText(/Saved to source/)
+HARNESS-V3 OP 1793645068771 START press getByRole('dialog', { name: 'Change history', exact: true })
+HARNESS-V3 OP 1793645068785 END press getByRole('dialog', { name: 'Change history', exact: true })
+HARNESS-V3 OP 1793645068785 START waitFor getByRole('dialog', { name: 'Change history', exact: true })
+HARNESS-V3 OP 1793645068789 END waitFor getByRole('dialog', { name: 'Change history', exact: true })
+HARNESS-V3 OP 1793645068789 START click getByRole('button', { name: 'Undo', exact: true })
+HARNESS-V3 OP 1793645068943 END click getByRole('button', { name: 'Undo', exact: true })
+TIMING 1793645070252 REQUEST http://127.0.0.1:61069/?__slightnudge_session=dc9846bd-cb05-4e19-9460-b9263580fcb7&__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A61068&__slightnudge_draft=1&__slightnudge_canvas=1&__slightnudge_refresh=4e622a31-3c78-4d38-801c-01511af00723
+TIMING 1793645070288 RESPONSE 200 http://127.0.0.1:61069/?__slightnudge_session=dc9846bd-cb05-4e19-9460-b9263580fcb7&__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A61068&__slightnudge_draft=1&__slightnudge_canvas=1&__slightnudge_refresh=4e622a31-3c78-4d38-801c-01511af00723
+HARNESS-V3 OP 1793645071183 START waitFor locator('[data-source-ready="true"]')
+HARNESS-V3 OP 1793645071207 END waitFor locator('[data-source-ready="true"]')
+HARNESS-V3 OP 1793645071208 START click getByRole('button', { name: 'Change history', exact: true })
+HARNESS-V3 OP 1793645071296 END click getByRole('button', { name: 'Change history', exact: true })
+HARNESS-V3 OP 1793645071296 START waitFor getByRole('dialog', { name: 'Change history', exact: true })
+HARNESS-V3 OP 1793645071302 END waitFor getByRole('dialog', { name: 'Change history', exact: true })
+HARNESS-V3 OP 1793645071303 START waitFor getByRole('dialog', { name: 'Change history', exact: true }).getByText(/Save undone/)
+HARNESS-V3 OP 1793645071501 END waitFor getByRole('dialog', { name: 'Change history', exact: true }).getByText(/Save undone/)
+HARNESS-V3 OP 1793645071501 START click getByRole('dialog', { name: 'Change history', exact: true }).getByRole('button', { name: 'Refresh saved history', exact: true })
+HARNESS-V3 OP 1793645071527 END click getByRole('dialog', { name: 'Change history', exact: true }).getByRole('button', { name: 'Refresh saved history', exact: true })
+HARNESS-V3 OP 1793645071528 START waitFor getByRole('dialog', { name: 'Change history', exact: true }).getByText(/Save undone/)
+HARNESS-V3 OP 1793645071632 END waitFor getByRole('dialog', { name: 'Change history', exact: true }).getByText(/Save undone/)
+HARNESS-V3 OP 1793645071633 START press getByRole('dialog', { name: 'Change history', exact: true })
+HARNESS-V3 OP 1793645071643 END press getByRole('dialog', { name: 'Change history', exact: true })
+HARNESS-V3 OP 1793645071643 START waitFor getByRole('dialog', { name: 'Change history', exact: true })
+HARNESS-V3 OP 1793645071646 END waitFor getByRole('dialog', { name: 'Change history', exact: true })
+HARNESS-V3 OP 1793645071646 START click getByRole('button', { name: 'Fit page to canvas', exact: true })
+HARNESS-V3 OP 1793645131655 ERROR click getByRole('button', { name: 'Fit page to canvas', exact: true })
+
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+locator.click: Timeout 60000ms exceeded.
+Call log:
+[2m  - waiting for getByRole('button', { name: 'Fit page to canvas', exact: true })[22m
+
+    at Proxy.<anonymous> (C:\dev\vibecheck\scratch\g\94995019\worktree\test\helpers\gate-page-v3.ts:24:176)
+    at checkImportedCanvas (C:\dev\vibecheck\scratch\g\94995019\worktree\test\helpers\imported-canvas-browser.v4.ts:118:81)
+    at async <anonymous> (C:\dev\vibecheck\scratch\g\94995019\worktree\test\gate-history-runner.v3.ts:12:15) {
+  log: [
+    "  - waiting for getByRole('button', { name: 'Fit page to canvas', exact: true })"
+  ],
+  name: 'TimeoutError'
+}
+
+Node.js v22.19.0
+
+workflow | harness | REAL or MOCKED | result | seconds
+shared-compiler-warmup | HARNESS-V3 | REAL | PASS | 63.37
+history | HARNESS-V3 | REAL | FAIL | 91.06
+TOTAL ELAPSED 161.89s
+GATE FAIL; evidence C:\dev\vibecheck\docs\reliability-gate\2026-11-02T18-42-53-180Z-4614bb8-history

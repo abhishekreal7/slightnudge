@@ -1,0 +1,7 @@
+PASS separate editing window: full real viewport, optional panels without breakpoint changes, attached inline controls, grouped local draft, Save/Undo, Edit/Browse behavior, untouched parent window
+Disposable source project: generated SaaS; Next.js 16.4.3; Tailwind 4.3.3; installed source adapter; no environment files checked out.
+Connection check {"url":"http://127.0.0.1:58047"} 200 {"success":true,"url":"http://127.0.0.1:58047/","status":200}
+Imported responsive notice: Undid Save visual draft.
+PASS imported responsive editing: project-custom breakpoints, isolated variant edit, mobile inheritance, refresh recovery, Save from another width, rendered custom-scope CSS and exact source Undo
+PASS imported localhost window: paired adapter, real text/style/order drafts, refresh recovery, cross-container move and centered position Move in an imported source file, grouped Save and exact Undo; local project source only
+PASS: 2 review-consent browser cases (real API; disposable source copy)

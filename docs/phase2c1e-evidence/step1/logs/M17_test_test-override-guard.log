@@ -1,0 +1,6 @@
+🧪 RUNNING TEST OVERRIDE GUARD SUITE
+  ✅ [PASS] NODE_ENV=production strictly ignores all SLIGHTNUDGE_* overrides even when SLIGHTNUDGE_TEST=1
+  ✅ [PASS] NODE_ENV=development with SLIGHTNUDGE_TEST=1 honors overrides
+  ✅ [PASS] SLIGHTNUDGE_TEST unset ignores overrides even in development
+🎉 ALL TEST OVERRIDE GUARD CHECKS PASSED!
+

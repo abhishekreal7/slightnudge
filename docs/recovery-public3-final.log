@@ -1,0 +1,63 @@
+Disposable source project: https://github.com/EdgeOneDev/saas-starter; Next.js 14.0.4; Tailwind 3.4.17; installed source adapter; no environment files checked out.
+Selection 1/30: refused — src/components/layout/layout.tsx:18:5
+Selection 2/30: allowed — src/components/layout/header.tsx:62:7
+Selection 3/30: allowed — src/components/layout/header.tsx:63:9
+Selection 4/30: allowed — src/components/layout/header.tsx:65:11
+Selection 5/30: allowed — src/components/layout/header.tsx:72:11
+Selection 6/30: allowed — src/components/layout/header.tsx:90:11
+Selection 7/30: allowed — src/components/language-switcher.tsx:56:5
+Selection 8/30: refused — src/components/ui/button.tsx:73:7
+Selection 9/30: allowed — src/components/language-switcher.tsx:66:9
+Selection 10/30: refused — src/components/ui/button.tsx:73:7
+Selection 11/30: refused — src/components/layout/header.tsx:110:15
+Selection 12/30: refused — src/components/layout/header.tsx:111:17
+Selection 13/30: refused — src/components/layout/header.tsx:112:17
+Selection 14/30: refused — src/components/sections/hero.tsx:73:5
+Selection 15/30: refused — src/components/sections/hero.tsx:75:7
+Selection 16/30: refused — src/components/sections/hero.tsx:76:9
+Selection 17/30: refused — src/components/sections/hero.tsx:77:9
+Selection 18/30: refused — src/components/sections/hero.tsx:81:7
+Source proof failure notice: none
+Source proof failure alert: [ '' ]
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+locator.scrollIntoViewIfNeeded: Timeout 4980.131999999983ms exceeded.
+Call log:
+  - attempting scroll into view action
+    2 × waiting for element to be stable
+      - element is not stable
+    - retrying scroll into view action
+    - waiting 20ms
+    2 × waiting for element to be stable
+      - element is not stable
+    - retrying scroll into view action
+      - waiting 100ms
+    9 × waiting for element to be stable
+      - element is not stable
+    - retrying scroll into view action
+      - waiting 500ms
+
+    at checkSourceSelections (C:\dev\vibecheck\test\helpers\source-selection-workflows.ts:37:25)
+    at async checkSourceProject (C:\dev\vibecheck\test\helpers\source-project-browser.ts:97:64)
+    at async <anonymous> (C:\dev\vibecheck\test\review-consent.browser.ts:91:14) {
+  log: [
+    '  - attempting scroll into view action',
+    '    2 × waiting for element to be stable',
+    '      - element is not stable',
+    '    - retrying scroll into view action',
+    '    - waiting 20ms',
+    '    2 × waiting for element to be stable',
+    '      - element is not stable',
+    '    - retrying scroll into view action',
+    '      - waiting 100ms',
+    '    9 × waiting for element to be stable',
+    '      - element is not stable',
+    '    - retrying scroll into view action',
+    '      - waiting 500ms'
+  ],
+  name: 'TimeoutError'
+}
+
+Node.js v22.19.0

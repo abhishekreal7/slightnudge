@@ -1,0 +1,21 @@
+Disposable source project: https://github.com/bennyjoel/nextjs-saas-starter-lite; Next.js 14.2.35; Tailwind 3.4.19; installed source adapter; no environment files checked out.
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: The sample must contain thirty distinct selectable elements
+
+17 !== 30
+
+    at checkSourceSelections (C:\dev\vibecheck\test\helpers\source-selection-workflows.ts:15:10)
+    at async checkSourceProject (C:\dev\vibecheck\test\helpers\source-project-browser.ts:65:64)
+    at async <anonymous> (C:\dev\vibecheck\test\review-consent.browser.ts:88:14) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 17,
+  expected: 30,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v22.19.0

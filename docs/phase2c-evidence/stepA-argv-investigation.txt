@@ -1,0 +1,30 @@
+﻿=== STEP A: PROCESS.ARGV BYPASS INVESTIGATION ===
+
+1. Standard Server Launch Scenarios (current workspace):
+[BLOCKED] npm run dev / next dev --webpack -H 127.0.0.1
+  argv: ["node","C:\\dev\\vibecheck\\node_modules\\next\\dist\\bin\\next","dev","--webpack","-H","127.0.0.1"]
+  SLIGHTNUDGE_TEST: undefined, NODE_ENV: development
+  Result: INVALID (Status 403)
+
+[BLOCKED] next start (production server)
+  argv: ["node","C:\\dev\\vibecheck\\node_modules\\next\\dist\\bin\\next","start"]
+  SLIGHTNUDGE_TEST: undefined, NODE_ENV: production
+  Result: INVALID (Status 403)
+
+2. Potentially Vulnerable Server Launch Scenarios:
+[BYPASSED] Repo cloned into path containing "reorder-safety" (e.g. C:\dev\reorder-safety\vibecheck)
+  argv: ["node","C:\\dev\\reorder-safety\\vibecheck\\node_modules\\next\\dist\\bin\\next","dev"]
+  SLIGHTNUDGE_TEST: undefined, NODE_ENV: development
+  Result: VALID (AUTH BYPASSED!)
+
+[BYPASSED] Production server running in path containing "reorder-safety"
+  argv: ["node","C:\\apps\\reorder-safety\\node_modules\\next\\dist\\bin\\next","start"]
+  SLIGHTNUDGE_TEST: undefined, NODE_ENV: production
+  Result: VALID (AUTH BYPASSED!)
+
+[BYPASSED] Server started with extra CLI argument matching "reorder-safety"
+  argv: ["node","C:\\dev\\vibecheck\\node_modules\\next\\dist\\bin\\next","dev","--filter=reorder-safety"]
+  SLIGHTNUDGE_TEST: undefined, NODE_ENV: development
+  Result: VALID (AUTH BYPASSED!)
+
+Demonstration complete.

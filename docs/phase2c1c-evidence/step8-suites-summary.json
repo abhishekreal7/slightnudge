@@ -1,0 +1,154 @@
+[
+  {
+    "name": "reorder-safety",
+    "command": "npx tsx test/reorder-safety.test.ts",
+    "exitCode": 0,
+    "passed": true,
+    "durationMs": 1443,
+    "logFile": "docs/phase2c1c-evidence/step8-suite-reorder-safety.txt"
+  },
+  {
+    "name": "adapter",
+    "command": "npx tsx test/adapter.test.ts",
+    "exitCode": 0,
+    "passed": true,
+    "durationMs": 1043,
+    "logFile": "docs/phase2c1c-evidence/step8-suite-adapter.txt"
+  },
+  {
+    "name": "history-resilience",
+    "command": "npx tsx test/history-resilience.test.ts",
+    "exitCode": 0,
+    "passed": true,
+    "durationMs": 1686,
+    "logFile": "docs/phase2c1c-evidence/step8-suite-history-resilience.txt"
+  },
+  {
+    "name": "s1-auth-origin",
+    "command": "npx tsx test/s1-auth-origin.test.ts",
+    "exitCode": 0,
+    "passed": true,
+    "durationMs": 31345,
+    "logFile": "docs/phase2c1c-evidence/step8-suite-s1-auth-origin.txt"
+  },
+  {
+    "name": "s1-auth-bypass",
+    "command": "npx tsx test/s1-auth-bypass.test.ts",
+    "exitCode": 0,
+    "passed": true,
+    "durationMs": 994,
+    "logFile": "docs/phase2c1c-evidence/step8-suite-s1-auth-bypass.txt"
+  },
+  {
+    "name": "s2",
+    "command": "npx tsx test/s2-path-traversal.test.ts",
+    "exitCode": 0,
+    "passed": true,
+    "durationMs": 2301,
+    "logFile": "docs/phase2c1c-evidence/step8-suite-s2.txt"
+  },
+  {
+    "name": "s3",
+    "command": "npx tsx test/s3-atomic-write.test.ts",
+    "exitCode": 0,
+    "passed": true,
+    "durationMs": 3051,
+    "logFile": "docs/phase2c1c-evidence/step8-suite-s3.txt"
+  },
+  {
+    "name": "s5-compile",
+    "command": "npx tsx test/s5-tailwind-compile.test.ts",
+    "exitCode": 0,
+    "passed": true,
+    "durationMs": 1964,
+    "logFile": "docs/phase2c1c-evidence/step8-suite-s5-compile.txt"
+  },
+  {
+    "name": "s5-theme",
+    "command": "npx tsx test/s5-theme-support.test.ts",
+    "exitCode": 0,
+    "passed": true,
+    "durationMs": 2137,
+    "logFile": "docs/phase2c1c-evidence/step8-suite-s5-theme.txt"
+  },
+  {
+    "name": "s5-v3",
+    "command": "npx tsx test/s5-v3-support.test.ts",
+    "exitCode": 0,
+    "passed": true,
+    "durationMs": 23307,
+    "logFile": "docs/phase2c1c-evidence/step8-suite-s5-v3.txt"
+  },
+  {
+    "name": "test-override-guard",
+    "command": "npx tsx test/test-override-guard.test.ts",
+    "exitCode": 0,
+    "passed": true,
+    "durationMs": 1514,
+    "logFile": "docs/phase2c1c-evidence/step8-suite-test-override-guard.txt"
+  },
+  {
+    "name": "prewrite-hook-guard",
+    "command": "npx tsx test/prewrite-hook-guard.test.ts",
+    "exitCode": 0,
+    "passed": true,
+    "durationMs": 1493,
+    "logFile": "docs/phase2c1c-evidence/step8-suite-prewrite-hook-guard.txt"
+  },
+  {
+    "name": "m5-containment-helper",
+    "command": "npx tsx test/m5-containment-helper.test.ts",
+    "exitCode": 0,
+    "passed": true,
+    "durationMs": 2274,
+    "logFile": "docs/phase2c1c-evidence/step8-suite-m5-containment-helper.txt"
+  },
+  {
+    "name": "token-undo",
+    "command": "npx tsx test/token-undo.test.ts",
+    "exitCode": 0,
+    "passed": true,
+    "durationMs": 4375,
+    "logFile": "docs/phase2c1c-evidence/step8-suite-token-undo.txt"
+  },
+  {
+    "name": "token-html-host",
+    "command": "npx tsx test/token-html-host.test.ts",
+    "exitCode": 0,
+    "passed": true,
+    "durationMs": 66941,
+    "logFile": "docs/phase2c1c-evidence/step8-suite-token-html-host.txt"
+  },
+  {
+    "name": "undo-refusals",
+    "command": "npx tsx test/undo-refusals.test.ts",
+    "exitCode": 0,
+    "passed": true,
+    "durationMs": 6258,
+    "logFile": "docs/phase2c1c-evidence/step8-suite-undo-refusals.txt"
+  },
+  {
+    "name": "fixtures",
+    "command": "npx tsx test/fixtures.test.ts",
+    "exitCode": 0,
+    "passed": true,
+    "durationMs": 1821,
+    "logFile": "docs/phase2c1c-evidence/step8-suite-fixtures.txt"
+  },
+  {
+    "name": "m0-regression",
+    "command": "m0-control-lab -> test/m0-regression.test.ts",
+    "exitCode": 0,
+    "passed": true,
+    "durationMs": 45876,
+    "logFile": "docs/phase2c1c-evidence/step8-suite-m0-regression.txt"
+  },
+  {
+    "name": "m0-overfit",
+    "command": "m0-overfit-lab -> test/m0-overfit.test.ts",
+    "exitCode": 0,
+    "passed": true,
+    "durationMs": 37862,
+    "logFile": "docs/phase2c1c-evidence/step8-suite-m0-overfit.txt"
+  }
+]

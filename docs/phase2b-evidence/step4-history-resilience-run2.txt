@@ -1,0 +1,53 @@
+﻿TAP version 13
+# Subtest: History Resilience: Resilient readHistory and Safe File Validation
+    # Subtest: (a) a history entry whose file was deleted must not make apply throw: apply on a different existing file succeeds
+    ok 1 - (a) a history entry whose file was deleted must not make apply throw: apply on a different existing file succeeds
+      ---
+      duration_ms: 495.1606
+      type: 'test'
+      ...
+    # Subtest: (b) a history entry whose file was deleted must not break undo of a different edit
+    ok 2 - (b) a history entry whose file was deleted must not break undo of a different edit
+      ---
+      duration_ms: 12.1694
+      type: 'test'
+      ...
+    # Subtest: (c) a missing-file entry stays in the history file (never auto-deleted) and is returned marked missing so the UI can show it unavailable
+    ok 3 - (c) a missing-file entry stays in the history file (never auto-deleted) and is returned marked missing so the UI can show it unavailable
+      ---
+      duration_ms: 6.8082
+      type: 'test'
+      ...
+    # Subtest: (d) an entry whose path escapes the project root is skipped and reported, never followed
+    ok 4 - (d) an entry whose path escapes the project root is skipped and reported, never followed
+      ---
+      duration_ms: 10.1933
+      type: 'test'
+      ...
+    # Subtest: (e) undo of the entry whose file is missing returns a clear error ("that file no longer exists"), not a crash
+    ok 5 - (e) undo of the entry whose file is missing returns a clear error ("that file no longer exists"), not a crash
+      ---
+      duration_ms: 6.1157
+      type: 'test'
+      ...
+    # Subtest: (f) a corrupt history file (invalid JSON) produces a clear error and does not overwrite or truncate the file
+    ok 6 - (f) a corrupt history file (invalid JSON) produces a clear error and does not overwrite or truncate the file
+      ---
+      duration_ms: 5.8414
+      type: 'test'
+      ...
+    1..6
+ok 1 - History Resilience: Resilient readHistory and Safe File Validation
+  ---
+  duration_ms: 537.4127
+  type: 'suite'
+  ...
+1..1
+# tests 6
+# suites 1
+# pass 6
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 543.9448

@@ -1,0 +1,51 @@
+{
+  "head": "ec3973c843b04f4bf2db1e30eb0c7fa9c7320b63",
+  "productRef": "ec3973c843b04f4bf2db1e30eb0c7fa9c7320b63",
+  "testRef": "ec3973c843b04f4bf2db1e30eb0c7fa9c7320b63",
+  "fatal": false,
+  "rows": [
+    {
+      "workflow": "shared-compiler-warmup",
+      "harness": "HARNESS-V3",
+      "api": "REAL",
+      "result": "PASS",
+      "seconds": 138.73
+    },
+    {
+      "workflow": "shared-local-studio",
+      "harness": "HARNESS-V3",
+      "api": "REAL",
+      "result": "TIMEOUT",
+      "testPassed": false,
+      "seconds": 122,
+      "exitCode": 1,
+      "historical": "docs/security-hardening/shared-workflows.log",
+      "invalidManifestServers": [],
+      "invalidChildServerLogs": []
+    },
+    {
+      "workflow": "shared-local-window",
+      "harness": "HARNESS-V3",
+      "api": "REAL",
+      "result": "HARNESS-ERROR",
+      "seconds": 0,
+      "error": "Previous owned-runtime workflow timed out; refusing to reuse state while an Apply may be unconfirmed"
+    },
+    {
+      "workflow": "shared-imported-studio",
+      "harness": "HARNESS-V3",
+      "api": "REAL",
+      "result": "HARNESS-ERROR",
+      "seconds": 0,
+      "error": "Previous owned-runtime workflow timed out; refusing to reuse state while an Apply may be unconfirmed"
+    },
+    {
+      "workflow": "shared-imported-window",
+      "harness": "HARNESS-V3",
+      "api": "REAL",
+      "result": "HARNESS-ERROR",
+      "seconds": 0,
+      "error": "Previous owned-runtime workflow timed out; refusing to reuse state while an Apply may be unconfirmed"
+    }
+  ]
+}

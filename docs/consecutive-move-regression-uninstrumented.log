@@ -1,0 +1,267 @@
+HARNESS-V3 NAVIGATION http://127.0.0.1:52907/editor?view=fit&panel=inspector
+HARNESS-V3 OP 1793722272685 START waitFor locator('[data-source-ready="true"]')
+HARNESS-V3 OP 1793722275499 END waitFor locator('[data-source-ready="true"]')
+HARNESS-V3 OP 1793722275501 START selectOption getByRole('combobox', { name: 'Canvas zoom', exact: true })
+HARNESS-V3 OP 1793722275652 END selectOption getByRole('combobox', { name: 'Canvas zoom', exact: true })
+HARNESS-V3 OP 1793722275653 START click locator('h1')
+HARNESS-V3 OP 1793722276479 END click locator('h1')
+HARNESS-V3 OP 1793722276481 START boundingBox locator('h1')
+HARNESS-V3 OP 1793722276539 END boundingBox locator('h1')
+HARNESS-V3 OP 1793722276539 START boundingBox getByRole('button', { name: 'Move element', exact: true })
+HARNESS-V3 OP 1793722276591 END boundingBox getByRole('button', { name: 'Move element', exact: true })
+HARNESS-V3 OP 1793722276591 START click getByRole('button', { name: 'Move element', exact: true })
+HARNESS-V3 OP 1793722277823 END click getByRole('button', { name: 'Move element', exact: true })
+HARNESS-V3 OP 1793722277824 START waitFor getByRole('group', { name: 'Move selected element', exact: true })
+HARNESS-V3 OP 1793722277990 END waitFor getByRole('group', { name: 'Move selected element', exact: true })
+HARNESS-V3 OP 1793722277991 START click getByRole('button', { name: 'Move element', exact: true })
+HARNESS-V3 OP 1793722279269 END click getByRole('button', { name: 'Move element', exact: true })
+HARNESS-V3 OP 1793722279270 START count getByRole('group', { name: 'Move selected element', exact: true })
+HARNESS-V3 OP 1793722279281 END count getByRole('group', { name: 'Move selected element', exact: true })
+HARNESS-V3 OP 1793722279282 START boundingBox getByRole('button', { name: 'Move element', exact: true })
+HARNESS-V3 OP 1793722279306 END boundingBox getByRole('button', { name: 'Move element', exact: true })
+HARNESS-V3 OP 1793722279522 START waitFor getByLabel('Move measurement', { exact: true })
+HARNESS-V3 OP 1793722309541 ERROR waitFor getByLabel('Move measurement', { exact: true })
+Isolated application diagnostics ▲ Next.js 16.4.3 (webpack)
+- Local:         http://127.0.0.1:52907
+- Network:       http://127.0.0.1:52907
+✓ Ready in 591ms
+✓ Running next.config.mjs took 38ms
+
+○ Compiling /editor/[[...project]]/page ...
+ GET /editor 200 in 3.3s (next.js: 2.4s, application-code: 946ms)
+ GET /editor?view=fit&panel=inspector 200 in 1453ms (next.js: 24ms, application-code: 1428ms)
+○ Compiling /studio/preview/[pageId]/page ...
+ GET /studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A52907&__slightnudge_session=[redacted]&__slightnudge_canvas=1 200 in 3.1s (next.js: 2.1s, application-code: 1000ms)
+○ Compiling /api/slightnudge/responsive/route ...
+⚠ ./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+ GET /api/slightnudge/pages 200 in 6.9s (next.js: 4.6s, proxy.ts: 1463ms, application-code: 834ms)
+ POST /api/slightnudge/responsive 200 in 7.5s (next.js: 4.6s, proxy.ts: 1465ms, application-code: 1401ms)
+ POST /api/slightnudge/responsive 200 in 7.6s (next.js: 4.6s, proxy.ts: 1465ms, application-code: 1540ms)
+ GET /api/slightnudge/pages 200 in 324ms (next.js: 6ms, proxy.ts: 298ms, application-code: 20ms)
+ GET /editor?view=fit&panel=inspector 200 in 3.2s (next.js: 2.7s, application-code: 469ms)
+⚠ ./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+⚠ ./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+ POST /api/slightnudge/preview 200 in 5.8s (next.js: 4.4s, proxy.ts: 24ms, application-code: 1373ms)
+
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+locator.waitFor: Timeout 30000ms exceeded.
+Call log:
+  - waiting for getByLabel('Move measurement', { exact: true }) to be visible
+
+    at Proxy.<anonymous> (C:\dev\vibecheck\test\helpers\gate-page-v3.ts:24:176)
+    at checkDragMove (C:\dev\vibecheck\test\helpers\drag-move-browser.v4.ts:39:23)
+    at async <anonymous> (C:\dev\vibecheck\test\move-continuation-regression.browser.ts:248:14) {
+  log: [
+    "  - waiting for getByLabel('Move measurement', { exact: true }) to be visible"
+  ],
+  name: 'TimeoutError'
+}
+
+Node.js v22.19.0

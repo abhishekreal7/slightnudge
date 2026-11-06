@@ -1,0 +1,16 @@
+node:fs:441
+    return binding.readFileUtf8(path, stringToFlags(options.flag));
+                   ^
+
+Error: ENOENT: no such file or directory, open 'C:\Users\abhis\AppData\Local\Temp\sn-apply-outcome-lMjvNq\.slightnudge\pending\5efa2ed6-d917-41fa-bffb-cde249a578f2.json'
+    at readFileSync (node:fs:441:20)
+    at readPendingSourceEdit (C:\dev\vibecheck\lib\slightnudge\edit-history.ts:517:30)
+    at applyPendingSourceEdit (C:\dev\vibecheck\lib\slightnudge\edit-history.ts:532:19)
+    at <anonymous> (C:\dev\vibecheck\test\apply-outcome.test.ts:21:27) {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-apply-outcome-lMjvNq\\.slightnudge\\pending\\5efa2ed6-d917-41fa-bffb-cde249a578f2.json'
+}
+
+Node.js v22.19.0

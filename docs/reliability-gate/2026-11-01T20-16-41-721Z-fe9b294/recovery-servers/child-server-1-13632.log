@@ -1,0 +1,16 @@
+{"start":1793567143645,"cwd":"C:\\dev\\vibecheck\\scratch\\reliability-gate\\2026-11-01T20-16-41-721Z-fe9b294\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-VmA9Av","args":["C:\\dev\\vibecheck\\scratch\\reliability-gate\\2026-11-01T20-16-41-721Z-fe9b294\\worktree\\node_modules\\next\\dist\\bin\\next","dev","--webpack","-H","127.0.0.1","-p","51735"]}
+▲ Next.js 16.4.3 (webpack)
+- Local:         http://127.0.0.1:51735
+- Network:       http://127.0.0.1:51735
+✓ Ready in 509ms
+✓ Running next.config.mjs took 30ms
+
+○ Compiling /fixtures/1/page ...
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\reliability-gate\\2026-11-01T20-16-41-721Z-fe9b294\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-VmA9Av\\.next\\dev\\build-manifest.json","pid":30740,"time":1793567197569,"bytes":344}
+ GET /fixtures/1 200 in 2.1s (next.js: 1206ms, application-code: 867ms)
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\reliability-gate\\2026-11-01T20-16-41-721Z-fe9b294\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-VmA9Av\\.next\\dev\\build-manifest.json","pid":30740,"time":1793567199760,"bytes":344}
+ GET /fixtures/1 200 in 1643ms (next.js: 2ms, application-code: 1641ms)
+○ Compiling /editor/[[...project]]/page ...
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\reliability-gate\\2026-11-01T20-16-41-721Z-fe9b294\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-VmA9Av\\.next\\dev\\build-manifest.json","pid":25760,"time":1793567230941,"bytes":344}
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\reliability-gate\\2026-11-01T20-16-41-721Z-fe9b294\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-VmA9Av\\.next\\dev\\build-manifest.json","pid":30740,"time":1793567231206,"bytes":344}
+ GET /editor 200 in 2.5s (next.js: 1049ms, application-code: 1406ms)

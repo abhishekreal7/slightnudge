@@ -1,0 +1,175 @@
+SETUP 1793704455978 START git ["ls-files"]
+SETUP END elapsed 46ms
+SETUP 1793704486430 START git ["init","--quiet"]
+SETUP END elapsed 360ms
+SETUP 1793704486790 START git ["-c","core.autocrlf=false","add","app","components","package.json","LICENSE"]
+SETUP END elapsed 193ms
+SETUP 1793704486987 START C:\nvm4w\nodejs\node.exe ["--import","tsx","--input-type=module","-e","const {installNextSourceAdapter}=await import('./lib/slightnudge/next-source-adapter.ts');await installNextSourceAdapter('source-proof');"]
+SETUP END elapsed 636ms
+SETUP 1793704487623 START C:\nvm4w\nodejs\node.exe ["C:\\dev\\vibecheck\\scratch\\g\\6983c8c1\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-EbLTy3\\.slightnudge\\repositories\\source-proof\\node_modules\\next\\dist\\bin\\next","dev","--help"]
+SETUP END elapsed 261ms
+Disposable source project: generated SaaS; Next.js 16.4.3; Tailwind 4.3.3; installed source adapter; no environment files checked out.
+HARNESS-V3 NAVIGATION http://127.0.0.1:63029/editor/source-proof?preview=http%3A%2F%2F127.0.0.1%3A56997%2F
+TIMING 1793704509762 REQUEST http://127.0.0.1:63029/editor/source-proof?preview=http%3A%2F%2F127.0.0.1%3A56997%2F
+TIMING 1793704510278 RESPONSE 200 http://127.0.0.1:63029/editor/source-proof?preview=http%3A%2F%2F127.0.0.1%3A56997%2F
+HARNESS-V3 OP 1793704510502 START waitFor locator('[data-source-ready="true"]')
+TIMING 1793704513344 REQUEST http://127.0.0.1:63029/api/slightnudge/repositories/source-proof
+TIMING 1793704513344 REQUEST http://127.0.0.1:63029/api/slightnudge/repositories/source-proof
+TIMING 1793704519973 REQUEST http://127.0.0.1:63029/editor/source-proof?preview=http%3A%2F%2F127.0.0.1%3A56997%2F&_rsc=f1M0w9r7Rra7NS0O
+TIMING 1793704527532 RESPONSE 200 http://127.0.0.1:63029/editor/source-proof?preview=http%3A%2F%2F127.0.0.1%3A56997%2F&_rsc=f1M0w9r7Rra7NS0O
+TIMING 1793704528153 RESPONSE 200 http://127.0.0.1:63029/api/slightnudge/repositories/source-proof
+TIMING 1793704528588 RESPONSE 200 http://127.0.0.1:63029/api/slightnudge/repositories/source-proof
+TIMING 1793704528597 REQUEST http://127.0.0.1:63029/api/slightnudge/repositories/source-proof/preview-check
+TIMING 1793704531515 RESPONSE 200 http://127.0.0.1:63029/api/slightnudge/repositories/source-proof/preview-check
+TIMING 1793704531516 REQUEST http://127.0.0.1:56997/?__slightnudge_session=089148ba-ea3a-4e25-a12e-e381d3de2e38&__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A63029&__slightnudge_draft=1
+TIMING 1793704531662 RESPONSE 200 http://127.0.0.1:56997/?__slightnudge_session=089148ba-ea3a-4e25-a12e-e381d3de2e38&__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A63029&__slightnudge_draft=1
+TIMING 1793704534129 REQUEST http://127.0.0.1:63029/api/slightnudge/responsive
+HARNESS-V3 OP 1793704534299 END waitFor locator('[data-source-ready="true"]')
+TIMING 1793704534918 REQUEST http://127.0.0.1:63029/api/slightnudge/responsive
+TIMING 1793704534918 REQUEST http://127.0.0.1:63029/api/slightnudge/preview
+HARNESS-V3 OP 1793704535064 START waitFor getByRole('toolbar', { name: 'Selection formatting' })
+HARNESS-V3 OP 1793704535080 END waitFor getByRole('toolbar', { name: 'Selection formatting' })
+HARNESS-V3 OP 1793704535081 START getAttribute getByRole('button', { name: 'Toggle design panel', exact: true })
+HARNESS-V3 OP 1793704535094 END getAttribute getByRole('button', { name: 'Toggle design panel', exact: true })
+HARNESS-V3 OP 1793704535095 START click getByRole('button', { name: 'Toggle design panel', exact: true })
+HARNESS-V3 OP 1793704535273 END click getByRole('button', { name: 'Toggle design panel', exact: true })
+HARNESS-V3 OP 1793704535273 START count getByRole('button', { name: 'Edit shared definition', exact: true })
+HARNESS-V3 OP 1793704535286 END count getByRole('button', { name: 'Edit shared definition', exact: true })
+HARNESS-V3 OP 1793704535286 START click getByRole('button', { name: 'Edit shared definition', exact: true })
+TIMING 1793704535477 REQUEST http://127.0.0.1:63029/api/slightnudge/repositories/source-proof/inspect
+HARNESS-V3 OP 1793704535527 END click getByRole('button', { name: 'Edit shared definition', exact: true })
+HARNESS-V3 OP 1793704535528 START waitFor getByRole('toolbar', { name: 'Selection formatting' }).getByRole('combobox', { name: 'Font size', exact: true })
+TIMING 1793704537184 RESPONSE 200 http://127.0.0.1:63029/api/slightnudge/responsive
+TIMING 1793704537456 RESPONSE 200 http://127.0.0.1:63029/api/slightnudge/responsive
+TIMING 1793704543337 RESPONSE 200 http://127.0.0.1:63029/api/slightnudge/preview
+TIMING 1793704544232 RESPONSE 200 http://127.0.0.1:63029/api/slightnudge/repositories/source-proof/inspect
+HARNESS-V3 OP 1793704544793 END waitFor getByRole('toolbar', { name: 'Selection formatting' }).getByRole('combobox', { name: 'Font size', exact: true })
+HARNESS-V3 OP 1793704544793 START selectOption getByRole('toolbar', { name: 'Selection formatting' }).getByRole('combobox', { name: 'Font size', exact: true })
+TIMING 1793704545115 REQUEST http://127.0.0.1:63029/api/slightnudge/preview
+HARNESS-V3 OP 1793704545115 END selectOption getByRole('toolbar', { name: 'Selection formatting' }).getByRole('combobox', { name: 'Font size', exact: true })
+HARNESS-V3 OP 1793704545115 START waitFor getByLabel('Draft status', { exact: true }).filter({ hasText: '1 change' })
+TIMING 1793704546453 RESPONSE 200 http://127.0.0.1:63029/api/slightnudge/preview
+TIMING 1793704547952 REQUEST http://127.0.0.1:63029/api/slightnudge/preview
+HARNESS-V3 OP 1793704547969 END waitFor getByLabel('Draft status', { exact: true }).filter({ hasText: '1 change' })
+HARNESS-V3 OP 1793704547973 START click getByRole('banner', { name: 'Editor toolbar' }).getByRole('button', { name: 'Save changes', exact: true })
+HARNESS-V3 OP 1793704548483 END click getByRole('banner', { name: 'Editor toolbar' }).getByRole('button', { name: 'Save changes', exact: true })
+TIMING 1793704548893 RESPONSE 200 http://127.0.0.1:63029/api/slightnudge/preview
+TIMING 1793704550318 REQUEST http://127.0.0.1:56997/?__slightnudge_session=2b15e1db-eee2-4b27-a3de-84fe12920663&__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A63029&__slightnudge_draft=1&__slightnudge_refresh=3e527052-493b-4fb9-8752-cf7a511d38e3
+TIMING 1793704550479 REQUEST http://127.0.0.1:63029/api/slightnudge/responsive
+TIMING 1793704550855 RESPONSE 200 http://127.0.0.1:63029/api/slightnudge/responsive
+TIMING 1793704553548 RESPONSE 200 http://127.0.0.1:56997/?__slightnudge_session=2b15e1db-eee2-4b27-a3de-84fe12920663&__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A63029&__slightnudge_draft=1&__slightnudge_refresh=3e527052-493b-4fb9-8752-cf7a511d38e3
+HARNESS-V3 OP 1793704555643 START waitFor locator('[data-source-ready="true"]')
+HARNESS-V3 OP 1793704555691 END waitFor locator('[data-source-ready="true"]')
+HARNESS-V3 OP 1793704555692 START click getByRole('banner', { name: 'Editor toolbar' }).getByRole('button', { name: 'Undo', exact: true })
+HARNESS-V3 OP 1793704555852 END click getByRole('banner', { name: 'Editor toolbar' }).getByRole('button', { name: 'Undo', exact: true })
+TIMING 1793704557056 REQUEST http://127.0.0.1:56997/?__slightnudge_session=edf9b7e8-a95c-47c3-9f73-932855c0b21b&__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A63029&__slightnudge_draft=1&__slightnudge_refresh=77c9777f-8f13-463c-808a-9ea0f67b1ae8
+TIMING 1793704558540 RESPONSE 200 http://127.0.0.1:56997/?__slightnudge_session=edf9b7e8-a95c-47c3-9f73-932855c0b21b&__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A63029&__slightnudge_draft=1&__slightnudge_refresh=77c9777f-8f13-463c-808a-9ea0f67b1ae8
+HARNESS-V3 OP 1793704560880 START waitFor locator('[data-source-ready="true"]')
+HARNESS-V3 OP 1793704560960 END waitFor locator('[data-source-ready="true"]')
+HARNESS-V3 OP 1793704560962 START waitFor getByRole('combobox', { name: 'Responsive edit scope', exact: true }).locator('option[value="tablet"]')
+HARNESS-V3 OP 1793704561021 END waitFor getByRole('combobox', { name: 'Responsive edit scope', exact: true }).locator('option[value="tablet"]')
+HARNESS-V3 OP 1793704561022 START innerText getByRole('combobox', { name: 'Responsive edit scope', exact: true }).locator('option[value="md"]')
+HARNESS-V3 OP 1793704561033 END innerText getByRole('combobox', { name: 'Responsive edit scope', exact: true }).locator('option[value="md"]')
+HARNESS-V3 OP 1793704561037 START selectOption getByRole('combobox', { name: 'Responsive edit scope', exact: true })
+HARNESS-V3 OP 1793704561185 END selectOption getByRole('combobox', { name: 'Responsive edit scope', exact: true })
+HARNESS-V3 OP 1793704561186 START fill getByRole('spinbutton', { name: 'Preview width', exact: true })
+HARNESS-V3 OP 1793704561403 END fill getByRole('spinbutton', { name: 'Preview width', exact: true })
+HARNESS-V3 OP 1793704561403 START press getByRole('spinbutton', { name: 'Preview width', exact: true })
+HARNESS-V3 OP 1793704561637 END press getByRole('spinbutton', { name: 'Preview width', exact: true })
+TIMING 1793704561852 REQUEST http://127.0.0.1:63029/editor/source-proof?preview=http%3A%2F%2F127.0.0.1%3A56997%2F
+TIMING 1793704562411 RESPONSE 200 http://127.0.0.1:63029/editor/source-proof?preview=http%3A%2F%2F127.0.0.1%3A56997%2F
+TIMING 1793704564577 REQUEST http://127.0.0.1:63029/api/slightnudge/repositories/source-proof
+TIMING 1793704564578 REQUEST http://127.0.0.1:63029/api/slightnudge/repositories/source-proof
+HARNESS-V3 OP 1793704567153 START waitFor locator('[data-source-ready="true"]')
+TIMING 1793704567506 RESPONSE 200 http://127.0.0.1:63029/api/slightnudge/repositories/source-proof
+TIMING 1793704567679 RESPONSE 200 http://127.0.0.1:63029/api/slightnudge/repositories/source-proof
+TIMING 1793704567687 REQUEST http://127.0.0.1:63029/api/slightnudge/repositories/source-proof/preview-check
+TIMING 1793704568362 RESPONSE 200 http://127.0.0.1:63029/api/slightnudge/repositories/source-proof/preview-check
+TIMING 1793704568364 REQUEST http://127.0.0.1:56997/?__slightnudge_session=3c6a70ab-fabe-45d2-9f6f-5aa1238bac33&__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A63029&__slightnudge_draft=1
+TIMING 1793704568719 RESPONSE 200 http://127.0.0.1:56997/?__slightnudge_session=3c6a70ab-fabe-45d2-9f6f-5aa1238bac33&__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A63029&__slightnudge_draft=1
+TIMING 1793704570812 REQUEST http://127.0.0.1:63029/api/slightnudge/responsive
+HARNESS-V3 OP 1793704570981 END waitFor locator('[data-source-ready="true"]')
+HARNESS-V3 OP 1793704570982 START inputValue getByRole('combobox', { name: 'Responsive edit scope', exact: true })
+HARNESS-V3 OP 1793704571005 END inputValue getByRole('combobox', { name: 'Responsive edit scope', exact: true })
+HARNESS-V3 OP 1793704571005 START inputValue getByRole('spinbutton', { name: 'Preview width', exact: true })
+HARNESS-V3 OP 1793704571011 END inputValue getByRole('spinbutton', { name: 'Preview width', exact: true })
+HARNESS-V3 OP 1793704571011 START selectOption getByRole('combobox', { name: 'Responsive edit scope', exact: true })
+TIMING 1793704571062 RESPONSE 200 http://127.0.0.1:63029/api/slightnudge/responsive
+HARNESS-V3 OP 1793704571265 END selectOption getByRole('combobox', { name: 'Responsive edit scope', exact: true })
+HARNESS-V3 OP 1793704571572 START waitFor getByRole('toolbar', { name: 'Selection formatting' })
+TIMING 1793704571898 REQUEST http://127.0.0.1:63029/api/slightnudge/responsive
+TIMING 1793704571898 REQUEST http://127.0.0.1:63029/api/slightnudge/preview
+HARNESS-V3 OP 1793704572046 END waitFor getByRole('toolbar', { name: 'Selection formatting' })
+HARNESS-V3 OP 1793704572046 START getAttribute getByRole('button', { name: 'Toggle design panel', exact: true })
+HARNESS-V3 OP 1793704572059 END getAttribute getByRole('button', { name: 'Toggle design panel', exact: true })
+HARNESS-V3 OP 1793704572059 START click getByRole('button', { name: 'Toggle design panel', exact: true })
+HARNESS-V3 OP 1793704572234 END click getByRole('button', { name: 'Toggle design panel', exact: true })
+HARNESS-V3 OP 1793704572235 START count getByRole('button', { name: 'Edit shared definition', exact: true })
+HARNESS-V3 OP 1793704572246 END count getByRole('button', { name: 'Edit shared definition', exact: true })
+HARNESS-V3 OP 1793704572246 START click getByRole('button', { name: 'Edit shared definition', exact: true })
+TIMING 1793704572491 REQUEST http://127.0.0.1:63029/api/slightnudge/repositories/source-proof/inspect
+HARNESS-V3 OP 1793704572533 END click getByRole('button', { name: 'Edit shared definition', exact: true })
+HARNESS-V3 OP 1793704572534 START waitFor getByRole('toolbar', { name: 'Selection formatting' }).getByRole('combobox', { name: 'Font size', exact: true })
+TIMING 1793704572717 RESPONSE 200 http://127.0.0.1:63029/api/slightnudge/preview
+TIMING 1793704572772 RESPONSE 200 http://127.0.0.1:63029/api/slightnudge/responsive
+TIMING 1793704574685 RESPONSE 200 http://127.0.0.1:63029/api/slightnudge/repositories/source-proof/inspect
+HARNESS-V3 OP 1793704575085 END waitFor getByRole('toolbar', { name: 'Selection formatting' }).getByRole('combobox', { name: 'Font size', exact: true })
+HARNESS-V3 OP 1793704575085 START selectOption getByRole('toolbar', { name: 'Selection formatting' }).getByRole('combobox', { name: 'Font size', exact: true })
+TIMING 1793704575331 REQUEST http://127.0.0.1:63029/api/slightnudge/preview
+HARNESS-V3 OP 1793704575333 END selectOption getByRole('toolbar', { name: 'Selection formatting' }).getByRole('combobox', { name: 'Font size', exact: true })
+HARNESS-V3 OP 1793704575333 START waitFor getByLabel('Draft status', { exact: true }).filter({ hasText: '1 change' })
+TIMING 1793704577119 RESPONSE 200 http://127.0.0.1:63029/api/slightnudge/preview
+TIMING 1793704578810 REQUEST http://127.0.0.1:63029/api/slightnudge/preview
+HARNESS-V3 OP 1793704578824 END waitFor getByLabel('Draft status', { exact: true }).filter({ hasText: '1 change' })
+HARNESS-V3 OP 1793704578869 START fill getByRole('spinbutton', { name: 'Preview width', exact: true })
+HARNESS-V3 OP 1793704578896 END fill getByRole('spinbutton', { name: 'Preview width', exact: true })
+HARNESS-V3 OP 1793704578896 START press getByRole('spinbutton', { name: 'Preview width', exact: true })
+HARNESS-V3 OP 1793704579203 END press getByRole('spinbutton', { name: 'Preview width', exact: true })
+TIMING 1793704580804 RESPONSE 200 http://127.0.0.1:63029/api/slightnudge/preview
+TIMING 1793704580931 REQUEST http://127.0.0.1:63029/editor/source-proof?preview=http%3A%2F%2F127.0.0.1%3A56997%2F
+TIMING 1793704581197 REQUEST http://127.0.0.1:63029/api/slightnudge/responsive
+TIMING 1793704582966 RESPONSE 200 http://127.0.0.1:63029/editor/source-proof?preview=http%3A%2F%2F127.0.0.1%3A56997%2F
+HARNESS-V3 OP 1793704583347 START waitFor getByLabel('Draft status', { exact: true }).filter({ hasText: '1 change' })
+TIMING 1793704586368 REQUEST http://127.0.0.1:63029/api/slightnudge/repositories/source-proof
+TIMING 1793704586371 REQUEST http://127.0.0.1:63029/api/slightnudge/repositories/source-proof
+HARNESS-V3 OP 1793704587103 END waitFor getByLabel('Draft status', { exact: true }).filter({ hasText: '1 change' })
+TIMING 1793704587214 RESPONSE 200 http://127.0.0.1:63029/api/slightnudge/repositories/source-proof
+HARNESS-V3 OP 1793704589518 START waitFor locator('[data-source-ready="true"]')
+TIMING 1793704589870 RESPONSE 200 http://127.0.0.1:63029/api/slightnudge/repositories/source-proof
+TIMING 1793704589870 REQUEST http://127.0.0.1:63029/api/slightnudge/repositories/source-proof/preview-check
+TIMING 1793704590669 RESPONSE 200 http://127.0.0.1:63029/api/slightnudge/repositories/source-proof/preview-check
+TIMING 1793704590754 REQUEST http://127.0.0.1:56997/?__slightnudge_session=4e4116ef-73c3-4bd7-a49a-5cc4df0da05e&__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A63029&__slightnudge_draft=1
+TIMING 1793704591020 RESPONSE 200 http://127.0.0.1:56997/?__slightnudge_session=4e4116ef-73c3-4bd7-a49a-5cc4df0da05e&__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A63029&__slightnudge_draft=1
+TIMING 1793704593196 REQUEST http://127.0.0.1:63029/api/slightnudge/responsive
+HARNESS-V3 OP 1793704593296 END waitFor locator('[data-source-ready="true"]')
+HARNESS-V3 OP 1793704593297 START inputValue getByRole('combobox', { name: 'Responsive edit scope', exact: true })
+HARNESS-V3 OP 1793704593308 END inputValue getByRole('combobox', { name: 'Responsive edit scope', exact: true })
+HARNESS-V3 OP 1793704593308 START inputValue getByRole('spinbutton', { name: 'Preview width', exact: true })
+HARNESS-V3 OP 1793704593403 END inputValue getByRole('spinbutton', { name: 'Preview width', exact: true })
+TIMING 1793704593425 RESPONSE 200 http://127.0.0.1:63029/api/slightnudge/responsive
+HARNESS-V3 OP 1793704593610 START click getByRole('banner', { name: 'Editor toolbar' }).getByRole('button', { name: 'Save changes', exact: true })
+HARNESS-V3 OP 1793704596582 END click getByRole('banner', { name: 'Editor toolbar' }).getByRole('button', { name: 'Save changes', exact: true })
+TIMING 1793704597900 REQUEST http://127.0.0.1:56997/?__slightnudge_session=ac3065ec-d72a-47eb-abfe-8413ec81f54b&__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A63029&__slightnudge_draft=1&__slightnudge_refresh=f2f0d315-1f44-4bf9-a10c-1757d6584f74
+TIMING 1793704598349 RESPONSE 200 http://127.0.0.1:56997/?__slightnudge_session=ac3065ec-d72a-47eb-abfe-8413ec81f54b&__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A63029&__slightnudge_draft=1&__slightnudge_refresh=f2f0d315-1f44-4bf9-a10c-1757d6584f74
+TIMING 1793704603633 REQUEST http://127.0.0.1:56997/?__slightnudge_session=671700c6-86ef-4c63-a895-a0fd4d96eae8&__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A63029&__slightnudge_draft=1&__slightnudge_refresh=5a63a35e-7383-41dd-861b-5c5cb64ed797
+TIMING 1793704604162 RESPONSE 200 http://127.0.0.1:56997/?__slightnudge_session=671700c6-86ef-4c63-a895-a0fd4d96eae8&__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A63029&__slightnudge_draft=1&__slightnudge_refresh=5a63a35e-7383-41dd-861b-5c5cb64ed797
+HARNESS-V3 OP 1793704606666 START waitFor locator('[data-source-ready="true"]')
+HARNESS-V3 OP 1793704606707 END waitFor locator('[data-source-ready="true"]')
+HARNESS-V3 OP 1793704606708 START fill getByRole('spinbutton', { name: 'Preview width', exact: true })
+HARNESS-V3 OP 1793704606727 END fill getByRole('spinbutton', { name: 'Preview width', exact: true })
+HARNESS-V3 OP 1793704606727 START press getByRole('spinbutton', { name: 'Preview width', exact: true })
+HARNESS-V3 OP 1793704606851 END press getByRole('spinbutton', { name: 'Preview width', exact: true })
+HARNESS-V3 OP 1793704607294 START click getByRole('banner', { name: 'Editor toolbar' }).getByRole('button', { name: 'Undo', exact: true })
+HARNESS-V3 OP 1793704607445 END click getByRole('banner', { name: 'Editor toolbar' }).getByRole('button', { name: 'Undo', exact: true })
+TIMING 1793704607919 REQUEST http://127.0.0.1:56997/?__slightnudge_session=6af15533-cb30-4bba-9067-f1f7cb2f66f9&__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A63029&__slightnudge_draft=1&__slightnudge_refresh=fb040644-eace-4ec9-a1ec-0a552d6609e3
+TIMING 1793704608170 RESPONSE 200 http://127.0.0.1:56997/?__slightnudge_session=6af15533-cb30-4bba-9067-f1f7cb2f66f9&__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A63029&__slightnudge_draft=1&__slightnudge_refresh=fb040644-eace-4ec9-a1ec-0a552d6609e3
+TIMING 1793704612965 REQUEST http://127.0.0.1:56997/?__slightnudge_session=c4839e47-9b43-4372-aa7d-09910ad387de&__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A63029&__slightnudge_draft=1&__slightnudge_refresh=ac311466-6f01-4e5f-a186-e89993ae67ae
+TIMING 1793704613601 RESPONSE 200 http://127.0.0.1:56997/?__slightnudge_session=c4839e47-9b43-4372-aa7d-09910ad387de&__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A63029&__slightnudge_draft=1&__slightnudge_refresh=ac311466-6f01-4e5f-a186-e89993ae67ae
+HARNESS-V3 OP 1793704616085 START waitFor locator('[data-source-ready="true"]')
+HARNESS-V3 OP 1793704616107 END waitFor locator('[data-source-ready="true"]')
+PASS imported responsive browser: custom project scopes, prior Save/Undo checkpoint cannot reset current view, previously unused theme token previews correctly, base inheritance, draft width/scope refresh recovery, Save from mobile, actual saved responsive CSS, exact source Undo
+SETUP 1793704616172 START taskkill ["/pid","15996","/T","/F"]
+SETUP END elapsed 683ms
+PASS: 1 review-consent browser cases (real API; disposable source copy)
+SETUP 1793704618797 START taskkill ["/pid","30436","/T","/F"]
+SETUP END elapsed 374ms

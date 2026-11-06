@@ -1,0 +1,47 @@
+▶ Undo Refusals & Safety Mutants Battery
+  ✔ M3: refuses undo when element already contains a removed token (user restored it) (326.0048ms)
+  ✔ M6: refuses undo when history record contains tampered malicious tokens (252.2111ms)
+  ✔ Branch 1: path-containment catch refuses escaping path (15.5192ms)
+  ✔ Branch 2: interrupted-undo recovery succeeds when status is undoing and file equals before (79.7225ms)
+  ✔ Branch 3: textContent refusal when file changed after visual edit (22.6452ms)
+  ✔ Branch 4: imageSource refusal when file changed after visual edit (19.7131ms)
+  ✔ Branch 5: non-className fallback refusal when neither textContent nor imageSource (114.052ms)
+  ✔ Branch 6: existing-file parse failure refuses cleanly (221.2861ms)
+  ✖ Branch 7: multiple candidate elements without unique id refuses ambiguity (235.1149ms)
+  ✔ Branch 8: element inside repeating list refuses (229.7261ms)
+  ✔ Branch 9: component used multiple times refuses (158.3973ms)
+  ✔ Branch 10: element inside conditional expression refuses (143.4513ms)
+  ✔ Branch 11: element inside an if statement refuses (142.0718ms)
+  ✔ Branch 12: same-line sibling ambiguity refuses (134.2641ms)
+  ✔ Branch 13: className attribute missing refuses (115.9171ms)
+  ✔ Branch 14: dynamic or template-literal className refuses (137.2588ms)
+  ✔ Branch 15: re-parse failure after substitution refuses (1004.4181ms)
+  ✔ Branch 16: atomicWrite I/O error resets status to applied (1675.2858ms)
+✖ Undo Refusals & Safety Mutants Battery (5029.3231ms)
+ℹ tests 18
+ℹ suites 1
+ℹ pass 17
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 5065.4484
+
+✖ failing tests:
+
+test at test\undo-refusals.test.ts:13:5111
+✖ Branch 7: multiple candidate elements without unique id refuses ambiguity (235.1149ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  true !== false
+  
+      at TestContext.<anonymous> (C:\Users\abhis\AppData\Local\Temp\mutant-m1-b2bffaee-fc26-427a-a8bd-f0b3b53f870d\test\undo-refusals.test.ts:294:14)
+      at async Test.run (node:internal/test_runner/test:1113:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:788:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

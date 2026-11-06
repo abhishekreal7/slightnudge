@@ -1,0 +1,506 @@
+PASS four HTTP redirects: project path and repeated/empty/encoded query values preserved
+ROUND 1 VIEW full
+WORKFLOW NAVIGATION /editor?view=full&panel=inspector
+PASS shared instances local Studio: identical callers, text/inline, destination, enabled state, variant, refresh, Save, exact Undo
+WORKFLOW NAVIGATION /editor?view=full
+PASS shared instances local window: identical callers, text/inline, destination, enabled state, variant, refresh, Save, exact Undo
+PASS migration local full: real legacy edit, refresh, same draft ID in canonical route, continue, project/file history, persisted Save history, exact Undo, selection geometry <=1px, scale 1
+Disposable source project: generated SaaS; Next.js 16.4.3; Tailwind 4.3.3; installed source adapter; no environment files checked out.
+WORKFLOW NAVIGATION /editor/source-proof?preview=http%3A%2F%2F127.0.0.1%3A52129%2F&view=full&panel=inspector
+PASS shared instances imported Studio: identical callers, text/inline, destination, enabled state, variant, refresh, Save, exact Undo
+WORKFLOW NAVIGATION /editor/source-proof?preview=http%3A%2F%2F127.0.0.1%3A52129%2F&view=full
+PASS shared instances imported window: identical callers, text/inline, destination, enabled state, variant, refresh, Save, exact Undo
+PASS migration imported full: real legacy edit, refresh, same draft ID in canonical route, continue, project/file history, persisted Save history, exact Undo, selection geometry <=1px, scale 1
+UNCHANGED SELECTION full: exit 1; raw output C:\dev\vibecheck\docs\unified-editor-evidence\round-1-selection-full.log
+====================================================
+🧪 SLIGHTNUDGE - STEP 1: ELEMENT SELECTION SUITE
+====================================================
+
+--- Test 1: Click selection on Fixture 1 ---
+  ✅ [PASS] Bounding box drawn around selected element
+Test run failed: page.waitForSelector: Timeout 30000ms exceeded.
+Call log:
+[2m  - waiting for locator('#slightnudge-file-display') to be visible[22m
+
+    at runStep1Tests (C:\dev\vibecheck\test\step1-selection.test.ts:43:16) {
+  log: [
+    "  - waiting for locator('#slightnudge-file-display') to be visible"
+  ],
+  name: 'TimeoutError'
+}
+
+ROUND 1 VIEW fit
+WORKFLOW NAVIGATION /editor?view=fit&panel=inspector
+PASS shared instances local Studio: identical callers, text/inline, destination, enabled state, variant, refresh, Save, exact Undo
+WORKFLOW NAVIGATION /editor?view=fit
+PASS shared instances local window: identical callers, text/inline, destination, enabled state, variant, refresh, Save, exact Undo
+wind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+ GET /api/slightnudge/pages 200 in 170ms (next.js: 84ms, proxy.ts: 26ms, application-code: 60ms)
+ GET /api/slightnudge/pages 200 in 398ms (next.js: 339ms, proxy.ts: 19ms, application-code: 40ms)
+ POST /api/slightnudge/responsive 200 in 743ms (next.js: 31ms, proxy.ts: 145ms, application-code: 567ms)
+ POST /api/slightnudge/responsive 200 in 945ms (next.js: 135ms, proxy.ts: 145ms, application-code: 665ms)
+ GET /studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A60369&__slightnudge_session=a4d4b755-d902-45e6-9515-b2bd064a3c66&__slightnudge_canvas=1 200 in 1365ms (next.js: 141ms, application-code: 1223ms)
+ POST /api/slightnudge/preview 200 in 3.0s (next.js: 165ms, proxy.ts: 30ms, application-code: 2.8s)
+ POST /api/slightnudge/responsive 200 in 3.3s (next.js: 8ms, proxy.ts: 30ms, application-code: 3.2s)
+ POST /api/slightnudge/preview 200 in 2.6s (next.js: 20ms, proxy.ts: 19ms, application-code: 2.5s)
+ POST /api/slightnudge/preview 200 in 1175ms (next.js: 10ms, proxy.ts: 29ms, application-code: 1136ms)
+ POST /api/slightnudge/preview 200 in 2.7s (next.js: 8ms, proxy.ts: 27ms, application-code: 2.7s)
+ POST /api/slightnudge/preview 200 in 1261ms (next.js: 10ms, proxy.ts: 29ms, application-code: 1223ms)
+ POST /api/slightnudge/preview 200 in 2.9s (next.js: 8ms, proxy.ts: 27ms, application-code: 2.9s)
+ POST /api/slightnudge/preview 200 in 1197ms (next.js: 8ms, proxy.ts: 32ms, application-code: 1157ms)
+ POST /api/slightnudge/preview 200 in 2.7s (next.js: 9ms, proxy.ts: 22ms, application-code: 2.7s)
+ POST /api/slightnudge/preview 200 in 1222ms (next.js: 8ms, proxy.ts: 29ms, application-code: 1184ms)
+ POST /api/slightnudge/inspect 200 in 946ms (next.js: 19ms, proxy.ts: 14ms, application-code: 913ms)
+ POST /api/slightnudge/preview 200 in 1234ms (next.js: 8ms, proxy.ts: 21ms, application-code: 1205ms)
+ POST /api/slightnudge/preview 200 in 2.9s (next.js: 7ms, proxy.ts: 24ms, application-code: 2.9s)
+ POST /api/slightnudge/preview 200 in 1333ms (next.js: 9ms, proxy.ts: 42ms, application-code: 1281ms)
+ POST /api/slightnudge/preview 200 in 1293ms (next.js: 7ms, proxy.ts: 19ms, application-code: 1267ms)
+ POST /api/slightnudge/preview 200 in 2.9s (next.js: 9ms, proxy.ts: 26ms, application-code: 2.8s)
+ POST /api/slightnudge/preview 200 in 1325ms (next.js: 9ms, proxy.ts: 32ms, application-code: 1284ms)
+ POST /api/slightnudge/preview 200 in 1262ms (next.js: 7ms, proxy.ts: 20ms, application-code: 1234ms)
+ POST /api/slightnudge/preview 200 in 2.8s (next.js: 13ms, proxy.ts: 25ms, application-code: 2.7s)
+ POST /api/slightnudge/preview 200 in 1325ms (next.js: 9ms, proxy.ts: 23ms, application-code: 1292ms)
+ POST /api/slightnudge/responsive 200 in 825ms (next.js: 212ms, proxy.ts: 25ms, application-code: 587ms)
+ GET /editor?view=fit 200 in 809ms (next.js: 78ms, application-code: 731ms)
+ GET /api/slightnudge/pages 200 in 80ms (next.js: 8ms, proxy.ts: 24ms, application-code: 49ms)
+ GET /api/slightnudge/pages 200 in 83ms (next.js: 8ms, proxy.ts: 24ms, application-code: 50ms)
+ POST /api/slightnudge/apply/status 409 in 350ms (next.js: 166ms, proxy.ts: 62ms, application-code: 122ms)
+ POST /api/slightnudge/apply/status 409 in 649ms (next.js: 435ms, proxy.ts: 62ms, application-code: 152ms)
+ POST /api/slightnudge/responsive 200 in 887ms (next.js: 25ms, proxy.ts: 62ms, application-code: 800ms)
+ POST /api/slightnudge/responsive 200 in 1152ms (next.js: 296ms, proxy.ts: 62ms, application-code: 795ms)
+ GET /studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A60369&__slightnudge_session=f60637d5-2d1f-4843-ae16-eba5be6005cf&__slightnudge_canvas=1 200 in 1345ms (next.js: 38ms, application-code: 1307ms)
+ POST /api/slightnudge/draft-view 200 in 3.4s (next.js: 45ms, proxy.ts: 22ms, application-code: 3.3s)
+ POST /api/slightnudge/apply 200 in 2.7s (next.js: 77ms, proxy.ts: 109ms, application-code: 2.5s)
+⚠ ./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+ GET /studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A60369&__slightnudge_session=f60637d5-2d1f-4843-ae16-eba5be6005cf&__slightnudge_canvas=1 200 in 72ms (next.js: 51ms, application-code: 20ms)
+⨯ Error: The destination stream errored while writing data.
+    at ignore-listed frames {
+  digest: '761301334'
+}
+ GET /studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A60369&__slightnudge_session=50f69d02-d0ed-43df-b55c-676e076a0399&__slightnudge_canvas=1&__slightnudge_refresh=1c22a48f-4d98-433d-8148-64aec9552194 200 in 681ms (next.js: 126ms, application-code: 555ms)
+ GET /editor?view=fit 200 in 443ms (next.js: 22ms, application-code: 421ms)
+ POST /api/slightnudge/preview 200 in 341ms (next.js: 13ms, proxy.ts: 5ms, application-code: 323ms)
+ POST /api/slightnudge/responsive 200 in 416ms (next.js: 338ms, proxy.ts: 5ms, application-code: 72ms)
+⚠ ./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+⚠ ./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+ POST /api/slightnudge/undo 200 in 677ms (next.js: 292ms, proxy.ts: 4ms, application-code: 381ms)
+ POST /api/slightnudge/responsive 200 in 138ms (next.js: 7ms, proxy.ts: 39ms, application-code: 92ms)
+ GET /studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A60369&__slightnudge_session=b1c5a2a7-cb16-400b-bcd4-6f13982726d2&__slightnudge_canvas=1&__slightnudge_refresh=ab980782-5f61-4ad5-bacd-87582ed4a43b 200 in 408ms (next.js: 30ms, application-code: 378ms)
+⚠ ./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+ GET /editor?view=fit 200 in 110ms (next.js: 55ms, application-code: 54ms)
+ GET /studio?legacyStudio=1 200 in 160ms (next.js: 13ms, application-code: 147ms)
+⚠ ./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+warning: in the working copy of 'app/admin/page.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/api/admin/metrics/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/api/checkout/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/api/checkout/simulate/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/api/runs/[id]/report.pdf/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/api/runs/[id]/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/api/runs/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/api/sites/[id]/verify/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/api/sites/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/api/slightnudge/inspect/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/api/slightnudge/preview/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/api/slightnudge/repositories/[id]/inspect/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/api/slightnudge/repositories/[id]/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/design/page.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/how-it-works/page.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/page.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/pricing/page.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/runs/[id]/page.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/studio/page.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'components/Header.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'components/MarketingFooter.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'lib/db/client.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'lib/db/types.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'lib/llm/generator.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'lib/payments/dodo.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'lib/pipeline/runner.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'lib/pipeline/stage-c-planning.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'lib/pipeline/stage-d-execution.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'lib/pipeline/stage-e-analysis.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'lib/pipeline/types.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'lib/security/ownership.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'lib/security/ssrf.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'lib/slightnudge/ast-nudger.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'lib/slightnudge/client.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'lib/slightnudge/edit-history.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'lib/slightnudge/next-source-loader.cjs', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'package.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'worker/index.ts', LF will be replaced by CRLF the next time Git touches it
+RAW GIT STATUS: docs/unified-editor-evidence/round-1-git-status.txt
+Disposable workspace retained: C:\Users\abhis\AppData\Local\Temp\sn-review-consent-DiJLFr
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+locator.waitFor: Timeout 120000ms exceeded.
+Call log:
+[2m  - waiting for locator('[data-source-ready="true"]') to be visible[22m
+
+    at ready (C:\dev\vibecheck\test\unified-editor.browser.ts:148:73)
+    at migrate (C:\dev\vibecheck\test\unified-editor.browser.ts:155:84)
+    at async <anonymous> (C:\dev\vibecheck\test\unified-editor.browser.ts:189:37) {
+  log: [
+    `  - waiting for locator('[data-source-ready="true"]') to be visible`
+  ],
+  name: 'TimeoutError'
+}
+
+Node.js v22.19.0

@@ -1,0 +1,504 @@
+{
+  "method": "physical click where exposed → real inspection → real preview → explicit Apply → iframe reload → exact source Undo",
+  "complete": true,
+  "fullQualification": true,
+  "candidateCount": 30,
+  "selections": [
+    {
+      "file": "src/app/page.tsx",
+      "line": 5,
+      "column": 5,
+      "tag": "div",
+      "occurrence": 0,
+      "text": "⚡ NextSaaS LiteGitHubGet Pro ($49)✨ Open Source Next.js 14 BoilerplateLaunch You",
+      "outcome": "refused",
+      "reason": "No exposed click area belongs to this element; its children cover the visible area."
+    },
+    {
+      "file": "src/app/page.tsx",
+      "line": 8,
+      "column": 9,
+      "tag": "div",
+      "occurrence": 0,
+      "text": "⚡ NextSaaS LiteGitHubGet Pro ($49)",
+      "clicked": true,
+      "actualSelection": {
+        "file": "src/app/page.tsx",
+        "line": 8,
+        "column": 9,
+        "tag": "div"
+      },
+      "outcome": "allowed",
+      "reason": "Exact source Apply, rendered reload and exact Undo verified."
+    },
+    {
+      "file": "src/app/page.tsx",
+      "line": 9,
+      "column": 11,
+      "tag": "div",
+      "occurrence": 0,
+      "text": "⚡ NextSaaS Lite",
+      "clicked": true,
+      "actualSelection": {
+        "file": "src/app/page.tsx",
+        "line": 9,
+        "column": 11,
+        "tag": "div"
+      },
+      "outcome": "allowed",
+      "reason": "Exact source Apply, rendered reload and exact Undo verified."
+    },
+    {
+      "file": "src/app/page.tsx",
+      "line": 10,
+      "column": 13,
+      "tag": "span",
+      "occurrence": 0,
+      "text": "⚡",
+      "clicked": true,
+      "actualSelection": {
+        "file": "src/app/page.tsx",
+        "line": 10,
+        "column": 13,
+        "tag": "span"
+      },
+      "outcome": "allowed",
+      "reason": "Exact source Apply, rendered reload and exact Undo verified."
+    },
+    {
+      "file": "src/app/page.tsx",
+      "line": 10,
+      "column": 71,
+      "tag": "span",
+      "occurrence": 0,
+      "text": "Lite",
+      "clicked": true,
+      "actualSelection": {
+        "file": "src/app/page.tsx",
+        "line": 10,
+        "column": 71,
+        "tag": "span"
+      },
+      "outcome": "allowed",
+      "reason": "Exact source Apply, rendered reload and exact Undo verified."
+    },
+    {
+      "file": "src/app/page.tsx",
+      "line": 12,
+      "column": 11,
+      "tag": "div",
+      "occurrence": 0,
+      "text": "GitHubGet Pro ($49)",
+      "clicked": true,
+      "actualSelection": {
+        "file": "src/app/page.tsx",
+        "line": 12,
+        "column": 11,
+        "tag": "div"
+      },
+      "outcome": "allowed",
+      "reason": "Exact source Apply, rendered reload and exact Undo verified."
+    },
+    {
+      "file": "src/app/page.tsx",
+      "line": 13,
+      "column": 13,
+      "tag": "a",
+      "occurrence": 0,
+      "text": "GitHub",
+      "clicked": true,
+      "actualSelection": {
+        "file": "src/app/page.tsx",
+        "line": 13,
+        "column": 13,
+        "tag": "a"
+      },
+      "outcome": "allowed",
+      "reason": "Exact source Apply, rendered reload and exact Undo verified."
+    },
+    {
+      "file": "src/app/page.tsx",
+      "line": 21,
+      "column": 13,
+      "tag": "a",
+      "occurrence": 0,
+      "text": "Get Pro ($49)",
+      "clicked": true,
+      "actualSelection": {
+        "file": "src/app/page.tsx",
+        "line": 21,
+        "column": 13,
+        "tag": "a"
+      },
+      "outcome": "refused",
+      "reason": "⚠️ The project styling overrides this change, or its utility is unavailable. Nothing was changed."
+    },
+    {
+      "file": "src/app/page.tsx",
+      "line": 35,
+      "column": 9,
+      "tag": "div",
+      "occurrence": 0,
+      "text": "✨ Open Source Next.js 14 BoilerplateLaunch Your Next SaaS In Hours, Not Weeks.A ",
+      "clicked": true,
+      "actualSelection": {
+        "file": "src/app/page.tsx",
+        "line": 35,
+        "column": 9,
+        "tag": "div"
+      },
+      "outcome": "allowed",
+      "reason": "Exact source Apply, rendered reload and exact Undo verified."
+    },
+    {
+      "file": "src/app/page.tsx",
+      "line": 36,
+      "column": 11,
+      "tag": "div",
+      "occurrence": 0,
+      "text": "✨ Open Source Next.js 14 Boilerplate",
+      "clicked": true,
+      "actualSelection": {
+        "file": "src/app/page.tsx",
+        "line": 36,
+        "column": 11,
+        "tag": "div"
+      },
+      "outcome": "allowed",
+      "reason": "Exact source Apply, rendered reload and exact Undo verified."
+    },
+    {
+      "file": "src/app/page.tsx",
+      "line": 37,
+      "column": 13,
+      "tag": "span",
+      "occurrence": 0,
+      "text": "✨ Open Source Next.js 14 Boilerplate",
+      "clicked": true,
+      "actualSelection": {
+        "file": "src/app/page.tsx",
+        "line": 37,
+        "column": 13,
+        "tag": "span"
+      },
+      "outcome": "refused",
+      "reason": "can't edit this safely: no className attribute found"
+    },
+    {
+      "file": "src/app/page.tsx",
+      "line": 39,
+      "column": 11,
+      "tag": "h1",
+      "occurrence": 0,
+      "text": "Launch Your Next SaaS In Hours, Not Weeks.",
+      "clicked": true,
+      "actualSelection": {
+        "file": "src/app/page.tsx",
+        "line": 39,
+        "column": 11,
+        "tag": "h1"
+      },
+      "outcome": "allowed",
+      "reason": "Exact source Apply, rendered reload and exact Undo verified."
+    },
+    {
+      "file": "src/app/page.tsx",
+      "line": 41,
+      "column": 13,
+      "tag": "span",
+      "occurrence": 0,
+      "text": "In Hours, Not Weeks.",
+      "clicked": true,
+      "actualSelection": {
+        "file": "src/app/page.tsx",
+        "line": 41,
+        "column": 13,
+        "tag": "span"
+      },
+      "outcome": "allowed",
+      "reason": "Exact source Apply, rendered reload and exact Undo verified."
+    },
+    {
+      "file": "src/app/page.tsx",
+      "line": 45,
+      "column": 11,
+      "tag": "p",
+      "occurrence": 0,
+      "text": "A clean, modular starter built on Next.js 14 App Router, TypeScript, and Tailwin",
+      "clicked": true,
+      "actualSelection": {
+        "file": "src/app/page.tsx",
+        "line": 45,
+        "column": 11,
+        "tag": "p"
+      },
+      "outcome": "allowed",
+      "reason": "Exact source Apply, rendered reload and exact Undo verified."
+    },
+    {
+      "file": "src/app/page.tsx",
+      "line": 48,
+      "column": 11,
+      "tag": "div",
+      "occurrence": 0,
+      "text": "Upgrade to Pro — Full Turnkey ($49) →Star on GitHub ⭐",
+      "clicked": true,
+      "actualSelection": {
+        "file": "src/app/page.tsx",
+        "line": 48,
+        "column": 11,
+        "tag": "div"
+      },
+      "outcome": "allowed",
+      "reason": "Exact source Apply, rendered reload and exact Undo verified."
+    },
+    {
+      "file": "src/app/page.tsx",
+      "line": 49,
+      "column": 13,
+      "tag": "a",
+      "occurrence": 0,
+      "text": "Upgrade to Pro — Full Turnkey ($49) →",
+      "clicked": true,
+      "actualSelection": {
+        "file": "src/app/page.tsx",
+        "line": 49,
+        "column": 13,
+        "tag": "a"
+      },
+      "outcome": "refused",
+      "reason": "⚠️ The project styling overrides this change, or its utility is unavailable. Nothing was changed."
+    },
+    {
+      "file": "src/app/page.tsx",
+      "line": 57,
+      "column": 13,
+      "tag": "a",
+      "occurrence": 0,
+      "text": "Star on GitHub ⭐",
+      "clicked": true,
+      "actualSelection": {
+        "file": "src/app/page.tsx",
+        "line": 57,
+        "column": 13,
+        "tag": "a"
+      },
+      "outcome": "refused",
+      "reason": "⚠️ The project styling overrides this change, or its utility is unavailable. Nothing was changed."
+    },
+    {
+      "file": "src/app/page.tsx",
+      "line": 69,
+      "column": 9,
+      "tag": "div",
+      "occurrence": 0,
+      "text": "⚡Next.js 14 App RouterOptimized for React Server Components, server actions, and",
+      "outcome": "refused",
+      "reason": "No exposed click area belongs to this element; its children cover the visible area."
+    },
+    {
+      "file": "src/app/page.tsx",
+      "line": 70,
+      "column": 11,
+      "tag": "div",
+      "occurrence": 0,
+      "text": "⚡Next.js 14 App RouterOptimized for React Server Components, server actions, and",
+      "clicked": true,
+      "actualSelection": {
+        "file": "src/app/page.tsx",
+        "line": 70,
+        "column": 11,
+        "tag": "div"
+      },
+      "outcome": "allowed",
+      "reason": "Exact source Apply, rendered reload and exact Undo verified."
+    },
+    {
+      "file": "src/app/page.tsx",
+      "line": 71,
+      "column": 13,
+      "tag": "div",
+      "occurrence": 0,
+      "text": "⚡",
+      "clicked": true,
+      "actualSelection": {
+        "file": "src/app/page.tsx",
+        "line": 71,
+        "column": 13,
+        "tag": "div"
+      },
+      "outcome": "allowed",
+      "reason": "Exact source Apply, rendered reload and exact Undo verified."
+    },
+    {
+      "file": "src/app/page.tsx",
+      "line": 72,
+      "column": 13,
+      "tag": "h3",
+      "occurrence": 0,
+      "text": "Next.js 14 App Router",
+      "clicked": true,
+      "actualSelection": {
+        "file": "src/app/page.tsx",
+        "line": 72,
+        "column": 13,
+        "tag": "h3"
+      },
+      "outcome": "allowed",
+      "reason": "Exact source Apply, rendered reload and exact Undo verified."
+    },
+    {
+      "file": "src/app/page.tsx",
+      "line": 73,
+      "column": 13,
+      "tag": "p",
+      "occurrence": 0,
+      "text": "Optimized for React Server Components, server actions, and instant edge renderin",
+      "clicked": true,
+      "actualSelection": {
+        "file": "src/app/page.tsx",
+        "line": 73,
+        "column": 13,
+        "tag": "p"
+      },
+      "outcome": "allowed",
+      "reason": "Exact source Apply, rendered reload and exact Undo verified."
+    },
+    {
+      "file": "src/app/page.tsx",
+      "line": 77,
+      "column": 11,
+      "tag": "div",
+      "occurrence": 0,
+      "text": "🎨Tailwind CSS ReadyModern dark-mode design system with responsive typography, u",
+      "clicked": true,
+      "actualSelection": {
+        "file": "src/app/page.tsx",
+        "line": 77,
+        "column": 11,
+        "tag": "div"
+      },
+      "outcome": "allowed",
+      "reason": "Exact source Apply, rendered reload and exact Undo verified."
+    },
+    {
+      "file": "src/app/page.tsx",
+      "line": 78,
+      "column": 13,
+      "tag": "div",
+      "occurrence": 0,
+      "text": "🎨",
+      "clicked": true,
+      "actualSelection": {
+        "file": "src/app/page.tsx",
+        "line": 78,
+        "column": 13,
+        "tag": "div"
+      },
+      "outcome": "allowed",
+      "reason": "Exact source Apply, rendered reload and exact Undo verified."
+    },
+    {
+      "file": "src/app/page.tsx",
+      "line": 79,
+      "column": 13,
+      "tag": "h3",
+      "occurrence": 0,
+      "text": "Tailwind CSS Ready",
+      "clicked": true,
+      "actualSelection": {
+        "file": "src/app/page.tsx",
+        "line": 79,
+        "column": 13,
+        "tag": "h3"
+      },
+      "outcome": "allowed",
+      "reason": "Exact source Apply, rendered reload and exact Undo verified."
+    },
+    {
+      "file": "src/app/page.tsx",
+      "line": 80,
+      "column": 13,
+      "tag": "p",
+      "occurrence": 0,
+      "text": "Modern dark-mode design system with responsive typography, utility classes, and ",
+      "clicked": true,
+      "actualSelection": {
+        "file": "src/app/page.tsx",
+        "line": 80,
+        "column": 13,
+        "tag": "p"
+      },
+      "outcome": "allowed",
+      "reason": "Exact source Apply, rendered reload and exact Undo verified."
+    },
+    {
+      "file": "src/app/page.tsx",
+      "line": 84,
+      "column": 11,
+      "tag": "div",
+      "occurrence": 0,
+      "text": "🛡️Strict TypeScript100% type-safe codebase with strict compilation flags to eli",
+      "clicked": true,
+      "actualSelection": {
+        "file": "src/app/page.tsx",
+        "line": 84,
+        "column": 11,
+        "tag": "div"
+      },
+      "outcome": "allowed",
+      "reason": "Exact source Apply, rendered reload and exact Undo verified."
+    },
+    {
+      "file": "src/app/page.tsx",
+      "line": 85,
+      "column": 13,
+      "tag": "div",
+      "occurrence": 0,
+      "text": "🛡️",
+      "clicked": true,
+      "actualSelection": {
+        "file": "src/app/page.tsx",
+        "line": 85,
+        "column": 13,
+        "tag": "div"
+      },
+      "outcome": "allowed",
+      "reason": "Exact source Apply, rendered reload and exact Undo verified."
+    },
+    {
+      "file": "src/app/page.tsx",
+      "line": 86,
+      "column": 13,
+      "tag": "h3",
+      "occurrence": 0,
+      "text": "Strict TypeScript",
+      "clicked": true,
+      "actualSelection": {
+        "file": "src/app/page.tsx",
+        "line": 86,
+        "column": 13,
+        "tag": "h3"
+      },
+      "outcome": "allowed",
+      "reason": "Exact source Apply, rendered reload and exact Undo verified."
+    },
+    {
+      "file": "src/app/page.tsx",
+      "line": 87,
+      "column": 13,
+      "tag": "p",
+      "occurrence": 0,
+      "text": "100% type-safe codebase with strict compilation flags to eliminate runtime error",
+      "clicked": true,
+      "actualSelection": {
+        "file": "src/app/page.tsx",
+        "line": 87,
+        "column": 13,
+        "tag": "p"
+      },
+      "outcome": "allowed",
+      "reason": "Exact source Apply, rendered reload and exact Undo verified."
+    }
+  ]
+}

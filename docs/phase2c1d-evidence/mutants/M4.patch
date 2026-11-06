@@ -1,0 +1,30 @@
+diff --git a/lib/slightnudge/edit-history.ts b/lib/slightnudge/edit-history.ts
+index b0267e5..7b454a3 100644
+--- a/lib/slightnudge/edit-history.ts
++++ b/lib/slightnudge/edit-history.ts
+@@ -888,9 +888,7 @@ export function undoSourceEdit(target?: string | { filePath?: string; editId?: s
+   const targetLine = targetEl.getStartLineNumber();
+ 
+   // Safety checks on candidate element
+-  if (isElementInsideLoop(targetEl)) {
+-    return refuseWithInstructions('element is inside a repeating list', targetLine);
+-  }
++  /* M4 loop dropped */
+   if (isComponentUsedMultipleTimes(targetEl, project)) {
+     return refuseWithInstructions('element is in a component used in several places', targetLine);
+   }
+@@ -898,12 +896,8 @@ export function undoSourceEdit(target?: string | { filePath?: string; editId?: s
+   // Check conditional ancestor
+   let ancestor: Node | undefined = targetEl.getParent();
+   while (ancestor) {
+-    if (Node.isConditionalExpression(ancestor) || (Node.isBinaryExpression(ancestor) && ['&&', '||'].includes(ancestor.getOperatorToken().getText()))) {
+-      return refuseWithInstructions('element is in a conditional expression', targetLine);
+-    }
+-    if (Node.isIfStatement(ancestor)) {
+-      return refuseWithInstructions('element is in a conditional statement', targetLine);
+-    }
++    /* M4 conditional dropped */
++    /* M4 if dropped */
+     ancestor = ancestor.getParent();
+   }
+ 

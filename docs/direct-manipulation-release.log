@@ -1,0 +1,12 @@
+node:internal/process/promises:394
+    triggerUncaughtException(err, true /* fromPromise */);
+    ^
+
+page.waitForResponse: Timeout 30000ms exceeded while waiting for event "response"
+    at checkDirectManipulation (C:\dev\vibecheck\test\helpers\direct-manipulation-browser.ts:11:22)
+    at <anonymous> (C:\dev\vibecheck\test\review-consent.browser.ts:100:20) {
+  log: [],
+  name: 'TimeoutError'
+}
+
+Node.js v22.19.0

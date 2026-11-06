@@ -1,0 +1,228 @@
+PASS four HTTP redirects: project path and repeated/empty/encoded query values preserved
+ROUND 1 VIEW full
+WORKFLOW NAVIGATION /editor?view=full&panel=inspector
+[]
+▲ Next.js 16.4.3 (webpack)
+- Local:         http://127.0.0.1:50149
+- Network:       http://127.0.0.1:50149
+✓ Ready in 511ms
+✓ Running next.config.mjs took 28ms
+
+○ Compiling /fixtures/1/page ...
+ GET /fixtures/1 200 in 422ms (next.js: 203ms, application-code: 219ms)
+ GET /studio?tag=a&tag=b&empty=&preview=http%3A%2F%2Flocalhost%3A3001%2Fa%3Fx%3D1%26y%3D2 307 in 1667ms (next.js: 1508ms, application-code: 159ms)
+ GET /studio/window?tag=a&tag=b&empty=&preview=http%3A%2F%2Flocalhost%3A3001%2Fa%3Fx%3D1%26y%3D2 307 in 293ms (next.js: 139ms, application-code: 154ms)
+ GET /studio/source-proof/edit?tag=a&tag=b&empty=&preview=http%3A%2F%2Flocalhost%3A3001%2Fa%3Fx%3D1%26y%3D2 307 in 1570ms (next.js: 1452ms, application-code: 118ms)
+ GET /studio/source-proof/window?tag=a&tag=b&empty=&preview=http%3A%2F%2Flocalhost%3A3001%2Fa%3Fx%3D1%26y%3D2 307 in 733ms (next.js: 608ms, application-code: 124ms)
+ GET /editor?view=full&panel=inspector 200 in 1038ms (next.js: 877ms, application-code: 161ms)
+⨯ SyntaxError: Invalid or unexpected token
+    at ignore-listed frames {
+  type: 'SyntaxError',
+  page: '/studio/preview/fixture-1'
+}
+⚠ ./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+ GET /api/slightnudge/pages 200 in 6.4s (next.js: 4.6s, proxy.ts: 1572ms, application-code: 278ms)
+○ Compiling /_error ...
+ POST /api/slightnudge/responsive 200 in 6.6s (next.js: 4.6s, proxy.ts: 1573ms, application-code: 484ms)
+ POST /api/slightnudge/responsive 200 in 6.7s (next.js: 4.6s, proxy.ts: 1573ms, application-code: 531ms)
+ GET /api/slightnudge/pages 200 in 116ms (next.js: 7ms, proxy.ts: 100ms, application-code: 10ms)
+ GET /editor?view=full&panel=inspector 200 in 2.8s (next.js: 2.5s, application-code: 213ms)
+ GET /editor?view=full&panel=inspector 200 in 92ms (next.js: 3ms, application-code: 89ms)
+⚠ ./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+ GET /studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A50149&__slightnudge_session=5ef3d895-74d1-403d-9a27-6e5f367700bd 500 in 7.4s (next.js: 7.3s, application-code: 114ms)
+[browser] Uncaught SyntaxError: Invalid or unexpected token
+
+warning: in the working copy of 'app/admin/page.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/api/admin/metrics/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/api/checkout/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/api/checkout/simulate/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/api/runs/[id]/report.pdf/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/api/runs/[id]/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/api/runs/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/api/sites/[id]/verify/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/api/sites/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/api/slightnudge/inspect/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/api/slightnudge/preview/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/api/slightnudge/repositories/[id]/inspect/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/api/slightnudge/repositories/[id]/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/design/page.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/how-it-works/page.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/page.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/pricing/page.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/runs/[id]/page.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/studio/page.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'components/Header.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'components/MarketingFooter.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'lib/db/client.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'lib/db/types.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'lib/llm/generator.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'lib/payments/dodo.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'lib/pipeline/runner.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'lib/pipeline/stage-c-planning.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'lib/pipeline/stage-d-execution.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'lib/pipeline/stage-e-analysis.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'lib/pipeline/types.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'lib/security/ownership.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'lib/security/ssrf.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'lib/slightnudge/ast-nudger.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'lib/slightnudge/client.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'lib/slightnudge/edit-history.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'lib/slightnudge/next-source-loader.cjs', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'package.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'worker/index.ts', LF will be replaced by CRLF the next time Git touches it
+RAW GIT STATUS: docs/unified-editor-evidence/round-1-git-status.txt
+Disposable workspace retained: C:\Users\abhis\AppData\Local\Temp\sn-review-consent-eSBrPd
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+locator.waitFor: Timeout 120000ms exceeded.
+Call log:
+[2m  - waiting for locator('[data-source-ready="true"]') to be visible[22m
+
+    at checkSharedInstances (C:\dev\vibecheck\test\helpers\shared-instance-browser.ts:21:127)
+    at async existing (C:\dev\vibecheck\test\unified-editor.browser.ts:181:13)
+    at async <anonymous> (C:\dev\vibecheck\test\unified-editor.browser.ts:191:11) {
+  log: [
+    `  - waiting for locator('[data-source-ready="true"]') to be visible`
+  ],
+  name: 'TimeoutError'
+}
+
+Node.js v22.19.0

@@ -1,0 +1,56 @@
+SETUP 1793638577898 START git ["ls-files"]
+SETUP END elapsed 125ms
+SETUP 1793638771489 START git ["init","--quiet"]
+SETUP END elapsed 67ms
+SETUP 1793638771556 START git ["-c","core.autocrlf=false","add","app","components","package.json","LICENSE"]
+SETUP END elapsed 66ms
+SETUP 1793638771623 START C:\nvm4w\nodejs\node.exe ["--import","tsx","--input-type=module","-e","const {installNextSourceAdapter}=await import('./lib/slightnudge/next-source-adapter.ts');await installNextSourceAdapter('source-proof');"]
+SETUP END elapsed 315ms
+SETUP 1793638771938 START C:\nvm4w\nodejs\node.exe ["C:\\dev\\vibecheck\\scratch\\g\\aac49cee\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-gw51PJ\\.slightnudge\\repositories\\source-proof\\node_modules\\next\\dist\\bin\\next","dev","--help"]
+SETUP END elapsed 197ms
+Disposable source project: generated SaaS; Next.js 16.4.3; Tailwind 4.3.3; installed source adapter; no environment files checked out.
+HARNESS-V3 NAVIGATION http://127.0.0.1:59656/editor/source-proof?preview=http%3A%2F%2F127.0.0.1%3A59922%2F&panel=inspector&view=fit
+TIMING 1793638812678 REQUEST http://127.0.0.1:59656/editor/source-proof?preview=http%3A%2F%2F127.0.0.1%3A59922%2F&panel=inspector&view=fit
+TIMING 1793638813230 RESPONSE 200 http://127.0.0.1:59656/editor/source-proof?preview=http%3A%2F%2F127.0.0.1%3A59922%2F&panel=inspector&view=fit
+HARNESS-V3 OP 1793638813487 START waitFor locator('[data-source-ready="true"]')
+TIMING 1793638815840 REQUEST http://127.0.0.1:59656/api/slightnudge/repositories/source-proof
+TIMING 1793638815846 REQUEST http://127.0.0.1:59656/api/slightnudge/repositories/source-proof
+TIMING 1793638831920 REQUEST http://127.0.0.1:59656/editor/source-proof?preview=http%3A%2F%2F127.0.0.1%3A59922%2F&panel=inspector&view=fit&_rsc=5lSdY0W0HEP4B4bu
+TIMING 1793638850343 RESPONSE 200 http://127.0.0.1:59656/editor/source-proof?preview=http%3A%2F%2F127.0.0.1%3A59922%2F&panel=inspector&view=fit&_rsc=5lSdY0W0HEP4B4bu
+TIMING 1793638851047 RESPONSE 200 http://127.0.0.1:59656/api/slightnudge/repositories/source-proof
+TIMING 1793638851280 RESPONSE 200 http://127.0.0.1:59656/api/slightnudge/repositories/source-proof
+TIMING 1793638851286 REQUEST http://127.0.0.1:59656/api/slightnudge/repositories/source-proof/preview-check
+TIMING 1793638854800 RESPONSE 200 http://127.0.0.1:59656/api/slightnudge/repositories/source-proof/preview-check
+TIMING 1793638854805 REQUEST http://127.0.0.1:59922/?__slightnudge_session=bbf2d967-06c6-46e7-9993-df6375421ce5&__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A59656&__slightnudge_draft=1&__slightnudge_canvas=1
+TIMING 1793638855257 RESPONSE 200 http://127.0.0.1:59922/?__slightnudge_session=bbf2d967-06c6-46e7-9993-df6375421ce5&__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A59656&__slightnudge_draft=1&__slightnudge_canvas=1
+TIMING 1793638860860 REQUEST http://127.0.0.1:59656/api/slightnudge/responsive
+HARNESS-V3 OP 1793638860906 END waitFor locator('[data-source-ready="true"]')
+HARNESS-V3 OP 1793638861272 START count locator('iframe[title="Actual project"]')
+HARNESS-V3 OP 1793638861293 END count locator('iframe[title="Actual project"]')
+HARNESS-V3 OP 1793638861507 START evaluate locator('iframe[title="Actual project"]')
+HARNESS-V3 OP 1793638861529 END evaluate locator('iframe[title="Actual project"]')
+HARNESS-V3 OP 1793638861943 START evaluate locator('iframe[title="Actual project"]')
+HARNESS-V3 OP 1793638861973 END evaluate locator('iframe[title="Actual project"]')
+HARNESS-V3 OP 1793638862613 START evaluate locator('iframe[title="Actual project"]')
+TIMING 1793638863152 REQUEST http://127.0.0.1:59922/?__slightnudge_session=bbf2d967-06c6-46e7-9993-df6375421ce5&__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A59656&__slightnudge_draft=1&__slightnudge_canvas=1
+HARNESS-V3 OP 1793638863154 END evaluate locator('iframe[title="Actual project"]')
+TIMING 1793638863550 RESPONSE 200 http://127.0.0.1:59922/?__slightnudge_session=bbf2d967-06c6-46e7-9993-df6375421ce5&__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A59656&__slightnudge_draft=1&__slightnudge_canvas=1
+HARNESS-V3 OP 1793638863566 START waitFor locator('[data-source-ready="true"]')
+HARNESS-V3 OP 1793638868541 END waitFor locator('[data-source-ready="true"]')
+HARNESS-V3 OP 1793638868668 START boundingBox locator('[data-canvas-stage]')
+HARNESS-V3 OP 1793638868848 END boundingBox locator('[data-canvas-stage]')
+HARNESS-V3 OP 1793638868848 START boundingBox locator('iframe[title="Actual project"]')
+HARNESS-V3 OP 1793638869088 END boundingBox locator('iframe[title="Actual project"]')
+HARNESS-V3 OP 1793638869088 START selectOption getByRole('combobox', { name: 'Canvas zoom', exact: true })
+HARNESS-V3 OP 1793638869305 END selectOption getByRole('combobox', { name: 'Canvas zoom', exact: true })
+TIMING 1793638870514 REQUEST http://127.0.0.1:59656/api/slightnudge/responsive
+TIMING 1793638870514 REQUEST http://127.0.0.1:59656/api/slightnudge/preview
+HARNESS-V3 OP 1793638870824 START getAttribute getByRole('button', { name: 'Toggle design panel', exact: true })
+HARNESS-V3 OP 1793638870842 END getAttribute getByRole('button', { name: 'Toggle design panel', exact: true })
+HARNESS-V3 OP 1793638870842 START count getByRole('button', { name: 'Edit shared definition', exact: true })
+HARNESS-V3 OP 1793638870863 END count getByRole('button', { name: 'Edit shared definition', exact: true })
+HARNESS-V3 OP 1793638870863 START click getByRole('button', { name: 'Edit shared definition', exact: true })
+TIMING 1793638870992 RESPONSE 200 http://127.0.0.1:59656/api/slightnudge/responsive
+TIMING 1793638871180 REQUEST http://127.0.0.1:59656/api/slightnudge/repositories/source-proof/inspect
+HARNESS-V3 OP 1793638871240 END click getByRole('button', { name: 'Edit shared definition', exact: true })
+HARNESS-V3 OP 1793638871242 START waitFor getByRole('toolbar', { name: 'Selection formatting' }).getByRole('combobox', { name: 'Font size', exact: true })

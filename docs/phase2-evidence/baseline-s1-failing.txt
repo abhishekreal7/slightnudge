@@ -1,0 +1,115 @@
+TAP version 13
+# Subtest: S1: Authenticated, local-only mutating requests
+    # Subtest: rejects mutating request with no Origin and no token with 403
+    not ok 1 - rejects mutating request with no Origin and no token with 403
+      ---
+      duration_ms: 5812.9552
+      type: 'test'
+      location: 'C:\\dev\\vibecheck\\test\\s1-auth-origin.test.ts:8:3'
+      failureType: 'testCodeFailure'
+      error: |-
+        Expected 403, got 400
+        
+        400 !== 403
+        
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: 403
+      actual: 400
+      operator: 'strictEqual'
+      stack: |-
+        TestContext.<anonymous> (C:\dev\vibecheck\test\s1-auth-origin.test.ts:14:12)
+        process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+        async Test.run (node:internal/test_runner/test:1054:7)
+        async Promise.all (index 0)
+        async Suite.run (node:internal/test_runner/test:1442:7)
+        async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+      ...
+    # Subtest: rejects mutating request with wrong Host with 403
+    not ok 2 - rejects mutating request with wrong Host with 403
+      ---
+      duration_ms: 32.626
+      type: 'test'
+      location: 'C:\\dev\\vibecheck\\test\\s1-auth-origin.test.ts:17:3'
+      failureType: 'testCodeFailure'
+      error: |-
+        Expected 403 on invalid Host, got 400
+        
+        400 !== 403
+        
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: 403
+      actual: 400
+      operator: 'strictEqual'
+      stack: |-
+        TestContext.<anonymous> (C:\dev\vibecheck\test\s1-auth-origin.test.ts:27:12)
+        process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+        async Test.run (node:internal/test_runner/test:1054:7)
+        async Suite.processPendingSubtests (node:internal/test_runner/test:744:7)
+      ...
+    # Subtest: rejects mutating request with valid Origin but missing token with 403
+    not ok 3 - rejects mutating request with valid Origin but missing token with 403
+      ---
+      duration_ms: 22.2928
+      type: 'test'
+      location: 'C:\\dev\\vibecheck\\test\\s1-auth-origin.test.ts:30:3'
+      failureType: 'testCodeFailure'
+      error: |-
+        Expected 403 on missing token, got 400
+        
+        400 !== 403
+        
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: 403
+      actual: 400
+      operator: 'strictEqual'
+      stack: |-
+        TestContext.<anonymous> (C:\dev\vibecheck\test\s1-auth-origin.test.ts:39:12)
+        process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+        async Test.run (node:internal/test_runner/test:1054:7)
+        async Suite.processPendingSubtests (node:internal/test_runner/test:744:7)
+      ...
+    # Subtest: rejects mutating request with valid Origin but invalid token with 403
+    not ok 4 - rejects mutating request with valid Origin but invalid token with 403
+      ---
+      duration_ms: 19.7324
+      type: 'test'
+      location: 'C:\\dev\\vibecheck\\test\\s1-auth-origin.test.ts:42:3'
+      failureType: 'testCodeFailure'
+      error: |-
+        Expected 403 on invalid token, got 400
+        
+        400 !== 403
+        
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: 403
+      actual: 400
+      operator: 'strictEqual'
+      stack: |-
+        TestContext.<anonymous> (C:\dev\vibecheck\test\s1-auth-origin.test.ts:52:12)
+        process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+        async Test.run (node:internal/test_runner/test:1054:7)
+        async Suite.processPendingSubtests (node:internal/test_runner/test:744:7)
+      ...
+    1..4
+not ok 1 - S1: Authenticated, local-only mutating requests
+  ---
+  duration_ms: 5892.3581
+  type: 'suite'
+  location: 'C:\\dev\\vibecheck\\test\\s1-auth-origin.test.ts:5:1'
+  failureType: 'subtestsFailed'
+  error: '4 subtests failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+1..1
+# tests 4
+# suites 1
+# pass 0
+# fail 4
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 6257.9939

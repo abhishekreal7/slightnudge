@@ -1,0 +1,25 @@
+Resize baseline: {"width":672,"rem":"16px"}
+PASS: Escape cancels the active resize and retains selection
+PASS: blur cancels the active resize and retains selection
+PASS: pointercancel cancels the active resize and retains selection
+PASS: capture cancels the active resize and retains selection
+PASS: scroll cancels the active resize and retains selection
+PASS: generous edge/corner targets, live snapped geometry, no per-frame proposals, Escape/blur/cancel/capture/scroll restoration
+PASS: final pointer coordinate determines one proposal; selection stays pinned; Discard leaves source untouched
+PASS: scale-aware pointer geometry and live measurement; cancelled scaled gesture generates no proposal
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: false == true
+    at checkDirectManipulation (C:\dev\vibecheck\test\helpers\direct-manipulation-browser.ts:95:10)
+    at async <anonymous> (C:\dev\vibecheck\test\review-consent.browser.ts:100:14) {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v22.19.0

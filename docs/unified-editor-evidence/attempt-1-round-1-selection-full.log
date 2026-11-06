@@ -1,0 +1,16 @@
+====================================================
+🧪 SLIGHTNUDGE - STEP 1: ELEMENT SELECTION SUITE
+====================================================
+
+--- Test 1: Click selection on Fixture 1 ---
+  ✅ [PASS] Bounding box drawn around selected element
+Test run failed: page.waitForSelector: Timeout 30000ms exceeded.
+Call log:
+[2m  - waiting for locator('#slightnudge-file-display') to be visible[22m
+
+    at runStep1Tests (C:\dev\vibecheck\test\step1-selection.test.ts:43:16) {
+  log: [
+    "  - waiting for locator('#slightnudge-file-display') to be visible"
+  ],
+  name: 'TimeoutError'
+}

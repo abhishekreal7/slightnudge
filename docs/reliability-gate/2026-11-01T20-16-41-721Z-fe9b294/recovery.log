@@ -1,0 +1,35 @@
+SETUP 1793567143407 START git ["ls-files"]
+SETUP END elapsed 67ms
+HARNESS-V3 NAVIGATION http://127.0.0.1:51735/editor
+TIMING 1793567202996 REQUEST http://127.0.0.1:51735/editor
+TIMING 1793567232570 RESPONSE 200 http://127.0.0.1:51735/editor
+Isolated application diagnostics ▲ Next.js 16.4.3 (webpack)
+- Local:         http://127.0.0.1:51735
+- Network:       http://127.0.0.1:51735
+✓ Ready in 509ms
+✓ Running next.config.mjs took 30ms
+
+○ Compiling /fixtures/1/page ...
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\reliability-gate\\2026-11-01T20-16-41-721Z-fe9b294\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-VmA9Av\\.next\\dev\\build-manifest.json","pid":30740,"time":1793567197569,"bytes":344}
+ GET /fixtures/1 200 in 2.1s (next.js: 1206ms, application-code: 867ms)
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\reliability-gate\\2026-11-01T20-16-41-721Z-fe9b294\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-VmA9Av\\.next\\dev\\build-manifest.json","pid":30740,"time":1793567199760,"bytes":344}
+ GET /fixtures/1 200 in 1643ms (next.js: 2ms, application-code: 1641ms)
+○ Compiling /editor/[[...project]]/page ...
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\reliability-gate\\2026-11-01T20-16-41-721Z-fe9b294\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-VmA9Av\\.next\\dev\\build-manifest.json","pid":25760,"time":1793567230941,"bytes":344}
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\reliability-gate\\2026-11-01T20-16-41-721Z-fe9b294\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-VmA9Av\\.next\\dev\\build-manifest.json","pid":30740,"time":1793567231206,"bytes":344}
+ GET /editor 200 in 2.5s (next.js: 1049ms, application-code: 1406ms)
+
+SETUP 1793567238317 START taskkill ["/pid","13632","/T","/F"]
+SETUP END elapsed 895ms
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+page.waitForResponse: Timeout 30000ms exceeded while waiting for event "response"
+    at checkStudioReloadRecovery (C:\dev\vibecheck\scratch\reliability-gate\2026-11-01T20-16-41-721Z-fe9b294\worktree\test\helpers\studio-reload-recovery-browser.v3.ts:25:25)
+    at async <anonymous> (C:\dev\vibecheck\scratch\reliability-gate\2026-11-01T20-16-41-721Z-fe9b294\worktree\test\review-consent.browser.v3.ts:243:14) {
+  log: [],
+  name: 'TimeoutError'
+}
+
+Node.js v22.19.0

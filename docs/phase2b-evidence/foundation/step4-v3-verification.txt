@@ -1,0 +1,44 @@
+=== STEP 4: TAILWIND V3 VERIFICATION RAW OUTPUT ===
+Command: npx tsx --test test/s5-v3-support.test.ts
+Exit Code: 0
+
+TAP version 13
+# warn - No utility classes were detected in your source files. If this is unexpected, double-check the `content` option in your Tailwind CSS configuration.
+# warn - https://tailwindcss.com/docs/content-configuration
+# Subtest: S5: Tailwind v3 Verification and Project Isolation
+    # Subtest: verifies Tailwind v3 project tokens: standard, theme brand.500, stacked variants, arbitrary values, plugins, and refuses bogus
+    ok 1 - verifies Tailwind v3 project tokens: standard, theme brand.500, stacked variants, arbitrary values, plugins, and refuses bogus
+      ---
+      duration_ms: 33891.4719
+      type: 'test'
+      ...
+    # Subtest: confirms unchanged existing tokens are never verified in a v3 project during apply
+    ok 2 - confirms unchanged existing tokens are never verified in a v3 project during apply
+      ---
+      duration_ms: 8033.7222
+      type: 'test'
+      ...
+    1..2
+ok 1 - S5: Tailwind v3 Verification and Project Isolation
+  ---
+  duration_ms: 41926.8165
+  type: 'suite'
+  ...
+1..1
+# tests 2
+# suites 1
+# pass 2
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 43412.6379
+
+SUMMARY OF VERIFICATION:
+- p-4: ACCEPTED (standard utility)
+- bg-brand-500: ACCEPTED (project theme.extend.colors.brand.500)
+- dark:hover:bg-brand-500: ACCEPTED (stacked variant with darkMode: 'class')
+- w-[37px]: ACCEPTED (arbitrary value)
+- plugin-glow: ACCEPTED (plugin-added utility)
+- bg-nonexistent-999: REFUSED (0 bytes generated, produces no CSS error)
+- Unchanged existing tokens during apply: PASSED (never verified, apply succeeded)

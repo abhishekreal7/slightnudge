@@ -1,0 +1,30 @@
+SETUP 1793564571858 START git ["ls-files"]
+SETUP END elapsed 53ms
+SETUP 1793564610677 START git ["init","--quiet"]
+SETUP END elapsed 188ms
+SETUP 1793564610866 START git ["-c","core.autocrlf=false","add","app","components","package.json","LICENSE"]
+SETUP END elapsed 157ms
+SETUP 1793564611029 START C:\nvm4w\nodejs\node.exe ["--import","tsx","--input-type=module","-e","const {installNextSourceAdapter}=await import('./lib/slightnudge/next-source-adapter.ts');await installNextSourceAdapter('source-proof');"]
+SETUP END elapsed 853ms
+SETUP 1793564611882 START C:\nvm4w\nodejs\node.exe ["C:\\dev\\vibecheck\\scratch\\reliability-gate\\2026-11-01T20-16-41-721Z-fe9b294\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-G0kKum\\.slightnudge\\repositories\\source-proof\\node_modules\\next\\dist\\bin\\next","dev","--help"]
+SETUP END elapsed 177ms
+Disposable source project: generated SaaS; Next.js 16.4.3; Tailwind 4.3.3; installed source adapter; no environment files checked out.
+HARNESS-V3 NAVIGATION about:blank
+HARNESS-V3 NAVIGATION about:blank
+HARNESS-V3 NAVIGATION http://127.0.0.1:57910/editor/source-proof?preview=http%3A%2F%2F127.0.0.1%3A62467%2F
+HARNESS-V3 NAVIGATION http://127.0.0.1:57910/editor/source-proof?preview=http%3A%2F%2F127.0.0.1%3A62467%2F
+TIMING 1793564638066 REQUEST http://127.0.0.1:57910/editor/source-proof?preview=http%3A%2F%2F127.0.0.1%3A62467%2F
+TIMING 1793564653380 RESPONSE 200 http://127.0.0.1:57910/editor/source-proof?preview=http%3A%2F%2F127.0.0.1%3A62467%2F
+TIMING 1793564657375 REQUEST http://127.0.0.1:57910/api/slightnudge/repositories/source-proof
+TIMING 1793564657379 REQUEST http://127.0.0.1:57910/api/slightnudge/repositories/source-proof
+TIMING 1793564676783 RESPONSE 200 http://127.0.0.1:57910/api/slightnudge/repositories/source-proof
+TIMING 1793564677186 RESPONSE 200 http://127.0.0.1:57910/api/slightnudge/repositories/source-proof
+TIMING 1793564677192 REQUEST http://127.0.0.1:57910/api/slightnudge/repositories/source-proof/preview-check
+TIMING 1793564679808 RESPONSE 200 http://127.0.0.1:57910/api/slightnudge/repositories/source-proof/preview-check
+TIMING 1793564679821 REQUEST http://127.0.0.1:62467/?__slightnudge_session=561f0e54-5cf5-4f5d-9b26-479a246882b5&__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A57910&__slightnudge_draft=1
+TIMING 1793564679869 RESPONSE 200 http://127.0.0.1:62467/?__slightnudge_session=561f0e54-5cf5-4f5d-9b26-479a246882b5&__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A57910&__slightnudge_draft=1
+TIMING 1793564682387 REQUEST http://127.0.0.1:57910/api/slightnudge/responsive
+TIMING 1793564683204 REQUEST http://127.0.0.1:57910/api/slightnudge/responsive
+TIMING 1793564683205 REQUEST http://127.0.0.1:57910/api/slightnudge/preview
+TIMING 1793564688149 RESPONSE 200 http://127.0.0.1:57910/api/slightnudge/responsive
+TIMING 1793564688307 RESPONSE 200 http://127.0.0.1:57910/api/slightnudge/responsive

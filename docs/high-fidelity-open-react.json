@@ -1,0 +1,580 @@
+{
+  "date": "2026-10-28T12:42:39.221Z",
+  "state": "passed",
+  "checks": [
+    "studio: native typography, gradients, three image assets and responsive card geometry at 375/768/1200px",
+    "studio: original video dialog, Escape, hover spotlight and pointer tracking on the native page",
+    "studio: original-size inline text and responsive typography preserve animated gradient and AOS metadata",
+    "studio: alpha text color replacement and independent fill preserve layered background and pseudo border",
+    "studio: nested card spacing and mixed drafts survive refresh without source writes",
+    "studio: mixed two-file Save, native interactions after Save, exact source Undo and restored design",
+    "window: native typography, gradients, three image assets and responsive card geometry at 375/768/1200px",
+    "window: original video dialog, Escape, hover spotlight and pointer tracking in Browse",
+    "window: original-size inline text and responsive typography preserve animated gradient and AOS metadata",
+    "window: alpha text color replacement and independent fill preserve layered background and pseudo border",
+    "window: nested card spacing and mixed drafts survive refresh without source writes",
+    "window: mixed two-file Save, native interactions after Save, exact source Undo and restored design"
+  ],
+  "modes": [
+    {
+      "mode": "studio",
+      "comparisons": {
+        "375": {
+          "heading": {
+            "font-size": "40px",
+            "font-family": "nacelle, \"nacelle Fallback\"",
+            "font-weight": "600",
+            "line-height": "44px",
+            "color": "rgba(0, 0, 0, 0)",
+            "background-image": "linear-gradient(to right, oklch(0.928 0.006 264.531), oklch(0.87 0.065 274.039), oklch(0.985 0.002 247.839), oklch(0.785 0.115 274.713), oklch(0.928 0.006 264.531))",
+            "background-size": "200% auto",
+            "background-clip": "text",
+            "animation-name": "gradient"
+          },
+          "paragraph": {
+            "font-size": "20px",
+            "line-height": "30px",
+            "color": "oklab(0.87 0.0045783 -0.0648386 / 0.65)",
+            "width": "343px"
+          },
+          "button": {
+            "background-image": "linear-gradient(to top, oklch(0.511 0.262 276.966) 0%, oklch(0.585 0.233 277.117) 100%)",
+            "background-size": "100% 100%",
+            "border-radius": "8px",
+            "font-size": "14px"
+          },
+          "cards": [
+            {
+              "width": 343,
+              "top": 0
+            },
+            {
+              "width": 343,
+              "top": 460
+            },
+            {
+              "width": 343,
+              "top": 919
+            }
+          ],
+          "assets": [
+            {
+              "alt": "Workflow 01",
+              "width": 341,
+              "naturalWidth": 384,
+              "complete": true
+            },
+            {
+              "alt": "Workflow 02",
+              "width": 341,
+              "naturalWidth": 384,
+              "complete": true
+            },
+            {
+              "alt": "Workflow 03",
+              "width": 341,
+              "naturalWidth": 384,
+              "complete": true
+            }
+          ]
+        },
+        "768": {
+          "heading": {
+            "font-size": "56px",
+            "font-family": "nacelle, \"nacelle Fallback\"",
+            "font-weight": "600",
+            "line-height": "56px",
+            "color": "rgba(0, 0, 0, 0)",
+            "background-image": "linear-gradient(to right, oklch(0.928 0.006 264.531), oklch(0.87 0.065 274.039), oklch(0.985 0.002 247.839), oklch(0.785 0.115 274.713), oklch(0.928 0.006 264.531))",
+            "background-size": "200% auto",
+            "background-clip": "text",
+            "animation-name": "gradient"
+          },
+          "paragraph": {
+            "font-size": "20px",
+            "line-height": "30px",
+            "color": "oklab(0.87 0.0045783 -0.0648386 / 0.65)",
+            "width": "720px"
+          },
+          "button": {
+            "background-image": "linear-gradient(to top, oklch(0.511 0.262 276.966) 0%, oklch(0.585 0.233 277.117) 100%)",
+            "background-size": "100% 100%",
+            "border-radius": "8px",
+            "font-size": "14px"
+          },
+          "cards": [
+            {
+              "width": 384,
+              "top": 0
+            },
+            {
+              "width": 384,
+              "top": 467
+            },
+            {
+              "width": 384,
+              "top": 934
+            }
+          ],
+          "assets": [
+            {
+              "alt": "Workflow 01",
+              "width": 350,
+              "naturalWidth": 384,
+              "complete": true
+            },
+            {
+              "alt": "Workflow 02",
+              "width": 350,
+              "naturalWidth": 384,
+              "complete": true
+            },
+            {
+              "alt": "Workflow 03",
+              "width": 350,
+              "naturalWidth": 384,
+              "complete": true
+            }
+          ]
+        },
+        "1200": {
+          "heading": {
+            "font-size": "56px",
+            "font-family": "nacelle, \"nacelle Fallback\"",
+            "font-weight": "600",
+            "line-height": "56px",
+            "color": "rgba(0, 0, 0, 0)",
+            "background-image": "linear-gradient(to right, oklch(0.928 0.006 264.531), oklch(0.87 0.065 274.039), oklch(0.985 0.002 247.839), oklch(0.785 0.115 274.713), oklch(0.928 0.006 264.531))",
+            "background-size": "200% auto",
+            "background-clip": "text",
+            "animation-name": "gradient"
+          },
+          "paragraph": {
+            "font-size": "20px",
+            "line-height": "30px",
+            "color": "oklab(0.87 0.0045783 -0.0648386 / 0.65)",
+            "width": "768px"
+          },
+          "button": {
+            "background-image": "linear-gradient(to top, oklch(0.511 0.262 276.966) 0%, oklch(0.585 0.233 277.117) 100%)",
+            "background-size": "100% 100%",
+            "border-radius": "8px",
+            "font-size": "14px"
+          },
+          "cards": [
+            {
+              "width": 352,
+              "top": 0
+            },
+            {
+              "width": 352,
+              "top": 0
+            },
+            {
+              "width": 352,
+              "top": 0
+            }
+          ],
+          "assets": [
+            {
+              "alt": "Workflow 01",
+              "width": 350,
+              "naturalWidth": 384,
+              "complete": true
+            },
+            {
+              "alt": "Workflow 02",
+              "width": 350,
+              "naturalWidth": 384,
+              "complete": true
+            },
+            {
+              "alt": "Workflow 03",
+              "width": 350,
+              "naturalWidth": 384,
+              "complete": true
+            }
+          ]
+        }
+      },
+      "dockAfterEditing": {
+        "x": 473.96875,
+        "y": 940,
+        "width": 604.046875,
+        "height": 44
+      }
+    },
+    {
+      "mode": "window",
+      "comparisons": {
+        "375": {
+          "heading": {
+            "font-size": "40px",
+            "font-family": "nacelle, \"nacelle Fallback\"",
+            "font-weight": "600",
+            "line-height": "44px",
+            "color": "rgba(0, 0, 0, 0)",
+            "background-image": "linear-gradient(to right, oklch(0.928 0.006 264.531), oklch(0.87 0.065 274.039), oklch(0.985 0.002 247.839), oklch(0.785 0.115 274.713), oklch(0.928 0.006 264.531))",
+            "background-size": "200% auto",
+            "background-clip": "text",
+            "animation-name": "gradient"
+          },
+          "paragraph": {
+            "font-size": "20px",
+            "line-height": "30px",
+            "color": "oklab(0.87 0.0045783 -0.0648386 / 0.65)",
+            "width": "343px"
+          },
+          "button": {
+            "background-image": "linear-gradient(to top, oklch(0.511 0.262 276.966) 0%, oklch(0.585 0.233 277.117) 100%)",
+            "background-size": "100% 100%",
+            "border-radius": "8px",
+            "font-size": "14px"
+          },
+          "cards": [
+            {
+              "width": 343,
+              "top": 0
+            },
+            {
+              "width": 343,
+              "top": 460
+            },
+            {
+              "width": 343,
+              "top": 919
+            }
+          ],
+          "assets": [
+            {
+              "alt": "Workflow 01",
+              "width": 341,
+              "naturalWidth": 384,
+              "complete": true
+            },
+            {
+              "alt": "Workflow 02",
+              "width": 341,
+              "naturalWidth": 384,
+              "complete": true
+            },
+            {
+              "alt": "Workflow 03",
+              "width": 341,
+              "naturalWidth": 384,
+              "complete": true
+            }
+          ]
+        },
+        "768": {
+          "heading": {
+            "font-size": "56px",
+            "font-family": "nacelle, \"nacelle Fallback\"",
+            "font-weight": "600",
+            "line-height": "56px",
+            "color": "rgba(0, 0, 0, 0)",
+            "background-image": "linear-gradient(to right, oklch(0.928 0.006 264.531), oklch(0.87 0.065 274.039), oklch(0.985 0.002 247.839), oklch(0.785 0.115 274.713), oklch(0.928 0.006 264.531))",
+            "background-size": "200% auto",
+            "background-clip": "text",
+            "animation-name": "gradient"
+          },
+          "paragraph": {
+            "font-size": "20px",
+            "line-height": "30px",
+            "color": "oklab(0.87 0.0045783 -0.0648386 / 0.65)",
+            "width": "720px"
+          },
+          "button": {
+            "background-image": "linear-gradient(to top, oklch(0.511 0.262 276.966) 0%, oklch(0.585 0.233 277.117) 100%)",
+            "background-size": "100% 100%",
+            "border-radius": "8px",
+            "font-size": "14px"
+          },
+          "cards": [
+            {
+              "width": 384,
+              "top": 0
+            },
+            {
+              "width": 384,
+              "top": 467
+            },
+            {
+              "width": 384,
+              "top": 934
+            }
+          ],
+          "assets": [
+            {
+              "alt": "Workflow 01",
+              "width": 350,
+              "naturalWidth": 384,
+              "complete": true
+            },
+            {
+              "alt": "Workflow 02",
+              "width": 350,
+              "naturalWidth": 384,
+              "complete": true
+            },
+            {
+              "alt": "Workflow 03",
+              "width": 350,
+              "naturalWidth": 384,
+              "complete": true
+            }
+          ]
+        },
+        "1200": {
+          "heading": {
+            "font-size": "56px",
+            "font-family": "nacelle, \"nacelle Fallback\"",
+            "font-weight": "600",
+            "line-height": "56px",
+            "color": "rgba(0, 0, 0, 0)",
+            "background-image": "linear-gradient(to right, oklch(0.928 0.006 264.531), oklch(0.87 0.065 274.039), oklch(0.985 0.002 247.839), oklch(0.785 0.115 274.713), oklch(0.928 0.006 264.531))",
+            "background-size": "200% auto",
+            "background-clip": "text",
+            "animation-name": "gradient"
+          },
+          "paragraph": {
+            "font-size": "20px",
+            "line-height": "30px",
+            "color": "oklab(0.87 0.0045783 -0.0648386 / 0.65)",
+            "width": "768px"
+          },
+          "button": {
+            "background-image": "linear-gradient(to top, oklch(0.511 0.262 276.966) 0%, oklch(0.585 0.233 277.117) 100%)",
+            "background-size": "100% 100%",
+            "border-radius": "8px",
+            "font-size": "14px"
+          },
+          "cards": [
+            {
+              "width": 352,
+              "top": 0
+            },
+            {
+              "width": 352,
+              "top": 0
+            },
+            {
+              "width": 352,
+              "top": 0
+            }
+          ],
+          "assets": [
+            {
+              "alt": "Workflow 01",
+              "width": 350,
+              "naturalWidth": 384,
+              "complete": true
+            },
+            {
+              "alt": "Workflow 02",
+              "width": 350,
+              "naturalWidth": 384,
+              "complete": true
+            },
+            {
+              "alt": "Workflow 03",
+              "width": 350,
+              "naturalWidth": 384,
+              "complete": true
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "errors": [],
+  "limits": [
+    "Image asset replacement, component props, generated testimonial data and animation timeline editing are not qualified or added by this experiment.",
+    "Native comparisons use the same upstream page with its development source adapter, without the editor canvas styles. Chromium only."
+  ],
+  "phase": "window: save and exact Undo",
+  "project": "https://github.com/cruip/open-react-template",
+  "commit": "9da36763df216be7840f3c063edcdcaf7862401e",
+  "next": "15.1.11",
+  "tailwind": "4.3.3",
+  "sourceFilesChecked": 26,
+  "native": {
+    "375": {
+      "heading": {
+        "font-size": "40px",
+        "font-family": "nacelle, \"nacelle Fallback\"",
+        "font-weight": "600",
+        "line-height": "44px",
+        "color": "rgba(0, 0, 0, 0)",
+        "background-image": "linear-gradient(to right, oklch(0.928 0.006 264.531), oklch(0.87 0.065 274.039), oklch(0.985 0.002 247.839), oklch(0.785 0.115 274.713), oklch(0.928 0.006 264.531))",
+        "background-size": "200% auto",
+        "background-clip": "text",
+        "animation-name": "gradient"
+      },
+      "paragraph": {
+        "font-size": "20px",
+        "line-height": "30px",
+        "color": "oklab(0.87 0.0045783 -0.0648386 / 0.65)",
+        "width": "343px"
+      },
+      "button": {
+        "background-image": "linear-gradient(to top, oklch(0.511 0.262 276.966) 0%, oklch(0.585 0.233 277.117) 100%)",
+        "background-size": "100% 100%",
+        "border-radius": "8px",
+        "font-size": "14px"
+      },
+      "cards": [
+        {
+          "width": 343,
+          "top": 0
+        },
+        {
+          "width": 343,
+          "top": 460
+        },
+        {
+          "width": 343,
+          "top": 919
+        }
+      ],
+      "assets": [
+        {
+          "alt": "Workflow 01",
+          "width": 341,
+          "naturalWidth": 384,
+          "complete": true
+        },
+        {
+          "alt": "Workflow 02",
+          "width": 341,
+          "naturalWidth": 384,
+          "complete": true
+        },
+        {
+          "alt": "Workflow 03",
+          "width": 341,
+          "naturalWidth": 384,
+          "complete": true
+        }
+      ]
+    },
+    "768": {
+      "heading": {
+        "font-size": "56px",
+        "font-family": "nacelle, \"nacelle Fallback\"",
+        "font-weight": "600",
+        "line-height": "56px",
+        "color": "rgba(0, 0, 0, 0)",
+        "background-image": "linear-gradient(to right, oklch(0.928 0.006 264.531), oklch(0.87 0.065 274.039), oklch(0.985 0.002 247.839), oklch(0.785 0.115 274.713), oklch(0.928 0.006 264.531))",
+        "background-size": "200% auto",
+        "background-clip": "text",
+        "animation-name": "gradient"
+      },
+      "paragraph": {
+        "font-size": "20px",
+        "line-height": "30px",
+        "color": "oklab(0.87 0.0045783 -0.0648386 / 0.65)",
+        "width": "720px"
+      },
+      "button": {
+        "background-image": "linear-gradient(to top, oklch(0.511 0.262 276.966) 0%, oklch(0.585 0.233 277.117) 100%)",
+        "background-size": "100% 100%",
+        "border-radius": "8px",
+        "font-size": "14px"
+      },
+      "cards": [
+        {
+          "width": 384,
+          "top": 0
+        },
+        {
+          "width": 384,
+          "top": 467
+        },
+        {
+          "width": 384,
+          "top": 934
+        }
+      ],
+      "assets": [
+        {
+          "alt": "Workflow 01",
+          "width": 350,
+          "naturalWidth": 384,
+          "complete": true
+        },
+        {
+          "alt": "Workflow 02",
+          "width": 350,
+          "naturalWidth": 384,
+          "complete": true
+        },
+        {
+          "alt": "Workflow 03",
+          "width": 350,
+          "naturalWidth": 384,
+          "complete": true
+        }
+      ]
+    },
+    "1200": {
+      "heading": {
+        "font-size": "56px",
+        "font-family": "nacelle, \"nacelle Fallback\"",
+        "font-weight": "600",
+        "line-height": "56px",
+        "color": "rgba(0, 0, 0, 0)",
+        "background-image": "linear-gradient(to right, oklch(0.928 0.006 264.531), oklch(0.87 0.065 274.039), oklch(0.985 0.002 247.839), oklch(0.785 0.115 274.713), oklch(0.928 0.006 264.531))",
+        "background-size": "200% auto",
+        "background-clip": "text",
+        "animation-name": "gradient"
+      },
+      "paragraph": {
+        "font-size": "20px",
+        "line-height": "30px",
+        "color": "oklab(0.87 0.0045783 -0.0648386 / 0.65)",
+        "width": "768px"
+      },
+      "button": {
+        "background-image": "linear-gradient(to top, oklch(0.511 0.262 276.966) 0%, oklch(0.585 0.233 277.117) 100%)",
+        "background-size": "100% 100%",
+        "border-radius": "8px",
+        "font-size": "14px"
+      },
+      "cards": [
+        {
+          "width": 352,
+          "top": 0
+        },
+        {
+          "width": 352,
+          "top": 0
+        },
+        {
+          "width": 352,
+          "top": 0
+        }
+      ],
+      "assets": [
+        {
+          "alt": "Workflow 01",
+          "width": 350,
+          "naturalWidth": 384,
+          "complete": true
+        },
+        {
+          "alt": "Workflow 02",
+          "width": 350,
+          "naturalWidth": 384,
+          "complete": true
+        },
+        {
+          "alt": "Workflow 03",
+          "width": 350,
+          "naturalWidth": 384,
+          "complete": true
+        }
+      ]
+    }
+  }
+}

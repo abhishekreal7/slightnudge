@@ -1,0 +1,15 @@
+PASS: centered Move handle, live two-axis snapped geometry and six cancellation paths; no source proposals while dragging
+PASS: Shift axis lock, one review per completed drag, exact Discard restoration
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+page.waitForFunction: Timeout 60000ms exceeded.
+    at translation (C:\dev\vibecheck\test\helpers\drag-move-browser.ts:57:72)
+    at checkDragMove (C:\dev\vibecheck\test\helpers\drag-move-browser.ts:68:67)
+    at async <anonymous> (C:\dev\vibecheck\test\review-consent.browser.ts:104:14) {
+  log: [],
+  name: 'TimeoutError'
+}
+
+Node.js v22.19.0

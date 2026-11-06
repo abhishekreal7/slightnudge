@@ -1,0 +1,14 @@
+====================================================
+🧪 SLIGHTNUDGE - STEP 1: ELEMENT SELECTION SUITE
+====================================================
+
+--- Test 1: Click selection on Fixture 1 ---
+SELECTION NAVIGATION /editor?view=full&fixture=1
+Test run failed: page.waitForSelector: Timeout 30000ms exceeded.
+Call log:
+[2m  - waiting for locator('#target') to be visible[22m
+
+    at runStep1Tests (C:\dev\vibecheck\test\step1-selection.test.ts:33:16) {
+  log: [ "  - waiting for locator('#target') to be visible" ],
+  name: 'TimeoutError'
+}

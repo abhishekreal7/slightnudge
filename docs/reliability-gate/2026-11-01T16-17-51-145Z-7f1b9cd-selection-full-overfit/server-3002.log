@@ -1,0 +1,16 @@
+▲ Next.js 16.4.3 (webpack)
+- Local:         http://127.0.0.1:3002
+- Network:       http://127.0.0.1:3002
+✓ Ready in 577ms
+⚠ Warning: Next.js ignored package-lock.json in C:\dev\vibecheck\scratch\reliability-gate\2026-11-01T16-17-51-145Z-7f1b9cd-selection-full-overfit\worktree because it is outside the current Git repository (C:\dev\vibecheck\scratch\reliability-gate\2026-11-01T16-17-51-145Z-7f1b9cd-selection-full-overfit\worktree\.slightnudge\repositories\m0-overfit-lab).
+ To use this directory, set `outputFileTracingRoot` in your Next.js config.
+
+✓ Running next.config.mjs took 40ms
+
+○ Compiling /page ...
+ GET / 200 in 1048ms (next.js: 589ms, application-code: 459ms)
+ GET / 200 in 171ms (next.js: 4ms, application-code: 167ms)
+ GET /?__slightnudge_session=9a5d4fe7-54b4-4b1b-a860-5ff54f2fc470&__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A3000&__slightnudge_draft=1 200 in 192ms (next.js: 3ms, application-code: 188ms)
+ GET / 200 in 70ms (next.js: 3ms, application-code: 68ms)
+ GET / 200 in 87ms (next.js: 3ms, application-code: 84ms)
+ GET /?__slightnudge_session=b547a0db-b6aa-4c4d-983d-656eb9c7ff1c&__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A3000&__slightnudge_draft=1&__slightnudge_canvas=1 200 in 130ms (next.js: 4ms, application-code: 126ms)

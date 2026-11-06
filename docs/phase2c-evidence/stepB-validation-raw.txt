@@ -1,0 +1,294 @@
+=== STEP B VALIDATION SUITE RUNS ===
+
+
+--- SUITE: token-undo-run-1 (Exit: 0, Duration: 3.70s) ---
+🧪 RUNNING TOKEN-LEVEL UNDO TEST SUITE
+--- Test (j): Exact-match restores byte-for-byte ---
+  ✅ [PASS] (j) Exact match restores byte for byte
+--- Test (a): Prettier reformat preserved on undo ---
+  ✅ [PASS] (a) Prettier reformat preserved on undo
+--- Test (b): Unrelated file edit preserved ---
+  ✅ [PASS] (b) Unrelated file edit preserved
+--- Test (c): Other classes on same element preserved ---
+  ✅ [PASS] (c) Other classes on same element preserved
+--- Test (d): User changed same token -> refuse with manual instructions ---
+  ✅ [PASS] (d) User changed same token refused with instructions
+--- Test (e): Element deleted -> refuse ---
+  ✅ [PASS] (e) Element deleted refused
+--- Test (f): Two identical elements ambiguous -> refuse ---
+  ✅ [PASS] (f) Two identical elements ambiguous refused
+--- Test (g): File deleted -> clear error ---
+  ✅ [PASS] (g) File deleted returned clear error
+--- Test (h): Stacked edits on one element ---
+  ✅ [PASS] (h) Stacked edits on one element verified
+--- Test (i): Path escaping project root refused ---
+  ✅ [PASS] (i) Path escaping project root refused
+--- Test (k): Atomic write failure leaves file unchanged and clean ---
+  ✅ [PASS] (k) Atomic write failure leaves file unchanged and clean
+
+🎉 ALL 12 TOKEN-LEVEL UNDO TESTS PASSED!
+
+
+
+--- SUITE: token-undo-run-2 (Exit: 0, Duration: 3.86s) ---
+🧪 RUNNING TOKEN-LEVEL UNDO TEST SUITE
+--- Test (j): Exact-match restores byte-for-byte ---
+  ✅ [PASS] (j) Exact match restores byte for byte
+--- Test (a): Prettier reformat preserved on undo ---
+  ✅ [PASS] (a) Prettier reformat preserved on undo
+--- Test (b): Unrelated file edit preserved ---
+  ✅ [PASS] (b) Unrelated file edit preserved
+--- Test (c): Other classes on same element preserved ---
+  ✅ [PASS] (c) Other classes on same element preserved
+--- Test (d): User changed same token -> refuse with manual instructions ---
+  ✅ [PASS] (d) User changed same token refused with instructions
+--- Test (e): Element deleted -> refuse ---
+  ✅ [PASS] (e) Element deleted refused
+--- Test (f): Two identical elements ambiguous -> refuse ---
+  ✅ [PASS] (f) Two identical elements ambiguous refused
+--- Test (g): File deleted -> clear error ---
+  ✅ [PASS] (g) File deleted returned clear error
+--- Test (h): Stacked edits on one element ---
+  ✅ [PASS] (h) Stacked edits on one element verified
+--- Test (i): Path escaping project root refused ---
+  ✅ [PASS] (i) Path escaping project root refused
+--- Test (k): Atomic write failure leaves file unchanged and clean ---
+  ✅ [PASS] (k) Atomic write failure leaves file unchanged and clean
+
+🎉 ALL 12 TOKEN-LEVEL UNDO TESTS PASSED!
+
+
+
+--- SUITE: token-undo-run-3 (Exit: 0, Duration: 3.92s) ---
+🧪 RUNNING TOKEN-LEVEL UNDO TEST SUITE
+--- Test (j): Exact-match restores byte-for-byte ---
+  ✅ [PASS] (j) Exact match restores byte for byte
+--- Test (a): Prettier reformat preserved on undo ---
+  ✅ [PASS] (a) Prettier reformat preserved on undo
+--- Test (b): Unrelated file edit preserved ---
+  ✅ [PASS] (b) Unrelated file edit preserved
+--- Test (c): Other classes on same element preserved ---
+  ✅ [PASS] (c) Other classes on same element preserved
+--- Test (d): User changed same token -> refuse with manual instructions ---
+  ✅ [PASS] (d) User changed same token refused with instructions
+--- Test (e): Element deleted -> refuse ---
+  ✅ [PASS] (e) Element deleted refused
+--- Test (f): Two identical elements ambiguous -> refuse ---
+  ✅ [PASS] (f) Two identical elements ambiguous refused
+--- Test (g): File deleted -> clear error ---
+  ✅ [PASS] (g) File deleted returned clear error
+--- Test (h): Stacked edits on one element ---
+  ✅ [PASS] (h) Stacked edits on one element verified
+--- Test (i): Path escaping project root refused ---
+  ✅ [PASS] (i) Path escaping project root refused
+--- Test (k): Atomic write failure leaves file unchanged and clean ---
+  ✅ [PASS] (k) Atomic write failure leaves file unchanged and clean
+
+🎉 ALL 12 TOKEN-LEVEL UNDO TESTS PASSED!
+
+
+
+--- SUITE: reorder-safety (Exit: 0, Duration: 1.62s) ---
+====================================================
+🧪 RUNNING REORDER SAFETY & SAME-LINE RESOLUTION TESTS
+====================================================
+
+--- 1. Same-line Element Resolution (Column + Tag Name) ---
+  ✅ [PASS] Same-line without column does not succeed
+  ✅ [PASS] Same-line without column refuses safely
+  ✅ [PASS] Refusal exact message: "I can't tell which element on this line you mean. Nothing was changed."
+  ✅ [PASS] Targets First button using col 7 + tagName
+  ✅ [PASS] First button correctly swapped later
+  ✅ [PASS] Targets Second button using col 52 + tagName
+  ✅ [PASS] Second button correctly swapped earlier
+  ✅ [PASS] Non-matching column refuses
+  ✅ [PASS] Non-matching column returns exact refusal message
+
+--- 2. Multi-slot Reorder Safety (Loops, Conditionals, Permutation) ---
+  ✅ [PASS] Reorder across map() list refused
+  ✅ [PASS] map() list refused safely
+  ✅ [PASS] Reorder across conditional element refused
+  ✅ [PASS] Conditional element refused safely
+  ✅ [PASS] Permutation swap succeeded
+  ✅ [PASS] Unchanged sibling item-c has identical bytes
+  ✅ [PASS] Whitespace and all comments are preserved byte-for-byte
+  ✅ [PASS] Order is pure permutation (item-b before item-a)
+
+--- 3. Preview Route targetIndex Validation ---
+  ✅ [PASS] targetIndex NaN returns status 400
+  ✅ [PASS] targetIndex float (1.5) returns status 400
+  ✅ [PASS] targetIndex negative (-2) returns status 400
+
+--- 4. Interaction Safety Tests (Failed Preview, Rapid Drag, Alt+Drag, Resize) ---
+  ✅ [PASS] Failed preview returns error status 422
+  ✅ [PASS] Failed preview returns informative error message
+  ✅ [PASS] Rapid drag: First reorder succeeds
+  ✅ [PASS] Rapid drag: Second immediate reorder succeeds
+  ✅ [PASS] Rapid drag: Final order is item-2, item-3, item-1 without corruption
+  ✅ [PASS] Alt+drag (spacing nudge down) succeeds
+  ✅ [PASS] Alt+drag nudged margin from mt-1 to mt-1.5
+  ✅ [PASS] Undo Alt+drag (nudge back up) succeeds
+  ✅ [PASS] Undo restores original mt-1 spacing cleanly
+  ✅ [PASS] Heading resize (width update) succeeds
+  ✅ [PASS] Resized heading contains new width class w-full
+  ✅ [PASS] Heading resize leaves typography classes (text-2xl, font-bold, text color) 100% unchanged
+
+====================================================
+🎉 ALL 32/32 REORDER & VALIDATION TESTS PASSED!
+====================================================
+
+
+
+--- SUITE: adapter (Exit: 0, Duration: 0.81s) ---
+====================================================
+🧪 SLIGHTNUDGE ADAPTER & ASSET REGEX TESTS
+====================================================
+
+✅ [PASS] next-source-loader.cjs starts with /* eslint-disable */
+✅ [PASS] bridgeClient script is generated as a string
+✅ [PASS] bridgeClient does NOT contain malformed /^/slightnudge-assets/ regex
+✅ [PASS] Found asset-path regex pattern in bridgeClient script
+✅ [PASS] Regex matches valid PNG asset path
+✅ [PASS] Regex matches valid JPG asset path
+✅ [PASS] Regex matches valid JPEG asset path
+✅ [PASS] Regex matches valid WEBP asset path
+✅ [PASS] Regex matches valid GIF asset path
+✅ [PASS] Regex is case-insensitive for UUID and extension
+✅ [PASS] Regex rejects unsupported SVG extension
+✅ [PASS] Regex rejects executable extension
+✅ [PASS] Regex rejects invalid UUID
+✅ [PASS] Regex rejects non-slightnudge path
+✅ [PASS] Regex rejects absolute URL
+✅ [PASS] Regex rejects path with trailing segment
+✅ [PASS] bridgeClient script parses cleanly as valid JavaScript in Function()
+
+====================================================
+🎉 ALL ADAPTER TESTS PASSED!
+====================================================
+
+
+
+--- SUITE: history-resilience (Exit: 0, Duration: 1.91s) ---
+▶ History Resilience: Resilient readHistory and Safe File Validation
+  ✔ (a) a history entry whose file was deleted must not make apply throw: apply on a different existing file succeeds (432.0055ms)
+  ✔ (b) a history entry whose file was deleted must not break undo of a different edit (50.8554ms)
+  ✔ (c) a missing-file entry stays in the history file (never auto-deleted) and is returned marked missing so the UI can show it unavailable (21.5556ms)
+  ✔ (d) an entry whose path escapes the project root is skipped and reported, never followed (22.5087ms)
+  ✔ (e) undo of the entry whose file is missing returns a clear error ("that file no longer exists"), not a crash (16.3609ms)
+  ✔ (f) a corrupt history file (invalid JSON) produces a clear error and does not overwrite or truncate the file (18.5067ms)
+✔ History Resilience: Resilient readHistory and Safe File Validation (563.3386ms)
+ℹ tests 6
+ℹ suites 1
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 567.1249
+
+
+--- SUITE: s1-auth-origin (Exit: 0, Duration: 19.82s) ---
+(node:35024) [DEP0190] DeprecationWarning: Passing args to a child process with shell option true can lead to security vulnerabilities, as the arguments are not escaped, only concatenated.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+▶ S1: Authenticated, local-only mutating requests
+  ✔ rejects mutating request with no Origin and no token with 403 (not 404) (3251.5063ms)
+  ✔ rejects mutating request with wrong Host with 403 (61.4846ms)
+  ✔ rejects mutating request with valid Origin but missing token with 403 (21.324ms)
+  ✔ rejects mutating request with valid Origin but invalid token with 403 (17.8266ms)
+  ✔ returns normal not-found error for fake previewId with valid token and valid Origin (37.7114ms)
+  ✔ allows missing Origin when valid token is present and proceeds to normal handling (33.3656ms)
+  ✔ completes preview, apply, and undo flow in a temp copy with valid token and Origin (2539.7003ms)
+✔ S1: Authenticated, local-only mutating requests (18701.2582ms)
+ℹ tests 7
+ℹ suites 1
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 18872.4302
+
+
+--- SUITE: s2-path-traversal (Exit: 0, Duration: 1.44s) ---
+▶ S2: Path traversal refusal regression test
+  ✔ refuses pending-preview with ..\ traversing outside project root, leaving target file unchanged (12.0885ms)
+  ✔ refuses pending-preview using symlink/junction pointing outside project root, leaving target file unchanged (10.1504ms)
+✔ S2: Path traversal refusal regression test (26.3709ms)
+ℹ tests 2
+ℹ suites 1
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 628.0536
+
+
+--- SUITE: s3-atomic-write (Exit: 0, Duration: 3.29s) ---
+▶ S3: Atomic or refuse in atomicWrite
+  ✔ refuses and leaves target file unchanged when rename fails permanently without fallback overwrite (1593.8748ms)
+  ✔ retries with backoff and succeeds when rename fails twice then succeeds (218.8176ms)
+✔ S3: Atomic or refuse in atomicWrite (1816.284ms)
+ℹ tests 2
+ℹ suites 1
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2430.2397
+
+
+--- SUITE: s5-compile (Exit: 0, Duration: 2.08s) ---
+▶ S5: Verify Tailwind compilation and AST parse before write
+  ✔ refuses applying an edit with a bogus non-compiling class and leaves file unchanged (197.67ms)
+  ✔ accepts valid classes, stacked variant (dark:hover:bg-blue-500), and arbitrary value (w-[37px]) (258.4515ms)
+  ✔ refuses content that would break the AST parse and leaves file unchanged (114.4991ms)
+✔ S5: Verify Tailwind compilation and AST parse before write (574.4297ms)
+ℹ tests 3
+ℹ suites 1
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1162.5742
+
+
+--- SUITE: s5-theme (Exit: 0, Duration: 1.93s) ---
+▶ S5: Theme Support and Config Detection in Tailwind Verifier
+  ✔ a. Tailwind v4 project with @theme defining --color-brand-500 accepts bg-brand-500, stacked variant, and arbitrary value, and refuses bogus (144.4415ms)
+  ✔ b. Tailwind v4 project with legacy tailwind.config.js and CSS @config accepts bg-brand-500, stacked variant, and arbitrary value, and refuses bogus (71.1252ms)
+NOTICE [d. Tailwind v3]: UNVERIFIED offline. Node_modules has Tailwind v4.3.3 installed, v3 package not present offline.
+  ✔ c. Tailwind v4 project with tailwind.config.js but CSS entry WITHOUT @config refuses bg-brand-500 (matches v4 build behavior) while accepting standard utilities (34.2647ms)
+  ✔ d. Tailwind v3 project: verify offline availability or report UNVERIFIED (0.6049ms)
+  ✔ f. Project where no Tailwind is installed or engine fails: refuses and writes nothing (5.9167ms)
+  ✔ g. Unchanged existing tokens in className are never verified and never cause refusal; only added tokens are verified (269.1316ms)
+✔ S5: Theme Support and Config Detection in Tailwind Verifier (526.5127ms)
+ℹ tests 6
+ℹ suites 1
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1112.0534
+
+
+--- SUITE: s5-v3 (Exit: 0, Duration: 33.51s) ---
+
+[1m[33mwarn[39m[22m - No utility classes were detected in your source files. If this is unexpected, double-check the `content` option in your Tailwind CSS configuration.
+[1m[33mwarn[39m[22m - https://tailwindcss.com/docs/content-configuration
+▶ S5: Tailwind v3 Verification and Project Isolation
+  ✔ verifies Tailwind v3 project tokens: standard, theme brand.500, stacked variants, arbitrary values, plugins, and refuses bogus (17879.4537ms)
+  ✔ confirms unchanged existing tokens are never verified in a v3 project during apply (13976.4626ms)
+✔ S5: Tailwind v3 Verification and Project Isolation (31857.3648ms)
+ℹ tests 2
+ℹ suites 1
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 32621.8451
+

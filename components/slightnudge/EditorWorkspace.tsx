@@ -6,7 +6,7 @@ import { AppearanceControls } from './AppearanceControls';
 import { ConstraintControls } from './ConstraintControls';
 
 
-import React, { useState, useEffect, useLayoutEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useLayoutEffect, useCallback, useRef, useSyncExternalStore } from 'react';
 import { EditorSurface, type EditorMode } from './EditorSurface';
 import { EditorDraftControls, EditorHistoryControls, EditorViewportControls } from './EditorSessionControls';
 import { useWindowDock } from '@/components/slightnudge/useWindowDock';
@@ -448,21 +448,48 @@ const styleOptions = {
   padding: ['p-0', 'p-1', 'p-2', 'p-3', 'p-4', 'p-6', 'p-8', 'p-12'],
 } as const;
 
+const studioWidth = '(min-width: 1100px)';
+function subscribeStudioWidth(update: () => void) {
+  const query = window.matchMedia(studioWidth);
+  query.addEventListener('change', update);
+  return () => query.removeEventListener('change', update);
+}
+const isStudioWidth = () => window.matchMedia(studioWidth).matches;
+const isServerStudioWidth = () => false;
+
 /** One editing session implementation; mode controls the workspace presentation. */
 export function EditorWorkspace({ mode, unified = false, view = 'full', projectId, initialPanel = null }: { mode: EditorMode; unified?: boolean; view?: EditorView; projectId?: string; initialPanel?: 'layers' | 'inspector' | null }) {
   const windowMode = unified || mode === 'window';
   const sourceWindowMode = unified ? view === 'full' : windowMode;
   const router = useRouter();
   const changeView = (next:EditorView) => {const url=new URL(location.href);url.searchParams.set('view',next);router.replace(url.pathname+url.search,{scroll:false});};
-  const windowDock = useWindowDock(windowMode);
+  const wideWorkspace = useSyncExternalStore(subscribeStudioWidth, isStudioWidth, isServerStudioWidth);
+  const docked = unified && view === 'fit' && wideWorkspace;
+  const windowDock = useWindowDock(windowMode && !docked);
   const routeParams = useParams<{ repoId?: string }>();
   const repositoryId = projectId ?? routeParams?.repoId;
   const usesDrafts = true;
   const projectDraftStorageKey = repositoryId ? `${draftStorageKey}:${repositoryId}` : draftStorageKey;
   const [windowPanel, setWindowPanel] = useState<'layers' | 'inspector' | null>(initialPanel);
+  const [dockedPanels, setDockedPanels] = useState({ layers: true, inspector: true });
+  const layersOpen = docked ? dockedPanels.layers : windowPanel === 'layers';
+  const designOpen = docked ? dockedPanels.inspector : windowPanel === 'inspector';
+  const togglePanel = (panel: 'layers' | 'inspector') => {
+    if (docked) setDockedPanels(previous => ({ ...previous, [panel]: !previous[panel] }));
+    else setWindowPanel(previous => previous === panel ? null : panel);
+  };
+  const openDesign = () => {
+    if (docked) setDockedPanels(previous => ({ ...previous, inspector: true }));
+    else setWindowPanel('inspector');
+  };
   const [browseMode, setBrowseMode] = useState(false);
   const [canvasZoom, setCanvasZoom] = useState<CanvasZoom>(unified && view === 'full' ? 1 : 'fit');
-  useEffect(()=>{if(unified)setCanvasZoom(view==='fit'?'fit':1);},[unified,view]);
+  const requestedFitZoom = useRef<CanvasZoom | null>(null);
+  useEffect(() => {
+    if (!unified) return;
+    setCanvasZoom(view === 'fit' ? requestedFitZoom.current ?? 'fit' : 1);
+    requestedFitZoom.current = null;
+  }, [unified, view]);
   const [canvasReset, setCanvasReset] = useState(0);
   const [canvasPan, setCanvasPan] = useState(false);
   const [inspectorWidth, setInspectorWidth] = useState(288);
@@ -629,18 +656,23 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
   const scopeTokens = (classes: string) => classes.split(/\s+/).filter(token => editScope ? token.startsWith(`${editScope}:`) : !token.includes(':')).map(token => (editScope ? token.slice(editScope.length + 1) : token).replace(/^!|!$/g, ''));
   const responsiveSourcePath = repositoryId && !selectedLayer ? sourceLayers[0]?.path : activeElement.filePath;
   useEffect(() => {
-    let cancelled = false; setScopeLoading(true); setScopeError(''); setResponsiveScopes([]);
+    const request = new AbortController();
+    setScopeLoading(true); setScopeError(''); setResponsiveScopes([]);
     if (!responsiveSourcePath) { setScopeLoading(false); return; }
     void (async () => {
       try {
         const token = await getClientSessionToken();
-        const response = await fetch('/api/slightnudge/responsive', { method: 'POST', headers: { 'content-type': 'application/json', 'x-slightnudge-token': token }, body: JSON.stringify({ repositoryId, filePath: responsiveSourcePath }) });
+        const response = await fetch('/api/slightnudge/responsive', {
+          signal: AbortSignal.any([request.signal, AbortSignal.timeout(15000)]),
+          method: 'POST', headers: { 'content-type': 'application/json', 'x-slightnudge-token': token },
+          body: JSON.stringify({ repositoryId, filePath: responsiveSourcePath }),
+        });
         const result = await readApiJson(response); if (!response.ok) throw new Error(result.error || 'Project breakpoints are unavailable.');
-        if (!cancelled) setResponsiveScopes(result.breakpoints);
-      } catch (error) { if (!cancelled) setScopeError(error instanceof Error ? error.message : 'Project breakpoints are unavailable.'); }
-      finally { if (!cancelled) setScopeLoading(false); }
+        if (!request.signal.aborted) setResponsiveScopes(result.breakpoints);
+      } catch (error) { if (!request.signal.aborted) setScopeError(error instanceof Error && error.name === 'TimeoutError' ? 'Reading project breakpoints timed out. Reselect the source file or reload the editor to retry.' : error instanceof Error ? error.message : 'Project breakpoints are unavailable.'); }
+      finally { if (!request.signal.aborted) setScopeLoading(false); }
     })();
-    return () => { cancelled = true; };
+    return () => request.abort();
   }, [repositoryId, responsiveSourcePath]);
 
 
@@ -899,6 +931,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
         obstacles.push(new DOMRect(previewFrame.left + layer.rect.left * previewScale, previewFrame.top + layer.rect.top * previewScale, layer.rect.width * previewScale, layer.rect.height * previewScale));
       }
       const move = node.querySelector('[aria-label="Move element"]')?.getBoundingClientRect();
+      const dimensions = node.querySelector('[aria-label="Selection dimensions"]')?.getBoundingClientRect();
       const overlap = (left: number, top: number, rect: DOMRect) => Math.max(0, Math.min(left + width, rect.right) - Math.max(left, rect.left)) * Math.max(0, Math.min(top + height, rect.bottom) - Math.max(top, rect.top));
       const candidates = [
         [selection.left, selection.top - height - 10], [selection.right - width, selection.top - height - 10],
@@ -908,7 +941,8 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
         [selection.left - width - 12, selection.top], [selection.right + 12, selection.top],
       ].map(([x, y], index) => {
         const left = clampLeft(x), top = clampTop(y);
-        const score = overlap(left, top, selection) * 12 + (move ? overlap(left, top, move) * 12 : 0) + obstacles.reduce((sum, rect) => sum + overlap(left, top, rect), 0) * 4 + Math.abs(left - x) + Math.abs(top - y) + index;
+        const selectionOverlap = overlap(left, top, selection) + (move ? overlap(left, top, move) : 0) + (dimensions ? overlap(left, top, dimensions) : 0);
+        const score = selectionOverlap * 12 + obstacles.reduce((sum, rect) => sum + overlap(left, top, rect), 0) * 4 + Math.abs(left - x) + Math.abs(top - y) + index;
         return { left, top, score };
       });
       const best = candidates.reduce((a, b) => a.score <= b.score ? a : b);
@@ -1391,7 +1425,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
       if (e.target instanceof HTMLElement && e.target.closest('input, textarea, select, [contenteditable="true"]')) return;
       if (e.key === 'Escape') {
         if (destinationSource.current) { cancelDestination(); return; }
-        if (windowMode && windowPanel && !isDraggingMove && !isResizing) { setWindowPanel(null); return; }
+        if (windowMode && !docked && windowPanel && !isDraggingMove && !isResizing) { setWindowPanel(null); return; }
         if (isDraggingMove) {
           setIsDraggingMove(false);
           setDragLayerKey(null);
@@ -1409,7 +1443,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isDraggingMove, isResizing, windowMode, windowPanel]);
+  }, [isDraggingMove, isResizing, windowMode, windowPanel, docked]);
 
   const restoreSnapshot = (edit: PendingEdit) => {
     inlineSessionRef.current = null;
@@ -2018,7 +2052,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
     if (type === 'text-cancel' && selection) { cancelInlineText(sourceKey(selection)); return; }
     if (type === 'text-request' && selection) { sourceSelections.current[sourceKey(selection)] = selection; receiveSourceSelection(selection); beginInlineText(sourceKey(selection)); return; }
     if (type === 'save-request') { saveTextRef.current = null; setSaveRequested(true); return; }
-    if (type === 'shortcut') { if (text === 'Escape') { if (destinationSource.current) cancelDestination(); else if (windowMode && windowPanel) setWindowPanel(null); else setSelectedLayer(null); } else if (text?.toLowerCase() === 's') requestSave(); else if (text?.toLowerCase() === 'y' || shift) navigateDraft(1); else void handleUndo(); }
+    if (type === 'shortcut') { if (text === 'Escape') { if (destinationSource.current) cancelDestination(); else if (windowMode && !docked && windowPanel) setWindowPanel(null); else setSelectedLayer(null); } else if (text?.toLowerCase() === 's') requestSave(); else if (text?.toLowerCase() === 'y' || shift) navigateDraft(1); else void handleUndo(); }
   };
 
   const reorderSibling = (direction: 'earlier' | 'later') => {
@@ -2120,10 +2154,16 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
 
   // Contextual formatting controls share the inspector's neutral surfaces.
   const renderMoveControl = () => {
-    const supported = usesDrafts && /^(h[1-6]|p|section|div|article|aside|header|footer|nav|main|a|button|img)$/.test(activeElement.tag) && !activeVariant && !activeBreakpoint;
+    const unsupportedReason = activeVariant || activeBreakpoint
+      ? 'Choose All sizes and the Default state to move this element.'
+      : !usesDrafts || !/^(h[1-6]|p|section|div|article|aside|header|footer|nav|main|a|button|img)$/.test(activeElement.tag)
+        ? 'Move is unavailable for this element.'
+        : '';
+    const supported = !unsupportedReason;
+    const moveHint = unsupportedReason || 'Drag to move. Click for arrow controls. Shift locks an axis. Escape cancels.';
     const disabled = (busy && movePipeline.current?.key !== selectedLayer) || isApplying || isResizing || reviewBlocking || Boolean(uncertainUndoId) || !supported;
     return (
-      <div ref={moveControlRef} className={reviewStyles.moveControl} onClick={event => event.stopPropagation()}
+      <div ref={moveControlRef} className={reviewStyles.moveControl} title={moveHint} onClick={event => event.stopPropagation()}
         onBlur={event => { if (!event.currentTarget.contains(event.relatedTarget as Node)) setMoveOpen(false); }}>
         <button type="button" className={reviewStyles.moveTrigger} aria-label="Move element" aria-expanded={moveOpen}
           aria-pressed={moveArmed || Boolean(liveMove)} onPointerDown={event => { if (selectedLayer) startDragMove(selectedLayer, event); }}
@@ -2138,7 +2178,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
           aria-controls="selection-move-controls" disabled={disabled} onClick={() => { if (moveClickSuppressed.current) { moveClickSuppressed.current = false; return; } setMoveOpen(value => !value); }}>
           <Move size={15} /><span className="sr-only">Move</span>
         </button>
-        <span id="selection-move-hint" className="sr-only">{!supported ? 'Move is available with All sizes and the Default state' : 'Drag to move this element and its contents. Click for arrow controls. Shift locks an axis. Escape cancels.'}</span>
+        <span id="selection-move-hint" className="sr-only">{moveHint}</span>
         {moveOpen && <div id="selection-move-controls" className={reviewStyles.movePopover} role="group" aria-label="Move selected element">
           <div className={reviewStyles.moveHeading}><span>Move element</span><span>4 px steps</span></div>
           <div className={reviewStyles.movePad}>
@@ -2159,7 +2199,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
     const locked = busy || isApplying || reviewBlocking || Boolean(uncertainUndoId) || destinationMode || viewportChanging || Boolean(activeBreakpoint) && scopeLoading;
     if(activeElement.instance && !editingDefinitionStyles)return createPortal(<div ref={formattingRef} role="toolbar" aria-label="Selection formatting" className={reviewStyles.floatingFormatting} style={{position:'fixed',left:formattingPosition?.left||0,top:formattingPosition?.top||0,visibility:formattingPosition?.visible?'visible':'hidden'}} onClick={event=>event.stopPropagation()}><div className={reviewStyles.formattingBar}>
       {isTextElement&&<button type="button" className={reviewStyles.editTextControl} disabled={locked} onClick={()=>beginInlineText(selectedLayer)}><Pencil size={13}/><span>Edit text</span></button>}
-      <button type="button" className={reviewStyles.editTextControl} disabled={locked} onClick={()=>{setWindowPanel('inspector');requestAnimationFrame(()=>document.querySelector<HTMLElement>('[aria-label="Component properties"] textarea, [aria-label="Component properties"] select')?.focus())}}><SlidersHorizontal size={13}/><span>Instance props</span></button>
+      <button type="button" className={reviewStyles.editTextControl} disabled={locked} onClick={()=>{openDesign();requestAnimationFrame(()=>document.querySelector<HTMLElement>('[aria-label="Component properties"] textarea, [aria-label="Component properties"] select')?.focus())}}><SlidersHorizontal size={13}/><span>Instance props</span></button>
     </div></div>,document.body);
     const parentKey = sourceSelections.current[selectedLayer]?.parentKey;
     const siblings = parentKey ? sourceLayers.filter(layer => layer.parentKey === parentKey && layer.path === activeElement.filePath && (layer.computed.order || '0') === (sourceSelections.current[selectedLayer]?.computed.order || '0')) : [];
@@ -2458,13 +2498,13 @@ className={`${reviewStyles.cornerResizeHandle} ${reviewStyles.eastCorner}`} aria
         )}
 
         {/* Workspace Body: Left Sidebar + Center Canvas + Right Inspector */}
-        <div data-editor-workspace className="min-h-0 flex-1 flex overflow-hidden">
+        <div data-editor-workspace data-docked={docked || undefined} data-layers-open={layersOpen || undefined} data-design-open={designOpen || undefined} className="min-h-0 flex-1 flex overflow-hidden">
 
           {/* ======================================================== */}
           {/* LEFT SIDEBAR: Layers & Pages (SaaS Theme)                */}
           {/* ======================================================== */}
           <aside data-editor-panel="layers" className="w-60 bg-white border-r border-[#E5E7EB] flex flex-col shrink-0 z-20">
-            {windowMode && <div className={reviewStyles.windowPanelHeader}><strong>Layers</strong><button type="button" aria-label="Close layers" onClick={() => setWindowPanel(null)}><X size={14}/></button></div>}
+            {windowMode && !docked && <div className={reviewStyles.windowPanelHeader}><strong>Layers</strong><button type="button" aria-label="Close layers" onClick={() => setWindowPanel(null)}><X size={14}/></button></div>}
             {/* Brand header aligns with the editor toolbar. */}
             <div data-editor-brand className="h-12 px-3 border-b border-[#E5E7EB] flex items-center justify-between shrink-0 bg-white select-none">
               <Link href="/workspace" className="flex items-center space-x-2 text-slate-900 hover:opacity-85 transition" title="Back to workspace">
@@ -2522,7 +2562,7 @@ className={`${reviewStyles.cornerResizeHandle} ${reviewStyles.eastCorner}`} aria
 
             {/* Sidebar Content: Layers Tree OR Pages List */}
             {repositoryId || sidebarTab === 'layers' ? (
-              <SourceLayers layers={sourceLayers} selected={selectedLayer} onSelect={setSelectedLayer} />
+              <SourceLayers layers={sourceLayers} selected={selectedLayer} panelVisible={windowMode ? layersOpen : !focusMode} onSelect={setSelectedLayer} />
             ) : (
               /* Pages Selection Panel: Pure Native List */
               <div className="flex-1 overflow-y-auto px-2 py-3 space-y-0.5 text-xs text-slate-700">
@@ -2596,27 +2636,33 @@ className={`${reviewStyles.cornerResizeHandle} ${reviewStyles.eastCorner}`} aria
           {/* ======================================================== */}
           <div className={`${reviewStyles.editorColumn} flex-1 flex flex-col overflow-hidden bg-[#F8F9FA]`}>
             {windowMode && (
-            <header ref={windowDock.ref} style={windowMode ? windowDock.style : undefined} className={reviewStyles.editorTopbar} aria-label="Editor toolbar">
+            <header ref={windowDock.ref} style={docked ? undefined : windowDock.style} className={reviewStyles.editorTopbar} aria-label="Editor toolbar">
               {windowMode && <div className={reviewStyles.windowActions}>
-                <button type="button" aria-label="Move editing toolbar" title="Drag to move · Arrow keys to position · Home to reset" className={reviewStyles.dockGrip} {...windowDock.grip}><MoreHorizontal size={15}/></button>
+                {!docked && <button type="button" aria-label="Move editing toolbar" title="Drag to move · Arrow keys to position · Home to reset" className={reviewStyles.dockGrip} {...windowDock.grip}><MoreHorizontal size={15}/></button>}
                 <Link href={repositoryId ? `/studio/${encodeURIComponent(repositoryId)}/edit` : '/studio'} aria-label="Back to Studio" title="Back to Studio" onClick={event => { if (reviewRef.current || inlineSessionRef.current) { event.preventDefault(); showToast('Save or discard your draft before returning to Studio.'); } }}><ArrowLeft size={15}/></Link>
                 <div role="group" aria-label="Page interaction" className={reviewStyles.interactionMode}>
                   <button type="button" aria-pressed={!browseMode} onClick={() => setBrowseMode(false)}>Edit</button>
                   <button type="button" aria-pressed={browseMode} disabled={busy || isApplying} onClick={() => { if (reviewRef.current || inlineSessionRef.current) { showToast('Save or discard your draft before browsing the page.'); return; } setSelectedLayerState(null); setBrowseMode(true); }}>Browse</button>
                 </div>
-                <button type="button" aria-label="Toggle layers" title="Layers" aria-expanded={windowPanel === 'layers'} onClick={() => setWindowPanel(previous => previous === 'layers' ? null : 'layers')}><Columns2 size={15}/></button>
-                <button type="button" aria-label="Toggle design panel" title="Design" aria-expanded={windowPanel === 'inspector'} onClick={() => setWindowPanel(previous => previous === 'inspector' ? null : 'inspector')}><Pencil size={15}/></button>
+                <button type="button" aria-label="Toggle layers" title="Layers" aria-expanded={layersOpen} onClick={() => togglePanel('layers')}><Columns2 size={15}/></button>
+                <button type="button" aria-label="Toggle design panel" title="Design" aria-expanded={designOpen} onClick={() => togglePanel('inspector')}><Pencil size={15}/></button>
               </div>}
               <div className={reviewStyles.projectContext}>
-                <span className={reviewStyles.sourceDot} role="img" aria-label="Local source connected" />
-                <span className={reviewStyles.projectName}>{repositoryId || 'vibecheck'}</span>
+                {sourceReady && <span className={reviewStyles.sourceDot} role="img" aria-label="Source connected" />}
+                <span className={reviewStyles.projectName}>{repositoryId || 'Playground'}</span>
                 <span className={reviewStyles.contextSlash} aria-hidden="true">/</span>
                 <span className={reviewStyles.pageName}>{repositoryId ? 'Live project' : selectedPage.title}</span>
               </div>
 
               {unified && <div className={reviewStyles.unifiedViewTools}>
                 <label>View <select aria-label="Editor view" value={view} disabled={busy || isApplying || isInlineEditing || isResizing || moveArmed || Boolean(liveMove)} onChange={event=>changeView(event.target.value as EditorView)}><option value="full">Full page</option><option value="fit">Fit canvas</option></select></label>
-                <select aria-label="Canvas zoom" title="Fit starts with automatic scaling; zoom can also be adjusted manually." value={canvasZoom} disabled={busy || isApplying || isInlineEditing || isResizing || moveArmed || Boolean(liveMove)} onChange={event=>{const zoom=event.target.value==='fit'?'fit':Number(event.target.value);setCanvasZoom(zoom);if(view==='full'&&zoom!==1)changeView('fit');}}>
+                <select aria-label="Canvas zoom" title="Fit starts with automatic scaling; zoom can also be adjusted manually." value={canvasZoom} disabled={busy || isApplying || isInlineEditing || isResizing || moveArmed || Boolean(liveMove)} onChange={event => {
+                  const zoom = event.target.value === 'fit' ? 'fit' : Number(event.target.value);
+                  if (view === 'full' && zoom !== 1) {
+                    requestedFitZoom.current = zoom;
+                    changeView('fit');
+                  } else setCanvasZoom(zoom);
+                }}>
                   <option value="fit">Fit page</option>{[.1,.25,.5,.75,1,1.5,2].map(value=><option key={value} value={value}>{Math.round(value*100)}%</option>)}{typeof canvasZoom==='number'&&![.1,.25,.5,.75,1,1.5,2].includes(canvasZoom)&&<option value={canvasZoom}>{Math.round(canvasZoom*100)}%</option>}
                 </select>
               </div>}
@@ -2677,6 +2723,17 @@ className={`${reviewStyles.cornerResizeHandle} ${reviewStyles.eastCorner}`} aria
             </div>
 
           </main>
+          {docked && <div className={reviewStyles.studioStatus}>
+            <div className={reviewStyles.canvasViewTools} role="group" aria-label="Canvas navigation">
+              <button type="button" aria-label="Select elements" title="Select elements" aria-pressed={!canvasPan} onClick={() => setCanvasPan(false)}><MousePointer2 size={15}/></button>
+              <button type="button" aria-label="Pan canvas" title="Pan canvas · hold Space to pan temporarily" aria-pressed={canvasPan} disabled={busy || isApplying || isInlineEditing || isResizing || moveArmed || Boolean(liveMove)} onClick={() => setCanvasPan(value => !value)}><Hand size={15}/></button>
+              <button type="button" aria-label="Fit page to canvas" title="Fit page to canvas" disabled={busy || isApplying || isInlineEditing || isResizing || moveArmed || Boolean(liveMove)} onClick={() => { setCanvasZoom('fit'); setCanvasReset(value => value + 1); }}><Scan size={15}/></button>
+            </div>
+            <span className={reviewStyles.selectionPath} title={selectedLayer ? `${activeElement.filePath}:${activeElement.line}` : undefined}>
+              {selectedLayer ? <><Code2 size={14}/><span>{activeElement.filePath}:{activeElement.line}</span></> : 'Select a layer or click the canvas'}
+            </span>
+            <span className={reviewStyles.canvasMode}>{browseMode ? 'Browsing' : 'Editing'}</span>
+          </div>}
           {!windowMode && <div className={reviewStyles.canvasFooter} role="region" aria-label="Canvas controls">
             <button type="button" className={reviewStyles.panelToggle} aria-label={focusMode ? 'Restore sidebars' : 'Focus canvas'} aria-pressed={focusMode} title={focusMode ? 'Restore sidebars' : 'Focus canvas'} onClick={() => setFocusMode(value => !value)}><Columns2 size={15}/></button>
             {<div className={reviewStyles.canvasViewTools} role="group" aria-label="Canvas navigation">
@@ -2710,7 +2767,7 @@ className={`${reviewStyles.cornerResizeHandle} ${reviewStyles.eastCorner}`} aria
                   <MousePointer2 size={12} className="text-[#247253]" />
                 </div>
                 <div>
-                  <span className="font-semibold text-xs text-[#26342C] block leading-tight">Visual editor</span>
+                  <span className="font-semibold text-xs text-[#26342C] block leading-tight">{docked ? 'Design' : 'Visual editor'}</span>
                 </div>
                 {selectedLayer && (
                   <span className="text-[10px] font-mono text-slate-400 bg-slate-50 px-1.5 py-0.5 rounded border border-slate-200/60 truncate max-w-[85px]">
@@ -2719,7 +2776,7 @@ className={`${reviewStyles.cornerResizeHandle} ${reviewStyles.eastCorner}`} aria
                 )}
               </div>
               {!windowMode && <button type="button" aria-label="Hide design panel" title="Hide design panel" onClick={() => setInspectorCollapsed(true)} className={reviewStyles.panelToggle}><ChevronRight size={14}/></button>}
-              {windowMode && <button type="button" aria-label="Close design panel" onClick={() => setWindowPanel(null)} className={reviewStyles.windowLaunch}><X size={14}/></button>}
+              {windowMode && <button type="button" aria-label="Close design panel" onClick={() => togglePanel('inspector')} className={reviewStyles.windowLaunch}><X size={14}/></button>}
             </div>
 
             {/* Inspector Content */}

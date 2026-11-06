@@ -1,0 +1,13 @@
+diff --git a/lib/slightnudge/edit-history.ts b/lib/slightnudge/edit-history.ts
+index 493373a..2295c83 100644
+--- a/lib/slightnudge/edit-history.ts
++++ b/lib/slightnudge/edit-history.ts
+@@ -831,7 +831,7 @@ export function undoSourceEdit(target?: string | { filePath?: string; editId?: s
+   const currentTokens = currentClassVal.trim().split(/\s+/).filter(Boolean);
+ 
+   const hasAllAdded = addedTokens.every(t => currentTokens.includes(t));
+-  const hasNoRemoved = removedTokens.every(t => !currentTokens.includes(t));
++  const hasNoRemoved = true; /* M3 mutant */
+ 
+   if (!hasAllAdded || !hasNoRemoved) {
+     return refuseWithInstructions('the token was modified by the user', targetLine);

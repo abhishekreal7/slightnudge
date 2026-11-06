@@ -1,0 +1,219 @@
+========================================================================================
+🎯 MOVE EXPECTATIONS VALIDATION SUITE (test/move-expectations.test.ts)
+========================================================================================
+
+▶ Testing BLOCK @ 100%...
+    [jump trace details] Total frames: 231, top jumps: [
+  { f: 36, dt: 33, tag: 'a', index: 3, jump: 4.7, from: 590, to: 585 },
+  { f: 77, dt: 50, tag: 'a', index: 3, jump: 7, from: 492, to: 485 },
+  { f: 80, dt: 33, tag: 'a', index: 3, jump: 4.7, from: 480, to: 475 },
+  { f: 84, dt: 33, tag: 'a', index: 3, jump: 4.7, from: 468, to: 464 }
+]
+  ✓ Done: 1a(less=true, swap=true) | 1b(dropLine=461px, final=461px, Δ=0px, pass=true) | 1c(maxJump=2.3px, pass=true)
+▶ Testing BLOCK @ 120%...
+    [jump trace details] Total frames: 211, top jumps: [
+  { f: 23, dt: 67, tag: 'a', index: 3, jump: 9.3, from: 689, to: 680 },
+  { f: 28, dt: 50, tag: 'a', index: 3, jump: 7, from: 670, to: 663 },
+  { f: 34, dt: 50, tag: 'a', index: 3, jump: 7, from: 652, to: 645 },
+  { f: 40, dt: 50, tag: 'a', index: 3, jump: 7, from: 633, to: 626 },
+  { f: 46, dt: 50, tag: 'a', index: 3, jump: 7, from: 614, to: 607 }
+]
+  ✓ Done: 1a(less=true, swap=true) | 1b(dropLine=517px, final=517px, Δ=0px, pass=true) | 1c(maxJump=2.3px, pass=true)
+▶ Testing BLOCK @ 150%...
+    [jump trace details] Total frames: 206, top jumps: [
+  { f: 25, dt: 67, tag: 'a', index: 3, jump: 9.3, from: 499, to: 489 },
+  { f: 30, dt: 67, tag: 'a', index: 3, jump: 9.3, from: 480, to: 471 },
+  { f: 35, dt: 50, tag: 'a', index: 3, jump: 7, from: 461, to: 454 },
+  { f: 41, dt: 50, tag: 'a', index: 3, jump: 7, from: 443, to: 436 },
+  { f: 47, dt: 67, tag: 'a', index: 3, jump: 9.3, from: 424, to: 415 }
+]
+  ✓ Done: 1a(less=true, swap=true) | 1b(dropLine=283px, final=283px, Δ=0px, pass=true) | 1c(maxJump=2.3px, pass=true)
+▶ Testing FLEX-ROW @ 100%...
+    [jump trace details] Total frames: 213, top jumps: [
+  {
+    f: 16,
+    dt: 33,
+    tag: 'div',
+    index: 1,
+    jump: 4.7,
+    from: 598,
+    to: 602
+  },
+  {
+    f: 26,
+    dt: 33,
+    tag: 'div',
+    index: 1,
+    jump: 4.7,
+    from: 624,
+    to: 628
+  },
+  {
+    f: 31,
+    dt: 33,
+    tag: 'div',
+    index: 1,
+    jump: 4.7,
+    from: 638,
+    to: 642
+  },
+  { f: 33, dt: 50, tag: 'div', index: 1, jump: 7, from: 645, to: 652 },
+  {
+    f: 36,
+    dt: 50,
+    tag: 'div',
+    index: 1,
+    jump: 7.1,
+    from: 656,
+    to: 664
+  }
+]
+  ✓ Done: 1a(less=true, swap=true) | 1b(dropLine=598px, final=598px, Δ=0.6px, pass=true) | 1c(maxJump=2.4px, pass=true)
+▶ Testing FLEX-ROW @ 120%...
+    [jump trace details] Total frames: 216, top jumps: [
+  {
+    f: 14,
+    dt: 67,
+    tag: 'div',
+    index: 1,
+    jump: 8.5,
+    from: 583,
+    to: 591
+  },
+  {
+    f: 15,
+    dt: 50,
+    tag: 'div',
+    index: 1,
+    jump: 8.5,
+    from: 591,
+    to: 600
+  },
+  {
+    f: 18,
+    dt: 50,
+    tag: 'div',
+    index: 1,
+    jump: 8.4,
+    from: 605,
+    to: 614
+  },
+  {
+    f: 24,
+    dt: 50,
+    tag: 'div',
+    index: 1,
+    jump: 8.5,
+    from: 628,
+    to: 636
+  },
+  {
+    f: 26,
+    dt: 50,
+    tag: 'div',
+    index: 1,
+    jump: 8.5,
+    from: 639,
+    to: 648
+  }
+]
+  ✓ Done: 1a(less=true, swap=true) | 1b(dropLine=583px, final=603px, Δ=20.5px, pass=false) | 1c(maxJump=2.8px, pass=true)
+▶ Testing FLEX-ROW @ 150%...
+▶ Testing FLEX-COLUMN @ 100%...
+    [jump trace details] Total frames: 212, top jumps: [
+  { f: 27, dt: 67, tag: 'a', index: 3, jump: 9.3, from: 620, to: 610 },
+  { f: 32, dt: 50, tag: 'a', index: 3, jump: 7, from: 601, to: 594 },
+  { f: 38, dt: 50, tag: 'a', index: 3, jump: 7, from: 582, to: 575 },
+  { f: 44, dt: 50, tag: 'a', index: 3, jump: 7, from: 564, to: 557 },
+  { f: 50, dt: 50, tag: 'a', index: 3, jump: 7, from: 545, to: 538 }
+]
+  ✓ Done: 1a(less=true, swap=true) | 1b(dropLine=445px, final=445px, Δ=0px, pass=true) | 1c(maxJump=2.3px, pass=true)
+▶ Testing FLEX-COLUMN @ 120%...
+    [jump trace details] Total frames: 214, top jumps: [
+  { f: 27, dt: 50, tag: 'a', index: 3, jump: 7, from: 708, to: 701 },
+  { f: 33, dt: 50, tag: 'a', index: 3, jump: 7, from: 690, to: 683 },
+  { f: 38, dt: 67, tag: 'a', index: 3, jump: 9.3, from: 673, to: 664 },
+  { f: 43, dt: 50, tag: 'a', index: 3, jump: 7, from: 655, to: 648 },
+  { f: 48, dt: 67, tag: 'a', index: 3, jump: 9.3, from: 638, to: 629 }
+]
+  ✓ Done: 1a(less=true, swap=true) | 1b(dropLine=498px, final=498px, Δ=0px, pass=true) | 1c(maxJump=2.3px, pass=true)
+▶ Testing FLEX-COLUMN @ 150%...
+    [jump trace details] Total frames: 210, top jumps: [
+  { f: 24, dt: 67, tag: 'a', index: 3, jump: 9.3, from: 797, to: 787 },
+  { f: 29, dt: 67, tag: 'a', index: 3, jump: 9.3, from: 778, to: 769 },
+  { f: 34, dt: 50, tag: 'a', index: 3, jump: 7, from: 759, to: 752 },
+  { f: 39, dt: 50, tag: 'a', index: 3, jump: 7, from: 743, to: 736 },
+  { f: 44, dt: 50, tag: 'a', index: 3, jump: 7, from: 727, to: 720 }
+]
+  ✓ Done: 1a(less=true, swap=true) | 1b(dropLine=551px, final=551px, Δ=0px, pass=true) | 1c(maxJump=2.3px, pass=true)
+
+--- Running 1d: Apply & Undo byte-for-byte verification ---
+  ✓ Source file updated after Apply: true
+  ✓ Undo restored exact original file: true
+
+--- Running 1e & Item 3: Esc, Discard, and Reload verification ---
+  ✓ Esc cancels drag cleanly: true
+  ✓ Discard returns preview to original order: true (preview was swapped: true)
+  ✓ Reload matches original source order: true
+  ✓ Source file completely untouched: true
+
+--- Running 1f: Grid and Flex-wrap refusal verification ---
+  ✓ Grid refuses cleanly with notice and zero transform: true (notice: "Grid and wrapping layouts do not support drag reordering yet.")
+  ✓ Flex-wrap refuses cleanly with notice and zero transform: true (notice: "Grid and wrapping layouts do not support drag reordering yet.")
+
+--- Running Option A: Normal Drag (Reorder Only) vs Alt+Drag (Spacing Nudge) ---
+  ✓ Normal drag does not trigger micro-nudge: true (notice: "")
+  ✓ Alt+drag activates spacing nudge: true (notice: "Alt+Drag: release to increase top spacing")
+
+========================================================================================
+📋 VERIFICATION RESULTS TABLE (MATRIX: BLOCK, FLEX-ROW, FLEX-COLUMN @ 100%, 120%, 150%)
+========================================================================================
+| Layout | Zoom | 1a Order Swap | 1a Zero Sub-drag Move | 1b Drop Line (rel) | 1b Final Pos | 1b Δ (≤2px) | 1c Max Sibling Jump (≤8px) | Status |
+|--------|------|---------------|-----------------------|--------------------|--------------|-------------|-----------------------------|--------|
+| block  | 100% | PASS (1 place) | PASS (0px)            | 461px              | 461px        | 0px PASS    | 2.3px PASS                  | PASS   |
+| block  | 120% | PASS (1 place) | PASS (0px)            | 517px              | 517px        | 0px PASS    | 2.3px PASS                  | PASS   |
+| block  | 150% | PASS (1 place) | PASS (0px)            | 283px              | 283px        | 0px PASS    | 2.3px PASS                  | PASS   |
+| flex-row | 100% | PASS (1 place) | PASS (0px)            | 598px              | 598px        | 0.6px PASS  | 2.4px PASS                  | PASS   |
+| flex-row | 120% | PASS (1 place) | PASS (0px)            | 583px              | 603px        | 20.5px FAIL | 2.8px PASS                  | FAIL   |
+| flex-column | 100% | PASS (1 place) | PASS (0px)            | 445px              | 445px        | 0px PASS    | 2.3px PASS                  | PASS   |
+| flex-column | 120% | PASS (1 place) | PASS (0px)            | 498px              | 498px        | 0px PASS    | 2.3px PASS                  | PASS   |
+| flex-column | 150% | PASS (1 place) | PASS (0px)            | 551px              | 551px        | 0px PASS    | 2.3px PASS                  | PASS   |
+
+========================================================================================
+📋 ADDITIONAL EXPECTATIONS SUMMARY
+========================================================================================
+1d: Apply writes to source matching preview:        PASS
+1d: Undo restores original byte-for-byte in 1 step:  PASS
+1e: Esc during drag changes nothing:                 PASS
+1e: Discard returns preview to source order:         PASS
+1e: Reload matches original source file:             PASS
+1f: Grid refuses with message and zero move:         PASS
+1f: Flex-wrap refuses with message and zero move:    PASS
+Option A: Normal drag = reorder only (no nudge):    PASS
+Option A: Alt+Drag = spacing nudge:                 PASS
+
+========================================================================================
+OVERALL TEST STATUS: ❌ SOME TESTS FAILED
+========================================================================================
+
+
+  ✗ Error in flex-row @ 150%: locator.waitFor: Timeout 3000ms exceeded.
+Call log:
+[2m  - waiting for locator('.sn-drop-line') to be visible[22m
+
+    at testMatrixCase (C:\dev\vibecheck\test\move-expectations.test.ts:255:18)
+    at async main (C:\dev\vibecheck\test\move-expectations.test.ts:704:19) {
+  log: [ "  - waiting for locator('.sn-drop-line') to be visible" ],
+  name: 'TimeoutError'
+}
+
+Command failed: npx tsx test/move-expectations.test.ts
+  ✗ Error in flex-row @ 150%: locator.waitFor: Timeout 3000ms exceeded.
+Call log:
+[2m  - waiting for locator('.sn-drop-line') to be visible[22m
+
+    at testMatrixCase (C:\dev\vibecheck\test\move-expectations.test.ts:255:18)
+    at async main (C:\dev\vibecheck\test\move-expectations.test.ts:704:19) {
+  log: [ "  - waiting for locator('.sn-drop-line') to be visible" ],
+  name: 'TimeoutError'
+}

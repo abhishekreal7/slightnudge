@@ -1,0 +1,15 @@
+SETUP 1793622572068 START git ["ls-files"]
+SETUP END elapsed 40ms
+Component actions: local Studio
+HARNESS-V3 NAVIGATION about:blank
+HARNESS-V3 NAVIGATION http://127.0.0.1:58481/editor?panel=inspector
+TIMING 1793622595641 REQUEST http://127.0.0.1:58481/editor?panel=inspector
+TIMING 1793622595871 RESPONSE 200 http://127.0.0.1:58481/editor?panel=inspector
+HARNESS-V3 OP 1793622596355 START waitFor locator('[data-source-ready="true"]')
+TIMING 1793622597386 REQUEST http://127.0.0.1:58481/api/slightnudge/responsive
+TIMING 1793622597387 REQUEST http://127.0.0.1:58481/api/slightnudge/responsive
+TIMING 1793622597408 REQUEST http://127.0.0.1:58481/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A58481&__slightnudge_session=646556ab-6ebd-42a1-b8a0-1964edd43428
+HARNESS-V3 OP 1793633850503 ERROR waitFor locator('[data-source-ready="true"]')
+HARNESS-V3 OP 1793633850503 START allTextContents getByLabel('Editor notice', { exact: true })
+HARNESS-V3 OP 1793633851518 END allTextContents getByLabel('Editor notice', { exact: true })
+Action notice []

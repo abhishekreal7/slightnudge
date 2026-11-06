@@ -1,0 +1,34 @@
+warning: in the working copy of 'LICENSE', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/globals.css', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/page.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'components/Features.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'package.json', LF will be replaced by CRLF the next time Git touches it
+Live preview acknowledgements: [
+  {
+    channel: 'slightnudge',
+    session: '8f0cbffb-7736-4159-8c99-5d58719a140e',
+    type: 'edit-result',
+    requestId: '141b4a71-56c9-47cc-9c44-bfc717656559',
+    success: true,
+    reason: ''
+  }
+]
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+'700' !== '600'
+
+    at checkSourceProject (C:\dev\vibecheck\test\helpers\source-project-browser.ts:73:12)
+    at async <anonymous> (C:\dev\vibecheck\test\review-consent.browser.ts:88:14) {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: '700',
+  expected: '600',
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v22.19.0

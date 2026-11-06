@@ -1,0 +1,54 @@
+[
+  {
+    "name": "Attack 1a (Prettier cfg 0, undo B then A)",
+    "verdict": "CONFIRMED_PASS"
+  },
+  {
+    "name": "Attack 1b (Prettier cfg 0, undo A first then B)",
+    "verdict": "CONFIRMED_PASS"
+  },
+  {
+    "name": "Attack 1a (Prettier cfg 1, undo B then A)",
+    "verdict": "CONFIRMED_PASS"
+  },
+  {
+    "name": "Attack 1b (Prettier cfg 1, undo A first then B)",
+    "verdict": "CONFIRMED_PASS"
+  },
+  {
+    "name": "Attack 1a (Prettier cfg 2, undo B then A)",
+    "verdict": "CONFIRMED_PASS"
+  },
+  {
+    "name": "Attack 1b (Prettier cfg 2, undo A first then B)",
+    "verdict": "CONFIRMED_PASS"
+  },
+  {
+    "name": "Attack 2a (Lines shift above, undo B then A)",
+    "verdict": "CONFIRMED_PASS"
+  },
+  {
+    "name": "Attack 2b (Lines shift above, undo A first then B)",
+    "verdict": "CONFIRMED_PASS"
+  },
+  {
+    "name": "Attack 3 (Same element with Prettier reflow: undo A refused, then succeeds after B undone)",
+    "verdict": "CONFIRMED_PASS"
+  },
+  {
+    "name": "Attack 4 (X and Y collapsed to same line: refused safely on same-line rule)",
+    "verdict": "CONFIRMED_PASS"
+  },
+  {
+    "name": "Attack 5 (Newer record already undone does not block undo of older)",
+    "verdict": "CONFIRMED_PASS"
+  },
+  {
+    "name": "Attack 6 (Newer edit in another file does not block)",
+    "verdict": "CONFIRMED_PASS"
+  },
+  {
+    "name": "Attack 7 (Legacy record without elementId refused conservatively with instructions)",
+    "verdict": "CONFIRMED_PASS"
+  }
+]

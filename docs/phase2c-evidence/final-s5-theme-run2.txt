@@ -1,0 +1,17 @@
+▶ S5: Theme Support and Config Detection in Tailwind Verifier
+  ✔ a. Tailwind v4 project with @theme defining --color-brand-500 accepts bg-brand-500, stacked variant, and arbitrary value, and refuses bogus (180.2273ms)
+  ✔ b. Tailwind v4 project with legacy tailwind.config.js and CSS @config accepts bg-brand-500, stacked variant, and arbitrary value, and refuses bogus (65.3476ms)
+NOTICE [d. Tailwind v3]: UNVERIFIED offline. Node_modules has Tailwind v4.3.3 installed, v3 package not present offline.
+  ✔ c. Tailwind v4 project with tailwind.config.js but CSS entry WITHOUT @config refuses bg-brand-500 (matches v4 build behavior) while accepting standard utilities (38.1115ms)
+  ✔ d. Tailwind v3 project: verify offline availability or report UNVERIFIED (0.588ms)
+  ✔ f. Project where no Tailwind is installed or engine fails: refuses and writes nothing (6.545ms)
+  ✔ g. Unchanged existing tokens in className are never verified and never cause refusal; only added tokens are verified (310.4932ms)
+✔ S5: Theme Support and Config Detection in Tailwind Verifier (603.0082ms)
+ℹ tests 6
+ℹ suites 1
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 624.7384

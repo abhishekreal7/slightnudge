@@ -1,0 +1,24 @@
+{"start":1793622572337,"cwd":"C:\\dev\\vibecheck\\scratch\\g\\98063bcc\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-DNg5Bv","args":["C:\\dev\\vibecheck\\scratch\\g\\98063bcc\\worktree\\node_modules\\next\\dist\\bin\\next","dev","--webpack","-H","127.0.0.1","-p","58481"]}
+▲ Next.js 16.4.3 (webpack)
+- Local:         http://127.0.0.1:58481
+- Network:       http://127.0.0.1:58481
+✓ Ready in 590ms
+✓ Running next.config.mjs took 40ms
+
+○ Compiling /editor/[[...project]]/page ...
+ GET /editor 200 in 601ms
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\98063bcc\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-DNg5Bv\\.next\\dev\\build-manifest.json","pid":22028,"time":1793622594793,"bytes":344}
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\98063bcc\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-DNg5Bv\\.next\\dev\\build-manifest.json","pid":3508,"time":1793622595121,"bytes":344}
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\98063bcc\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-DNg5Bv\\.next\\dev\\build-manifest.json","pid":3508,"time":1793622595129,"bytes":344}
+ GET /editor 200 in 975ms (next.js: 666ms, application-code: 309ms)
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\98063bcc\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-DNg5Bv\\.next\\dev\\build-manifest.json","pid":3508,"time":1793622595766,"bytes":344}
+ GET /editor?panel=inspector 200 in 149ms (next.js: 12ms, application-code: 136ms)
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\98063bcc\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-DNg5Bv\\.next\\dev\\build-manifest.json","pid":20112,"time":1793622596184,"bytes":344}
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\98063bcc\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-DNg5Bv\\.next\\dev\\build-manifest.json","pid":15844,"time":1793622603064,"bytes":344}
+⨯ TypeError: Cannot read properties of undefined (reading 'length')
+    at <unknown> (C:\dev\vibecheck\scratch\g\98063bcc\worktree\scratch\security-hardening-20261101\os-temp\sn-review-consent-DNg5Bv\.next\dev\server\app\studio\preview\[pageId]\page.js:593:47)
+    at Object.<anonymous> (C:\dev\vibecheck\scratch\g\98063bcc\worktree\scratch\security-hardening-20261101\os-temp\sn-review-consent-DNg5Bv\.next\dev\server\app\studio\preview\[pageId]\page.js:596:3) {
+  type: 'TypeError',
+  page: '/studio/preview/fixture-1'
+}
+○ Compiling /_error ...

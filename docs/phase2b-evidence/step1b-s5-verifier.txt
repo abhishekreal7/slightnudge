@@ -1,0 +1,67 @@
+=== STEP 1.B: S5 VERIFIER AUDIT (DIRECT & APPLY PATH) ===
+
+--- PART 1: Direct verifyTailwindClass() calls ---
+Token: "p-4" (Standard utility (p-4))
+  verified: true, error: (none)
+  ✅ As expected (verified=true)
+Token: "dark:hover:bg-blue-500" (Stacked variant (dark:hover:bg-blue-500))
+  verified: true, error: (none)
+  ✅ As expected (verified=true)
+Token: "w-[37px]" (Arbitrary value (w-[37px]))
+  verified: true, error: (none)
+  ✅ As expected (verified=true)
+Token: "bg-nonexistent-999" (Bogus class (bg-nonexistent-999))
+  verified: false, error: can't verify this class: "bg-nonexistent-999" produced no CSS
+  ✅ As expected (verified=false)
+Token: "bg-brand-500" (Custom theme color from tailwind.config.js (bg-brand-500))
+  verified: false, error: can't verify this class: "bg-brand-500" produced no CSS
+  ❌ UNEXPECTED: expected verified=true, got false
+Token: "site-header" (Custom component class defined in globals.css (site-header))
+  verified: false, error: can't verify this class: "site-header" produced no CSS
+  ✅ As expected (verified=false)
+
+--- PART 2: Apply Path with NEW / CHANGED Tokens ---
+Apply token "p-4" (Standard utility (p-4)):
+  success: true, error: (none)
+  disk updated: true, disk untouched: false
+  ✅ Valid token accepted and applied to disk.
+Apply token "dark:hover:bg-blue-500" (Stacked variant (dark:hover:bg-blue-500)):
+  success: true, error: (none)
+  disk updated: true, disk untouched: false
+  ✅ Valid token accepted and applied to disk.
+Apply token "w-[37px]" (Arbitrary value (w-[37px])):
+  success: true, error: (none)
+  disk updated: true, disk untouched: false
+  ✅ Valid token accepted and applied to disk.
+Apply token "bg-nonexistent-999" (Bogus class (bg-nonexistent-999)):
+  success: false, error: can't verify this class: "bg-nonexistent-999" produced no CSS
+  disk updated: false, disk untouched: true
+  ✅ Invalid/non-Tailwind token safely refused; disk untouched.
+Apply token "bg-brand-500" (Custom theme color from tailwind.config.js (bg-brand-500)):
+  success: false, error: can't verify this class: "bg-brand-500" produced no CSS
+  disk updated: false, disk untouched: true
+  ❌ BLOCKER: Valid theme color was REFUSED by apply!
+Apply token "site-header" (Custom component class defined in globals.css (site-header)):
+  success: false, error: can't verify this class: "site-header" produced no CSS
+  disk updated: false, disk untouched: true
+  ✅ Invalid/non-Tailwind token safely refused; disk untouched.
+
+--- PART 3: EXISTING Tokens in className that were NOT changed ---
+Apply p-4 with existing unchanged tokens:
+  Existing tokens: "group peer container site-header my-plain-button"
+  New token: "p-4"
+  apply success: true, error: (none)
+  disk properly updated with new token: true
+  ✅ CONFIRMED: Unchanged existing tokens (group, peer, container, custom classes) NEVER cause refusal.
+
+--- ROOT CAUSE INVESTIGATION FOR bg-brand-500 REFUSAL ---
+In lib/slightnudge/tailwind-verifier.ts:
+L132: ds = await twNode.__unstable__loadDesignSystem('@import "tailwindcss";', { base: projectDir });
+L145: const compiler = await compileFn('@import "tailwindcss";', { base: projectDir, ... });
+
+In Tailwind v4, passing '@import "tailwindcss";' alone without '@config "./tailwind.config.js";' does NOT load legacy tailwind.config.js configurations.
+Direct experiment (scratch/test-tw-config.cjs):
+- Without @config: ds.candidatesToCss(['bg-brand-500']) => [ null ] (fails)
+- With @config "./tailwind.config.js": ds.candidatesToCss(['bg-brand-500']) => [ '.bg-brand-500 {\n  background-color: #3b82f6;\n}\n' ] (succeeds)
+Because tailwind-verifier.ts hardcodes '@import "tailwindcss";' without detecting or passing '@config "./tailwind.config.js";', valid theme colors defined in the project's own theme are falsely refused.
+This constitutes an active BLOCKER for STEP 2 per prompt instructions.

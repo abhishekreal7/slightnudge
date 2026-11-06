@@ -1,0 +1,83 @@
+Disposable source project: generated SaaS; Next.js 16.4.3; Tailwind 4.3.3; installed source adapter; no environment files checked out.
+▲ Next.js 16.4.3 (webpack)
+- Local:         http://127.0.0.1:59003
+- Network:       http://127.0.0.1:59003
+✓ Ready in 810ms
+✓ Running next.config.mjs took 55ms
+
+  We detected TypeScript in your project and created a tsconfig.json file for you.
+
+○ Compiling /page ...
+ GET / 200 in 2.0s (next.js: 1155ms, application-code: 868ms)
+
+Isolated application diagnostics ▲ Next.js 16.4.3 (webpack)
+- Local:         http://127.0.0.1:59857
+- Network:       http://127.0.0.1:59857
+✓ Ready in 690ms
+✓ Running next.config.mjs took 33ms
+
+○ Compiling /fixtures/1/page ...
+ GET /fixtures/1 200 in 2.6s (next.js: 1160ms, application-code: 1401ms)
+○ Compiling /studio/[repoId]/edit/page ...
+⨯ ./components/slightnudge/change-history.module.css:23:1
+Syntax error: Selector "[data-state='redo']" is not pure (pure selectors must contain at least one local class or id)
+
+ [90m 21 | [39m[33m[[39mdata-state=[32m'saved'[39m[33m][39m > [33m.marker[39m [33m{[39m background[33m:[39m [35m#238269[39m[33m;[39m [33m}[39m
+ [90m 22 | [39m[33m[[39mdata-state=[32m'draft'[39m[33m][39m > [33m.marker,[39m [33m[[39mdata-state=[32m'attention'[39m[33m][39m > [33m.marker[39m [33m{[39m background[33m:[39m [35m#b58d49[39m[33m;[39m [33m}[39m
+[1m[31m>[39m[22m[90m 23 | [39m[33m[[39mdata-state=[32m'redo'[39m[33m][39m [33m{[39m opacity[33m:[39m [33m.65[39m[33m;[39m [33m}[39m
+ [90m    | [39m[1m[31m^[39m[22m
+ [90m 24 | [39m[33m.empty[39m [33m{[39m color[33m:[39m [35m#839086[39m[33m;[39m font-size[33m:[39m 12px[33m;[39m margin[33m:[39m 12px 0[33m;[39m [33m}[39m
+ [90m 25 | [39m[33m.attention[39m [33m{[39m background[33m:[39m [35m#faf6eb[39m[33m;[39m color[33m:[39m [35m#8a6b30[39m[33m;[39m border-radius[33m:[39m 7px[33m;[39m padding[33m:[39m 10px[33m;[39m font-size[33m:[39m 12px[33m;[39m [33m}[39m
+<w> [webpack.cache.PackFileCacheStrategy] Skipped not serializable cache item 'Compilation/modules|C:\dev\vibecheck\node_modules\next\dist\build\webpack\loaders\css-loader\src\index.js??ruleSet[1].rules[15].oneOf[5].use[2]!C:\dev\vibecheck\node_modules\next\dist\build\webpack\loaders\postcss-loader\src\index.js??ruleSet[1].rules[15].oneOf[5].use[3]!C:\Users\abhis\AppData\Local\Temp\sn-review-consent-jo0zhC\components\slightnudge\change-history.module.css': No serializer registered for CssSyntaxError
+<w> while serializing webpack/lib/cache/PackFileCacheStrategy.PackContentItems -> webpack/lib/NormalModule -> webpack/lib/ModuleBuildError -> CssSyntaxError
+⨯ ./components/slightnudge/change-history.module.css:23:1
+Syntax error: Selector "[data-state='redo']" is not pure (pure selectors must contain at least one local class or id)
+
+ [90m 21 | [39m[33m[[39mdata-state=[32m'saved'[39m[33m][39m > [33m.marker[39m [33m{[39m background[33m:[39m [35m#238269[39m[33m;[39m [33m}[39m
+ [90m 22 | [39m[33m[[39mdata-state=[32m'draft'[39m[33m][39m > [33m.marker,[39m [33m[[39mdata-state=[32m'attention'[39m[33m][39m > [33m.marker[39m [33m{[39m background[33m:[39m [35m#b58d49[39m[33m;[39m [33m}[39m
+[1m[31m>[39m[22m[90m 23 | [39m[33m[[39mdata-state=[32m'redo'[39m[33m][39m [33m{[39m opacity[33m:[39m [33m.65[39m[33m;[39m [33m}[39m
+ [90m    | [39m[1m[31m^[39m[22m
+ [90m 24 | [39m[33m.empty[39m [33m{[39m color[33m:[39m [35m#839086[39m[33m;[39m font-size[33m:[39m 12px[33m;[39m margin[33m:[39m 12px 0[33m;[39m [33m}[39m
+ [90m 25 | [39m[33m.attention[39m [33m{[39m background[33m:[39m [35m#faf6eb[39m[33m;[39m color[33m:[39m [35m#8a6b30[39m[33m;[39m border-radius[33m:[39m 7px[33m;[39m padding[33m:[39m 10px[33m;[39m font-size[33m:[39m 12px[33m;[39m [33m}[39m
+ GET /studio/source-proof/edit?preview=http%3A%2F%2F127.0.0.1%3A59003%2F 500 in 29.0s (next.js: 28.3s, application-code: 752ms)
+[browser] Uncaught Error: Syntax error: Selector "[data-state='redo']" is not pure (pure selectors must contain at least one local class or id)
+
+  21 | [data-state='saved'] > .marker { background: #238269; }
+  22 | [data-state='draft'] > .marker, [data-state='attention'] > .marker { background: #b58d49; }
+> 23 | [data-state='redo'] { opacity: .65; }
+     | ^
+  24 | .empty { color: #839086; font-size: 12px; margin: 12px 0; }
+  25 | .attention { background: #faf6eb; color: #8a6b30; border-radius: 7px; padding: 10px; font-size: 12px; }
+
+[browser] ./components/slightnudge/change-history.module.css:23:1
+Syntax error: Selector "[data-state='redo']" is not pure (pure selectors must contain at least one local class or id)
+
+  21 | [data-state='saved'] > .marker { background: #238269; }
+  22 | [data-state='draft'] > .marker, [data-state='attention'] > .marker { background: #b58d49; }
+> 23 | [data-state='redo'] { opacity: .65; }
+     | ^
+  24 | .empty { color: #839086; font-size: 12px; margin: 12px 0; }
+  25 | .attention { background: #faf6eb; color: #8a6b30; border-radius: 7px; padding: 10px; font-size: 12px; } 
+<w> [webpack.cache.PackFileCacheStrategy] Skipped not serializable cache item 'Compilation/modules|javascript/auto|C:\dev\vibecheck\node_modules\next\dist\build\webpack\loaders\next-flight-css-loader.js??ruleSet[1].rules[13].oneOf[5].use[0]!C:\dev\vibecheck\node_modules\next\dist\build\webpack\loaders\css-loader\src\index.js??ruleSet[1].rules[13].oneOf[5].use[1]!C:\dev\vibecheck\node_modules\next\dist\build\webpack\loaders\postcss-loader\src\index.js??ruleSet[1].rules[13].oneOf[5].use[2]!C:\Users\abhis\AppData\Local\Temp\sn-review-consent-jo0zhC\components\slightnudge\change-history.module.css|ssr': No serializer registered for CssSyntaxError
+<w> while serializing webpack/lib/cache/PackFileCacheStrategy.PackContentItems -> webpack/lib/NormalModule -> webpack/lib/ModuleBuildError -> CssSyntaxError
+<w> [webpack.cache.PackFileCacheStrategy] Skipped not serializable cache item 'Compilation/modules|C:\dev\vibecheck\node_modules\next\dist\build\webpack\loaders\css-loader\src\index.js??ruleSet[1].rules[15].oneOf[5].use[2]!C:\dev\vibecheck\node_modules\next\dist\build\webpack\loaders\postcss-loader\src\index.js??ruleSet[1].rules[15].oneOf[5].use[3]!C:\Users\abhis\AppData\Local\Temp\sn-review-consent-jo0zhC\components\slightnudge\change-history.module.css': No serializer registered for CssSyntaxError
+<w> while serializing webpack/lib/cache/PackFileCacheStrategy.PackContentItems -> webpack/lib/NormalModule -> webpack/lib/ModuleBuildError -> CssSyntaxError
+
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+locator.waitFor: Timeout 120000ms exceeded.
+Call log:
+  - waiting for locator('[data-source-ready="true"]') to be visible
+
+    at connected (C:\dev\vibecheck\test\helpers\imported-canvas-browser.ts:27:70)
+    at checkImportedCanvas (C:\dev\vibecheck\test\helpers\imported-canvas-browser.ts:38:29)
+    at async <anonymous> (C:\dev\vibecheck\test\review-consent.browser.ts:135:14) {
+  log: [
+    `  - waiting for locator('[data-source-ready="true"]') to be visible`
+  ],
+  name: 'TimeoutError'
+}
+
+Node.js v22.19.0

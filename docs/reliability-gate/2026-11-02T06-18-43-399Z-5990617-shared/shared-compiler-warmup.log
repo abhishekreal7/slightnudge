@@ -1,0 +1,19 @@
+SETUP 1793600327487 START git ["ls-files"]
+SETUP END elapsed 56ms
+TIMING 1793600327739 REQUEST http://127.0.0.1:56168/editor?panel=inspector
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:56168/editor?panel=inspector
+Call log:
+[2m  - navigating to "http://127.0.0.1:56168/editor?panel=inspector", waiting until "domcontentloaded"[22m
+
+    at <anonymous> (C:\dev\vibecheck\scratch\g\aa531eeb\worktree\test\gate-shared-runner.v3.ts:53:14) {
+  log: [
+    '  - navigating to "http://127.0.0.1:56168/editor?panel=inspector", waiting until "domcontentloaded"'
+  ],
+  name: 'Error'
+}
+
+Node.js v22.19.0

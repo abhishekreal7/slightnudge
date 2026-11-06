@@ -1,0 +1,290 @@
+{"id":"start","zoom":0.75,"delta":8,"offset":0}
+{"id":"start","zoom":0.75,"delta":19,"offset":0}
+{"id":"start","zoom":0.75,"delta":31,"offset":0}
+{"id":"start","zoom":0.75,"delta":47,"offset":0}
+{"id":"center","zoom":0.75,"delta":8,"offset":0}
+{"id":"center","zoom":0.75,"delta":19,"offset":0}
+{"id":"center","zoom":0.75,"delta":31,"offset":0}
+{"id":"center","zoom":0.75,"delta":47,"offset":0}
+{"id":"end","zoom":0.75,"delta":8,"offset":0}
+{"id":"end","zoom":0.75,"delta":19,"offset":0}
+{"id":"end","zoom":0.75,"delta":31,"offset":0}
+{"id":"end","zoom":0.75,"delta":47,"offset":0}
+{"id":"start","zoom":1,"delta":8,"offset":0}
+{"id":"start","zoom":1,"delta":19,"offset":0}
+{"id":"start","zoom":1,"delta":31,"offset":0}
+{"id":"start","zoom":1,"delta":47,"offset":0}
+{"id":"center","zoom":1,"delta":8,"offset":0}
+{"id":"center","zoom":1,"delta":19,"offset":0}
+{"id":"center","zoom":1,"delta":31,"offset":0}
+{"id":"center","zoom":1,"delta":47,"offset":0}
+{"id":"end","zoom":1,"delta":8,"offset":0}
+{"id":"end","zoom":1,"delta":19,"offset":0}
+{"id":"end","zoom":1,"delta":31,"offset":0}
+{"id":"end","zoom":1,"delta":47,"offset":0}
+{"id":"start","zoom":1.5,"delta":8,"offset":0}
+{"id":"start","zoom":1.5,"delta":19,"offset":0}
+{"id":"start","zoom":1.5,"delta":31,"offset":0}
+{"id":"start","zoom":1.5,"delta":47,"offset":0}
+{"id":"center","zoom":1.5,"delta":8,"offset":0}
+{"id":"center","zoom":1.5,"delta":19,"offset":0}
+{"id":"center","zoom":1.5,"delta":31,"offset":0}
+{"id":"center","zoom":1.5,"delta":47,"offset":0}
+{"id":"end","zoom":1.5,"delta":8,"offset":0}
+{"id":"end","zoom":1.5,"delta":19,"offset":0}
+{"id":"end","zoom":1.5,"delta":31,"offset":0}
+{"id":"end","zoom":1.5,"delta":47,"offset":0}
+Isolated application diagnostics ▲ Next.js 16.4.3 (webpack)
+- Local:         http://127.0.0.1:57095
+- Network:       http://127.0.0.1:57095
+✓ Ready in 515ms
+✓ Running next.config.mjs took 38ms
+
+○ Compiling /editor/[[...project]]/page ...
+ GET /editor 200 in 1047ms
+ GET /editor 200 in 1118ms (next.js: 318ms, application-code: 800ms)
+ GET /editor?view=fit 200 in 379ms (next.js: 141ms, application-code: 238ms)
+○ Compiling /studio/preview/[pageId]/page ...
+ GET /studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A57095&__slightnudge_session=[REDACTED]&__slightnudge_canvas=1 200 in 2.3s (next.js: 1801ms, application-code: 454ms)
+⚠ ./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+ GET /api/slightnudge/pages 200 in 6.4s (next.js: 4.1s, proxy.ts: 1485ms, application-code: 803ms)
+○ Compiling /api/slightnudge/pages/route ...
+ POST /api/slightnudge/responsive 200 in 7.0s (next.js: 4.1s, proxy.ts: 1487ms, application-code: 1362ms)
+ POST /api/slightnudge/responsive 200 in 7.1s (next.js: 4.1s, proxy.ts: 1487ms, application-code: 1490ms)
+ GET /api/slightnudge/pages 200 in 319ms (next.js: 10ms, proxy.ts: 290ms, application-code: 20ms)
+ GET /editor?view=fit 200 in 3.1s (next.js: 2.6s, application-code: 487ms)
+⚠ ./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+⚠ ./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+ POST /api/slightnudge/preview 200 in 6.6s (next.js: 5.0s, proxy.ts: 27ms, application-code: 1493ms)
+ POST /api/slightnudge/preview 200 in 492ms (next.js: 5ms, proxy.ts: 26ms, application-code: 462ms)
+ POST /api/slightnudge/preview 200 in 437ms (next.js: 5ms, proxy.ts: 29ms, application-code: 403ms)
+ POST /api/slightnudge/preview 200 in 446ms (next.js: 3ms, proxy.ts: 29ms, application-code: 414ms)
+ POST /api/slightnudge/preview 200 in 408ms (next.js: 6ms, proxy.ts: 24ms, application-code: 378ms)
+ POST /api/slightnudge/preview 200 in 401ms (next.js: 5ms, proxy.ts: 17ms, application-code: 379ms)
+ POST /api/slightnudge/preview 200 in 1626ms (next.js: 6ms, proxy.ts: 106ms, application-code: 1514ms)
+ POST /api/slightnudge/preview 200 in 400ms (next.js: 6ms, proxy.ts: 24ms, application-code: 370ms)
+ POST /api/slightnudge/preview 200 in 467ms (next.js: 3ms, proxy.ts: 19ms, application-code: 445ms)
+
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+'false' !== 'true'
+
+    at checkContinuousWidth (C:\dev\vibecheck\test\helpers\continuous-width-browser.ts:50:10)
+    at async <anonymous> (C:\dev\vibecheck\test\continuous-width.browser.ts:232:14) {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: 'false',
+  expected: 'true',
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v22.19.0

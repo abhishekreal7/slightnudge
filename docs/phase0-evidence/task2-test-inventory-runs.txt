@@ -1,0 +1,245 @@
+=== TASK 2: TEST INVENTORY & 3X EXECUTION RUNS ===
+
+Timestamp: 2026-10-20T12:07:26.835Z
+Suites to run: 10 (3 runs each = 30 runs total)
+
+=======================================================
+SUITE: test:m0 (npx tsx test/m0-regression.test.ts)
+=======================================================
+Run 1/3:
+  Exit Code: 1 (FAILED)
+  Duration: 3868ms
+  Fixtures Status: CLEAN (zero mutations)
+  Git Worktree Status: ?? docs/coverage-study.md; ?? docs/phase0-evidence/; ?? scratch/actual-canvas-comparison.png; ?? scratch/analyze-40.js; ?? scratch/analyze-partials-wilson.js; ?? scratch/analyzed-40.json; ?? scratch/audit-results-detailed.json; ?? scratch/classify-unsupported.js; ?? scratch/compute-repo-mix.js; ?? scratch/curved-pill-test.png; ?? scratch/diffs/; ?? scratch/evaluate-40-detailed.ts; ?? scratch/fetch-diffs.js; ?? scratch/full-canvas-demo.png; ?? scratch/inspect-corner.js; ?? scratch/inspect-partials.js; ?? scratch/inspect-unsupported.js; ?? scratch/parse-study.js; ?? scratch/parsed-rows.json; ?? scratch/partial-breakdown.json; ?? scratch/perfect-fit-test.png; ?? scratch/pill-comparison.png; ?? scratch/pill-zoom.png; ?? scratch/print-disagreements.js; ?? scratch/print-reproduced.js; ?? scratch/repo-stats.json; ?? scratch/sample-40.js; ?? scratch/sampled-40.json; ?? scratch/studio-active-drag.png; ?? scratch/studio-hover-corner.png; ?? scratch/studio-idle-corner.png; ?? scratch/summarize-audit.js; ?? scratch/test-canvas-actual.js; ?? scratch/test-corner-drag.js; ?? scratch/test-engine-on-samples.ts; ?? scratch/test-full-demo.js; ?? scratch/test-perfect-fit.js; ?? scratch/test-pill-zoom.js; ?? scratch/test-pill.js; ?? scratch/test-zoomed-fit.js; ?? scratch/unsupported-classification.json; ?? scratch/zoom-corner-inspect.png; ?? scratch/zoomed-fit.png
+  Raw Output Artifact: docs/phase0-evidence/task2-runs/test_m0_run1.txt
+
+Run 2/3:
+  Exit Code: 1 (FAILED)
+  Duration: 2597ms
+  Fixtures Status: CLEAN (zero mutations)
+  Git Worktree Status: ?? docs/coverage-study.md; ?? docs/phase0-evidence/; ?? scratch/actual-canvas-comparison.png; ?? scratch/analyze-40.js; ?? scratch/analyze-partials-wilson.js; ?? scratch/analyzed-40.json; ?? scratch/audit-results-detailed.json; ?? scratch/classify-unsupported.js; ?? scratch/compute-repo-mix.js; ?? scratch/curved-pill-test.png; ?? scratch/diffs/; ?? scratch/evaluate-40-detailed.ts; ?? scratch/fetch-diffs.js; ?? scratch/full-canvas-demo.png; ?? scratch/inspect-corner.js; ?? scratch/inspect-partials.js; ?? scratch/inspect-unsupported.js; ?? scratch/parse-study.js; ?? scratch/parsed-rows.json; ?? scratch/partial-breakdown.json; ?? scratch/perfect-fit-test.png; ?? scratch/pill-comparison.png; ?? scratch/pill-zoom.png; ?? scratch/print-disagreements.js; ?? scratch/print-reproduced.js; ?? scratch/repo-stats.json; ?? scratch/sample-40.js; ?? scratch/sampled-40.json; ?? scratch/studio-active-drag.png; ?? scratch/studio-hover-corner.png; ?? scratch/studio-idle-corner.png; ?? scratch/summarize-audit.js; ?? scratch/test-canvas-actual.js; ?? scratch/test-corner-drag.js; ?? scratch/test-engine-on-samples.ts; ?? scratch/test-full-demo.js; ?? scratch/test-perfect-fit.js; ?? scratch/test-pill-zoom.js; ?? scratch/test-pill.js; ?? scratch/test-zoomed-fit.js; ?? scratch/unsupported-classification.json; ?? scratch/zoom-corner-inspect.png; ?? scratch/zoomed-fit.png
+  Raw Output Artifact: docs/phase0-evidence/task2-runs/test_m0_run2.txt
+
+Run 3/3:
+  Exit Code: 1 (FAILED)
+  Duration: 2551ms
+  Fixtures Status: CLEAN (zero mutations)
+  Git Worktree Status: ?? docs/coverage-study.md; ?? docs/phase0-evidence/; ?? scratch/actual-canvas-comparison.png; ?? scratch/analyze-40.js; ?? scratch/analyze-partials-wilson.js; ?? scratch/analyzed-40.json; ?? scratch/audit-results-detailed.json; ?? scratch/classify-unsupported.js; ?? scratch/compute-repo-mix.js; ?? scratch/curved-pill-test.png; ?? scratch/diffs/; ?? scratch/evaluate-40-detailed.ts; ?? scratch/fetch-diffs.js; ?? scratch/full-canvas-demo.png; ?? scratch/inspect-corner.js; ?? scratch/inspect-partials.js; ?? scratch/inspect-unsupported.js; ?? scratch/parse-study.js; ?? scratch/parsed-rows.json; ?? scratch/partial-breakdown.json; ?? scratch/perfect-fit-test.png; ?? scratch/pill-comparison.png; ?? scratch/pill-zoom.png; ?? scratch/print-disagreements.js; ?? scratch/print-reproduced.js; ?? scratch/repo-stats.json; ?? scratch/sample-40.js; ?? scratch/sampled-40.json; ?? scratch/studio-active-drag.png; ?? scratch/studio-hover-corner.png; ?? scratch/studio-idle-corner.png; ?? scratch/summarize-audit.js; ?? scratch/test-canvas-actual.js; ?? scratch/test-corner-drag.js; ?? scratch/test-engine-on-samples.ts; ?? scratch/test-full-demo.js; ?? scratch/test-perfect-fit.js; ?? scratch/test-pill-zoom.js; ?? scratch/test-pill.js; ?? scratch/test-zoomed-fit.js; ?? scratch/unsupported-classification.json; ?? scratch/zoom-corner-inspect.png; ?? scratch/zoomed-fit.png
+  Raw Output Artifact: docs/phase0-evidence/task2-runs/test_m0_run3.txt
+
+=======================================================
+SUITE: test:overfit (npx tsx test/m0-overfit.test.ts)
+=======================================================
+Run 1/3:
+  Exit Code: 1 (FAILED)
+  Duration: 3271ms
+  Fixtures Status: CLEAN (zero mutations)
+  Git Worktree Status: ?? docs/coverage-study.md; ?? docs/phase0-evidence/; ?? scratch/actual-canvas-comparison.png; ?? scratch/analyze-40.js; ?? scratch/analyze-partials-wilson.js; ?? scratch/analyzed-40.json; ?? scratch/audit-results-detailed.json; ?? scratch/classify-unsupported.js; ?? scratch/compute-repo-mix.js; ?? scratch/curved-pill-test.png; ?? scratch/diffs/; ?? scratch/evaluate-40-detailed.ts; ?? scratch/fetch-diffs.js; ?? scratch/full-canvas-demo.png; ?? scratch/inspect-corner.js; ?? scratch/inspect-partials.js; ?? scratch/inspect-unsupported.js; ?? scratch/parse-study.js; ?? scratch/parsed-rows.json; ?? scratch/partial-breakdown.json; ?? scratch/perfect-fit-test.png; ?? scratch/pill-comparison.png; ?? scratch/pill-zoom.png; ?? scratch/print-disagreements.js; ?? scratch/print-reproduced.js; ?? scratch/repo-stats.json; ?? scratch/sample-40.js; ?? scratch/sampled-40.json; ?? scratch/studio-active-drag.png; ?? scratch/studio-hover-corner.png; ?? scratch/studio-idle-corner.png; ?? scratch/summarize-audit.js; ?? scratch/test-canvas-actual.js; ?? scratch/test-corner-drag.js; ?? scratch/test-engine-on-samples.ts; ?? scratch/test-full-demo.js; ?? scratch/test-perfect-fit.js; ?? scratch/test-pill-zoom.js; ?? scratch/test-pill.js; ?? scratch/test-zoomed-fit.js; ?? scratch/unsupported-classification.json; ?? scratch/zoom-corner-inspect.png; ?? scratch/zoomed-fit.png
+  Raw Output Artifact: docs/phase0-evidence/task2-runs/test_overfit_run1.txt
+
+Run 2/3:
+  Exit Code: 1 (FAILED)
+  Duration: 2725ms
+  Fixtures Status: CLEAN (zero mutations)
+  Git Worktree Status: ?? docs/coverage-study.md; ?? docs/phase0-evidence/; ?? scratch/actual-canvas-comparison.png; ?? scratch/analyze-40.js; ?? scratch/analyze-partials-wilson.js; ?? scratch/analyzed-40.json; ?? scratch/audit-results-detailed.json; ?? scratch/classify-unsupported.js; ?? scratch/compute-repo-mix.js; ?? scratch/curved-pill-test.png; ?? scratch/diffs/; ?? scratch/evaluate-40-detailed.ts; ?? scratch/fetch-diffs.js; ?? scratch/full-canvas-demo.png; ?? scratch/inspect-corner.js; ?? scratch/inspect-partials.js; ?? scratch/inspect-unsupported.js; ?? scratch/parse-study.js; ?? scratch/parsed-rows.json; ?? scratch/partial-breakdown.json; ?? scratch/perfect-fit-test.png; ?? scratch/pill-comparison.png; ?? scratch/pill-zoom.png; ?? scratch/print-disagreements.js; ?? scratch/print-reproduced.js; ?? scratch/repo-stats.json; ?? scratch/sample-40.js; ?? scratch/sampled-40.json; ?? scratch/studio-active-drag.png; ?? scratch/studio-hover-corner.png; ?? scratch/studio-idle-corner.png; ?? scratch/summarize-audit.js; ?? scratch/test-canvas-actual.js; ?? scratch/test-corner-drag.js; ?? scratch/test-engine-on-samples.ts; ?? scratch/test-full-demo.js; ?? scratch/test-perfect-fit.js; ?? scratch/test-pill-zoom.js; ?? scratch/test-pill.js; ?? scratch/test-zoomed-fit.js; ?? scratch/unsupported-classification.json; ?? scratch/zoom-corner-inspect.png; ?? scratch/zoomed-fit.png
+  Raw Output Artifact: docs/phase0-evidence/task2-runs/test_overfit_run2.txt
+
+Run 3/3:
+  Exit Code: 1 (FAILED)
+  Duration: 5200ms
+  Fixtures Status: CLEAN (zero mutations)
+  Git Worktree Status: ?? docs/coverage-study.md; ?? docs/phase0-evidence/; ?? scratch/actual-canvas-comparison.png; ?? scratch/analyze-40.js; ?? scratch/analyze-partials-wilson.js; ?? scratch/analyzed-40.json; ?? scratch/audit-results-detailed.json; ?? scratch/classify-unsupported.js; ?? scratch/compute-repo-mix.js; ?? scratch/curved-pill-test.png; ?? scratch/diffs/; ?? scratch/evaluate-40-detailed.ts; ?? scratch/fetch-diffs.js; ?? scratch/full-canvas-demo.png; ?? scratch/inspect-corner.js; ?? scratch/inspect-partials.js; ?? scratch/inspect-unsupported.js; ?? scratch/parse-study.js; ?? scratch/parsed-rows.json; ?? scratch/partial-breakdown.json; ?? scratch/perfect-fit-test.png; ?? scratch/pill-comparison.png; ?? scratch/pill-zoom.png; ?? scratch/print-disagreements.js; ?? scratch/print-reproduced.js; ?? scratch/repo-stats.json; ?? scratch/sample-40.js; ?? scratch/sampled-40.json; ?? scratch/studio-active-drag.png; ?? scratch/studio-hover-corner.png; ?? scratch/studio-idle-corner.png; ?? scratch/summarize-audit.js; ?? scratch/test-canvas-actual.js; ?? scratch/test-corner-drag.js; ?? scratch/test-engine-on-samples.ts; ?? scratch/test-full-demo.js; ?? scratch/test-perfect-fit.js; ?? scratch/test-pill-zoom.js; ?? scratch/test-pill.js; ?? scratch/test-zoomed-fit.js; ?? scratch/unsupported-classification.json; ?? scratch/zoom-corner-inspect.png; ?? scratch/zoomed-fit.png
+  Raw Output Artifact: docs/phase0-evidence/task2-runs/test_overfit_run3.txt
+
+=======================================================
+SUITE: test:fixtures (npx tsx test/fixtures.test.ts)
+=======================================================
+Run 1/3:
+  Exit Code: 1 (FAILED)
+  Duration: 2336ms
+  Fixtures Status: CLEAN (zero mutations)
+  Git Worktree Status: ?? docs/coverage-study.md; ?? docs/phase0-evidence/; ?? scratch/actual-canvas-comparison.png; ?? scratch/analyze-40.js; ?? scratch/analyze-partials-wilson.js; ?? scratch/analyzed-40.json; ?? scratch/audit-results-detailed.json; ?? scratch/classify-unsupported.js; ?? scratch/compute-repo-mix.js; ?? scratch/curved-pill-test.png; ?? scratch/diffs/; ?? scratch/evaluate-40-detailed.ts; ?? scratch/fetch-diffs.js; ?? scratch/full-canvas-demo.png; ?? scratch/inspect-corner.js; ?? scratch/inspect-partials.js; ?? scratch/inspect-unsupported.js; ?? scratch/parse-study.js; ?? scratch/parsed-rows.json; ?? scratch/partial-breakdown.json; ?? scratch/perfect-fit-test.png; ?? scratch/pill-comparison.png; ?? scratch/pill-zoom.png; ?? scratch/print-disagreements.js; ?? scratch/print-reproduced.js; ?? scratch/repo-stats.json; ?? scratch/sample-40.js; ?? scratch/sampled-40.json; ?? scratch/studio-active-drag.png; ?? scratch/studio-hover-corner.png; ?? scratch/studio-idle-corner.png; ?? scratch/summarize-audit.js; ?? scratch/test-canvas-actual.js; ?? scratch/test-corner-drag.js; ?? scratch/test-engine-on-samples.ts; ?? scratch/test-full-demo.js; ?? scratch/test-perfect-fit.js; ?? scratch/test-pill-zoom.js; ?? scratch/test-pill.js; ?? scratch/test-zoomed-fit.js; ?? scratch/unsupported-classification.json; ?? scratch/zoom-corner-inspect.png; ?? scratch/zoomed-fit.png
+  Raw Output Artifact: docs/phase0-evidence/task2-runs/test_fixtures_run1.txt
+
+Run 2/3:
+  Exit Code: 1 (FAILED)
+  Duration: 1781ms
+  Fixtures Status: CLEAN (zero mutations)
+  Git Worktree Status: ?? docs/coverage-study.md; ?? docs/phase0-evidence/; ?? scratch/actual-canvas-comparison.png; ?? scratch/analyze-40.js; ?? scratch/analyze-partials-wilson.js; ?? scratch/analyzed-40.json; ?? scratch/audit-results-detailed.json; ?? scratch/classify-unsupported.js; ?? scratch/compute-repo-mix.js; ?? scratch/curved-pill-test.png; ?? scratch/diffs/; ?? scratch/evaluate-40-detailed.ts; ?? scratch/fetch-diffs.js; ?? scratch/full-canvas-demo.png; ?? scratch/inspect-corner.js; ?? scratch/inspect-partials.js; ?? scratch/inspect-unsupported.js; ?? scratch/parse-study.js; ?? scratch/parsed-rows.json; ?? scratch/partial-breakdown.json; ?? scratch/perfect-fit-test.png; ?? scratch/pill-comparison.png; ?? scratch/pill-zoom.png; ?? scratch/print-disagreements.js; ?? scratch/print-reproduced.js; ?? scratch/repo-stats.json; ?? scratch/sample-40.js; ?? scratch/sampled-40.json; ?? scratch/studio-active-drag.png; ?? scratch/studio-hover-corner.png; ?? scratch/studio-idle-corner.png; ?? scratch/summarize-audit.js; ?? scratch/test-canvas-actual.js; ?? scratch/test-corner-drag.js; ?? scratch/test-engine-on-samples.ts; ?? scratch/test-full-demo.js; ?? scratch/test-perfect-fit.js; ?? scratch/test-pill-zoom.js; ?? scratch/test-pill.js; ?? scratch/test-zoomed-fit.js; ?? scratch/unsupported-classification.json; ?? scratch/zoom-corner-inspect.png; ?? scratch/zoomed-fit.png
+  Raw Output Artifact: docs/phase0-evidence/task2-runs/test_fixtures_run2.txt
+
+Run 3/3:
+  Exit Code: 1 (FAILED)
+  Duration: 2188ms
+  Fixtures Status: CLEAN (zero mutations)
+  Git Worktree Status: ?? docs/coverage-study.md; ?? docs/phase0-evidence/; ?? scratch/actual-canvas-comparison.png; ?? scratch/analyze-40.js; ?? scratch/analyze-partials-wilson.js; ?? scratch/analyzed-40.json; ?? scratch/audit-results-detailed.json; ?? scratch/classify-unsupported.js; ?? scratch/compute-repo-mix.js; ?? scratch/curved-pill-test.png; ?? scratch/diffs/; ?? scratch/evaluate-40-detailed.ts; ?? scratch/fetch-diffs.js; ?? scratch/full-canvas-demo.png; ?? scratch/inspect-corner.js; ?? scratch/inspect-partials.js; ?? scratch/inspect-unsupported.js; ?? scratch/parse-study.js; ?? scratch/parsed-rows.json; ?? scratch/partial-breakdown.json; ?? scratch/perfect-fit-test.png; ?? scratch/pill-comparison.png; ?? scratch/pill-zoom.png; ?? scratch/print-disagreements.js; ?? scratch/print-reproduced.js; ?? scratch/repo-stats.json; ?? scratch/sample-40.js; ?? scratch/sampled-40.json; ?? scratch/studio-active-drag.png; ?? scratch/studio-hover-corner.png; ?? scratch/studio-idle-corner.png; ?? scratch/summarize-audit.js; ?? scratch/test-canvas-actual.js; ?? scratch/test-corner-drag.js; ?? scratch/test-engine-on-samples.ts; ?? scratch/test-full-demo.js; ?? scratch/test-perfect-fit.js; ?? scratch/test-pill-zoom.js; ?? scratch/test-pill.js; ?? scratch/test-zoomed-fit.js; ?? scratch/unsupported-classification.json; ?? scratch/zoom-corner-inspect.png; ?? scratch/zoomed-fit.png
+  Raw Output Artifact: docs/phase0-evidence/task2-runs/test_fixtures_run3.txt
+
+=======================================================
+SUITE: test:step1 (npx tsx test/step1-selection.test.ts)
+=======================================================
+Run 1/3:
+  Exit Code: 1 (FAILED)
+  Duration: 59165ms
+  Fixtures Status: CLEAN (zero mutations)
+  Git Worktree Status: ?? docs/coverage-study.md; ?? docs/phase0-evidence/; ?? scratch/actual-canvas-comparison.png; ?? scratch/analyze-40.js; ?? scratch/analyze-partials-wilson.js; ?? scratch/analyzed-40.json; ?? scratch/audit-results-detailed.json; ?? scratch/classify-unsupported.js; ?? scratch/compute-repo-mix.js; ?? scratch/curved-pill-test.png; ?? scratch/diffs/; ?? scratch/evaluate-40-detailed.ts; ?? scratch/fetch-diffs.js; ?? scratch/full-canvas-demo.png; ?? scratch/inspect-corner.js; ?? scratch/inspect-partials.js; ?? scratch/inspect-unsupported.js; ?? scratch/parse-study.js; ?? scratch/parsed-rows.json; ?? scratch/partial-breakdown.json; ?? scratch/perfect-fit-test.png; ?? scratch/pill-comparison.png; ?? scratch/pill-zoom.png; ?? scratch/print-disagreements.js; ?? scratch/print-reproduced.js; ?? scratch/repo-stats.json; ?? scratch/sample-40.js; ?? scratch/sampled-40.json; ?? scratch/studio-active-drag.png; ?? scratch/studio-hover-corner.png; ?? scratch/studio-idle-corner.png; ?? scratch/summarize-audit.js; ?? scratch/test-canvas-actual.js; ?? scratch/test-corner-drag.js; ?? scratch/test-engine-on-samples.ts; ?? scratch/test-full-demo.js; ?? scratch/test-perfect-fit.js; ?? scratch/test-pill-zoom.js; ?? scratch/test-pill.js; ?? scratch/test-zoomed-fit.js; ?? scratch/unsupported-classification.json; ?? scratch/zoom-corner-inspect.png; ?? scratch/zoomed-fit.png
+  Raw Output Artifact: docs/phase0-evidence/task2-runs/test_step1_run1.txt
+
+Run 2/3:
+  Exit Code: 1 (FAILED)
+  Duration: 34084ms
+  Fixtures Status: CLEAN (zero mutations)
+  Git Worktree Status: ?? docs/coverage-study.md; ?? docs/phase0-evidence/; ?? scratch/actual-canvas-comparison.png; ?? scratch/analyze-40.js; ?? scratch/analyze-partials-wilson.js; ?? scratch/analyzed-40.json; ?? scratch/audit-results-detailed.json; ?? scratch/classify-unsupported.js; ?? scratch/compute-repo-mix.js; ?? scratch/curved-pill-test.png; ?? scratch/diffs/; ?? scratch/evaluate-40-detailed.ts; ?? scratch/fetch-diffs.js; ?? scratch/full-canvas-demo.png; ?? scratch/inspect-corner.js; ?? scratch/inspect-partials.js; ?? scratch/inspect-unsupported.js; ?? scratch/parse-study.js; ?? scratch/parsed-rows.json; ?? scratch/partial-breakdown.json; ?? scratch/perfect-fit-test.png; ?? scratch/pill-comparison.png; ?? scratch/pill-zoom.png; ?? scratch/print-disagreements.js; ?? scratch/print-reproduced.js; ?? scratch/repo-stats.json; ?? scratch/sample-40.js; ?? scratch/sampled-40.json; ?? scratch/studio-active-drag.png; ?? scratch/studio-hover-corner.png; ?? scratch/studio-idle-corner.png; ?? scratch/summarize-audit.js; ?? scratch/test-canvas-actual.js; ?? scratch/test-corner-drag.js; ?? scratch/test-engine-on-samples.ts; ?? scratch/test-full-demo.js; ?? scratch/test-perfect-fit.js; ?? scratch/test-pill-zoom.js; ?? scratch/test-pill.js; ?? scratch/test-zoomed-fit.js; ?? scratch/unsupported-classification.json; ?? scratch/zoom-corner-inspect.png; ?? scratch/zoomed-fit.png
+  Raw Output Artifact: docs/phase0-evidence/task2-runs/test_step1_run2.txt
+
+Run 3/3:
+  Exit Code: 1 (FAILED)
+  Duration: 42323ms
+  Fixtures Status: CLEAN (zero mutations)
+  Git Worktree Status: ?? docs/coverage-study.md; ?? docs/phase0-evidence/; ?? scratch/actual-canvas-comparison.png; ?? scratch/analyze-40.js; ?? scratch/analyze-partials-wilson.js; ?? scratch/analyzed-40.json; ?? scratch/audit-results-detailed.json; ?? scratch/classify-unsupported.js; ?? scratch/compute-repo-mix.js; ?? scratch/curved-pill-test.png; ?? scratch/diffs/; ?? scratch/evaluate-40-detailed.ts; ?? scratch/fetch-diffs.js; ?? scratch/full-canvas-demo.png; ?? scratch/inspect-corner.js; ?? scratch/inspect-partials.js; ?? scratch/inspect-unsupported.js; ?? scratch/parse-study.js; ?? scratch/parsed-rows.json; ?? scratch/partial-breakdown.json; ?? scratch/perfect-fit-test.png; ?? scratch/pill-comparison.png; ?? scratch/pill-zoom.png; ?? scratch/print-disagreements.js; ?? scratch/print-reproduced.js; ?? scratch/repo-stats.json; ?? scratch/sample-40.js; ?? scratch/sampled-40.json; ?? scratch/studio-active-drag.png; ?? scratch/studio-hover-corner.png; ?? scratch/studio-idle-corner.png; ?? scratch/summarize-audit.js; ?? scratch/test-canvas-actual.js; ?? scratch/test-corner-drag.js; ?? scratch/test-engine-on-samples.ts; ?? scratch/test-full-demo.js; ?? scratch/test-perfect-fit.js; ?? scratch/test-pill-zoom.js; ?? scratch/test-pill.js; ?? scratch/test-zoomed-fit.js; ?? scratch/unsupported-classification.json; ?? scratch/zoom-corner-inspect.png; ?? scratch/zoomed-fit.png
+  Raw Output Artifact: docs/phase0-evidence/task2-runs/test_step1_run3.txt
+
+=======================================================
+SUITE: test:step2 (npx tsx test/step2-nudging.test.ts)
+=======================================================
+Run 1/3:
+  Exit Code: 1 (FAILED)
+  Duration: 5086ms
+  Fixtures Status: CLEAN (zero mutations)
+  Git Worktree Status: ?? docs/coverage-study.md; ?? docs/phase0-evidence/; ?? scratch/actual-canvas-comparison.png; ?? scratch/analyze-40.js; ?? scratch/analyze-partials-wilson.js; ?? scratch/analyzed-40.json; ?? scratch/audit-results-detailed.json; ?? scratch/classify-unsupported.js; ?? scratch/compute-repo-mix.js; ?? scratch/curved-pill-test.png; ?? scratch/diffs/; ?? scratch/evaluate-40-detailed.ts; ?? scratch/fetch-diffs.js; ?? scratch/full-canvas-demo.png; ?? scratch/inspect-corner.js; ?? scratch/inspect-partials.js; ?? scratch/inspect-unsupported.js; ?? scratch/parse-study.js; ?? scratch/parsed-rows.json; ?? scratch/partial-breakdown.json; ?? scratch/perfect-fit-test.png; ?? scratch/pill-comparison.png; ?? scratch/pill-zoom.png; ?? scratch/print-disagreements.js; ?? scratch/print-reproduced.js; ?? scratch/repo-stats.json; ?? scratch/sample-40.js; ?? scratch/sampled-40.json; ?? scratch/studio-active-drag.png; ?? scratch/studio-hover-corner.png; ?? scratch/studio-idle-corner.png; ?? scratch/summarize-audit.js; ?? scratch/test-canvas-actual.js; ?? scratch/test-corner-drag.js; ?? scratch/test-engine-on-samples.ts; ?? scratch/test-full-demo.js; ?? scratch/test-perfect-fit.js; ?? scratch/test-pill-zoom.js; ?? scratch/test-pill.js; ?? scratch/test-zoomed-fit.js; ?? scratch/unsupported-classification.json; ?? scratch/zoom-corner-inspect.png; ?? scratch/zoomed-fit.png
+  Raw Output Artifact: docs/phase0-evidence/task2-runs/test_step2_run1.txt
+
+Run 2/3:
+  Exit Code: 1 (FAILED)
+  Duration: 7739ms
+  Fixtures Status: CLEAN (zero mutations)
+  Git Worktree Status: ?? docs/coverage-study.md; ?? docs/phase0-evidence/; ?? scratch/actual-canvas-comparison.png; ?? scratch/analyze-40.js; ?? scratch/analyze-partials-wilson.js; ?? scratch/analyzed-40.json; ?? scratch/audit-results-detailed.json; ?? scratch/classify-unsupported.js; ?? scratch/compute-repo-mix.js; ?? scratch/curved-pill-test.png; ?? scratch/diffs/; ?? scratch/evaluate-40-detailed.ts; ?? scratch/fetch-diffs.js; ?? scratch/full-canvas-demo.png; ?? scratch/inspect-corner.js; ?? scratch/inspect-partials.js; ?? scratch/inspect-unsupported.js; ?? scratch/parse-study.js; ?? scratch/parsed-rows.json; ?? scratch/partial-breakdown.json; ?? scratch/perfect-fit-test.png; ?? scratch/pill-comparison.png; ?? scratch/pill-zoom.png; ?? scratch/print-disagreements.js; ?? scratch/print-reproduced.js; ?? scratch/repo-stats.json; ?? scratch/sample-40.js; ?? scratch/sampled-40.json; ?? scratch/studio-active-drag.png; ?? scratch/studio-hover-corner.png; ?? scratch/studio-idle-corner.png; ?? scratch/summarize-audit.js; ?? scratch/test-canvas-actual.js; ?? scratch/test-corner-drag.js; ?? scratch/test-engine-on-samples.ts; ?? scratch/test-full-demo.js; ?? scratch/test-perfect-fit.js; ?? scratch/test-pill-zoom.js; ?? scratch/test-pill.js; ?? scratch/test-zoomed-fit.js; ?? scratch/unsupported-classification.json; ?? scratch/zoom-corner-inspect.png; ?? scratch/zoomed-fit.png
+  Raw Output Artifact: docs/phase0-evidence/task2-runs/test_step2_run2.txt
+
+Run 3/3:
+  Exit Code: 1 (FAILED)
+  Duration: 4158ms
+  Fixtures Status: CLEAN (zero mutations)
+  Git Worktree Status: ?? docs/coverage-study.md; ?? docs/phase0-evidence/; ?? scratch/actual-canvas-comparison.png; ?? scratch/analyze-40.js; ?? scratch/analyze-partials-wilson.js; ?? scratch/analyzed-40.json; ?? scratch/audit-results-detailed.json; ?? scratch/classify-unsupported.js; ?? scratch/compute-repo-mix.js; ?? scratch/curved-pill-test.png; ?? scratch/diffs/; ?? scratch/evaluate-40-detailed.ts; ?? scratch/fetch-diffs.js; ?? scratch/full-canvas-demo.png; ?? scratch/inspect-corner.js; ?? scratch/inspect-partials.js; ?? scratch/inspect-unsupported.js; ?? scratch/parse-study.js; ?? scratch/parsed-rows.json; ?? scratch/partial-breakdown.json; ?? scratch/perfect-fit-test.png; ?? scratch/pill-comparison.png; ?? scratch/pill-zoom.png; ?? scratch/print-disagreements.js; ?? scratch/print-reproduced.js; ?? scratch/repo-stats.json; ?? scratch/sample-40.js; ?? scratch/sampled-40.json; ?? scratch/studio-active-drag.png; ?? scratch/studio-hover-corner.png; ?? scratch/studio-idle-corner.png; ?? scratch/summarize-audit.js; ?? scratch/test-canvas-actual.js; ?? scratch/test-corner-drag.js; ?? scratch/test-engine-on-samples.ts; ?? scratch/test-full-demo.js; ?? scratch/test-perfect-fit.js; ?? scratch/test-pill-zoom.js; ?? scratch/test-pill.js; ?? scratch/test-zoomed-fit.js; ?? scratch/unsupported-classification.json; ?? scratch/zoom-corner-inspect.png; ?? scratch/zoomed-fit.png
+  Raw Output Artifact: docs/phase0-evidence/task2-runs/test_step2_run3.txt
+
+=======================================================
+SUITE: test:step3 (npx tsx test/step3-file-git.test.ts)
+=======================================================
+Run 1/3:
+  Exit Code: 1 (FAILED)
+  Duration: 1545ms
+  Fixtures Status: CLEAN (zero mutations)
+  Git Worktree Status: ?? docs/coverage-study.md; ?? docs/phase0-evidence/; ?? scratch/actual-canvas-comparison.png; ?? scratch/analyze-40.js; ?? scratch/analyze-partials-wilson.js; ?? scratch/analyzed-40.json; ?? scratch/audit-results-detailed.json; ?? scratch/classify-unsupported.js; ?? scratch/compute-repo-mix.js; ?? scratch/curved-pill-test.png; ?? scratch/diffs/; ?? scratch/evaluate-40-detailed.ts; ?? scratch/fetch-diffs.js; ?? scratch/full-canvas-demo.png; ?? scratch/inspect-corner.js; ?? scratch/inspect-partials.js; ?? scratch/inspect-unsupported.js; ?? scratch/parse-study.js; ?? scratch/parsed-rows.json; ?? scratch/partial-breakdown.json; ?? scratch/perfect-fit-test.png; ?? scratch/pill-comparison.png; ?? scratch/pill-zoom.png; ?? scratch/print-disagreements.js; ?? scratch/print-reproduced.js; ?? scratch/repo-stats.json; ?? scratch/sample-40.js; ?? scratch/sampled-40.json; ?? scratch/studio-active-drag.png; ?? scratch/studio-hover-corner.png; ?? scratch/studio-idle-corner.png; ?? scratch/summarize-audit.js; ?? scratch/test-canvas-actual.js; ?? scratch/test-corner-drag.js; ?? scratch/test-engine-on-samples.ts; ?? scratch/test-full-demo.js; ?? scratch/test-perfect-fit.js; ?? scratch/test-pill-zoom.js; ?? scratch/test-pill.js; ?? scratch/test-zoomed-fit.js; ?? scratch/unsupported-classification.json; ?? scratch/zoom-corner-inspect.png; ?? scratch/zoomed-fit.png
+  Raw Output Artifact: docs/phase0-evidence/task2-runs/test_step3_run1.txt
+
+Run 2/3:
+  Exit Code: 1 (FAILED)
+  Duration: 1450ms
+  Fixtures Status: CLEAN (zero mutations)
+  Git Worktree Status: ?? docs/coverage-study.md; ?? docs/phase0-evidence/; ?? scratch/actual-canvas-comparison.png; ?? scratch/analyze-40.js; ?? scratch/analyze-partials-wilson.js; ?? scratch/analyzed-40.json; ?? scratch/audit-results-detailed.json; ?? scratch/classify-unsupported.js; ?? scratch/compute-repo-mix.js; ?? scratch/curved-pill-test.png; ?? scratch/diffs/; ?? scratch/evaluate-40-detailed.ts; ?? scratch/fetch-diffs.js; ?? scratch/full-canvas-demo.png; ?? scratch/inspect-corner.js; ?? scratch/inspect-partials.js; ?? scratch/inspect-unsupported.js; ?? scratch/parse-study.js; ?? scratch/parsed-rows.json; ?? scratch/partial-breakdown.json; ?? scratch/perfect-fit-test.png; ?? scratch/pill-comparison.png; ?? scratch/pill-zoom.png; ?? scratch/print-disagreements.js; ?? scratch/print-reproduced.js; ?? scratch/repo-stats.json; ?? scratch/sample-40.js; ?? scratch/sampled-40.json; ?? scratch/studio-active-drag.png; ?? scratch/studio-hover-corner.png; ?? scratch/studio-idle-corner.png; ?? scratch/summarize-audit.js; ?? scratch/test-canvas-actual.js; ?? scratch/test-corner-drag.js; ?? scratch/test-engine-on-samples.ts; ?? scratch/test-full-demo.js; ?? scratch/test-perfect-fit.js; ?? scratch/test-pill-zoom.js; ?? scratch/test-pill.js; ?? scratch/test-zoomed-fit.js; ?? scratch/unsupported-classification.json; ?? scratch/zoom-corner-inspect.png; ?? scratch/zoomed-fit.png
+  Raw Output Artifact: docs/phase0-evidence/task2-runs/test_step3_run2.txt
+
+Run 3/3:
+  Exit Code: 1 (FAILED)
+  Duration: 1528ms
+  Fixtures Status: CLEAN (zero mutations)
+  Git Worktree Status: ?? docs/coverage-study.md; ?? docs/phase0-evidence/; ?? scratch/actual-canvas-comparison.png; ?? scratch/analyze-40.js; ?? scratch/analyze-partials-wilson.js; ?? scratch/analyzed-40.json; ?? scratch/audit-results-detailed.json; ?? scratch/classify-unsupported.js; ?? scratch/compute-repo-mix.js; ?? scratch/curved-pill-test.png; ?? scratch/diffs/; ?? scratch/evaluate-40-detailed.ts; ?? scratch/fetch-diffs.js; ?? scratch/full-canvas-demo.png; ?? scratch/inspect-corner.js; ?? scratch/inspect-partials.js; ?? scratch/inspect-unsupported.js; ?? scratch/parse-study.js; ?? scratch/parsed-rows.json; ?? scratch/partial-breakdown.json; ?? scratch/perfect-fit-test.png; ?? scratch/pill-comparison.png; ?? scratch/pill-zoom.png; ?? scratch/print-disagreements.js; ?? scratch/print-reproduced.js; ?? scratch/repo-stats.json; ?? scratch/sample-40.js; ?? scratch/sampled-40.json; ?? scratch/studio-active-drag.png; ?? scratch/studio-hover-corner.png; ?? scratch/studio-idle-corner.png; ?? scratch/summarize-audit.js; ?? scratch/test-canvas-actual.js; ?? scratch/test-corner-drag.js; ?? scratch/test-engine-on-samples.ts; ?? scratch/test-full-demo.js; ?? scratch/test-perfect-fit.js; ?? scratch/test-pill-zoom.js; ?? scratch/test-pill.js; ?? scratch/test-zoomed-fit.js; ?? scratch/unsupported-classification.json; ?? scratch/zoom-corner-inspect.png; ?? scratch/zoomed-fit.png
+  Raw Output Artifact: docs/phase0-evidence/task2-runs/test_step3_run3.txt
+
+=======================================================
+SUITE: reorder-safety (npx tsx test/reorder-safety.test.ts)
+=======================================================
+Run 1/3:
+  Exit Code: 0 (PASSED)
+  Duration: 1691ms
+  Fixtures Status: CLEAN (zero mutations)
+  Git Worktree Status: ?? docs/coverage-study.md; ?? docs/phase0-evidence/; ?? scratch/actual-canvas-comparison.png; ?? scratch/analyze-40.js; ?? scratch/analyze-partials-wilson.js; ?? scratch/analyzed-40.json; ?? scratch/audit-results-detailed.json; ?? scratch/classify-unsupported.js; ?? scratch/compute-repo-mix.js; ?? scratch/curved-pill-test.png; ?? scratch/diffs/; ?? scratch/evaluate-40-detailed.ts; ?? scratch/fetch-diffs.js; ?? scratch/full-canvas-demo.png; ?? scratch/inspect-corner.js; ?? scratch/inspect-partials.js; ?? scratch/inspect-unsupported.js; ?? scratch/parse-study.js; ?? scratch/parsed-rows.json; ?? scratch/partial-breakdown.json; ?? scratch/perfect-fit-test.png; ?? scratch/pill-comparison.png; ?? scratch/pill-zoom.png; ?? scratch/print-disagreements.js; ?? scratch/print-reproduced.js; ?? scratch/repo-stats.json; ?? scratch/sample-40.js; ?? scratch/sampled-40.json; ?? scratch/studio-active-drag.png; ?? scratch/studio-hover-corner.png; ?? scratch/studio-idle-corner.png; ?? scratch/summarize-audit.js; ?? scratch/test-canvas-actual.js; ?? scratch/test-corner-drag.js; ?? scratch/test-engine-on-samples.ts; ?? scratch/test-full-demo.js; ?? scratch/test-perfect-fit.js; ?? scratch/test-pill-zoom.js; ?? scratch/test-pill.js; ?? scratch/test-zoomed-fit.js; ?? scratch/unsupported-classification.json; ?? scratch/zoom-corner-inspect.png; ?? scratch/zoomed-fit.png
+  Raw Output Artifact: docs/phase0-evidence/task2-runs/reorder-safety_run1.txt
+
+Run 2/3:
+  Exit Code: 0 (PASSED)
+  Duration: 1550ms
+  Fixtures Status: CLEAN (zero mutations)
+  Git Worktree Status: ?? docs/coverage-study.md; ?? docs/phase0-evidence/; ?? scratch/actual-canvas-comparison.png; ?? scratch/analyze-40.js; ?? scratch/analyze-partials-wilson.js; ?? scratch/analyzed-40.json; ?? scratch/audit-results-detailed.json; ?? scratch/classify-unsupported.js; ?? scratch/compute-repo-mix.js; ?? scratch/curved-pill-test.png; ?? scratch/diffs/; ?? scratch/evaluate-40-detailed.ts; ?? scratch/fetch-diffs.js; ?? scratch/full-canvas-demo.png; ?? scratch/inspect-corner.js; ?? scratch/inspect-partials.js; ?? scratch/inspect-unsupported.js; ?? scratch/parse-study.js; ?? scratch/parsed-rows.json; ?? scratch/partial-breakdown.json; ?? scratch/perfect-fit-test.png; ?? scratch/pill-comparison.png; ?? scratch/pill-zoom.png; ?? scratch/print-disagreements.js; ?? scratch/print-reproduced.js; ?? scratch/repo-stats.json; ?? scratch/sample-40.js; ?? scratch/sampled-40.json; ?? scratch/studio-active-drag.png; ?? scratch/studio-hover-corner.png; ?? scratch/studio-idle-corner.png; ?? scratch/summarize-audit.js; ?? scratch/test-canvas-actual.js; ?? scratch/test-corner-drag.js; ?? scratch/test-engine-on-samples.ts; ?? scratch/test-full-demo.js; ?? scratch/test-perfect-fit.js; ?? scratch/test-pill-zoom.js; ?? scratch/test-pill.js; ?? scratch/test-zoomed-fit.js; ?? scratch/unsupported-classification.json; ?? scratch/zoom-corner-inspect.png; ?? scratch/zoomed-fit.png
+  Raw Output Artifact: docs/phase0-evidence/task2-runs/reorder-safety_run2.txt
+
+Run 3/3:
+  Exit Code: 0 (PASSED)
+  Duration: 1563ms
+  Fixtures Status: CLEAN (zero mutations)
+  Git Worktree Status: ?? docs/coverage-study.md; ?? docs/phase0-evidence/; ?? scratch/actual-canvas-comparison.png; ?? scratch/analyze-40.js; ?? scratch/analyze-partials-wilson.js; ?? scratch/analyzed-40.json; ?? scratch/audit-results-detailed.json; ?? scratch/classify-unsupported.js; ?? scratch/compute-repo-mix.js; ?? scratch/curved-pill-test.png; ?? scratch/diffs/; ?? scratch/evaluate-40-detailed.ts; ?? scratch/fetch-diffs.js; ?? scratch/full-canvas-demo.png; ?? scratch/inspect-corner.js; ?? scratch/inspect-partials.js; ?? scratch/inspect-unsupported.js; ?? scratch/parse-study.js; ?? scratch/parsed-rows.json; ?? scratch/partial-breakdown.json; ?? scratch/perfect-fit-test.png; ?? scratch/pill-comparison.png; ?? scratch/pill-zoom.png; ?? scratch/print-disagreements.js; ?? scratch/print-reproduced.js; ?? scratch/repo-stats.json; ?? scratch/sample-40.js; ?? scratch/sampled-40.json; ?? scratch/studio-active-drag.png; ?? scratch/studio-hover-corner.png; ?? scratch/studio-idle-corner.png; ?? scratch/summarize-audit.js; ?? scratch/test-canvas-actual.js; ?? scratch/test-corner-drag.js; ?? scratch/test-engine-on-samples.ts; ?? scratch/test-full-demo.js; ?? scratch/test-perfect-fit.js; ?? scratch/test-pill-zoom.js; ?? scratch/test-pill.js; ?? scratch/test-zoomed-fit.js; ?? scratch/unsupported-classification.json; ?? scratch/zoom-corner-inspect.png; ?? scratch/zoomed-fit.png
+  Raw Output Artifact: docs/phase0-evidence/task2-runs/reorder-safety_run3.txt
+
+=======================================================
+SUITE: adapter (npx tsx test/adapter.test.ts)
+=======================================================
+Run 1/3:
+  Exit Code: 0 (PASSED)
+  Duration: 1364ms
+  Fixtures Status: CLEAN (zero mutations)
+  Git Worktree Status: ?? docs/coverage-study.md; ?? docs/phase0-evidence/; ?? scratch/actual-canvas-comparison.png; ?? scratch/analyze-40.js; ?? scratch/analyze-partials-wilson.js; ?? scratch/analyzed-40.json; ?? scratch/audit-results-detailed.json; ?? scratch/classify-unsupported.js; ?? scratch/compute-repo-mix.js; ?? scratch/curved-pill-test.png; ?? scratch/diffs/; ?? scratch/evaluate-40-detailed.ts; ?? scratch/fetch-diffs.js; ?? scratch/full-canvas-demo.png; ?? scratch/inspect-corner.js; ?? scratch/inspect-partials.js; ?? scratch/inspect-unsupported.js; ?? scratch/parse-study.js; ?? scratch/parsed-rows.json; ?? scratch/partial-breakdown.json; ?? scratch/perfect-fit-test.png; ?? scratch/pill-comparison.png; ?? scratch/pill-zoom.png; ?? scratch/print-disagreements.js; ?? scratch/print-reproduced.js; ?? scratch/repo-stats.json; ?? scratch/sample-40.js; ?? scratch/sampled-40.json; ?? scratch/studio-active-drag.png; ?? scratch/studio-hover-corner.png; ?? scratch/studio-idle-corner.png; ?? scratch/summarize-audit.js; ?? scratch/test-canvas-actual.js; ?? scratch/test-corner-drag.js; ?? scratch/test-engine-on-samples.ts; ?? scratch/test-full-demo.js; ?? scratch/test-perfect-fit.js; ?? scratch/test-pill-zoom.js; ?? scratch/test-pill.js; ?? scratch/test-zoomed-fit.js; ?? scratch/unsupported-classification.json; ?? scratch/zoom-corner-inspect.png; ?? scratch/zoomed-fit.png
+  Raw Output Artifact: docs/phase0-evidence/task2-runs/adapter_run1.txt
+
+Run 2/3:
+  Exit Code: 0 (PASSED)
+  Duration: 973ms
+  Fixtures Status: CLEAN (zero mutations)
+  Git Worktree Status: ?? docs/coverage-study.md; ?? docs/phase0-evidence/; ?? scratch/actual-canvas-comparison.png; ?? scratch/analyze-40.js; ?? scratch/analyze-partials-wilson.js; ?? scratch/analyzed-40.json; ?? scratch/audit-results-detailed.json; ?? scratch/classify-unsupported.js; ?? scratch/compute-repo-mix.js; ?? scratch/curved-pill-test.png; ?? scratch/diffs/; ?? scratch/evaluate-40-detailed.ts; ?? scratch/fetch-diffs.js; ?? scratch/full-canvas-demo.png; ?? scratch/inspect-corner.js; ?? scratch/inspect-partials.js; ?? scratch/inspect-unsupported.js; ?? scratch/parse-study.js; ?? scratch/parsed-rows.json; ?? scratch/partial-breakdown.json; ?? scratch/perfect-fit-test.png; ?? scratch/pill-comparison.png; ?? scratch/pill-zoom.png; ?? scratch/print-disagreements.js; ?? scratch/print-reproduced.js; ?? scratch/repo-stats.json; ?? scratch/sample-40.js; ?? scratch/sampled-40.json; ?? scratch/studio-active-drag.png; ?? scratch/studio-hover-corner.png; ?? scratch/studio-idle-corner.png; ?? scratch/summarize-audit.js; ?? scratch/test-canvas-actual.js; ?? scratch/test-corner-drag.js; ?? scratch/test-engine-on-samples.ts; ?? scratch/test-full-demo.js; ?? scratch/test-perfect-fit.js; ?? scratch/test-pill-zoom.js; ?? scratch/test-pill.js; ?? scratch/test-zoomed-fit.js; ?? scratch/unsupported-classification.json; ?? scratch/zoom-corner-inspect.png; ?? scratch/zoomed-fit.png
+  Raw Output Artifact: docs/phase0-evidence/task2-runs/adapter_run2.txt
+
+Run 3/3:
+  Exit Code: 0 (PASSED)
+  Duration: 1134ms
+  Fixtures Status: CLEAN (zero mutations)
+  Git Worktree Status: ?? docs/coverage-study.md; ?? docs/phase0-evidence/; ?? scratch/actual-canvas-comparison.png; ?? scratch/analyze-40.js; ?? scratch/analyze-partials-wilson.js; ?? scratch/analyzed-40.json; ?? scratch/audit-results-detailed.json; ?? scratch/classify-unsupported.js; ?? scratch/compute-repo-mix.js; ?? scratch/curved-pill-test.png; ?? scratch/diffs/; ?? scratch/evaluate-40-detailed.ts; ?? scratch/fetch-diffs.js; ?? scratch/full-canvas-demo.png; ?? scratch/inspect-corner.js; ?? scratch/inspect-partials.js; ?? scratch/inspect-unsupported.js; ?? scratch/parse-study.js; ?? scratch/parsed-rows.json; ?? scratch/partial-breakdown.json; ?? scratch/perfect-fit-test.png; ?? scratch/pill-comparison.png; ?? scratch/pill-zoom.png; ?? scratch/print-disagreements.js; ?? scratch/print-reproduced.js; ?? scratch/repo-stats.json; ?? scratch/sample-40.js; ?? scratch/sampled-40.json; ?? scratch/studio-active-drag.png; ?? scratch/studio-hover-corner.png; ?? scratch/studio-idle-corner.png; ?? scratch/summarize-audit.js; ?? scratch/test-canvas-actual.js; ?? scratch/test-corner-drag.js; ?? scratch/test-engine-on-samples.ts; ?? scratch/test-full-demo.js; ?? scratch/test-perfect-fit.js; ?? scratch/test-pill-zoom.js; ?? scratch/test-pill.js; ?? scratch/test-zoomed-fit.js; ?? scratch/unsupported-classification.json; ?? scratch/zoom-corner-inspect.png; ?? scratch/zoomed-fit.png
+  Raw Output Artifact: docs/phase0-evidence/task2-runs/adapter_run3.txt
+
+=======================================================
+SUITE: move-expectations (npx tsx test/move-expectations.test.ts)
+=======================================================
+Run 1/3:
+  Exit Code: 1 (FAILED)
+  Duration: 121327ms
+  Fixtures Status: MUTATED: M fixtures/1-plain-static.tsx
+  Git Worktree Status: M fixtures/1-plain-static.tsx; ?? docs/coverage-study.md; ?? docs/phase0-evidence/; ?? scratch/actual-canvas-comparison.png; ?? scratch/analyze-40.js; ?? scratch/analyze-partials-wilson.js; ?? scratch/analyzed-40.json; ?? scratch/audit-results-detailed.json; ?? scratch/classify-unsupported.js; ?? scratch/compute-repo-mix.js; ?? scratch/curved-pill-test.png; ?? scratch/diffs/; ?? scratch/evaluate-40-detailed.ts; ?? scratch/fetch-diffs.js; ?? scratch/full-canvas-demo.png; ?? scratch/inspect-corner.js; ?? scratch/inspect-partials.js; ?? scratch/inspect-unsupported.js; ?? scratch/parse-study.js; ?? scratch/parsed-rows.json; ?? scratch/partial-breakdown.json; ?? scratch/perfect-fit-test.png; ?? scratch/pill-comparison.png; ?? scratch/pill-zoom.png; ?? scratch/print-disagreements.js; ?? scratch/print-reproduced.js; ?? scratch/repo-stats.json; ?? scratch/sample-40.js; ?? scratch/sampled-40.json; ?? scratch/studio-active-drag.png; ?? scratch/studio-hover-corner.png; ?? scratch/studio-idle-corner.png; ?? scratch/summarize-audit.js; ?? scratch/test-canvas-actual.js; ?? scratch/test-corner-drag.js; ?? scratch/test-engine-on-samples.ts; ?? scratch/test-full-demo.js; ?? scratch/test-perfect-fit.js; ?? scratch/test-pill-zoom.js; ?? scratch/test-pill.js; ?? scratch/test-zoomed-fit.js; ?? scratch/unsupported-classification.json; ?? scratch/zoom-corner-inspect.png; ?? scratch/zoomed-fit.png
+  Raw Output Artifact: docs/phase0-evidence/task2-runs/move-expectations_run1.txt
+
+Run 2/3:
+  Exit Code: 1 (FAILED)
+  Duration: 108671ms
+  Fixtures Status: MUTATED: M fixtures/1-plain-static.tsx
+  Git Worktree Status: M fixtures/1-plain-static.tsx; ?? docs/coverage-study.md; ?? docs/phase0-evidence/; ?? scratch/actual-canvas-comparison.png; ?? scratch/analyze-40.js; ?? scratch/analyze-partials-wilson.js; ?? scratch/analyzed-40.json; ?? scratch/audit-results-detailed.json; ?? scratch/classify-unsupported.js; ?? scratch/compute-repo-mix.js; ?? scratch/curved-pill-test.png; ?? scratch/diffs/; ?? scratch/evaluate-40-detailed.ts; ?? scratch/fetch-diffs.js; ?? scratch/full-canvas-demo.png; ?? scratch/inspect-corner.js; ?? scratch/inspect-partials.js; ?? scratch/inspect-unsupported.js; ?? scratch/parse-study.js; ?? scratch/parsed-rows.json; ?? scratch/partial-breakdown.json; ?? scratch/perfect-fit-test.png; ?? scratch/pill-comparison.png; ?? scratch/pill-zoom.png; ?? scratch/print-disagreements.js; ?? scratch/print-reproduced.js; ?? scratch/repo-stats.json; ?? scratch/sample-40.js; ?? scratch/sampled-40.json; ?? scratch/studio-active-drag.png; ?? scratch/studio-hover-corner.png; ?? scratch/studio-idle-corner.png; ?? scratch/summarize-audit.js; ?? scratch/test-canvas-actual.js; ?? scratch/test-corner-drag.js; ?? scratch/test-engine-on-samples.ts; ?? scratch/test-full-demo.js; ?? scratch/test-perfect-fit.js; ?? scratch/test-pill-zoom.js; ?? scratch/test-pill.js; ?? scratch/test-zoomed-fit.js; ?? scratch/unsupported-classification.json; ?? scratch/zoom-corner-inspect.png; ?? scratch/zoomed-fit.png
+  Raw Output Artifact: docs/phase0-evidence/task2-runs/move-expectations_run2.txt
+
+Run 3/3:
+  Exit Code: 1 (FAILED)
+  Duration: 129159ms
+  Fixtures Status: MUTATED: M fixtures/1-plain-static.tsx
+  Git Worktree Status: M fixtures/1-plain-static.tsx; ?? docs/coverage-study.md; ?? docs/phase0-evidence/; ?? scratch/actual-canvas-comparison.png; ?? scratch/analyze-40.js; ?? scratch/analyze-partials-wilson.js; ?? scratch/analyzed-40.json; ?? scratch/audit-results-detailed.json; ?? scratch/classify-unsupported.js; ?? scratch/compute-repo-mix.js; ?? scratch/curved-pill-test.png; ?? scratch/diffs/; ?? scratch/evaluate-40-detailed.ts; ?? scratch/fetch-diffs.js; ?? scratch/full-canvas-demo.png; ?? scratch/inspect-corner.js; ?? scratch/inspect-partials.js; ?? scratch/inspect-unsupported.js; ?? scratch/parse-study.js; ?? scratch/parsed-rows.json; ?? scratch/partial-breakdown.json; ?? scratch/perfect-fit-test.png; ?? scratch/pill-comparison.png; ?? scratch/pill-zoom.png; ?? scratch/print-disagreements.js; ?? scratch/print-reproduced.js; ?? scratch/repo-stats.json; ?? scratch/sample-40.js; ?? scratch/sampled-40.json; ?? scratch/studio-active-drag.png; ?? scratch/studio-hover-corner.png; ?? scratch/studio-idle-corner.png; ?? scratch/summarize-audit.js; ?? scratch/test-canvas-actual.js; ?? scratch/test-corner-drag.js; ?? scratch/test-engine-on-samples.ts; ?? scratch/test-full-demo.js; ?? scratch/test-perfect-fit.js; ?? scratch/test-pill-zoom.js; ?? scratch/test-pill.js; ?? scratch/test-zoomed-fit.js; ?? scratch/unsupported-classification.json; ?? scratch/zoom-corner-inspect.png; ?? scratch/zoomed-fit.png
+  Raw Output Artifact: docs/phase0-evidence/task2-runs/move-expectations_run3.txt
+
+=======================================================
+SUITE: studio-restore (npx tsx test/studio-restore.test.ts)
+=======================================================
+Run 1/3:
+  Exit Code: 1 (FAILED)
+  Duration: 13374ms
+  Fixtures Status: MUTATED: M fixtures/1-plain-static.tsx
+  Git Worktree Status: M fixtures/1-plain-static.tsx; ?? docs/coverage-study.md; ?? docs/phase0-evidence/; ?? scratch/actual-canvas-comparison.png; ?? scratch/analyze-40.js; ?? scratch/analyze-partials-wilson.js; ?? scratch/analyzed-40.json; ?? scratch/audit-results-detailed.json; ?? scratch/classify-unsupported.js; ?? scratch/compute-repo-mix.js; ?? scratch/curved-pill-test.png; ?? scratch/diffs/; ?? scratch/evaluate-40-detailed.ts; ?? scratch/fetch-diffs.js; ?? scratch/full-canvas-demo.png; ?? scratch/inspect-corner.js; ?? scratch/inspect-partials.js; ?? scratch/inspect-unsupported.js; ?? scratch/parse-study.js; ?? scratch/parsed-rows.json; ?? scratch/partial-breakdown.json; ?? scratch/perfect-fit-test.png; ?? scratch/pill-comparison.png; ?? scratch/pill-zoom.png; ?? scratch/print-disagreements.js; ?? scratch/print-reproduced.js; ?? scratch/repo-stats.json; ?? scratch/sample-40.js; ?? scratch/sampled-40.json; ?? scratch/studio-active-drag.png; ?? scratch/studio-hover-corner.png; ?? scratch/studio-idle-corner.png; ?? scratch/summarize-audit.js; ?? scratch/test-canvas-actual.js; ?? scratch/test-corner-drag.js; ?? scratch/test-engine-on-samples.ts; ?? scratch/test-full-demo.js; ?? scratch/test-perfect-fit.js; ?? scratch/test-pill-zoom.js; ?? scratch/test-pill.js; ?? scratch/test-zoomed-fit.js; ?? scratch/unsupported-classification.json; ?? scratch/zoom-corner-inspect.png; ?? scratch/zoomed-fit.png
+  Raw Output Artifact: docs/phase0-evidence/task2-runs/studio-restore_run1.txt
+
+Run 2/3:
+  Exit Code: 1 (FAILED)
+  Duration: 13678ms
+  Fixtures Status: MUTATED: M fixtures/1-plain-static.tsx
+  Git Worktree Status: M fixtures/1-plain-static.tsx; ?? docs/coverage-study.md; ?? docs/phase0-evidence/; ?? scratch/actual-canvas-comparison.png; ?? scratch/analyze-40.js; ?? scratch/analyze-partials-wilson.js; ?? scratch/analyzed-40.json; ?? scratch/audit-results-detailed.json; ?? scratch/classify-unsupported.js; ?? scratch/compute-repo-mix.js; ?? scratch/curved-pill-test.png; ?? scratch/diffs/; ?? scratch/evaluate-40-detailed.ts; ?? scratch/fetch-diffs.js; ?? scratch/full-canvas-demo.png; ?? scratch/inspect-corner.js; ?? scratch/inspect-partials.js; ?? scratch/inspect-unsupported.js; ?? scratch/parse-study.js; ?? scratch/parsed-rows.json; ?? scratch/partial-breakdown.json; ?? scratch/perfect-fit-test.png; ?? scratch/pill-comparison.png; ?? scratch/pill-zoom.png; ?? scratch/print-disagreements.js; ?? scratch/print-reproduced.js; ?? scratch/repo-stats.json; ?? scratch/sample-40.js; ?? scratch/sampled-40.json; ?? scratch/studio-active-drag.png; ?? scratch/studio-hover-corner.png; ?? scratch/studio-idle-corner.png; ?? scratch/summarize-audit.js; ?? scratch/test-canvas-actual.js; ?? scratch/test-corner-drag.js; ?? scratch/test-engine-on-samples.ts; ?? scratch/test-full-demo.js; ?? scratch/test-perfect-fit.js; ?? scratch/test-pill-zoom.js; ?? scratch/test-pill.js; ?? scratch/test-zoomed-fit.js; ?? scratch/unsupported-classification.json; ?? scratch/zoom-corner-inspect.png; ?? scratch/zoomed-fit.png
+  Raw Output Artifact: docs/phase0-evidence/task2-runs/studio-restore_run2.txt
+
+Run 3/3:
+  Exit Code: 1 (FAILED)
+  Duration: 16818ms
+  Fixtures Status: MUTATED: M fixtures/1-plain-static.tsx
+  Git Worktree Status: M fixtures/1-plain-static.tsx; ?? docs/coverage-study.md; ?? docs/phase0-evidence/; ?? scratch/actual-canvas-comparison.png; ?? scratch/analyze-40.js; ?? scratch/analyze-partials-wilson.js; ?? scratch/analyzed-40.json; ?? scratch/audit-results-detailed.json; ?? scratch/classify-unsupported.js; ?? scratch/compute-repo-mix.js; ?? scratch/curved-pill-test.png; ?? scratch/diffs/; ?? scratch/evaluate-40-detailed.ts; ?? scratch/fetch-diffs.js; ?? scratch/full-canvas-demo.png; ?? scratch/inspect-corner.js; ?? scratch/inspect-partials.js; ?? scratch/inspect-unsupported.js; ?? scratch/parse-study.js; ?? scratch/parsed-rows.json; ?? scratch/partial-breakdown.json; ?? scratch/perfect-fit-test.png; ?? scratch/pill-comparison.png; ?? scratch/pill-zoom.png; ?? scratch/print-disagreements.js; ?? scratch/print-reproduced.js; ?? scratch/repo-stats.json; ?? scratch/sample-40.js; ?? scratch/sampled-40.json; ?? scratch/studio-active-drag.png; ?? scratch/studio-hover-corner.png; ?? scratch/studio-idle-corner.png; ?? scratch/summarize-audit.js; ?? scratch/test-canvas-actual.js; ?? scratch/test-corner-drag.js; ?? scratch/test-engine-on-samples.ts; ?? scratch/test-full-demo.js; ?? scratch/test-perfect-fit.js; ?? scratch/test-pill-zoom.js; ?? scratch/test-pill.js; ?? scratch/test-zoomed-fit.js; ?? scratch/unsupported-classification.json; ?? scratch/zoom-corner-inspect.png; ?? scratch/zoomed-fit.png
+  Raw Output Artifact: docs/phase0-evidence/task2-runs/studio-restore_run3.txt
+

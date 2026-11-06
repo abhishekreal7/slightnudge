@@ -1,0 +1,59 @@
+TAP version 13
+# Subtest: S1: Authenticated, local-only mutating requests
+    # Subtest: rejects mutating request with no Origin and no token with 403 (not 404)
+    ok 1 - rejects mutating request with no Origin and no token with 403 (not 404)
+      ---
+      duration_ms: 85.6336
+      type: 'test'
+      ...
+    # Subtest: rejects mutating request with wrong Host with 403
+    ok 2 - rejects mutating request with wrong Host with 403
+      ---
+      duration_ms: 22.1793
+      type: 'test'
+      ...
+    # Subtest: rejects mutating request with valid Origin but missing token with 403
+    ok 3 - rejects mutating request with valid Origin but missing token with 403
+      ---
+      duration_ms: 6.6519
+      type: 'test'
+      ...
+    # Subtest: rejects mutating request with valid Origin but invalid token with 403
+    ok 4 - rejects mutating request with valid Origin but invalid token with 403
+      ---
+      duration_ms: 8.1394
+      type: 'test'
+      ...
+    # Subtest: returns normal not-found error for fake previewId with valid token and valid Origin
+    ok 5 - returns normal not-found error for fake previewId with valid token and valid Origin
+      ---
+      duration_ms: 13.7885
+      type: 'test'
+      ...
+    # Subtest: allows missing Origin when valid token is present and proceeds to normal handling
+    ok 6 - allows missing Origin when valid token is present and proceeds to normal handling
+      ---
+      duration_ms: 11.4624
+      type: 'test'
+      ...
+    # Subtest: completes preview, apply, and undo flow in a temp copy with valid token and Origin
+    ok 7 - completes preview, apply, and undo flow in a temp copy with valid token and Origin
+      ---
+      duration_ms: 1287.4095
+      type: 'test'
+      ...
+    1..7
+ok 1 - S1: Authenticated, local-only mutating requests
+  ---
+  duration_ms: 1436.4935
+  type: 'suite'
+  ...
+1..1
+# tests 7
+# suites 1
+# pass 7
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 6446.4761

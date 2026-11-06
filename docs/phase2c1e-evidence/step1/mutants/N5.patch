@@ -1,0 +1,13 @@
+diff --git a/lib/slightnudge/edit-history.ts b/lib/slightnudge/edit-history.ts
+index b0267e5..f74d6d2 100644
+--- a/lib/slightnudge/edit-history.ts
++++ b/lib/slightnudge/edit-history.ts
+@@ -709,7 +709,7 @@ export function undoSourceEdit(target?: string | { filePath?: string; editId?: s
+   // Check 4: Identity-based dependency check on newer applied edits in the same file
+   for (let i = index + 1; i < records.length; i++) {
+     const newer = records[i];
+-    if (newer.status !== 'undone' && isSamePath(newer.filePath, record.filePath)) {
++    if (isSamePath(newer.filePath, record.filePath)) { /* N5: let already-undone records block undo */
+       const newerIdentity = getEditIdentity(newer);
+ 
+       // Rule 1: A newer structural edit (reorder/move) blocks undo of older edits

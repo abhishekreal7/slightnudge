@@ -1,0 +1,417 @@
+SETUP 1793693413250 START git ["ls-files"]
+SETUP END elapsed 56ms
+HARNESS-V3 NAVIGATION http://127.0.0.1:64642/editor?view=fit&panel=inspector
+TIMING 1793693455215 REQUEST http://127.0.0.1:64642/editor?view=fit&panel=inspector
+TIMING 1793693455485 RESPONSE 200 http://127.0.0.1:64642/editor?view=fit&panel=inspector
+TIMING 1793693461099 REQUEST http://127.0.0.1:64642/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A64642&__slightnudge_session=e6e1cf35-5067-4c76-8134-62b96d8ec430&__slightnudge_canvas=1
+TIMING 1793693461118 REQUEST http://127.0.0.1:64642/api/slightnudge/responsive
+TIMING 1793693461118 REQUEST http://127.0.0.1:64642/api/slightnudge/responsive
+TIMING 1793693474524 RESPONSE 200 http://127.0.0.1:64642/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A64642&__slightnudge_session=e6e1cf35-5067-4c76-8134-62b96d8ec430&__slightnudge_canvas=1
+TIMING 1793693474540 REQUEST http://127.0.0.1:64642/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+TIMING 1793693475132 RESPONSE 200 http://127.0.0.1:64642/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+HARNESS-V3 OP 1793693480584 START waitFor locator('[data-source-ready="true"]')
+TIMING 1793693481400 RESPONSE 200 http://127.0.0.1:64642/api/slightnudge/responsive
+TIMING 1793693481612 RESPONSE 200 http://127.0.0.1:64642/api/slightnudge/responsive
+HARNESS-V3 OP 1793693483439 END waitFor locator('[data-source-ready="true"]')
+HARNESS-V3 OP 1793693483440 START selectOption getByRole('combobox', { name: 'Canvas zoom', exact: true })
+HARNESS-V3 OP 1793693483610 END selectOption getByRole('combobox', { name: 'Canvas zoom', exact: true })
+HARNESS-V3 OP 1793693483610 START click locator('h1')
+TIMING 1793693484375 REQUEST http://127.0.0.1:64642/api/slightnudge/preview
+HARNESS-V3 OP 1793693484861 END click locator('h1')
+HARNESS-V3 OP 1793693484884 START boundingBox locator('h1')
+HARNESS-V3 OP 1793693484966 END boundingBox locator('h1')
+HARNESS-V3 OP 1793693484966 START boundingBox getByRole('button', { name: 'Move element', exact: true })
+HARNESS-V3 OP 1793693485002 END boundingBox getByRole('button', { name: 'Move element', exact: true })
+HARNESS-V3 OP 1793693485003 START click getByRole('button', { name: 'Move element', exact: true })
+HARNESS-V3 OP 1793693485613 END click getByRole('button', { name: 'Move element', exact: true })
+HARNESS-V3 OP 1793693485613 START waitFor getByRole('group', { name: 'Move selected element', exact: true })
+HARNESS-V3 OP 1793693485630 END waitFor getByRole('group', { name: 'Move selected element', exact: true })
+HARNESS-V3 OP 1793693485631 START click getByRole('button', { name: 'Move element', exact: true })
+HARNESS-V3 OP 1793693486023 END click getByRole('button', { name: 'Move element', exact: true })
+HARNESS-V3 OP 1793693486023 START count getByRole('group', { name: 'Move selected element', exact: true })
+HARNESS-V3 OP 1793693486030 END count getByRole('group', { name: 'Move selected element', exact: true })
+HARNESS-V3 OP 1793693486030 START boundingBox getByRole('button', { name: 'Move element', exact: true })
+HARNESS-V3 OP 1793693486046 END boundingBox getByRole('button', { name: 'Move element', exact: true })
+HARNESS-V3 OP 1793693488499 START waitFor getByLabel('Move measurement', { exact: true })
+HARNESS-V3 OP 1793693488864 END waitFor getByLabel('Move measurement', { exact: true })
+HARNESS-V3 OP 1793693488864 START boundingBox locator('h1')
+HARNESS-V3 OP 1793693489054 END boundingBox locator('h1')
+HARNESS-V3 OP 1793693490251 START boundingBox locator('h1')
+HARNESS-V3 OP 1793693490441 END boundingBox locator('h1')
+HARNESS-V3 OP 1793693490441 START isVisible getByLabel('Move measurement', { exact: true })
+HARNESS-V3 OP 1793693490450 END isVisible getByLabel('Move measurement', { exact: true })
+HARNESS-V3 OP 1793693490451 START evaluate locator('h1')
+HARNESS-V3 OP 1793693490471 END evaluate locator('h1')
+CANCEL_DIAGNOSTIC {"cancellation":"Escape","origin":{"x":300,"y":436.375,"width":368,"height":32},"current":{"x":300,"y":436.375,"width":368,"height":32},"measurementVisible":false,"state":{"style":null,"translate":"-16px","rect":{"x":100,"y":265.375,"width":368,"height":32,"top":265.375,"right":468,"bottom":297.375,"left":100}}}
+HARNESS-V3 OP 1793693490477 START count getByLabel('Draft controls', { exact: true }).getByRole('button', { name: 'Save changes', exact: true }).and(locator('button:enabled'))
+HARNESS-V3 OP 1793693490484 END count getByLabel('Draft controls', { exact: true }).getByRole('button', { name: 'Save changes', exact: true }).and(locator('button:enabled'))
+HARNESS-V3 OP 1793693490484 START boundingBox getByRole('button', { name: 'Move element', exact: true })
+HARNESS-V3 OP 1793693490497 END boundingBox getByRole('button', { name: 'Move element', exact: true })
+HARNESS-V3 OP 1793693493077 START waitFor getByLabel('Move measurement', { exact: true })
+HARNESS-V3 OP 1793693493452 END waitFor getByLabel('Move measurement', { exact: true })
+HARNESS-V3 OP 1793693493453 START boundingBox locator('h1')
+HARNESS-V3 OP 1793693493478 END boundingBox locator('h1')
+HARNESS-V3 OP 1793693494186 START boundingBox locator('h1')
+HARNESS-V3 OP 1793693494907 END boundingBox locator('h1')
+HARNESS-V3 OP 1793693494907 START isVisible getByLabel('Move measurement', { exact: true })
+HARNESS-V3 OP 1793693494918 END isVisible getByLabel('Move measurement', { exact: true })
+HARNESS-V3 OP 1793693494918 START evaluate locator('h1')
+HARNESS-V3 OP 1793693494951 END evaluate locator('h1')
+CANCEL_DIAGNOSTIC {"cancellation":"blur","origin":{"x":300,"y":436.375,"width":368,"height":32},"current":{"x":300,"y":436.375,"width":368,"height":32},"measurementVisible":false,"state":{"style":null,"translate":"-16px","rect":{"x":100,"y":265.375,"width":368,"height":32,"top":265.375,"right":468,"bottom":297.375,"left":100}}}
+HARNESS-V3 OP 1793693494967 START count getByLabel('Draft controls', { exact: true }).getByRole('button', { name: 'Save changes', exact: true }).and(locator('button:enabled'))
+HARNESS-V3 OP 1793693494977 END count getByLabel('Draft controls', { exact: true }).getByRole('button', { name: 'Save changes', exact: true }).and(locator('button:enabled'))
+HARNESS-V3 OP 1793693494977 START boundingBox getByRole('button', { name: 'Move element', exact: true })
+HARNESS-V3 OP 1793693495017 END boundingBox getByRole('button', { name: 'Move element', exact: true })
+TIMING 1793693497012 RESPONSE 200 http://127.0.0.1:64642/api/slightnudge/preview
+HARNESS-V3 OP 1793693497737 START waitFor getByLabel('Move measurement', { exact: true })
+HARNESS-V3 OP 1793693498087 END waitFor getByLabel('Move measurement', { exact: true })
+HARNESS-V3 OP 1793693498088 START boundingBox locator('h1')
+HARNESS-V3 OP 1793693498251 END boundingBox locator('h1')
+HARNESS-V3 OP 1793693498681 START boundingBox locator('h1')
+HARNESS-V3 OP 1793693499560 END boundingBox locator('h1')
+HARNESS-V3 OP 1793693499561 START isVisible getByLabel('Move measurement', { exact: true })
+HARNESS-V3 OP 1793693499574 END isVisible getByLabel('Move measurement', { exact: true })
+HARNESS-V3 OP 1793693499574 START evaluate locator('h1')
+HARNESS-V3 OP 1793693499610 END evaluate locator('h1')
+CANCEL_DIAGNOSTIC {"cancellation":"pointercancel","origin":{"x":300,"y":436.375,"width":368,"height":32},"current":{"x":300,"y":436.375,"width":368,"height":32},"measurementVisible":false,"state":{"style":null,"translate":"-16px","rect":{"x":100,"y":265.375,"width":368,"height":32,"top":265.375,"right":468,"bottom":297.375,"left":100}}}
+HARNESS-V3 OP 1793693499620 START count getByLabel('Draft controls', { exact: true }).getByRole('button', { name: 'Save changes', exact: true }).and(locator('button:enabled'))
+HARNESS-V3 OP 1793693499625 END count getByLabel('Draft controls', { exact: true }).getByRole('button', { name: 'Save changes', exact: true }).and(locator('button:enabled'))
+HARNESS-V3 OP 1793693499625 START boundingBox getByRole('button', { name: 'Move element', exact: true })
+HARNESS-V3 OP 1793693499644 END boundingBox getByRole('button', { name: 'Move element', exact: true })
+HARNESS-V3 OP 1793693501917 START waitFor getByLabel('Move measurement', { exact: true })
+HARNESS-V3 OP 1793693502282 END waitFor getByLabel('Move measurement', { exact: true })
+HARNESS-V3 OP 1793693502283 START boundingBox locator('h1')
+HARNESS-V3 OP 1793693502387 END boundingBox locator('h1')
+HARNESS-V3 OP 1793693502823 START boundingBox locator('h1')
+HARNESS-V3 OP 1793693503575 END boundingBox locator('h1')
+HARNESS-V3 OP 1793693503575 START isVisible getByLabel('Move measurement', { exact: true })
+HARNESS-V3 OP 1793693503585 END isVisible getByLabel('Move measurement', { exact: true })
+HARNESS-V3 OP 1793693503585 START evaluate locator('h1')
+HARNESS-V3 OP 1793693503610 END evaluate locator('h1')
+CANCEL_DIAGNOSTIC {"cancellation":"capture","origin":{"x":300,"y":436.375,"width":368,"height":32},"current":{"x":300,"y":436.375,"width":368,"height":32},"measurementVisible":false,"state":{"style":null,"translate":"-16px","rect":{"x":100,"y":265.375,"width":368,"height":32,"top":265.375,"right":468,"bottom":297.375,"left":100}}}
+HARNESS-V3 OP 1793693503615 START count getByLabel('Draft controls', { exact: true }).getByRole('button', { name: 'Save changes', exact: true }).and(locator('button:enabled'))
+HARNESS-V3 OP 1793693503623 END count getByLabel('Draft controls', { exact: true }).getByRole('button', { name: 'Save changes', exact: true }).and(locator('button:enabled'))
+HARNESS-V3 OP 1793693503623 START boundingBox getByRole('button', { name: 'Move element', exact: true })
+HARNESS-V3 OP 1793693503674 END boundingBox getByRole('button', { name: 'Move element', exact: true })
+HARNESS-V3 OP 1793693506534 START waitFor getByLabel('Move measurement', { exact: true })
+HARNESS-V3 OP 1793693506855 END waitFor getByLabel('Move measurement', { exact: true })
+HARNESS-V3 OP 1793693506855 START boundingBox locator('h1')
+HARNESS-V3 OP 1793693506892 END boundingBox locator('h1')
+HARNESS-V3 OP 1793693507511 START boundingBox locator('h1')
+HARNESS-V3 OP 1793693507875 END boundingBox locator('h1')
+HARNESS-V3 OP 1793693507875 START isVisible getByLabel('Move measurement', { exact: true })
+HARNESS-V3 OP 1793693507882 END isVisible getByLabel('Move measurement', { exact: true })
+HARNESS-V3 OP 1793693507882 START evaluate locator('h1')
+HARNESS-V3 OP 1793693507988 END evaluate locator('h1')
+CANCEL_DIAGNOSTIC {"cancellation":"scroll","origin":{"x":300,"y":436.375,"width":368,"height":32},"current":{"x":300,"y":436.375,"width":368,"height":32},"measurementVisible":false,"state":{"style":null,"translate":"-16px","rect":{"x":100,"y":265.375,"width":368,"height":32,"top":265.375,"right":468,"bottom":297.375,"left":100}}}
+HARNESS-V3 OP 1793693507992 START count getByLabel('Draft controls', { exact: true }).getByRole('button', { name: 'Save changes', exact: true }).and(locator('button:enabled'))
+HARNESS-V3 OP 1793693508012 END count getByLabel('Draft controls', { exact: true }).getByRole('button', { name: 'Save changes', exact: true }).and(locator('button:enabled'))
+HARNESS-V3 OP 1793693508012 START boundingBox getByRole('button', { name: 'Move element', exact: true })
+HARNESS-V3 OP 1793693508040 END boundingBox getByRole('button', { name: 'Move element', exact: true })
+HARNESS-V3 OP 1793693508334 START waitFor getByLabel('Move measurement', { exact: true })
+HARNESS-V3 OP 1793693508633 END waitFor getByLabel('Move measurement', { exact: true })
+HARNESS-V3 OP 1793693508633 START boundingBox locator('h1')
+HARNESS-V3 OP 1793693508659 END boundingBox locator('h1')
+HARNESS-V3 OP 1793693508659 START dispatchEvent getByRole('group', { name: 'Element state' }).getByRole('button', { name: 'Hover', exact: true })
+HARNESS-V3 OP 1793693508852 END dispatchEvent getByRole('group', { name: 'Element state' }).getByRole('button', { name: 'Hover', exact: true })
+HARNESS-V3 OP 1793693508861 START boundingBox locator('h1')
+HARNESS-V3 OP 1793693510195 END boundingBox locator('h1')
+HARNESS-V3 OP 1793693510195 START isVisible getByLabel('Move measurement', { exact: true })
+HARNESS-V3 OP 1793693510206 END isVisible getByLabel('Move measurement', { exact: true })
+HARNESS-V3 OP 1793693510206 START evaluate locator('h1')
+HARNESS-V3 OP 1793693510229 END evaluate locator('h1')
+CANCEL_DIAGNOSTIC {"cancellation":"scope","origin":{"x":300,"y":436.375,"width":368,"height":32},"current":{"x":300,"y":436.375,"width":368,"height":32},"measurementVisible":false,"state":{"style":null,"translate":"-16px","rect":{"x":100,"y":265.375,"width":368,"height":32,"top":265.375,"right":468,"bottom":297.375,"left":100}}}
+HARNESS-V3 OP 1793693510234 START count getByLabel('Draft controls', { exact: true }).getByRole('button', { name: 'Save changes', exact: true }).and(locator('button:enabled'))
+HARNESS-V3 OP 1793693510239 END count getByLabel('Draft controls', { exact: true }).getByRole('button', { name: 'Save changes', exact: true }).and(locator('button:enabled'))
+HARNESS-V3 OP 1793693510240 START click getByRole('group', { name: 'Element state' }).getByRole('button', { name: 'Default', exact: true })
+HARNESS-V3 OP 1793693510686 END click getByRole('group', { name: 'Element state' }).getByRole('button', { name: 'Default', exact: true })
+PASS: centered Move handle, live two-axis snapped geometry and six cancellation paths; no source proposals while dragging
+HARNESS-V3 OP 1793693510686 START selectOption getByRole('combobox', { name: 'Canvas zoom', exact: true })
+HARNESS-V3 OP 1793693540813 ERROR selectOption getByRole('combobox', { name: 'Canvas zoom', exact: true })
+Isolated application diagnostics ▲ Next.js 16.4.3 (webpack)
+- Local:         http://127.0.0.1:64642
+- Network:       http://127.0.0.1:64642
+✓ Ready in 2.4s
+✓ Running next.config.mjs took 119ms
+
+○ Compiling /editor/[[...project]]/page ...
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\0a972f10\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-ujuvfx\\.next\\dev\\build-manifest.json","pid":35924,"time":1793693452871,"bytes":344}
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\0a972f10\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-ujuvfx\\.next\\dev\\build-manifest.json","pid":13044,"time":1793693453659,"bytes":344}
+ GET /editor 200 in 2.7s (next.js: 1608ms, application-code: 1094ms)
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\0a972f10\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-ujuvfx\\.next\\dev\\build-manifest.json","pid":13044,"time":1793693455279,"bytes":344}
+ GET /editor?view=fit&panel=inspector 200 in 266ms (next.js: 41ms, application-code: 225ms)
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\0a972f10\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-ujuvfx\\.next\\dev\\build-manifest.json","pid":31500,"time":1793693455580,"bytes":344}
+○ Compiling /studio/preview/[pageId]/page ...
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\0a972f10\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-ujuvfx\\.next\\dev\\build-manifest.json","pid":25716,"time":1793693473847,"bytes":344}
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\0a972f10\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-ujuvfx\\.next\\dev\\build-manifest.json","pid":13044,"time":1793693474161,"bytes":344}
+ GET /studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A64642&__slightnudge_session=e6e1cf35-5067-4c76-8134-62b96d8ec430&__slightnudge_canvas=1 200 in 1627ms (next.js: 1233ms, application-code: 394ms)
+⚠ ./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\0a972f10\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-ujuvfx\\.next\\dev\\build-manifest.json","pid":13044,"time":1793693479984,"bytes":344}
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\0a972f10\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-ujuvfx\\.next\\dev\\build-manifest.json","pid":13044,"time":1793693480004,"bytes":344}
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\0a972f10\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-ujuvfx\\.next\\dev\\build-manifest.json","pid":13044,"time":1793693480017,"bytes":344}
+ GET /api/slightnudge/pages 200 in 7.8s (next.js: 6.2s, proxy.ts: 885ms, application-code: 780ms)
+○ Compiling /api/slightnudge/responsive/route ...
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\0a972f10\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-ujuvfx\\.next\\dev\\build-manifest.json","pid":13044,"time":1793693481008,"bytes":344}
+ POST /api/slightnudge/responsive 200 in 8.5s (next.js: 6.2s, proxy.ts: 887ms, application-code: 1428ms)
+ POST /api/slightnudge/responsive 200 in 8.7s (next.js: 6.2s, proxy.ts: 887ms, application-code: 1640ms)
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\0a972f10\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-ujuvfx\\.next\\dev\\build-manifest.json","pid":28860,"time":1793693481278,"bytes":344}
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\0a972f10\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-ujuvfx\\.next\\dev\\build-manifest.json","pid":13044,"time":1793693481643,"bytes":344}
+ GET /api/slightnudge/pages 200 in 438ms (next.js: 10ms, proxy.ts: 404ms, application-code: 24ms)
+ GET /editor?view=fit&panel=inspector 200 in 5.2s (next.js: 4.5s, application-code: 670ms)
+⚠ ./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+⚠ ./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\0a972f10\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-ujuvfx\\.next\\dev\\build-manifest.json","pid":13044,"time":1793693493241,"bytes":344}
+ POST /api/slightnudge/preview 200 in 12.5s (next.js: 8.8s, proxy.ts: 23ms, application-code: 3.7s)
+
+SETUP 1793693543970 START taskkill ["/pid","23044","/T","/F"]
+SETUP END elapsed 637ms
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+locator.selectOption: Timeout 30000ms exceeded.
+Call log:
+[2m  - waiting for getByRole('combobox', { name: 'Canvas zoom', exact: true })[22m
+[2m    - locator resolved to <select aria-label="Canvas zoom" class="jsx-ec7c25dc6aa835ea" title="Fit starts with automatic scaling; zoom can also be adjusted manually.">…</select>[22m
+[2m  - attempting select option action[22m
+[2m    2 × waiting for element to be visible and enabled[22m
+[2m      - did not find some options[22m
+[2m    - retrying select option action[22m
+[2m    - waiting 20ms[22m
+[2m    2 × waiting for element to be visible and enabled[22m
+[2m      - did not find some options[22m
+[2m    - retrying select option action[22m
+[2m      - waiting 100ms[22m
+[2m    57 × waiting for element to be visible and enabled[22m
+[2m       - did not find some options[22m
+[2m     - retrying select option action[22m
+[2m       - waiting 500ms[22m
+
+    at Proxy.<anonymous> (C:\dev\vibecheck\scratch\g\0a972f10\worktree\test\helpers\gate-page-v3.ts:24:176)
+    at checkDragMove (C:\dev\vibecheck\scratch\g\0a972f10\worktree\test\helpers\drag-move-browser.v4.ts:48:74)
+    at async <anonymous> (C:\dev\vibecheck\scratch\g\0a972f10\worktree\test\review-consent.browser.v3.ts:239:14) {
+  log: [
+    "  - waiting for getByRole('combobox', { name: 'Canvas zoom', exact: true })",
+    '    - locator resolved to <select aria-label="Canvas zoom" class="jsx-ec7c25dc6aa835ea" title="Fit starts with automatic scaling; zoom can also be adjusted manually.">…</select>',
+    '  - attempting select option action',
+    '    2 × waiting for element to be visible and enabled',
+    '      - did not find some options',
+    '    - retrying select option action',
+    '    - waiting 20ms',
+    '    2 × waiting for element to be visible and enabled',
+    '      - did not find some options',
+    '    - retrying select option action',
+    '      - waiting 100ms',
+    '    57 × waiting for element to be visible and enabled',
+    '       - did not find some options',
+    '     - retrying select option action',
+    '       - waiting 500ms'
+  ],
+  name: 'TimeoutError'
+}
+
+Node.js v22.19.0

@@ -1,0 +1,62 @@
+{
+  "sessionTokenPreview": "76a5fb55...",
+  "evilTokenStatus": 403,
+  "results": [
+    {
+      "path": "/",
+      "host": "evil.localhost:3230",
+      "label": "Root with evil.localhost",
+      "status": 200,
+      "tokenInBody": true,
+      "isDisallowedHost": true,
+      "p0Violation": true
+    },
+    {
+      "path": "/",
+      "host": "127.0.0.1:3230",
+      "label": "Root with 127.0.0.1",
+      "status": 200,
+      "tokenInBody": true,
+      "isDisallowedHost": false,
+      "p0Violation": false
+    },
+    {
+      "path": "/",
+      "host": "localhost:3230",
+      "label": "Root with localhost",
+      "status": 200,
+      "tokenInBody": true,
+      "isDisallowedHost": false,
+      "p0Violation": false
+    },
+    {
+      "path": "/studio",
+      "host": "evil.localhost:3230",
+      "label": "Studio with evil.localhost",
+      "status": 200,
+      "tokenInBody": true,
+      "isDisallowedHost": true,
+      "p0Violation": true
+    },
+    {
+      "path": "/studio",
+      "host": "127.0.0.1:3230",
+      "label": "Studio with 127.0.0.1",
+      "status": 200,
+      "tokenInBody": true,
+      "isDisallowedHost": false,
+      "p0Violation": false
+    },
+    {
+      "path": "/studio",
+      "host": "localhost:3230",
+      "label": "Studio with localhost",
+      "status": 200,
+      "tokenInBody": true,
+      "isDisallowedHost": false,
+      "p0Violation": false
+    }
+  ],
+  "hasP0": true,
+  "verdict": "FAIL (P0: token in HTML for disallowed host)"
+}

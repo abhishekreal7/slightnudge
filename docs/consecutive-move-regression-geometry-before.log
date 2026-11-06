@@ -1,0 +1,201 @@
+HARNESS-V3 NAVIGATION http://127.0.0.1:57698/editor?view=fit&panel=inspector
+HARNESS-V3 OP 1793722491146 START waitFor locator('[data-source-ready="true"]')
+HARNESS-V3 OP 1793722493217 END waitFor locator('[data-source-ready="true"]')
+HARNESS-V3 OP 1793722493219 START selectOption getByRole('combobox', { name: 'Canvas zoom', exact: true })
+HARNESS-V3 OP 1793722493374 END selectOption getByRole('combobox', { name: 'Canvas zoom', exact: true })
+HARNESS-V3 OP 1793722493375 START click locator('h1')
+HARNESS-V3 OP 1793722494306 END click locator('h1')
+HARNESS-V3 OP 1793722494307 START boundingBox locator('h1')
+HARNESS-V3 OP 1793722494388 END boundingBox locator('h1')
+HARNESS-V3 OP 1793722494389 START boundingBox getByRole('button', { name: 'Move element', exact: true })
+HARNESS-V3 OP 1793722494425 END boundingBox getByRole('button', { name: 'Move element', exact: true })
+HARNESS-V3 OP 1793722494425 START click getByRole('button', { name: 'Move element', exact: true })
+HARNESS-V3 OP 1793722495764 END click getByRole('button', { name: 'Move element', exact: true })
+HARNESS-V3 OP 1793722495765 START waitFor getByRole('group', { name: 'Move selected element', exact: true })
+HARNESS-V3 OP 1793722495929 END waitFor getByRole('group', { name: 'Move selected element', exact: true })
+HARNESS-V3 OP 1793722495929 START click getByRole('button', { name: 'Move element', exact: true })
+HARNESS-V3 OP 1793722498247 END click getByRole('button', { name: 'Move element', exact: true })
+HARNESS-V3 OP 1793722498249 START count getByRole('group', { name: 'Move selected element', exact: true })
+HARNESS-V3 OP 1793722498270 END count getByRole('group', { name: 'Move selected element', exact: true })
+HARNESS-V3 OP 1793722498271 START boundingBox getByRole('button', { name: 'Move element', exact: true })
+HARNESS-V3 OP 1793722498301 END boundingBox getByRole('button', { name: 'Move element', exact: true })
+HARNESS-V3 OP 1793722498881 START waitFor getByLabel('Move measurement', { exact: true })
+HARNESS-V3 OP 1793722498899 END waitFor getByLabel('Move measurement', { exact: true })
+HARNESS-V3 OP 1793722498899 START boundingBox locator('h1')
+HARNESS-V3 OP 1793722498954 END boundingBox locator('h1')
+Isolated application diagnostics ▲ Next.js 16.4.3 (webpack)
+- Local:         http://127.0.0.1:57698
+- Network:       http://127.0.0.1:57698
+✓ Ready in 522ms
+✓ Running next.config.mjs took 51ms
+
+○ Compiling /editor/[[...project]]/page ...
+ GET /editor 200 in 3.0s (next.js: 2.1s, application-code: 940ms)
+ GET /editor?view=fit&panel=inspector 200 in 800ms (next.js: 22ms, application-code: 779ms)
+○ Compiling /studio/preview/[pageId]/page ...
+ GET /studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A57698&__slightnudge_session=[redacted]&__slightnudge_canvas=1 200 in 1529ms (next.js: 1044ms, application-code: 486ms)
+○ Compiling /api/slightnudge/responsive/route ...
+⚠ ./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+ GET /api/slightnudge/pages 200 in 6.8s (next.js: 5.2s, proxy.ts: 660ms, application-code: 885ms)
+ POST /api/slightnudge/responsive 200 in 7.5s (next.js: 5.2s, proxy.ts: 662ms, application-code: 1578ms)
+ POST /api/slightnudge/responsive 200 in 7.8s (next.js: 5.2s, proxy.ts: 662ms, application-code: 1933ms)
+ GET /api/slightnudge/pages 200 in 53ms (next.js: 9ms, proxy.ts: 20ms, application-code: 24ms)
+ GET /editor?view=fit&panel=inspector 200 in 2.9s (next.js: 2.0s, application-code: 888ms)
+⚠ ./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+MOVE REGRESSION DIAGNOSTIC {"events":[{"type":"scroll","active":"BODY","label":null},{"type":"blur","active":"IFRAME","label":null},{"type":"pointerdown","x":540,"y":428.8699951171875,"target":"Move element","active":"IFRAME","label":null,"pressed":"false"},{"type":"pointerup","x":540,"y":428.8699951171875,"target":"Move element","active":"BUTTON","label":"Move element","pressed":"true"},{"type":"lostpointercapture","x":540,"y":428.8699951171875,"target":"Move element","active":"BUTTON","label":"Move element","pressed":"false"},{"type":"scroll","active":"BUTTON","label":"Move element","pressed":"false"},{"type":"pointerdown","x":1586,"y":986.6799926757812,"active":"BUTTON","label":"Move element","pressed":"false"},{"type":"pointerup","x":1586,"y":986.6799926757812,"active":"BUTTON","label":"Move element","pressed":"false"},{"type":"scroll","active":"BUTTON","label":"Move element","pressed":"false"},{"type":"scroll","active":"BUTTON","label":"Move element","pressed":"false"},{"type":"pointerdown","x":13.25,"y":13.869999885559082,"target":"Move element","active":"BUTTON","label":"Move element","pressed":"false"},{"type":"pointerup","x":13.25,"y":13.869999885559082,"target":"Move element","active":"BUTTON","label":"Move element","pressed":"true"},{"type":"lostpointercapture","x":13.25,"y":13.869999885559082,"target":"Move element","active":"BUTTON","label":"Move element","pressed":"false"},{"type":"pointerdown","x":13,"y":13.875,"target":"Move element","active":"BUTTON","label":"Move element","pressed":"false"},{"type":"pointermove","x":18,"y":16.875,"target":"Move element","active":"BUTTON","label":"Move element","pressed":"true"},{"type":"pointermove","x":23,"y":19.875,"target":"Move element","active":"BUTTON","label":"Move element","pressed":"true"},{"type":"pointermove","x":28,"y":22.875,"target":"Move element","active":"BUTTON","label":"Move element","pressed":"true"},{"type":"pointermove","x":33,"y":25.875,"target":"Move element","active":"BUTTON","label":"Move element","pressed":"true"},{"type":"pointermove","x":38,"y":28.875,"target":"Move element","active":"BUTTON","label":"Move element","pressed":"true"}],"controls":[{"label":"Move element","text":"Move","rect":{"x":23.5,"y":16.375,"width":27,"height":27,"top":16.375,"right":50.5,"bottom":43.375,"left":23.5},"pressed":"true","disabled":false},{"label":"Move measurement","text":"X 24pxY 16px","rect":{"x":-19.65625,"y":70.375,"width":113.3125,"height":28,"top":70.375,"right":93.65625,"bottom":98.375,"left":-19.65625},"pressed":null}],"heading":{"classes":"ml-2.5 mt-1 text-2xl  ","style":"translate: 24px 16px;","rect":{"x":180,"y":269.375,"width":368,"height":32,"top":269.375,"right":548,"bottom":301.375,"left":180}}}
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+
+  page.waitForFunction(expected => { const iframe=document.querySelector('iframe');const heading=iframe?.contentDocument?.querySelector('h1');if(!iframe||!heading)return false;const r=heading.getBoundingClientRect(),outer=iframe.getBoundingClientRect(),sx=outer.width/iframe.offsetWidth,sy=outer.height/iframe.offsetHeight; return Math.abs(outer.x+r.x*sx - expected.x) < 1 && Math.abs(outer.y+r.y*sy - expected.y) < 1; }, origin)
+
+    at checkDragMove (C:\dev\vibecheck\test\helpers\drag-move-browser.v4.ts:40:45)
+    at async <anonymous> (C:\dev\vibecheck\test\move-continuation-regression.browser.ts:257:14) {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v22.19.0

@@ -46,8 +46,9 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const headerList = await headers();
-  const allowToken = process.env.NODE_ENV !== 'production' && isRequestHostAllowed(headerList);
+  // Only the local editor needs request headers. Reading them in production
+  // forces otherwise static marketing pages to render for every request.
+  const allowToken = process.env.NODE_ENV !== 'production' && isRequestHostAllowed(await headers());
   const sessionToken = allowToken ? getSessionToken() : null;
   return (
     <html lang="en" className={`${geist.variable} ${geistMono.variable} ${inter.variable} ${manrope.variable}`}>

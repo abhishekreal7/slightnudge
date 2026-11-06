@@ -1,0 +1,50 @@
+GATE evidence C:\dev\vibecheck\docs\reliability-gate\2026-11-02T05-57-17-851Z-466ae5a-shared
+PRODUCT 466ae5a1d67af3b013c87c1dce3d0cb742088cfb TESTS 466ae5a1d67af3b013c87c1dce3d0cb742088cfb
+No test assertions or limits changed; same HEAD tests at every historical product ref.
+
+COMMAND shared-runtime-setup: node --import tsx test/gate-shared-runner.v3.ts --setup-only
+SETUP 1793599040131 START git ["ls-files"]
+SETUP END elapsed 41ms
+SETUP 1793599040321 START git ["init","--quiet"]
+SETUP END elapsed 53ms
+SETUP 1793599040374 START git ["-c","core.autocrlf=false","add","app","components","package.json","LICENSE"]
+SETUP END elapsed 81ms
+SETUP 1793599040456 START C:\nvm4w\nodejs\node.exe ["--import","tsx","--input-type=module","-e","const {installNextSourceAdapter}=await import('./lib/slightnudge/next-source-adapter.ts');await installNextSourceAdapter('source-proof');"]
+SETUP END elapsed 305ms
+SETUP 1793599040761 START C:\nvm4w\nodejs\node.exe ["C:\\dev\\vibecheck\\scratch\\g\\23290495\\worktree\\scratch\\shared-gate-runtime\\.slightnudge\\repositories\\source-proof\\node_modules\\next\\dist\\bin\\next","dev","--help"]
+SETUP END elapsed 179ms
+Disposable source project: generated SaaS; Next.js 16.4.3; Tailwind 4.3.3; installed source adapter; no environment files checked out.
+GATE_RUNTIMES {"workspace":"C:\\dev\\vibecheck\\scratch\\g\\23290495\\worktree\\scratch\\shared-gate-runtime","repo":"C:\\dev\\vibecheck\\scratch\\g\\23290495\\worktree\\scratch\\shared-gate-runtime\\.slightnudge\\repositories\\source-proof"}
+SERVER 59216 PID 6792 C:\dev\vibecheck\scratch\g\23290495\worktree\scratch\shared-gate-runtime
+SERVER 59217 PID 11136 C:\dev\vibecheck\scratch\g\23290495\worktree\scratch\shared-gate-runtime\.slightnudge\repositories\source-proof
+
+COMMAND shared-compiler-warmup: node --import tsx test/gate-shared-runner.v3.ts --prepare
+SETUP 1793599042189 START git ["ls-files"]
+SETUP END elapsed 44ms
+TIMING 1793599042396 REQUEST http://127.0.0.1:59216/editor?panel=inspector
+TIMING 1793599079610 RESPONSE 200 http://127.0.0.1:59216/editor?panel=inspector
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+page.goto: Timeout 30000ms exceeded.
+Call log:
+[2m  - navigating to "http://127.0.0.1:59216/editor?panel=inspector", waiting until "domcontentloaded"[22m
+
+    at <anonymous> (C:\dev\vibecheck\scratch\g\23290495\worktree\test\gate-shared-runner.v3.ts:53:14) {
+  log: [
+    '  - navigating to "http://127.0.0.1:59216/editor?panel=inspector", waiting until "domcontentloaded"'
+  ],
+  name: 'TimeoutError'
+}
+
+Node.js v22.19.0
+
+workflow | harness | REAL or MOCKED | result | seconds
+shared-compiler-warmup | HARNESS-V3 | REAL | FAIL | 40.78
+shared-local-studio | HARNESS-V3 | REAL | HARNESS-ERROR | 0
+shared-local-window | HARNESS-V3 | REAL | HARNESS-ERROR | 0
+shared-imported-studio | HARNESS-V3 | REAL | HARNESS-ERROR | 0
+shared-imported-window | HARNESS-V3 | REAL | HARNESS-ERROR | 0
+TOTAL ELAPSED 45.94s
+GATE FAIL; evidence C:\dev\vibecheck\docs\reliability-gate\2026-11-02T05-57-17-851Z-466ae5a-shared

@@ -1,0 +1,96 @@
+=== STEP 1: INITIAL FAILING TEST RUN (s5-theme-support.test.ts) ===
+
+Command: npx tsx test/s5-theme-support.test.ts
+
+TAP version 13
+# Subtest: S5: Theme Support and Config Detection in Tailwind Verifier
+    # Subtest: a. Tailwind v4 project with @theme defining --color-brand-500 accepts bg-brand-500, stacked variant, and arbitrary value, and refuses bogus
+    not ok 1 - a. Tailwind v4 project with @theme defining --color-brand-500 accepts bg-brand-500, stacked variant, and arbitrary value, and refuses bogus
+      ---
+      duration_ms: 139.3028
+      type: 'test'
+      location: 'C:\\dev\\vibecheck\\test\\s5-theme-support.test.ts:1:2156'
+      failureType: 'testCodeFailure'
+      error: |-
+        bg-brand-500 must be verified in @theme project: can't verify this class: "bg-brand-500" produced no CSS
+        
+        false !== true
+        
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: true
+      actual: false
+      operator: 'strictEqual'
+      stack: |-
+        TestContext.<anonymous> (C:\dev\vibecheck\test\s5-theme-support.test.ts:88:14)
+        async Test.run (node:internal/test_runner/test:1054:7)
+        async Promise.all (index 0)
+        async Suite.run (node:internal/test_runner/test:1442:7)
+        async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+      ...
+    # Subtest: b. Tailwind v4 project with legacy tailwind.config.js and CSS @config accepts bg-brand-500, stacked variant, and arbitrary value, and refuses bogus
+    not ok 2 - b. Tailwind v4 project with legacy tailwind.config.js and CSS @config accepts bg-brand-500, stacked variant, and arbitrary value, and refuses bogus
+      ---
+      duration_ms: 14.9891
+      type: 'test'
+      location: 'C:\\dev\\vibecheck\\test\\s5-theme-support.test.ts:5:808'
+      failureType: 'testCodeFailure'
+      error: |-
+        bg-brand-500 must be verified via @config: can't verify this class: "bg-brand-500" produced no CSS
+        
+        false !== true
+        
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: true
+      actual: false
+      operator: 'strictEqual'
+      stack: |-
+        TestContext.<anonymous> (C:\dev\vibecheck\test\s5-theme-support.test.ts:116:14)
+        async Test.run (node:internal/test_runner/test:1054:7)
+        async Suite.processPendingSubtests (node:internal/test_runner/test:744:7)
+      ...
+NOTICE [d. Tailwind v3]: UNVERIFIED offline. Node_modules has Tailwind v4.3.3 installed, v3 package not present offline.
+    # Subtest: c. Tailwind v4 project with tailwind.config.js but CSS entry WITHOUT @config refuses bg-brand-500 (matches v4 build behavior) while accepting standard utilities
+    ok 3 - c. Tailwind v4 project with tailwind.config.js but CSS entry WITHOUT @config refuses bg-brand-500 (matches v4 build behavior) while accepting standard utilities
+      ---
+      duration_ms: 15.657
+      type: 'test'
+      ...
+    # Subtest: d. Tailwind v3 project: verify offline availability or report UNVERIFIED
+    ok 4 - d. Tailwind v3 project: verify offline availability or report UNVERIFIED
+      ---
+      duration_ms: 0.6929
+      type: 'test'
+      ...
+    # Subtest: f. Project where no Tailwind is installed or engine fails: refuses and writes nothing
+    ok 5 - f. Project where no Tailwind is installed or engine fails: refuses and writes nothing
+      ---
+      duration_ms: 4.1828
+      type: 'test'
+      ...
+    # Subtest: g. Unchanged existing tokens in className are never verified and never cause refusal; only added tokens are verified
+    ok 6 - g. Unchanged existing tokens in className are never verified and never cause refusal; only added tokens are verified
+      ---
+      duration_ms: 274.0899
+      type: 'test'
+      ...
+    1..6
+not ok 1 - S5: Theme Support and Config Detection in Tailwind Verifier
+  ---
+  duration_ms: 450.1941
+  type: 'suite'
+  location: 'C:\\dev\\vibecheck\\test\\s5-theme-support.test.ts:1:481'
+  failureType: 'subtestsFailed'
+  error: '2 subtests failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+1..1
+# tests 6
+# suites 1
+# pass 4
+# fail 2
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 455.4781

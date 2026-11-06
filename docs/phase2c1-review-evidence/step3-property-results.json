@@ -1,0 +1,136 @@
+{
+  "timestamp": "2026-10-21T19:09:08.825Z",
+  "totalCases": 3000,
+  "passedCases": 3000,
+  "failedCases": 0,
+  "acceptedUndos": 1782,
+  "refusedUndos": 1218,
+  "benignCasesCount": 1776,
+  "benignAcceptedCount": 1602,
+  "benignRefusedCount": 174,
+  "benignRefusalRatePercent": 9.8,
+  "failuresCount": 0,
+  "failureSeeds": [],
+  "categoryStats": {
+    "exact_match": {
+      "total": 180,
+      "accepted": 180,
+      "refused": 0,
+      "passed": 180,
+      "failed": 0
+    },
+    "prettier_default": {
+      "total": 180,
+      "accepted": 180,
+      "refused": 0,
+      "passed": 180,
+      "failed": 0
+    },
+    "tailwind_reorder": {
+      "total": 180,
+      "accepted": 180,
+      "refused": 0,
+      "passed": 180,
+      "failed": 0
+    },
+    "add_unrelated_class": {
+      "total": 180,
+      "accepted": 180,
+      "refused": 0,
+      "passed": 180,
+      "failed": 0
+    },
+    "add_sibling_class": {
+      "total": 180,
+      "accepted": 180,
+      "refused": 0,
+      "passed": 180,
+      "failed": 0
+    },
+    "prettier_alt": {
+      "total": 180,
+      "accepted": 180,
+      "refused": 0,
+      "passed": 180,
+      "failed": 0
+    },
+    "insert_import": {
+      "total": 180,
+      "accepted": 180,
+      "refused": 0,
+      "passed": 180,
+      "failed": 0
+    },
+    "rename_variable": {
+      "total": 174,
+      "accepted": 174,
+      "refused": 0,
+      "passed": 174,
+      "failed": 0
+    },
+    "duplicate_unrelated": {
+      "total": 174,
+      "accepted": 174,
+      "refused": 0,
+      "passed": 174,
+      "failed": 0
+    },
+    "move_unrelated": {
+      "total": 174,
+      "accepted": 174,
+      "refused": 0,
+      "passed": 174,
+      "failed": 0
+    },
+    "delete_target": {
+      "total": 174,
+      "accepted": 0,
+      "refused": 174,
+      "passed": 174,
+      "failed": 0
+    },
+    "wrap_conditional": {
+      "total": 174,
+      "accepted": 0,
+      "refused": 174,
+      "passed": 174,
+      "failed": 0
+    },
+    "stacked_same": {
+      "total": 174,
+      "accepted": 0,
+      "refused": 174,
+      "passed": 174,
+      "failed": 0
+    },
+    "stacked_other": {
+      "total": 174,
+      "accepted": 0,
+      "refused": 174,
+      "passed": 174,
+      "failed": 0
+    },
+    "external_overwrite": {
+      "total": 174,
+      "accepted": 0,
+      "refused": 174,
+      "passed": 174,
+      "failed": 0
+    },
+    "non_existent": {
+      "total": 174,
+      "accepted": 0,
+      "refused": 174,
+      "passed": 174,
+      "failed": 0
+    },
+    "missing_file": {
+      "total": 174,
+      "accepted": 0,
+      "refused": 174,
+      "passed": 174,
+      "failed": 0
+    }
+  },
+  "elapsedMs": 327525
+}

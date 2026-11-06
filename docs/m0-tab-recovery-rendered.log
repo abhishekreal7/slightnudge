@@ -1,0 +1,15 @@
+PASS: full reload preserves an unknown accepted Apply; only read-only status checks run; restored accepted edit can be undone
+PASS: reload before a source write restores local review; only explicit Apply saves it
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+page.waitForResponse: Timeout 30000ms exceeded while waiting for event "response"
+    at prepare (C:\dev\vibecheck\test\helpers\studio-reload-recovery-browser.ts:34:27)
+    at async checkStudioReloadRecovery (C:\dev\vibecheck\test\helpers\studio-reload-recovery-browser.ts:90:3)
+    at async <anonymous> (C:\dev\vibecheck\test\review-consent.browser.ts:99:14) {
+  log: [],
+  name: 'TimeoutError'
+}
+
+Node.js v22.19.0

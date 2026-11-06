@@ -1,0 +1,28 @@
+{
+  "head": "967465f78245a52f67f7bb07e72e8e97d8eb4bb6",
+  "productRef": "967465f78245a52f67f7bb07e72e8e97d8eb4bb6",
+  "testRef": "967465f78245a52f67f7bb07e72e8e97d8eb4bb6",
+  "fatal": false,
+  "rows": [
+    {
+      "workflow": "selection-full-regression",
+      "harness": "existing",
+      "api": "REAL",
+      "result": "FAIL",
+      "seconds": 40.55,
+      "exitCode": 1,
+      "historical": "docs/editor-load-and-toolbar/selection/round-1-raw.log",
+      "invalidManifestServers": []
+    },
+    {
+      "workflow": "selection-full-overfit",
+      "harness": "existing",
+      "api": "REAL",
+      "result": "FAIL",
+      "seconds": 56.32,
+      "exitCode": 1,
+      "historical": "docs/editor-load-and-toolbar/selection/round-1-raw.log",
+      "invalidManifestServers": []
+    }
+  ]
+}

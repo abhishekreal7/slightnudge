@@ -1,0 +1,12 @@
+Component actions: local Studio
+Component actions: destinations, opening props and Next Link label verified
+Component actions: button props, Undo/Redo and provider/shared protections verified
+Component actions: held refresh replay blocks Save and inline editing until restored
+PASS component actions local Studio: native/Next Link destination and new-tab props, preserved icon/other usage, label, button type/enabled, Undo/Redo, provider/shared ownership, invalid URL/cancel, refresh, grouped Save/exact Undo
+Component actions: local window
+Component actions: destinations, opening props and Next Link label verified
+Component actions: button props, Undo/Redo and provider/shared protections verified
+Component actions: held refresh replay blocks Save and inline editing until restored
+PASS component actions local window: native/Next Link destination and new-tab props, preserved icon/other usage, label, button type/enabled, Undo/Redo, provider/shared ownership, invalid URL/cancel, refresh, grouped Save/exact Undo, real Browse form reset/handler and opener-free Next Link popup
+PASS: 2 review-consent browser cases (real API; disposable source copy)
+Temporary copy requires manual cleanup: C:\Users\abhis\AppData\Local\Temp\sn-review-consent-VLvnvu

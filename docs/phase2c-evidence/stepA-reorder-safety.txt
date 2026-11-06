@@ -1,0 +1,48 @@
+﻿====================================================
+≡ƒº¬ RUNNING REORDER SAFETY & SAME-LINE RESOLUTION TESTS
+====================================================
+
+--- 1. Same-line Element Resolution (Column + Tag Name) ---
+  Γ£à [PASS] Same-line without column does not succeed
+  Γ£à [PASS] Same-line without column refuses safely
+  Γ£à [PASS] Refusal exact message: "I can't tell which element on this line you mean. Nothing was changed."
+  Γ£à [PASS] Targets First button using col 7 + tagName
+  Γ£à [PASS] First button correctly swapped later
+  Γ£à [PASS] Targets Second button using col 52 + tagName
+  Γ£à [PASS] Second button correctly swapped earlier
+  Γ£à [PASS] Non-matching column refuses
+  Γ£à [PASS] Non-matching column returns exact refusal message
+
+--- 2. Multi-slot Reorder Safety (Loops, Conditionals, Permutation) ---
+  Γ£à [PASS] Reorder across map() list refused
+  Γ£à [PASS] map() list refused safely
+  Γ£à [PASS] Reorder across conditional element refused
+  Γ£à [PASS] Conditional element refused safely
+  Γ£à [PASS] Permutation swap succeeded
+  Γ£à [PASS] Unchanged sibling item-c has identical bytes
+  Γ£à [PASS] Whitespace and all comments are preserved byte-for-byte
+  Γ£à [PASS] Order is pure permutation (item-b before item-a)
+
+--- 3. Preview Route targetIndex Validation ---
+  Γ£à [PASS] targetIndex NaN returns status 400
+  Γ£à [PASS] targetIndex float (1.5) returns status 400
+  Γ£à [PASS] targetIndex negative (-2) returns status 400
+
+--- 4. Interaction Safety Tests (Failed Preview, Rapid Drag, Alt+Drag, Resize) ---
+  Γ£à [PASS] Failed preview returns error status 422
+  Γ£à [PASS] Failed preview returns informative error message
+  Γ£à [PASS] Rapid drag: First reorder succeeds
+  Γ£à [PASS] Rapid drag: Second immediate reorder succeeds
+  Γ£à [PASS] Rapid drag: Final order is item-2, item-3, item-1 without corruption
+  Γ£à [PASS] Alt+drag (spacing nudge down) succeeds
+  Γ£à [PASS] Alt+drag nudged margin from mt-1 to mt-1.5
+  Γ£à [PASS] Undo Alt+drag (nudge back up) succeeds
+  Γ£à [PASS] Undo restores original mt-1 spacing cleanly
+  Γ£à [PASS] Heading resize (width update) succeeds
+  Γ£à [PASS] Resized heading contains new width class w-full
+  Γ£à [PASS] Heading resize leaves typography classes (text-2xl, font-bold, text color) 100% unchanged
+
+====================================================
+≡ƒÄë ALL 32/32 REORDER & VALIDATION TESTS PASSED!
+====================================================
+

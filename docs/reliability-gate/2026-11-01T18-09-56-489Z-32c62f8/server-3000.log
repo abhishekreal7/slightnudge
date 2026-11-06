@@ -1,0 +1,22 @@
+▲ Next.js 16.4.3 (webpack)
+- Local:         http://127.0.0.1:3000
+- Network:       http://127.0.0.1:3000
+✓ Ready in 890ms
+✓ Running next.config.mjs took 63ms
+
+○ Compiling proxy ...
+○ Compiling /api/slightnudge/repositories/[id]/route ...
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\reliability-gate\\2026-11-01T18-09-56-489Z-32c62f8\\worktree\\.next\\dev\\build-manifest.json","pid":32140,"time":1793556618536,"bytes":344}
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\reliability-gate\\2026-11-01T18-09-56-489Z-32c62f8\\worktree\\.next\\dev\\build-manifest.json","pid":14772,"time":1793556618750,"bytes":344}
+ GET /api/slightnudge/repositories/m0-control-lab 200 in 1178ms (next.js: 756ms, proxy.ts: 18ms, application-code: 404ms)
+○ Compiling /editor/[[...project]]/page ...
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\reliability-gate\\2026-11-01T18-09-56-489Z-32c62f8\\worktree\\.next\\dev\\build-manifest.json","pid":26892,"time":1793556657478,"bytes":344}
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\reliability-gate\\2026-11-01T18-09-56-489Z-32c62f8\\worktree\\.next\\dev\\build-manifest.json","pid":14772,"time":1793556658154,"bytes":344}
+ GET /editor/m0-control-lab?view=full&preview=http%3A%2F%2F127.0.0.1%3A3001 200 in 3.3s (next.js: 1566ms, application-code: 1697ms)
+○ Compiling /api/slightnudge/pages/route ...
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\reliability-gate\\2026-11-01T18-09-56-489Z-32c62f8\\worktree\\.next\\dev\\build-manifest.json","pid":14772,"time":1793556671454,"bytes":344}
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\reliability-gate\\2026-11-01T18-09-56-489Z-32c62f8\\worktree\\.next\\dev\\build-manifest.json","pid":14772,"time":1793556672413,"bytes":344}
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\reliability-gate\\2026-11-01T18-09-56-489Z-32c62f8\\worktree\\.next\\dev\\build-manifest.json","pid":5116,"time":1793556672284,"bytes":344}
+ GET /api/slightnudge/repositories/m0-control-lab 200 in 1692ms (next.js: 162ms, proxy.ts: 1402ms, application-code: 128ms)
+ GET /editor/m0-control-lab?view=full&preview=http%3A%2F%2F127.0.0.1%3A3001 200 in 1720ms (next.js: 601ms, application-code: 1118ms)
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\reliability-gate\\2026-11-01T18-09-56-489Z-32c62f8\\worktree\\.next\\dev\\build-manifest.json","pid":29996,"time":1793557005683,"bytes":344}

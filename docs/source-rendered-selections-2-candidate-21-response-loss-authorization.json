@@ -1,0 +1,25 @@
+{
+  "method": "physical click where exposed → real inspection → real preview → explicit Apply/recovery → rendered confirmation → exact source Undo",
+  "complete": true,
+  "fullQualification": false,
+  "candidateCount": 1,
+  "selections": [
+    {
+      "file": "src/app/page.tsx",
+      "line": 72,
+      "column": 13,
+      "tag": "h3",
+      "occurrence": 0,
+      "text": "Next.js 14 App Router",
+      "clicked": true,
+      "actualSelection": {
+        "file": "src/app/page.tsx",
+        "line": 72,
+        "column": 13,
+        "tag": "h3"
+      },
+      "outcome": "allowed",
+      "reason": "Exact source/history Apply, rendered class/weight and exact Undo verified."
+    }
+  ]
+}

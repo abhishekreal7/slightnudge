@@ -1,0 +1,30 @@
+====================================================
+🧪 STUDIO BACKEND RESTORATION BROWSER SUITE
+====================================================
+
+1. Loading http://127.0.0.1:3999/studio...
+
+
+❌ Test assertion failed: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3999/studio
+Call log:
+[2m  - navigating to "http://127.0.0.1:3999/studio", waiting until "networkidle"[22m
+
+    at main (C:\dev\vibecheck\test\studio-restore.test.ts:23:16) {
+  log: [
+    '  - navigating to "http://127.0.0.1:3999/studio", waiting until "networkidle"'
+  ],
+  name: 'Error'
+}
+
+Command failed: npx tsx test/studio-restore.test.ts
+
+❌ Test assertion failed: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3999/studio
+Call log:
+[2m  - navigating to "http://127.0.0.1:3999/studio", waiting until "networkidle"[22m
+
+    at main (C:\dev\vibecheck\test\studio-restore.test.ts:23:16) {
+  log: [
+    '  - navigating to "http://127.0.0.1:3999/studio", waiting until "networkidle"'
+  ],
+  name: 'Error'
+}

@@ -1,0 +1,20 @@
+{
+  "head": "ec2669249b3d524e938d4d7ffc282dde61b383d0",
+  "productRef": "ec2669249b3d524e938d4d7ffc282dde61b383d0",
+  "testRef": "ec2669249b3d524e938d4d7ffc282dde61b383d0",
+  "fatal": false,
+  "rows": [
+    {
+      "workflow": "history",
+      "harness": "HARNESS-V3",
+      "api": "REAL",
+      "result": "TIMEOUT",
+      "testPassed": false,
+      "seconds": 301.75,
+      "exitCode": 1,
+      "historical": "docs/change-history-release.log",
+      "invalidManifestServers": [],
+      "invalidChildServerLogs": []
+    }
+  ]
+}

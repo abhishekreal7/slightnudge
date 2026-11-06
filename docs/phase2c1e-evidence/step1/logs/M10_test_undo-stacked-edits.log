@@ -1,0 +1,5 @@
+Same element refusal message: Cannot undo this edit because a newer edit ("font-normal → font-bold") on the same element depends on it. Undo the newer edit first.
+Legacy record refusal message: This file changed after the visual edit: element identity cannot be established. Open fixtures/page4.tsx near line 1 and change the className to remove "none" and restore "none". Nothing was changed.
+Structural edit refusal message: Cannot undo this edit because a structural edit ("reorder: move earlier") was applied to this file. Undo the structural edit first.
+Same-line refusal message: Cannot undo this edit because a newer edit on the same line depends on it. Undo the newer edit first.
+Starting 300 randomized order test runs (seed base: 771234)...

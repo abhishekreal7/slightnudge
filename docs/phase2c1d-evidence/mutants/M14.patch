@@ -1,0 +1,13 @@
+diff --git a/lib/slightnudge/edit-history.ts b/lib/slightnudge/edit-history.ts
+index b0267e5..25420dc 100644
+--- a/lib/slightnudge/edit-history.ts
++++ b/lib/slightnudge/edit-history.ts
+@@ -746,7 +746,7 @@ export function undoSourceEdit(target?: string | { filePath?: string; editId?: s
+         recordIdentity.tagName.toLowerCase() === newerIdentity.tagName.toLowerCase()
+       );
+ 
+-      const sameElement = sameElementId || sameDerivedLocator;
++      const sameElement = (newer.before === record.after); /* M14 */
+       if (sameElement) {
+         return {
+           success: false as const,

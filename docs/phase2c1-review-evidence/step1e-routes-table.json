@@ -1,0 +1,289 @@
+[
+  {
+    "route": "app\\api\\admin\\metrics\\route.ts",
+    "methods": [
+      "GET"
+    ],
+    "isMutating": false,
+    "hasValidateMutating": false,
+    "hasCors": false,
+    "hasRateLimit": false,
+    "hasAuth": false
+  },
+  {
+    "route": "app\\api\\checkout\\route.ts",
+    "methods": [
+      "POST"
+    ],
+    "isMutating": true,
+    "hasValidateMutating": false,
+    "hasCors": false,
+    "hasRateLimit": false,
+    "hasAuth": false
+  },
+  {
+    "route": "app\\api\\checkout\\simulate\\route.ts",
+    "methods": [
+      "GET"
+    ],
+    "isMutating": false,
+    "hasValidateMutating": false,
+    "hasCors": false,
+    "hasRateLimit": false,
+    "hasAuth": false
+  },
+  {
+    "route": "app\\api\\runs\\route.ts",
+    "methods": [
+      "POST"
+    ],
+    "isMutating": true,
+    "hasValidateMutating": false,
+    "hasCors": false,
+    "hasRateLimit": true,
+    "hasAuth": false
+  },
+  {
+    "route": "app\\api\\runs\\[id]\\report.pdf\\route.ts",
+    "methods": [
+      "GET"
+    ],
+    "isMutating": false,
+    "hasValidateMutating": false,
+    "hasCors": false,
+    "hasRateLimit": false,
+    "hasAuth": false
+  },
+  {
+    "route": "app\\api\\runs\\[id]\\route.ts",
+    "methods": [
+      "GET"
+    ],
+    "isMutating": false,
+    "hasValidateMutating": false,
+    "hasCors": false,
+    "hasRateLimit": false,
+    "hasAuth": false
+  },
+  {
+    "route": "app\\api\\sites\\route.ts",
+    "methods": [
+      "POST"
+    ],
+    "isMutating": true,
+    "hasValidateMutating": false,
+    "hasCors": false,
+    "hasRateLimit": false,
+    "hasAuth": false
+  },
+  {
+    "route": "app\\api\\sites\\[id]\\verify\\route.ts",
+    "methods": [
+      "POST"
+    ],
+    "isMutating": true,
+    "hasValidateMutating": false,
+    "hasCors": false,
+    "hasRateLimit": false,
+    "hasAuth": false
+  },
+  {
+    "route": "app\\api\\slightnudge\\apply\\route.ts",
+    "methods": [
+      "POST",
+      "OPTIONS"
+    ],
+    "isMutating": true,
+    "hasValidateMutating": true,
+    "hasCors": true,
+    "hasRateLimit": false,
+    "hasAuth": true
+  },
+  {
+    "route": "app\\api\\slightnudge\\assets\\route.ts",
+    "methods": [
+      "GET",
+      "POST"
+    ],
+    "isMutating": true,
+    "hasValidateMutating": true,
+    "hasCors": false,
+    "hasRateLimit": false,
+    "hasAuth": true
+  },
+  {
+    "route": "app\\api\\slightnudge\\inspect\\route.ts",
+    "methods": [
+      "POST",
+      "OPTIONS"
+    ],
+    "isMutating": true,
+    "hasValidateMutating": false,
+    "hasCors": true,
+    "hasRateLimit": false,
+    "hasAuth": false
+  },
+  {
+    "route": "app\\api\\slightnudge\\nudge\\route.ts",
+    "methods": [
+      "POST"
+    ],
+    "isMutating": true,
+    "hasValidateMutating": false,
+    "hasCors": false,
+    "hasRateLimit": false,
+    "hasAuth": false
+  },
+  {
+    "route": "app\\api\\slightnudge\\pages\\route.ts",
+    "methods": [
+      "GET"
+    ],
+    "isMutating": false,
+    "hasValidateMutating": false,
+    "hasCors": false,
+    "hasRateLimit": false,
+    "hasAuth": false
+  },
+  {
+    "route": "app\\api\\slightnudge\\preview\\route.ts",
+    "methods": [
+      "POST",
+      "DELETE",
+      "OPTIONS"
+    ],
+    "isMutating": true,
+    "hasValidateMutating": true,
+    "hasCors": true,
+    "hasRateLimit": false,
+    "hasAuth": true
+  },
+  {
+    "route": "app\\api\\slightnudge\\repositories\\route.ts",
+    "methods": [
+      "GET",
+      "POST"
+    ],
+    "isMutating": true,
+    "hasValidateMutating": true,
+    "hasCors": false,
+    "hasRateLimit": false,
+    "hasAuth": true
+  },
+  {
+    "route": "app\\api\\slightnudge\\repositories\\[id]\\adapter\\route.ts",
+    "methods": [
+      "GET",
+      "POST",
+      "DELETE"
+    ],
+    "isMutating": true,
+    "hasValidateMutating": true,
+    "hasCors": false,
+    "hasRateLimit": false,
+    "hasAuth": true
+  },
+  {
+    "route": "app\\api\\slightnudge\\repositories\\[id]\\docker-preview\\route.ts",
+    "methods": [
+      "GET",
+      "POST",
+      "DELETE"
+    ],
+    "isMutating": true,
+    "hasValidateMutating": true,
+    "hasCors": false,
+    "hasRateLimit": false,
+    "hasAuth": true
+  },
+  {
+    "route": "app\\api\\slightnudge\\repositories\\[id]\\inspect\\route.ts",
+    "methods": [
+      "POST",
+      "OPTIONS"
+    ],
+    "isMutating": true,
+    "hasValidateMutating": false,
+    "hasCors": true,
+    "hasRateLimit": false,
+    "hasAuth": false
+  },
+  {
+    "route": "app\\api\\slightnudge\\repositories\\[id]\\preview-check\\route.ts",
+    "methods": [
+      "POST"
+    ],
+    "isMutating": true,
+    "hasValidateMutating": true,
+    "hasCors": false,
+    "hasRateLimit": false,
+    "hasAuth": true
+  },
+  {
+    "route": "app\\api\\slightnudge\\repositories\\[id]\\route.ts",
+    "methods": [
+      "GET"
+    ],
+    "isMutating": false,
+    "hasValidateMutating": false,
+    "hasCors": false,
+    "hasRateLimit": false,
+    "hasAuth": false
+  },
+  {
+    "route": "app\\api\\slightnudge\\repositories\\[id]\\source\\route.ts",
+    "methods": [
+      "GET"
+    ],
+    "isMutating": false,
+    "hasValidateMutating": false,
+    "hasCors": false,
+    "hasRateLimit": false,
+    "hasAuth": false
+  },
+  {
+    "route": "app\\api\\slightnudge\\style\\route.ts",
+    "methods": [
+      "POST"
+    ],
+    "isMutating": true,
+    "hasValidateMutating": false,
+    "hasCors": false,
+    "hasRateLimit": false,
+    "hasAuth": false
+  },
+  {
+    "route": "app\\api\\slightnudge\\token\\route.ts",
+    "methods": [
+      "GET"
+    ],
+    "isMutating": false,
+    "hasValidateMutating": false,
+    "hasCors": false,
+    "hasRateLimit": false,
+    "hasAuth": true
+  },
+  {
+    "route": "app\\api\\slightnudge\\undo\\route.ts",
+    "methods": [
+      "POST",
+      "OPTIONS"
+    ],
+    "isMutating": true,
+    "hasValidateMutating": true,
+    "hasCors": true,
+    "hasRateLimit": false,
+    "hasAuth": true
+  },
+  {
+    "route": "app\\api\\webhooks\\dodo\\route.ts",
+    "methods": [
+      "POST"
+    ],
+    "isMutating": true,
+    "hasValidateMutating": false,
+    "hasCors": false,
+    "hasRateLimit": false,
+    "hasAuth": false
+  }
+]

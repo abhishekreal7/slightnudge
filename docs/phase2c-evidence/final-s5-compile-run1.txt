@@ -1,0 +1,13 @@
+▶ S5: Verify Tailwind compilation and AST parse before write
+  ✔ refuses applying an edit with a bogus non-compiling class and leaves file unchanged (225.7315ms)
+  ✔ accepts valid classes, stacked variant (dark:hover:bg-blue-500), and arbitrary value (w-[37px]) (280.6292ms)
+  ✔ refuses content that would break the AST parse and leaves file unchanged (126.674ms)
+✔ S5: Verify Tailwind compilation and AST parse before write (636.9716ms)
+ℹ tests 3
+ℹ suites 1
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 643.2525

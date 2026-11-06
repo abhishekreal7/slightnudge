@@ -1,0 +1,51 @@
+Disposable source project: generated SaaS; Next.js 16.4.3; Tailwind 4.3.3; installed source adapter; no environment files checked out.
+Source navigation: editor /studio/source-proof/edit
+Source lifecycle: editor document initialized
+Source navigation: editor /studio/source-proof/edit
+Source navigation: editor /studio/source-proof/edit
+Source navigation: project /
+Source navigation: project /
+Source API: {"api":"/api/slightnudge/preview","method":"POST","status":200,"success":true}
+Source proof: {"success":true,"reason":""}
+Source proof: {"success":true,"reason":"The page changed after preview. Reload and select again."}
+Source navigation: editor /studio/source-proof/edit
+Source API: {"api":"/api/slightnudge/apply","method":"POST","status":200,"success":true}
+Source navigation: editor /studio/source-proof/edit
+Source navigation: editor /studio/source-proof/edit
+Source navigation: project /
+Source navigation: project /
+Source proof: {"file":"components/Features.tsx","line":2,"column":162,"expectedClass":"mt-3 text-3xl font-bold","classes":["mt-3 text-3xl font-bold"]}
+Source proof: {"success":true,"reason":"The project is still rendering an older source revision."}
+Source notice: Applied change to .slightnudge\repositories\source-proof\components\Features.tsx
+Source API: {"api":"/api/slightnudge/preview","method":"POST","status":200,"success":true}
+Source proof: {"success":true,"reason":""}
+Source proof: {"success":true,"reason":"The page changed after preview. Reload and select again."}
+Source API: {"api":"/api/slightnudge/apply","method":"POST","status":200,"success":true}
+Source navigation: project /
+Source navigation: editor /studio/source-proof/edit
+Source navigation: project /
+Source proof: {"file":"components/Features.tsx","line":2,"column":162,"expectedClass":"mt-3 text-3xl font-normal","classes":["mt-3 text-3xl font-bold"]}
+Source proof: {"success":false,"reason":"The project is still rendering an older source revision."}
+Source navigation: editor /studio/source-proof/edit
+Source navigation: project /
+Source navigation: project /
+Source proof: {"file":"components/Features.tsx","line":2,"column":162,"expectedClass":"mt-3 text-3xl font-normal","classes":["mt-3 text-3xl font-normal"]}
+Source proof: {"success":true,"reason":"The project is still rendering an older source revision."}
+Source notice: Undo status is unconfirmed. Check Undo status before continuing; Undo will not be sent again.
+Source navigation: project /
+Source navigation: editor /studio/source-proof/edit
+Source navigation: project /
+Source navigation: project /
+Source proof: {"file":"components/Features.tsx","line":2,"column":162,"expectedClass":"mt-3 text-3xl font-bold","classes":["mt-3 text-3xl font-bold"]}
+Source proof: {"success":true,"reason":"The project is still rendering an older source revision."}
+Source notice: Undid font-bold → font-normal.
+PASS: real lost Undo response; unknown status pauses editing; explicit read-only check; duplicate receipt retains older edit
+Source navigation: editor /studio/source-proof/edit
+Source API: {"api":"/api/slightnudge/undo","method":"POST","status":200,"success":true}
+Source navigation: editor /studio/source-proof/edit
+Source navigation: project /
+Source navigation: project /
+Source proof: {"file":"components/Features.tsx","line":2,"column":162,"expectedClass":"mt-3 text-3xl font-semibold","classes":["mt-3 text-3xl font-semibold"]}
+Source proof: {"success":true,"reason":"The project is still rendering an older source revision."}
+Source notice: Undid font-semibold → font-bold.
+PASS: 7 review-consent browser cases (real API; disposable source copy)

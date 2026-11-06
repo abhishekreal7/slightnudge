@@ -1,0 +1,240 @@
+========================================================================================
+🎯 MOVE EXPECTATIONS VALIDATION SUITE (test/move-expectations.test.ts)
+========================================================================================
+
+Restoring fixtures/1-plain-static.tsx to pristine base and waiting for Next.js dev server...
+Waiting 4s for Next.js Fast Refresh to settle...
+▶ Testing BLOCK @ 100%...
+▶ Testing BLOCK @ 120%...
+▶ Testing BLOCK @ 150%...
+▶ Testing FLEX-ROW @ 100%...
+▶ Testing FLEX-ROW @ 120%...
+▶ Testing FLEX-ROW @ 150%...
+▶ Testing FLEX-COLUMN @ 100%...
+▶ Testing FLEX-COLUMN @ 120%...
+▶ Testing FLEX-COLUMN @ 150%...
+
+--- Running 1d: Apply & Undo byte-for-byte verification ---
+
+  ✗ Error in block @ 100%: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3999/fixtures/1
+Call log:
+[2m  - navigating to "http://127.0.0.1:3999/fixtures/1", waiting until "domcontentloaded"[22m
+
+    at testMatrixCase (C:\dev\vibecheck\test\move-expectations.test.ts:142:14)
+    at main (C:\dev\vibecheck\test\move-expectations.test.ts:716:25) {
+  log: [
+    '  - navigating to "http://127.0.0.1:3999/fixtures/1", waiting until "domcontentloaded"'
+  ],
+  name: 'Error'
+}
+  ✗ Error in block @ 120%: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3999/fixtures/1
+Call log:
+[2m  - navigating to "http://127.0.0.1:3999/fixtures/1", waiting until "domcontentloaded"[22m
+
+    at testMatrixCase (C:\dev\vibecheck\test\move-expectations.test.ts:142:14)
+    at main (C:\dev\vibecheck\test\move-expectations.test.ts:716:25) {
+  log: [
+    '  - navigating to "http://127.0.0.1:3999/fixtures/1", waiting until "domcontentloaded"'
+  ],
+  name: 'Error'
+}
+  ✗ Error in block @ 150%: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3999/fixtures/1
+Call log:
+[2m  - navigating to "http://127.0.0.1:3999/fixtures/1", waiting until "domcontentloaded"[22m
+
+    at testMatrixCase (C:\dev\vibecheck\test\move-expectations.test.ts:142:14)
+    at main (C:\dev\vibecheck\test\move-expectations.test.ts:716:25) {
+  log: [
+    '  - navigating to "http://127.0.0.1:3999/fixtures/1", waiting until "domcontentloaded"'
+  ],
+  name: 'Error'
+}
+  ✗ Error in flex-row @ 100%: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3999/fixtures/1
+Call log:
+[2m  - navigating to "http://127.0.0.1:3999/fixtures/1", waiting until "domcontentloaded"[22m
+
+    at testMatrixCase (C:\dev\vibecheck\test\move-expectations.test.ts:142:14)
+    at main (C:\dev\vibecheck\test\move-expectations.test.ts:716:25) {
+  log: [
+    '  - navigating to "http://127.0.0.1:3999/fixtures/1", waiting until "domcontentloaded"'
+  ],
+  name: 'Error'
+}
+  ✗ Error in flex-row @ 120%: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3999/fixtures/1
+Call log:
+[2m  - navigating to "http://127.0.0.1:3999/fixtures/1", waiting until "domcontentloaded"[22m
+
+    at testMatrixCase (C:\dev\vibecheck\test\move-expectations.test.ts:142:14)
+    at main (C:\dev\vibecheck\test\move-expectations.test.ts:716:25) {
+  log: [
+    '  - navigating to "http://127.0.0.1:3999/fixtures/1", waiting until "domcontentloaded"'
+  ],
+  name: 'Error'
+}
+  ✗ Error in flex-row @ 150%: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3999/fixtures/1
+Call log:
+[2m  - navigating to "http://127.0.0.1:3999/fixtures/1", waiting until "domcontentloaded"[22m
+
+    at testMatrixCase (C:\dev\vibecheck\test\move-expectations.test.ts:142:14)
+    at main (C:\dev\vibecheck\test\move-expectations.test.ts:716:25) {
+  log: [
+    '  - navigating to "http://127.0.0.1:3999/fixtures/1", waiting until "domcontentloaded"'
+  ],
+  name: 'Error'
+}
+  ✗ Error in flex-column @ 100%: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3999/fixtures/1
+Call log:
+[2m  - navigating to "http://127.0.0.1:3999/fixtures/1", waiting until "domcontentloaded"[22m
+
+    at testMatrixCase (C:\dev\vibecheck\test\move-expectations.test.ts:142:14)
+    at main (C:\dev\vibecheck\test\move-expectations.test.ts:716:25) {
+  log: [
+    '  - navigating to "http://127.0.0.1:3999/fixtures/1", waiting until "domcontentloaded"'
+  ],
+  name: 'Error'
+}
+  ✗ Error in flex-column @ 120%: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3999/fixtures/1
+Call log:
+[2m  - navigating to "http://127.0.0.1:3999/fixtures/1", waiting until "domcontentloaded"[22m
+
+    at testMatrixCase (C:\dev\vibecheck\test\move-expectations.test.ts:142:14)
+    at main (C:\dev\vibecheck\test\move-expectations.test.ts:716:25) {
+  log: [
+    '  - navigating to "http://127.0.0.1:3999/fixtures/1", waiting until "domcontentloaded"'
+  ],
+  name: 'Error'
+}
+  ✗ Error in flex-column @ 150%: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3999/fixtures/1
+Call log:
+[2m  - navigating to "http://127.0.0.1:3999/fixtures/1", waiting until "domcontentloaded"[22m
+
+    at testMatrixCase (C:\dev\vibecheck\test\move-expectations.test.ts:142:14)
+    at main (C:\dev\vibecheck\test\move-expectations.test.ts:716:25) {
+  log: [
+    '  - navigating to "http://127.0.0.1:3999/fixtures/1", waiting until "domcontentloaded"'
+  ],
+  name: 'Error'
+}
+Fatal test error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3999/fixtures/1
+Call log:
+[2m  - navigating to "http://127.0.0.1:3999/fixtures/1", waiting until "domcontentloaded"[22m
+
+    at testApplyAndUndo (C:\dev\vibecheck\test\move-expectations.test.ts:360:14)
+    at async main (C:\dev\vibecheck\test\move-expectations.test.ts:736:14) {
+  log: [
+    '  - navigating to "http://127.0.0.1:3999/fixtures/1", waiting until "domcontentloaded"'
+  ],
+  name: 'Error'
+}
+
+Command failed: npx tsx test/move-expectations.test.ts
+  ✗ Error in block @ 100%: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3999/fixtures/1
+Call log:
+[2m  - navigating to "http://127.0.0.1:3999/fixtures/1", waiting until "domcontentloaded"[22m
+
+    at testMatrixCase (C:\dev\vibecheck\test\move-expectations.test.ts:142:14)
+    at main (C:\dev\vibecheck\test\move-expectations.test.ts:716:25) {
+  log: [
+    '  - navigating to "http://127.0.0.1:3999/fixtures/1", waiting until "domcontentloaded"'
+  ],
+  name: 'Error'
+}
+  ✗ Error in block @ 120%: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3999/fixtures/1
+Call log:
+[2m  - navigating to "http://127.0.0.1:3999/fixtures/1", waiting until "domcontentloaded"[22m
+
+    at testMatrixCase (C:\dev\vibecheck\test\move-expectations.test.ts:142:14)
+    at main (C:\dev\vibecheck\test\move-expectations.test.ts:716:25) {
+  log: [
+    '  - navigating to "http://127.0.0.1:3999/fixtures/1", waiting until "domcontentloaded"'
+  ],
+  name: 'Error'
+}
+  ✗ Error in block @ 150%: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3999/fixtures/1
+Call log:
+[2m  - navigating to "http://127.0.0.1:3999/fixtures/1", waiting until "domcontentloaded"[22m
+
+    at testMatrixCase (C:\dev\vibecheck\test\move-expectations.test.ts:142:14)
+    at main (C:\dev\vibecheck\test\move-expectations.test.ts:716:25) {
+  log: [
+    '  - navigating to "http://127.0.0.1:3999/fixtures/1", waiting until "domcontentloaded"'
+  ],
+  name: 'Error'
+}
+  ✗ Error in flex-row @ 100%: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3999/fixtures/1
+Call log:
+[2m  - navigating to "http://127.0.0.1:3999/fixtures/1", waiting until "domcontentloaded"[22m
+
+    at testMatrixCase (C:\dev\vibecheck\test\move-expectations.test.ts:142:14)
+    at main (C:\dev\vibecheck\test\move-expectations.test.ts:716:25) {
+  log: [
+    '  - navigating to "http://127.0.0.1:3999/fixtures/1", waiting until "domcontentloaded"'
+  ],
+  name: 'Error'
+}
+  ✗ Error in flex-row @ 120%: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3999/fixtures/1
+Call log:
+[2m  - navigating to "http://127.0.0.1:3999/fixtures/1", waiting until "domcontentloaded"[22m
+
+    at testMatrixCase (C:\dev\vibecheck\test\move-expectations.test.ts:142:14)
+    at main (C:\dev\vibecheck\test\move-expectations.test.ts:716:25) {
+  log: [
+    '  - navigating to "http://127.0.0.1:3999/fixtures/1", waiting until "domcontentloaded"'
+  ],
+  name: 'Error'
+}
+  ✗ Error in flex-row @ 150%: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3999/fixtures/1
+Call log:
+[2m  - navigating to "http://127.0.0.1:3999/fixtures/1", waiting until "domcontentloaded"[22m
+
+    at testMatrixCase (C:\dev\vibecheck\test\move-expectations.test.ts:142:14)
+    at main (C:\dev\vibecheck\test\move-expectations.test.ts:716:25) {
+  log: [
+    '  - navigating to "http://127.0.0.1:3999/fixtures/1", waiting until "domcontentloaded"'
+  ],
+  name: 'Error'
+}
+  ✗ Error in flex-column @ 100%: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3999/fixtures/1
+Call log:
+[2m  - navigating to "http://127.0.0.1:3999/fixtures/1", waiting until "domcontentloaded"[22m
+
+    at testMatrixCase (C:\dev\vibecheck\test\move-expectations.test.ts:142:14)
+    at main (C:\dev\vibecheck\test\move-expectations.test.ts:716:25) {
+  log: [
+    '  - navigating to "http://127.0.0.1:3999/fixtures/1", waiting until "domcontentloaded"'
+  ],
+  name: 'Error'
+}
+  ✗ Error in flex-column @ 120%: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3999/fixtures/1
+Call log:
+[2m  - navigating to "http://127.0.0.1:3999/fixtures/1", waiting until "domcontentloaded"[22m
+
+    at testMatrixCase (C:\dev\vibecheck\test\move-expectations.test.ts:142:14)
+    at main (C:\dev\vibecheck\test\move-expectations.test.ts:716:25) {
+  log: [
+    '  - navigating to "http://127.0.0.1:3999/fixtures/1", waiting until "domcontentloaded"'
+  ],
+  name: 'Error'
+}
+  ✗ Error in flex-column @ 150%: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3999/fixtures/1
+Call log:
+[2m  - navigating to "http://127.0.0.1:3999/fixtures/1", waiting until "domcontentloaded"[22m
+
+    at testMatrixCase (C:\dev\vibecheck\test\move-expectations.test.ts:142:14)
+    at main (C:\dev\vibecheck\test\move-expectations.test.ts:716:25) {
+  log: [
+    '  - navigating to "http://127.0.0.1:3999/fixtures/1", waiting until "domcontentloaded"'
+  ],
+  name: 'Error'
+}
+Fatal test error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3999/fixtures/1
+Call log:
+[2m  - navigating to "http://127.0.0.1:3999/fixtures/1", waiting until "domcontentloaded"[22m
+
+    at testApplyAndUndo (C:\dev\vibecheck\test\move-expectations.test.ts:360:14)
+    at async main (C:\dev\vibecheck\test\move-expectations.test.ts:736:14) {
+  log: [
+    '  - navigating to "http://127.0.0.1:3999/fixtures/1", waiting until "domcontentloaded"'
+  ],
+  name: 'Error'
+}

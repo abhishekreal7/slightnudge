@@ -1,0 +1,29 @@
+TAP version 13
+# Subtest: S5: Tailwind v3 Verification and Project Isolation
+    # Subtest: verifies Tailwind v3 project tokens: standard, theme brand.500, stacked variants, arbitrary values, plugins, and refuses bogus
+    ok 1 - verifies Tailwind v3 project tokens: standard, theme brand.500, stacked variants, arbitrary values, plugins, and refuses bogus
+      ---
+      duration_ms: 15335.5808
+      type: 'test'
+      ...
+    # Subtest: confirms unchanged existing tokens are never verified in a v3 project during apply
+    ok 2 - confirms unchanged existing tokens are never verified in a v3 project during apply
+      ---
+      duration_ms: 6302.859
+      type: 'test'
+      ...
+    1..2
+ok 1 - S5: Tailwind v3 Verification and Project Isolation
+  ---
+  duration_ms: 21640.1628
+  type: 'suite'
+  ...
+1..1
+# tests 2
+# suites 1
+# pass 2
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 21653.1821

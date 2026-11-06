@@ -1,0 +1,134 @@
+SETUP 1793600694590 START git ["ls-files"]
+SETUP END elapsed 43ms
+HARNESS-V3 NAVIGATION http://127.0.0.1:58365/editor?panel=inspector
+TIMING 1793600709722 REQUEST http://127.0.0.1:58365/editor?panel=inspector
+TIMING 1793600710095 RESPONSE 200 http://127.0.0.1:58365/editor?panel=inspector
+TIMING 1793600710869 REQUEST http://127.0.0.1:58365/api/slightnudge/responsive
+TIMING 1793600710869 REQUEST http://127.0.0.1:58365/api/slightnudge/responsive
+TIMING 1793600710888 REQUEST http://127.0.0.1:58365/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A58365&__slightnudge_session=880943e5-f5f7-4fc4-b6d8-0e0a65dedda1
+TIMING 1793600716595 RESPONSE 200 http://127.0.0.1:58365/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A58365&__slightnudge_session=880943e5-f5f7-4fc4-b6d8-0e0a65dedda1
+TIMING 1793600716631 REQUEST http://127.0.0.1:58365/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+HARNESS-V3 OP 1793600719919 START click locator('h1')
+TIMING 1793600720138 RESPONSE 200 http://127.0.0.1:58365/api/slightnudge/responsive
+TIMING 1793600720199 RESPONSE 200 http://127.0.0.1:58365/api/slightnudge/responsive
+TIMING 1793600720419 RESPONSE 200 http://127.0.0.1:58365/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+HARNESS-V3 OP 1793600749926 ERROR click locator('h1')
+Isolated application diagnostics ▲ Next.js 16.4.3 (webpack)
+- Local:         http://127.0.0.1:58365
+- Network:       http://127.0.0.1:58365
+✓ Ready in 502ms
+✓ Running next.config.mjs took 32ms
+
+○ Compiling /editor/[[...project]]/page ...
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\ef621fd7\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-zZX4FF\\.next\\dev\\build-manifest.json","pid":23132,"time":1793600709144,"bytes":344}
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\ef621fd7\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-zZX4FF\\.next\\dev\\build-manifest.json","pid":21924,"time":1793600709383,"bytes":344}
+ GET /editor 200 in 919ms (next.js: 718ms, application-code: 201ms)
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\ef621fd7\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-zZX4FF\\.next\\dev\\build-manifest.json","pid":21924,"time":1793600710038,"bytes":344}
+ GET /editor?panel=inspector 200 in 68ms (next.js: 11ms, application-code: 57ms)
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\ef621fd7\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-zZX4FF\\.next\\dev\\build-manifest.json","pid":34840,"time":1793600710386,"bytes":344}
+○ Compiling /studio/preview/[pageId]/page ...
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\ef621fd7\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-zZX4FF\\.next\\dev\\build-manifest.json","pid":19588,"time":1793600716109,"bytes":344}
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\ef621fd7\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-zZX4FF\\.next\\dev\\build-manifest.json","pid":21924,"time":1793600716422,"bytes":344}
+ GET /studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A58365&__slightnudge_session=880943e5-f5f7-4fc4-b6d8-0e0a65dedda1 200 in 1225ms (next.js: 991ms, application-code: 233ms)
+⚠ ./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\ef621fd7\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-zZX4FF\\.next\\dev\\build-manifest.json","pid":21924,"time":1793600719680,"bytes":344}
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\ef621fd7\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-zZX4FF\\.next\\dev\\build-manifest.json","pid":21924,"time":1793600719694,"bytes":344}
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\ef621fd7\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-zZX4FF\\.next\\dev\\build-manifest.json","pid":21924,"time":1793600719705,"bytes":344}
+ GET /api/slightnudge/pages 200 in 4.5s (next.js: 3.8s, proxy.ts: 438ms, application-code: 269ms)
+○ Compiling /api/slightnudge/responsive/route ...
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\ef621fd7\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-zZX4FF\\.next\\dev\\build-manifest.json","pid":21924,"time":1793600720019,"bytes":344}
+ POST /api/slightnudge/responsive 200 in 4.7s (next.js: 3.8s, proxy.ts: 439ms, application-code: 462ms)
+ POST /api/slightnudge/responsive 200 in 4.8s (next.js: 3.8s, proxy.ts: 439ms, application-code: 523ms)
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\ef621fd7\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-zZX4FF\\.next\\dev\\build-manifest.json","pid":21924,"time":1793600720232,"bytes":344}
+ GET /api/slightnudge/pages 200 in 32ms (next.js: 16ms, proxy.ts: 9ms, application-code: 8ms)
+ GET /editor?panel=inspector 200 in 3.5s (next.js: 3.3s, application-code: 224ms)
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\ef621fd7\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-zZX4FF\\.next\\dev\\build-manifest.json","pid":25088,"time":1793600720343,"bytes":344}
+
+SETUP 1793600751622 START taskkill ["/pid","28380","/T","/F"]
+SETUP END elapsed 292ms
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+locator.click: Timeout 30000ms exceeded.
+Call log:
+[2m  - waiting for locator('iframe[title="Actual project"], iframe[title="Local source preview"]').contentFrame().locator('h1')[22m
+
+    at Proxy.<anonymous> (C:\dev\vibecheck\scratch\g\ef621fd7\worktree\test\helpers\gate-page-v3.ts:24:156)
+    at checkDragMove (C:\dev\vibecheck\scratch\g\ef621fd7\worktree\test\helpers\drag-move-browser.v3.ts:16:28)
+    at async <anonymous> (C:\dev\vibecheck\scratch\g\ef621fd7\worktree\test\review-consent.browser.v3.ts:239:14) {
+  log: [
+    `  - waiting for locator('iframe[title="Actual project"], iframe[title="Local source preview"]').contentFrame().locator('h1')`
+  ],
+  name: 'TimeoutError'
+}
+
+Node.js v22.19.0

@@ -1,0 +1,135 @@
+{
+  "date": "2026-10-27T17:47:12.497Z",
+  "project": "https://github.com/EdgeOneDev/saas-starter",
+  "commit": "33781d2aedcfc5518498668ce703bc45f7bed9f3",
+  "next": "14.0.4",
+  "tailwind": "3.4.17",
+  "state": "passed",
+  "checks": [
+    "single full-page canvas with stable document height",
+    "project breakpoints discovered through the actual compiled API",
+    "translated text safely refused before inline editing",
+    "shared/dynamic source movement refused with original source and position intact",
+    "shared/dynamic source responsive edit explicitly protected",
+    "native responsive widths: 375, 768 and 1200",
+    "separate-window native document with translated-text protection"
+  ],
+  "targets": [
+    {
+      "file": "src/components/sections/hero.tsx",
+      "line": "125",
+      "column": "36",
+      "tag": "p",
+      "text": "A complete SaaS starter template all the components you need to launch fast.",
+      "outcome": "protected",
+      "reason": "This text comes from prop 'subtitle' and cannot be edited directly. Nothing was changed."
+    },
+    {
+      "file": "src/components/ui/button.tsx",
+      "line": "73",
+      "column": "7",
+      "tag": "button",
+      "text": "Documentation",
+      "outcome": "not-qualified",
+      "reason": "Repeated source marker in a shared component; no edit attempted. This run qualifies unique source targets."
+    },
+    {
+      "file": "src/components/ui/card.tsx",
+      "line": "35",
+      "column": "3",
+      "tag": "h3",
+      "text": "Lightning Fast",
+      "outcome": "not-qualified",
+      "reason": "Repeated source marker in a shared component; no edit attempted. This run qualifies unique source targets."
+    },
+    {
+      "file": "src/components/sections/features.tsx",
+      "line": "34",
+      "column": "9",
+      "tag": "a",
+      "text": "30+ Components Ready to Use",
+      "outcome": "protected",
+      "reason": "This text is generated dynamically and cannot be edited safely."
+    },
+    {
+      "file": "src/components/sections/cta-section.tsx",
+      "line": "129",
+      "column": "9",
+      "tag": "h2",
+      "text": "Ready to Ship Your SaaS?",
+      "outcome": "protected",
+      "reason": "can't edit this safely: component used in several places"
+    },
+    {
+      "file": "src/components/layout/section-layout.tsx",
+      "line": "133",
+      "column": "15",
+      "tag": "p",
+      "text": "Our SaaS starter template comes packed with all the features and components you need to build and launch your product quickly.",
+      "outcome": "not-qualified",
+      "reason": "Repeated source marker in a shared component; no edit attempted. This run qualifies unique source targets."
+    },
+    {
+      "file": "src/components/ui/card.tsx",
+      "line": "50",
+      "column": "3",
+      "tag": "p",
+      "text": "Built with Next.js 14 and optimized for maximum performance. Your users will love the speed.",
+      "outcome": "not-qualified",
+      "reason": "Repeated source marker in a shared component; no edit attempted. This run qualifies unique source targets."
+    },
+    {
+      "file": "src/components/sections/faq.tsx",
+      "line": "30",
+      "column": "11",
+      "tag": "p",
+      "text": "Still have questions? We're here to help!",
+      "outcome": "protected",
+      "reason": "This text comes from prop 'stillHaveQuestions' and cannot be edited directly. Nothing was changed."
+    },
+    {
+      "file": "src/components/sections/faq.tsx",
+      "line": "33",
+      "column": "11",
+      "tag": "a",
+      "text": "Contact Support →",
+      "outcome": "protected",
+      "reason": "This text comes from prop 'contactSupport' and cannot be edited directly. Nothing was changed."
+    }
+  ],
+  "phase": "separate window",
+  "candidateCount": 30,
+  "responsive": {
+    "status": 200,
+    "breakpoints": [
+      {
+        "name": "sm",
+        "minWidth": 640,
+        "media": "(min-width: 640px)"
+      },
+      {
+        "name": "md",
+        "minWidth": 768,
+        "media": "(min-width: 768px)"
+      },
+      {
+        "name": "lg",
+        "minWidth": 1024,
+        "media": "(min-width: 1024px)"
+      },
+      {
+        "name": "xl",
+        "minWidth": 1280,
+        "media": "(min-width: 1280px)"
+      },
+      {
+        "name": "2xl",
+        "minWidth": 1536,
+        "media": "(min-width: 1536px)"
+      }
+    ]
+  },
+  "protectedMovement": "can't edit this safely: class built from a variable",
+  "protectedResponsiveEdit": "can't edit this safely: class built from a variable",
+  "browserErrors": []
+}

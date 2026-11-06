@@ -1,0 +1,28 @@
+====================================================
+🧪 SLIGHTNUDGE - STEP 0: FIXTURE VERIFICATION SUITE
+====================================================
+
+--- Fixture 1: Plain static className ---
+
+  ❌ [FAIL] Fixture 1 starts with ml-2
+Test suite failed: Error: Test failed: Fixture 1 starts with ml-2
+    at assert (C:\dev\vibecheck\test\fixtures.test.ts:21:13)
+    at <anonymous> (C:\dev\vibecheck\test\fixtures.test.ts:44:5)
+    at withFixtureBackup (C:\dev\vibecheck\test\fixtures.test.ts:31:7)
+    at runFixtureTests (C:\dev\vibecheck\test\fixtures.test.ts:42:3)
+    at <anonymous> (C:\dev\vibecheck\test\fixtures.test.ts:204:1)
+    at ModuleJob.run (node:internal/modules/esm/module_job:345:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:651:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)
+
+Command failed: npx tsx test/fixtures.test.ts
+  ❌ [FAIL] Fixture 1 starts with ml-2
+Test suite failed: Error: Test failed: Fixture 1 starts with ml-2
+    at assert (C:\dev\vibecheck\test\fixtures.test.ts:21:13)
+    at <anonymous> (C:\dev\vibecheck\test\fixtures.test.ts:44:5)
+    at withFixtureBackup (C:\dev\vibecheck\test\fixtures.test.ts:31:7)
+    at runFixtureTests (C:\dev\vibecheck\test\fixtures.test.ts:42:3)
+    at <anonymous> (C:\dev\vibecheck\test\fixtures.test.ts:204:1)
+    at ModuleJob.run (node:internal/modules/esm/module_job:345:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:651:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)

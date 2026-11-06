@@ -1,0 +1,16 @@
+▲ Next.js 16.4.3 (webpack)
+- Local:         http://127.0.0.1:3001
+- Network:       http://127.0.0.1:3001
+✓ Ready in 924ms
+✓ Running next.config.mjs took 55ms
+- Cache Components enabled
+- Partial Prefetching enabled
+
+○ Compiling /page ...
+ GET / 200 in 1201ms (next.js: 595ms, application-code: 605ms)
+Route / is rendering with server caches disabled. For this navigation, Component Metadata in React DevTools will not accurately reflect what is statically prerenderable and runtime prefetchable. See more info here: https://nextjs.org/docs/messages/cache-bypass-in-dev
+ GET / 200 in 150ms (next.js: 3ms, application-code: 147ms)
+ GET /?__slightnudge_session=512e61d4-a8ac-4549-b172-d7fb7922ddf0&__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A3000&__slightnudge_draft=1 200 in 133ms (next.js: 3ms, application-code: 130ms)
+ GET / 200 in 115ms (next.js: 3ms, application-code: 112ms)
+ GET / 200 in 109ms (next.js: 3ms, application-code: 106ms)
+ GET /?__slightnudge_session=ff787eb7-e8ad-4b5f-ae51-250c36629994&__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A3000&__slightnudge_draft=1&__slightnudge_canvas=1 200 in 201ms (next.js: 2ms, application-code: 198ms)

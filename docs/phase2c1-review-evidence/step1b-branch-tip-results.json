@@ -1,0 +1,20 @@
+{
+  "results": [
+    {
+      "label": "branch-tip: npm run dev with reorder-safety in path",
+      "port": 3220,
+      "status": 403,
+      "blocked": true,
+      "body": "{\"error\":\"Access denied.\"}"
+    },
+    {
+      "label": "branch-tip: next dev --webpack with reorder-safety in path",
+      "port": 3221,
+      "status": 403,
+      "blocked": true,
+      "body": "{\"error\":\"Access denied.\"}"
+    }
+  ],
+  "nothingWritten": true,
+  "allBlockedWith403": true
+}

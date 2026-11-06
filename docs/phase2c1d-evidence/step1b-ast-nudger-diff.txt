@@ -1,0 +1,13 @@
+﻿diff --git a/lib/slightnudge/ast-nudger.ts b/lib/slightnudge/ast-nudger.ts
+index fa455ee..2ae2ffc 100644
+--- a/lib/slightnudge/ast-nudger.ts
++++ b/lib/slightnudge/ast-nudger.ts
+@@ -35,7 +35,7 @@ export interface NudgeResult {
+ /**
+  * Checks whether an AST node is located within a component that is used in multiple places.
+  */
+-function isComponentUsedMultipleTimes(targetNode: JsxOpeningElement | JsxSelfClosingElement, project: Project): boolean {
++export function isComponentUsedMultipleTimes(targetNode: JsxOpeningElement | JsxSelfClosingElement, project: Project): boolean {
+   const sourceFile = targetNode.getSourceFile();
+   const jsxElements = [
+     ...sourceFile.getDescendantsOfKind(SyntaxKind.JsxOpeningElement),

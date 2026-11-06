@@ -1,0 +1,93 @@
+SETUP 1793708054677 START git ["ls-files"]
+SETUP END elapsed 113ms
+HARNESS-V3 NAVIGATION about:blank
+HARNESS-V3 NAVIGATION http://127.0.0.1:54380/editor?panel=inspector&view=fit
+TIMING 1793708055963 REQUEST http://127.0.0.1:54380/editor?panel=inspector&view=fit
+TIMING 1793708056409 RESPONSE 200 http://127.0.0.1:54380/editor?panel=inspector&view=fit
+HARNESS-V3 OP 1793708057050 START waitFor locator('[data-source-ready="true"]')
+TIMING 1793708068691 REQUEST http://127.0.0.1:54380/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A54380&__slightnudge_session=2ecc03b3-dcf7-4f1b-9f08-e992bd375cfb&__slightnudge_canvas=1
+TIMING 1793708068691 REQUEST http://127.0.0.1:54380/api/slightnudge/responsive
+TIMING 1793708068691 REQUEST http://127.0.0.1:54380/api/slightnudge/responsive
+TIMING 1793708081490 RESPONSE 200 http://127.0.0.1:54380/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A54380&__slightnudge_session=2ecc03b3-dcf7-4f1b-9f08-e992bd375cfb&__slightnudge_canvas=1
+TIMING 1793708081828 REQUEST http://127.0.0.1:54380/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+TIMING 1793708082267 RESPONSE 200 http://127.0.0.1:54380/api/slightnudge/responsive
+TIMING 1793708082564 RESPONSE 200 http://127.0.0.1:54380/api/slightnudge/responsive
+TIMING 1793708083280 RESPONSE 200 http://127.0.0.1:54380/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+HARNESS-V3 OP 1793708086336 END waitFor locator('[data-source-ready="true"]')
+HARNESS-V3 OP 1793708086336 START selectOption getByRole('combobox', { name: 'Canvas zoom', exact: true })
+HARNESS-V3 OP 1793708086449 END selectOption getByRole('combobox', { name: 'Canvas zoom', exact: true })
+TIMING 1793708086751 REQUEST http://127.0.0.1:54380/api/slightnudge/responsive
+TIMING 1793708086751 REQUEST http://127.0.0.1:54380/api/slightnudge/preview
+HARNESS-V3 OP 1793708086764 START waitFor getByRole('region', { name: 'Component properties', exact: true }).getByText('This instance', { exact: true })
+TIMING 1793708086891 RESPONSE 200 http://127.0.0.1:54380/api/slightnudge/responsive
+TIMING 1793708090147 RESPONSE 200 http://127.0.0.1:54380/api/slightnudge/preview
+HARNESS-V3 OP 1793708090249 END waitFor getByRole('region', { name: 'Component properties', exact: true }).getByText('This instance', { exact: true })
+HARNESS-V3 OP 1793708090250 START waitFor getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop label', { exact: true })
+HARNESS-V3 OP 1793708090287 END waitFor getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop label', { exact: true })
+HARNESS-V3 OP 1793708090291 START fill getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop label', { exact: true })
+HARNESS-V3 OP 1793708090337 END fill getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop label', { exact: true })
+HARNESS-V3 OP 1793708090340 START press getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop label', { exact: true })
+TIMING 1793708090500 REQUEST http://127.0.0.1:54380/api/slightnudge/preview
+HARNESS-V3 OP 1793708090564 END press getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop label', { exact: true })
+TIMING 1793708095013 RESPONSE 200 http://127.0.0.1:54380/api/slightnudge/preview
+TIMING 1793708095561 REQUEST http://127.0.0.1:54380/api/slightnudge/preview
+HARNESS-V3 OP 1793708095726 START selectOption getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop variant', { exact: true })
+TIMING 1793708097942 RESPONSE 200 http://127.0.0.1:54380/api/slightnudge/preview
+TIMING 1793708098349 REQUEST http://127.0.0.1:54380/api/slightnudge/preview
+HARNESS-V3 OP 1793708098352 END selectOption getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop variant', { exact: true })
+TIMING 1793708109034 RESPONSE 200 http://127.0.0.1:54380/api/slightnudge/preview
+TIMING 1793708109639 REQUEST http://127.0.0.1:54380/api/slightnudge/preview
+HARNESS-V3 OP 1793708109881 START selectOption getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop disabled', { exact: true })
+TIMING 1793708111887 RESPONSE 200 http://127.0.0.1:54380/api/slightnudge/preview
+TIMING 1793708111943 REQUEST http://127.0.0.1:54380/api/slightnudge/preview
+HARNESS-V3 OP 1793708111943 END selectOption getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop disabled', { exact: true })
+TIMING 1793708115674 RESPONSE 200 http://127.0.0.1:54380/api/slightnudge/preview
+TIMING 1793708116179 REQUEST http://127.0.0.1:54380/api/slightnudge/preview
+HARNESS-V3 OP 1793708116320 START selectOption getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop disabled', { exact: true })
+TIMING 1793708118013 RESPONSE 200 http://127.0.0.1:54380/api/slightnudge/preview
+TIMING 1793708118464 REQUEST http://127.0.0.1:54380/api/slightnudge/preview
+HARNESS-V3 OP 1793708118464 END selectOption getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop disabled', { exact: true })
+TIMING 1793708121088 RESPONSE 200 http://127.0.0.1:54380/api/slightnudge/preview
+TIMING 1793708121689 REQUEST http://127.0.0.1:54380/api/slightnudge/preview
+TIMING 1793708123030 RESPONSE 200 http://127.0.0.1:54380/api/slightnudge/preview
+TIMING 1793708125810 REQUEST http://127.0.0.1:54380/api/slightnudge/preview
+TIMING 1793708128840 RESPONSE 200 http://127.0.0.1:54380/api/slightnudge/preview
+TIMING 1793708130215 REQUEST http://127.0.0.1:54380/api/slightnudge/preview
+TIMING 1793708134574 RESPONSE 200 http://127.0.0.1:54380/api/slightnudge/preview
+TIMING 1793708135102 REQUEST http://127.0.0.1:54380/api/slightnudge/preview
+TIMING 1793708135732 REQUEST http://127.0.0.1:54380/api/slightnudge/preview
+TIMING 1793708139020 RESPONSE 200 http://127.0.0.1:54380/api/slightnudge/preview
+HARNESS-V3 OP 1793708139050 START inputValue getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop label', { exact: true })
+HARNESS-V3 OP 1793708139094 END inputValue getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop label', { exact: true })
+HARNESS-V3 OP 1793708139094 START fill getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop label', { exact: true })
+HARNESS-V3 OP 1793708139136 END fill getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop label', { exact: true })
+HARNESS-V3 OP 1793708139137 START press getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop label', { exact: true })
+TIMING 1793708139271 REQUEST http://127.0.0.1:54380/api/slightnudge/preview
+HARNESS-V3 OP 1793708139326 END press getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop label', { exact: true })
+TIMING 1793708144129 RESPONSE 200 http://127.0.0.1:54380/api/slightnudge/preview
+TIMING 1793708144794 REQUEST http://127.0.0.1:54380/api/slightnudge/preview
+TIMING 1793708145273 REQUEST http://127.0.0.1:54380/api/slightnudge/preview
+HARNESS-V3 OP 1793708145421 START waitFor getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop to', { exact: true })
+TIMING 1793708149945 RESPONSE 200 http://127.0.0.1:54380/api/slightnudge/preview
+HARNESS-V3 OP 1793708150093 END waitFor getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop to', { exact: true })
+HARNESS-V3 OP 1793708150094 START fill getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop to', { exact: true })
+HARNESS-V3 OP 1793708150166 END fill getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop to', { exact: true })
+HARNESS-V3 OP 1793708150170 START press getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop to', { exact: true })
+TIMING 1793708150542 REQUEST http://127.0.0.1:54380/api/slightnudge/preview
+HARNESS-V3 OP 1793708150691 END press getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop to', { exact: true })
+TIMING 1793708158989 RESPONSE 200 http://127.0.0.1:54380/api/slightnudge/preview
+TIMING 1793708159535 REQUEST http://127.0.0.1:54380/api/slightnudge/preview
+TIMING 1793708159603 REQUEST http://127.0.0.1:54380/editor?panel=inspector&view=fit
+TIMING 1793708159874 REQUEST http://127.0.0.1:54380/api/slightnudge/responsive
+TIMING 1793708162789 RESPONSE 200 http://127.0.0.1:54380/api/slightnudge/responsive
+TIMING 1793708162798 RESPONSE 200 http://127.0.0.1:54380/editor?panel=inspector&view=fit
+HARNESS-V3 OP 1793708163073 START waitFor locator('[data-source-ready="true"]')
+TIMING 1793708166436 REQUEST http://127.0.0.1:54380/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A54380&__slightnudge_session=b2d29e14-c960-4d76-a8b9-271f5479dc79&__slightnudge_canvas=1
+TIMING 1793708166555 REQUEST http://127.0.0.1:54380/api/slightnudge/responsive
+TIMING 1793708166557 REQUEST http://127.0.0.1:54380/api/slightnudge/responsive
+TIMING 1793708167810 RESPONSE 200 http://127.0.0.1:54380/api/slightnudge/responsive
+TIMING 1793708167848 RESPONSE 200 http://127.0.0.1:54380/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A54380&__slightnudge_session=b2d29e14-c960-4d76-a8b9-271f5479dc79&__slightnudge_canvas=1
+TIMING 1793708167861 REQUEST http://127.0.0.1:54380/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+TIMING 1793708168193 RESPONSE 200 http://127.0.0.1:54380/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+TIMING 1793708172537 RESPONSE 200 http://127.0.0.1:54380/api/slightnudge/responsive
+HARNESS-V3 OP 1793708174825 END waitFor locator('[data-source-ready="true"]')

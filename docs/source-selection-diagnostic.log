@@ -1,0 +1,21 @@
+Disposable source project: generated SaaS; Next.js 16.4.3; Tailwind 4.3.3; installed source adapter; no environment files checked out.
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: A physical click must select the intended marker before Apply
+
+354 !== 96
+
+    at checkSourceSelections (C:\dev\vibecheck\test\helpers\source-selection-workflows.ts:43:14)
+    at async checkSourceProject (C:\dev\vibecheck\test\helpers\source-project-browser.ts:65:64)
+    at async <anonymous> (C:\dev\vibecheck\test\review-consent.browser.ts:88:14) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 354,
+  expected: 96,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v22.19.0

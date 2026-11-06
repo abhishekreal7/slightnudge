@@ -1,0 +1,18 @@
+AssertionError [ERR_ASSERTION]: Reader saw incomplete manifest: [""]
+    at C:\dev\vibecheck\test\next-manifest-webpack.test.cjs:37:12
+    at C:\dev\vibecheck\node_modules\next\dist\compiled\webpack\bundle5.js:29:315989
+    at Hook.eval [as callAsync] (eval at create (C:\dev\vibecheck\node_modules\next\dist\compiled\webpack\bundle5.js:14:9222), <anonymous>:15:1)
+    at Hook.CALL_ASYNC_DELEGATE [as _callAsync] (C:\dev\vibecheck\node_modules\next\dist\compiled\webpack\bundle5.js:14:6376)
+    at Cache.shutdown (C:\dev\vibecheck\node_modules\next\dist\compiled\webpack\bundle5.js:29:16516)
+    at C:\dev\vibecheck\node_modules\next\dist\compiled\webpack\bundle5.js:29:149944
+    at Hook.eval [as callAsync] (eval at create (C:\dev\vibecheck\node_modules\next\dist\compiled\webpack\bundle5.js:14:9222), <anonymous>:6:1)
+    at Hook.CALL_ASYNC_DELEGATE [as _callAsync] (C:\dev\vibecheck\node_modules\next\dist\compiled\webpack\bundle5.js:14:6376)
+    at Compiler.close (C:\dev\vibecheck\node_modules\next\dist\compiled\webpack\bundle5.js:29:149829)
+    at C:\dev\vibecheck\test\next-manifest-webpack.test.cjs:33:38 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}

@@ -1,0 +1,85 @@
+commit e508d8038b9fcac518029fd796f838d371cbde13
+Author: Abhishek S B <abhishekreal79@gmail.com>
+Date:   Tue Oct 20 19:16:09 2026 +0530
+
+    fix(safety): support __non_webpack_require__ in tailwind-verifier for Next.js webpack server
+
+ lib/slightnudge/tailwind-verifier.ts | 65 +++++++++++++++++++++++++-----------
+ test/s1-auth-origin.test.ts          |  3 +-
+ 2 files changed, 48 insertions(+), 20 deletions(-)
+
+commit e3151d2e29b6bb2a337c80d9ddda040a6d09fe85
+Author: Abhishek S B <abhishekreal79@gmail.com>
+Date:   Tue Oct 20 19:11:47 2026 +0530
+
+    fix(safety): refine ESM/CJS loader in tailwind-verifier and update assertion message
+
+ lib/slightnudge/tailwind-verifier.ts | 13 ++++++++-----
+ test/s5-tailwind-compile.test.ts     |  2 +-
+ 2 files changed, 9 insertions(+), 6 deletions(-)
+
+commit d709584f7bcb00f5d947a3690e3c514cf3daa592
+Author: Abhishek S B <abhishekreal79@gmail.com>
+Date:   Tue Oct 20 19:07:12 2026 +0530
+
+    test(safety): add automated suites for S1 token auth, S3 atomic write retry, and S5 compile verification
+
+ test/s3-atomic-write.test.ts     | 111 ++++++++++++++++++++++++++++++++++++++
+ test/s5-tailwind-compile.test.ts | 112 +++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 223 insertions(+)
+
+commit d2bced78d1be83fa79d11addc8c6904f00a09d59
+Author: Abhishek S B <abhishekreal79@gmail.com>
+Date:   Tue Oct 20 19:06:58 2026 +0530
+
+    test(safety): S2 regression test for path traversal and junction refusal
+
+ test/s2-path-traversal.test.ts | 120 +++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 120 insertions(+)
+
+commit 2c198d178006787bc4ad8bdfcfc16967c94d6507
+Author: Abhishek S B <abhishekreal79@gmail.com>
+Date:   Tue Oct 20 19:06:49 2026 +0530
+
+    fix(safety): S5 verify Tailwind compilation and AST syntax parse before write
+
+ app/api/slightnudge/apply/route.ts   |   2 +-
+ lib/slightnudge/edit-history.ts      |  29 +++++-
+ lib/slightnudge/tailwind-verifier.ts | 186 +++++++++++++++++++++++++++++++++++
+ 3 files changed, 215 insertions(+), 2 deletions(-)
+
+commit 6174f120c198ff0aa0566f9f62ffa7e41ebc4773
+Author: Abhishek S B <abhishekreal79@gmail.com>
+Date:   Tue Oct 20 18:40:13 2026 +0530
+
+    fix(safety): S3 atomic or refuse with retry backoff and no non-atomic fallback
+
+ lib/slightnudge/edit-history.ts | 69 ++++++++++++++++++++++++++++-------------
+ 1 file changed, 48 insertions(+), 21 deletions(-)
+
+commit 325e835161bf304b77b20bad21f5f2e2d8c4ccea
+Author: Abhishek S B <abhishekreal79@gmail.com>
+Date:   Tue Oct 20 18:35:33 2026 +0530
+
+    fix(safety): S1 authenticated local-only mutating requests with per-session token
+
+ app/api/slightnudge/apply/route.ts                 |  10 +-
+ app/api/slightnudge/assets/route.ts                |   4 +-
+ app/api/slightnudge/preview/route.ts               |  17 +-
+ .../slightnudge/repositories/[id]/adapter/route.ts |   9 +-
+ .../repositories/[id]/docker-preview/route.ts      |  11 +-
+ .../repositories/[id]/preview-check/route.ts       |  14 +-
+ app/api/slightnudge/repositories/route.ts          |   4 +
+ app/api/slightnudge/token/route.ts                 |  18 +++
+ app/api/slightnudge/undo/route.ts                  |  10 +-
+ app/layout.tsx                                     |   9 ++
+ app/studio/[repoId]/page.tsx                       |  99 ++++++++----
+ app/workspace/page.tsx                             |   7 +-
+ components/slightnudge/SlightNudgeOverlay.tsx      |  32 ++--
+ lib/slightnudge/auth.ts                            |  92 +++++++++++
+ lib/slightnudge/client.ts                          |  44 ++++-
+ lib/slightnudge/cors.ts                            |   4 +-
+ lib/slightnudge/next-source-adapter.ts             |  26 ++-
+ package.json                                       |   2 +-
+ test/s1-auth-origin.test.ts                        | 178 +++++++++++++++++++++
+ 19 files changed, 504 insertions(+), 86 deletions(-)

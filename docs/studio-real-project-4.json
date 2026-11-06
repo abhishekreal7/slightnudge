@@ -1,0 +1,801 @@
+{
+  "date": "2026-10-23T18:43:57.901Z",
+  "policy": "30 distinct application DOM targets per rendered project, sampled uniformly in document order. Includes section/container, heading, paragraph, link, button and list types; excludes development overlay shadow roots and tiny accessibility-only nodes. Scroll each selected target into view. Dispatch a DOM click through the installed embedded bridge and verify its reported source file/line/column/tag. Then inspect and dry-run a font-weight change; independently parse the result to ensure that only the selected class attribute changes. No Apply to imported project copies. This tests browser-to-source mapping and the edit engine; it is not a full imported Studio Apply test and does not test physical mouse hit-testing.",
+  "results": [
+    {
+      "url": "generated-latest-next-tailwind-saas",
+      "next": "16.4.3",
+      "tailwind": "4.3.3",
+      "lockfiles": [],
+      "adapter": "runtime source markers verified",
+      "vite": "unsupported",
+      "selections": [
+        {
+          "selection": 1,
+          "n": 0,
+          "tag": "section",
+          "text": "NorthstarPricingA calmer way to buildMake room for your next idea.A thoughtful workspace for people ",
+          "file": "components/Hero.tsx",
+          "line": 1,
+          "column": 96,
+          "classes": "py-20",
+          "rect": {
+            "top": 0,
+            "left": 168,
+            "width": 1104,
+            "height": 464
+          },
+          "clickedRect": {
+            "top": 0,
+            "left": 168,
+            "width": 1104,
+            "height": 464
+          },
+          "outcome": "allowed",
+          "embeddedBridgeVerified": true,
+          "textEditable": false,
+          "textReason": "For safety, text editing currently supports elements with one plain text value and no nested elements."
+        },
+        {
+          "selection": 2,
+          "n": 1,
+          "tag": "nav",
+          "text": "NorthstarPricing",
+          "file": "components/Hero.tsx",
+          "line": 1,
+          "column": 133,
+          "classes": "mb-16 flex justify-between",
+          "rect": {
+            "top": 80,
+            "left": 168,
+            "width": 1104,
+            "height": 24
+          },
+          "clickedRect": {
+            "top": 80,
+            "left": 168,
+            "width": 1104,
+            "height": 24
+          },
+          "outcome": "allowed",
+          "embeddedBridgeVerified": true,
+          "textEditable": false,
+          "textReason": "For safety, text editing currently supports elements with one plain text value and no nested elements."
+        },
+        {
+          "selection": 3,
+          "n": 3,
+          "tag": "a",
+          "text": "Pricing",
+          "file": "components/Hero.tsx",
+          "line": 1,
+          "column": 228,
+          "classes": "text-sm",
+          "rect": {
+            "top": 80,
+            "left": 1229.875,
+            "width": 42.125,
+            "height": 24
+          },
+          "clickedRect": {
+            "top": 80,
+            "left": 1229.875,
+            "width": 42.125,
+            "height": 24
+          },
+          "outcome": "allowed",
+          "embeddedBridgeVerified": true,
+          "textEditable": true
+        },
+        {
+          "selection": 4,
+          "n": 5,
+          "tag": "h1",
+          "text": "Make room for your next idea.",
+          "file": "components/Hero.tsx",
+          "line": 1,
+          "column": 354,
+          "classes": "text-5xl font-semibold",
+          "rect": {
+            "top": 204,
+            "left": 168,
+            "width": 1104,
+            "height": 48
+          },
+          "clickedRect": {
+            "top": 204,
+            "left": 168,
+            "width": 1104,
+            "height": 48
+          },
+          "outcome": "allowed",
+          "embeddedBridgeVerified": true,
+          "textEditable": false,
+          "textReason": "This text comes from prop 'title' and cannot be edited directly. Nothing was changed."
+        },
+        {
+          "selection": 5,
+          "n": 7,
+          "tag": "a",
+          "text": "Explore the workspace",
+          "file": "components/Hero.tsx",
+          "line": 1,
+          "column": 465,
+          "classes": "mt-8 inline-block rounded-lg bg-emerald-700 px-6 py-3 text-white",
+          "rect": {
+            "top": 336,
+            "left": 168,
+            "width": 206.1875,
+            "height": 48
+          },
+          "clickedRect": {
+            "top": 336,
+            "left": 168,
+            "width": 206.1875,
+            "height": 48
+          },
+          "outcome": "allowed",
+          "embeddedBridgeVerified": true,
+          "textEditable": true
+        },
+        {
+          "selection": 6,
+          "n": 9,
+          "tag": "p",
+          "text": "Made for your everyday work",
+          "file": "components/Features.tsx",
+          "line": 2,
+          "column": 93,
+          "classes": "text-sm text-slate-500",
+          "rect": {
+            "top": 490,
+            "left": 168,
+            "width": 1104,
+            "height": 20
+          },
+          "clickedRect": {
+            "top": 490,
+            "left": 168,
+            "width": 1104,
+            "height": 20
+          },
+          "outcome": "allowed",
+          "embeddedBridgeVerified": true,
+          "textEditable": true
+        },
+        {
+          "selection": 7,
+          "n": 11,
+          "tag": "div",
+          "text": "Projects with clarityKeep the next step in view.One shared workspaceBring people and plans together.",
+          "file": "components/Features.tsx",
+          "line": 2,
+          "column": 240,
+          "classes": "mt-8 grid gap-6 md:grid-cols-3",
+          "rect": {
+            "top": 443,
+            "left": 168,
+            "width": 1104,
+            "height": 114
+          },
+          "clickedRect": {
+            "top": 443,
+            "left": 168,
+            "width": 1104,
+            "height": 114
+          },
+          "outcome": "allowed",
+          "embeddedBridgeVerified": true,
+          "textEditable": false,
+          "textReason": "This text is generated dynamically and cannot be edited safely."
+        },
+        {
+          "selection": 8,
+          "n": 13,
+          "tag": "h3",
+          "text": "Projects with clarity",
+          "file": "components/Features.tsx",
+          "line": 2,
+          "column": 416,
+          "classes": "text-xl font-semibold",
+          "rect": {
+            "top": 486,
+            "left": 193,
+            "width": 302,
+            "height": 28
+          },
+          "clickedRect": {
+            "top": 486,
+            "left": 193,
+            "width": 302,
+            "height": 28
+          },
+          "outcome": "refused",
+          "embeddedBridgeVerified": true,
+          "reason": "This element repeats from a list, so one edit would change every copy. Nothing was changed."
+        },
+        {
+          "selection": 9,
+          "n": 15,
+          "tag": "article",
+          "text": "One shared workspaceBring people and plans together.",
+          "file": "components/Features.tsx",
+          "line": 2,
+          "column": 311,
+          "classes": "rounded-xl border p-6",
+          "rect": {
+            "top": 443,
+            "left": 544,
+            "width": 352,
+            "height": 114
+          },
+          "clickedRect": {
+            "top": 443,
+            "left": 544,
+            "width": 352,
+            "height": 114
+          },
+          "outcome": "refused",
+          "embeddedBridgeVerified": true,
+          "textEditable": false,
+          "textReason": "For safety, text editing currently supports elements with one plain text value and no nested elements.",
+          "reason": "can't edit this safely: class built from a condition (call expression)"
+        },
+        {
+          "selection": 10,
+          "n": 17,
+          "tag": "p",
+          "text": "Bring people and plans together.",
+          "file": "components/Features.tsx",
+          "line": 2,
+          "column": 473,
+          "classes": "mt-3 text-slate-600",
+          "rect": {
+            "top": 488,
+            "left": 569,
+            "width": 302,
+            "height": 24
+          },
+          "clickedRect": {
+            "top": 488,
+            "left": 569,
+            "width": 302,
+            "height": 24
+          },
+          "outcome": "refused",
+          "embeddedBridgeVerified": true,
+          "reason": "This element repeats from a list, so one edit would change every copy. Nothing was changed."
+        },
+        {
+          "selection": 11,
+          "n": 18,
+          "tag": "article",
+          "text": "Room to focusBuild without the busywork.",
+          "file": "components/Features.tsx",
+          "line": 2,
+          "column": 311,
+          "classes": "rounded-xl border p-6",
+          "rect": {
+            "top": 443,
+            "left": 920,
+            "width": 352,
+            "height": 114
+          },
+          "clickedRect": {
+            "top": 443,
+            "left": 920,
+            "width": 352,
+            "height": 114
+          },
+          "outcome": "refused",
+          "embeddedBridgeVerified": true,
+          "textEditable": false,
+          "textReason": "For safety, text editing currently supports elements with one plain text value and no nested elements.",
+          "reason": "can't edit this safely: class built from a condition (call expression)"
+        },
+        {
+          "selection": 12,
+          "n": 20,
+          "tag": "p",
+          "text": "Build without the busywork.",
+          "file": "components/Features.tsx",
+          "line": 2,
+          "column": 473,
+          "classes": "mt-3 text-slate-600",
+          "rect": {
+            "top": 488,
+            "left": 945,
+            "width": 302,
+            "height": 24
+          },
+          "clickedRect": {
+            "top": 488,
+            "left": 945,
+            "width": 302,
+            "height": 24
+          },
+          "outcome": "refused",
+          "embeddedBridgeVerified": true,
+          "reason": "This element repeats from a list, so one edit would change every copy. Nothing was changed."
+        },
+        {
+          "selection": 13,
+          "n": 22,
+          "tag": "section",
+          "text": "Simple plansStart small. Grow together.PersonalFreeA quiet place for your ideas.See what is included",
+          "file": "components/Pricing.tsx",
+          "line": 1,
+          "column": 42,
+          "classes": "border-t py-16",
+          "rect": {
+            "top": 268,
+            "left": 168,
+            "width": 1104,
+            "height": 463
+          },
+          "clickedRect": {
+            "top": 268,
+            "left": 168,
+            "width": 1104,
+            "height": 463
+          },
+          "outcome": "allowed",
+          "embeddedBridgeVerified": true,
+          "textEditable": false,
+          "textReason": "For safety, text editing currently supports elements with one plain text value and no nested elements."
+        },
+        {
+          "selection": 14,
+          "n": 24,
+          "tag": "h2",
+          "text": "Start small. Grow together.",
+          "file": "components/Pricing.tsx",
+          "line": 1,
+          "column": 147,
+          "classes": "mt-3 text-3xl font-semibold",
+          "rect": {
+            "top": 482,
+            "left": 168,
+            "width": 1104,
+            "height": 36
+          },
+          "clickedRect": {
+            "top": 482,
+            "left": 168,
+            "width": 1104,
+            "height": 36
+          },
+          "outcome": "allowed",
+          "embeddedBridgeVerified": true,
+          "textEditable": true
+        },
+        {
+          "selection": 15,
+          "n": 26,
+          "tag": "article",
+          "text": "PersonalFreeA quiet place for your ideas.See what is included",
+          "file": "components/Pricing.tsx",
+          "line": 1,
+          "column": 271,
+          "classes": "rounded-xl border p-8",
+          "rect": {
+            "top": 383,
+            "left": 168,
+            "width": 540,
+            "height": 234
+          },
+          "clickedRect": {
+            "top": 383,
+            "left": 168,
+            "width": 540,
+            "height": 234
+          },
+          "outcome": "allowed",
+          "embeddedBridgeVerified": true,
+          "textEditable": false,
+          "textReason": "For safety, text editing currently supports elements with one plain text value and no nested elements."
+        },
+        {
+          "selection": 16,
+          "n": 28,
+          "tag": "p",
+          "text": "Free",
+          "file": "components/Pricing.tsx",
+          "line": 1,
+          "column": 365,
+          "classes": "mt-4 text-4xl font-bold",
+          "rect": {
+            "top": 480,
+            "left": 201,
+            "width": 474,
+            "height": 40
+          },
+          "clickedRect": {
+            "top": 480,
+            "left": 201,
+            "width": 474,
+            "height": 40
+          },
+          "outcome": "allowed",
+          "embeddedBridgeVerified": true,
+          "textEditable": true
+        },
+        {
+          "selection": 17,
+          "n": 30,
+          "tag": "a",
+          "text": "See what is included",
+          "file": "components/Pricing.tsx",
+          "line": 1,
+          "column": 480,
+          "classes": "mt-6 inline-block text-emerald-700",
+          "rect": {
+            "top": 488,
+            "left": 201,
+            "width": 143.6875,
+            "height": 24
+          },
+          "clickedRect": {
+            "top": 488,
+            "left": 201,
+            "width": 143.6875,
+            "height": 24
+          },
+          "outcome": "allowed",
+          "embeddedBridgeVerified": true,
+          "textEditable": true
+        },
+        {
+          "selection": 18,
+          "n": 32,
+          "tag": "h3",
+          "text": "Team",
+          "file": "components/Pricing.tsx",
+          "line": 1,
+          "column": 631,
+          "classes": "text-xl font-semibold",
+          "rect": {
+            "top": 486,
+            "left": 765,
+            "width": 474,
+            "height": 28
+          },
+          "clickedRect": {
+            "top": 486,
+            "left": 765,
+            "width": 474,
+            "height": 28
+          },
+          "outcome": "allowed",
+          "embeddedBridgeVerified": true,
+          "textEditable": true
+        },
+        {
+          "selection": 19,
+          "n": 34,
+          "tag": "p",
+          "text": "Per person, per month.",
+          "file": "components/Pricing.tsx",
+          "line": 1,
+          "column": 724,
+          "classes": "mt-3 text-slate-600",
+          "rect": {
+            "top": 488,
+            "left": 765,
+            "width": 474,
+            "height": 24
+          },
+          "clickedRect": {
+            "top": 488,
+            "left": 765,
+            "width": 474,
+            "height": 24
+          },
+          "outcome": "allowed",
+          "embeddedBridgeVerified": true,
+          "textEditable": true
+        },
+        {
+          "selection": 20,
+          "n": 36,
+          "tag": "section",
+          "text": "From people who buildA little more space to think.We finally know what matters this week.Alex, indep",
+          "file": "components/Testimonials.tsx",
+          "line": 1,
+          "column": 47,
+          "classes": "border-t py-16",
+          "rect": {
+            "top": 301,
+            "left": 168,
+            "width": 1104,
+            "height": 397
+          },
+          "clickedRect": {
+            "top": 301,
+            "left": 168,
+            "width": 1104,
+            "height": 397
+          },
+          "outcome": "allowed",
+          "embeddedBridgeVerified": true,
+          "textEditable": false,
+          "textReason": "For safety, text editing currently supports elements with one plain text value and no nested elements."
+        },
+        {
+          "selection": 21,
+          "n": 37,
+          "tag": "p",
+          "text": "From people who build",
+          "file": "components/Testimonials.tsx",
+          "line": 1,
+          "column": 83,
+          "classes": "text-sm text-slate-500",
+          "rect": {
+            "top": 490,
+            "left": 168,
+            "width": 1104,
+            "height": 20
+          },
+          "clickedRect": {
+            "top": 490,
+            "left": 168,
+            "width": 1104,
+            "height": 20
+          },
+          "outcome": "allowed",
+          "embeddedBridgeVerified": true,
+          "textEditable": true
+        },
+        {
+          "selection": 22,
+          "n": 39,
+          "tag": "p",
+          "text": "We finally know what matters this week.",
+          "file": "components/Testimonials.tsx",
+          "line": 1,
+          "column": 280,
+          "classes": "text-xl",
+          "rect": {
+            "top": 486,
+            "left": 200,
+            "width": 1040,
+            "height": 28
+          },
+          "clickedRect": {
+            "top": 486,
+            "left": 200,
+            "width": 1040,
+            "height": 28
+          },
+          "outcome": "allowed",
+          "embeddedBridgeVerified": true,
+          "textEditable": true
+        },
+        {
+          "selection": 23,
+          "n": 41,
+          "tag": "p",
+          "text": "Illustrative testimonial for this disposable test application.",
+          "file": "components/Testimonials.tsx",
+          "line": 1,
+          "column": 435,
+          "classes": "mt-4 text-xs text-slate-500",
+          "rect": {
+            "top": 492,
+            "left": 168,
+            "width": 1104,
+            "height": 16
+          },
+          "clickedRect": {
+            "top": 492,
+            "left": 168,
+            "width": 1104,
+            "height": 16
+          },
+          "outcome": "allowed",
+          "embeddedBridgeVerified": true,
+          "textEditable": true
+        },
+        {
+          "selection": 24,
+          "n": 43,
+          "tag": "h2",
+          "text": "A few useful answers.",
+          "file": "components/FAQ.tsx",
+          "line": 1,
+          "column": 83,
+          "classes": "text-3xl font-semibold",
+          "rect": {
+            "top": 531,
+            "left": 168,
+            "width": 1104,
+            "height": 36
+          },
+          "clickedRect": {
+            "top": 531,
+            "left": 168,
+            "width": 1104,
+            "height": 36
+          },
+          "outcome": "allowed",
+          "embeddedBridgeVerified": true,
+          "textEditable": true
+        },
+        {
+          "selection": 25,
+          "n": 45,
+          "tag": "p",
+          "text": "Yes. Start with a personal workspace and invite people when you are ready.",
+          "file": "components/FAQ.tsx",
+          "line": 1,
+          "column": 268,
+          "classes": "mt-3 text-slate-600",
+          "rect": {
+            "top": 648,
+            "left": 189,
+            "width": 1062,
+            "height": 24
+          },
+          "clickedRect": {
+            "top": 648,
+            "left": 189,
+            "width": 1062,
+            "height": 24
+          },
+          "outcome": "allowed",
+          "embeddedBridgeVerified": true,
+          "textEditable": true
+        },
+        {
+          "selection": 26,
+          "n": 47,
+          "tag": "p",
+          "text": "Your content belongs to you.",
+          "file": "components/FAQ.tsx",
+          "line": 1,
+          "column": 510,
+          "classes": "mt-3 text-slate-600",
+          "rect": {
+            "top": 766,
+            "left": 189,
+            "width": 1062,
+            "height": 24
+          },
+          "clickedRect": {
+            "top": 766,
+            "left": 189,
+            "width": 1062,
+            "height": 24
+          },
+          "outcome": "allowed",
+          "embeddedBridgeVerified": true,
+          "textEditable": true
+        },
+        {
+          "selection": 27,
+          "n": 49,
+          "tag": "div",
+          "text": "NorthstarFor the work that matters.",
+          "file": "components/Footer.tsx",
+          "line": 1,
+          "column": 97,
+          "classes": "space-y-3",
+          "rect": {
+            "top": 916,
+            "left": 168,
+            "width": 159.75,
+            "height": 44
+          },
+          "clickedRect": {
+            "top": 916,
+            "left": 168,
+            "width": 159.75,
+            "height": 44
+          },
+          "outcome": "allowed",
+          "embeddedBridgeVerified": true,
+          "textEditable": false,
+          "textReason": "For safety, text editing currently supports elements with one plain text value and no nested elements."
+        },
+        {
+          "selection": 28,
+          "n": 51,
+          "tag": "p",
+          "text": "For the work that matters.",
+          "file": "components/Footer.tsx",
+          "line": 1,
+          "column": 175,
+          "classes": "text-sm text-slate-500",
+          "rect": {
+            "top": 940,
+            "left": 168,
+            "width": 159.75,
+            "height": 20
+          },
+          "clickedRect": {
+            "top": 940,
+            "left": 168,
+            "width": 159.75,
+            "height": 20
+          },
+          "outcome": "allowed",
+          "embeddedBridgeVerified": true,
+          "textEditable": true
+        },
+        {
+          "selection": 29,
+          "n": 53,
+          "tag": "a",
+          "text": "Features",
+          "file": "components/Footer.tsx",
+          "line": 1,
+          "column": 276,
+          "classes": "text-sm",
+          "rect": {
+            "top": 919,
+            "left": 1067.84375,
+            "width": 52.078125,
+            "height": 19
+          },
+          "clickedRect": {
+            "top": 919,
+            "left": 1067.84375,
+            "width": 52.078125,
+            "height": 19
+          },
+          "outcome": "allowed",
+          "embeddedBridgeVerified": true,
+          "textEditable": true
+        },
+        {
+          "selection": 30,
+          "n": 55,
+          "tag": "a",
+          "text": "Questions",
+          "file": "components/Footer.tsx",
+          "line": 1,
+          "column": 378,
+          "classes": "text-sm",
+          "rect": {
+            "top": 919,
+            "left": 1210.046875,
+            "width": 61.953125,
+            "height": 19
+          },
+          "clickedRect": {
+            "top": 919,
+            "left": 1210.046875,
+            "width": 61.953125,
+            "height": 19
+          },
+          "outcome": "allowed",
+          "embeddedBridgeVerified": true,
+          "textEditable": true
+        }
+      ],
+      "registryVersions": {
+        "next": "16.4.3",
+        "react": "19.3.1",
+        "tailwindcss": "4.3.3",
+        "@tailwindcss/postcss": "4.3.3",
+        "typescript": "7.0.2",
+        "@types/react": "19.3.0",
+        "@types/node": "26.6.5"
+      },
+      "license": [
+        "LICENSE"
+      ],
+      "routes": [
+        "app"
+      ],
+      "nextDeclared": "16.4.3",
+      "tailwindDeclared": "4.3.3",
+      "installExit": 0,
+      "installedLockfiles": [
+        "package-lock.json"
+      ],
+      "visibleCandidates": 56
+    }
+  ],
+  "cleanup": []
+}

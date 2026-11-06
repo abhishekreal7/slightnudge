@@ -1,0 +1,12 @@
+C:\dev\vibecheck\test\m0-case8-diagnostic.ts:8
+const specs=vm.runInNewContext(ts.transpileModule(block+'\nSELECTIONS;', {compilerOptions:{target:ts.ScriptTarget.ES2022}}).outputText);
+                                                                                                                  ^
+
+
+TypeError: Cannot read properties of undefined (reading 'ES2022')
+    at <anonymous> (C:\dev\vibecheck\test\m0-case8-diagnostic.ts:8:115)
+    at ModuleJob.run (node:internal/modules/esm/module_job:345:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:651:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)
+
+Node.js v22.19.0

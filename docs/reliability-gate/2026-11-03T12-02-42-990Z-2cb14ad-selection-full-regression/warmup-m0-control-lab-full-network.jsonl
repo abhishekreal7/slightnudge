@@ -1,0 +1,76 @@
+{"time":1793707404151,"elapsed":37149.228,"kind":"warmup-page-created","remaining":142850.9974}
+{"time":1793707404175,"elapsed":37173.8002,"kind":"request","url":"http://127.0.0.1:52990/editor/m0-control-lab?view=full&preview=http%3A%2F%2F127.0.0.1%3A52991"}
+{"time":1793707431414,"elapsed":64407.390799999994,"kind":"response","url":"http://127.0.0.1:52990/editor/m0-control-lab?view=full&preview=http%3A%2F%2F127.0.0.1%3A52991","status":200}
+{"time":1793707431433,"elapsed":64426.4075,"kind":"request","url":"http://127.0.0.1:52990/_next/static/css/app/layout.css?v=1793707429250"}
+{"time":1793707431435,"elapsed":64428.6075,"kind":"request","url":"http://127.0.0.1:52990/_next/static/css/app/editor/%5B%5B...project%5D%5D/page.css?v=1793707429250"}
+{"time":1793707431437,"elapsed":64430.5527,"kind":"request","url":"http://127.0.0.1:52990/_next/static/chunks/webpack.js?v=1793707429250"}
+{"time":1793707431438,"elapsed":64431.6856,"kind":"request","url":"http://127.0.0.1:52990/_next/static/chunks/main-app.js?v=1793707429250"}
+{"time":1793707431439,"elapsed":64432.7438,"kind":"request","url":"http://127.0.0.1:52990/_next/static/chunks/app-pages-internals.js"}
+{"time":1793707431481,"elapsed":64474.7883,"kind":"response","url":"http://127.0.0.1:52990/_next/static/css/app/layout.css?v=1793707429250","status":200}
+{"time":1793707431485,"elapsed":64478.7956,"kind":"response","url":"http://127.0.0.1:52990/_next/static/css/app/editor/%5B%5B...project%5D%5D/page.css?v=1793707429250","status":200}
+{"time":1793707431522,"elapsed":64516.302500000005,"kind":"response","url":"http://127.0.0.1:52990/_next/static/chunks/webpack.js?v=1793707429250","status":200}
+{"time":1793707431587,"elapsed":64580.4587,"kind":"request","url":"http://127.0.0.1:52990/_next/static/media/22a5144ee8d83bca-s.p.woff2"}
+{"time":1793707431980,"elapsed":64973.5353,"kind":"response","url":"http://127.0.0.1:52990/_next/static/chunks/app-pages-internals.js","status":200}
+{"time":1793707431994,"elapsed":64987.7264,"kind":"response","url":"http://127.0.0.1:52990/_next/static/media/22a5144ee8d83bca-s.p.woff2","status":200}
+{"time":1793707433868,"elapsed":66861.609,"kind":"response","url":"http://127.0.0.1:52990/_next/static/chunks/main-app.js?v=1793707429250","status":200}
+{"time":1793707434650,"elapsed":67643.4978,"kind":"console","level":"info","text":"%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"}
+{"time":1793707434921,"elapsed":67914.5757,"kind":"request","url":"http://127.0.0.1:52990/_next/static/chunks/app/editor/%5B%5B...project%5D%5D/page.js"}
+{"time":1793707434923,"elapsed":67916.3408,"kind":"request","url":"http://127.0.0.1:52990/_next/static/chunks/app/layout.js"}
+{"time":1793707434924,"elapsed":67918.1713,"kind":"request","url":"http://127.0.0.1:52990/_next/static/chunks/app/not-found.js"}
+{"time":1793707434958,"elapsed":67951.6719,"kind":"console","level":"log","text":"[HMR] connected"}
+{"time":1793707435055,"elapsed":68048.9005,"kind":"response","url":"http://127.0.0.1:52990/_next/static/chunks/app/not-found.js","status":200}
+{"time":1793707435060,"elapsed":68053.52,"kind":"response","url":"http://127.0.0.1:52990/_next/static/chunks/app/layout.js","status":200}
+{"time":1793707435238,"elapsed":68232.1299,"kind":"response","url":"http://127.0.0.1:52990/_next/static/chunks/app/editor/%5B%5B...project%5D%5D/page.js","status":200}
+{"time":1793707435798,"elapsed":68791.6834,"kind":"request","url":"http://127.0.0.1:52990/_next/static/media/e4af272ccee01ff0-s.p.woff2"}
+{"time":1793707435851,"elapsed":68845.0083,"kind":"request","url":"http://127.0.0.1:52990/api/slightnudge/repositories/m0-control-lab"}
+{"time":1793707435857,"elapsed":68850.6258,"kind":"request","url":"http://127.0.0.1:52990/api/slightnudge/pages"}
+{"time":1793707435860,"elapsed":68853.8873,"kind":"request","url":"http://127.0.0.1:52990/api/slightnudge/repositories/m0-control-lab"}
+{"time":1793707435861,"elapsed":68855.143,"kind":"request","url":"http://127.0.0.1:52990/api/slightnudge/pages"}
+{"time":1793707436046,"elapsed":69039.3662,"kind":"response","url":"http://127.0.0.1:52990/_next/static/media/e4af272ccee01ff0-s.p.woff2","status":200}
+{"time":1793707436333,"elapsed":69326.5474,"kind":"request","url":"http://127.0.0.1:52990/_next/static/webpack/bf6c62cbb4e6aae8.webpack.hot-update.json"}
+{"time":1793707436436,"elapsed":69430.2873,"kind":"response","url":"http://127.0.0.1:52990/_next/static/webpack/bf6c62cbb4e6aae8.webpack.hot-update.json","status":200}
+{"time":1793707436440,"elapsed":69434.2916,"kind":"request","url":"http://127.0.0.1:52990/_next/static/webpack/app/layout.bf6c62cbb4e6aae8.hot-update.js"}
+{"time":1793707436441,"elapsed":69435.2528,"kind":"request","url":"http://127.0.0.1:52990/_next/static/webpack/webpack.bf6c62cbb4e6aae8.hot-update.js"}
+{"time":1793707436746,"elapsed":69740.0259,"kind":"response","url":"http://127.0.0.1:52990/_next/static/webpack/webpack.bf6c62cbb4e6aae8.hot-update.js","status":200}
+{"time":1793707436749,"elapsed":69742.4482,"kind":"response","url":"http://127.0.0.1:52990/_next/static/webpack/app/layout.bf6c62cbb4e6aae8.hot-update.js","status":200}
+{"time":1793707436755,"elapsed":69748.5942,"kind":"console","level":"log","text":"[Fast Refresh] done in 1793707436751ms"}
+{"time":1793707436871,"elapsed":69865.07,"kind":"response","url":"http://127.0.0.1:52990/api/slightnudge/repositories/m0-control-lab","status":200}
+{"time":1793707437101,"elapsed":70094.45420000001,"kind":"console","level":"log","text":"[Fast Refresh] rebuilding"}
+{"time":1793707437905,"elapsed":70898.798,"kind":"request","url":"http://127.0.0.1:52990/_next/static/webpack/06c41eb167080198.webpack.hot-update.json"}
+{"time":1793707437994,"elapsed":70987.8765,"kind":"response","url":"http://127.0.0.1:52990/_next/static/webpack/06c41eb167080198.webpack.hot-update.json","status":200}
+{"time":1793707437997,"elapsed":70990.5559,"kind":"request","url":"http://127.0.0.1:52990/_next/static/webpack/webpack.06c41eb167080198.hot-update.js"}
+{"time":1793707438039,"elapsed":71033.224,"kind":"response","url":"http://127.0.0.1:52990/_next/static/webpack/webpack.06c41eb167080198.hot-update.js","status":200}
+{"time":1793707438041,"elapsed":71035.0192,"kind":"console","level":"log","text":"[Fast Refresh] done in 940ms"}
+{"time":1793707438076,"elapsed":71069.8779,"kind":"console","level":"log","text":"[Fast Refresh] rebuilding"}
+{"time":1793707438693,"elapsed":71686.5548,"kind":"request","url":"http://127.0.0.1:52990/editor/m0-control-lab?view=full&preview=http%3A%2F%2F127.0.0.1%3A52991&_rsc=sVkvYcmL0Tzdv_g8"}
+{"time":1793707438696,"elapsed":71690.1119,"kind":"console","level":"log","text":"[Fast Refresh] done in 620ms"}
+{"time":1793707439057,"elapsed":72050.4599,"kind":"response","url":"http://127.0.0.1:52990/api/slightnudge/pages","status":200}
+{"time":1793707439489,"elapsed":72482.9502,"kind":"response","url":"http://127.0.0.1:52990/api/slightnudge/pages","status":200}
+{"time":1793707439773,"elapsed":72767.0063,"kind":"response","url":"http://127.0.0.1:52990/editor/m0-control-lab?view=full&preview=http%3A%2F%2F127.0.0.1%3A52991&_rsc=sVkvYcmL0Tzdv_g8","status":200}
+{"time":1793707439924,"elapsed":72917.5213,"kind":"request","url":"http://127.0.0.1:52990/_next/static/css/app/layout.css?v=1793707439584"}
+{"time":1793707439925,"elapsed":72918.6781,"kind":"request","url":"http://127.0.0.1:52990/_next/static/css/app/editor/%5B%5B...project%5D%5D/page.css?v=1793707439584"}
+{"time":1793707439963,"elapsed":72956.4247,"kind":"response","url":"http://127.0.0.1:52990/_next/static/css/app/layout.css?v=1793707439584","status":200}
+{"time":1793707439968,"elapsed":72961.4511,"kind":"response","url":"http://127.0.0.1:52990/_next/static/css/app/editor/%5B%5B...project%5D%5D/page.css?v=1793707439584","status":200}
+{"time":1793707440023,"elapsed":73017.1626,"kind":"response","url":"http://127.0.0.1:52990/api/slightnudge/repositories/m0-control-lab","status":200}
+{"time":1793707440161,"elapsed":73154.6321,"kind":"request","url":"http://127.0.0.1:52990/api/slightnudge/repositories/m0-control-lab/preview-check"}
+{"time":1793707440491,"elapsed":73484.9709,"kind":"console","level":"log","text":"[Fast Refresh] rebuilding"}
+{"time":1793707441169,"elapsed":74162.9561,"kind":"request","url":"http://127.0.0.1:52990/_next/static/webpack/5df2b1e38794226a.webpack.hot-update.json"}
+{"time":1793707441400,"elapsed":74393.8132,"kind":"response","url":"http://127.0.0.1:52990/_next/static/webpack/5df2b1e38794226a.webpack.hot-update.json","status":200}
+{"time":1793707441404,"elapsed":74397.4069,"kind":"request","url":"http://127.0.0.1:52990/_next/static/webpack/webpack.5df2b1e38794226a.hot-update.js"}
+{"time":1793707441422,"elapsed":74415.3943,"kind":"response","url":"http://127.0.0.1:52990/_next/static/webpack/webpack.5df2b1e38794226a.hot-update.js","status":200}
+{"time":1793707441424,"elapsed":74417.4775,"kind":"console","level":"log","text":"[Fast Refresh] done in 931ms"}
+{"time":1793707442309,"elapsed":75302.8767,"kind":"response","url":"http://127.0.0.1:52990/api/slightnudge/repositories/m0-control-lab/preview-check","status":200}
+{"time":1793707442343,"elapsed":75336.5972,"kind":"request","url":"http://127.0.0.1:52991/?__slightnudge_session=093df36d-1adb-40b8-9ee1-79dddf46a4e1&__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A52990&__slightnudge_draft=1"}
+{"time":1793707442592,"elapsed":75585.6728,"kind":"response","url":"http://127.0.0.1:52991/?__slightnudge_session=093df36d-1adb-40b8-9ee1-79dddf46a4e1&__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A52990&__slightnudge_draft=1","status":200}
+{"time":1793707442610,"elapsed":75603.9921,"kind":"request","url":"http://127.0.0.1:52991/_next/static/css/app/layout.css?v=1793707442377"}
+{"time":1793707442614,"elapsed":75607.3658,"kind":"request","url":"http://127.0.0.1:52991/_next/static/chunks/webpack.js?v=1793707442377"}
+{"time":1793707442615,"elapsed":75608.3989,"kind":"request","url":"http://127.0.0.1:52991/_next/static/chunks/main-app.js?v=1793707442377"}
+{"time":1793707442616,"elapsed":75609.3399,"kind":"request","url":"http://127.0.0.1:52991/_next/static/chunks/app-pages-internals.js"}
+{"time":1793707442616,"elapsed":75609.7104,"kind":"request","url":"http://127.0.0.1:52991/_next/static/chunks/app/layout.js"}
+{"time":1793707442741,"elapsed":75734.5928,"kind":"response","url":"http://127.0.0.1:52991/_next/static/css/app/layout.css?v=1793707442377","status":200}
+{"time":1793707442981,"elapsed":75974.8404,"kind":"response","url":"http://127.0.0.1:52991/_next/static/chunks/app/layout.js","status":200}
+{"time":1793707443056,"elapsed":76050.2848,"kind":"response","url":"http://127.0.0.1:52991/_next/static/chunks/webpack.js?v=1793707442377","status":200}
+{"time":1793707443338,"elapsed":76331.4396,"kind":"response","url":"http://127.0.0.1:52991/_next/static/chunks/app-pages-internals.js","status":200}
+{"time":1793707445038,"elapsed":78031.6552,"kind":"response","url":"http://127.0.0.1:52991/_next/static/chunks/main-app.js?v=1793707442377","status":200}
+{"time":1793707445921,"elapsed":78914.7079,"kind":"console","level":"log","text":"[HMR] connected"}
+{"time":1793707446594,"elapsed":79587.7192,"kind":"request","url":"http://127.0.0.1:52990/api/slightnudge/responsive"}

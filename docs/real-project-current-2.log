@@ -1,0 +1,24 @@
+Disposable source project: https://github.com/bennyjoel/nextjs-saas-starter-lite; Next.js 14.2.35; Tailwind 3.4.19; installed source adapter; no environment files checked out.
+Real project 2: start original application
+Real project 2: connect current full-page canvas
+PASS 2: single full-page canvas with stable document height
+Real project 2: edit original a: src/app/page.tsx:13
+Real project 2: save src/app/page.tsx:13
+Real project 2: undo src/app/page.tsx:13
+Real project 2: edit original p: src/app/page.tsx:45
+Real project 2: save src/app/page.tsx:45
+Real project 2: undo src/app/page.tsx:45
+Real project 2: edit original h3: src/app/page.tsx:72
+Real project 2: save src/app/page.tsx:72
+Real project 2: undo src/app/page.tsx:72
+PASS 2: original mapped text targets: physical selection, native typography, draft recovery, source Save and exact Undo
+Real project 2: scaled movement on original element
+Real project 2: save src/app/page.tsx:13
+Real project 2: undo src/app/page.tsx:13
+PASS 2: scaled Move, source Save and exact Undo
+PASS 2: native responsive widths: 375, 768 and 1200
+Real project 2: separate window
+Real project 2: save src/app/page.tsx:13
+Real project 2: undo src/app/page.tsx:13
+PASS 2: separate-window native document, text edit, Save and exact Undo
+PASS: 5 review-consent browser cases (mocked API; disposable source copy)

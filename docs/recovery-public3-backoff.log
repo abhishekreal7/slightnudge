@@ -1,0 +1,34 @@
+Disposable source project: https://github.com/EdgeOneDev/saas-starter; Next.js 14.0.4; Tailwind 3.4.17; installed source adapter; no environment files checked out.
+Selection 1/30: refused — src/components/layout/layout.tsx:18:5
+Selection 2/30: allowed — src/components/layout/header.tsx:62:7
+Selection 3/30: allowed — src/components/layout/header.tsx:63:9
+Selection 4/30: allowed — src/components/layout/header.tsx:65:11
+Selection 5/30: allowed — src/components/layout/header.tsx:72:11
+Selection 6/30: allowed — src/components/layout/header.tsx:90:11
+Selection 7/30: allowed — src/components/language-switcher.tsx:56:5
+Selection 8/30: refused — src/components/ui/button.tsx:73:7
+Selection 9/30: allowed — src/components/language-switcher.tsx:66:9
+Selection 10/30: refused — src/components/ui/button.tsx:73:7
+Selection 11/30: refused — src/components/layout/header.tsx:110:15
+Selection 12/30: refused — src/components/layout/header.tsx:111:17
+Selection 13/30: refused — src/components/layout/header.tsx:112:17
+Selection 14/30: refused — src/components/sections/hero.tsx:73:5
+Selection 15/30: refused — src/components/sections/hero.tsx:75:7
+Selection 16/30: refused — src/components/sections/hero.tsx:76:9
+Selection 17/30: refused — src/components/sections/hero.tsx:77:9
+Selection 18/30: refused — src/components/sections/hero.tsx:81:7
+Selection 19/30: refused — src/components/sections/hero.tsx:83:9
+Selection 20/30: refused — src/components/sections/hero.tsx:84:9
+Selection 21/30: refused — src/components/sections/hero.tsx:85:9
+Selection 22/30: refused — src/components/sections/hero.tsx:88:9
+Selection 23/30: refused — src/components/sections/hero.tsx:89:9
+Selection 24/30: refused — src/components/sections/hero.tsx:101:7
+Selection 25/30: refused — src/components/sections/hero.tsx:102:9
+Selection 26/30: refused — src/components/sections/hero.tsx:104:11
+Selection 27/30: refused — src/components/sections/hero.tsx:110:11
+Selection 28/30: refused — src/components/sections/hero.tsx:112:15
+Selection 29/30: refused — src/components/sections/hero.tsx:125:36
+Selection 30/30: refused — src/components/sections/hero.tsx:130:11
+Source selection workflows: 7 allowed, 23 refused, 0 wrong targets
+PASS: 30 review-consent browser cases (real API; disposable source copy)
+Temporary copy requires manual cleanup: C:\Users\abhis\AppData\Local\Temp\sn-review-consent-DCouMI

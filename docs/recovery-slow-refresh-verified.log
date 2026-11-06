@@ -1,0 +1,16 @@
+Disposable source project: generated SaaS; Next.js 16.4.3; Tailwind 4.3.3; installed source adapter; no environment files checked out.
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+page.waitForEvent: Timeout 30000ms exceeded while waiting for event "framenavigated"
+=========================== logs ===========================
+waiting for event "framenavigated"
+============================================================
+    at checkSourceProject (C:\dev\vibecheck\test\helpers\source-project-browser.ts:56:27)
+    at async <anonymous> (C:\dev\vibecheck\test\review-consent.browser.ts:91:14) {
+  log: [],
+  name: 'TimeoutError'
+}
+
+Node.js v22.19.0

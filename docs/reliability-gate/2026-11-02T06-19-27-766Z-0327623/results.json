@@ -1,0 +1,112 @@
+{
+  "head": "0327623bdffca96e11fef81d8c22b51f4e912509",
+  "productRef": "0327623bdffca96e11fef81d8c22b51f4e912509",
+  "testRef": "0327623bdffca96e11fef81d8c22b51f4e912509",
+  "fatal": false,
+  "rows": [
+    {
+      "workflow": "warmup-m0-control-lab-full",
+      "api": "REAL",
+      "result": "FAIL",
+      "seconds": 180.01,
+      "error": "TimeoutError: locator.waitFor: Timeout 133908.6486ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-source-ready=\"true\"]') to be visible\u001b[22m\n"
+    },
+    {
+      "workflow": "selection-full-regression",
+      "api": "REAL",
+      "result": "HARNESS-ERROR",
+      "seconds": 0,
+      "error": "TimeoutError: locator.waitFor: Timeout 133908.6486ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-source-ready=\"true\"]') to be visible\u001b[22m\n"
+    },
+    {
+      "workflow": "selection-full-overfit",
+      "api": "REAL",
+      "result": "HARNESS-ERROR",
+      "seconds": 0,
+      "error": "TimeoutError: locator.waitFor: Timeout 133908.6486ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-source-ready=\"true\"]') to be visible\u001b[22m\n"
+    },
+    {
+      "workflow": "selection-fit-regression",
+      "api": "REAL",
+      "result": "HARNESS-ERROR",
+      "seconds": 0,
+      "error": "TimeoutError: locator.waitFor: Timeout 133908.6486ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-source-ready=\"true\"]') to be visible\u001b[22m\n"
+    },
+    {
+      "workflow": "selection-fit-overfit",
+      "api": "REAL",
+      "result": "HARNESS-ERROR",
+      "seconds": 0,
+      "error": "TimeoutError: locator.waitFor: Timeout 133908.6486ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-source-ready=\"true\"]') to be visible\u001b[22m\n"
+    },
+    {
+      "workflow": "shared-compiler-warmup",
+      "harness": "HARNESS-V3",
+      "api": "REAL",
+      "result": "FAIL",
+      "seconds": 137.24
+    },
+    {
+      "workflow": "shared-local-studio",
+      "harness": "HARNESS-V3",
+      "api": "REAL",
+      "result": "HARNESS-ERROR",
+      "seconds": 0,
+      "error": "Shared compiler warm-up failed; see shared-compiler-warmup.log"
+    },
+    {
+      "workflow": "shared-local-window",
+      "harness": "HARNESS-V3",
+      "api": "REAL",
+      "result": "HARNESS-ERROR",
+      "seconds": 0,
+      "error": "Shared compiler warm-up failed; see shared-compiler-warmup.log"
+    },
+    {
+      "workflow": "shared-imported-studio",
+      "harness": "HARNESS-V3",
+      "api": "REAL",
+      "result": "HARNESS-ERROR",
+      "seconds": 0,
+      "error": "Shared compiler warm-up failed; see shared-compiler-warmup.log"
+    },
+    {
+      "workflow": "shared-imported-window",
+      "harness": "HARNESS-V3",
+      "api": "REAL",
+      "result": "HARNESS-ERROR",
+      "seconds": 0,
+      "error": "Shared compiler warm-up failed; see shared-compiler-warmup.log"
+    },
+    {
+      "workflow": "movement",
+      "harness": "HARNESS-V3",
+      "api": "REAL",
+      "result": "FAIL",
+      "seconds": 58.8,
+      "exitCode": 1,
+      "historical": "docs/center-move-release.log",
+      "invalidManifestServers": []
+    },
+    {
+      "workflow": "state-and-transitions",
+      "harness": "HARNESS-V3",
+      "api": "REAL",
+      "result": "FAIL",
+      "seconds": 61.06,
+      "exitCode": 1,
+      "historical": "docs/m1-final-gates.log",
+      "invalidManifestServers": []
+    },
+    {
+      "workflow": "responsive",
+      "harness": "HARNESS-V3",
+      "api": "REAL",
+      "result": "PASS",
+      "seconds": 52.41,
+      "exitCode": 0,
+      "historical": "docs/responsive-editing-qualification.log",
+      "invalidManifestServers": []
+    }
+  ]
+}

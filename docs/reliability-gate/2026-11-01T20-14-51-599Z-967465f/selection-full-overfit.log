@@ -1,0 +1,24 @@
+NAVIGATION http://127.0.0.1:3000/editor/m0-overfit-lab?preview=http%3A%2F%2F127.0.0.1%3A3002&view=full
+TIMING 1793564136540 REQUEST http://127.0.0.1:3000/editor/m0-overfit-lab?preview=http%3A%2F%2F127.0.0.1%3A3002&view=full
+TIMING 1793564157766 RESPONSE 200 http://127.0.0.1:3000/editor/m0-overfit-lab?preview=http%3A%2F%2F127.0.0.1%3A3002&view=full
+TIMING 1793564162315 REQUEST http://127.0.0.1:3000/api/slightnudge/repositories/m0-overfit-lab
+TIMING 1793564162317 REQUEST http://127.0.0.1:3000/api/slightnudge/repositories/m0-overfit-lab
+TIMING 1793564164225 RESPONSE 200 http://127.0.0.1:3000/api/slightnudge/repositories/m0-overfit-lab
+TIMING 1793564164294 RESPONSE 200 http://127.0.0.1:3000/api/slightnudge/repositories/m0-overfit-lab
+TIMING 1793564164296 REQUEST http://127.0.0.1:3000/api/slightnudge/repositories/m0-overfit-lab/preview-check
+TIMING 1793564165436 RESPONSE 502 http://127.0.0.1:3000/api/slightnudge/repositories/m0-overfit-lab/preview-check
+TIMING 1793564165943 REQUEST http://127.0.0.1:3000/api/slightnudge/repositories/m0-overfit-lab/preview-check
+TIMING 1793564165965 RESPONSE 502 http://127.0.0.1:3000/api/slightnudge/repositories/m0-overfit-lab/preview-check
+TIMING 1793564166972 REQUEST http://127.0.0.1:3000/api/slightnudge/repositories/m0-overfit-lab/preview-check
+TIMING 1793564166999 RESPONSE 502 http://127.0.0.1:3000/api/slightnudge/repositories/m0-overfit-lab/preview-check
+locator.waitFor: Timeout 30000ms exceeded.
+Call log:
+[2m  - waiting for locator('[data-source-ready="true"]') to be visible[22m
+
+    at <anonymous> (C:\dev\vibecheck\scratch\reliability-gate\2026-11-01T20-14-51-599Z-967465f\worktree\test\helpers\editor-reliability-selection.ts:34:176)
+    at async runSelectionGate (C:\dev\vibecheck\scratch\reliability-gate\2026-11-01T20-14-51-599Z-967465f\worktree\test\helpers\editor-reliability-selection.ts:34:39) {
+  log: [
+    `  - waiting for locator('[data-source-ready="true"]') to be visible`
+  ],
+  name: 'TimeoutError'
+}

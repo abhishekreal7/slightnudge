@@ -1,0 +1,793 @@
+{
+  "date": "2026-10-23T18:43:57.901Z",
+  "policy": "30 distinct application DOM targets per rendered project, sampled uniformly in document order. Includes section/container, heading, paragraph, link, button and list types; excludes development overlay shadow roots and tiny accessibility-only nodes. Scroll each selected target into view. Dispatch a DOM click through the installed embedded bridge and verify its reported source file/line/column/tag. Then inspect and dry-run a font-weight change; independently parse the result to ensure that only the selected class attribute changes. No Apply to imported project copies. This tests browser-to-source mapping and the edit engine; it is not a full imported Studio Apply test and does not test physical mouse hit-testing.",
+  "results": [
+    {
+      "url": "https://github.com/bennyjoel/nextjs-saas-starter-lite",
+      "next": "14.2.35",
+      "tailwind": "3.4.19",
+      "lockfiles": [],
+      "adapter": "runtime source markers verified",
+      "vite": "unsupported",
+      "selections": [
+        {
+          "selection": 1,
+          "n": 0,
+          "tag": "div",
+          "text": "\u26a1 NextSaaS LiteGitHubGet Pro ($49)\u2728 Open Source Next.js 14 BoilerplateLaunch Your Next SaaS In Hours",
+          "file": "src/app/page.tsx",
+          "line": 5,
+          "column": 5,
+          "classes": "min-h-screen flex flex-col justify-between",
+          "rect": {
+            "top": -158,
+            "left": 0,
+            "width": 1440,
+            "height": 1316.75
+          },
+          "clickedRect": {
+            "top": -158,
+            "left": 0,
+            "width": 1440,
+            "height": 1316.75
+          },
+          "outcome": "allowed",
+          "embeddedBridgeVerified": true,
+          "textEditable": false,
+          "textReason": "For safety, text editing currently supports elements with one plain text value and no nested elements."
+        },
+        {
+          "selection": 2,
+          "n": 1,
+          "tag": "div",
+          "text": "\u26a1 NextSaaS LiteGitHubGet Pro ($49)",
+          "file": "src/app/page.tsx",
+          "line": 8,
+          "column": 9,
+          "classes": "max-w-6xl mx-auto px-6 h-16 flex items-center justify-between",
+          "rect": {
+            "top": 0,
+            "left": 144,
+            "width": 1152,
+            "height": 64
+          },
+          "clickedRect": {
+            "top": 0,
+            "left": 144,
+            "width": 1152,
+            "height": 64
+          },
+          "outcome": "allowed",
+          "embeddedBridgeVerified": true,
+          "textEditable": false,
+          "textReason": "For safety, text editing currently supports elements with one plain text value and no nested elements."
+        },
+        {
+          "selection": 3,
+          "n": 2,
+          "tag": "div",
+          "text": "\u26a1 NextSaaS Lite",
+          "file": "src/app/page.tsx",
+          "line": 9,
+          "column": 11,
+          "classes": "flex items-center gap-2 font-bold text-lg text-white",
+          "rect": {
+            "top": 18,
+            "left": 168,
+            "width": 162.609375,
+            "height": 28
+          },
+          "clickedRect": {
+            "top": 18,
+            "left": 168,
+            "width": 162.609375,
+            "height": 28
+          },
+          "outcome": "allowed",
+          "embeddedBridgeVerified": true,
+          "textEditable": false,
+          "textReason": "For safety, text editing currently supports elements with one plain text value and no nested elements."
+        },
+        {
+          "selection": 4,
+          "n": 3,
+          "tag": "span",
+          "text": "\u26a1",
+          "file": "src/app/page.tsx",
+          "line": 10,
+          "column": 13,
+          "classes": "text-blue-500 text-xl",
+          "rect": {
+            "top": 18,
+            "left": 168,
+            "width": 27.46875,
+            "height": 28
+          },
+          "clickedRect": {
+            "top": 18,
+            "left": 168,
+            "width": 27.46875,
+            "height": 28
+          },
+          "outcome": "allowed",
+          "embeddedBridgeVerified": true,
+          "textEditable": true
+        },
+        {
+          "selection": 5,
+          "n": 4,
+          "tag": "span",
+          "text": "Lite",
+          "file": "src/app/page.tsx",
+          "line": 10,
+          "column": 71,
+          "classes": "text-xs bg-blue-950 text-blue-400 px-2 py-0.5 rounded border border-blue-800",
+          "rect": {
+            "top": 21,
+            "left": 291.9375,
+            "width": 38.671875,
+            "height": 22
+          },
+          "clickedRect": {
+            "top": 21,
+            "left": 291.9375,
+            "width": 38.671875,
+            "height": 22
+          },
+          "outcome": "allowed",
+          "embeddedBridgeVerified": true,
+          "textEditable": true
+        },
+        {
+          "selection": 6,
+          "n": 6,
+          "tag": "a",
+          "text": "GitHub",
+          "file": "src/app/page.tsx",
+          "line": 13,
+          "column": 13,
+          "classes": "text-sm text-gray-400 hover:text-white transition-colors",
+          "rect": {
+            "top": 22,
+            "left": 1095.640625,
+            "width": 43.84375,
+            "height": 20
+          },
+          "clickedRect": {
+            "top": 22,
+            "left": 1095.640625,
+            "width": 43.84375,
+            "height": 20
+          },
+          "outcome": "allowed",
+          "embeddedBridgeVerified": true,
+          "textEditable": true
+        },
+        {
+          "selection": 7,
+          "n": 7,
+          "tag": "a",
+          "text": "Get Pro ($49)",
+          "file": "src/app/page.tsx",
+          "line": 21,
+          "column": 13,
+          "classes": "text-sm bg-blue-600 hover:bg-blue-500 text-white font-semibold px-4 py-2 rounded-lg transition-all shadow-lg shadow-blue-500/20",
+          "rect": {
+            "top": 14,
+            "left": 1155.484375,
+            "width": 116.515625,
+            "height": 36
+          },
+          "clickedRect": {
+            "top": 14,
+            "left": 1155.484375,
+            "width": 116.515625,
+            "height": 36
+          },
+          "outcome": "allowed",
+          "embeddedBridgeVerified": true,
+          "textEditable": true
+        },
+        {
+          "selection": 8,
+          "n": 8,
+          "tag": "div",
+          "text": "\u2728 Open Source Next.js 14 BoilerplateLaunch Your Next SaaS In Hours, Not Weeks.A clean, modular start",
+          "file": "src/app/page.tsx",
+          "line": 35,
+          "column": 9,
+          "classes": "text-center max-w-3xl mx-auto",
+          "rect": {
+            "top": 145,
+            "left": 336,
+            "width": 768,
+            "height": 358.5
+          },
+          "clickedRect": {
+            "top": 145,
+            "left": 336,
+            "width": 768,
+            "height": 358.5
+          },
+          "outcome": "allowed",
+          "embeddedBridgeVerified": true,
+          "textEditable": false,
+          "textReason": "For safety, text editing currently supports elements with one plain text value and no nested elements."
+        },
+        {
+          "selection": 9,
+          "n": 9,
+          "tag": "div",
+          "text": "\u2728 Open Source Next.js 14 Boilerplate",
+          "file": "src/app/page.tsx",
+          "line": 36,
+          "column": 11,
+          "classes": "inline-flex items-center gap-2 bg-blue-950/80 border border-blue-800 text-blue-300 text-xs px-3 py-1.5 rounded-full mb-8 font-medium",
+          "rect": {
+            "top": 145,
+            "left": 603.3125,
+            "width": 233.359375,
+            "height": 30
+          },
+          "clickedRect": {
+            "top": 145,
+            "left": 603.3125,
+            "width": 233.359375,
+            "height": 30
+          },
+          "outcome": "allowed",
+          "embeddedBridgeVerified": true,
+          "textEditable": false,
+          "textReason": "This text is generated dynamically and cannot be edited safely."
+        },
+        {
+          "selection": 10,
+          "n": 10,
+          "tag": "span",
+          "text": "\u2728 Open Source Next.js 14 Boilerplate",
+          "file": "src/app/page.tsx",
+          "line": 37,
+          "column": 13,
+          "classes": "",
+          "rect": {
+            "top": 152,
+            "left": 616.3125,
+            "width": 207.359375,
+            "height": 16
+          },
+          "clickedRect": {
+            "top": 152,
+            "left": 616.3125,
+            "width": 207.359375,
+            "height": 16
+          },
+          "outcome": "refused",
+          "embeddedBridgeVerified": true,
+          "textEditable": true,
+          "reason": "can't edit this safely: no className attribute found"
+        },
+        {
+          "selection": 11,
+          "n": 12,
+          "tag": "span",
+          "text": "In Hours, Not Weeks.",
+          "file": "src/app/page.tsx",
+          "line": 41,
+          "column": 13,
+          "classes": "bg-gradient-to-r from-blue-400 to-emerald-400 bg-clip-text text-transparent",
+          "rect": {
+            "top": 257,
+            "left": 418.78125,
+            "width": 602.4375,
+            "height": 80
+          },
+          "clickedRect": {
+            "top": 257,
+            "left": 418.78125,
+            "width": 602.4375,
+            "height": 80
+          },
+          "outcome": "allowed",
+          "embeddedBridgeVerified": true,
+          "textEditable": true
+        },
+        {
+          "selection": 12,
+          "n": 13,
+          "tag": "p",
+          "text": "A clean, modular starter built on Next.js 14 App Router, TypeScript, and Tailwind CSS. Skip the boil",
+          "file": "src/app/page.tsx",
+          "line": 45,
+          "column": 11,
+          "classes": "text-lg text-gray-400 mb-10 leading-relaxed",
+          "rect": {
+            "top": 351,
+            "left": 336,
+            "width": 768,
+            "height": 58.5
+          },
+          "clickedRect": {
+            "top": 351,
+            "left": 336,
+            "width": 768,
+            "height": 58.5
+          },
+          "outcome": "allowed",
+          "embeddedBridgeVerified": true,
+          "textEditable": true
+        },
+        {
+          "selection": 13,
+          "n": 14,
+          "tag": "div",
+          "text": "Upgrade to Pro \u2014 Full Turnkey ($49) \u2192Star on GitHub \u2b50",
+          "file": "src/app/page.tsx",
+          "line": 48,
+          "column": 11,
+          "classes": "flex flex-col sm:flex-row items-center justify-center gap-4",
+          "rect": {
+            "top": 449.5,
+            "left": 336,
+            "width": 768,
+            "height": 54
+          },
+          "clickedRect": {
+            "top": 449.5,
+            "left": 336,
+            "width": 768,
+            "height": 54
+          },
+          "outcome": "allowed",
+          "embeddedBridgeVerified": true,
+          "textEditable": false,
+          "textReason": "For safety, text editing currently supports elements with one plain text value and no nested elements."
+        },
+        {
+          "selection": 14,
+          "n": 15,
+          "tag": "a",
+          "text": "Upgrade to Pro \u2014 Full Turnkey ($49) \u2192",
+          "file": "src/app/page.tsx",
+          "line": 49,
+          "column": 13,
+          "classes": "w-full sm:w-auto bg-gradient-to-r from-blue-600 to-emerald-600 hover:from-blue-500 hover:to-emerald-500 text-white font-bold px-8 py-3.5 rounded-xl transition-all shadow-xl shadow-blue-500/25",
+          "rect": {
+            "top": 450.5,
+            "left": 432.859375,
+            "width": 358.046875,
+            "height": 52
+          },
+          "clickedRect": {
+            "top": 450.5,
+            "left": 432.859375,
+            "width": 358.046875,
+            "height": 52
+          },
+          "outcome": "allowed",
+          "embeddedBridgeVerified": true,
+          "textEditable": true
+        },
+        {
+          "selection": 15,
+          "n": 16,
+          "tag": "a",
+          "text": "Star on GitHub \u2b50",
+          "file": "src/app/page.tsx",
+          "line": 57,
+          "column": 13,
+          "classes": "w-full sm:w-auto bg-gray-900 hover:bg-gray-800 border border-gray-800 text-gray-200 font-semibold px-8 py-3.5 rounded-xl transition-all",
+          "rect": {
+            "top": 449.5,
+            "left": 806.90625,
+            "width": 200.21875,
+            "height": 54
+          },
+          "clickedRect": {
+            "top": 449.5,
+            "left": 806.90625,
+            "width": 200.21875,
+            "height": 54
+          },
+          "outcome": "allowed",
+          "embeddedBridgeVerified": true,
+          "textEditable": true
+        },
+        {
+          "selection": 16,
+          "n": 18,
+          "tag": "div",
+          "text": "\u26a1Next.js 14 App RouterOptimized for React Server Components, server actions, and instant edge render",
+          "file": "src/app/page.tsx",
+          "line": 70,
+          "column": 11,
+          "classes": "p-6 rounded-2xl bg-gray-900/60 border border-gray-800/80",
+          "rect": {
+            "top": 400.5,
+            "left": 168,
+            "width": 352,
+            "height": 198.25
+          },
+          "clickedRect": {
+            "top": 400.5,
+            "left": 168,
+            "width": 352,
+            "height": 198.25
+          },
+          "outcome": "allowed",
+          "embeddedBridgeVerified": true,
+          "textEditable": false,
+          "textReason": "For safety, text editing currently supports elements with one plain text value and no nested elements."
+        },
+        {
+          "selection": 17,
+          "n": 19,
+          "tag": "div",
+          "text": "\u26a1",
+          "file": "src/app/page.tsx",
+          "line": 71,
+          "column": 13,
+          "classes": "text-2xl mb-3",
+          "rect": {
+            "top": 483.5,
+            "left": 193,
+            "width": 302,
+            "height": 32
+          },
+          "clickedRect": {
+            "top": 483.5,
+            "left": 193,
+            "width": 302,
+            "height": 32
+          },
+          "outcome": "allowed",
+          "embeddedBridgeVerified": true,
+          "textEditable": true
+        },
+        {
+          "selection": 18,
+          "n": 20,
+          "tag": "h3",
+          "text": "Next.js 14 App Router",
+          "file": "src/app/page.tsx",
+          "line": 72,
+          "column": 13,
+          "classes": "text-lg font-bold text-white mb-2",
+          "rect": {
+            "top": 485.5,
+            "left": 193,
+            "width": 302,
+            "height": 28
+          },
+          "clickedRect": {
+            "top": 485.5,
+            "left": 193,
+            "width": 302,
+            "height": 28
+          },
+          "outcome": "allowed",
+          "embeddedBridgeVerified": true,
+          "textEditable": true
+        },
+        {
+          "selection": 19,
+          "n": 21,
+          "tag": "p",
+          "text": "Optimized for React Server Components, server actions, and instant edge rendering out of the box.",
+          "file": "src/app/page.tsx",
+          "line": 73,
+          "column": 13,
+          "classes": "text-sm text-gray-400 leading-relaxed",
+          "rect": {
+            "top": 465.5,
+            "left": 193,
+            "width": 302,
+            "height": 68.25
+          },
+          "clickedRect": {
+            "top": 465.5,
+            "left": 193,
+            "width": 302,
+            "height": 68.25
+          },
+          "outcome": "allowed",
+          "embeddedBridgeVerified": true,
+          "textEditable": true
+        },
+        {
+          "selection": 20,
+          "n": 22,
+          "tag": "div",
+          "text": "\ud83c\udfa8Tailwind CSS ReadyModern dark-mode design system with responsive typography, utility classes, and ",
+          "file": "src/app/page.tsx",
+          "line": 77,
+          "column": 11,
+          "classes": "p-6 rounded-2xl bg-gray-900/60 border border-gray-800/80",
+          "rect": {
+            "top": 400.5,
+            "left": 544,
+            "width": 352,
+            "height": 198.25
+          },
+          "clickedRect": {
+            "top": 400.5,
+            "left": 544,
+            "width": 352,
+            "height": 198.25
+          },
+          "outcome": "allowed",
+          "embeddedBridgeVerified": true,
+          "textEditable": false,
+          "textReason": "For safety, text editing currently supports elements with one plain text value and no nested elements."
+        },
+        {
+          "selection": 21,
+          "n": 24,
+          "tag": "h3",
+          "text": "Tailwind CSS Ready",
+          "file": "src/app/page.tsx",
+          "line": 79,
+          "column": 13,
+          "classes": "text-lg font-bold text-white mb-2",
+          "rect": {
+            "top": 485.5,
+            "left": 569,
+            "width": 302,
+            "height": 28
+          },
+          "clickedRect": {
+            "top": 485.5,
+            "left": 569,
+            "width": 302,
+            "height": 28
+          },
+          "outcome": "allowed",
+          "embeddedBridgeVerified": true,
+          "textEditable": true
+        },
+        {
+          "selection": 22,
+          "n": 25,
+          "tag": "p",
+          "text": "Modern dark-mode design system with responsive typography, utility classes, and glassmorphic element",
+          "file": "src/app/page.tsx",
+          "line": 80,
+          "column": 13,
+          "classes": "text-sm text-gray-400 leading-relaxed",
+          "rect": {
+            "top": 465.5,
+            "left": 569,
+            "width": 302,
+            "height": 68.25
+          },
+          "clickedRect": {
+            "top": 465.5,
+            "left": 569,
+            "width": 302,
+            "height": 68.25
+          },
+          "outcome": "allowed",
+          "embeddedBridgeVerified": true,
+          "textEditable": true
+        },
+        {
+          "selection": 23,
+          "n": 26,
+          "tag": "div",
+          "text": "\ud83d\udee1\ufe0fStrict TypeScript100% type-safe codebase with strict compilation flags to eliminate runtime error",
+          "file": "src/app/page.tsx",
+          "line": 84,
+          "column": 11,
+          "classes": "p-6 rounded-2xl bg-gray-900/60 border border-gray-800/80",
+          "rect": {
+            "top": 400.5,
+            "left": 920,
+            "width": 352,
+            "height": 198.25
+          },
+          "clickedRect": {
+            "top": 400.5,
+            "left": 920,
+            "width": 352,
+            "height": 198.25
+          },
+          "outcome": "allowed",
+          "embeddedBridgeVerified": true,
+          "textEditable": false,
+          "textReason": "For safety, text editing currently supports elements with one plain text value and no nested elements."
+        },
+        {
+          "selection": 24,
+          "n": 27,
+          "tag": "div",
+          "text": "\ud83d\udee1\ufe0f",
+          "file": "src/app/page.tsx",
+          "line": 85,
+          "column": 13,
+          "classes": "text-2xl mb-3",
+          "rect": {
+            "top": 483.5,
+            "left": 945,
+            "width": 302,
+            "height": 32
+          },
+          "clickedRect": {
+            "top": 483.5,
+            "left": 945,
+            "width": 302,
+            "height": 32
+          },
+          "outcome": "allowed",
+          "embeddedBridgeVerified": true,
+          "textEditable": true
+        },
+        {
+          "selection": 25,
+          "n": 28,
+          "tag": "h3",
+          "text": "Strict TypeScript",
+          "file": "src/app/page.tsx",
+          "line": 86,
+          "column": 13,
+          "classes": "text-lg font-bold text-white mb-2",
+          "rect": {
+            "top": 485.5,
+            "left": 945,
+            "width": 302,
+            "height": 28
+          },
+          "clickedRect": {
+            "top": 485.5,
+            "left": 945,
+            "width": 302,
+            "height": 28
+          },
+          "outcome": "allowed",
+          "embeddedBridgeVerified": true,
+          "textEditable": true
+        },
+        {
+          "selection": 26,
+          "n": 30,
+          "tag": "div",
+          "text": "Need Stripe, NextAuth & Database Integration?The Pro version includes complete Stripe webhook handli",
+          "file": "src/app/page.tsx",
+          "line": 94,
+          "column": 9,
+          "classes": "mt-20 p-8 sm:p-12 rounded-3xl bg-gradient-to-br from-blue-950/60 to-emerald-950/60 border border-blue-800/50 text-center",
+          "rect": {
+            "top": 560.75,
+            "left": 168,
+            "width": 1104,
+            "height": 278
+          },
+          "clickedRect": {
+            "top": 560.75,
+            "left": 168,
+            "width": 1104,
+            "height": 278
+          },
+          "outcome": "allowed",
+          "embeddedBridgeVerified": true,
+          "textEditable": false,
+          "textReason": "For safety, text editing currently supports elements with one plain text value and no nested elements."
+        },
+        {
+          "selection": 27,
+          "n": 31,
+          "tag": "h2",
+          "text": "Need Stripe, NextAuth & Database Integration?",
+          "file": "src/app/page.tsx",
+          "line": 95,
+          "column": 11,
+          "classes": "text-2xl sm:text-3xl font-bold text-white mb-4",
+          "rect": {
+            "top": 609.75,
+            "left": 217,
+            "width": 1006,
+            "height": 36
+          },
+          "clickedRect": {
+            "top": 609.75,
+            "left": 217,
+            "width": 1006,
+            "height": 36
+          },
+          "outcome": "allowed",
+          "embeddedBridgeVerified": true,
+          "textEditable": true
+        },
+        {
+          "selection": 28,
+          "n": 32,
+          "tag": "p",
+          "text": "The Pro version includes complete Stripe webhook handling, subscription customer portals, Google/Git",
+          "file": "src/app/page.tsx",
+          "line": 98,
+          "column": 11,
+          "classes": "text-gray-300 max-w-2xl mx-auto mb-8 text-sm sm:text-base leading-relaxed",
+          "rect": {
+            "top": 661.75,
+            "left": 384,
+            "width": 672,
+            "height": 48
+          },
+          "clickedRect": {
+            "top": 661.75,
+            "left": 384,
+            "width": 672,
+            "height": 48
+          },
+          "outcome": "allowed",
+          "embeddedBridgeVerified": true,
+          "textEditable": true
+        },
+        {
+          "selection": 29,
+          "n": 33,
+          "tag": "a",
+          "text": "Get SaaS Launch Kit Pro for $49",
+          "file": "src/app/page.tsx",
+          "line": 101,
+          "column": 11,
+          "classes": "inline-block bg-white text-gray-950 hover:bg-gray-100 font-bold px-8 py-3 rounded-xl transition-all shadow-lg",
+          "rect": {
+            "top": 741.75,
+            "left": 568.828125,
+            "width": 302.328125,
+            "height": 48
+          },
+          "clickedRect": {
+            "top": 741.75,
+            "left": 568.828125,
+            "width": 302.328125,
+            "height": 48
+          },
+          "outcome": "allowed",
+          "embeddedBridgeVerified": true,
+          "textEditable": true
+        },
+        {
+          "selection": 30,
+          "n": 35,
+          "tag": "p",
+          "text": "\u00a9 2026 NextSaaS Lite. Released under the MIT License by bennyjoel.",
+          "file": "src/app/page.tsx",
+          "line": 114,
+          "column": 9,
+          "classes": "",
+          "rect": {
+            "top": 951.75,
+            "left": 0,
+            "width": 1440,
+            "height": 16
+          },
+          "clickedRect": {
+            "top": 951.75,
+            "left": 0,
+            "width": 1440,
+            "height": 16
+          },
+          "outcome": "refused",
+          "embeddedBridgeVerified": true,
+          "textEditable": true,
+          "reason": "can't edit this safely: no className attribute found"
+        }
+      ],
+      "commit": "dff9c1f93c3d3b29d5a57a5741d9c90da5269cb5",
+      "license": [
+        "LICENSE"
+      ],
+      "routes": [
+        "src/app"
+      ],
+      "nextDeclared": "^14.2.5",
+      "tailwindDeclared": "^3.4.6",
+      "installExit": 0,
+      "installedLockfiles": [
+        "package-lock.json"
+      ],
+      "visibleCandidates": 36
+    }
+  ],
+  "cleanup": []
+}

@@ -1,0 +1,28 @@
+▶ Undo Refusals & Safety Mutants Battery
+  ✔ M3: refuses undo when element already contains a removed token (user restored it) (213.062ms)
+  ✔ M6: refuses undo when history record contains tampered malicious tokens (236.2073ms)
+  ✔ Branch 1: path-containment catch refuses escaping path (5.5672ms)
+  ✔ Branch 2: interrupted-undo recovery succeeds when status is undoing and file equals before (172.455ms)
+  ✔ Branch 3: textContent refusal when file changed after visual edit (117.1561ms)
+  ✔ Branch 4: imageSource refusal when file changed after visual edit (22.1627ms)
+  ✔ Branch 5: non-className fallback refusal when neither textContent nor imageSource (15.0151ms)
+  ✔ Branch 6: existing-file parse failure refuses cleanly (98.1566ms)
+  ✔ Branch 7: multiple candidate elements without unique id refuses ambiguity (137.1663ms)
+  ✔ Branch 8: element inside repeating list refuses (233.8343ms)
+  ✔ Branch 9: component used multiple times refuses (210.908ms)
+  ✔ Branch 10: element inside conditional expression refuses (95.6004ms)
+  ✔ Branch 11: element inside an if statement refuses (105.8249ms)
+  ✔ Branch 12: same-line sibling ambiguity refuses (147.1423ms)
+  ✔ Branch 13: className attribute missing refuses (185.7752ms)
+  ✔ Branch 14: dynamic or template-literal className refuses (178.6671ms)
+  ✔ Branch 15: re-parse failure after substitution refuses (1146.2575ms)
+  ✔ Branch 16: atomicWrite I/O error resets status to applied (1748.4471ms)
+✔ Undo Refusals & Safety Mutants Battery (5070.9991ms)
+ℹ tests 18
+ℹ suites 1
+ℹ pass 18
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 5310.7436

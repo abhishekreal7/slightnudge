@@ -1,0 +1,104 @@
+{
+  "timestamp": "2026-10-23T13:20:00Z",
+  "seedRange": "76000-78999",
+  "totalExpectedCases": 3000,
+  "oracle": "@babel/parser (independent)",
+  "actions": {
+    "exact_match": {
+      "expectedOutcome": "ACCEPT",
+      "reason": "Source file matches record.after byte-for-byte; step (i) exact match path restores before bytes"
+    },
+    "prettier_default": {
+      "expectedOutcome": "ACCEPT",
+      "reason": "Benign code formatting preserved under token-level undo"
+    },
+    "prettier_alt": {
+      "expectedOutcome": "ACCEPT",
+      "reason": "Alternative prettier options (useTabs, singleQuote, printWidth 40) formatting preserved"
+    },
+    "tailwind_reorder": {
+      "expectedOutcome": "ACCEPT",
+      "reason": "Class reordering via tailwind plugin preserved under token multiset restoration"
+    },
+    "edit_unrelated_line": {
+      "expectedOutcome": "ACCEPT",
+      "reason": "Unrelated line modification elsewhere in component preserved"
+    },
+    "add_class_to_other_element": {
+      "expectedOutcome": "ACCEPT",
+      "reason": "Modifications to other elements preserved"
+    },
+    "rename_variable": {
+      "expectedOutcome": "ACCEPT",
+      "reason": "Variable renaming elsewhere in file preserved"
+    },
+    "insert_import": {
+      "expectedOutcome": "ACCEPT",
+      "reason": "Import statements added at top of file preserved"
+    },
+    "duplicate_unrelated_element": {
+      "expectedOutcome": "ACCEPT",
+      "reason": "Duplicating another element in component preserved"
+    },
+    "move_unrelated_element": {
+      "expectedOutcome": "ACCEPT",
+      "reason": "Moving unrelated siblings preserved"
+    },
+    "stacked_second_edit_on_a_DIFFERENT_element": {
+      "expectedOutcome": "ACCEPT",
+      "reason": "Independent edits on different elements in same file are undoable via identity-based dependency checking"
+    },
+    "interleaved_multi_element_undo": {
+      "expectedOutcome": "ACCEPT",
+      "reason": "N edits (2..5) on distinct elements with random benign action between consecutive edits, then undo in random order accepted with final bytes equal to file after benign actions"
+    },
+    "delete_target": {
+      "expectedOutcome": "REFUSE",
+      "reason": "Target element was deleted; cannot locate element safely"
+    },
+    "wrap_target_in_conditional": {
+      "expectedOutcome": "REFUSE",
+      "reason": "Target element wrapped in conditional; safety rule prohibits editing inside conditions"
+    },
+    "stacked_second_edit_on_SAME_element": {
+      "expectedOutcome": "REFUSE",
+      "reason": "Newer edit on the same element depends on this edit; must undo newer edit first"
+    },
+    "stacked_same_element_reflow": {
+      "expectedOutcome": "REFUSE",
+      "reason": "Same element edited twice with Prettier reflow between; newer edit depends on older edit, must refuse"
+    },
+    "user_changed_same_token": {
+      "expectedOutcome": "REFUSE",
+      "reason": "User modified the added/removed tokens; cannot safely resolve token conflict"
+    },
+    "external_overwrite": {
+      "expectedOutcome": "REFUSE",
+      "reason": "File was overwritten externally with incompatible content"
+    },
+    "rename_tag": {
+      "expectedOutcome": "REFUSE",
+      "reason": "Tag name of target element changed"
+    },
+    "duplicate_target": {
+      "expectedOutcome": "REFUSE",
+      "reason": "Target element duplicated, causing sibling ambiguity without unique id"
+    },
+    "file_deleted": {
+      "expectedOutcome": "REFUSE",
+      "reason": "Target file no longer exists"
+    },
+    "element_moved_into_loop": {
+      "expectedOutcome": "REFUSE",
+      "reason": "Target element moved into repeating list or map loop; safety rule prohibits loop edits"
+    },
+    "wrap_target_in_div": {
+      "expectedOutcome": "REFUSE",
+      "reason": "Target element wrapped in an extra container div altering component hierarchy"
+    },
+    "reorder_children_containing_target": {
+      "expectedOutcome": "REFUSE",
+      "reason": "Structural reordering of children containing target element blocks undo"
+    }
+  }
+}

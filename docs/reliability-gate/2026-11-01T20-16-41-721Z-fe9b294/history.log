@@ -1,0 +1,168 @@
+SETUP 1793566932522 START git ["ls-files"]
+SETUP END elapsed 66ms
+SETUP 1793566980578 START git ["init","--quiet"]
+SETUP END elapsed 198ms
+SETUP 1793566980776 START git ["-c","core.autocrlf=false","add","app","components","package.json","LICENSE"]
+SETUP END elapsed 269ms
+SETUP 1793566981048 START C:\nvm4w\nodejs\node.exe ["--import","tsx","--input-type=module","-e","const {installNextSourceAdapter}=await import('./lib/slightnudge/next-source-adapter.ts');await installNextSourceAdapter('source-proof');"]
+SETUP END elapsed 776ms
+SETUP 1793566981824 START C:\nvm4w\nodejs\node.exe ["C:\\dev\\vibecheck\\scratch\\reliability-gate\\2026-11-01T20-16-41-721Z-fe9b294\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-aDexRf\\.slightnudge\\repositories\\source-proof\\node_modules\\next\\dist\\bin\\next","dev","--help"]
+SETUP END elapsed 364ms
+Disposable source project: generated SaaS; Next.js 16.4.3; Tailwind 4.3.3; installed source adapter; no environment files checked out.
+HARNESS-V3 NAVIGATION http://127.0.0.1:65318/editor/source-proof?preview=http%3A%2F%2F127.0.0.1%3A63473%2F
+TIMING 1793567015775 REQUEST http://127.0.0.1:65318/editor/source-proof?preview=http%3A%2F%2F127.0.0.1%3A63473%2F
+TIMING 1793567036297 RESPONSE 200 http://127.0.0.1:65318/editor/source-proof?preview=http%3A%2F%2F127.0.0.1%3A63473%2F
+TIMING 1793567040997 REQUEST http://127.0.0.1:65318/api/slightnudge/repositories/source-proof
+TIMING 1793567040998 REQUEST http://127.0.0.1:65318/api/slightnudge/repositories/source-proof
+TIMING 1793567064600 RESPONSE 200 http://127.0.0.1:65318/api/slightnudge/repositories/source-proof
+TIMING 1793567065163 RESPONSE 200 http://127.0.0.1:65318/api/slightnudge/repositories/source-proof
+TIMING 1793567065173 REQUEST http://127.0.0.1:65318/api/slightnudge/repositories/source-proof/preview-check
+TIMING 1793567070878 RESPONSE 200 http://127.0.0.1:65318/api/slightnudge/repositories/source-proof/preview-check
+TIMING 1793567070891 REQUEST http://127.0.0.1:63473/?__slightnudge_session=2a9a8ef9-9d25-4119-a850-740352469ca4&__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A65318&__slightnudge_draft=1
+TIMING 1793567071115 RESPONSE 200 http://127.0.0.1:63473/?__slightnudge_session=2a9a8ef9-9d25-4119-a850-740352469ca4&__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A65318&__slightnudge_draft=1
+TIMING 1793567074371 REQUEST http://127.0.0.1:65318/api/slightnudge/responsive
+TIMING 1793567077958 RESPONSE 200 http://127.0.0.1:65318/api/slightnudge/responsive
+▲ Next.js 16.4.3 (webpack)
+- Local:         http://127.0.0.1:63473
+- Network:       http://127.0.0.1:63473
+✓ Ready in 588ms
+⚠ Warning: Next.js ignored package-lock.json in C:\dev\vibecheck\scratch\reliability-gate\2026-11-01T20-16-41-721Z-fe9b294\worktree because it is outside the current Git repository (C:\dev\vibecheck\scratch\reliability-gate\2026-11-01T20-16-41-721Z-fe9b294\worktree\scratch\security-hardening-20261101\os-temp\sn-review-consent-aDexRf\.slightnudge\repositories\source-proof).
+ To use this directory, set `outputFileTracingRoot` in your Next.js config.
+
+✓ Running next.config.mjs took 41ms
+NEXT_MANIFEST_IO {"event":"write-start","file":"C:\\dev\\vibecheck\\scratch\\reliability-gate\\2026-11-01T20-16-41-721Z-fe9b294\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-aDexRf\\.slightnudge\\repositories\\source-proof\\.next\\dev\\build-manifest.json","pid":29532,"time":1793566984681,"bytes":277,"stack":"Error: \n    at fs.writeFile (file:///C:/dev/vibecheck/tools/observe-next-manifests.mjs:10:63)\n    at go$writeFile (C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\webpack\\bundle5.js:1:267865)\n    at Object.writeFile (C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\webpack\\bundle5.js:1:267803)\n    at doWrite (C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\webpack\\bundle5.js:29:143731)\n    at processMissingFile (C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\webpack\\bundle5.js:29:144773)\n    at C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\webpack\\bundle5.js:29:145207\n    at callback (C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\webpack\\bundle5.js:1:277681)\n    at FSReqCallback.oncomplete (node:fs:197:21)"}
+NEXT_MANIFEST_IO {"event":"write-end","file":"C:\\dev\\vibecheck\\scratch\\reliability-gate\\2026-11-01T20-16-41-721Z-fe9b294\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-aDexRf\\.slightnudge\\repositories\\source-proof\\.next\\dev\\build-manifest.json","pid":29532,"time":1793566984688}
+
+  We detected TypeScript in your project and created a tsconfig.json file for you.
+NEXT_MANIFEST_IO {"event":"write-start","file":"C:\\dev\\vibecheck\\scratch\\reliability-gate\\2026-11-01T20-16-41-721Z-fe9b294\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-aDexRf\\.slightnudge\\repositories\\source-proof\\.next\\dev\\build-manifest.json","pid":29532,"time":1793566985048,"bytes":277,"stack":"Error: \n    at fs.writeFile (file:///C:/dev/vibecheck/tools/observe-next-manifests.mjs:10:63)\n    at go$writeFile (C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\webpack\\bundle5.js:1:267865)\n    at Object.writeFile (C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\webpack\\bundle5.js:1:267803)\n    at doWrite (C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\webpack\\bundle5.js:29:143731)\n    at processMissingFile (C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\webpack\\bundle5.js:29:144773)\n    at writeOut (C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\webpack\\bundle5.js:29:145018)\n    at C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\webpack\\bundle5.js:29:145358\n    at arrayIterator (C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\neo-async\\async.js:1:14262)\n    at timesSync (C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\neo-async\\async.js:1:5027)\n    at Object.eachLimit (C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\neo-async\\async.js:1:14208)"}
+NEXT_MANIFEST_IO {"event":"write-end","file":"C:\\dev\\vibecheck\\scratch\\reliability-gate\\2026-11-01T20-16-41-721Z-fe9b294\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-aDexRf\\.slightnudge\\repositories\\source-proof\\.next\\dev\\build-manifest.json","pid":29532,"time":1793566985082}
+
+○ Compiling /page ...
+NEXT_MANIFEST_IO {"event":"write-start","file":"C:\\dev\\vibecheck\\scratch\\reliability-gate\\2026-11-01T20-16-41-721Z-fe9b294\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-aDexRf\\.slightnudge\\repositories\\source-proof\\.next\\dev\\build-manifest.json","pid":29532,"time":1793567008158,"bytes":344,"stack":"Error: \n    at fs.writeFile (file:///C:/dev/vibecheck/tools/observe-next-manifests.mjs:10:63)\n    at go$writeFile (C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\webpack\\bundle5.js:1:267865)\n    at Object.writeFile (C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\webpack\\bundle5.js:1:267803)\n    at doWrite (C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\webpack\\bundle5.js:29:143731)\n    at processMissingFile (C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\webpack\\bundle5.js:29:144773)\n    at writeOut (C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\webpack\\bundle5.js:29:145018)\n    at C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\webpack\\bundle5.js:29:145358\n    at arrayIterator (C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\neo-async\\async.js:1:14262)\n    at timesSync (C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\neo-async\\async.js:1:5027)\n    at Object.eachLimit (C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\neo-async\\async.js:1:14208)\n    at emitFiles (C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\webpack\\bundle5.js:29:142228)\n    at C:\\dev\\vibecheck\\node_modules\\next\\dist\\compiled\\webpack\\bundle5.js:29:1429039\n    at FSReqCallback.oncomplete (node:fs:187:23)"}
+NEXT_MANIFEST_IO {"event":"write-end","file":"C:\\dev\\vibecheck\\scratch\\reliability-gate\\2026-11-01T20-16-41-721Z-fe9b294\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-aDexRf\\.slightnudge\\repositories\\source-proof\\.next\\dev\\build-manifest.json","pid":29532,"time":1793567008462}
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\reliability-gate\\2026-11-01T20-16-41-721Z-fe9b294\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-aDexRf\\.slightnudge\\repositories\\source-proof\\.next\\dev\\build-manifest.json","pid":29532,"time":1793567015041,"bytes":344}
+ GET / 200 in 1248ms (next.js: 643ms, application-code: 606ms)
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\reliability-gate\\2026-11-01T20-16-41-721Z-fe9b294\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-aDexRf\\.slightnudge\\repositories\\source-proof\\.next\\dev\\build-manifest.json","pid":29532,"time":1793567015661,"bytes":344}
+ GET / 200 in 111ms (next.js: 3ms, application-code: 109ms)
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\reliability-gate\\2026-11-01T20-16-41-721Z-fe9b294\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-aDexRf\\.slightnudge\\repositories\\source-proof\\.next\\dev\\build-manifest.json","pid":29532,"time":1793567070696,"bytes":344}
+ GET / 200 in 180ms (next.js: 6ms, application-code: 174ms)
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\reliability-gate\\2026-11-01T20-16-41-721Z-fe9b294\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-aDexRf\\.slightnudge\\repositories\\source-proof\\.next\\dev\\build-manifest.json","pid":29532,"time":1793567070992,"bytes":344}
+ GET /?__slightnudge_session=2a9a8ef9-9d25-4119-a850-740352469ca4&__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A65318&__slightnudge_draft=1 200 in 132ms (next.js: 3ms, application-code: 129ms)
+
+SETUP 1793567134521 START taskkill ["/pid","8964","/T","/F"]
+SETUP END elapsed 294ms
+Isolated application diagnostics ▲ Next.js 16.4.3 (webpack)
+- Local:         http://127.0.0.1:65318
+- Network:       http://127.0.0.1:65318
+✓ Ready in 519ms
+✓ Running next.config.mjs took 39ms
+
+○ Compiling /fixtures/1/page ...
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\reliability-gate\\2026-11-01T20-16-41-721Z-fe9b294\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-aDexRf\\.next\\dev\\build-manifest.json","pid":34800,"time":1793566977414,"bytes":344}
+ GET /fixtures/1 200 in 3.1s (next.js: 763ms, application-code: 2.3s)
+○ Compiling /editor/[[...project]]/page ...
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\reliability-gate\\2026-11-01T20-16-41-721Z-fe9b294\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-aDexRf\\.next\\dev\\build-manifest.json","pid":35152,"time":1793567035464,"bytes":344}
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\reliability-gate\\2026-11-01T20-16-41-721Z-fe9b294\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-aDexRf\\.next\\dev\\build-manifest.json","pid":34800,"time":1793567035832,"bytes":344}
+ GET /editor/source-proof?preview=http%3A%2F%2F127.0.0.1%3A63473%2F 200 in 8.6s (next.js: 8.1s, application-code: 553ms)
+○ Compiling proxy ...
+○ Compiling /api/slightnudge/repositories/[id]/route ...
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\reliability-gate\\2026-11-01T20-16-41-721Z-fe9b294\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-aDexRf\\.next\\dev\\build-manifest.json","pid":34800,"time":1793567060452,"bytes":344}
+ GET /api/slightnudge/pages 200 in 8.1s (next.js: 7.6s, proxy.ts: 414ms, application-code: 83ms)
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\reliability-gate\\2026-11-01T20-16-41-721Z-fe9b294\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-aDexRf\\.next\\dev\\build-manifest.json","pid":34800,"time":1793567060541,"bytes":344}
+ GET /api/slightnudge/pages 200 in 163ms (next.js: 4ms, proxy.ts: 15ms, application-code: 144ms)
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\reliability-gate\\2026-11-01T20-16-41-721Z-fe9b294\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-aDexRf\\.next\\dev\\build-manifest.json","pid":28084,"time":1793567060715,"bytes":344}
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\reliability-gate\\2026-11-01T20-16-41-721Z-fe9b294\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-aDexRf\\.next\\dev\\build-manifest.json","pid":34800,"time":1793567061109,"bytes":344}
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\reliability-gate\\2026-11-01T20-16-41-721Z-fe9b294\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-aDexRf\\.next\\dev\\build-manifest.json","pid":34800,"time":1793567061303,"bytes":344}
+ GET /api/slightnudge/repositories/source-proof 200 in 12.2s (next.js: 8.3s, proxy.ts: 414ms, application-code: 3.5s)
+ GET /api/slightnudge/repositories/source-proof 200 in 4.3s (next.js: 205ms, proxy.ts: 20ms, application-code: 4.0s)
+○ Compiling /api/slightnudge/repositories/[id]/preview-check/route ...
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\reliability-gate\\2026-11-01T20-16-41-721Z-fe9b294\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-aDexRf\\.next\\dev\\build-manifest.json","pid":29676,"time":1793567070373,"bytes":344}
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\reliability-gate\\2026-11-01T20-16-41-721Z-fe9b294\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-aDexRf\\.next\\dev\\build-manifest.json","pid":34800,"time":1793567070612,"bytes":344}
+ POST /api/slightnudge/repositories/source-proof/preview-check 200 in 5.6s (next.js: 5.0s, proxy.ts: 264ms, application-code: 274ms)
+⚠ ./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\reliability-gate\\2026-11-01T20-16-41-721Z-fe9b294\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-aDexRf\\.next\\dev\\build-manifest.json","pid":34800,"time":1793567075409,"bytes":344}
+○ Compiling /api/slightnudge/responsive/route ...
+ POST /api/slightnudge/responsive 200 in 3.6s (next.js: 1013ms, proxy.ts: 13ms, application-code: 2.5s)
+
+SETUP 1793567137526 START taskkill ["/pid","31652","/T","/F"]
+SETUP END elapsed 933ms
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+page.waitForFunction: Timeout 60000ms exceeded.
+    at checkImportedCanvas (C:\dev\vibecheck\scratch\reliability-gate\2026-11-01T20-16-41-721Z-fe9b294\worktree\test\helpers\imported-canvas-browser.v3.ts:44:16)
+    at async <anonymous> (C:\dev\vibecheck\scratch\reliability-gate\2026-11-01T20-16-41-721Z-fe9b294\worktree\test\review-consent.browser.v3.ts:198:14) {
+  log: [],
+  name: 'TimeoutError'
+}
+
+Node.js v22.19.0

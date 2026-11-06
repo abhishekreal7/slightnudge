@@ -1,0 +1,5 @@
+PASS: duplicate bound Undo retains the older accepted edit
+PASS: required target, authorization, scope, read-only status, and historical receipts
+PASS: eight real process-exit cases; exact and token Undo preserve outside edits, recover receipts, and block conflicts
+PASS: an obsolete proposal cannot Undo an extended edit group
+PASS: unrelated history growth preserves unfinished Undo recovery

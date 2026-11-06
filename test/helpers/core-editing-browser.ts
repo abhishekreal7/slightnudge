@@ -20,7 +20,7 @@ export default function Page(){return <main className="bg-white p-10">
     for (const windowMode of [false, true]) {
       fs.writeFileSync(file, fixture);
       await page.goto('about:blank');
-      await page.goto(`${baseURL}/studio${windowMode ? '/window' : ''}`, { waitUntil: 'domcontentloaded', timeout: 120000 });
+      await page.goto(`${baseURL}/editor?view=${windowMode ? 'full' : 'fit&panel=inspector'}`, { waitUntil: 'domcontentloaded', timeout: 120000 });
       await page.locator('[data-source-ready="true"]').waitFor({ timeout: 120000 });
       const frame = page.frameLocator('iframe[title="Actual project"]');
       const toolbar = page.getByRole('toolbar', { name: 'Selection formatting', exact: true });
@@ -132,6 +132,10 @@ export default function Page(){return <main className="bg-white p-10">
         await page.getByRole('button', { name: 'Browse', exact: true }).click();
         const prevented = await frame.locator('body').evaluate(el => { const event = new KeyboardEvent('keydown', { key: 'z', ctrlKey: true, bubbles: true, cancelable: true }); el.dispatchEvent(event); return event.defaultPrevented; });
         assert.equal(prevented, false, 'Browse keeps website keyboard behavior');
+        await page.getByRole('combobox', { name: 'Canvas zoom', exact: true }).selectOption('0.5');
+        await page.waitForURL(url => url.searchParams.get('view') === 'fit');
+        await page.locator('[data-canvas-stage][data-zoom="0.5"]').waitFor();
+        assert.equal(await page.getByRole('combobox', { name: 'Canvas zoom', exact: true }).inputValue(), '0.5', 'Switching from Full page preserves the chosen zoom');
       }
       assert.deepEqual(errors, []);
       console.log(`PASS core editing ${windowMode ? 'window' : 'Studio'}: original-size text, button/icon, alignment/fill, padding/width, keyboard ownership, Move/Undo/Redo, grid, section order, responsive isolation, grouped Save/exact Undo`);

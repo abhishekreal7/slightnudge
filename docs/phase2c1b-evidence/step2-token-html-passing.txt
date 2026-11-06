@@ -1,0 +1,155 @@
+TAP version 13
+# Subtest: P0: Token HTML Host Header Validation
+    # Subtest: disallows token in HTML for / with evil.localhost
+    ok 1 - disallows token in HTML for / with evil.localhost
+      ---
+      duration_ms: 36597.5537
+      type: 'test'
+      ...
+    # Subtest: disallows token in HTML for / with attacker.example
+    ok 2 - disallows token in HTML for / with attacker.example
+      ---
+      duration_ms: 300.6374
+      type: 'test'
+      ...
+    # Subtest: disallows token in HTML for / with wrong port (port+1)
+    ok 3 - disallows token in HTML for / with wrong port (port+1)
+      ---
+      duration_ms: 156.2339
+      type: 'test'
+      ...
+    # Subtest: disallows token in HTML for / with missing Host
+    ok 4 - disallows token in HTML for / with missing Host
+      ---
+      duration_ms: 6.4579
+      type: 'test'
+      ...
+    # Subtest: disallows token in HTML for / with valid Host + X-Forwarded-Host: evil.localhost
+    ok 5 - disallows token in HTML for / with valid Host + X-Forwarded-Host: evil.localhost
+      ---
+      duration_ms: 434.6959
+      type: 'test'
+      ...
+    # Subtest: disallows token in HTML for / with valid Host + Forwarded: host=evil.localhost
+    ok 6 - disallows token in HTML for / with valid Host + Forwarded: host=evil.localhost
+      ---
+      duration_ms: 475.9361
+      type: 'test'
+      ...
+    # Subtest: disallows token in HTML for / with valid 127.0.0.1 + X-Forwarded-Host: evil.localhost
+    ok 7 - disallows token in HTML for / with valid 127.0.0.1 + X-Forwarded-Host: evil.localhost
+      ---
+      duration_ms: 303.4938
+      type: 'test'
+      ...
+    # Subtest: disallows token in HTML for / with valid 127.0.0.1 + Forwarded: host=evil.localhost
+    ok 8 - disallows token in HTML for / with valid 127.0.0.1 + Forwarded: host=evil.localhost
+      ---
+      duration_ms: 127.0723
+      type: 'test'
+      ...
+    # Subtest: renders token in HTML for / with valid Host localhost:PORT
+    ok 9 - renders token in HTML for / with valid Host localhost:PORT
+      ---
+      duration_ms: 230.2394
+      type: 'test'
+      ...
+    # Subtest: renders token in HTML for / with valid Host 127.0.0.1:PORT
+    ok 10 - renders token in HTML for / with valid Host 127.0.0.1:PORT
+      ---
+      duration_ms: 318.1839
+      type: 'test'
+      ...
+    # Subtest: disallows token in HTML for /studio with evil.localhost
+    ok 11 - disallows token in HTML for /studio with evil.localhost
+      ---
+      duration_ms: 10758.6961
+      type: 'test'
+      ...
+    # Subtest: disallows token in HTML for /studio with attacker.example
+    ok 12 - disallows token in HTML for /studio with attacker.example
+      ---
+      duration_ms: 206.8942
+      type: 'test'
+      ...
+    # Subtest: disallows token in HTML for /studio with wrong port (port+1)
+    ok 13 - disallows token in HTML for /studio with wrong port (port+1)
+      ---
+      duration_ms: 121.7259
+      type: 'test'
+      ...
+    # Subtest: disallows token in HTML for /studio with missing Host
+    ok 14 - disallows token in HTML for /studio with missing Host
+      ---
+      duration_ms: 1.7518
+      type: 'test'
+      ...
+    # Subtest: disallows token in HTML for /studio with valid Host + X-Forwarded-Host: evil.localhost
+    ok 15 - disallows token in HTML for /studio with valid Host + X-Forwarded-Host: evil.localhost
+      ---
+      duration_ms: 244.5417
+      type: 'test'
+      ...
+    # Subtest: disallows token in HTML for /studio with valid Host + Forwarded: host=evil.localhost
+    ok 16 - disallows token in HTML for /studio with valid Host + Forwarded: host=evil.localhost
+      ---
+      duration_ms: 123.9048
+      type: 'test'
+      ...
+    # Subtest: disallows token in HTML for /studio with valid 127.0.0.1 + X-Forwarded-Host: evil.localhost
+    ok 17 - disallows token in HTML for /studio with valid 127.0.0.1 + X-Forwarded-Host: evil.localhost
+      ---
+      duration_ms: 136.614
+      type: 'test'
+      ...
+    # Subtest: disallows token in HTML for /studio with valid 127.0.0.1 + Forwarded: host=evil.localhost
+    ok 18 - disallows token in HTML for /studio with valid 127.0.0.1 + Forwarded: host=evil.localhost
+      ---
+      duration_ms: 119.3003
+      type: 'test'
+      ...
+    # Subtest: renders token in HTML for /studio with valid Host localhost:PORT
+    ok 19 - renders token in HTML for /studio with valid Host localhost:PORT
+      ---
+      duration_ms: 135.2757
+      type: 'test'
+      ...
+    # Subtest: renders token in HTML for /studio with valid Host 127.0.0.1:PORT
+    ok 20 - renders token in HTML for /studio with valid Host 127.0.0.1:PORT
+      ---
+      duration_ms: 289.5752
+      type: 'test'
+      ...
+    # Subtest: refuses token endpoint for disallowed host (evil.localhost) with 403
+    ok 21 - refuses token endpoint for disallowed host (evil.localhost) with 403
+      ---
+      duration_ms: 54.0217
+      type: 'test'
+      ...
+    # Subtest: refuses token endpoint when X-Forwarded-Host is evil.localhost with 403
+    ok 22 - refuses token endpoint when X-Forwarded-Host is evil.localhost with 403
+      ---
+      duration_ms: 15.0272
+      type: 'test'
+      ...
+    # Subtest: token endpoint response includes Cache-Control: no-store
+    ok 23 - token endpoint response includes Cache-Control: no-store
+      ---
+      duration_ms: 15.7311
+      type: 'test'
+      ...
+    1..23
+ok 1 - P0: Token HTML Host Header Validation
+  ---
+  duration_ms: 79162.0822
+  type: 'suite'
+  ...
+1..1
+# tests 23
+# suites 1
+# pass 23
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 79169.1118

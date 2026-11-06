@@ -1,0 +1,7 @@
+ app/globals.css                                    |   9 +-
+ components/slightnudge/EditorWorkspace.tsx         | 334 ++++++++++++++++-----
+ components/slightnudge/SourceProjectCanvas.tsx     |  12 +
+ components/slightnudge/editor-workspace.module.css |  52 +++-
+ lib/slightnudge/direct-manipulation.ts             |  13 +-
+ next-env.d.ts                                      |   4 +-
+ 6 files changed, 331 insertions(+), 93 deletions(-)

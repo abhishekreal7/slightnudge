@@ -1,0 +1,683 @@
+SETUP 1793622071312 START git ["ls-files"]
+SETUP END elapsed 57ms
+HARNESS-V3 NAVIGATION about:blank
+HARNESS-V3 NAVIGATION http://127.0.0.1:50707/editor?panel=inspector
+TIMING 1793622123464 REQUEST http://127.0.0.1:50707/editor?panel=inspector
+TIMING 1793622125824 RESPONSE 200 http://127.0.0.1:50707/editor?panel=inspector
+HARNESS-V3 OP 1793622125852 START waitFor locator('[data-source-ready="true"]')
+TIMING 1793622126819 REQUEST http://127.0.0.1:50707/api/slightnudge/responsive
+TIMING 1793622126819 REQUEST http://127.0.0.1:50707/api/slightnudge/responsive
+TIMING 1793622126848 REQUEST http://127.0.0.1:50707/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A50707&__slightnudge_session=9127a2bd-c154-40e1-a855-0dd971050cae
+TIMING 1793622133212 RESPONSE 200 http://127.0.0.1:50707/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A50707&__slightnudge_session=9127a2bd-c154-40e1-a855-0dd971050cae
+TIMING 1793622133217 REQUEST http://127.0.0.1:50707/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+TIMING 1793622133253 RESPONSE 200 http://127.0.0.1:50707/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+HARNESS-V3 OP 1793622134342 END waitFor locator('[data-source-ready="true"]')
+HARNESS-V3 OP 1793622134343 START count getByRole('button', { name: 'Toggle design panel', exact: true })
+HARNESS-V3 OP 1793622134351 END count getByRole('button', { name: 'Toggle design panel', exact: true })
+HARNESS-V3 OP 1793622134351 START getAttribute getByRole('button', { name: 'Toggle design panel', exact: true })
+HARNESS-V3 OP 1793622134356 END getAttribute getByRole('button', { name: 'Toggle design panel', exact: true })
+TIMING 1793622134661 REQUEST http://127.0.0.1:50707/api/slightnudge/preview
+HARNESS-V3 OP 1793622134785 START click locator('summary').filter({ hasText: /^Fill & effects(?: |$)/ }).first()
+HARNESS-V3 OP 1793622134838 END click locator('summary').filter({ hasText: /^Fill & effects(?: |$)/ }).first()
+HARNESS-V3 OP 1793622134838 START click locator('summary').filter({ hasText: /^Gradient(?: |$)/ }).first()
+HARNESS-V3 OP 1793622134880 END click locator('summary').filter({ hasText: /^Gradient(?: |$)/ }).first()
+HARNESS-V3 OP 1793622134881 START fill getByLabel('Gradient angle', { exact: true })
+HARNESS-V3 OP 1793622134898 END fill getByLabel('Gradient angle', { exact: true })
+HARNESS-V3 OP 1793622134898 START fill getByLabel('Gradient stop 1 color', { exact: true })
+HARNESS-V3 OP 1793622134911 END fill getByLabel('Gradient stop 1 color', { exact: true })
+HARNESS-V3 OP 1793622134911 START fill getByLabel('Gradient stop 2 color', { exact: true })
+HARNESS-V3 OP 1793622134922 END fill getByLabel('Gradient stop 2 color', { exact: true })
+HARNESS-V3 OP 1793622134924 START click getByRole('button', { name: 'Set gradient', exact: true })
+TIMING 1793622135027 REQUEST http://127.0.0.1:50707/api/slightnudge/preview
+HARNESS-V3 OP 1793622135070 END click getByRole('button', { name: 'Set gradient', exact: true })
+TIMING 1793622138276 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/responsive
+TIMING 1793622138345 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/responsive
+TIMING 1793622140922 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/preview
+TIMING 1793622141156 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/preview
+TIMING 1793622141565 REQUEST http://127.0.0.1:50707/api/slightnudge/preview
+HARNESS-V3 OP 1793622141569 START allTextContents getByLabel('Editor notice', { exact: true })
+HARNESS-V3 OP 1793622141580 END allTextContents getByLabel('Editor notice', { exact: true })
+HARNESS-V3 OP 1793622141626 START click getByRole('button', { name: 'Add stop', exact: true })
+HARNESS-V3 OP 1793622141691 END click getByRole('button', { name: 'Add stop', exact: true })
+HARNESS-V3 OP 1793622141691 START fill getByLabel('Gradient stop 2 color', { exact: true })
+HARNESS-V3 OP 1793622141706 END fill getByLabel('Gradient stop 2 color', { exact: true })
+HARNESS-V3 OP 1793622141707 START click getByRole('button', { name: 'Set gradient', exact: true })
+TIMING 1793622141829 REQUEST http://127.0.0.1:50707/api/slightnudge/preview
+TIMING 1793622141883 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/preview
+HARNESS-V3 OP 1793622141884 END click getByRole('button', { name: 'Set gradient', exact: true })
+TIMING 1793622142381 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/preview
+TIMING 1793622142791 REQUEST http://127.0.0.1:50707/api/slightnudge/preview
+HARNESS-V3 OP 1793622142803 START allTextContents getByLabel('Editor notice', { exact: true })
+HARNESS-V3 OP 1793622142811 END allTextContents getByLabel('Editor notice', { exact: true })
+HARNESS-V3 OP 1793622142818 START click locator('summary').filter({ hasText: /^Shadow(?: |$)/ }).first()
+HARNESS-V3 OP 1793622142867 END click locator('summary').filter({ hasText: /^Shadow(?: |$)/ }).first()
+HARNESS-V3 OP 1793622142868 START selectOption getByLabel('Shadow preset', { exact: true })
+TIMING 1793622142941 REQUEST http://127.0.0.1:50707/api/slightnudge/preview
+HARNESS-V3 OP 1793622142941 END selectOption getByLabel('Shadow preset', { exact: true })
+TIMING 1793622142991 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/preview
+TIMING 1793622143472 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/preview
+TIMING 1793622143884 REQUEST http://127.0.0.1:50707/api/slightnudge/preview
+HARNESS-V3 OP 1793622143888 START allTextContents getByLabel('Editor notice', { exact: true })
+HARNESS-V3 OP 1793622143893 END allTextContents getByLabel('Editor notice', { exact: true })
+HARNESS-V3 OP 1793622143911 START selectOption getByLabel('Shadow preset', { exact: true })
+TIMING 1793622143976 REQUEST http://127.0.0.1:50707/api/slightnudge/preview
+HARNESS-V3 OP 1793622143976 END selectOption getByLabel('Shadow preset', { exact: true })
+TIMING 1793622144132 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/preview
+TIMING 1793622144699 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/preview
+TIMING 1793622145132 REQUEST http://127.0.0.1:50707/api/slightnudge/preview
+HARNESS-V3 OP 1793622145136 START allTextContents getByLabel('Editor notice', { exact: true })
+HARNESS-V3 OP 1793622145141 END allTextContents getByLabel('Editor notice', { exact: true })
+HARNESS-V3 OP 1793622145156 START selectOption getByLabel('Shadow preset', { exact: true })
+TIMING 1793622145232 REQUEST http://127.0.0.1:50707/api/slightnudge/preview
+HARNESS-V3 OP 1793622145233 END selectOption getByLabel('Shadow preset', { exact: true })
+TIMING 1793622145349 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/preview
+TIMING 1793622146042 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/preview
+TIMING 1793622146459 REQUEST http://127.0.0.1:50707/api/slightnudge/preview
+HARNESS-V3 OP 1793622146462 START allTextContents getByLabel('Editor notice', { exact: true })
+HARNESS-V3 OP 1793622146478 END allTextContents getByLabel('Editor notice', { exact: true })
+HARNESS-V3 OP 1793622146497 START click locator('summary').filter({ hasText: /^Constraints(?: |$)/ }).first()
+HARNESS-V3 OP 1793622146564 END click locator('summary').filter({ hasText: /^Constraints(?: |$)/ }).first()
+HARNESS-V3 OP 1793622146565 START selectOption getByLabel('Constraint minimum width', { exact: true })
+TIMING 1793622146655 REQUEST http://127.0.0.1:50707/api/slightnudge/preview
+HARNESS-V3 OP 1793622146655 END selectOption getByLabel('Constraint minimum width', { exact: true })
+TIMING 1793622146709 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/preview
+TIMING 1793622147174 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/preview
+TIMING 1793622147522 REQUEST http://127.0.0.1:50707/api/slightnudge/preview
+HARNESS-V3 OP 1793622147528 START allTextContents getByLabel('Editor notice', { exact: true })
+HARNESS-V3 OP 1793622147534 END allTextContents getByLabel('Editor notice', { exact: true })
+HARNESS-V3 OP 1793622147535 START selectOption getByLabel('Constraint grow', { exact: true })
+TIMING 1793622147601 REQUEST http://127.0.0.1:50707/api/slightnudge/preview
+HARNESS-V3 OP 1793622147601 END selectOption getByLabel('Constraint grow', { exact: true })
+TIMING 1793622147702 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/preview
+TIMING 1793622148225 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/preview
+TIMING 1793622148570 REQUEST http://127.0.0.1:50707/api/slightnudge/preview
+HARNESS-V3 OP 1793622148580 START allTextContents getByLabel('Editor notice', { exact: true })
+HARNESS-V3 OP 1793622148586 END allTextContents getByLabel('Editor notice', { exact: true })
+HARNESS-V3 OP 1793622148587 START selectOption getByLabel('Constraint shrink', { exact: true })
+TIMING 1793622148650 REQUEST http://127.0.0.1:50707/api/slightnudge/preview
+HARNESS-V3 OP 1793622148650 END selectOption getByLabel('Constraint shrink', { exact: true })
+TIMING 1793622148776 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/preview
+TIMING 1793622149292 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/preview
+TIMING 1793622149640 REQUEST http://127.0.0.1:50707/api/slightnudge/preview
+HARNESS-V3 OP 1793622149643 START allTextContents getByLabel('Editor notice', { exact: true })
+HARNESS-V3 OP 1793622149650 END allTextContents getByLabel('Editor notice', { exact: true })
+HARNESS-V3 OP 1793622149650 START fill getByRole('spinbutton', { name: 'Preview width', exact: true })
+HARNESS-V3 OP 1793622149663 END fill getByRole('spinbutton', { name: 'Preview width', exact: true })
+HARNESS-V3 OP 1793622149663 START press getByRole('spinbutton', { name: 'Preview width', exact: true })
+HARNESS-V3 OP 1793622149743 END press getByRole('spinbutton', { name: 'Preview width', exact: true })
+HARNESS-V3 OP 1793622149743 START waitFor getByRole('combobox', { name: 'Responsive edit scope', exact: true }).locator('option[value="tablet"]')
+HARNESS-V3 OP 1793622149748 END waitFor getByRole('combobox', { name: 'Responsive edit scope', exact: true }).locator('option[value="tablet"]')
+HARNESS-V3 OP 1793622149748 START selectOption getByRole('combobox', { name: 'Responsive edit scope', exact: true })
+HARNESS-V3 OP 1793622149846 END selectOption getByRole('combobox', { name: 'Responsive edit scope', exact: true })
+TIMING 1793622149858 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/preview
+HARNESS-V3 OP 1793622149880 START selectOption getByLabel('Constraint minimum width', { exact: true })
+TIMING 1793622149900 REQUEST http://127.0.0.1:50707/api/slightnudge/preview
+HARNESS-V3 OP 1793622149900 END selectOption getByLabel('Constraint minimum width', { exact: true })
+TIMING 1793622150522 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/preview
+TIMING 1793622150905 REQUEST http://127.0.0.1:50707/api/slightnudge/preview
+HARNESS-V3 OP 1793622150915 START allTextContents getByLabel('Editor notice', { exact: true })
+HARNESS-V3 OP 1793622150922 END allTextContents getByLabel('Editor notice', { exact: true })
+HARNESS-V3 OP 1793622150923 START selectOption getByLabel('Shadow preset', { exact: true })
+TIMING 1793622150992 REQUEST http://127.0.0.1:50707/api/slightnudge/preview
+HARNESS-V3 OP 1793622150992 END selectOption getByLabel('Shadow preset', { exact: true })
+TIMING 1793622151091 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/preview
+TIMING 1793622151686 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/preview
+TIMING 1793622152116 REQUEST http://127.0.0.1:50707/api/slightnudge/preview
+HARNESS-V3 OP 1793622152120 START allTextContents getByLabel('Editor notice', { exact: true })
+HARNESS-V3 OP 1793622152126 END allTextContents getByLabel('Editor notice', { exact: true })
+HARNESS-V3 OP 1793622152148 START fill getByRole('spinbutton', { name: 'Preview width', exact: true })
+HARNESS-V3 OP 1793622152158 END fill getByRole('spinbutton', { name: 'Preview width', exact: true })
+HARNESS-V3 OP 1793622152158 START press getByRole('spinbutton', { name: 'Preview width', exact: true })
+HARNESS-V3 OP 1793622152261 END press getByRole('spinbutton', { name: 'Preview width', exact: true })
+TIMING 1793622152314 REQUEST http://127.0.0.1:50707/editor?panel=inspector
+TIMING 1793622152621 RESPONSE 200 http://127.0.0.1:50707/editor?panel=inspector
+HARNESS-V3 OP 1793622152646 START waitFor locator('[data-source-ready="true"]')
+TIMING 1793622153354 REQUEST http://127.0.0.1:50707/api/slightnudge/responsive
+TIMING 1793622153354 REQUEST http://127.0.0.1:50707/api/slightnudge/responsive
+TIMING 1793622153381 REQUEST http://127.0.0.1:50707/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A50707&__slightnudge_session=72b22e1c-67a3-437f-b193-ea73a00f8c22
+TIMING 1793622153634 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/responsive
+TIMING 1793622155183 RESPONSE 200 http://127.0.0.1:50707/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A50707&__slightnudge_session=72b22e1c-67a3-437f-b193-ea73a00f8c22
+TIMING 1793622155249 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/responsive
+TIMING 1793622155272 REQUEST http://127.0.0.1:50707/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+TIMING 1793622155302 RESPONSE 200 http://127.0.0.1:50707/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+HARNESS-V3 OP 1793622156053 END waitFor locator('[data-source-ready="true"]')
+HARNESS-V3 OP 1793622157324 START click getByRole('button', { name: 'Save changes', exact: true })
+HARNESS-V3 OP 1793622157418 END click getByRole('button', { name: 'Save changes', exact: true })
+TIMING 1793622158403 REQUEST http://127.0.0.1:50707/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A50707&__slightnudge_session=44db50a9-5903-4e36-8f1b-9396930a06e1&__slightnudge_refresh=1b9b26b5-a4dd-4b90-b0e1-6e4880dd319f
+TIMING 1793622158584 RESPONSE 200 http://127.0.0.1:50707/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A50707&__slightnudge_session=44db50a9-5903-4e36-8f1b-9396930a06e1&__slightnudge_refresh=1b9b26b5-a4dd-4b90-b0e1-6e4880dd319f
+TIMING 1793622158853 REQUEST http://127.0.0.1:50707/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+TIMING 1793622159127 RESPONSE 200 http://127.0.0.1:50707/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+HARNESS-V3 OP 1793622161085 START count getByRole('button', { name: 'Toggle design panel', exact: true })
+HARNESS-V3 OP 1793622161100 END count getByRole('button', { name: 'Toggle design panel', exact: true })
+HARNESS-V3 OP 1793622161100 START getAttribute getByRole('button', { name: 'Toggle design panel', exact: true })
+HARNESS-V3 OP 1793622161103 END getAttribute getByRole('button', { name: 'Toggle design panel', exact: true })
+TIMING 1793622161362 REQUEST http://127.0.0.1:50707/api/slightnudge/preview
+HARNESS-V3 OP 1793622161550 START click getByRole('button', { name: 'Undo', exact: true })
+TIMING 1793622161663 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/preview
+HARNESS-V3 OP 1793622161714 END click getByRole('button', { name: 'Undo', exact: true })
+TIMING 1793622162612 REQUEST http://127.0.0.1:50707/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A50707&__slightnudge_session=74bec8ad-1213-46c0-9d32-05a2cdc822af&__slightnudge_refresh=74a5c88b-ca1a-4604-8a7d-2c5815e1e46e
+TIMING 1793622163144 RESPONSE 200 http://127.0.0.1:50707/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A50707&__slightnudge_session=74bec8ad-1213-46c0-9d32-05a2cdc822af&__slightnudge_refresh=74a5c88b-ca1a-4604-8a7d-2c5815e1e46e
+TIMING 1793622163147 REQUEST http://127.0.0.1:50707/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+TIMING 1793622163564 RESPONSE 200 http://127.0.0.1:50707/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+TIMING 1793622177623 REQUEST http://127.0.0.1:50707/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A50707&__slightnudge_session=08eb434b-ec71-4e36-bb5f-14898c2db983&__slightnudge_refresh=95d46d25-feb9-40ad-ad85-32a65b16dce3
+TIMING 1793622177932 RESPONSE 200 http://127.0.0.1:50707/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A50707&__slightnudge_session=08eb434b-ec71-4e36-bb5f-14898c2db983&__slightnudge_refresh=95d46d25-feb9-40ad-ad85-32a65b16dce3
+TIMING 1793622177941 REQUEST http://127.0.0.1:50707/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+TIMING 1793622177966 RESPONSE 200 http://127.0.0.1:50707/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+PASS appearance/constraints local Studio: gradient, ring-preserving shadow, flex constraints, custom breakpoint cascade, unchanged neighbour, refresh, Save and exact Undo
+HARNESS-V3 NAVIGATION about:blank
+HARNESS-V3 NAVIGATION http://127.0.0.1:50707/editor
+TIMING 1793622178920 REQUEST http://127.0.0.1:50707/editor
+TIMING 1793622179000 RESPONSE 200 http://127.0.0.1:50707/editor
+HARNESS-V3 OP 1793622179261 START waitFor locator('[data-source-ready="true"]')
+TIMING 1793622180861 REQUEST http://127.0.0.1:50707/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A50707&__slightnudge_session=2bdb528d-71e4-4c01-a87b-9406c32c13c4
+TIMING 1793622180862 REQUEST http://127.0.0.1:50707/api/slightnudge/responsive
+TIMING 1793622180862 REQUEST http://127.0.0.1:50707/api/slightnudge/responsive
+TIMING 1793622181347 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/responsive
+TIMING 1793622181414 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/responsive
+TIMING 1793622181424 RESPONSE 200 http://127.0.0.1:50707/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A50707&__slightnudge_session=2bdb528d-71e4-4c01-a87b-9406c32c13c4
+TIMING 1793622181440 REQUEST http://127.0.0.1:50707/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+TIMING 1793622181468 RESPONSE 200 http://127.0.0.1:50707/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+HARNESS-V3 OP 1793622182643 END waitFor locator('[data-source-ready="true"]')
+HARNESS-V3 OP 1793622182644 START count getByRole('button', { name: 'Toggle design panel', exact: true })
+HARNESS-V3 OP 1793622182650 END count getByRole('button', { name: 'Toggle design panel', exact: true })
+HARNESS-V3 OP 1793622182650 START getAttribute getByRole('button', { name: 'Toggle design panel', exact: true })
+HARNESS-V3 OP 1793622182653 END getAttribute getByRole('button', { name: 'Toggle design panel', exact: true })
+HARNESS-V3 OP 1793622182654 START click getByRole('button', { name: 'Toggle design panel', exact: true })
+HARNESS-V3 OP 1793622182701 END click getByRole('button', { name: 'Toggle design panel', exact: true })
+TIMING 1793622182940 REQUEST http://127.0.0.1:50707/api/slightnudge/preview
+HARNESS-V3 OP 1793622183053 START click locator('summary').filter({ hasText: /^Fill & effects(?: |$)/ }).first()
+HARNESS-V3 OP 1793622183098 END click locator('summary').filter({ hasText: /^Fill & effects(?: |$)/ }).first()
+HARNESS-V3 OP 1793622183099 START click locator('summary').filter({ hasText: /^Gradient(?: |$)/ }).first()
+TIMING 1793622183127 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/preview
+HARNESS-V3 OP 1793622183143 END click locator('summary').filter({ hasText: /^Gradient(?: |$)/ }).first()
+HARNESS-V3 OP 1793622183143 START fill getByLabel('Gradient angle', { exact: true })
+HARNESS-V3 OP 1793622183156 END fill getByLabel('Gradient angle', { exact: true })
+HARNESS-V3 OP 1793622183156 START fill getByLabel('Gradient stop 1 color', { exact: true })
+HARNESS-V3 OP 1793622183170 END fill getByLabel('Gradient stop 1 color', { exact: true })
+HARNESS-V3 OP 1793622183170 START fill getByLabel('Gradient stop 2 color', { exact: true })
+HARNESS-V3 OP 1793622183181 END fill getByLabel('Gradient stop 2 color', { exact: true })
+HARNESS-V3 OP 1793622183181 START click getByRole('button', { name: 'Set gradient', exact: true })
+TIMING 1793622183278 REQUEST http://127.0.0.1:50707/api/slightnudge/preview
+HARNESS-V3 OP 1793622183326 END click getByRole('button', { name: 'Set gradient', exact: true })
+TIMING 1793622183725 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/preview
+TIMING 1793622184056 REQUEST http://127.0.0.1:50707/api/slightnudge/preview
+HARNESS-V3 OP 1793622184062 START allTextContents getByLabel('Editor notice', { exact: true })
+HARNESS-V3 OP 1793622184071 END allTextContents getByLabel('Editor notice', { exact: true })
+HARNESS-V3 OP 1793622184103 START click getByRole('button', { name: 'Add stop', exact: true })
+HARNESS-V3 OP 1793622184148 END click getByRole('button', { name: 'Add stop', exact: true })
+HARNESS-V3 OP 1793622184148 START fill getByLabel('Gradient stop 2 color', { exact: true })
+HARNESS-V3 OP 1793622184162 END fill getByLabel('Gradient stop 2 color', { exact: true })
+HARNESS-V3 OP 1793622184163 START click getByRole('button', { name: 'Set gradient', exact: true })
+TIMING 1793622184267 REQUEST http://127.0.0.1:50707/api/slightnudge/preview
+TIMING 1793622184271 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/preview
+HARNESS-V3 OP 1793622184317 END click getByRole('button', { name: 'Set gradient', exact: true })
+TIMING 1793622184731 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/preview
+TIMING 1793622185076 REQUEST http://127.0.0.1:50707/api/slightnudge/preview
+HARNESS-V3 OP 1793622185082 START allTextContents getByLabel('Editor notice', { exact: true })
+HARNESS-V3 OP 1793622185086 END allTextContents getByLabel('Editor notice', { exact: true })
+HARNESS-V3 OP 1793622185093 START click locator('summary').filter({ hasText: /^Shadow(?: |$)/ }).first()
+HARNESS-V3 OP 1793622185127 END click locator('summary').filter({ hasText: /^Shadow(?: |$)/ }).first()
+HARNESS-V3 OP 1793622185128 START selectOption getByLabel('Shadow preset', { exact: true })
+TIMING 1793622185194 REQUEST http://127.0.0.1:50707/api/slightnudge/preview
+HARNESS-V3 OP 1793622185195 END selectOption getByLabel('Shadow preset', { exact: true })
+TIMING 1793622185258 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/preview
+TIMING 1793622185724 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/preview
+TIMING 1793622186077 REQUEST http://127.0.0.1:50707/api/slightnudge/preview
+HARNESS-V3 OP 1793622186081 START allTextContents getByLabel('Editor notice', { exact: true })
+HARNESS-V3 OP 1793622186087 END allTextContents getByLabel('Editor notice', { exact: true })
+HARNESS-V3 OP 1793622186103 START selectOption getByLabel('Shadow preset', { exact: true })
+TIMING 1793622186172 REQUEST http://127.0.0.1:50707/api/slightnudge/preview
+HARNESS-V3 OP 1793622186172 END selectOption getByLabel('Shadow preset', { exact: true })
+TIMING 1793622186266 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/preview
+TIMING 1793622186754 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/preview
+TIMING 1793622187075 REQUEST http://127.0.0.1:50707/api/slightnudge/preview
+HARNESS-V3 OP 1793622187079 START allTextContents getByLabel('Editor notice', { exact: true })
+HARNESS-V3 OP 1793622187087 END allTextContents getByLabel('Editor notice', { exact: true })
+HARNESS-V3 OP 1793622187098 START selectOption getByLabel('Shadow preset', { exact: true })
+TIMING 1793622187162 REQUEST http://127.0.0.1:50707/api/slightnudge/preview
+HARNESS-V3 OP 1793622187162 END selectOption getByLabel('Shadow preset', { exact: true })
+TIMING 1793622187255 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/preview
+TIMING 1793622187695 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/preview
+TIMING 1793622188034 REQUEST http://127.0.0.1:50707/api/slightnudge/preview
+HARNESS-V3 OP 1793622188037 START allTextContents getByLabel('Editor notice', { exact: true })
+HARNESS-V3 OP 1793622188042 END allTextContents getByLabel('Editor notice', { exact: true })
+HARNESS-V3 OP 1793622188052 START click locator('summary').filter({ hasText: /^Constraints(?: |$)/ }).first()
+HARNESS-V3 OP 1793622188113 END click locator('summary').filter({ hasText: /^Constraints(?: |$)/ }).first()
+HARNESS-V3 OP 1793622188113 START selectOption getByLabel('Constraint minimum width', { exact: true })
+TIMING 1793622188202 REQUEST http://127.0.0.1:50707/api/slightnudge/preview
+HARNESS-V3 OP 1793622188202 END selectOption getByLabel('Constraint minimum width', { exact: true })
+TIMING 1793622188252 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/preview
+TIMING 1793622188687 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/preview
+TIMING 1793622188971 REQUEST http://127.0.0.1:50707/api/slightnudge/preview
+HARNESS-V3 OP 1793622188975 START allTextContents getByLabel('Editor notice', { exact: true })
+HARNESS-V3 OP 1793622188984 END allTextContents getByLabel('Editor notice', { exact: true })
+HARNESS-V3 OP 1793622188985 START selectOption getByLabel('Constraint grow', { exact: true })
+TIMING 1793622189039 REQUEST http://127.0.0.1:50707/api/slightnudge/preview
+HARNESS-V3 OP 1793622189040 END selectOption getByLabel('Constraint grow', { exact: true })
+TIMING 1793622189142 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/preview
+TIMING 1793622189583 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/preview
+TIMING 1793622189784 REQUEST http://127.0.0.1:50707/api/slightnudge/preview
+HARNESS-V3 OP 1793622189787 START allTextContents getByLabel('Editor notice', { exact: true })
+HARNESS-V3 OP 1793622189791 END allTextContents getByLabel('Editor notice', { exact: true })
+HARNESS-V3 OP 1793622189791 START selectOption getByLabel('Constraint shrink', { exact: true })
+TIMING 1793622189804 REQUEST http://127.0.0.1:50707/api/slightnudge/preview
+HARNESS-V3 OP 1793622189804 END selectOption getByLabel('Constraint shrink', { exact: true })
+TIMING 1793622189935 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/preview
+TIMING 1793622190389 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/preview
+TIMING 1793622190684 REQUEST http://127.0.0.1:50707/api/slightnudge/preview
+HARNESS-V3 OP 1793622190689 START allTextContents getByLabel('Editor notice', { exact: true })
+HARNESS-V3 OP 1793622190697 END allTextContents getByLabel('Editor notice', { exact: true })
+HARNESS-V3 OP 1793622190697 START fill getByRole('spinbutton', { name: 'Preview width', exact: true })
+HARNESS-V3 OP 1793622190706 END fill getByRole('spinbutton', { name: 'Preview width', exact: true })
+HARNESS-V3 OP 1793622190706 START press getByRole('spinbutton', { name: 'Preview width', exact: true })
+HARNESS-V3 OP 1793622190823 END press getByRole('spinbutton', { name: 'Preview width', exact: true })
+HARNESS-V3 OP 1793622190823 START waitFor getByRole('combobox', { name: 'Responsive edit scope', exact: true }).locator('option[value="tablet"]')
+HARNESS-V3 OP 1793622190853 END waitFor getByRole('combobox', { name: 'Responsive edit scope', exact: true }).locator('option[value="tablet"]')
+HARNESS-V3 OP 1793622190853 START selectOption getByRole('combobox', { name: 'Responsive edit scope', exact: true })
+HARNESS-V3 OP 1793622190870 END selectOption getByRole('combobox', { name: 'Responsive edit scope', exact: true })
+TIMING 1793622190881 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/preview
+HARNESS-V3 OP 1793622190889 START selectOption getByLabel('Constraint minimum width', { exact: true })
+TIMING 1793622190918 REQUEST http://127.0.0.1:50707/api/slightnudge/preview
+HARNESS-V3 OP 1793622190918 END selectOption getByLabel('Constraint minimum width', { exact: true })
+TIMING 1793622191510 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/preview
+TIMING 1793622191886 REQUEST http://127.0.0.1:50707/api/slightnudge/preview
+HARNESS-V3 OP 1793622191891 START allTextContents getByLabel('Editor notice', { exact: true })
+HARNESS-V3 OP 1793622191898 END allTextContents getByLabel('Editor notice', { exact: true })
+HARNESS-V3 OP 1793622191898 START selectOption getByLabel('Shadow preset', { exact: true })
+TIMING 1793622191961 REQUEST http://127.0.0.1:50707/api/slightnudge/preview
+HARNESS-V3 OP 1793622191961 END selectOption getByLabel('Shadow preset', { exact: true })
+TIMING 1793622192073 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/preview
+TIMING 1793622192619 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/preview
+TIMING 1793622192992 REQUEST http://127.0.0.1:50707/api/slightnudge/preview
+HARNESS-V3 OP 1793622192992 START allTextContents getByLabel('Editor notice', { exact: true })
+HARNESS-V3 OP 1793622193002 END allTextContents getByLabel('Editor notice', { exact: true })
+HARNESS-V3 OP 1793622193019 START fill getByRole('spinbutton', { name: 'Preview width', exact: true })
+HARNESS-V3 OP 1793622193025 END fill getByRole('spinbutton', { name: 'Preview width', exact: true })
+HARNESS-V3 OP 1793622193025 START press getByRole('spinbutton', { name: 'Preview width', exact: true })
+HARNESS-V3 OP 1793622193105 END press getByRole('spinbutton', { name: 'Preview width', exact: true })
+TIMING 1793622193149 REQUEST http://127.0.0.1:50707/editor
+TIMING 1793622193293 RESPONSE 200 http://127.0.0.1:50707/editor
+HARNESS-V3 OP 1793622193325 START waitFor locator('[data-source-ready="true"]')
+TIMING 1793622193953 REQUEST http://127.0.0.1:50707/api/slightnudge/responsive
+TIMING 1793622193953 REQUEST http://127.0.0.1:50707/api/slightnudge/responsive
+TIMING 1793622193977 REQUEST http://127.0.0.1:50707/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A50707&__slightnudge_session=67ff5f2d-43ca-42dd-9ac9-f4d89dfe7c9c
+TIMING 1793622194213 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/responsive
+TIMING 1793622194260 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/responsive
+TIMING 1793622194275 RESPONSE 200 http://127.0.0.1:50707/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A50707&__slightnudge_session=67ff5f2d-43ca-42dd-9ac9-f4d89dfe7c9c
+TIMING 1793622194282 REQUEST http://127.0.0.1:50707/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+TIMING 1793622194310 RESPONSE 200 http://127.0.0.1:50707/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+HARNESS-V3 OP 1793622195384 END waitFor locator('[data-source-ready="true"]')
+HARNESS-V3 OP 1793622195477 START click getByRole('button', { name: 'Save changes', exact: true })
+HARNESS-V3 OP 1793622195549 END click getByRole('button', { name: 'Save changes', exact: true })
+TIMING 1793622195838 REQUEST http://127.0.0.1:50707/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A50707&__slightnudge_session=b71660c6-dee9-4ed6-9a84-91ab79a421d9&__slightnudge_refresh=523963a1-c70f-46d9-bb61-5207e1c51542
+TIMING 1793622195889 RESPONSE 200 http://127.0.0.1:50707/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A50707&__slightnudge_session=b71660c6-dee9-4ed6-9a84-91ab79a421d9&__slightnudge_refresh=523963a1-c70f-46d9-bb61-5207e1c51542
+TIMING 1793622195899 REQUEST http://127.0.0.1:50707/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+TIMING 1793622196202 RESPONSE 200 http://127.0.0.1:50707/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+TIMING 1793622198158 REQUEST http://127.0.0.1:50707/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A50707&__slightnudge_session=895718eb-72e0-490d-bd82-e9ff7f7d4d0d&__slightnudge_refresh=9f99ae09-51d0-4c6b-a570-946c4c2ba749
+TIMING 1793622198275 RESPONSE 200 http://127.0.0.1:50707/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A50707&__slightnudge_session=895718eb-72e0-490d-bd82-e9ff7f7d4d0d&__slightnudge_refresh=9f99ae09-51d0-4c6b-a570-946c4c2ba749
+TIMING 1793622198282 REQUEST http://127.0.0.1:50707/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+TIMING 1793622198306 RESPONSE 200 http://127.0.0.1:50707/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+HARNESS-V3 OP 1793622199093 START count getByRole('button', { name: 'Toggle design panel', exact: true })
+HARNESS-V3 OP 1793622199108 END count getByRole('button', { name: 'Toggle design panel', exact: true })
+HARNESS-V3 OP 1793622199108 START getAttribute getByRole('button', { name: 'Toggle design panel', exact: true })
+HARNESS-V3 OP 1793622199115 END getAttribute getByRole('button', { name: 'Toggle design panel', exact: true })
+HARNESS-V3 OP 1793622199115 START click getByRole('button', { name: 'Toggle design panel', exact: true })
+HARNESS-V3 OP 1793622199186 END click getByRole('button', { name: 'Toggle design panel', exact: true })
+TIMING 1793622199412 REQUEST http://127.0.0.1:50707/api/slightnudge/preview
+HARNESS-V3 OP 1793622199529 START click getByRole('button', { name: 'Undo', exact: true })
+TIMING 1793622199640 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/preview
+HARNESS-V3 OP 1793622199644 END click getByRole('button', { name: 'Undo', exact: true })
+TIMING 1793622199790 REQUEST http://127.0.0.1:50707/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A50707&__slightnudge_session=6e235a22-d2a1-4c04-85cb-09bef82bdec4&__slightnudge_refresh=29d479e7-82a6-4e12-89e6-e92b0faa9f85
+TIMING 1793622200976 REQUEST http://127.0.0.1:50707/_next/static/webpack/app/studio/preview/[pageId]/page.14a9016d55f62b03.hot-update.js
+TIMING 1793622201078 RESPONSE 200 http://127.0.0.1:50707/_next/static/webpack/app/studio/preview/[pageId]/page.14a9016d55f62b03.hot-update.js
+TIMING 1793622201415 REQUEST http://127.0.0.1:50707/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A50707&__slightnudge_session=895718eb-72e0-490d-bd82-e9ff7f7d4d0d&__slightnudge_refresh=9f99ae09-51d0-4c6b-a570-946c4c2ba749&_rsc=1ALcOFigXzXvES7u
+TIMING 1793622201558 RESPONSE 200 http://127.0.0.1:50707/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A50707&__slightnudge_session=6e235a22-d2a1-4c04-85cb-09bef82bdec4&__slightnudge_refresh=29d479e7-82a6-4e12-89e6-e92b0faa9f85
+TIMING 1793622201578 REQUEST http://127.0.0.1:50707/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+TIMING 1793622202152 RESPONSE 200 http://127.0.0.1:50707/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+PASS appearance/constraints local window: gradient, ring-preserving shadow, flex constraints, custom breakpoint cascade, unchanged neighbour, refresh, Save and exact Undo
+SETUP 1793622202914 START git ["init","--quiet"]
+SETUP END elapsed 61ms
+SETUP 1793622202975 START git ["-c","core.autocrlf=false","add","app","components","package.json","LICENSE"]
+SETUP END elapsed 127ms
+SETUP 1793622203103 START C:\nvm4w\nodejs\node.exe ["--import","tsx","--input-type=module","-e","const {installNextSourceAdapter}=await import('./lib/slightnudge/next-source-adapter.ts');await installNextSourceAdapter('source-proof');"]
+SETUP END elapsed 347ms
+SETUP 1793622203450 START C:\nvm4w\nodejs\node.exe ["C:\\dev\\vibecheck\\scratch\\g\\98063bcc\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-wqdC0G\\.slightnudge\\repositories\\source-proof\\node_modules\\next\\dist\\bin\\next","dev","--help"]
+SETUP END elapsed 186ms
+Disposable source project: generated SaaS; Next.js 16.4.3; Tailwind 4.3.3; installed source adapter; no environment files checked out.
+TIMING 1793622205630 REQUEST http://127.0.0.1:50707/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A50707&__slightnudge_session=6e235a22-d2a1-4c04-85cb-09bef82bdec4&__slightnudge_refresh=29d479e7-82a6-4e12-89e6-e92b0faa9f85&_rsc=h0F6U8IxjB0d_H9-
+TIMING 1793622205771 REQUEST http://127.0.0.1:50707/_next/static/webpack/app/studio/preview/[pageId]/page.67f39917f8b72b9a.hot-update.js
+TIMING 1793622205805 RESPONSE 200 http://127.0.0.1:50707/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A50707&__slightnudge_session=6e235a22-d2a1-4c04-85cb-09bef82bdec4&__slightnudge_refresh=29d479e7-82a6-4e12-89e6-e92b0faa9f85&_rsc=h0F6U8IxjB0d_H9-
+TIMING 1793622205829 RESPONSE 200 http://127.0.0.1:50707/_next/static/webpack/app/studio/preview/[pageId]/page.67f39917f8b72b9a.hot-update.js
+HARNESS-V3 NAVIGATION about:blank
+HARNESS-V3 NAVIGATION http://127.0.0.1:50707/editor/source-proof?preview=http%3A%2F%2F127.0.0.1%3A52839%2F&panel=inspector
+TIMING 1793622218738 REQUEST http://127.0.0.1:50707/editor/source-proof?preview=http%3A%2F%2F127.0.0.1%3A52839%2F&panel=inspector
+TIMING 1793622218887 RESPONSE 200 http://127.0.0.1:50707/editor/source-proof?preview=http%3A%2F%2F127.0.0.1%3A52839%2F&panel=inspector
+HARNESS-V3 OP 1793622218924 START waitFor locator('[data-source-ready="true"]')
+TIMING 1793622219657 REQUEST http://127.0.0.1:50707/api/slightnudge/repositories/source-proof
+TIMING 1793622219658 REQUEST http://127.0.0.1:50707/api/slightnudge/repositories/source-proof
+TIMING 1793622221923 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/repositories/source-proof
+TIMING 1793622222038 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/repositories/source-proof
+TIMING 1793622222042 REQUEST http://127.0.0.1:50707/api/slightnudge/repositories/source-proof/preview-check
+TIMING 1793622223821 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/repositories/source-proof/preview-check
+TIMING 1793622223840 REQUEST http://127.0.0.1:52839/?__slightnudge_session=6dd5697b-3fbd-44c5-b44f-60c6439b7e34&__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A50707&__slightnudge_draft=1
+TIMING 1793622223882 RESPONSE 200 http://127.0.0.1:52839/?__slightnudge_session=6dd5697b-3fbd-44c5-b44f-60c6439b7e34&__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A50707&__slightnudge_draft=1
+TIMING 1793622224765 REQUEST http://127.0.0.1:50707/api/slightnudge/responsive
+TIMING 1793622224815 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/responsive
+HARNESS-V3 OP 1793622224848 END waitFor locator('[data-source-ready="true"]')
+HARNESS-V3 OP 1793622224848 START count getByRole('button', { name: 'Toggle design panel', exact: true })
+HARNESS-V3 OP 1793622224853 END count getByRole('button', { name: 'Toggle design panel', exact: true })
+HARNESS-V3 OP 1793622224854 START getAttribute getByRole('button', { name: 'Toggle design panel', exact: true })
+HARNESS-V3 OP 1793622224857 END getAttribute getByRole('button', { name: 'Toggle design panel', exact: true })
+TIMING 1793622225079 REQUEST http://127.0.0.1:50707/api/slightnudge/preview
+HARNESS-V3 OP 1793622225189 START click locator('summary').filter({ hasText: /^Fill & effects(?: |$)/ }).first()
+HARNESS-V3 OP 1793622225225 END click locator('summary').filter({ hasText: /^Fill & effects(?: |$)/ }).first()
+HARNESS-V3 OP 1793622225225 START click locator('summary').filter({ hasText: /^Gradient(?: |$)/ }).first()
+TIMING 1793622225272 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/preview
+HARNESS-V3 OP 1793622225280 END click locator('summary').filter({ hasText: /^Gradient(?: |$)/ }).first()
+HARNESS-V3 OP 1793622225280 START fill getByLabel('Gradient angle', { exact: true })
+HARNESS-V3 OP 1793622225293 END fill getByLabel('Gradient angle', { exact: true })
+HARNESS-V3 OP 1793622225294 START fill getByLabel('Gradient stop 1 color', { exact: true })
+HARNESS-V3 OP 1793622225305 END fill getByLabel('Gradient stop 1 color', { exact: true })
+HARNESS-V3 OP 1793622225305 START fill getByLabel('Gradient stop 2 color', { exact: true })
+HARNESS-V3 OP 1793622225315 END fill getByLabel('Gradient stop 2 color', { exact: true })
+HARNESS-V3 OP 1793622225315 START click getByRole('button', { name: 'Set gradient', exact: true })
+TIMING 1793622225408 REQUEST http://127.0.0.1:50707/api/slightnudge/preview
+HARNESS-V3 OP 1793622225454 END click getByRole('button', { name: 'Set gradient', exact: true })
+TIMING 1793622225889 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/preview
+TIMING 1793622226268 REQUEST http://127.0.0.1:50707/api/slightnudge/preview
+HARNESS-V3 OP 1793622226272 START allTextContents getByLabel('Editor notice', { exact: true })
+HARNESS-V3 OP 1793622226279 END allTextContents getByLabel('Editor notice', { exact: true })
+HARNESS-V3 OP 1793622226307 START click getByRole('button', { name: 'Add stop', exact: true })
+HARNESS-V3 OP 1793622226351 END click getByRole('button', { name: 'Add stop', exact: true })
+HARNESS-V3 OP 1793622226351 START fill getByLabel('Gradient stop 2 color', { exact: true })
+HARNESS-V3 OP 1793622226366 END fill getByLabel('Gradient stop 2 color', { exact: true })
+HARNESS-V3 OP 1793622226366 START click getByRole('button', { name: 'Set gradient', exact: true })
+TIMING 1793622226476 REQUEST http://127.0.0.1:50707/api/slightnudge/preview
+TIMING 1793622226478 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/preview
+HARNESS-V3 OP 1793622226523 END click getByRole('button', { name: 'Set gradient', exact: true })
+TIMING 1793622226915 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/preview
+TIMING 1793622227220 REQUEST http://127.0.0.1:50707/api/slightnudge/preview
+HARNESS-V3 OP 1793622227227 START allTextContents getByLabel('Editor notice', { exact: true })
+HARNESS-V3 OP 1793622227233 END allTextContents getByLabel('Editor notice', { exact: true })
+HARNESS-V3 OP 1793622227238 START click locator('summary').filter({ hasText: /^Shadow(?: |$)/ }).first()
+HARNESS-V3 OP 1793622227280 END click locator('summary').filter({ hasText: /^Shadow(?: |$)/ }).first()
+HARNESS-V3 OP 1793622227281 START selectOption getByLabel('Shadow preset', { exact: true })
+TIMING 1793622227346 REQUEST http://127.0.0.1:50707/api/slightnudge/preview
+HARNESS-V3 OP 1793622227346 END selectOption getByLabel('Shadow preset', { exact: true })
+TIMING 1793622227396 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/preview
+TIMING 1793622227848 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/preview
+TIMING 1793622227965 REQUEST http://127.0.0.1:50707/api/slightnudge/preview
+HARNESS-V3 OP 1793622227966 START allTextContents getByLabel('Editor notice', { exact: true })
+HARNESS-V3 OP 1793622227976 END allTextContents getByLabel('Editor notice', { exact: true })
+HARNESS-V3 OP 1793622227993 START selectOption getByLabel('Shadow preset', { exact: true })
+TIMING 1793622228059 REQUEST http://127.0.0.1:50707/api/slightnudge/preview
+HARNESS-V3 OP 1793622228059 END selectOption getByLabel('Shadow preset', { exact: true })
+TIMING 1793622228144 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/preview
+TIMING 1793622228595 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/preview
+TIMING 1793622228933 REQUEST http://127.0.0.1:50707/api/slightnudge/preview
+HARNESS-V3 OP 1793622228937 START allTextContents getByLabel('Editor notice', { exact: true })
+HARNESS-V3 OP 1793622228947 END allTextContents getByLabel('Editor notice', { exact: true })
+HARNESS-V3 OP 1793622228964 START selectOption getByLabel('Shadow preset', { exact: true })
+TIMING 1793622229027 REQUEST http://127.0.0.1:50707/api/slightnudge/preview
+HARNESS-V3 OP 1793622229027 END selectOption getByLabel('Shadow preset', { exact: true })
+TIMING 1793622229110 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/preview
+TIMING 1793622229563 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/preview
+TIMING 1793622229886 REQUEST http://127.0.0.1:50707/api/slightnudge/preview
+HARNESS-V3 OP 1793622229889 START allTextContents getByLabel('Editor notice', { exact: true })
+HARNESS-V3 OP 1793622229893 END allTextContents getByLabel('Editor notice', { exact: true })
+HARNESS-V3 OP 1793622229904 START click locator('summary').filter({ hasText: /^Constraints(?: |$)/ }).first()
+HARNESS-V3 OP 1793622229939 END click locator('summary').filter({ hasText: /^Constraints(?: |$)/ }).first()
+HARNESS-V3 OP 1793622229940 START selectOption getByLabel('Constraint minimum width', { exact: true })
+TIMING 1793622230007 REQUEST http://127.0.0.1:50707/api/slightnudge/preview
+HARNESS-V3 OP 1793622230007 END selectOption getByLabel('Constraint minimum width', { exact: true })
+TIMING 1793622230064 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/preview
+TIMING 1793622230534 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/preview
+TIMING 1793622230841 REQUEST http://127.0.0.1:50707/api/slightnudge/preview
+HARNESS-V3 OP 1793622230846 START allTextContents getByLabel('Editor notice', { exact: true })
+HARNESS-V3 OP 1793622230852 END allTextContents getByLabel('Editor notice', { exact: true })
+HARNESS-V3 OP 1793622230853 START selectOption getByLabel('Constraint grow', { exact: true })
+TIMING 1793622230915 REQUEST http://127.0.0.1:50707/api/slightnudge/preview
+HARNESS-V3 OP 1793622230915 END selectOption getByLabel('Constraint grow', { exact: true })
+TIMING 1793622231023 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/preview
+TIMING 1793622231513 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/preview
+TIMING 1793622231820 REQUEST http://127.0.0.1:50707/api/slightnudge/preview
+HARNESS-V3 OP 1793622231824 START allTextContents getByLabel('Editor notice', { exact: true })
+HARNESS-V3 OP 1793622231829 END allTextContents getByLabel('Editor notice', { exact: true })
+HARNESS-V3 OP 1793622231829 START selectOption getByLabel('Constraint shrink', { exact: true })
+TIMING 1793622231894 REQUEST http://127.0.0.1:50707/api/slightnudge/preview
+HARNESS-V3 OP 1793622231894 END selectOption getByLabel('Constraint shrink', { exact: true })
+TIMING 1793622232000 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/preview
+TIMING 1793622232494 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/preview
+TIMING 1793622232820 REQUEST http://127.0.0.1:50707/api/slightnudge/preview
+HARNESS-V3 OP 1793622232824 START allTextContents getByLabel('Editor notice', { exact: true })
+HARNESS-V3 OP 1793622232828 END allTextContents getByLabel('Editor notice', { exact: true })
+HARNESS-V3 OP 1793622232828 START fill getByRole('spinbutton', { name: 'Preview width', exact: true })
+HARNESS-V3 OP 1793622232840 END fill getByRole('spinbutton', { name: 'Preview width', exact: true })
+HARNESS-V3 OP 1793622232840 START press getByRole('spinbutton', { name: 'Preview width', exact: true })
+HARNESS-V3 OP 1793622232912 END press getByRole('spinbutton', { name: 'Preview width', exact: true })
+HARNESS-V3 OP 1793622232912 START waitFor getByRole('combobox', { name: 'Responsive edit scope', exact: true }).locator('option[value="tablet"]')
+HARNESS-V3 OP 1793622232974 END waitFor getByRole('combobox', { name: 'Responsive edit scope', exact: true }).locator('option[value="tablet"]')
+HARNESS-V3 OP 1793622232975 START selectOption getByRole('combobox', { name: 'Responsive edit scope', exact: true })
+TIMING 1793622233031 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/preview
+HARNESS-V3 OP 1793622233049 END selectOption getByRole('combobox', { name: 'Responsive edit scope', exact: true })
+HARNESS-V3 OP 1793622233067 START selectOption getByLabel('Constraint minimum width', { exact: true })
+TIMING 1793622233103 REQUEST http://127.0.0.1:50707/api/slightnudge/preview
+HARNESS-V3 OP 1793622233103 END selectOption getByLabel('Constraint minimum width', { exact: true })
+TIMING 1793622233628 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/preview
+TIMING 1793622233963 REQUEST http://127.0.0.1:50707/api/slightnudge/preview
+HARNESS-V3 OP 1793622233967 START allTextContents getByLabel('Editor notice', { exact: true })
+HARNESS-V3 OP 1793622233975 END allTextContents getByLabel('Editor notice', { exact: true })
+HARNESS-V3 OP 1793622233976 START selectOption getByLabel('Shadow preset', { exact: true })
+TIMING 1793622234035 REQUEST http://127.0.0.1:50707/api/slightnudge/preview
+HARNESS-V3 OP 1793622234035 END selectOption getByLabel('Shadow preset', { exact: true })
+TIMING 1793622234126 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/preview
+TIMING 1793622234577 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/preview
+TIMING 1793622234613 REQUEST http://127.0.0.1:50707/api/slightnudge/preview
+HARNESS-V3 OP 1793622234615 START allTextContents getByLabel('Editor notice', { exact: true })
+HARNESS-V3 OP 1793622234619 END allTextContents getByLabel('Editor notice', { exact: true })
+HARNESS-V3 OP 1793622234638 START fill getByRole('spinbutton', { name: 'Preview width', exact: true })
+HARNESS-V3 OP 1793622234645 END fill getByRole('spinbutton', { name: 'Preview width', exact: true })
+HARNESS-V3 OP 1793622234645 START press getByRole('spinbutton', { name: 'Preview width', exact: true })
+HARNESS-V3 OP 1793622234916 END press getByRole('spinbutton', { name: 'Preview width', exact: true })
+TIMING 1793622234919 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/preview
+TIMING 1793622235028 REQUEST http://127.0.0.1:50707/editor/source-proof?preview=http%3A%2F%2F127.0.0.1%3A52839%2F&panel=inspector
+TIMING 1793622235158 RESPONSE 200 http://127.0.0.1:50707/editor/source-proof?preview=http%3A%2F%2F127.0.0.1%3A52839%2F&panel=inspector
+HARNESS-V3 OP 1793622235190 START waitFor locator('[data-source-ready="true"]')
+TIMING 1793622235799 REQUEST http://127.0.0.1:50707/api/slightnudge/repositories/source-proof
+TIMING 1793622235799 REQUEST http://127.0.0.1:50707/api/slightnudge/repositories/source-proof
+TIMING 1793622236053 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/repositories/source-proof
+TIMING 1793622236128 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/repositories/source-proof
+TIMING 1793622236131 REQUEST http://127.0.0.1:50707/api/slightnudge/repositories/source-proof/preview-check
+TIMING 1793622236190 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/repositories/source-proof/preview-check
+TIMING 1793622236197 REQUEST http://127.0.0.1:52839/?__slightnudge_session=a65bf2be-ffa6-40f6-89df-694eaa7390d3&__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A50707&__slightnudge_draft=1
+TIMING 1793622236231 RESPONSE 200 http://127.0.0.1:52839/?__slightnudge_session=a65bf2be-ffa6-40f6-89df-694eaa7390d3&__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A50707&__slightnudge_draft=1
+TIMING 1793622236955 REQUEST http://127.0.0.1:50707/api/slightnudge/responsive
+TIMING 1793622237000 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/responsive
+HARNESS-V3 OP 1793622237047 END waitFor locator('[data-source-ready="true"]')
+HARNESS-V3 OP 1793622237416 START click getByRole('button', { name: 'Save changes', exact: true })
+HARNESS-V3 OP 1793622237498 END click getByRole('button', { name: 'Save changes', exact: true })
+TIMING 1793622237794 REQUEST http://127.0.0.1:52839/?__slightnudge_session=d0cc5550-9fe4-471f-af67-8648c60a9639&__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A50707&__slightnudge_draft=1&__slightnudge_refresh=5401dd12-b838-4013-8d74-732ab613700d
+TIMING 1793622238498 RESPONSE 200 http://127.0.0.1:52839/?__slightnudge_session=d0cc5550-9fe4-471f-af67-8648c60a9639&__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A50707&__slightnudge_draft=1&__slightnudge_refresh=5401dd12-b838-4013-8d74-732ab613700d
+HARNESS-V3 OP 1793622239315 START count getByRole('button', { name: 'Toggle design panel', exact: true })
+HARNESS-V3 OP 1793622239336 END count getByRole('button', { name: 'Toggle design panel', exact: true })
+HARNESS-V3 OP 1793622239337 START getAttribute getByRole('button', { name: 'Toggle design panel', exact: true })
+HARNESS-V3 OP 1793622239343 END getAttribute getByRole('button', { name: 'Toggle design panel', exact: true })
+TIMING 1793622239614 REQUEST http://127.0.0.1:50707/api/slightnudge/preview
+TIMING 1793622239817 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/preview
+HARNESS-V3 OP 1793622239819 START click getByRole('button', { name: 'Undo', exact: true })
+HARNESS-V3 OP 1793622239962 END click getByRole('button', { name: 'Undo', exact: true })
+TIMING 1793622240179 REQUEST http://127.0.0.1:52839/?__slightnudge_session=94d3358b-f45a-4fba-9ff9-44f690859df3&__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A50707&__slightnudge_draft=1&__slightnudge_refresh=32923db0-8af2-4908-93e2-8599bc9bf037
+TIMING 1793622240719 RESPONSE 200 http://127.0.0.1:52839/?__slightnudge_session=94d3358b-f45a-4fba-9ff9-44f690859df3&__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A50707&__slightnudge_draft=1&__slightnudge_refresh=32923db0-8af2-4908-93e2-8599bc9bf037
+PASS appearance/constraints imported Studio: gradient, ring-preserving shadow, flex constraints, custom breakpoint cascade, unchanged neighbour, refresh, Save and exact Undo
+HARNESS-V3 NAVIGATION about:blank
+HARNESS-V3 NAVIGATION http://127.0.0.1:50707/editor/source-proof?preview=http%3A%2F%2F127.0.0.1%3A52839%2F
+TIMING 1793622241474 REQUEST http://127.0.0.1:50707/editor/source-proof?preview=http%3A%2F%2F127.0.0.1%3A52839%2F
+TIMING 1793622241533 RESPONSE 200 http://127.0.0.1:50707/editor/source-proof?preview=http%3A%2F%2F127.0.0.1%3A52839%2F
+HARNESS-V3 OP 1793622241560 START waitFor locator('[data-source-ready="true"]')
+TIMING 1793622242380 REQUEST http://127.0.0.1:50707/api/slightnudge/repositories/source-proof
+TIMING 1793622242380 REQUEST http://127.0.0.1:50707/api/slightnudge/repositories/source-proof
+TIMING 1793622242556 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/repositories/source-proof
+TIMING 1793622242638 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/repositories/source-proof
+TIMING 1793622242640 REQUEST http://127.0.0.1:50707/api/slightnudge/repositories/source-proof/preview-check
+TIMING 1793622242847 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/repositories/source-proof/preview-check
+TIMING 1793622242852 REQUEST http://127.0.0.1:52839/?__slightnudge_session=2e05c334-1402-42b2-acb5-b567e30845ce&__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A50707&__slightnudge_draft=1
+TIMING 1793622242901 RESPONSE 200 http://127.0.0.1:52839/?__slightnudge_session=2e05c334-1402-42b2-acb5-b567e30845ce&__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A50707&__slightnudge_draft=1
+TIMING 1793622243710 REQUEST http://127.0.0.1:50707/api/slightnudge/responsive
+TIMING 1793622243751 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/responsive
+HARNESS-V3 OP 1793622244123 END waitFor locator('[data-source-ready="true"]')
+HARNESS-V3 OP 1793622244124 START count getByRole('button', { name: 'Toggle design panel', exact: true })
+HARNESS-V3 OP 1793622244130 END count getByRole('button', { name: 'Toggle design panel', exact: true })
+HARNESS-V3 OP 1793622244130 START getAttribute getByRole('button', { name: 'Toggle design panel', exact: true })
+HARNESS-V3 OP 1793622244133 END getAttribute getByRole('button', { name: 'Toggle design panel', exact: true })
+HARNESS-V3 OP 1793622244134 START click getByRole('button', { name: 'Toggle design panel', exact: true })
+HARNESS-V3 OP 1793622244196 END click getByRole('button', { name: 'Toggle design panel', exact: true })
+TIMING 1793622244472 REQUEST http://127.0.0.1:50707/api/slightnudge/preview
+HARNESS-V3 OP 1793622244594 START click locator('summary').filter({ hasText: /^Fill & effects(?: |$)/ }).first()
+HARNESS-V3 OP 1793622244641 END click locator('summary').filter({ hasText: /^Fill & effects(?: |$)/ }).first()
+HARNESS-V3 OP 1793622244641 START click locator('summary').filter({ hasText: /^Gradient(?: |$)/ }).first()
+HARNESS-V3 OP 1793622244673 END click locator('summary').filter({ hasText: /^Gradient(?: |$)/ }).first()
+HARNESS-V3 OP 1793622244674 START fill getByLabel('Gradient angle', { exact: true })
+HARNESS-V3 OP 1793622244686 END fill getByLabel('Gradient angle', { exact: true })
+HARNESS-V3 OP 1793622244686 START fill getByLabel('Gradient stop 1 color', { exact: true })
+TIMING 1793622244689 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/preview
+HARNESS-V3 OP 1793622244699 END fill getByLabel('Gradient stop 1 color', { exact: true })
+HARNESS-V3 OP 1793622244699 START fill getByLabel('Gradient stop 2 color', { exact: true })
+HARNESS-V3 OP 1793622244710 END fill getByLabel('Gradient stop 2 color', { exact: true })
+HARNESS-V3 OP 1793622244710 START click getByRole('button', { name: 'Set gradient', exact: true })
+TIMING 1793622244806 REQUEST http://127.0.0.1:50707/api/slightnudge/preview
+HARNESS-V3 OP 1793622244851 END click getByRole('button', { name: 'Set gradient', exact: true })
+TIMING 1793622245292 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/preview
+TIMING 1793622245604 REQUEST http://127.0.0.1:50707/api/slightnudge/preview
+HARNESS-V3 OP 1793622245609 START allTextContents getByLabel('Editor notice', { exact: true })
+HARNESS-V3 OP 1793622245616 END allTextContents getByLabel('Editor notice', { exact: true })
+HARNESS-V3 OP 1793622245645 START click getByRole('button', { name: 'Add stop', exact: true })
+HARNESS-V3 OP 1793622245693 END click getByRole('button', { name: 'Add stop', exact: true })
+HARNESS-V3 OP 1793622245693 START fill getByLabel('Gradient stop 2 color', { exact: true })
+HARNESS-V3 OP 1793622245705 END fill getByLabel('Gradient stop 2 color', { exact: true })
+HARNESS-V3 OP 1793622245705 START click getByRole('button', { name: 'Set gradient', exact: true })
+TIMING 1793622245803 REQUEST http://127.0.0.1:50707/api/slightnudge/preview
+TIMING 1793622245849 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/preview
+HARNESS-V3 OP 1793622245850 END click getByRole('button', { name: 'Set gradient', exact: true })
+TIMING 1793622246347 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/preview
+TIMING 1793622246672 REQUEST http://127.0.0.1:50707/api/slightnudge/preview
+HARNESS-V3 OP 1793622246676 START allTextContents getByLabel('Editor notice', { exact: true })
+HARNESS-V3 OP 1793622246682 END allTextContents getByLabel('Editor notice', { exact: true })
+HARNESS-V3 OP 1793622246688 START click locator('summary').filter({ hasText: /^Shadow(?: |$)/ }).first()
+HARNESS-V3 OP 1793622246730 END click locator('summary').filter({ hasText: /^Shadow(?: |$)/ }).first()
+HARNESS-V3 OP 1793622246731 START selectOption getByLabel('Shadow preset', { exact: true })
+TIMING 1793622246795 REQUEST http://127.0.0.1:50707/api/slightnudge/preview
+HARNESS-V3 OP 1793622246795 END selectOption getByLabel('Shadow preset', { exact: true })
+TIMING 1793622246869 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/preview
+TIMING 1793622247408 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/preview
+TIMING 1793622247785 REQUEST http://127.0.0.1:50707/api/slightnudge/preview
+HARNESS-V3 OP 1793622247788 START allTextContents getByLabel('Editor notice', { exact: true })
+HARNESS-V3 OP 1793622247795 END allTextContents getByLabel('Editor notice', { exact: true })
+HARNESS-V3 OP 1793622247810 START selectOption getByLabel('Shadow preset', { exact: true })
+TIMING 1793622247875 REQUEST http://127.0.0.1:50707/api/slightnudge/preview
+HARNESS-V3 OP 1793622247875 END selectOption getByLabel('Shadow preset', { exact: true })
+TIMING 1793622247980 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/preview
+TIMING 1793622248452 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/preview
+TIMING 1793622248815 REQUEST http://127.0.0.1:50707/api/slightnudge/preview
+HARNESS-V3 OP 1793622248825 START allTextContents getByLabel('Editor notice', { exact: true })
+HARNESS-V3 OP 1793622248832 END allTextContents getByLabel('Editor notice', { exact: true })
+HARNESS-V3 OP 1793622248848 START selectOption getByLabel('Shadow preset', { exact: true })
+TIMING 1793622248923 REQUEST http://127.0.0.1:50707/api/slightnudge/preview
+HARNESS-V3 OP 1793622248923 END selectOption getByLabel('Shadow preset', { exact: true })
+TIMING 1793622249020 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/preview
+TIMING 1793622249553 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/preview
+TIMING 1793622249904 REQUEST http://127.0.0.1:50707/api/slightnudge/preview
+HARNESS-V3 OP 1793622249912 START allTextContents getByLabel('Editor notice', { exact: true })
+HARNESS-V3 OP 1793622249919 END allTextContents getByLabel('Editor notice', { exact: true })
+HARNESS-V3 OP 1793622249932 START click locator('summary').filter({ hasText: /^Constraints(?: |$)/ }).first()
+HARNESS-V3 OP 1793622249994 END click locator('summary').filter({ hasText: /^Constraints(?: |$)/ }).first()
+HARNESS-V3 OP 1793622249995 START selectOption getByLabel('Constraint minimum width', { exact: true })
+TIMING 1793622250067 REQUEST http://127.0.0.1:50707/api/slightnudge/preview
+HARNESS-V3 OP 1793622250067 END selectOption getByLabel('Constraint minimum width', { exact: true })
+TIMING 1793622250117 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/preview
+TIMING 1793622250569 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/preview
+TIMING 1793622250897 REQUEST http://127.0.0.1:50707/api/slightnudge/preview
+HARNESS-V3 OP 1793622250904 START allTextContents getByLabel('Editor notice', { exact: true })
+HARNESS-V3 OP 1793622250912 END allTextContents getByLabel('Editor notice', { exact: true })
+HARNESS-V3 OP 1793622250912 START selectOption getByLabel('Constraint grow', { exact: true })
+TIMING 1793622250975 REQUEST http://127.0.0.1:50707/api/slightnudge/preview
+HARNESS-V3 OP 1793622250975 END selectOption getByLabel('Constraint grow', { exact: true })
+TIMING 1793622251095 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/preview
+TIMING 1793622251560 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/preview
+TIMING 1793622251881 REQUEST http://127.0.0.1:50707/api/slightnudge/preview
+HARNESS-V3 OP 1793622251884 START allTextContents getByLabel('Editor notice', { exact: true })
+HARNESS-V3 OP 1793622251890 END allTextContents getByLabel('Editor notice', { exact: true })
+HARNESS-V3 OP 1793622251890 START selectOption getByLabel('Constraint shrink', { exact: true })
+TIMING 1793622251953 REQUEST http://127.0.0.1:50707/api/slightnudge/preview
+HARNESS-V3 OP 1793622251953 END selectOption getByLabel('Constraint shrink', { exact: true })
+TIMING 1793622252061 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/preview
+TIMING 1793622252530 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/preview
+TIMING 1793622252833 REQUEST http://127.0.0.1:50707/api/slightnudge/preview
+HARNESS-V3 OP 1793622252833 START allTextContents getByLabel('Editor notice', { exact: true })
+HARNESS-V3 OP 1793622252838 END allTextContents getByLabel('Editor notice', { exact: true })
+HARNESS-V3 OP 1793622252838 START fill getByRole('spinbutton', { name: 'Preview width', exact: true })
+HARNESS-V3 OP 1793622252846 END fill getByRole('spinbutton', { name: 'Preview width', exact: true })
+HARNESS-V3 OP 1793622252846 START press getByRole('spinbutton', { name: 'Preview width', exact: true })
+HARNESS-V3 OP 1793622252914 END press getByRole('spinbutton', { name: 'Preview width', exact: true })
+HARNESS-V3 OP 1793622252915 START waitFor getByRole('combobox', { name: 'Responsive edit scope', exact: true }).locator('option[value="tablet"]')
+HARNESS-V3 OP 1793622253103 END waitFor getByRole('combobox', { name: 'Responsive edit scope', exact: true }).locator('option[value="tablet"]')
+HARNESS-V3 OP 1793622253103 START selectOption getByRole('combobox', { name: 'Responsive edit scope', exact: true })
+TIMING 1793622253104 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/preview
+HARNESS-V3 OP 1793622253163 END selectOption getByRole('combobox', { name: 'Responsive edit scope', exact: true })
+HARNESS-V3 OP 1793622253326 START selectOption getByLabel('Constraint minimum width', { exact: true })
+TIMING 1793622253341 REQUEST http://127.0.0.1:50707/api/slightnudge/preview
+HARNESS-V3 OP 1793622253341 END selectOption getByLabel('Constraint minimum width', { exact: true })
+TIMING 1793622253805 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/preview
+TIMING 1793622253825 REQUEST http://127.0.0.1:50707/api/slightnudge/preview
+HARNESS-V3 OP 1793622253831 START allTextContents getByLabel('Editor notice', { exact: true })
+HARNESS-V3 OP 1793622253835 END allTextContents getByLabel('Editor notice', { exact: true })
+HARNESS-V3 OP 1793622253835 START selectOption getByLabel('Shadow preset', { exact: true })
+TIMING 1793622253849 REQUEST http://127.0.0.1:50707/api/slightnudge/preview
+HARNESS-V3 OP 1793622253849 END selectOption getByLabel('Shadow preset', { exact: true })
+TIMING 1793622253980 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/preview
+TIMING 1793622254416 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/preview
+TIMING 1793622254756 REQUEST http://127.0.0.1:50707/api/slightnudge/preview
+HARNESS-V3 OP 1793622254760 START allTextContents getByLabel('Editor notice', { exact: true })
+HARNESS-V3 OP 1793622254765 END allTextContents getByLabel('Editor notice', { exact: true })
+HARNESS-V3 OP 1793622254787 START fill getByRole('spinbutton', { name: 'Preview width', exact: true })
+HARNESS-V3 OP 1793622254794 END fill getByRole('spinbutton', { name: 'Preview width', exact: true })
+HARNESS-V3 OP 1793622254794 START press getByRole('spinbutton', { name: 'Preview width', exact: true })
+HARNESS-V3 OP 1793622254858 END press getByRole('spinbutton', { name: 'Preview width', exact: true })
+TIMING 1793622254920 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/preview
+TIMING 1793622254952 REQUEST http://127.0.0.1:50707/editor/source-proof?preview=http%3A%2F%2F127.0.0.1%3A52839%2F
+TIMING 1793622255009 RESPONSE 200 http://127.0.0.1:50707/editor/source-proof?preview=http%3A%2F%2F127.0.0.1%3A52839%2F
+HARNESS-V3 OP 1793622255036 START waitFor locator('[data-source-ready="true"]')
+TIMING 1793622255724 REQUEST http://127.0.0.1:50707/api/slightnudge/repositories/source-proof
+TIMING 1793622255725 REQUEST http://127.0.0.1:50707/api/slightnudge/repositories/source-proof
+TIMING 1793622255973 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/repositories/source-proof
+TIMING 1793622256063 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/repositories/source-proof
+TIMING 1793622256065 REQUEST http://127.0.0.1:50707/api/slightnudge/repositories/source-proof/preview-check
+TIMING 1793622256127 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/repositories/source-proof/preview-check
+TIMING 1793622256135 REQUEST http://127.0.0.1:52839/?__slightnudge_session=e31db0a6-8444-42b8-8dd3-ac3fbd408802&__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A50707&__slightnudge_draft=1
+TIMING 1793622256166 RESPONSE 200 http://127.0.0.1:52839/?__slightnudge_session=e31db0a6-8444-42b8-8dd3-ac3fbd408802&__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A50707&__slightnudge_draft=1
+TIMING 1793622256891 REQUEST http://127.0.0.1:50707/api/slightnudge/responsive
+HARNESS-V3 OP 1793622256916 END waitFor locator('[data-source-ready="true"]')
+TIMING 1793622256943 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/responsive
+HARNESS-V3 OP 1793622257342 START click getByRole('button', { name: 'Save changes', exact: true })
+HARNESS-V3 OP 1793622257423 END click getByRole('button', { name: 'Save changes', exact: true })
+TIMING 1793622257724 REQUEST http://127.0.0.1:52839/?__slightnudge_session=383eb15e-16ed-44b0-b0ef-fea900b333f7&__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A50707&__slightnudge_draft=1&__slightnudge_refresh=79da048a-20b2-49eb-bc93-b649cf0bbeff
+TIMING 1793622258261 RESPONSE 200 http://127.0.0.1:52839/?__slightnudge_session=383eb15e-16ed-44b0-b0ef-fea900b333f7&__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A50707&__slightnudge_draft=1&__slightnudge_refresh=79da048a-20b2-49eb-bc93-b649cf0bbeff
+HARNESS-V3 OP 1793622258997 START count getByRole('button', { name: 'Toggle design panel', exact: true })
+HARNESS-V3 OP 1793622259015 END count getByRole('button', { name: 'Toggle design panel', exact: true })
+HARNESS-V3 OP 1793622259016 START getAttribute getByRole('button', { name: 'Toggle design panel', exact: true })
+HARNESS-V3 OP 1793622259018 END getAttribute getByRole('button', { name: 'Toggle design panel', exact: true })
+HARNESS-V3 OP 1793622259019 START click getByRole('button', { name: 'Toggle design panel', exact: true })
+HARNESS-V3 OP 1793622259090 END click getByRole('button', { name: 'Toggle design panel', exact: true })
+TIMING 1793622259367 REQUEST http://127.0.0.1:50707/api/slightnudge/preview
+TIMING 1793622259566 RESPONSE 200 http://127.0.0.1:50707/api/slightnudge/preview
+HARNESS-V3 OP 1793622259568 START click getByRole('button', { name: 'Undo', exact: true })
+HARNESS-V3 OP 1793622259703 END click getByRole('button', { name: 'Undo', exact: true })
+TIMING 1793622259878 REQUEST http://127.0.0.1:52839/?__slightnudge_session=d3e7ce70-8af1-4923-8435-7326bcbd5e4b&__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A50707&__slightnudge_draft=1&__slightnudge_refresh=4ac5dc0c-18f0-48f2-822e-2d7f1b205bef
+TIMING 1793622259946 RESPONSE 200 http://127.0.0.1:52839/?__slightnudge_session=d3e7ce70-8af1-4923-8435-7326bcbd5e4b&__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A50707&__slightnudge_draft=1&__slightnudge_refresh=4ac5dc0c-18f0-48f2-822e-2d7f1b205bef
+TIMING 1793622261302 REQUEST http://127.0.0.1:52839/?__slightnudge_session=21fe3a7c-924c-452c-b505-bcddb09b5ca0&__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A50707&__slightnudge_draft=1&__slightnudge_refresh=ea39bfeb-f34b-4c19-abb0-2d6441d5f4e1
+TIMING 1793622261484 RESPONSE 200 http://127.0.0.1:52839/?__slightnudge_session=21fe3a7c-924c-452c-b505-bcddb09b5ca0&__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A50707&__slightnudge_draft=1&__slightnudge_refresh=ea39bfeb-f34b-4c19-abb0-2d6441d5f4e1
+PASS appearance/constraints imported window: gradient, ring-preserving shadow, flex constraints, custom breakpoint cascade, unchanged neighbour, refresh, Save and exact Undo
+SETUP 1793622262276 START taskkill ["/pid","16856","/T","/F"]
+SETUP END elapsed 450ms
+PASS: 4 review-consent browser cases (real API; disposable source copy)
+SETUP 1793622264605 START taskkill ["/pid","26900","/T","/F"]
+SETUP END elapsed 534ms

@@ -1,0 +1,411 @@
+{
+  "method": "physical click where exposed → real inspection → real preview → explicit Apply → iframe reload → exact source Undo",
+  "complete": true,
+  "selections": [
+    {
+      "file": "src/components/layout/layout.tsx",
+      "line": 18,
+      "column": 5,
+      "tag": "div",
+      "occurrence": 0,
+      "text": "SaaS StarterHomeAIPricingBlogCasesContactBlocksEnglish🚀 Ship Your SaaS in Hours",
+      "outcome": "refused",
+      "reason": "No exposed click area belongs to this element; its children cover the visible area."
+    },
+    {
+      "file": "src/components/layout/header.tsx",
+      "line": 62,
+      "column": 7,
+      "tag": "div",
+      "occurrence": 0,
+      "text": "SaaS StarterHomeAIPricingBlogCasesContactBlocksEnglish",
+      "clicked": true,
+      "actualSelection": {
+        "file": "src/components/layout/header.tsx",
+        "line": 62,
+        "column": 7,
+        "tag": "div"
+      },
+      "outcome": "allowed",
+      "reason": "Exact source Apply, rendered reload and exact Undo verified."
+    },
+    {
+      "file": "src/components/layout/header.tsx",
+      "line": 63,
+      "column": 9,
+      "tag": "div",
+      "occurrence": 0,
+      "text": "SaaS StarterHomeAIPricingBlogCasesContactBlocksEnglish",
+      "clicked": true,
+      "actualSelection": {
+        "file": "src/components/layout/header.tsx",
+        "line": 63,
+        "column": 9,
+        "tag": "div"
+      },
+      "outcome": "allowed",
+      "reason": "Exact source Apply, rendered reload and exact Undo verified."
+    },
+    {
+      "file": "src/components/layout/header.tsx",
+      "line": 65,
+      "column": 11,
+      "tag": "div",
+      "occurrence": 0,
+      "text": "SaaS Starter",
+      "clicked": true,
+      "actualSelection": {
+        "file": "src/components/layout/header.tsx",
+        "line": 65,
+        "column": 11,
+        "tag": "div"
+      },
+      "outcome": "allowed",
+      "reason": "Exact source Apply, rendered reload and exact Undo verified."
+    },
+    {
+      "file": "src/components/layout/header.tsx",
+      "line": 72,
+      "column": 11,
+      "tag": "nav",
+      "occurrence": 0,
+      "text": "HomeAIPricingBlogCasesContactBlocks",
+      "clicked": true,
+      "actualSelection": {
+        "file": "src/components/layout/header.tsx",
+        "line": 72,
+        "column": 11,
+        "tag": "nav"
+      },
+      "outcome": "allowed",
+      "reason": "Exact source Apply, rendered reload and exact Undo verified."
+    },
+    {
+      "file": "src/components/layout/header.tsx",
+      "line": 90,
+      "column": 11,
+      "tag": "div",
+      "occurrence": 0,
+      "text": "English",
+      "clicked": true,
+      "actualSelection": {
+        "file": "src/components/layout/header.tsx",
+        "line": 90,
+        "column": 11,
+        "tag": "div"
+      },
+      "outcome": "allowed",
+      "reason": "Exact source Apply, rendered reload and exact Undo verified."
+    },
+    {
+      "file": "src/components/language-switcher.tsx",
+      "line": 56,
+      "column": 5,
+      "tag": "div",
+      "occurrence": 0,
+      "text": "English",
+      "clicked": true,
+      "actualSelection": {
+        "file": "src/components/language-switcher.tsx",
+        "line": 56,
+        "column": 5,
+        "tag": "div"
+      },
+      "outcome": "allowed",
+      "reason": "Exact source Apply, rendered reload and exact Undo verified."
+    },
+    {
+      "file": "src/components/ui/button.tsx",
+      "line": 73,
+      "column": 7,
+      "tag": "button",
+      "occurrence": 0,
+      "text": "English",
+      "clicked": true,
+      "actualSelection": {
+        "file": "src/components/ui/button.tsx",
+        "line": 73,
+        "column": 7,
+        "tag": "button"
+      },
+      "outcome": "refused",
+      "reason": "can't edit this safely: component used in several places"
+    },
+    {
+      "file": "src/components/language-switcher.tsx",
+      "line": 66,
+      "column": 9,
+      "tag": "span",
+      "occurrence": 0,
+      "text": "English",
+      "clicked": true,
+      "actualSelection": {
+        "file": "src/components/language-switcher.tsx",
+        "line": 66,
+        "column": 9,
+        "tag": "span"
+      },
+      "outcome": "allowed",
+      "reason": "Exact source Apply, rendered reload and exact Undo verified."
+    },
+    {
+      "file": "src/components/ui/button.tsx",
+      "line": 73,
+      "column": 7,
+      "tag": "button",
+      "occurrence": 1,
+      "text": "",
+      "clicked": true,
+      "actualSelection": {
+        "file": "src/components/ui/button.tsx",
+        "line": 73,
+        "column": 7,
+        "tag": "button"
+      },
+      "outcome": "refused",
+      "reason": "can't edit this safely: component used in several places"
+    },
+    {
+      "file": "src/components/layout/header.tsx",
+      "line": 110,
+      "column": 15,
+      "tag": "div",
+      "occurrence": 0,
+      "text": "",
+      "outcome": "refused",
+      "reason": "The originally measured element is no longer present or visible after a page rebuild. No source was changed."
+    },
+    {
+      "file": "src/components/layout/header.tsx",
+      "line": 111,
+      "column": 17,
+      "tag": "div",
+      "occurrence": 0,
+      "text": "",
+      "outcome": "refused",
+      "reason": "The originally measured element is no longer present or visible after a page rebuild. No source was changed."
+    },
+    {
+      "file": "src/components/layout/header.tsx",
+      "line": 112,
+      "column": 17,
+      "tag": "div",
+      "occurrence": 0,
+      "text": "",
+      "outcome": "refused",
+      "reason": "The originally measured element is no longer present or visible after a page rebuild. No source was changed."
+    },
+    {
+      "file": "src/components/sections/hero.tsx",
+      "line": 73,
+      "column": 5,
+      "tag": "section",
+      "occurrence": 0,
+      "text": "🚀 Ship Your SaaS in Hours, Not MonthsBuild Your Next SaaS Product with Our Star",
+      "outcome": "refused",
+      "reason": "No exposed click area belongs to this element; its children cover the visible area."
+    },
+    {
+      "file": "src/components/sections/hero.tsx",
+      "line": 75,
+      "column": 7,
+      "tag": "div",
+      "occurrence": 0,
+      "text": "",
+      "outcome": "refused",
+      "reason": "No exposed click area belongs to this element; its children cover the visible area."
+    },
+    {
+      "file": "src/components/sections/hero.tsx",
+      "line": 76,
+      "column": 9,
+      "tag": "div",
+      "occurrence": 0,
+      "text": "",
+      "outcome": "refused",
+      "reason": "No exposed click area belongs to this element; its children cover the visible area."
+    },
+    {
+      "file": "src/components/sections/hero.tsx",
+      "line": 77,
+      "column": 9,
+      "tag": "div",
+      "occurrence": 0,
+      "text": "",
+      "outcome": "refused",
+      "reason": "No exposed click area belongs to this element; its children cover the visible area."
+    },
+    {
+      "file": "src/components/sections/hero.tsx",
+      "line": 81,
+      "column": 7,
+      "tag": "div",
+      "occurrence": 0,
+      "text": "",
+      "outcome": "refused",
+      "reason": "No exposed click area belongs to this element; its children cover the visible area."
+    },
+    {
+      "file": "src/components/sections/hero.tsx",
+      "line": 83,
+      "column": 9,
+      "tag": "div",
+      "occurrence": 0,
+      "text": "",
+      "outcome": "refused",
+      "reason": "The element did not stay stable long enough for a reliable physical selection. No edit was attempted."
+    },
+    {
+      "file": "src/components/sections/hero.tsx",
+      "line": 84,
+      "column": 9,
+      "tag": "div",
+      "occurrence": 0,
+      "text": "",
+      "outcome": "refused",
+      "reason": "No exposed click area belongs to this element; its children cover the visible area."
+    },
+    {
+      "file": "src/components/sections/hero.tsx",
+      "line": 85,
+      "column": 9,
+      "tag": "div",
+      "occurrence": 0,
+      "text": "",
+      "outcome": "refused",
+      "reason": "The element did not stay stable long enough for a reliable physical selection. No edit was attempted."
+    },
+    {
+      "file": "src/components/sections/hero.tsx",
+      "line": 88,
+      "column": 9,
+      "tag": "div",
+      "occurrence": 0,
+      "text": "",
+      "outcome": "refused",
+      "reason": "The element did not stay stable long enough for a reliable physical selection. No edit was attempted."
+    },
+    {
+      "file": "src/components/sections/hero.tsx",
+      "line": 89,
+      "column": 9,
+      "tag": "div",
+      "occurrence": 0,
+      "text": "",
+      "outcome": "refused",
+      "reason": "The element did not stay stable long enough for a reliable physical selection. No edit was attempted."
+    },
+    {
+      "file": "src/components/sections/hero.tsx",
+      "line": 101,
+      "column": 7,
+      "tag": "div",
+      "occurrence": 0,
+      "text": "🚀 Ship Your SaaS in Hours, Not MonthsBuild Your Next SaaS Product with Our Star",
+      "clicked": true,
+      "actualSelection": {
+        "file": "src/components/sections/hero.tsx",
+        "line": 101,
+        "column": 7,
+        "tag": "div"
+      },
+      "outcome": "refused",
+      "reason": "can't edit this safely: dynamic className"
+    },
+    {
+      "file": "src/components/sections/hero.tsx",
+      "line": 102,
+      "column": 9,
+      "tag": "div",
+      "occurrence": 0,
+      "text": "🚀 Ship Your SaaS in Hours, Not MonthsBuild Your Next SaaS Product with Our Star",
+      "clicked": true,
+      "actualSelection": {
+        "file": "src/components/sections/hero.tsx",
+        "line": 102,
+        "column": 9,
+        "tag": "div"
+      },
+      "outcome": "refused",
+      "reason": "can't edit this safely: dynamic className"
+    },
+    {
+      "file": "src/components/sections/hero.tsx",
+      "line": 104,
+      "column": 11,
+      "tag": "div",
+      "occurrence": 0,
+      "text": "🚀 Ship Your SaaS in Hours, Not Months",
+      "outcome": "refused",
+      "reason": "No exposed click area belongs to this element; its children cover the visible area."
+    },
+    {
+      "file": "src/components/sections/hero.tsx",
+      "line": 110,
+      "column": 11,
+      "tag": "h1",
+      "occurrence": 0,
+      "text": "Build Your Next SaaS Product with Our Starter Template",
+      "clicked": true,
+      "actualSelection": {
+        "file": "src/components/sections/hero.tsx",
+        "line": 110,
+        "column": 11,
+        "tag": "h1"
+      },
+      "outcome": "refused",
+      "reason": "can't edit this safely: class built from a variable"
+    },
+    {
+      "file": "src/components/sections/hero.tsx",
+      "line": 112,
+      "column": 15,
+      "tag": "span",
+      "occurrence": 0,
+      "text": "Build Your Next SaaS Product with Our Starter Template",
+      "clicked": true,
+      "actualSelection": {
+        "file": "src/components/sections/hero.tsx",
+        "line": 112,
+        "column": 15,
+        "tag": "span"
+      },
+      "outcome": "refused",
+      "reason": "can't edit this safely: no className attribute found"
+    },
+    {
+      "file": "src/components/sections/hero.tsx",
+      "line": 125,
+      "column": 36,
+      "tag": "p",
+      "occurrence": 0,
+      "text": "A complete SaaS starter template all the components you need to launch fast.",
+      "clicked": true,
+      "actualSelection": {
+        "file": "src/components/sections/hero.tsx",
+        "line": 125,
+        "column": 36,
+        "tag": "p"
+      },
+      "outcome": "refused",
+      "reason": "can't edit this safely: class built from a variable"
+    },
+    {
+      "file": "src/components/sections/hero.tsx",
+      "line": 130,
+      "column": 11,
+      "tag": "div",
+      "occurrence": 0,
+      "text": "Get Started FreeDocumentation",
+      "clicked": true,
+      "actualSelection": {
+        "file": "src/components/sections/hero.tsx",
+        "line": 130,
+        "column": 11,
+        "tag": "div"
+      },
+      "outcome": "refused",
+      "reason": "can't edit this safely: class built from a variable"
+    }
+  ]
+}

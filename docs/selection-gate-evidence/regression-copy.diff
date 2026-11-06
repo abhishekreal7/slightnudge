@@ -1,0 +1,133 @@
+diff --git a/test/m0-regression.test.ts b/test/m0-regression.iframe.test.ts
+index 7e70f9e..d72474e 100644
+--- a/test/m0-regression.test.ts
++++ b/test/m0-regression.iframe.test.ts
+@@ -229,126 +229,5 @@ const SELECTIONS: SelectionSpec[] = [
+   },
+ ];
+ 
+-async function runM0RegressionSuite() {
+-  console.log('====================================================');
+-  console.log('🧪 M0 REGRESSION SUITE: 30 SELECTIONS PLAYWRIGHT TEST');
+-  console.log('====================================================\n');
+-
+-  const browser: Browser = await chromium.launch({ headless: true });
+-  const page: Page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+-
+-  const baseUrl = process.env.M0_BASE_URL || 'http://127.0.0.1:3001';
+-  await page.goto(baseUrl, { waitUntil: 'domcontentloaded' });
+-  await page.waitForSelector('section#top');
+-
+-  const repoBase = path.resolve(process.env.M0_REPO_PATH || '.slightnudge/repositories/m0-control-lab');
+-
+-  let allowed = 0;
+-  let refused = 0;
+-  let wrongTarget = 0;
+-
+-  console.log('| # | Section | Clicked Element | Expected | Actual | Target File:Line:Tag | Verdict |');
+-  console.log('|---|---|---|---|---|---|---|');
+-
+-  for (const s of SELECTIONS) {
+-    const locator = page.locator(s.selector);
+-    const count = await locator.count();
+-    if (count === 0) {
+-      console.error(`Locator not found: ${s.selector}`);
+-      wrongTarget++;
+-      continue;
+-    }
+-
+-    // Scroll into view
+-    await locator.scrollIntoViewIfNeeded();
+-
+-    // Click the target element in browser (simulating user click)
+-    if (s.clickPosition) {
+-      await locator.click({ position: s.clickPosition });
+-    } else {
+-      await locator.click();
+-    }
+-
+-    // Read attributes directly from the clicked DOM element and nearest marked ancestor
+-    const domInfo = await locator.evaluate((el) => {
+-      const marker = el.closest('[data-source-file]') || el;
+-      const markerRect = marker.getBoundingClientRect();
+-      const clickedRect = el.getBoundingClientRect();
+-      return {
+-        clickedTag: el.tagName.toLowerCase(),
+-        clickedClasses: el.className || '',
+-        markerFile: marker.getAttribute('data-source-file') || '',
+-        markerLine: Number(marker.getAttribute('data-source-line')) || 0,
+-        markerColumn: Number(marker.getAttribute('data-source-column')) || 0,
+-        markerTag: marker.tagName.toLowerCase(),
+-        markerClasses: marker.className || '',
+-        markerRect: { top: markerRect.top, left: markerRect.left, width: markerRect.width, height: markerRect.height },
+-        clickedRect: { top: clickedRect.top, left: clickedRect.left, width: clickedRect.width, height: clickedRect.height },
+-      };
+-    });
+-
+-    const fullFilePath = path.resolve(repoBase, domInfo.markerFile);
+-
+-    // Call inspection logic verifying runtime tag, class, rect, loops, components
+-    const inspection = inspectElement({
+-      filePath: fullFilePath,
+-      line: domInfo.markerLine,
+-      column: domInfo.markerColumn,
+-      tagName: domInfo.clickedTag,
+-      className: domInfo.clickedClasses,
+-      rect: domInfo.markerRect,
+-      clickedRect: domInfo.clickedRect,
+-    });
+-
+-    const actualOutcome = inspection.safeToEdit ? 'allowed' : 'refused';
+-    const targetFileBasename = path.basename(inspection.filePath || domInfo.markerFile);
+-
+-    let isWrongTarget = false;
+-    let verdict = 'OK';
+-
+-    // Verification 1: File and line must match expected target
+-    if (targetFileBasename !== s.expectedFile || inspection.line !== s.expectedLine) {
+-      isWrongTarget = true;
+-      verdict = `WRONG TARGET (expected ${s.expectedFile}:${s.expectedLine}, got ${targetFileBasename}:${inspection.line})`;
+-    } else if (inspection.tagName?.toLowerCase() !== s.expectedTag.toLowerCase()) {
+-      isWrongTarget = true;
+-      verdict = `WRONG TAG (expected ${s.expectedTag}, got ${inspection.tagName})`;
+-    } else if (actualOutcome !== s.expectedOutcome) {
+-      isWrongTarget = true;
+-      verdict = `OUTCOME MISMATCH (expected ${s.expectedOutcome}, got ${actualOutcome})`;
+-    } else if (s.expectedRefusalPattern && inspection.reason && !s.expectedRefusalPattern.test(inspection.reason)) {
+-      isWrongTarget = true;
+-      verdict = `WRONG REASON (${inspection.reason})`;
+-    } else if (s.textShouldBeAllowed === false && inspection.textEditable !== false) {
+-      isWrongTarget = true;
+-      verdict = `TEXT NOT REFUSED`;
+-    }
+-
+-    if (isWrongTarget) {
+-      wrongTarget++;
+-    } else {
+-      if (actualOutcome === 'allowed') allowed++;
+-      else refused++;
+-    }
+-
+-    console.log(`| ${s.index} | ${s.section} | ${s.elementDesc} | ${s.expectedOutcome} | ${actualOutcome} | ${targetFileBasename}:${inspection.line}:${inspection.tagName} | ${verdict} |`);
+-  }
+-
+-  await browser.close();
+-
+-  console.log('\n====================================================');
+-  console.log('M0 REGRESSION TEST RESULTS:');
+-  console.log(`  Allowed: ${allowed}`);
+-  console.log(`  Refused: ${refused}`);
+-  console.log(`  Wrong Targets: ${wrongTarget}`);
+-  console.log('====================================================\n');
+-
+-  if (wrongTarget > 0) {
+-    throw new Error(`M0 REGRESSION FAILED: ${wrongTarget} wrong targets found.`);
+-  }
+-}
+-
+-runM0RegressionSuite().catch((err) => {
+-  console.error(err);
+-  process.exit(1);
+-});
++import { runIframeSelections } from './helpers/m0-iframe-selection-gate';
++runIframeSelections(SELECTIONS, 'regression').catch(error => { console.error(error); process.exitCode=1; });

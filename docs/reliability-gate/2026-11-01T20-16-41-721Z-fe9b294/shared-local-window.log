@@ -1,0 +1,18 @@
+SETUP 1793564328914 START git ["ls-files"]
+SETUP END elapsed 40ms
+HARNESS-V3 NAVIGATION about:blank
+HARNESS-V3 NAVIGATION http://127.0.0.1:58101/editor
+TIMING 1793564366044 REQUEST http://127.0.0.1:58101/editor
+TIMING 1793564387621 RESPONSE 200 http://127.0.0.1:58101/editor
+TIMING 1793564391246 REQUEST http://127.0.0.1:58101/api/slightnudge/responsive
+TIMING 1793564391246 REQUEST http://127.0.0.1:58101/api/slightnudge/responsive
+TIMING 1793564391322 REQUEST http://127.0.0.1:58101/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A58101&__slightnudge_session=f40f3df6-4a1e-4a16-811a-d94f7c4d4e03
+TIMING 1793564405358 RESPONSE 200 http://127.0.0.1:58101/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A58101&__slightnudge_session=f40f3df6-4a1e-4a16-811a-d94f7c4d4e03
+TIMING 1793564405449 REQUEST http://127.0.0.1:58101/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+TIMING 1793564406120 RESPONSE 200 http://127.0.0.1:58101/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+TIMING 1793564410297 REQUEST http://127.0.0.1:58101/api/slightnudge/responsive
+TIMING 1793564410297 REQUEST http://127.0.0.1:58101/api/slightnudge/preview
+TIMING 1793564418948 RESPONSE 200 http://127.0.0.1:58101/api/slightnudge/responsive
+TIMING 1793564419675 RESPONSE 200 http://127.0.0.1:58101/api/slightnudge/responsive
+TIMING 1793564420225 RESPONSE 200 http://127.0.0.1:58101/api/slightnudge/responsive
+TIMING 1793564429891 RESPONSE 200 http://127.0.0.1:58101/api/slightnudge/preview

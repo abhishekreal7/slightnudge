@@ -1,0 +1,83 @@
+GATE evidence C:\dev\vibecheck\docs\reliability-gate\2026-11-02T05-47-18-186Z-f11e470-shared-local-studio
+PRODUCT f11e47058a1ca0e0985ba5bbdff6dbe4c44133a6 TESTS f11e47058a1ca0e0985ba5bbdff6dbe4c44133a6
+No test assertions or limits changed; same HEAD tests at every historical product ref.
+
+COMMAND shared-local-studio: node --import tsx test/shared-instance-security.v2.browser.v3.ts --shared-instances
+SETUP 1793598441772 START git ["ls-files"]
+SETUP END elapsed 59ms
+HARNESS-V3 NAVIGATION about:blank
+HARNESS-V3 NAVIGATION http://127.0.0.1:51327/editor?panel=inspector
+TIMING 1793598480605 REQUEST http://127.0.0.1:51327/editor?panel=inspector
+TIMING 1793598480927 RESPONSE 200 http://127.0.0.1:51327/editor?panel=inspector
+HARNESS-V3 OP 1793598481974 START waitFor locator('[data-source-ready="true"]')
+TIMING 1793598484052 REQUEST http://127.0.0.1:51327/api/slightnudge/responsive
+TIMING 1793598484052 REQUEST http://127.0.0.1:51327/api/slightnudge/responsive
+TIMING 1793598484161 REQUEST http://127.0.0.1:51327/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A51327&__slightnudge_session=976bb9fd-6dbb-4633-9a0e-d6092e048844
+TIMING 1793598500102 RESPONSE 200 http://127.0.0.1:51327/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A51327&__slightnudge_session=976bb9fd-6dbb-4633-9a0e-d6092e048844
+TIMING 1793598500125 REQUEST http://127.0.0.1:51327/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+TIMING 1793598500663 RESPONSE 200 http://127.0.0.1:51327/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+HARNESS-V3 OP 1793598503423 END waitFor locator('[data-source-ready="true"]')
+HARNESS-V3 OP 1793598503427 START selectOption getByRole('combobox', { name: 'Canvas zoom', exact: true })
+HARNESS-V3 OP 1793598503523 END selectOption getByRole('combobox', { name: 'Canvas zoom', exact: true })
+TIMING 1793598504114 REQUEST http://127.0.0.1:51327/api/slightnudge/responsive
+TIMING 1793598504114 REQUEST http://127.0.0.1:51327/api/slightnudge/preview
+HARNESS-V3 OP 1793598504123 START waitFor getByRole('region', { name: 'Component properties', exact: true }).getByText('This instance', { exact: true })
+TIMING 1793598512377 RESPONSE 200 http://127.0.0.1:51327/api/slightnudge/responsive
+TIMING 1793598512660 RESPONSE 200 http://127.0.0.1:51327/api/slightnudge/responsive
+TIMING 1793598513139 RESPONSE 200 http://127.0.0.1:51327/api/slightnudge/responsive
+TIMING 1793598522703 RESPONSE 200 http://127.0.0.1:51327/api/slightnudge/preview
+HARNESS-V3 OP 1793598523070 END waitFor getByRole('region', { name: 'Component properties', exact: true }).getByText('This instance', { exact: true })
+HARNESS-V3 OP 1793598523070 START waitFor getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop label', { exact: true })
+HARNESS-V3 OP 1793598523084 END waitFor getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop label', { exact: true })
+HARNESS-V3 OP 1793598523086 START fill getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop label', { exact: true })
+HARNESS-V3 OP 1793598523146 END fill getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop label', { exact: true })
+HARNESS-V3 OP 1793598523152 START press getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop label', { exact: true })
+TIMING 1793598523290 REQUEST http://127.0.0.1:51327/api/slightnudge/preview
+HARNESS-V3 OP 1793598523347 END press getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop label', { exact: true })
+TIMING 1793598526599 RESPONSE 200 http://127.0.0.1:51327/api/slightnudge/preview
+TIMING 1793598527196 REQUEST http://127.0.0.1:51327/api/slightnudge/preview
+HARNESS-V3 OP 1793598527245 START selectOption getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop variant', { exact: true })
+TIMING 1793598528513 RESPONSE 200 http://127.0.0.1:51327/api/slightnudge/preview
+TIMING 1793598528633 REQUEST http://127.0.0.1:51327/api/slightnudge/preview
+HARNESS-V3 OP 1793598528633 END selectOption getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop variant', { exact: true })
+TIMING 1793598531635 RESPONSE 200 http://127.0.0.1:51327/api/slightnudge/preview
+TIMING 1793598532219 REQUEST http://127.0.0.1:51327/api/slightnudge/preview
+HARNESS-V3 OP 1793598532275 START selectOption getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop disabled', { exact: true })
+TIMING 1793598533635 RESPONSE 200 http://127.0.0.1:51327/api/slightnudge/preview
+TIMING 1793598534199 REQUEST http://127.0.0.1:51327/api/slightnudge/preview
+HARNESS-V3 OP 1793598534199 END selectOption getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop disabled', { exact: true })
+TIMING 1793598536632 RESPONSE 200 http://127.0.0.1:51327/api/slightnudge/preview
+TIMING 1793598536814 REQUEST http://127.0.0.1:51327/api/slightnudge/preview
+HARNESS-V3 OP 1793598536842 START selectOption getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop disabled', { exact: true })
+TIMING 1793598537311 RESPONSE 200 http://127.0.0.1:51327/api/slightnudge/preview
+TIMING 1793598537699 REQUEST http://127.0.0.1:51327/api/slightnudge/preview
+HARNESS-V3 OP 1793598537700 END selectOption getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop disabled', { exact: true })
+TIMING 1793598540308 RESPONSE 200 http://127.0.0.1:51327/api/slightnudge/preview
+TIMING 1793598540825 REQUEST http://127.0.0.1:51327/api/slightnudge/preview
+TIMING 1793598542048 RESPONSE 200 http://127.0.0.1:51327/api/slightnudge/preview
+TIMING 1793598545409 REQUEST http://127.0.0.1:51327/api/slightnudge/preview
+TIMING 1793598547550 RESPONSE 200 http://127.0.0.1:51327/api/slightnudge/preview
+TIMING 1793598548166 REQUEST http://127.0.0.1:51327/api/slightnudge/preview
+TIMING 1793598551002 RESPONSE 200 http://127.0.0.1:51327/api/slightnudge/preview
+TIMING 1793598551570 REQUEST http://127.0.0.1:51327/api/slightnudge/preview
+TIMING 1793598551942 REQUEST http://127.0.0.1:51327/api/slightnudge/preview
+GATE REQUEST FAILED /api/slightnudge/preview net::ERR_ABORTED
+TIMING 1793598554307 RESPONSE 200 http://127.0.0.1:51327/api/slightnudge/preview
+HARNESS-V3 OP 1793598554320 START inputValue getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop label', { exact: true })
+HARNESS-V3 OP 1793598554332 END inputValue getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop label', { exact: true })
+HARNESS-V3 OP 1793598554332 START fill getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop label', { exact: true })
+HARNESS-V3 OP 1793598554366 END fill getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop label', { exact: true })
+HARNESS-V3 OP 1793598554368 START press getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop label', { exact: true })
+TIMING 1793598554490 REQUEST http://127.0.0.1:51327/api/slightnudge/preview
+HARNESS-V3 OP 1793598554561 END press getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop label', { exact: true })
+TIMING 1793598557883 RESPONSE 200 http://127.0.0.1:51327/api/slightnudge/preview
+TIMING 1793598558488 REQUEST http://127.0.0.1:51327/api/slightnudge/preview
+HARNESS-V3 OP 1793598558649 START waitFor getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop to', { exact: true })
+TIMING 1793598558922 REQUEST http://127.0.0.1:51327/api/slightnudge/preview
+GATE REQUEST FAILED /api/slightnudge/preview net::ERR_ABORTED
+TIMEOUT shared-local-studio after 120s
+
+workflow | harness | REAL or MOCKED | result | seconds
+shared-local-studio | HARNESS-V3 | REAL | TIMEOUT | 121.48
+TOTAL ELAPSED 123.67s
+GATE FAIL; evidence C:\dev\vibecheck\docs\reliability-gate\2026-11-02T05-47-18-186Z-f11e470-shared-local-studio

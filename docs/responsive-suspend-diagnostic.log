@@ -1,0 +1,29 @@
+Responsive editor state 
+Browser errors []
+Isolated application diagnostics ▲ Next.js 16.4.3 (webpack)
+- Local:         http://127.0.0.1:61637
+- Network:       http://127.0.0.1:61637
+✓ Ready in 666ms
+✓ Running next.config.mjs took 30ms
+
+○ Compiling /fixtures/1/page ...
+ GET /fixtures/1 200 in 1305ms (next.js: 616ms, application-code: 688ms)
+○ Compiling /studio/window/page ...
+
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+page.goto: net::ERR_NETWORK_IO_SUSPENDED at http://127.0.0.1:61637/studio/window
+Call log:
+  - navigating to "http://127.0.0.1:61637/studio/window", waiting until "domcontentloaded"
+
+    at checkResponsiveEditing (C:\dev\vibecheck\test\helpers\responsive-editing-browser.ts:22:16)
+    at async <anonymous> (C:\dev\vibecheck\test\review-consent.browser.ts:128:14) {
+  log: [
+    '  - navigating to "http://127.0.0.1:61637/studio/window", waiting until "domcontentloaded"'
+  ],
+  name: 'Error'
+}
+
+Node.js v22.19.0

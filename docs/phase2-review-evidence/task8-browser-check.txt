@@ -1,0 +1,41 @@
+=== TASK 8: PLAYWRIGHT E2E BROWSER CHECK (S1 + S3 + S5) ===
+
+Original fixture length: 2125
+1. Navigating to http://127.0.0.1:3100/studio ...
+Studio page DOM loaded. Waiting for layers sidebar...
+Layers sidebar rendered.
+2. Selecting Text layer...
+[PAGE LOG] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[PAGE LOG] [HMR] connected
+3. Triggering nudge via keyboard ArrowRight...
+Apply to Source button is visible.
+4. Clicking Apply to Source...
+[PAGE LOG] [Fast Refresh] rebuilding
+[PAGE LOG] [Fast Refresh] done in 940ms
+Saved screenshot after apply: C:\dev\vibecheck\docs\phase2-review-evidence\task8-browser-nudge-applied.png
+Source file on disk was modified: true
+Diff confirmed on disk:
+  Line 8:
+  -                   <div className="sn-playground-content p-3 lg:p-4"><p className="sn-playground-eyebrow"><span/> A calmer way to work</p><p className="sn-playground-description text-xl">One thoughtful workspace for the people, projects, and plans that move your business forward.</p><span className="sn-playground-note">Free to start · Set up in minutes</span><h1 id="target" data-source-file="fixtures/1-plain-static.tsx" data-source-line="8" className="ml-2.5 mt-1 text-2xl">Make room for your best work.</h1><a href="#start" className="sn-playground-primary lg:text-lg">Get started <span>→</span></a></div>
+  +                   <div className="sn-playground-content p-3 lg:p-4"><p className="sn-playground-eyebrow"><span/> A calmer way to work</p><p className="sn-playground-description text-xl">One thoughtful workspace for the people, projects, and plans that move your business forward.</p><span className="sn-playground-note">Free to start · Set up in minutes</span><h1 id="target" data-source-file="fixtures/1-plain-static.tsx" data-source-line="8" className="ml-3 mt-1 text-2xl">Make room for your best work.</h1><a href="#start" className="sn-playground-primary lg:text-lg">Get started <span>→</span></a></div>
+
+5. Clicking Undo in UI...
+[PAGE LOG] [Fast Refresh] rebuilding
+[PAGE LOG] [Fast Refresh] done in 852ms
+Saved screenshot after undo: C:\dev\vibecheck\docs\phase2-review-evidence\task8-browser-undone.png
+Source file restored byte-for-byte: true
+
+--- PART B: Intercept Apply request and CORRUPT x-slightnudge-token header ---
+Nudging again to trigger another pending edit...
+Apply button visible for intercepted attempt. Clicking Apply...
+Intercepted /api/slightnudge/apply! Corrupted token header to invalid-tampered-token.
+[PAGE LOG] Failed to load resource: the server responded with a status of 403 (Forbidden)
+Route was intercepted: true
+Intercepted backend HTTP status: 403
+Intercepted response body: {"error":"Access denied."}
+Error toast visible in UI: true Text: ⚠️ Access denied.
+Apply button state after refusal (not stuck in Applying...): true (Button text: "Apply to Source")
+Saved screenshot of token-stripped refusal error: C:\dev\vibecheck\docs\phase2-review-evidence\task8-token-stripped-error.png
+Target file remains byte-for-byte UNTOUCHED by rejected apply: true
+
+Task 8 Playwright browser checks completed successfully.

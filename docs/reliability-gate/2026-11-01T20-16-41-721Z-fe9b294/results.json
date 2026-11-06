@@ -1,0 +1,236 @@
+{
+  "head": "fe9b2940e7a34447ebf4b0bdc96dc48ce68c7336",
+  "productRef": "fe9b2940e7a34447ebf4b0bdc96dc48ce68c7336",
+  "testRef": "fe9b2940e7a34447ebf4b0bdc96dc48ce68c7336",
+  "fatal": false,
+  "rows": [
+    {
+      "workflow": "selection-full-regression",
+      "api": "REAL",
+      "result": "HARNESS-ERROR",
+      "seconds": 0,
+      "error": "Error: listen EADDRINUSE: address already in use 127.0.0.1:3000"
+    },
+    {
+      "workflow": "selection-full-overfit",
+      "api": "REAL",
+      "result": "HARNESS-ERROR",
+      "seconds": 0,
+      "error": "Error: listen EADDRINUSE: address already in use 127.0.0.1:3000"
+    },
+    {
+      "workflow": "selection-fit-regression",
+      "api": "REAL",
+      "result": "HARNESS-ERROR",
+      "seconds": 0,
+      "error": "Error: listen EADDRINUSE: address already in use 127.0.0.1:3000"
+    },
+    {
+      "workflow": "selection-fit-overfit",
+      "api": "REAL",
+      "result": "HARNESS-ERROR",
+      "seconds": 0,
+      "error": "Error: listen EADDRINUSE: address already in use 127.0.0.1:3000"
+    },
+    {
+      "workflow": "shared-local-studio",
+      "harness": "HARNESS-V3",
+      "api": "REAL",
+      "result": "TIMEOUT",
+      "seconds": 121.46,
+      "exitCode": 1,
+      "historical": "docs/security-hardening/shared-workflows.log",
+      "invalidManifestServers": []
+    },
+    {
+      "workflow": "shared-local-window",
+      "harness": "HARNESS-V3",
+      "api": "REAL",
+      "result": "TIMEOUT",
+      "seconds": 121.08,
+      "exitCode": 1,
+      "historical": "docs/security-hardening/shared-workflows.log",
+      "invalidManifestServers": []
+    },
+    {
+      "workflow": "shared-imported-studio",
+      "harness": "HARNESS-V3",
+      "api": "REAL",
+      "result": "TIMEOUT",
+      "seconds": 121.31,
+      "exitCode": 1,
+      "historical": "docs/security-hardening/shared-workflows.log",
+      "invalidManifestServers": []
+    },
+    {
+      "workflow": "shared-imported-window",
+      "harness": "HARNESS-V3",
+      "api": "REAL",
+      "result": "TIMEOUT",
+      "seconds": 121.75,
+      "exitCode": 1,
+      "historical": "docs/security-hardening/shared-workflows.log",
+      "invalidManifestServers": []
+    },
+    {
+      "workflow": "movement",
+      "harness": "HARNESS-V3",
+      "api": "REAL",
+      "result": "FAIL",
+      "seconds": 98.89,
+      "exitCode": 1,
+      "historical": "docs/center-move-release.log",
+      "invalidManifestServers": []
+    },
+    {
+      "workflow": "state-and-transitions",
+      "harness": "HARNESS-V3",
+      "api": "REAL",
+      "result": "FAIL",
+      "seconds": 131.62,
+      "exitCode": 1,
+      "historical": "docs/m1-final-gates.log",
+      "invalidManifestServers": []
+    },
+    {
+      "workflow": "responsive",
+      "harness": "HARNESS-V3",
+      "api": "REAL",
+      "result": "FAIL",
+      "seconds": 134.32,
+      "exitCode": 1,
+      "historical": "docs/responsive-editing-qualification.log",
+      "invalidManifestServers": []
+    },
+    {
+      "workflow": "responsive-imported",
+      "harness": "HARNESS-V3",
+      "api": "REAL",
+      "result": "FAIL",
+      "seconds": 159.02,
+      "exitCode": 1,
+      "historical": "docs/responsive-imported-final.log",
+      "invalidManifestServers": []
+    },
+    {
+      "workflow": "appearance-layout",
+      "harness": "HARNESS-V3",
+      "api": "REAL",
+      "result": "FAIL",
+      "seconds": 176.76,
+      "exitCode": 1,
+      "historical": "docs/appearance-layout.md",
+      "invalidManifestServers": []
+    },
+    {
+      "workflow": "images-local",
+      "harness": "HARNESS-V3",
+      "api": "REAL",
+      "result": "FAIL",
+      "seconds": 165.75,
+      "exitCode": 1,
+      "historical": "docs/advanced-image-local-final.log",
+      "invalidManifestServers": []
+    },
+    {
+      "workflow": "images-imported",
+      "harness": "HARNESS-V3",
+      "api": "REAL",
+      "result": "FAIL",
+      "seconds": 216.33,
+      "exitCode": 1,
+      "historical": "docs/advanced-image-imported-final.log",
+      "invalidManifestServers": []
+    },
+    {
+      "workflow": "component-actions-local",
+      "harness": "HARNESS-V3",
+      "api": "MOCKED",
+      "result": "FAIL",
+      "seconds": 189.52,
+      "exitCode": 1,
+      "historical": "docs/component-actions-local-final.log",
+      "invalidManifestServers": []
+    },
+    {
+      "workflow": "component-actions-imported",
+      "harness": "HARNESS-V3",
+      "api": "MOCKED",
+      "result": "FAIL",
+      "seconds": 225.47,
+      "exitCode": 1,
+      "historical": "docs/component-actions-imported-final.log",
+      "invalidManifestServers": []
+    },
+    {
+      "workflow": "icon-replacement",
+      "harness": "HARNESS-V3",
+      "api": "REAL",
+      "result": "FAIL",
+      "seconds": 164.87,
+      "exitCode": 1,
+      "historical": "docs/icon-replacement-qualification.log",
+      "invalidManifestServers": []
+    },
+    {
+      "workflow": "icon-properties",
+      "harness": "HARNESS-V3",
+      "api": "REAL",
+      "result": "FAIL",
+      "seconds": 156.3,
+      "exitCode": 1,
+      "historical": "docs/icon-properties-imported-final.log",
+      "invalidManifestServers": []
+    },
+    {
+      "workflow": "section-order",
+      "harness": "HARNESS-V3",
+      "api": "REAL",
+      "result": "FAIL",
+      "seconds": 182.66,
+      "exitCode": 1,
+      "historical": "docs/section-order-final.log",
+      "invalidManifestServers": []
+    },
+    {
+      "workflow": "container-move",
+      "harness": "HARNESS-V3",
+      "api": "REAL",
+      "result": "FAIL",
+      "seconds": 164.26,
+      "exitCode": 1,
+      "historical": "docs/container-move-qualification.log",
+      "invalidManifestServers": []
+    },
+    {
+      "workflow": "text-editing",
+      "harness": "HARNESS-V3",
+      "api": "REAL",
+      "result": "FAIL",
+      "seconds": 72.92,
+      "exitCode": 1,
+      "historical": "docs/component-text-final.log",
+      "invalidManifestServers": []
+    },
+    {
+      "workflow": "history",
+      "harness": "HARNESS-V3",
+      "api": "REAL",
+      "result": "FAIL",
+      "seconds": 210.96,
+      "exitCode": 1,
+      "historical": "docs/change-history-release.log",
+      "invalidManifestServers": []
+    },
+    {
+      "workflow": "recovery",
+      "harness": "HARNESS-V3",
+      "api": "MOCKED",
+      "result": "FAIL",
+      "seconds": 98.57,
+      "exitCode": 1,
+      "historical": "docs/recovery-release-gates.log",
+      "invalidManifestServers": []
+    }
+  ]
+}

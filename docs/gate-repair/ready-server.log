@@ -1,0 +1,86 @@
+▲ Next.js 16.4.3 (webpack)
+- Local:         http://127.0.0.1:50452
+- Network:       http://127.0.0.1:50452
+✓ Ready in 476ms
+✓ Running next.config.mjs took 34ms
+
+✓ Generated AGENTS.md for AI agents. Set `agentRules: false` in next.config to disable.
+○ Compiling /editor/[[...project]]/page ...
+ GET /editor 200 in 294ms
+ GET /editor 200 in 585ms (next.js: 235ms, application-code: 350ms)
+ GET /editor?panel=inspector 200 in 55ms (next.js: 12ms, application-code: 44ms)
+⚠ ./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+ GET /api/slightnudge/pages 200 in 7.7s (next.js: 3.8s, proxy.ts: 3.7s, application-code: 274ms)
+○ Compiling /api/slightnudge/responsive/route ...
+ GET /studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A50452&__slightnudge_session=73bc13bc-4b4d-4977-a552-f61dd43f06dc 200 in 7.9s (next.js: 4.2s, application-code: 3.7s)
+ POST /api/slightnudge/responsive 200 in 8.0s (next.js: 3.8s, proxy.ts: 3.7s, application-code: 503ms)
+ POST /api/slightnudge/responsive 200 in 8.0s (next.js: 3.8s, proxy.ts: 3.7s, application-code: 565ms)
+ GET /api/slightnudge/pages 200 in 16ms (next.js: 2ms, proxy.ts: 7ms, application-code: 7ms)

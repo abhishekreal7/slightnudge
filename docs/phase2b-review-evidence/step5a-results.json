@@ -1,0 +1,15 @@
+{
+  "buttonStateBeforeReload": {
+    "visible": false,
+    "text": "N/A",
+    "disabled": false
+  },
+  "toastsOnApplyAfterRestart": [],
+  "browserLogs": [
+    "[CONSOLE error] WebSocket connection to 'ws://127.0.0.1:3125/_next/hmr?id=3CdrnsnvZNNRY2EPJxvlK' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+    "[CONSOLE error] WebSocket connection to 'ws://127.0.0.1:3125/_next/hmr?id=3CdrnsnvZNNRY2EPJxvlK' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+    "[CONSOLE error] Failed to load resource: the server responded with a status of 400 (Bad Request)"
+  ],
+  "reloadFixedToken": true,
+  "postReloadApplySucceeded": true
+}

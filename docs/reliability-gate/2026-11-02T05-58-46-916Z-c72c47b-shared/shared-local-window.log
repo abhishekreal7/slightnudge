@@ -1,0 +1,127 @@
+SETUP 1793599369394 START git ["ls-files"]
+SETUP END elapsed 37ms
+HARNESS-V3 NAVIGATION about:blank
+HARNESS-V3 NAVIGATION http://127.0.0.1:61023/editor
+TIMING 1793599369601 REQUEST http://127.0.0.1:61023/editor
+TIMING 1793599370180 RESPONSE 200 http://127.0.0.1:61023/editor
+HARNESS-V3 OP 1793599371346 START waitFor locator('[data-source-ready="true"]')
+TIMING 1793599375940 REQUEST http://127.0.0.1:61023/api/slightnudge/responsive
+TIMING 1793599375941 REQUEST http://127.0.0.1:61023/api/slightnudge/responsive
+TIMING 1793599376042 REQUEST http://127.0.0.1:61023/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A61023&__slightnudge_session=0c5e6bd2-20dc-472f-83d5-b4bc58dc35c4
+TIMING 1793599376725 RESPONSE 200 http://127.0.0.1:61023/api/slightnudge/responsive
+TIMING 1793599377008 RESPONSE 200 http://127.0.0.1:61023/api/slightnudge/responsive
+TIMING 1793599377512 RESPONSE 200 http://127.0.0.1:61023/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A61023&__slightnudge_session=0c5e6bd2-20dc-472f-83d5-b4bc58dc35c4
+TIMING 1793599377529 REQUEST http://127.0.0.1:61023/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+TIMING 1793599377631 RESPONSE 200 http://127.0.0.1:61023/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+HARNESS-V3 OP 1793599380726 END waitFor locator('[data-source-ready="true"]')
+HARNESS-V3 OP 1793599380727 START click getByRole('button', { name: 'Toggle design panel', exact: true })
+HARNESS-V3 OP 1793599380924 END click getByRole('button', { name: 'Toggle design panel', exact: true })
+TIMING 1793599381511 REQUEST http://127.0.0.1:61023/api/slightnudge/responsive
+TIMING 1793599381511 REQUEST http://127.0.0.1:61023/api/slightnudge/preview
+HARNESS-V3 OP 1793599381517 START waitFor getByRole('region', { name: 'Component properties', exact: true }).getByText('This instance', { exact: true })
+TIMING 1793599383653 RESPONSE 200 http://127.0.0.1:61023/api/slightnudge/preview
+TIMING 1793599383899 RESPONSE 200 http://127.0.0.1:61023/api/slightnudge/responsive
+HARNESS-V3 OP 1793599384053 END waitFor getByRole('region', { name: 'Component properties', exact: true }).getByText('This instance', { exact: true })
+HARNESS-V3 OP 1793599384054 START waitFor getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop label', { exact: true })
+HARNESS-V3 OP 1793599384070 END waitFor getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop label', { exact: true })
+HARNESS-V3 OP 1793599384071 START fill getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop label', { exact: true })
+HARNESS-V3 OP 1793599384108 END fill getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop label', { exact: true })
+HARNESS-V3 OP 1793599384115 START press getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop label', { exact: true })
+TIMING 1793599384248 REQUEST http://127.0.0.1:61023/api/slightnudge/preview
+HARNESS-V3 OP 1793599384313 END press getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop label', { exact: true })
+TIMING 1793599386779 RESPONSE 200 http://127.0.0.1:61023/api/slightnudge/preview
+TIMING 1793599387320 REQUEST http://127.0.0.1:61023/api/slightnudge/preview
+HARNESS-V3 OP 1793599387367 START selectOption getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop variant', { exact: true })
+TIMING 1793599388573 RESPONSE 200 http://127.0.0.1:61023/api/slightnudge/preview
+TIMING 1793599388746 REQUEST http://127.0.0.1:61023/api/slightnudge/preview
+HARNESS-V3 OP 1793599388747 END selectOption getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop variant', { exact: true })
+TIMING 1793599391237 RESPONSE 200 http://127.0.0.1:61023/api/slightnudge/preview
+TIMING 1793599391796 REQUEST http://127.0.0.1:61023/api/slightnudge/preview
+HARNESS-V3 OP 1793599391847 START selectOption getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop disabled', { exact: true })
+TIMING 1793599393065 RESPONSE 200 http://127.0.0.1:61023/api/slightnudge/preview
+TIMING 1793599393265 REQUEST http://127.0.0.1:61023/api/slightnudge/preview
+HARNESS-V3 OP 1793599393267 END selectOption getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop disabled', { exact: true })
+TIMING 1793599396109 RESPONSE 200 http://127.0.0.1:61023/api/slightnudge/preview
+TIMING 1793599396643 REQUEST http://127.0.0.1:61023/api/slightnudge/preview
+HARNESS-V3 OP 1793599396703 START selectOption getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop disabled', { exact: true })
+TIMING 1793599397866 RESPONSE 200 http://127.0.0.1:61023/api/slightnudge/preview
+TIMING 1793599398092 REQUEST http://127.0.0.1:61023/api/slightnudge/preview
+HARNESS-V3 OP 1793599398092 END selectOption getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop disabled', { exact: true })
+TIMING 1793599400934 RESPONSE 200 http://127.0.0.1:61023/api/slightnudge/preview
+TIMING 1793599401531 REQUEST http://127.0.0.1:61023/api/slightnudge/preview
+TIMING 1793599402798 RESPONSE 200 http://127.0.0.1:61023/api/slightnudge/preview
+TIMING 1793599405325 REQUEST http://127.0.0.1:61023/api/slightnudge/preview
+TIMING 1793599408007 RESPONSE 200 http://127.0.0.1:61023/api/slightnudge/preview
+TIMING 1793599408571 REQUEST http://127.0.0.1:61023/api/slightnudge/preview
+TIMING 1793599411560 RESPONSE 200 http://127.0.0.1:61023/api/slightnudge/preview
+TIMING 1793599412142 REQUEST http://127.0.0.1:61023/api/slightnudge/preview
+TIMING 1793599412532 REQUEST http://127.0.0.1:61023/api/slightnudge/preview
+TIMING 1793599414714 RESPONSE 200 http://127.0.0.1:61023/api/slightnudge/preview
+HARNESS-V3 OP 1793599414727 START inputValue getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop label', { exact: true })
+HARNESS-V3 OP 1793599414741 END inputValue getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop label', { exact: true })
+HARNESS-V3 OP 1793599414741 START fill getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop label', { exact: true })
+HARNESS-V3 OP 1793599414770 END fill getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop label', { exact: true })
+HARNESS-V3 OP 1793599414772 START press getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop label', { exact: true })
+TIMING 1793599414871 REQUEST http://127.0.0.1:61023/api/slightnudge/preview
+HARNESS-V3 OP 1793599414940 END press getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop label', { exact: true })
+TIMING 1793599417331 RESPONSE 200 http://127.0.0.1:61023/api/slightnudge/preview
+TIMING 1793599417890 REQUEST http://127.0.0.1:61023/api/slightnudge/preview
+HARNESS-V3 OP 1793599418000 START waitFor getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop to', { exact: true })
+TIMING 1793599418259 REQUEST http://127.0.0.1:61023/api/slightnudge/preview
+TIMING 1793599420308 RESPONSE 200 http://127.0.0.1:61023/api/slightnudge/preview
+HARNESS-V3 OP 1793599420678 END waitFor getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop to', { exact: true })
+HARNESS-V3 OP 1793599420679 START fill getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop to', { exact: true })
+HARNESS-V3 OP 1793599420715 END fill getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop to', { exact: true })
+HARNESS-V3 OP 1793599420716 START press getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop to', { exact: true })
+TIMING 1793599420843 REQUEST http://127.0.0.1:61023/api/slightnudge/preview
+HARNESS-V3 OP 1793599420912 END press getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop to', { exact: true })
+TIMING 1793599423869 RESPONSE 200 http://127.0.0.1:61023/api/slightnudge/preview
+TIMING 1793599424456 REQUEST http://127.0.0.1:61023/api/slightnudge/preview
+TIMING 1793599424525 REQUEST http://127.0.0.1:61023/editor
+TIMING 1793599424673 REQUEST http://127.0.0.1:61023/api/slightnudge/responsive
+TIMING 1793599426638 RESPONSE 200 http://127.0.0.1:61023/api/slightnudge/responsive
+TIMING 1793599426649 RESPONSE 200 http://127.0.0.1:61023/editor
+HARNESS-V3 OP 1793599426795 START waitFor locator('[data-source-ready="true"]')
+TIMING 1793599429709 REQUEST http://127.0.0.1:61023/api/slightnudge/responsive
+TIMING 1793599429709 REQUEST http://127.0.0.1:61023/api/slightnudge/responsive
+TIMING 1793599429814 REQUEST http://127.0.0.1:61023/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A61023&__slightnudge_session=954dcb88-dc4d-48ea-bd2b-12e129c4cc17
+TIMING 1793599430267 RESPONSE 200 http://127.0.0.1:61023/api/slightnudge/responsive
+TIMING 1793599434053 RESPONSE 200 http://127.0.0.1:61023/api/slightnudge/responsive
+TIMING 1793599434066 RESPONSE 200 http://127.0.0.1:61023/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A61023&__slightnudge_session=954dcb88-dc4d-48ea-bd2b-12e129c4cc17
+TIMING 1793599434130 REQUEST http://127.0.0.1:61023/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+TIMING 1793599434205 RESPONSE 200 http://127.0.0.1:61023/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+HARNESS-V3 OP 1793599436737 END waitFor locator('[data-source-ready="true"]')
+HARNESS-V3 OP 1793599442368 START click getByRole('button', { name: 'Save changes', exact: true })
+HARNESS-V3 OP 1793599442586 END click getByRole('button', { name: 'Save changes', exact: true })
+TIMING 1793599446661 REQUEST http://127.0.0.1:61023/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A61023&__slightnudge_session=9ab56565-ec19-4a3d-ab87-7b37d7aa0a42&__slightnudge_refresh=62e71036-416e-48a4-9274-d88ff8d379d3
+TIMING 1793599447247 RESPONSE 200 http://127.0.0.1:61023/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A61023&__slightnudge_session=9ab56565-ec19-4a3d-ab87-7b37d7aa0a42&__slightnudge_refresh=62e71036-416e-48a4-9274-d88ff8d379d3
+TIMING 1793599448120 REQUEST http://127.0.0.1:61023/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+TIMING 1793599448700 RESPONSE 200 http://127.0.0.1:61023/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+HARNESS-V3 OP 1793599453146 START getAttribute getByRole('button', { name: 'Toggle design panel', exact: true })
+HARNESS-V3 OP 1793599453198 END getAttribute getByRole('button', { name: 'Toggle design panel', exact: true })
+HARNESS-V3 OP 1793599453199 START click getByRole('button', { name: 'Toggle design panel', exact: true })
+HARNESS-V3 OP 1793599453370 END click getByRole('button', { name: 'Toggle design panel', exact: true })
+TIMING 1793599453727 REQUEST http://127.0.0.1:61023/api/slightnudge/responsive
+TIMING 1793599453728 REQUEST http://127.0.0.1:61023/api/slightnudge/preview
+HARNESS-V3 OP 1793599453742 START waitFor getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop label', { exact: true })
+TIMING 1793599455646 RESPONSE 200 http://127.0.0.1:61023/api/slightnudge/preview
+HARNESS-V3 OP 1793599455720 END waitFor getByRole('region', { name: 'Component properties', exact: true }).getByLabel('Component prop label', { exact: true })
+HARNESS-V3 OP 1793599455929 START click getByRole('button', { name: 'Undo', exact: true })
+TIMING 1793599455945 RESPONSE 200 http://127.0.0.1:61023/api/slightnudge/responsive
+HARNESS-V3 OP 1793599456422 END click getByRole('button', { name: 'Undo', exact: true })
+TIMING 1793599457507 REQUEST http://127.0.0.1:61023/_next/static/webpack/app/studio/preview/[pageId]/page.3b8cda17de7600ee.hot-update.js
+TIMING 1793599457541 RESPONSE 200 http://127.0.0.1:61023/_next/static/webpack/app/studio/preview/[pageId]/page.3b8cda17de7600ee.hot-update.js
+TIMING 1793599458835 REQUEST http://127.0.0.1:61023/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A61023&__slightnudge_session=9ab56565-ec19-4a3d-ab87-7b37d7aa0a42&__slightnudge_refresh=62e71036-416e-48a4-9274-d88ff8d379d3&_rsc=4_XDWRW5lDu3r_Jl
+TIMING 1793599461091 REQUEST http://127.0.0.1:61023/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A61023&__slightnudge_session=67ccdc0e-1b16-47c9-b420-94e3b2ca158b&__slightnudge_refresh=38ad1357-a7eb-4a58-9904-a15544168f0f
+TIMING 1793599461160 REQUEST http://127.0.0.1:61023/api/slightnudge/responsive
+TIMING 1793599461496 RESPONSE 200 http://127.0.0.1:61023/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A61023&__slightnudge_session=9ab56565-ec19-4a3d-ab87-7b37d7aa0a42&__slightnudge_refresh=62e71036-416e-48a4-9274-d88ff8d379d3&_rsc=4_XDWRW5lDu3r_Jl
+TIMING 1793599462205 RESPONSE 200 http://127.0.0.1:61023/api/slightnudge/responsive
+TIMING 1793599462215 RESPONSE 200 http://127.0.0.1:61023/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A61023&__slightnudge_session=67ccdc0e-1b16-47c9-b420-94e3b2ca158b&__slightnudge_refresh=38ad1357-a7eb-4a58-9904-a15544168f0f
+TIMING 1793599462300 REQUEST http://127.0.0.1:61023/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+TIMING 1793599463358 RESPONSE 200 http://127.0.0.1:61023/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+TIMING 1793599468429 REQUEST http://127.0.0.1:61023/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A61023&__slightnudge_session=a5a8b2e9-2200-4a94-b250-4d4cd8d078f6&__slightnudge_refresh=0cf5eaef-e7df-4880-b829-dfba81a23fc6
+TIMING 1793599468745 RESPONSE 200 http://127.0.0.1:61023/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A61023&__slightnudge_session=a5a8b2e9-2200-4a94-b250-4d4cd8d078f6&__slightnudge_refresh=0cf5eaef-e7df-4880-b829-dfba81a23fc6
+TIMING 1793599468759 REQUEST http://127.0.0.1:61023/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+TIMING 1793599468854 RESPONSE 200 http://127.0.0.1:61023/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+PASS shared instances local window: identical callers, text/inline, destination, enabled state, variant, refresh, Save, exact Undo
+PASS: 2 review-consent browser cases (REAL API; shared-instance assertions unchanged)

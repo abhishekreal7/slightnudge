@@ -1,0 +1,66 @@
+TAP version 13
+# Subtest: S3: Atomic or refuse in atomicWrite
+    # Subtest: refuses and leaves target file unchanged when rename fails permanently without fallback overwrite
+    not ok 1 - refuses and leaves target file unchanged when rename fails permanently without fallback overwrite
+      ---
+      duration_ms: 84.8716
+      type: 'test'
+      location: 'C:\\dev\\vibecheck\\test\\s3-atomic-write.test.ts:14:3'
+      failureType: 'testCodeFailure'
+      error: |-
+        API must return success: false when rename fails
+        
+        true !== false
+        
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: false
+      actual: true
+      operator: 'strictEqual'
+      stack: |-
+        TestContext.<anonymous> (C:\dev\vibecheck\test\s3-atomic-write.test.ts:41:14)
+        Test.runInAsyncScope (node:async_hooks:214:14)
+        Test.run (node:internal/test_runner/test:1047:25)
+        async Promise.all (index 0)
+        async Suite.run (node:internal/test_runner/test:1442:7)
+        async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+      ...
+    # Subtest: retries with backoff and succeeds when rename fails twice then succeeds
+    not ok 2 - retries with backoff and succeeds when rename fails twice then succeeds
+      ---
+      duration_ms: 26.3475
+      type: 'test'
+      location: 'C:\\dev\\vibecheck\\test\\s3-atomic-write.test.ts:57:3'
+      failureType: 'testCodeFailure'
+      error: "ENOENT: no such file or directory, lstat 'C:\\dev\\vibecheck\\scratch\\s3-permanent-fail.txt'"
+      code: 'ENOENT'
+      stack: |-
+        realpathSync (node:fs:2786:29)
+        relativeFilePath (C:\dev\vibecheck\lib\slightnudge\edit-history.ts:101:24)
+        readHistory (C:\dev\vibecheck\lib\slightnudge\edit-history.ts:57:5)
+        recordSourceEdit (C:\dev\vibecheck\lib\slightnudge\edit-history.ts:127:19)
+        applyPendingSourceEdit (C:\dev\vibecheck\lib\slightnudge\edit-history.ts:238:15)
+        TestContext.<anonymous> (C:\dev\vibecheck\test\s3-atomic-write.test.ts:87:19)
+        Test.runInAsyncScope (node:async_hooks:214:14)
+        Test.run (node:internal/test_runner/test:1047:25)
+        async Suite.processPendingSubtests (node:internal/test_runner/test:744:7)
+      ...
+    1..2
+not ok 1 - S3: Atomic or refuse in atomicWrite
+  ---
+  duration_ms: 112.2324
+  type: 'suite'
+  location: 'C:\\dev\\vibecheck\\test\\s3-atomic-write.test.ts:7:1'
+  failureType: 'subtestsFailed'
+  error: '2 subtests failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+1..1
+# tests 2
+# suites 1
+# pass 0
+# fail 2
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 334.4104

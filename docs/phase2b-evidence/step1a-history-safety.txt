@@ -1,0 +1,35 @@
+=== STEP 1.A: EDIT HISTORY SAFETY AUDIT ===
+
+1. Track / Ignore Status:
+Command: git ls-files .slightnudge
+Output: (empty - untracked)
+
+Command: git check-ignore -v .slightnudge/history/edits.json
+Output: .gitignore:3:.slightnudge	.slightnudge/history/edits.json
+
+Result: .slightnudge/history/edits.json is untracked and ignored by .gitignore line 3.
+
+2. Current Records in .slightnudge/history/edits.json:
+Total records: 99
+Breakdown by filePath:
+- fixtures\1-plain-static.tsx: 98 records
+- scratch\test-s5-debug.tsx: 1 record
+Non-fixture, non-scratch records: 0
+
+3. Builder and Test Record Deletion Filters:
+- test/s1-auth-origin.test.ts:
+  L172: const filtered = h.filter((r: any) => !r.filePath.includes('s1-auth-flow'));
+  Target: temporary scratch file s1-auth-flow.txt created within that test.
+
+- test/s3-atomic-write.test.ts:
+  L104: const records = JSON.parse(raw).filter((r: any) => !r.filePath.includes('s3-retry-success'));
+  Target: temporary scratch file s3-retry-success.txt created within that test.
+
+- test/s5-tailwind-compile.test.ts:
+  L75: const records = JSON.parse(raw).filter((r: any) => !r.filePath.includes('s5-valid-classes'));
+  Target: temporary scratch file s5-valid-classes.tsx created within that test.
+
+4. Conclusion on Real User Edit Records:
+Could any real user edit record have been removed?
+CONFIRMED: NO.
+All records in edits.json strictly reference test fixtures (fixtures/1-plain-static.tsx) or scratch files (scratch/test-s5-debug.tsx). The automated cleanup filters in tests strictly filtered their own test-generated filenames (s1-auth-flow, s3-retry-success, s5-valid-classes). No real user edit record existed or was deleted.

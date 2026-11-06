@@ -1,0 +1,12 @@
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+page.waitForResponse: Timeout 30000ms exceeded while waiting for event "response"
+    at checkM1Interactions (C:\dev\vibecheck\test\helpers\m1-interactions-browser.ts:10:22)
+    at <anonymous> (C:\dev\vibecheck\test\review-consent.browser.ts:86:20) {
+  log: [],
+  name: 'TimeoutError'
+}
+
+Node.js v22.19.0

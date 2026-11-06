@@ -1,0 +1,13 @@
+diff --git a/lib/slightnudge/edit-history.ts b/lib/slightnudge/edit-history.ts
+index 493373a..587295f 100644
+--- a/lib/slightnudge/edit-history.ts
++++ b/lib/slightnudge/edit-history.ts
+@@ -830,7 +830,7 @@ export function undoSourceEdit(target?: string | { filePath?: string; editId?: s
+   const currentClassVal = literal.getLiteralValue();
+   const currentTokens = currentClassVal.trim().split(/\s+/).filter(Boolean);
+ 
+-  const hasAllAdded = addedTokens.every(t => currentTokens.includes(t));
++  const hasAllAdded = true; /* M2 mutant */
+   const hasNoRemoved = removedTokens.every(t => !currentTokens.includes(t));
+ 
+   if (!hasAllAdded || !hasNoRemoved) {

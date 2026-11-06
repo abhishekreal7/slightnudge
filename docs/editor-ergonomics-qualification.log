@@ -1,0 +1,122 @@
+
+> slightnudge@1.0.0 test:workspace-layout
+> tsx test/review-consent.browser.ts --workspace-layout --gates
+
+Isolated application diagnostics ▲ Next.js 16.4.3 (webpack)
+- Local:         http://127.0.0.1:59833
+- Network:       http://127.0.0.1:59833
+✓ Ready in 750ms
+✓ Running next.config.mjs took 47ms
+
+○ Compiling /fixtures/1/page ...
+ GET /fixtures/1 200 in 1401ms (next.js: 604ms, application-code: 797ms)
+○ Compiling /studio/page ...
+ GET /studio 200 in 838ms (next.js: 371ms, application-code: 467ms)
+○ Compiling /studio/preview/[pageId]/page ...
+ GET /studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A59833&__slightnudge_session=4a8b2871-f475-408c-bf2d-eea7b1dafe25 200 in 2.2s (next.js: 1134ms, application-code: 1067ms)
+○ Compiling /api/slightnudge/responsive/route ...
+⚠ ./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+ GET /api/slightnudge/pages 200 in 8.5s (next.js: 7.1s, proxy.ts: 604ms, application-code: 787ms)
+ POST /api/slightnudge/responsive 200 in 8.8s (next.js: 7.1s, proxy.ts: 605ms, application-code: 1086ms)
+ POST /api/slightnudge/responsive 200 in 9.0s (next.js: 7.1s, proxy.ts: 605ms, application-code: 1218ms)
+ GET /api/slightnudge/pages 200 in 310ms (next.js: 10ms, proxy.ts: 282ms, application-code: 19ms)
+
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+locator.waitFor: Timeout 45000ms exceeded.
+Call log:
+  - waiting for getByText('No matching layers.', { exact: true }) to be visible
+
+    at checkEditorErgonomics (C:\dev\vibecheck\test\helpers\editor-ergonomics-browser.ts:29:102)
+    at async <anonymous> (C:\dev\vibecheck\test\review-consent.browser.ts:132:5) {
+  log: [
+    "  - waiting for getByText('No matching layers.', { exact: true }) to be visible"
+  ],
+  name: 'TimeoutError'
+}
+
+Node.js v22.19.0

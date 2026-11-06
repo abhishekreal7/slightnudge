@@ -1,0 +1,132 @@
+[
+  {
+    "id": "M1",
+    "name": "accept the first of several matching elements",
+    "targetFile": "lib/slightnudge/edit-history.ts",
+    "status": "KILLED",
+    "killedBy": "test/token-undo.test.ts",
+    "reason": "🧪 RUNNING TOKEN-LEVEL UNDO TEST SUITE\n--- Test (j): Exact-match restores byte-for-byte ---\n  ✅ [PASS] (j) Exact match restores byte for byte\n--- Test (a): Prettier reformat preserved on undo ---\n  ✅ [PASS] (a) Prettier reformat preserved on undo\n--- Test (b): Unrelated file edit preserved ---\n  ✅ [PASS] (b) Unrelated file edit preserved\n--- Test (c): Other classes on same element preserved ---\n  ✅ [PASS] (c) Other classes on same element preserved\n--- Test (d): User changed same token -> refuse",
+    "isSafetyRelevant": true,
+    "patchFile": "docs/phase2c1c-evidence/mutants/M1.patch"
+  },
+  {
+    "id": "M2",
+    "name": "skip the \"contains every added token\" check",
+    "targetFile": "lib/slightnudge/edit-history.ts",
+    "status": "KILLED",
+    "killedBy": "test/token-undo.test.ts",
+    "reason": "🧪 RUNNING TOKEN-LEVEL UNDO TEST SUITE\n--- Test (j): Exact-match restores byte-for-byte ---\n  ✅ [PASS] (j) Exact match restores byte for byte\n--- Test (a): Prettier reformat preserved on undo ---\n  ✅ [PASS] (a) Prettier reformat preserved on undo\n--- Test (b): Unrelated file edit preserved ---\n  ✅ [PASS] (b) Unrelated file edit preserved\n--- Test (c): Other classes on same element preserved ---\n  ✅ [PASS] (c) Other classes on same element preserved\n--- Test (d): User changed same token -> refuse",
+    "isSafetyRelevant": true,
+    "patchFile": "docs/phase2c1c-evidence/mutants/M2.patch"
+  },
+  {
+    "id": "M3",
+    "name": "skip the \"none of the removed tokens present\" check",
+    "targetFile": "lib/slightnudge/edit-history.ts",
+    "status": "SURVIVED",
+    "killedBy": null,
+    "reason": null,
+    "isSafetyRelevant": true,
+    "patchFile": "docs/phase2c1c-evidence/mutants/M3.patch"
+  },
+  {
+    "id": "M4",
+    "name": "drop the loop/conditional refusal",
+    "targetFile": "lib/slightnudge/edit-history.ts",
+    "status": "KILLED",
+    "killedBy": "test/undo-refusals.test.ts",
+    "reason": "TAP version 13\n# Subtest: Undo Refusals & Safety Mutants Battery\n    # Subtest: M3: refuses undo when element already contains a removed token (user restored it)\n    ok 1 - M3: refuses undo when element already contains a removed token (user restored it)\n      ---\n      duration_ms: 221.3567\n      type: 'test'\n      ...\n    # Subtest: M6: refuses undo when history record contains tampered malicious tokens\n    ok 2 - M6: refuses undo when history record contains tampered malicious tokens\n      --",
+    "isSafetyRelevant": true,
+    "patchFile": "docs/phase2c1c-evidence/mutants/M4.patch"
+  },
+  {
+    "id": "M5",
+    "name": "drop the containment check right before the undo write (and the call to assertWriteTargetInsideWorkspace in undoSourceEdit)",
+    "targetFile": "lib/slightnudge/edit-history.ts",
+    "status": "SURVIVED",
+    "killedBy": null,
+    "reason": null,
+    "isSafetyRelevant": true,
+    "patchFile": "docs/phase2c1c-evidence/mutants/M5.patch"
+  },
+  {
+    "id": "M6",
+    "name": "skip the post-edit parse check and token-multiset post-condition",
+    "targetFile": "lib/slightnudge/edit-history.ts",
+    "status": "KILLED",
+    "killedBy": "test/token-undo.test.ts",
+    "reason": "node:internal/modules/run_main:123\r\n    triggerUncaughtException(\r\n    ^\r\nError [TransformError]: Transform failed with 1 error:\r\nC:\\Users\\abhis\\AppData\\Local\\Temp\\mutant-m6-c2e50390-142b-439f-a41b-d490affe91b6\\lib\\slightnudge\\edit-history.ts:869:30: ERROR: Unexpected \")\"\r\n    at failureErrorWithLog (C:\\dev\\vibecheck\\node_modules\\esbuild\\lib\\main.js:1752:15)\r\n    at C:\\dev\\vibecheck\\node_modules\\esbuild\\lib\\main.js:1019:50\r\n    at responseCallbacks.<computed> (C:\\dev\\vibecheck\\node_modules\\esbui",
+    "isSafetyRelevant": true,
+    "patchFile": "docs/phase2c1c-evidence/mutants/M6.patch"
+  },
+  {
+    "id": "M7",
+    "name": "undo an older edit while a newer one is stacked",
+    "targetFile": "lib/slightnudge/edit-history.ts",
+    "status": "KILLED",
+    "killedBy": "test/token-undo.test.ts",
+    "reason": "node:internal/modules/run_main:123\r\n    triggerUncaughtException(\r\n    ^\r\nError [TransformError]: Transform failed with 1 error:\r\nC:\\Users\\abhis\\AppData\\Local\\Temp\\mutant-m7-ade49682-53d5-4f62-afb9-1453680d16d6\\lib\\slightnudge\\edit-history.ts:657:2: ERROR: Unexpected \"}\"\r\n    at failureErrorWithLog (C:\\dev\\vibecheck\\node_modules\\esbuild\\lib\\main.js:1752:15)\r\n    at C:\\dev\\vibecheck\\node_modules\\esbuild\\lib\\main.js:1019:50\r\n    at responseCallbacks.<computed> (C:\\dev\\vibecheck\\node_modules\\esbuil",
+    "isSafetyRelevant": true,
+    "patchFile": "docs/phase2c1c-evidence/mutants/M7.patch"
+  },
+  {
+    "id": "M8",
+    "name": "restore the unguarded argv bypass in lib/slightnudge/auth.ts",
+    "targetFile": "lib/slightnudge/auth.ts",
+    "status": "KILLED",
+    "killedBy": "test/s1-auth-bypass.test.ts",
+    "reason": "🧪 RUNNING AUTH BYPASS UNIT TEST\n\nnode:internal/modules/run_main:123\r\n    triggerUncaughtException(\r\n    ^\r\n\r\nAssertionError [ERR_ASSERTION]: Requests lacking token must be refused when SLIGHTNUDGE_TEST is unset, even if argv contains reorder-safety\r\n\r\ntrue !== false\r\n\r\n    at <anonymous> (C:\\Users\\abhis\\AppData\\Local\\Temp\\mutant-m8-1b1ca89c-61fb-4430-b1c8-98c5264476bc\\test\\s1-auth-bypass.test.ts:29:10)\r\n    at ModuleJob.run (node:internal/modules/esm/module_job:345:25)\r\n    at async onImport.tr",
+    "isSafetyRelevant": true,
+    "patchFile": "docs/phase2c1c-evidence/mutants/M8.patch"
+  },
+  {
+    "id": "M9",
+    "name": "plain === instead of timingSafeEqual (informational)",
+    "targetFile": "lib/slightnudge/auth.ts",
+    "status": "SURVIVED",
+    "killedBy": null,
+    "reason": null,
+    "isSafetyRelevant": false,
+    "patchFile": "docs/phase2c1c-evidence/mutants/M9.patch"
+  },
+  {
+    "id": "M10",
+    "name": "accept any non-empty token",
+    "targetFile": "lib/slightnudge/auth.ts",
+    "status": "KILLED",
+    "killedBy": "test/s1-auth-origin.test.ts",
+    "reason": "TAP version 13\n# Subtest: S1: Authenticated, local-only mutating requests\n    # Subtest: rejects mutating request with no Origin and no token with 403 (not 404)\n    ok 1 - rejects mutating request with no Origin and no token with 403 (not 404)\n      ---\n      duration_ms: 881.6191\n      type: 'test'\n      ...\n    # Subtest: rejects mutating request with wrong Host with 403\n    ok 2 - rejects mutating request with wrong Host with 403\n      ---\n      duration_ms: 32.3085\n      type: 'test'\n      .",
+    "isSafetyRelevant": true,
+    "patchFile": "docs/phase2c1c-evidence/mutants/M10.patch"
+  },
+  {
+    "id": "M11",
+    "name": "drop the isRequestHostAllowed check in app/layout.tsx",
+    "targetFile": "app/layout.tsx",
+    "status": "KILLED",
+    "killedBy": "test/token-html-host.test.ts",
+    "reason": "TAP version 13\n# Subtest: P0: Token HTML Host Header Validation\n    # Subtest: disallows token in HTML for / with evil.localhost\n    not ok 1 - disallows token in HTML for / with evil.localhost\n      ---\n      duration_ms: 9096.3891\n      type: 'test'\n      location: 'C:\\\\Users\\\\abhis\\\\AppData\\\\Local\\\\Temp\\\\mutant-m11-44d108d6-2bec-44b0-af35-cd751a9d6988\\\\test\\\\token-html-host.test.ts:1:2197'\n      failureType: 'testCodeFailure'\n      error: 'Session token was leaked in response body for / under",
+    "isSafetyRelevant": true,
+    "patchFile": "docs/phase2c1c-evidence/mutants/M11.patch"
+  },
+  {
+    "id": "M12",
+    "name": "drop the X-Forwarded-Host/Forwarded check inside isRequestHostAllowed",
+    "targetFile": "lib/slightnudge/auth.ts",
+    "status": "KILLED",
+    "killedBy": "test/token-html-host.test.ts",
+    "reason": "TAP version 13\n# Subtest: P0: Token HTML Host Header Validation\n    # Subtest: disallows token in HTML for / with evil.localhost\n    ok 1 - disallows token in HTML for / with evil.localhost\n      ---\n      duration_ms: 14771.9983\n      type: 'test'\n      ...\n    # Subtest: disallows token in HTML for / with attacker.example\n    ok 2 - disallows token in HTML for / with attacker.example\n      ---\n      duration_ms: 47.3518\n      type: 'test'\n      ...\n    # Subtest: disallows token in HTML for / ",
+    "isSafetyRelevant": true,
+    "patchFile": "docs/phase2c1c-evidence/mutants/M12.patch"
+  },
+  {
+    "id": "M13",
+    "name": "drop the pre-write hook guard (make the hook active without SLIGHTNUDGE_TEST)",
+    "targetFile": "lib/slightnudge/edit-history.ts",
+    "status": "KILLED",
+    "killedBy": "test/token-undo.test.ts",
+    "reason": "node:internal/modules/run_main:123\r\n    triggerUncaughtException(\r\n    ^\r\nError [TransformError]: Transform failed with 1 error:\r\nC:\\Users\\abhis\\AppData\\Local\\Temp\\mutant-m13-92614500-9966-4e45-b029-e5dfdfae9615\\lib\\slightnudge\\edit-history.ts:219:0: ERROR: Unexpected \"}\"\r\n    at failureErrorWithLog (C:\\dev\\vibecheck\\node_modules\\esbuild\\lib\\main.js:1752:15)\r\n    at C:\\dev\\vibecheck\\node_modules\\esbuild\\lib\\main.js:1019:50\r\n    at responseCallbacks.<computed> (C:\\dev\\vibecheck\\node_modules\\esbui",
+    "isSafetyRelevant": true,
+    "patchFile": "docs/phase2c1c-evidence/mutants/M13.patch"
+  }
+]

@@ -1,0 +1,19 @@
+▶ History Resilience: Resilient readHistory and Safe File Validation
+  ✔ (a) a history entry whose file was deleted must not make apply throw: apply on a different existing file succeeds (480.6876ms)
+  ✔ (b) a history entry whose file was deleted must not break undo of a different edit (69.1339ms)
+  ✔ (c) a missing-file entry stays in the history file (never auto-deleted) and is returned marked missing so the UI can show it unavailable (28.3764ms)
+  ✔ (d) an entry whose path escapes the project root is skipped and reported, never followed (34.0873ms)
+  ✔ (e) undo of the entry whose file is missing returns a clear error ("that file no longer exists"), not a crash (21.0481ms)
+  ✔ (f) a corrupt history file (invalid JSON) produces a clear error and does not overwrite or truncate the file (19.5241ms)
+✔ History Resilience: Resilient readHistory and Safe File Validation (655.4092ms)
+ℹ tests 6
+ℹ suites 1
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 679.7946
+
+--- STDERR ---
+Skipping history record whose path escapes workspace root: ../../etc/passwd

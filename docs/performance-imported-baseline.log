@@ -1,0 +1,118 @@
+Disposable source project: generated SaaS; Next.js 16.4.3; Tailwind 4.3.3; installed source adapter; no environment files checked out.
+▲ Next.js 16.4.3 (webpack)
+- Local:         http://127.0.0.1:49674
+- Network:       http://127.0.0.1:49674
+✓ Ready in 591ms
+✓ Running next.config.mjs took 133ms
+
+  We detected TypeScript in your project and created a tsconfig.json file for you.
+
+○ Compiling /page ...
+ GET / 200 in 1535ms (next.js: 789ms, application-code: 745ms)
+ GET / 200 in 609ms (next.js: 3ms, application-code: 606ms)
+ GET / 200 in 90ms (next.js: 3ms, application-code: 87ms)
+ GET /?__slightnudge_session=0180a279-f843-4be7-807c-25ce8a476dbe&__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A58340&__slightnudge_draft=1 200 in 202ms (next.js: 44ms, application-code: 158ms)
+
+Isolated application diagnostics ▲ Next.js 16.4.3 (webpack)
+- Local:         http://127.0.0.1:58340
+- Network:       http://127.0.0.1:58340
+✓ Ready in 487ms
+✓ Running next.config.mjs took 37ms
+
+○ Compiling /fixtures/1/page ...
+ GET /fixtures/1 200 in 3.2s (next.js: 1197ms, application-code: 2.0s)
+○ Compiling /studio/[repoId]/edit/page ...
+ GET /studio/source-proof/edit?preview=http%3A%2F%2F127.0.0.1%3A49674%2F 307 in 2.7s (next.js: 1297ms, application-code: 1390ms)
+○ Compiling /editor/[[...project]]/page ...
+ GET /editor/source-proof?preview=http%3A%2F%2F127.0.0.1%3A49674%2F 200 in 1664ms (next.js: 1014ms, application-code: 650ms)
+○ Compiling proxy ...
+○ Compiling /api/slightnudge/repositories/[id]/route ...
+ GET /api/slightnudge/pages 200 in 8.7s (next.js: 7.9s, proxy.ts: 753ms, application-code: 90ms)
+ GET /api/slightnudge/pages 200 in 65ms (next.js: 6ms, proxy.ts: 40ms, application-code: 19ms)
+ GET /api/slightnudge/repositories/source-proof 200 in 9.2s (next.js: 8.3s, proxy.ts: 754ms, application-code: 116ms)
+ GET /api/slightnudge/repositories/source-proof 200 in 113ms (next.js: 23ms, proxy.ts: 14ms, application-code: 76ms)
+ POST /api/slightnudge/repositories/source-proof/preview-check 200 in 1509ms (next.js: 1324ms, proxy.ts: 14ms, application-code: 172ms)
+⚠ ./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+ POST /api/slightnudge/responsive 200 in 2.4s (next.js: 1384ms, proxy.ts: 75ms, application-code: 958ms)
+○ Compiling /api/slightnudge/responsive/route ...
+
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+page.waitForFunction: Timeout 60000ms exceeded.
+    at checkImportedCanvas (C:\dev\vibecheck\test\helpers\imported-canvas-browser.ts:41:16)
+    at async <anonymous> (C:\dev\vibecheck\test\review-consent.browser.ts:210:14) {
+  log: [],
+  name: 'TimeoutError'
+}
+
+Node.js v22.19.0

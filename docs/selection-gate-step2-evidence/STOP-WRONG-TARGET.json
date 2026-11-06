@@ -1,0 +1,109 @@
+{
+  "name": "round-1-old-window-overfit",
+  "index": 1,
+  "selector": "div#app-shell",
+  "clickPosition": {
+    "x": 5,
+    "y": 5
+  },
+  "expected": {
+    "file": "ShellLayout.tsx",
+    "line": 9,
+    "tag": "div",
+    "outcome": "allowed"
+  },
+  "dom": {
+    "file": "src/components/ShellLayout.tsx",
+    "line": 9,
+    "column": 5,
+    "tag": "div",
+    "classes": "min-h-screen bg-slate-50 text-slate-900 antialiased",
+    "markerRect": {
+      "top": 0,
+      "left": 0,
+      "width": 1440,
+      "height": 1242
+    },
+    "clickedRect": {
+      "top": 0,
+      "left": 0,
+      "width": 1440,
+      "height": 1242
+    }
+  },
+  "position": {
+    "x": 5,
+    "y": 5
+  },
+  "insideHit": {
+    "point": {
+      "x": 5,
+      "y": 5
+    },
+    "hit": {
+      "tag": "header",
+      "id": "",
+      "classes": "border-b border-slate-200 bg-white px-6 py-4",
+      "file": "src/components/ShellLayout.tsx",
+      "line": "10"
+    },
+    "scroll": {
+      "x": 0,
+      "y": 0
+    },
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    }
+  },
+  "parentHit": {
+    "point": {
+      "x": 5,
+      "y": 5
+    },
+    "hit": {
+      "tag": "iframe",
+      "classes": "block w-full border-0 bg-white",
+      "role": null,
+      "label": null,
+      "isIframe": true
+    }
+  },
+  "signals": [
+    {
+      "type": "source-selection",
+      "selection": {
+        "path": "src/components/ShellLayout.tsx",
+        "line": 10,
+        "column": 7,
+        "tagName": "header"
+      }
+    }
+  ],
+  "pointer": [
+    {
+      "x": 5,
+      "y": 5,
+      "tag": "header",
+      "id": "",
+      "classes": "border-b border-slate-200 bg-white px-6 py-4",
+      "file": "src/components/ShellLayout.tsx",
+      "line": "10"
+    }
+  ],
+  "selected": "src/components/ShellLayout.tsx:10:7:header",
+  "actual": {
+    "file": "ShellLayout.tsx",
+    "line": 10,
+    "column": 7,
+    "tag": "header"
+  },
+  "offset": {
+    "x": 0,
+    "y": 0,
+    "width": 0,
+    "height": -1181
+  },
+  "verdict": "WRONG TARGET",
+  "reason": "Real editor selected a different source target from the unchanged expected target"
+}

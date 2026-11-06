@@ -1,0 +1,21 @@
+{
+  "method": "physical click → real inspection → real preview → explicit Apply → iframe reload → exact source Undo",
+  "selections": [
+    {
+      "file": "components/Hero.tsx",
+      "line": 1,
+      "column": 96,
+      "tag": "section",
+      "occurrence": 0,
+      "text": "NorthstarPricingA calmer way to buildMake room for your next idea.A thoughtful w",
+      "actualSelection": {
+        "file": "components/Hero.tsx",
+        "line": 1,
+        "column": 354,
+        "tag": "h1"
+      },
+      "outcome": "WRONG TARGET",
+      "reason": "The physical click selected a different marker than the requested container; stopped before Apply."
+    }
+  ]
+}

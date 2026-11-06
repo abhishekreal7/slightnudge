@@ -1,0 +1,18 @@
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Fresh server HTML must be checked without navigating or changing the current DOM
+
+false !== true
+
+    at <anonymous> (C:\dev\vibecheck\test\source-document-fence.browser.test.ts:21:9) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v22.19.0

@@ -1,0 +1,15 @@
+diff --git a/lib/slightnudge/edit-history.ts b/lib/slightnudge/edit-history.ts
+index b0267e5..eb2f09d 100644
+--- a/lib/slightnudge/edit-history.ts
++++ b/lib/slightnudge/edit-history.ts
+@@ -880,9 +880,7 @@ export function undoSourceEdit(target?: string | { filePath?: string; editId?: s
+   if (candidates.length === 0) {
+     return refuseWithInstructions(`element could not be found`);
+   }
+-  if (candidates.length > 1) {
+-    return refuseWithInstructions(`multiple matching elements found where uniqueness cannot be established`);
+-  }
++  /* M1 mutant: skip ambiguity check */
+ 
+   const targetEl = candidates[0];
+   const targetLine = targetEl.getStartLineNumber();

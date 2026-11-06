@@ -1,0 +1,77 @@
+﻿Same element refusal message: Cannot undo this edit because a newer edit on the same element depends on it. Undo the newer edit first.
+Legacy record refusal message: Cannot undo this edit because a newer edit on the same element depends on it. Undo the newer edit first.
+Structural edit refusal message: Cannot undo this edit because a newer edit on the same element depends on it. Undo the newer edit first.
+Same-line refusal message: Cannot undo this edit because a newer edit on the same element depends on it. Undo the newer edit first.
+Starting 300 randomized order test runs (seed base: 771234)...
+Γû╢ Multi-Element Stacked Edits Undo Battery
+  Γ£û (1) edit A on elem1, edit B on elem2: undo A accepted, then undo B accepted -> byte-identical (596.041ms)
+  Γ£ö (2) edit A then B, undo B first then A -> byte-identical (335.8837ms)
+  Γ£ö (3) edit A then edit B on the SAME element: undo A refused naming newer edit, undo B accepted, then undo A accepted (301.6265ms)
+  Γ£û (4) legacy records without elementId and without derivable identity: undo of older refused with manual instructions (17.2195ms)
+  Γ£ö (5) newer record of structural kind (reorder) in same file: undo of older edit refused (245.1216ms)
+  Γ£ö (6) different elements on the SAME line: refused due to same-line ambiguity (244.9331ms)
+  Γ£û (7) randomized order test: 300 seeded runs with N (2..5) edits undone in random order (486.4808ms)
+Γ£û Multi-Element Stacked Edits Undo Battery (2230.1956ms)
+Γä╣ tests 7
+Γä╣ suites 1
+Γä╣ pass 4
+Γä╣ fail 3
+Γä╣ cancelled 0
+Γä╣ skipped 0
+Γä╣ todo 0
+Γä╣ duration_ms 2246.6573
+
+Γ£û failing tests:
+
+test at test\undo-stacked-edits.test.ts:1:1236
+Γ£û (1) edit A on elem1, edit B on elem2: undo A accepted, then undo B accepted -> byte-identical (596.041ms)
+  AssertionError [ERR_ASSERTION]: Undo of older edit A must be ACCEPTED, got: Cannot undo this edit because a newer edit on the same element depends on it. Undo the newer edit first.
+  
+  false !== true
+  
+      at TestContext.<anonymous> (C:\dev\vibecheck\test\undo-stacked-edits.test.ts:115:14)
+      at async Test.run (node:internal/test_runner/test:1113:7)
+      at async Promise.all (index 0)
+      at async Suite.run (node:internal/test_runner/test:1518:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:358:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test\undo-stacked-edits.test.ts:1:8085
+Γ£û (4) legacy records without elementId and without derivable identity: undo of older refused with manual instructions (17.2195ms)
+  AssertionError [ERR_ASSERTION]: Legacy refusal must provide manual instructions: Cannot undo this edit because a newer edit on the same element depends on it. Undo the newer edit first.
+  
+  false !== true
+  
+      at TestContext.<anonymous> (C:\dev\vibecheck\test\undo-stacked-edits.test.ts:344:14)
+      at async Test.run (node:internal/test_runner/test:1113:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:788:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test\undo-stacked-edits.test.ts:1:13872
+Γ£û (7) randomized order test: 300 seeded runs with N (2..5) edits undone in random order (486.4808ms)
+  AssertionError [ERR_ASSERTION]: Undo of el-btn in run 0 failed: Cannot undo this edit because a newer edit on the same element depends on it. Undo the newer edit first.
+  
+  false !== true
+  
+      at TestContext.<anonymous> (C:\dev\vibecheck\test\undo-stacked-edits.test.ts:597:18)
+      at async Test.run (node:internal/test_runner/test:1113:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:788:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

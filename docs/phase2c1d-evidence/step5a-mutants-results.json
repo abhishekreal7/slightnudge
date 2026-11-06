@@ -1,0 +1,172 @@
+[
+  {
+    "id": "M1",
+    "name": "accept the first of several matching elements",
+    "targetFile": "lib/slightnudge/edit-history.ts",
+    "status": "KILLED",
+    "killedBy": "test/token-undo.test.ts",
+    "reason": "🧪 RUNNING TOKEN-LEVEL UNDO TEST SUITE\n--- Test (j): Exact-match restores byte-for-byte ---\n  ✅ [PASS] (j) Exact match restores byte for byte\n--- Test (a): Prettier reformat preserved on undo ---\n  ✅ [PASS] (a) Prettier reformat preserved on undo\n--- Test (b): Unrelated file edit preserved ---\n  ✅ [PASS] (b) Unrelated file edit preserved\n--- Test (c): Other classes on same element preserved ---\n  ✅ [PASS] (c) Other classes on same element preserved\n--- Test (d): User changed same token -> refuse",
+    "isSafetyRelevant": true,
+    "patchFile": "docs/phase2c1d-evidence/mutants/M1.patch"
+  },
+  {
+    "id": "M2",
+    "name": "skip the \"contains every added token\" check",
+    "targetFile": "lib/slightnudge/edit-history.ts",
+    "status": "KILLED",
+    "killedBy": "test/token-undo.test.ts",
+    "reason": "🧪 RUNNING TOKEN-LEVEL UNDO TEST SUITE\n--- Test (j): Exact-match restores byte-for-byte ---\n  ✅ [PASS] (j) Exact match restores byte for byte\n--- Test (a): Prettier reformat preserved on undo ---\n  ✅ [PASS] (a) Prettier reformat preserved on undo\n--- Test (b): Unrelated file edit preserved ---\n  ✅ [PASS] (b) Unrelated file edit preserved\n--- Test (c): Other classes on same element preserved ---\n  ✅ [PASS] (c) Other classes on same element preserved\n--- Test (d): User changed same token -> refuse",
+    "isSafetyRelevant": true,
+    "patchFile": "docs/phase2c1d-evidence/mutants/M2.patch"
+  },
+  {
+    "id": "M3",
+    "name": "skip the \"none of the removed tokens present\" check",
+    "targetFile": "lib/slightnudge/edit-history.ts",
+    "status": "KILLED",
+    "killedBy": "test/undo-m3-restored-token.test.ts",
+    "reason": "Case 2 fallback refusal message: This file changed after the visual edit: element could not be found. Open fixtures\\test-m3-case2.tsx near line 3 and change the className to remove \"font-bold\" and restore \"font-normal\". Nothing was changed.\n▶ Mutant M3 Closeout: Restored Token Refusal Battery\n  ✖ case 1 (elementId recorded): user restores removed token by hand -> only token check refuses with specific restored-token error (671.8183ms)\n  ✔ case 2 (candidate scanning fallback): without elementId, ",
+    "isSafetyRelevant": true,
+    "patchFile": "docs/phase2c1d-evidence/mutants/M3.patch"
+  },
+  {
+    "id": "M4",
+    "name": "drop the loop/conditional refusal",
+    "targetFile": "lib/slightnudge/edit-history.ts",
+    "status": "KILLED",
+    "killedBy": "test/undo-refusals.test.ts",
+    "reason": "▶ Undo Refusals & Safety Mutants Battery\n  ✔ M3: refuses undo when element already contains a removed token (user restored it) (245.6767ms)\n  ✔ M6: refuses undo when history record contains tampered malicious tokens (239.1292ms)\n  ✔ Branch 1: path-containment catch refuses escaping path (6.5907ms)\n  ✔ Branch 2: interrupted-undo recovery succeeds when status is undoing and file equals before (29.5084ms)\n  ✔ Branch 3: textContent refusal when file changed after visual edit (21.9992ms)\n  ✔ Branch 4",
+    "isSafetyRelevant": true,
+    "patchFile": "docs/phase2c1d-evidence/mutants/M4.patch"
+  },
+  {
+    "id": "M5",
+    "name": "drop the containment check right before the undo write (and the call to assertWriteTargetInsideWorkspace in undoSourceEdit)",
+    "targetFile": "lib/slightnudge/edit-history.ts",
+    "status": "KILLED",
+    "killedBy": "test/undo-m5-parent-junction.test.ts",
+    "reason": "Case 2 apply parent junction refusal message: The target file must be inside the SlightNudge workspace.\nCase 3 file swap refusal message: The file is locked and nothing was changed (EPERM).\n[INFO UNVERIFIED] Windows file symlinks require Developer Mode (SeCreateSymbolicLinkPrivilege).\nTo enable: Settings -> System -> For developers -> Developer Mode: ON.\n[INFO CONFIRMED] Directory junctions verified without admin; file symlinks marked UNVERIFIED as expected.\n▶ Mutant M5 Closeout: Parent Director",
+    "isSafetyRelevant": true,
+    "patchFile": "docs/phase2c1d-evidence/mutants/M5.patch"
+  },
+  {
+    "id": "M6",
+    "name": "skip the post-edit parse check and token-multiset post-condition",
+    "targetFile": "lib/slightnudge/edit-history.ts",
+    "status": "KILLED",
+    "killedBy": "test/token-undo.test.ts",
+    "reason": "node:internal/modules/run_main:107\r\n    triggerUncaughtException(\r\n    ^\r\n\r\nError: Transform failed with 1 error:\r\nC:\\Users\\abhis\\AppData\\Local\\Temp\\mutant-m6-65faffb4-3a03-4012-a0e4-708895fe4ee6\\lib\\slightnudge\\edit-history.ts:966:30: ERROR: Unexpected \")\"\r\n    at failureErrorWithLog (C:\\dev\\vibecheck\\node_modules\\esbuild\\lib\\main.js:1752:15)\r\n    at C:\\dev\\vibecheck\\node_modules\\esbuild\\lib\\main.js:1019:50\r\n    at responseCallbacks.<computed> (C:\\dev\\vibecheck\\node_modules\\esbuild\\lib\\main.js:",
+    "isSafetyRelevant": true,
+    "patchFile": "docs/phase2c1d-evidence/mutants/M6.patch"
+  },
+  {
+    "id": "M7",
+    "name": "undo an older edit while a newer one is stacked",
+    "targetFile": "lib/slightnudge/edit-history.ts",
+    "status": "KILLED",
+    "killedBy": "test/token-undo.test.ts",
+    "reason": "node:internal/modules/run_main:107\r\n    triggerUncaughtException(\r\n    ^\r\n\r\nError: Transform failed with 1 error:\r\nC:\\Users\\abhis\\AppData\\Local\\Temp\\mutant-m7-4526dcad-a169-47fe-9d6a-f3bdfc726d9e\\lib\\slightnudge\\edit-history.ts:720:4: ERROR: Unexpected \"}\"\r\n    at failureErrorWithLog (C:\\dev\\vibecheck\\node_modules\\esbuild\\lib\\main.js:1752:15)\r\n    at C:\\dev\\vibecheck\\node_modules\\esbuild\\lib\\main.js:1019:50\r\n    at responseCallbacks.<computed> (C:\\dev\\vibecheck\\node_modules\\esbuild\\lib\\main.js:8",
+    "isSafetyRelevant": true,
+    "patchFile": "docs/phase2c1d-evidence/mutants/M7.patch"
+  },
+  {
+    "id": "M8",
+    "name": "restore the unguarded argv bypass in lib/slightnudge/auth.ts",
+    "targetFile": "lib/slightnudge/auth.ts",
+    "status": "KILLED",
+    "killedBy": "test/undo-stacked-edits.test.ts",
+    "reason": "Same element refusal message: Cannot undo this edit because a newer edit (\"font-normal → font-bold\") on the same element depends on it. Undo the newer edit first.\nLegacy record refusal message: This file changed after the visual edit: element identity cannot be established. Open fixtures/page4.tsx near line 1 and change the className to remove \"none\" and restore \"none\". Nothing was changed.\nStructural edit refusal message: Cannot undo this edit because a structural edit (\"reorder: move earlier\")",
+    "isSafetyRelevant": true,
+    "patchFile": "docs/phase2c1d-evidence/mutants/M8.patch"
+  },
+  {
+    "id": "M9",
+    "name": "plain === instead of timingSafeEqual (informational)",
+    "targetFile": "lib/slightnudge/auth.ts",
+    "status": "KILLED",
+    "killedBy": "test/undo-stacked-edits.test.ts",
+    "reason": "Same element refusal message: Cannot undo this edit because a newer edit (\"font-normal → font-bold\") on the same element depends on it. Undo the newer edit first.\nLegacy record refusal message: This file changed after the visual edit: element identity cannot be established. Open fixtures/page4.tsx near line 1 and change the className to remove \"none\" and restore \"none\". Nothing was changed.\nStructural edit refusal message: Cannot undo this edit because a structural edit (\"reorder: move earlier\")",
+    "isSafetyRelevant": false,
+    "patchFile": "docs/phase2c1d-evidence/mutants/M9.patch"
+  },
+  {
+    "id": "M10",
+    "name": "accept any non-empty token",
+    "targetFile": "lib/slightnudge/auth.ts",
+    "status": "KILLED",
+    "killedBy": "test/undo-stacked-edits.test.ts",
+    "reason": "Same element refusal message: Cannot undo this edit because a newer edit (\"font-normal → font-bold\") on the same element depends on it. Undo the newer edit first.\nLegacy record refusal message: This file changed after the visual edit: element identity cannot be established. Open fixtures/page4.tsx near line 1 and change the className to remove \"none\" and restore \"none\". Nothing was changed.\nStructural edit refusal message: Cannot undo this edit because a structural edit (\"reorder: move earlier\")",
+    "isSafetyRelevant": true,
+    "patchFile": "docs/phase2c1d-evidence/mutants/M10.patch"
+  },
+  {
+    "id": "M11",
+    "name": "drop the isRequestHostAllowed check in app/layout.tsx",
+    "targetFile": "app/layout.tsx",
+    "status": "KILLED",
+    "killedBy": "test/undo-stacked-edits.test.ts",
+    "reason": "Same element refusal message: Cannot undo this edit because a newer edit (\"font-normal → font-bold\") on the same element depends on it. Undo the newer edit first.\nLegacy record refusal message: This file changed after the visual edit: element identity cannot be established. Open fixtures/page4.tsx near line 1 and change the className to remove \"none\" and restore \"none\". Nothing was changed.\nStructural edit refusal message: Cannot undo this edit because a structural edit (\"reorder: move earlier\")",
+    "isSafetyRelevant": true,
+    "patchFile": "docs/phase2c1d-evidence/mutants/M11.patch"
+  },
+  {
+    "id": "M12",
+    "name": "drop the X-Forwarded-Host/Forwarded check inside isRequestHostAllowed",
+    "targetFile": "lib/slightnudge/auth.ts",
+    "status": "KILLED",
+    "killedBy": "test/undo-stacked-edits.test.ts",
+    "reason": "Same element refusal message: Cannot undo this edit because a newer edit (\"font-normal → font-bold\") on the same element depends on it. Undo the newer edit first.\nLegacy record refusal message: This file changed after the visual edit: element identity cannot be established. Open fixtures/page4.tsx near line 1 and change the className to remove \"none\" and restore \"none\". Nothing was changed.\nStructural edit refusal message: Cannot undo this edit because a structural edit (\"reorder: move earlier\")",
+    "isSafetyRelevant": true,
+    "patchFile": "docs/phase2c1d-evidence/mutants/M12.patch"
+  },
+  {
+    "id": "M13",
+    "name": "drop the pre-write hook guard (make the hook active without SLIGHTNUDGE_TEST)",
+    "targetFile": "lib/slightnudge/edit-history.ts",
+    "status": "KILLED",
+    "killedBy": "test/token-undo.test.ts",
+    "reason": "node:internal/modules/run_main:107\r\n    triggerUncaughtException(\r\n    ^\r\n\r\nError: Transform failed with 1 error:\r\nC:\\Users\\abhis\\AppData\\Local\\Temp\\mutant-m13-3dafc54f-0ce2-4204-ab12-80a3c11d81f5\\lib\\slightnudge\\edit-history.ts:219:0: ERROR: Unexpected \"}\"\r\n    at failureErrorWithLog (C:\\dev\\vibecheck\\node_modules\\esbuild\\lib\\main.js:1752:15)\r\n    at C:\\dev\\vibecheck\\node_modules\\esbuild\\lib\\main.js:1019:50\r\n    at responseCallbacks.<computed> (C:\\dev\\vibecheck\\node_modules\\esbuild\\lib\\main.js:",
+    "isSafetyRelevant": true,
+    "patchFile": "docs/phase2c1d-evidence/mutants/M13.patch"
+  },
+  {
+    "id": "M14",
+    "name": "restore the old sameElement clause (newer.before === record.after)",
+    "targetFile": "lib/slightnudge/edit-history.ts",
+    "status": "KILLED",
+    "killedBy": "test/undo-stacked-edits.test.ts",
+    "reason": "Same element refusal message: Cannot undo this edit because a newer edit (\"font-normal → font-bold\") on the same element depends on it. Undo the newer edit first.\nLegacy record refusal message: This file changed after the visual edit: element identity cannot be established. Open fixtures/page4.tsx near line 1 and change the className to remove \"none\" and restore \"none\". Nothing was changed.\nStructural edit refusal message: Cannot undo this edit because a structural edit (\"reorder: move earlier\")",
+    "isSafetyRelevant": true,
+    "patchFile": "docs/phase2c1d-evidence/mutants/M14.patch"
+  },
+  {
+    "id": "M15",
+    "name": "drop the identity check so a same-element newer edit no longer blocks undo of older edit",
+    "targetFile": "lib/slightnudge/edit-history.ts",
+    "status": "KILLED",
+    "killedBy": "test/undo-stacked-edits.test.ts",
+    "reason": "Same element refusal message: Cannot undo this edit because a newer edit on the same line depends on it. Undo the newer edit first.\nLegacy record refusal message: This file changed after the visual edit: element identity cannot be established. Open fixtures/page4.tsx near line 1 and change the className to remove \"none\" and restore \"none\". Nothing was changed.\nStructural edit refusal message: Cannot undo this edit because a structural edit (\"reorder: move earlier\") was applied to this file. Undo",
+    "isSafetyRelevant": true,
+    "patchFile": "docs/phase2c1d-evidence/mutants/M15.patch"
+  },
+  {
+    "id": "M16",
+    "name": "treat unknown identity as \"different element\"",
+    "targetFile": "lib/slightnudge/edit-history.ts",
+    "status": "KILLED",
+    "killedBy": "test/undo-stacked-edits.test.ts",
+    "reason": "Same element refusal message: Cannot undo this edit because a newer edit (\"font-normal → font-bold\") on the same element depends on it. Undo the newer edit first.\nLegacy record refusal message: This file changed after the visual edit. Nothing was overwritten; review the source before undoing.\nStructural edit refusal message: Cannot undo this edit because a structural edit (\"reorder: move earlier\") was applied to this file. Undo the structural edit first.\nSame-line refusal message: Cannot undo th",
+    "isSafetyRelevant": true,
+    "patchFile": "docs/phase2c1d-evidence/mutants/M16.patch"
+  },
+  {
+    "id": "M17",
+    "name": "drop the structural-edit blocking rule",
+    "targetFile": "lib/slightnudge/edit-history.ts",
+    "status": "KILLED",
+    "killedBy": "test/undo-stacked-edits.test.ts",
+    "reason": "Same element refusal message: Cannot undo this edit because a newer edit (\"font-normal → font-bold\") on the same element depends on it. Undo the newer edit first.\nLegacy record refusal message: This file changed after the visual edit: element identity cannot be established. Open fixtures/page4.tsx near line 1 and change the className to remove \"none\" and restore \"none\". Nothing was changed.\nStructural edit refusal message: Cannot undo this edit because a newer edit on the same line depends on it",
+    "isSafetyRelevant": true,
+    "patchFile": "docs/phase2c1d-evidence/mutants/M17.patch"
+  }
+]

@@ -1,0 +1,56 @@
+Isolated application diagnostics ▲ Next.js 16.4.3 (webpack)
+- Local:         http://127.0.0.1:60019
+- Network:       http://127.0.0.1:60019
+✓ Ready in 796ms
+✓ Running next.config.mjs took 37ms
+
+○ Compiling /fixtures/1/page ...
+ GET /fixtures/1 200 in 1560ms (next.js: 785ms, application-code: 775ms)
+○ Compiling /studio/[repoId]/page ...
+ GET /studio/compatible 200 in 1214ms (next.js: 792ms, application-code: 422ms)
+○ Compiling proxy ...
+⚠ ./lib/slightnudge/project-compatibility.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/project-compatibility.ts
+./app/api/slightnudge/repositories/[id]/route.ts
+
+./lib/slightnudge/project-compatibility.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/project-compatibility.ts
+./app/api/slightnudge/repositories/[id]/route.ts
+○ Compiling /api/slightnudge/repositories/[id]/route ...
+ GET /api/slightnudge/repositories/compatible 200 in 4.4s (next.js: 3.9s, proxy.ts: 196ms, application-code: 268ms)
+ GET /api/slightnudge/repositories/compatible 200 in 4.4s (next.js: 3.9s, proxy.ts: 196ms, application-code: 271ms)
+[browser] Uncaught Error: Failed prop type: The prop `href` expects a `string` or `object` in `<Link>`, but got `undefined` instead.
+Open your browser's console to view the Component stack trace.
+    at ImportedRepositoryPage (app\studio\[repoId]\page.tsx:646:136)
+  644 | ...r && <p data-source-file="app/studio/[repoId]/page.tsx" data-source-line="644" data-source-column="28" className="sn-form-error" role="alert"><CircleAlert size={15}/>{previewError}</p>}
+  645 | ...
+> 646 | ...ce-file="app/studio/[repoId]/page.tsx" data-source-line="646" data-source-column="9" className="sn-repo-actions"><Link className="sn-button sn-button-secondary" href={project.repository.url} target="_blank" rel="noreferrer">Op...
+      |                                                                                                                     ^
+  647 | ... <section data-source-file="app/studio/[repoId]/page.tsx" data-source-line="647" data-source-column="24" className="sn-live-preview" aria-label="Connected local preview">
+  648 | ...urce-file="app/studio/[repoId]/page.tsx" data-source-line="648" data-source-column="11" className="sn-live-preview-head"><div data-source-file="app/studio/[repoId]/page.tsx" data-source-line="648" data-source-column="49"><span...
+  649 | ...urce-file="app/studio/[repoId]/page.tsx" data-source-line="649" data-source-column="11" className="sn-live-preview-stage"><iframe data-source-file="app/studio/[repoId]/page.tsx" data-source-line="649" data-source-column="50" r...
+ GET /fixtures/1 200 in 602ms (next.js: 158ms, application-code: 444ms)
+
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+locator.waitFor: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('details').filter({ has: getByText('Editing compatibility', { exact: true }) }).locator('summary') to be visible
+
+    at checkProjectCompatibility (C:\dev\vibecheck\test\helpers\project-compatibility-browser.ts:32:38)
+    at async <anonymous> (C:\dev\vibecheck\test\review-consent.browser.ts:133:14) {
+  log: [
+    "  - waiting for locator('details').filter({ has: getByText('Editing compatibility', { exact: true }) }).locator('summary') to be visible"
+  ],
+  name: 'TimeoutError'
+}
+
+Node.js v22.19.0

@@ -1,0 +1,27 @@
+====================================================
+🧪 M0 REGRESSION SUITE: 30 SELECTIONS PLAYWRIGHT TEST
+====================================================
+
+
+page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3001/
+Call log:
+[2m  - navigating to "http://127.0.0.1:3001/", waiting until "domcontentloaded"[22m
+
+    at runM0RegressionSuite (C:\dev\vibecheck\test\m0-regression.test.ts:240:14) {
+  log: [
+    '  - navigating to "http://127.0.0.1:3001/", waiting until "domcontentloaded"'
+  ],
+  name: 'Error'
+}
+
+Command failed: npx tsx test/m0-regression.test.ts
+page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3001/
+Call log:
+[2m  - navigating to "http://127.0.0.1:3001/", waiting until "domcontentloaded"[22m
+
+    at runM0RegressionSuite (C:\dev\vibecheck\test\m0-regression.test.ts:240:14) {
+  log: [
+    '  - navigating to "http://127.0.0.1:3001/", waiting until "domcontentloaded"'
+  ],
+  name: 'Error'
+}

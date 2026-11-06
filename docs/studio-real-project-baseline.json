@@ -1,0 +1,70 @@
+{
+  "date": "2026-10-23T18:24:57.116Z",
+  "policy": "30 distinct visible elements sampled uniformly in document order on the landing page; identical policy for every rendered project. Operation: inspect then dry-run font weight. No source writes.",
+  "results": [
+    {
+      "url": "https://github.com/ShadcnDeck/chatdeck-shadcn-saas-landing-page-template",
+      "next": "unavailable",
+      "tailwind": "unavailable",
+      "lockfiles": [
+        "pnpm-lock.yaml"
+      ],
+      "adapter": "not run",
+      "vite": "unsupported",
+      "selections": [],
+      "commit": "405e18a824499333079f0c2c873215acd37e1523",
+      "license": [],
+      "routes": [
+        "app"
+      ],
+      "nextDeclared": "^16.0.3",
+      "tailwindDeclared": "^4",
+      "error": "Required LICENSE, Next routes or Tailwind is missing."
+    },
+    {
+      "url": "https://github.com/bennyjoel/nextjs-saas-starter-lite",
+      "next": "14.2.35",
+      "tailwind": "3.4.19",
+      "lockfiles": [],
+      "adapter": "installed; landing failed to render without environment files",
+      "vite": "unsupported",
+      "selections": [],
+      "commit": "dff9c1f93c3d3b29d5a57a5741d9c90da5269cb5",
+      "license": [
+        "LICENSE"
+      ],
+      "routes": [
+        "src/app"
+      ],
+      "nextDeclared": "^14.2.5",
+      "tailwindDeclared": "^3.4.6",
+      "installExit": 0,
+      "runtimeLog": "(node:3744) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///C:/Users/abhis/AppData/Local/Temp/sn-real-projects-xLBUMA/.slightnudge/repositories/project-2/next.config.js is not specified and it doesn't parse as CommonJS.\nReparsing as ES module because module syntax was detected. This incurs a performance overhead.\nTo eliminate this warning, add \"type\": \"module\" to C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-real-projects-xLBUMA\\.slightnudge\\repositories\\project-2\\package.json.\n(Use `node --trace-warnings ...` to show where the warning was created)\n  ▲ Next.js 14.2.35\n  - Local:        http://127.0.0.1:56080\n  - Network:      http://127.0.0.1:56080\n\n ✓ Starting...\n(node:16592) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///C:/Users/abhis/AppData/Local/Temp/sn-real-projects-xLBUMA/.slightnudge/repositories/project-2/next.config.js is not specified and it doesn't parse as CommonJS.\nReparsing as ES module because module syntax was detected. This incurs a performance overhead.\nTo eliminate this warning, add \"type\": \"module\" to C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-real-projects-xLBUMA\\.slightnudge\\repositories\\project-2\\package.json.\n(Use `node --trace-warnings ...` to show where the warning was created)\nRangeError: Maximum call stack size exceeded\n    at config.webpack (file:///C:/Users/abhis/AppData/Local/Temp/sn-real-projects-xLBUMA/.slightnudge/repositories/project-2/next.config.js:12:20)\n    at config.webpack (file:///C:/Users/abhis/AppData/Local/Temp/sn-real-projects-xLBUMA/.slightnudge/repositories/project-2/next.config.js:41:40)\n    at config.webpack (file:///C:/Users/abhis/AppData/Local/Temp/sn-real-projects-xLBUMA/.slightnudge/repositories/project-2/next.config.js:41:40)\n    at config.webpack (file:///C:/Users/abhis/AppData/Local/Temp/sn-real-projects-xLBUMA/.slightnudge/repositories/project-2/next.config.js:41:40)\n    at config.webpack (file:///C:/Users/abhis/AppData/Local/Temp/sn-real-projects-xLBUMA/.slightnudge/repositories/project-2/next.config.js:41:40)\n    at config.webpack (file:///C:/Users/abhis/AppData/Local/Temp/sn-real-projects-xLBUMA/.slightnudge/repositories/project-2/next.config.js:41:40)\n    at config.webpack (file:///C:/Users/abhis/AppData/Local/Temp/sn-real-projects-xLBUMA/.slightnudge/repositories/project-2/next.config.js:41:40)\n    at config.webpack (file:///C:/Users/abhis/AppData/Local/Temp/sn-real-projects-xLBUMA/.slightnudge/repositories/project-2/next.config.js:41:40)\n    at config.webpack (file:///C:/Users/abhis/AppData/Local/Temp/sn-real-projects-xLBUMA/.slightnudge/repositories/project-2/next.config.js:41:40)\n    at config.webpack (file:///C:/Users/abhis/AppData/Local/Temp/sn-real-projects-xLBUMA/.slightnudge/repositories/project-2/next.config.js:41:40)\n\u001b[?25h\n",
+      "error": "Landing page did not render without secret/environment values; skipped."
+    },
+    {
+      "url": "https://github.com/EdgeOneDev/saas-starter",
+      "next": "14.0.4",
+      "tailwind": "3.4.17",
+      "lockfiles": [
+        "package-lock.json"
+      ],
+      "adapter": "installed; landing failed to render without environment files",
+      "vite": "unsupported",
+      "selections": [],
+      "commit": "33781d2aedcfc5518498668ce703bc45f7bed9f3",
+      "license": [
+        "LICENSE"
+      ],
+      "routes": [
+        "src/app"
+      ],
+      "nextDeclared": "14.0.4",
+      "tailwindDeclared": "^3.3.0",
+      "installExit": 0,
+      "runtimeLog": "(node:18036) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///C:/Users/abhis/AppData/Local/Temp/sn-real-projects-xLBUMA/.slightnudge/repositories/project-3/next.config.js is not specified and it doesn't parse as CommonJS.\nReparsing as ES module because module syntax was detected. This incurs a performance overhead.\nTo eliminate this warning, add \"type\": \"module\" to C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-real-projects-xLBUMA\\.slightnudge\\repositories\\project-3\\package.json.\n(Use `node --trace-warnings ...` to show where the warning was created)\n   ▲ Next.js 14.0.4\n   - Local:        http://127.0.0.1:51531\n   - Network:      http://127.0.0.1:51531\n\n(node:41044) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///C:/Users/abhis/AppData/Local/Temp/sn-real-projects-xLBUMA/.slightnudge/repositories/project-3/next.config.js is not specified and it doesn't parse as CommonJS.\nReparsing as ES module because module syntax was detected. This incurs a performance overhead.\nTo eliminate this warning, add \"type\": \"module\" to C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-real-projects-xLBUMA\\.slightnudge\\repositories\\project-3\\package.json.\n(Use `node --trace-warnings ...` to show where the warning was created)\nRangeError: Maximum call stack size exceeded\n    at config.webpack (file:///C:/Users/abhis/AppData/Local/Temp/sn-real-projects-xLBUMA/.slightnudge/repositories/project-3/next.config.js:12:20)\n    at config.webpack (file:///C:/Users/abhis/AppData/Local/Temp/sn-real-projects-xLBUMA/.slightnudge/repositories/project-3/next.config.js:41:40)\n    at config.webpack (file:///C:/Users/abhis/AppData/Local/Temp/sn-real-projects-xLBUMA/.slightnudge/repositories/project-3/next.config.js:41:40)\n    at config.webpack (file:///C:/Users/abhis/AppData/Local/Temp/sn-real-projects-xLBUMA/.slightnudge/repositories/project-3/next.config.js:41:40)\n    at config.webpack (file:///C:/Users/abhis/AppData/Local/Temp/sn-real-projects-xLBUMA/.slightnudge/repositories/project-3/next.config.js:41:40)\n    at config.webpack (file:///C:/Users/abhis/AppData/Local/Temp/sn-real-projects-xLBUMA/.slightnudge/repositories/project-3/next.config.js:41:40)\n    at config.webpack (file:///C:/Users/abhis/AppData/Local/Temp/sn-real-projects-xLBUMA/.slightnudge/repositories/project-3/next.config.js:41:40)\n    at config.webpack (file:///C:/Users/abhis/AppData/Local/Temp/sn-real-projects-xLBUMA/.slightnudge/repositories/project-3/next.config.js:41:40)\n    at config.webpack (file:///C:/Users/abhis/AppData/Local/Temp/sn-real-projects-xLBUMA/.slightnudge/repositories/project-3/next.config.js:41:40)\n    at config.webpack (file:///C:/Users/abhis/AppData/Local/Temp/sn-real-projects-xLBUMA/.slightnudge/repositories/project-3/next.config.js:41:40)\n\u001b[?25h\n",
+      "error": "Landing page did not render without secret/environment values; skipped."
+    }
+  ],
+  "cleanup": []
+}

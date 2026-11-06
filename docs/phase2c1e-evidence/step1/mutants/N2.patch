@@ -1,0 +1,19 @@
+diff --git a/lib/slightnudge/edit-history.ts b/lib/slightnudge/edit-history.ts
+index b0267e5..f87ae64 100644
+--- a/lib/slightnudge/edit-history.ts
++++ b/lib/slightnudge/edit-history.ts
+@@ -754,13 +754,7 @@ export function undoSourceEdit(target?: string | { filePath?: string; editId?: s
+         };
+       }
+ 
+-      // Rule 4: Edits sharing a line (same-line siblings) block undo
+-      if (recordIdentity.line && newerIdentity.line && recordIdentity.line === newerIdentity.line) {
+-        return {
+-          success: false as const,
+-          error: `Cannot undo this edit because a newer edit on the same line depends on it. Undo the newer edit first.`,
+-        };
+-      }
++      /* N2: ignore same-line rule */
+     }
+   }
+ 

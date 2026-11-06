@@ -1,0 +1,49 @@
+PASS four HTTP redirects: project path and repeated/empty/encoded query values preserved
+ROUND 1 VIEW fit
+Disposable source project: generated SaaS; Next.js 16.4.3; Tailwind 4.3.3; installed source adapter; no environment files checked out.
+WORKFLOW NAVIGATION /editor/source-proof?preview=http%3A%2F%2F127.0.0.1%3A58596%2F&view=fit&panel=inspector
+PASS shared instances imported Studio: identical callers, text/inline, destination, enabled state, variant, refresh, Save, exact Undo
+WORKFLOW NAVIGATION /editor/source-proof?preview=http%3A%2F%2F127.0.0.1%3A58596%2F&view=fit
+PASS shared instances imported window: identical callers, text/inline, destination, enabled state, variant, refresh, Save, exact Undo
+PASS migration imported fit: real legacy edit, refresh, same draft ID in canonical route, continue, project/file history, persisted Save history, exact Undo, selection geometry <=1px, scale 0.752
+COMPLETED 2/8 existing shared-instance workflows on canonical route; old workflow assertions and limits unchanged. Failures and unreached cases remain failures.
+warning: in the working copy of 'app/admin/page.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/api/admin/metrics/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/api/checkout/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/api/checkout/simulate/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/api/runs/[id]/report.pdf/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/api/runs/[id]/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/api/runs/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/api/sites/[id]/verify/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/api/sites/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/api/slightnudge/inspect/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/api/slightnudge/preview/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/api/slightnudge/repositories/[id]/inspect/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/api/slightnudge/repositories/[id]/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/design/page.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/how-it-works/page.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/page.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/pricing/page.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/runs/[id]/page.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/studio/page.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'components/Header.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'components/MarketingFooter.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'lib/db/client.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'lib/db/types.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'lib/llm/generator.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'lib/payments/dodo.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'lib/pipeline/runner.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'lib/pipeline/stage-c-planning.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'lib/pipeline/stage-d-execution.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'lib/pipeline/stage-e-analysis.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'lib/pipeline/types.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'lib/security/ownership.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'lib/security/ssrf.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'lib/slightnudge/ast-nudger.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'lib/slightnudge/client.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'lib/slightnudge/edit-history.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'lib/slightnudge/next-source-loader.cjs', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'package.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'worker/index.ts', LF will be replaced by CRLF the next time Git touches it
+RAW GIT STATUS: docs/unified-editor-evidence/round-1-git-status.txt
+Disposable workspace retained: C:\Users\abhis\AppData\Local\Temp\sn-review-consent-F0yCac

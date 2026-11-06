@@ -1,0 +1,26 @@
+====================================================
+🧪 SLIGHTNUDGE ADAPTER & ASSET REGEX TESTS
+====================================================
+
+✅ [PASS] next-source-loader.cjs starts with /* eslint-disable */
+✅ [PASS] bridgeClient script is generated as a string
+✅ [PASS] bridgeClient does NOT contain malformed /^/slightnudge-assets/ regex
+✅ [PASS] Found asset-path regex pattern in bridgeClient script
+✅ [PASS] Regex matches valid PNG asset path
+✅ [PASS] Regex matches valid JPG asset path
+✅ [PASS] Regex matches valid JPEG asset path
+✅ [PASS] Regex matches valid WEBP asset path
+✅ [PASS] Regex matches valid GIF asset path
+✅ [PASS] Regex is case-insensitive for UUID and extension
+✅ [PASS] Regex rejects unsupported SVG extension
+✅ [PASS] Regex rejects executable extension
+✅ [PASS] Regex rejects invalid UUID
+✅ [PASS] Regex rejects non-slightnudge path
+✅ [PASS] Regex rejects absolute URL
+✅ [PASS] Regex rejects path with trailing segment
+✅ [PASS] bridgeClient script parses cleanly as valid JavaScript in Function()
+
+====================================================
+🎉 ALL ADAPTER TESTS PASSED!
+====================================================
+

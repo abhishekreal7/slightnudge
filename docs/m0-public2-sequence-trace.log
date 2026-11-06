@@ -1,0 +1,682 @@
+Disposable source project: https://github.com/bennyjoel/nextjs-saas-starter-lite; Next.js 14.2.35; Tailwind 3.4.19; installed source adapter; no environment files checked out.
+Source navigation: editor /studio/source-proof/edit
+Source lifecycle: editor document initialized
+Source navigation: editor /studio/source-proof/edit
+Source navigation: editor /studio/source-proof/edit
+Source navigation: project /
+Source navigation: project /
+Source stage: select src/app/page.tsx:5:5
+Selection 1/30: refused — src/app/page.tsx:5:5
+Source stage: select src/app/page.tsx:8:9
+Source API: {"api":"/api/slightnudge/preview","status":200,"success":true}
+Source proof: {"success":true,"reason":""}
+Source stage: apply src/app/page.tsx:8:9
+Source proof: {"success":true,"reason":"The page changed after preview. Reload and select again."}
+Source API: {"api":"/api/slightnudge/apply","status":200,"success":true}
+Source stage: apply accepted src/app/page.tsx:8:9
+Source navigation: project /
+Source navigation: project /
+Source proof: {"file":"src/app/page.tsx","line":8,"column":9,"expectedClass":"max-w-6xl mx-auto px-6 h-16 flex items-center justify-between font-bold","classes":["max-w-6xl mx-auto px-6 h-16 flex items-center justify-between"]}
+Source proof: {"success":false,"reason":"The project is still rendering an older source revision."}
+Source navigation: editor /studio/source-proof/edit
+Source navigation: editor /studio/source-proof/edit
+Source navigation: project /
+Source navigation: project /
+Source proof: {"file":"src/app/page.tsx","line":8,"column":9,"expectedClass":"max-w-6xl mx-auto px-6 h-16 flex items-center justify-between font-bold","classes":["max-w-6xl mx-auto px-6 h-16 flex items-center justify-between font-bold"]}
+Source proof: {"success":true,"reason":"The project is still rendering an older source revision."}
+Source notice: Applied change to .slightnudge\repositories\source-proof\src\app\page.tsx
+Source stage: undo src/app/page.tsx:8:9
+Source API: {"api":"/api/slightnudge/undo","status":200,"success":true}
+Source stage: undo accepted src/app/page.tsx:8:9
+Source navigation: project /
+Source navigation: project /
+Source proof: {"file":"src/app/page.tsx","line":8,"column":9,"expectedClass":"max-w-6xl mx-auto px-6 h-16 flex items-center justify-between","classes":["max-w-6xl mx-auto px-6 h-16 flex items-center justify-between font-bold"]}
+Source proof: {"success":false,"reason":"The project is still rendering an older source revision."}
+Source navigation: editor /studio/source-proof/edit
+Source navigation: project /
+Source navigation: project /
+Source proof: {"file":"src/app/page.tsx","line":8,"column":9,"expectedClass":"max-w-6xl mx-auto px-6 h-16 flex items-center justify-between","classes":["max-w-6xl mx-auto px-6 h-16 flex items-center justify-between"]}
+Source proof: {"success":true,"reason":"The project is still rendering an older source revision."}
+Source notice: Undid none → font-bold.
+Selection 2/30: allowed — src/app/page.tsx:8:9
+Source stage: select src/app/page.tsx:9:11
+Source API: {"api":"/api/slightnudge/preview","status":200,"success":true}
+Source proof: {"success":true,"reason":""}
+Source stage: apply src/app/page.tsx:9:11
+Source proof: {"success":true,"reason":"The page changed after preview. Reload and select again."}
+Source API: {"api":"/api/slightnudge/apply","status":200,"success":true}
+Source stage: apply accepted src/app/page.tsx:9:11
+Source navigation: project /
+Source navigation: project /
+Source proof: {"file":"src/app/page.tsx","line":9,"column":11,"expectedClass":"flex items-center gap-2 font-normal text-lg text-white","classes":["flex items-center gap-2 font-bold text-lg text-white"]}
+Source proof: {"success":false,"reason":"The project is still rendering an older source revision."}
+Source navigation: project /
+Source navigation: project /
+Source navigation: editor /studio/source-proof/edit
+Source proof: {"file":"src/app/page.tsx","line":9,"column":11,"expectedClass":"flex items-center gap-2 font-normal text-lg text-white","classes":["flex items-center gap-2 font-normal text-lg text-white"]}
+Source proof: {"success":true,"reason":"The project is still rendering an older source revision."}
+Source notice: Applied change to .slightnudge\repositories\source-proof\src\app\page.tsx
+Source stage: undo src/app/page.tsx:9:11
+Source navigation: editor /studio/source-proof/edit
+Source navigation: editor /studio/source-proof/edit
+Source API: {"api":"/api/slightnudge/undo","status":200,"success":true}
+Source stage: undo accepted src/app/page.tsx:9:11
+Source navigation: project /
+Source navigation: project /
+Source navigation: editor /studio/source-proof/edit
+Source proof: {"file":"src/app/page.tsx","line":9,"column":11,"expectedClass":"flex items-center gap-2 font-bold text-lg text-white","classes":["flex items-center gap-2 font-normal text-lg text-white"]}
+Source proof: {"success":false,"reason":"The project is still rendering an older source revision."}
+Source navigation: project /
+Source navigation: project /
+Source proof: {"file":"src/app/page.tsx","line":9,"column":11,"expectedClass":"flex items-center gap-2 font-bold text-lg text-white","classes":["flex items-center gap-2 font-bold text-lg text-white"]}
+Source proof: {"success":true,"reason":"The project is still rendering an older source revision."}
+Source notice: Undid font-bold → font-normal.
+Selection 3/30: allowed — src/app/page.tsx:9:11
+Source stage: select src/app/page.tsx:10:13
+Source proof: {"success":true,"reason":""}
+Source API: {"api":"/api/slightnudge/preview","status":200,"success":true}
+Source stage: apply src/app/page.tsx:10:13
+Source proof: {"success":true,"reason":"The page changed after preview. Reload and select again."}
+Source API: {"api":"/api/slightnudge/apply","status":200,"success":true}
+Source stage: apply accepted src/app/page.tsx:10:13
+Source navigation: project /
+Source navigation: editor /studio/source-proof/edit
+Source navigation: project /
+Source proof: {"file":"src/app/page.tsx","line":10,"column":13,"expectedClass":"text-blue-500 text-xl font-normal","classes":["text-blue-500 text-xl font-normal"]}
+Source proof: {"success":true,"reason":"The project is still rendering an older source revision."}
+Source notice: Applied change to .slightnudge\repositories\source-proof\src\app\page.tsx
+Source stage: undo src/app/page.tsx:10:13
+Source navigation: editor /studio/source-proof/edit
+Source API: {"api":"/api/slightnudge/undo","status":200,"success":true}
+Source stage: undo accepted src/app/page.tsx:10:13
+Source navigation: project /
+Source navigation: project /
+Source navigation: editor /studio/source-proof/edit
+Source proof: {"file":"src/app/page.tsx","line":10,"column":13,"expectedClass":"text-blue-500 text-xl","classes":["text-blue-500 text-xl font-normal"]}
+Source proof: {"success":false,"reason":"The project is still rendering an older source revision."}
+Source navigation: project /
+Source navigation: project /
+Source proof: {"file":"src/app/page.tsx","line":10,"column":13,"expectedClass":"text-blue-500 text-xl","classes":["text-blue-500 text-xl"]}
+Source proof: {"success":true,"reason":"The project is still rendering an older source revision."}
+Source notice: Undid none → font-normal.
+Selection 4/30: allowed — src/app/page.tsx:10:13
+Source stage: select src/app/page.tsx:10:71
+Source proof: {"success":true,"reason":""}
+Source API: {"api":"/api/slightnudge/preview","status":200,"success":true}
+Source stage: apply src/app/page.tsx:10:71
+Source proof: {"success":true,"reason":"The page changed after preview. Reload and select again."}
+Source API: {"api":"/api/slightnudge/apply","status":200,"success":true}
+Source stage: apply accepted src/app/page.tsx:10:71
+Source navigation: project /
+Source navigation: editor /studio/source-proof/edit
+Source navigation: project /
+Source proof: {"file":"src/app/page.tsx","line":10,"column":71,"expectedClass":"text-xs bg-blue-950 text-blue-400 px-2 py-0.5 rounded border border-blue-800 font-normal","classes":["text-xs bg-blue-950 text-blue-400 px-2 py-0.5 rounded border border-blue-800 font-normal"]}
+Source proof: {"success":true,"reason":"The project is still rendering an older source revision."}
+Source notice: Applied change to .slightnudge\repositories\source-proof\src\app\page.tsx
+Source stage: undo src/app/page.tsx:10:71
+Source navigation: editor /studio/source-proof/edit
+Source API: {"api":"/api/slightnudge/undo","status":200,"success":true}
+Source stage: undo accepted src/app/page.tsx:10:71
+Source navigation: project /
+Source navigation: project /
+Source proof: {"file":"src/app/page.tsx","line":10,"column":71,"expectedClass":"text-xs bg-blue-950 text-blue-400 px-2 py-0.5 rounded border border-blue-800","classes":["text-xs bg-blue-950 text-blue-400 px-2 py-0.5 rounded border border-blue-800 font-normal"]}
+Source proof: {"success":false,"reason":"The project is still rendering an older source revision."}
+Source navigation: editor /studio/source-proof/edit
+Source navigation: project /
+Source navigation: project /
+Source proof: {"file":"src/app/page.tsx","line":10,"column":71,"expectedClass":"text-xs bg-blue-950 text-blue-400 px-2 py-0.5 rounded border border-blue-800","classes":["text-xs bg-blue-950 text-blue-400 px-2 py-0.5 rounded border border-blue-800"]}
+Source proof: {"success":true,"reason":"The project is still rendering an older source revision."}
+Source notice: Undid none → font-normal.
+Selection 5/30: allowed — src/app/page.tsx:10:71
+Source stage: select src/app/page.tsx:12:11
+Source API: {"api":"/api/slightnudge/preview","status":200,"success":true}
+Source proof: {"success":true,"reason":""}
+Source stage: apply src/app/page.tsx:12:11
+Source proof: {"success":true,"reason":"The page changed after preview. Reload and select again."}
+Source API: {"api":"/api/slightnudge/apply","status":200,"success":true}
+Source stage: apply accepted src/app/page.tsx:12:11
+Source navigation: project /
+Source navigation: project /
+Source proof: {"file":"src/app/page.tsx","line":12,"column":11,"expectedClass":"flex items-center gap-4 font-bold","classes":["flex items-center gap-4"]}
+Source proof: {"success":false,"reason":"The project is still rendering an older source revision."}
+Source navigation: editor /studio/source-proof/edit
+Source navigation: project /
+Source navigation: project /
+Source proof: {"file":"src/app/page.tsx","line":12,"column":11,"expectedClass":"flex items-center gap-4 font-bold","classes":["flex items-center gap-4 font-bold"]}
+Source proof: {"success":true,"reason":"The project is still rendering an older source revision."}
+Source notice: Applied change to .slightnudge\repositories\source-proof\src\app\page.tsx
+Source stage: undo src/app/page.tsx:12:11
+Source API: {"api":"/api/slightnudge/undo","status":200,"success":true}
+Source stage: undo accepted src/app/page.tsx:12:11
+Source navigation: project /
+Source navigation: editor /studio/source-proof/edit
+Source navigation: project /
+Source proof: {"file":"src/app/page.tsx","line":12,"column":11,"expectedClass":"flex items-center gap-4","classes":["flex items-center gap-4"]}
+Source proof: {"success":true,"reason":"The project is still rendering an older source revision."}
+Source notice: Undid none → font-bold.
+Selection 6/30: allowed — src/app/page.tsx:12:11
+Source stage: select src/app/page.tsx:13:13
+Source proof: {"success":true,"reason":""}
+Source API: {"api":"/api/slightnudge/preview","status":200,"success":true}
+Source stage: apply src/app/page.tsx:13:13
+Source proof: {"success":true,"reason":"The page changed after preview. Reload and select again."}
+Source API: {"api":"/api/slightnudge/apply","status":200,"success":true}
+Source stage: apply accepted src/app/page.tsx:13:13
+Source navigation: project /
+Source navigation: editor /studio/source-proof/edit
+Source navigation: project /
+Source proof: {"file":"src/app/page.tsx","line":13,"column":13,"expectedClass":"text-sm text-gray-400 hover:text-white transition-colors font-bold","classes":["text-sm text-gray-400 hover:text-white transition-colors font-bold"]}
+Source proof: {"success":true,"reason":"The project is still rendering an older source revision."}
+Source notice: Applied change to .slightnudge\repositories\source-proof\src\app\page.tsx
+Source stage: undo src/app/page.tsx:13:13
+Source navigation: editor /studio/source-proof/edit
+Source API: {"api":"/api/slightnudge/undo","status":200,"success":true}
+Source stage: undo accepted src/app/page.tsx:13:13
+Source navigation: project /
+Source navigation: editor /studio/source-proof/edit
+Source navigation: project /
+Source proof: {"file":"src/app/page.tsx","line":13,"column":13,"expectedClass":"text-sm text-gray-400 hover:text-white transition-colors","classes":["text-sm text-gray-400 hover:text-white transition-colors"]}
+Source proof: {"success":true,"reason":"The project is still rendering an older source revision."}
+Source notice: Undid none → font-bold.
+Selection 7/30: allowed — src/app/page.tsx:13:13
+Source stage: select src/app/page.tsx:21:13
+Source API: {"api":"/api/slightnudge/preview","status":200,"success":true}
+Source proof: {"success":false,"reason":"The project styling overrides this change, or its utility is unavailable. Nothing was changed."}
+Source notice: ⚠️ The project styling overrides this change, or its utility is unavailable. Nothing was changed.
+Selection 8/30: refused — src/app/page.tsx:21:13
+Source stage: select src/app/page.tsx:35:9
+Source API: {"api":"/api/slightnudge/preview","status":200,"success":true}
+Source navigation: project /
+Source navigation: project /
+Source navigation: editor /studio/source-proof/edit
+Source navigation: editor /studio/source-proof/edit
+Source API: {"api":"/api/slightnudge/preview","status":200,"success":true}
+Source proof: {"success":true,"reason":""}
+Source stage: apply src/app/page.tsx:35:9
+Source proof: {"success":true,"reason":"The page changed after preview. Reload and select again."}
+Source API: {"api":"/api/slightnudge/apply","status":200,"success":true}
+Source stage: apply accepted src/app/page.tsx:35:9
+Source navigation: project /
+Source navigation: editor /studio/source-proof/edit
+Source navigation: project /
+Source proof: {"file":"src/app/page.tsx","line":35,"column":9,"expectedClass":"text-center max-w-3xl mx-auto font-bold","classes":["text-center max-w-3xl mx-auto font-bold"]}
+Source proof: {"success":true,"reason":"The project is still rendering an older source revision."}
+Source notice: Applied change to .slightnudge\repositories\source-proof\src\app\page.tsx
+Source stage: undo src/app/page.tsx:35:9
+Source navigation: editor /studio/source-proof/edit
+Source API: {"api":"/api/slightnudge/undo","status":200,"success":true}
+Source stage: undo accepted src/app/page.tsx:35:9
+Source navigation: project /
+Source navigation: project /
+Source navigation: editor /studio/source-proof/edit
+Source proof: {"file":"src/app/page.tsx","line":35,"column":9,"expectedClass":"text-center max-w-3xl mx-auto","classes":["text-center max-w-3xl mx-auto"]}
+Source proof: {"success":true,"reason":"The project is still rendering an older source revision."}
+Source notice: Undid none → font-bold.
+Selection 9/30: allowed — src/app/page.tsx:35:9
+Source stage: select src/app/page.tsx:36:11
+Source API: {"api":"/api/slightnudge/preview","status":200,"success":true}
+Source proof: {"success":true,"reason":""}
+Source stage: apply src/app/page.tsx:36:11
+Source proof: {"success":true,"reason":"The page changed after preview. Reload and select again."}
+Source API: {"api":"/api/slightnudge/apply","status":200,"success":true}
+Source stage: apply accepted src/app/page.tsx:36:11
+Source navigation: project /
+Source navigation: editor /studio/source-proof/edit
+Source navigation: project /
+Source proof: {"file":"src/app/page.tsx","line":36,"column":11,"expectedClass":"inline-flex items-center gap-2 bg-blue-950/80 border border-blue-800 text-blue-300 text-xs px-3 py-1.5 rounded-full mb-8 font-bold","classes":["inline-flex items-center gap-2 bg-blue-950/80 border border-blue-800 text-blue-300 text-xs px-3 py-1.5 rounded-full mb-8 font-bold"]}
+Source proof: {"success":true,"reason":"The project is still rendering an older source revision."}
+Source notice: Applied change to .slightnudge\repositories\source-proof\src\app\page.tsx
+Source stage: undo src/app/page.tsx:36:11
+Source navigation: editor /studio/source-proof/edit
+Source API: {"api":"/api/slightnudge/undo","status":200,"success":true}
+Source stage: undo accepted src/app/page.tsx:36:11
+Source navigation: project /
+Source navigation: editor /studio/source-proof/edit
+Source navigation: project /
+Source proof: {"file":"src/app/page.tsx","line":36,"column":11,"expectedClass":"inline-flex items-center gap-2 bg-blue-950/80 border border-blue-800 text-blue-300 text-xs px-3 py-1.5 rounded-full mb-8 font-medium","classes":["inline-flex items-center gap-2 bg-blue-950/80 border border-blue-800 text-blue-300 text-xs px-3 py-1.5 rounded-full mb-8 font-medium"]}
+Source proof: {"success":true,"reason":"The project is still rendering an older source revision."}
+Source notice: Undid font-medium → font-bold.
+Selection 10/30: allowed — src/app/page.tsx:36:11
+Source stage: select src/app/page.tsx:37:13
+Source notice: can't edit this safely: no className attribute found
+Selection 11/30: refused — src/app/page.tsx:37:13
+Source stage: select src/app/page.tsx:39:11
+Source API: {"api":"/api/slightnudge/preview","status":200,"success":true}
+Source proof: {"success":true,"reason":""}
+Source stage: apply src/app/page.tsx:39:11
+Source proof: {"success":true,"reason":"The page changed after preview. Reload and select again."}
+Source API: {"api":"/api/slightnudge/apply","status":200,"success":true}
+Source stage: apply accepted src/app/page.tsx:39:11
+Source navigation: project /
+Source navigation: editor /studio/source-proof/edit
+Source navigation: project /
+Source proof: {"file":"src/app/page.tsx","line":39,"column":11,"expectedClass":"text-4xl sm:text-6xl font-normal text-white tracking-tight mb-6 leading-tight","classes":["text-4xl sm:text-6xl font-extrabold text-white tracking-tight mb-6 leading-tight"]}
+Source proof: {"success":false,"reason":"The project is still rendering an older source revision."}
+Source navigation: editor /studio/source-proof/edit
+Source navigation: project /
+Source navigation: project /
+Source proof: {"file":"src/app/page.tsx","line":39,"column":11,"expectedClass":"text-4xl sm:text-6xl font-normal text-white tracking-tight mb-6 leading-tight","classes":["text-4xl sm:text-6xl font-normal text-white tracking-tight mb-6 leading-tight"]}
+Source proof: {"success":true,"reason":"The project is still rendering an older source revision."}
+Source notice: Applied change to .slightnudge\repositories\source-proof\src\app\page.tsx
+Source stage: undo src/app/page.tsx:39:11
+Source API: {"api":"/api/slightnudge/undo","status":200,"success":true}
+Source stage: undo accepted src/app/page.tsx:39:11
+Source navigation: project /
+Source navigation: editor /studio/source-proof/edit
+Source navigation: project /
+Source proof: {"file":"src/app/page.tsx","line":39,"column":11,"expectedClass":"text-4xl sm:text-6xl font-extrabold text-white tracking-tight mb-6 leading-tight","classes":["text-4xl sm:text-6xl font-extrabold text-white tracking-tight mb-6 leading-tight"]}
+Source proof: {"success":true,"reason":"The project is still rendering an older source revision."}
+Source notice: Undid font-extrabold → font-normal.
+Selection 12/30: allowed — src/app/page.tsx:39:11
+Source stage: select src/app/page.tsx:41:13
+Source API: {"api":"/api/slightnudge/preview","status":200,"success":true}
+Source proof: {"success":true,"reason":""}
+Source stage: apply src/app/page.tsx:41:13
+Source proof: {"success":true,"reason":"The page changed after preview. Reload and select again."}
+Source API: {"api":"/api/slightnudge/apply","status":200,"success":true}
+Source stage: apply accepted src/app/page.tsx:41:13
+Source navigation: project /
+Source navigation: project /
+Source navigation: editor /studio/source-proof/edit
+Source proof: {"file":"src/app/page.tsx","line":41,"column":13,"expectedClass":"bg-gradient-to-r from-blue-400 to-emerald-400 bg-clip-text text-transparent font-normal","classes":["bg-gradient-to-r from-blue-400 to-emerald-400 bg-clip-text text-transparent"]}
+Source proof: {"success":false,"reason":"The project is still rendering an older source revision."}
+Source navigation: editor /studio/source-proof/edit
+Source navigation: project /
+Source navigation: project /
+Source proof: {"file":"src/app/page.tsx","line":41,"column":13,"expectedClass":"bg-gradient-to-r from-blue-400 to-emerald-400 bg-clip-text text-transparent font-normal","classes":["bg-gradient-to-r from-blue-400 to-emerald-400 bg-clip-text text-transparent font-normal"]}
+Source proof: {"success":true,"reason":"The project is still rendering an older source revision."}
+Source notice: Applied change to .slightnudge\repositories\source-proof\src\app\page.tsx
+Source stage: undo src/app/page.tsx:41:13
+Source API: {"api":"/api/slightnudge/undo","status":200,"success":true}
+Source stage: undo accepted src/app/page.tsx:41:13
+Source navigation: project /
+Source navigation: project /
+Source proof: {"file":"src/app/page.tsx","line":41,"column":13,"expectedClass":"bg-gradient-to-r from-blue-400 to-emerald-400 bg-clip-text text-transparent","classes":["bg-gradient-to-r from-blue-400 to-emerald-400 bg-clip-text text-transparent font-normal"]}
+Source proof: {"success":false,"reason":"The project is still rendering an older source revision."}
+Source navigation: editor /studio/source-proof/edit
+Source navigation: project /
+Source navigation: project /
+Source proof: {"file":"src/app/page.tsx","line":41,"column":13,"expectedClass":"bg-gradient-to-r from-blue-400 to-emerald-400 bg-clip-text text-transparent","classes":["bg-gradient-to-r from-blue-400 to-emerald-400 bg-clip-text text-transparent"]}
+Source proof: {"success":true,"reason":"The project is still rendering an older source revision."}
+Source notice: Undid none → font-normal.
+Selection 13/30: allowed — src/app/page.tsx:41:13
+Source stage: select src/app/page.tsx:45:11
+Source proof: {"success":true,"reason":""}
+Source API: {"api":"/api/slightnudge/preview","status":200,"success":true}
+Source stage: apply src/app/page.tsx:45:11
+Source proof: {"success":true,"reason":"The page changed after preview. Reload and select again."}
+Source API: {"api":"/api/slightnudge/apply","status":200,"success":true}
+Source stage: apply accepted src/app/page.tsx:45:11
+Source navigation: project /
+Source navigation: editor /studio/source-proof/edit
+Source navigation: project /
+Source proof: {"file":"src/app/page.tsx","line":45,"column":11,"expectedClass":"text-lg text-gray-400 mb-10 leading-relaxed font-bold","classes":["text-lg text-gray-400 mb-10 leading-relaxed font-bold"]}
+Source proof: {"success":true,"reason":"The project is still rendering an older source revision."}
+Source notice: Applied change to .slightnudge\repositories\source-proof\src\app\page.tsx
+Source stage: undo src/app/page.tsx:45:11
+Source navigation: editor /studio/source-proof/edit
+Source API: {"api":"/api/slightnudge/undo","status":200,"success":true}
+Source stage: undo accepted src/app/page.tsx:45:11
+Source navigation: project /
+Source navigation: project /
+Source navigation: editor /studio/source-proof/edit
+Source proof: {"file":"src/app/page.tsx","line":45,"column":11,"expectedClass":"text-lg text-gray-400 mb-10 leading-relaxed","classes":["text-lg text-gray-400 mb-10 leading-relaxed font-bold"]}
+Source proof: {"success":false,"reason":"The project is still rendering an older source revision."}
+Source navigation: project /
+Source navigation: project /
+Source proof: {"file":"src/app/page.tsx","line":45,"column":11,"expectedClass":"text-lg text-gray-400 mb-10 leading-relaxed","classes":["text-lg text-gray-400 mb-10 leading-relaxed"]}
+Source proof: {"success":true,"reason":"The project is still rendering an older source revision."}
+Source notice: Undid none → font-bold.
+Selection 14/30: allowed — src/app/page.tsx:45:11
+Source stage: select src/app/page.tsx:48:11
+Source API: {"api":"/api/slightnudge/preview","status":200,"success":true}
+Source proof: {"success":true,"reason":""}
+Source stage: apply src/app/page.tsx:48:11
+Source proof: {"success":true,"reason":"The page changed after preview. Reload and select again."}
+Source API: {"api":"/api/slightnudge/apply","status":200,"success":true}
+Source stage: apply accepted src/app/page.tsx:48:11
+Source navigation: editor /studio/source-proof/edit
+Source navigation: project /
+Source navigation: project /
+Source proof: {"file":"src/app/page.tsx","line":48,"column":11,"expectedClass":"flex flex-col sm:flex-row items-center justify-center gap-4 font-bold","classes":["flex flex-col sm:flex-row items-center justify-center gap-4 font-bold"]}
+Source proof: {"success":true,"reason":"The project is still rendering an older source revision."}
+Source notice: Applied change to .slightnudge\repositories\source-proof\src\app\page.tsx
+Source stage: undo src/app/page.tsx:48:11
+Source navigation: editor /studio/source-proof/edit
+Source navigation: editor /studio/source-proof/edit
+Source API: {"api":"/api/slightnudge/undo","status":200,"success":true}
+Source stage: undo accepted src/app/page.tsx:48:11
+Source navigation: project /
+Source navigation: project /
+Source proof: {"file":"src/app/page.tsx","line":48,"column":11,"expectedClass":"flex flex-col sm:flex-row items-center justify-center gap-4","classes":["flex flex-col sm:flex-row items-center justify-center gap-4"]}
+Source proof: {"success":true,"reason":"The project is still rendering an older source revision."}
+Source notice: Undid none → font-bold.
+Source navigation: editor /studio/source-proof/edit
+Selection 15/30: allowed — src/app/page.tsx:48:11
+Source stage: select src/app/page.tsx:49:13
+Source proof: {"success":false,"reason":"The project styling overrides this change, or its utility is unavailable. Nothing was changed."}
+Source API: {"api":"/api/slightnudge/preview","status":200,"success":true}
+Source notice: ⚠️ The project styling overrides this change, or its utility is unavailable. Nothing was changed.
+Selection 16/30: refused — src/app/page.tsx:49:13
+Source stage: select src/app/page.tsx:57:13
+Source API: {"api":"/api/slightnudge/preview","status":200,"success":true}
+Source navigation: project /
+Source navigation: project /
+Source navigation: editor /studio/source-proof/edit
+Source navigation: editor /studio/source-proof/edit
+Source proof: {"success":false,"reason":"The project styling overrides this change, or its utility is unavailable. Nothing was changed."}
+Source API: {"api":"/api/slightnudge/preview","status":200,"success":true}
+Selection 17/30: refused — src/app/page.tsx:57:13
+Source stage: select src/app/page.tsx:69:9
+Source API: {"api":"/api/slightnudge/preview","status":200,"success":true}
+Source navigation: project /
+Source navigation: project /
+Source navigation: editor /studio/source-proof/edit
+Selection 18/30: refused — src/app/page.tsx:69:9
+Source stage: select src/app/page.tsx:70:11
+Source navigation: editor /studio/source-proof/edit
+Source API: {"api":"/api/slightnudge/preview","status":200,"success":true}
+Source proof: {"success":true,"reason":""}
+Source stage: apply src/app/page.tsx:70:11
+Source proof: {"success":true,"reason":"The page changed after preview. Reload and select again."}
+Source API: {"api":"/api/slightnudge/apply","status":200,"success":true}
+Source stage: apply accepted src/app/page.tsx:70:11
+Source navigation: project /
+Source navigation: editor /studio/source-proof/edit
+Source navigation: project /
+Source proof: {"file":"src/app/page.tsx","line":70,"column":11,"expectedClass":"p-6 rounded-2xl bg-gray-900/60 border border-gray-800/80 font-bold","classes":["p-6 rounded-2xl bg-gray-900/60 border border-gray-800/80 font-bold"]}
+Source proof: {"success":true,"reason":"The project is still rendering an older source revision."}
+Source notice: Applied change to .slightnudge\repositories\source-proof\src\app\page.tsx
+Source stage: undo src/app/page.tsx:70:11
+Source navigation: editor /studio/source-proof/edit
+Source navigation: editor /studio/source-proof/edit
+Source API: {"api":"/api/slightnudge/undo","status":200,"success":true}
+Source stage: undo accepted src/app/page.tsx:70:11
+Source navigation: project /
+Source navigation: project /
+Source proof: {"file":"src/app/page.tsx","line":70,"column":11,"expectedClass":"p-6 rounded-2xl bg-gray-900/60 border border-gray-800/80","classes":["p-6 rounded-2xl bg-gray-900/60 border border-gray-800/80"]}
+Source proof: {"success":true,"reason":"The project is still rendering an older source revision."}
+Source notice: Undid none → font-bold.
+Source navigation: editor /studio/source-proof/edit
+Selection 19/30: allowed — src/app/page.tsx:70:11
+Source stage: select src/app/page.tsx:71:13
+Source API: {"api":"/api/slightnudge/preview","status":200,"success":true}
+Source proof: {"success":true,"reason":""}
+Source stage: apply src/app/page.tsx:71:13
+Source proof: {"success":true,"reason":"The page changed after preview. Reload and select again."}
+Source API: {"api":"/api/slightnudge/apply","status":200,"success":true}
+Source stage: apply accepted src/app/page.tsx:71:13
+Source navigation: project /
+Source navigation: editor /studio/source-proof/edit
+Source navigation: project /
+Source proof: {"file":"src/app/page.tsx","line":71,"column":13,"expectedClass":"text-2xl mb-3 font-bold","classes":["text-2xl mb-3 font-bold"]}
+Source proof: {"success":true,"reason":"The project is still rendering an older source revision."}
+Source notice: Applied change to .slightnudge\repositories\source-proof\src\app\page.tsx
+Source stage: undo src/app/page.tsx:71:13
+Source navigation: editor /studio/source-proof/edit
+Source navigation: editor /studio/source-proof/edit
+Source API: {"api":"/api/slightnudge/undo","status":200,"success":true}
+Source stage: undo accepted src/app/page.tsx:71:13
+Source navigation: project /
+Source navigation: project /
+Source proof: {"file":"src/app/page.tsx","line":71,"column":13,"expectedClass":"text-2xl mb-3","classes":["text-2xl mb-3"]}
+Source proof: {"success":true,"reason":"The project is still rendering an older source revision."}
+Source notice: Undid none → font-bold.
+Selection 20/30: allowed — src/app/page.tsx:71:13
+Source stage: select src/app/page.tsx:72:13
+Source navigation: editor /studio/source-proof/edit
+Source proof: {"success":true,"reason":""}
+Source API: {"api":"/api/slightnudge/preview","status":200,"success":true}
+Source stage: apply src/app/page.tsx:72:13
+Source proof: {"success":true,"reason":"The page changed after preview. Reload and select again."}
+Source API: {"api":"/api/slightnudge/apply","status":200,"success":true}
+Source stage: apply accepted src/app/page.tsx:72:13
+Source navigation: project /
+Source navigation: editor /studio/source-proof/edit
+Source navigation: project /
+Source proof: {"file":"src/app/page.tsx","line":72,"column":13,"expectedClass":"text-lg font-normal text-white mb-2","classes":["text-lg font-normal text-white mb-2"]}
+Source proof: {"success":true,"reason":"The project is still rendering an older source revision."}
+Source notice: Applied change to .slightnudge\repositories\source-proof\src\app\page.tsx
+Source stage: undo src/app/page.tsx:72:13
+Source navigation: editor /studio/source-proof/edit
+Source navigation: editor /studio/source-proof/edit
+Source API: {"api":"/api/slightnudge/undo","status":200,"success":true}
+Source stage: undo accepted src/app/page.tsx:72:13
+Source navigation: project /
+Source navigation: project /
+Source proof: {"file":"src/app/page.tsx","line":72,"column":13,"expectedClass":"text-lg font-bold text-white mb-2","classes":["text-lg font-bold text-white mb-2"]}
+Source proof: {"success":true,"reason":"The project is still rendering an older source revision."}
+Source notice: Undid font-bold → font-normal.
+Source navigation: editor /studio/source-proof/edit
+Selection 21/30: allowed — src/app/page.tsx:72:13
+Source stage: select src/app/page.tsx:73:13
+Source API: {"api":"/api/slightnudge/preview","status":200,"success":true}
+Source proof: {"success":true,"reason":""}
+Source stage: apply src/app/page.tsx:73:13
+Source proof: {"success":true,"reason":"The page changed after preview. Reload and select again."}
+Source API: {"api":"/api/slightnudge/apply","status":200,"success":true}
+Source stage: apply accepted src/app/page.tsx:73:13
+Source navigation: project /
+Source navigation: project /
+Source navigation: editor /studio/source-proof/edit
+Source proof: {"file":"src/app/page.tsx","line":73,"column":13,"expectedClass":"text-sm text-gray-400 leading-relaxed font-bold","classes":["text-sm text-gray-400 leading-relaxed"]}
+Source proof: {"success":false,"reason":"The project is still rendering an older source revision."}
+Source navigation: project /
+Source navigation: editor /studio/source-proof/edit
+Source navigation: project /
+Source proof: {"file":"src/app/page.tsx","line":73,"column":13,"expectedClass":"text-sm text-gray-400 leading-relaxed font-bold","classes":["text-sm text-gray-400 leading-relaxed font-bold"]}
+Source proof: {"success":true,"reason":"The project is still rendering an older source revision."}
+Source notice: Applied change to .slightnudge\repositories\source-proof\src\app\page.tsx
+Source navigation: editor /studio/source-proof/edit
+Source stage: undo src/app/page.tsx:73:13
+Source API: {"api":"/api/slightnudge/undo","status":200,"success":true}
+Source stage: undo accepted src/app/page.tsx:73:13
+Source navigation: project /
+Source navigation: project /
+Source proof: {"file":"src/app/page.tsx","line":73,"column":13,"expectedClass":"text-sm text-gray-400 leading-relaxed","classes":["text-sm text-gray-400 leading-relaxed"]}
+Source proof: {"success":true,"reason":"The project is still rendering an older source revision."}
+Source notice: Undid none → font-bold.
+Source navigation: editor /studio/source-proof/edit
+Selection 22/30: allowed — src/app/page.tsx:73:13
+Source stage: select src/app/page.tsx:77:11
+Source API: {"api":"/api/slightnudge/preview","status":200,"success":true}
+Source proof: {"success":true,"reason":""}
+Source stage: apply src/app/page.tsx:77:11
+Source proof: {"success":true,"reason":"The page changed after preview. Reload and select again."}
+Source API: {"api":"/api/slightnudge/apply","status":200,"success":true}
+Source stage: apply accepted src/app/page.tsx:77:11
+Source navigation: project /
+Source navigation: editor /studio/source-proof/edit
+Source navigation: project /
+Source proof: {"file":"src/app/page.tsx","line":77,"column":11,"expectedClass":"p-6 rounded-2xl bg-gray-900/60 border border-gray-800/80 font-bold","classes":["p-6 rounded-2xl bg-gray-900/60 border border-gray-800/80 font-bold"]}
+Source proof: {"success":true,"reason":"The project is still rendering an older source revision."}
+Source notice: Applied change to .slightnudge\repositories\source-proof\src\app\page.tsx
+Source stage: undo src/app/page.tsx:77:11
+Source navigation: editor /studio/source-proof/edit
+Source navigation: editor /studio/source-proof/edit
+Source API: {"api":"/api/slightnudge/undo","status":200,"success":true}
+Source stage: undo accepted src/app/page.tsx:77:11
+Source navigation: project /
+Source navigation: project /
+Source proof: {"file":"src/app/page.tsx","line":77,"column":11,"expectedClass":"p-6 rounded-2xl bg-gray-900/60 border border-gray-800/80","classes":["p-6 rounded-2xl bg-gray-900/60 border border-gray-800/80"]}
+Source proof: {"success":true,"reason":"The project is still rendering an older source revision."}
+Source notice: Undid none → font-bold.
+Source navigation: editor /studio/source-proof/edit
+Selection 23/30: allowed — src/app/page.tsx:77:11
+Source stage: select src/app/page.tsx:78:13
+Source API: {"api":"/api/slightnudge/preview","status":200,"success":true}
+Source proof: {"success":true,"reason":""}
+Source stage: apply src/app/page.tsx:78:13
+Source proof: {"success":true,"reason":"The page changed after preview. Reload and select again."}
+Source API: {"api":"/api/slightnudge/apply","status":200,"success":true}
+Source stage: apply accepted src/app/page.tsx:78:13
+Source navigation: project /
+Source navigation: editor /studio/source-proof/edit
+Source navigation: project /
+Source proof: {"file":"src/app/page.tsx","line":78,"column":13,"expectedClass":"text-2xl mb-3 font-bold","classes":["text-2xl mb-3 font-bold"]}
+Source proof: {"success":true,"reason":"The project is still rendering an older source revision."}
+Source notice: Applied change to .slightnudge\repositories\source-proof\src\app\page.tsx
+Source stage: undo src/app/page.tsx:78:13
+Source navigation: editor /studio/source-proof/edit
+Source navigation: editor /studio/source-proof/edit
+Source API: {"api":"/api/slightnudge/undo","status":200,"success":true}
+Source stage: undo accepted src/app/page.tsx:78:13
+Source navigation: project /
+Source navigation: project /
+Source proof: {"file":"src/app/page.tsx","line":78,"column":13,"expectedClass":"text-2xl mb-3","classes":["text-2xl mb-3"]}
+Source proof: {"success":true,"reason":"The project is still rendering an older source revision."}
+Source notice: Undid none → font-bold.
+Source navigation: editor /studio/source-proof/edit
+Selection 24/30: allowed — src/app/page.tsx:78:13
+Source stage: select src/app/page.tsx:79:13
+Source proof: {"success":true,"reason":""}
+Source API: {"api":"/api/slightnudge/preview","status":200,"success":true}
+Source stage: apply src/app/page.tsx:79:13
+Source proof: {"success":true,"reason":"The page changed after preview. Reload and select again."}
+Source API: {"api":"/api/slightnudge/apply","status":200,"success":true}
+Source stage: apply accepted src/app/page.tsx:79:13
+Source navigation: project /
+Source navigation: editor /studio/source-proof/edit
+Source navigation: project /
+Source proof: {"file":"src/app/page.tsx","line":79,"column":13,"expectedClass":"text-lg font-normal text-white mb-2","classes":["text-lg font-normal text-white mb-2"]}
+Source proof: {"success":true,"reason":"The project is still rendering an older source revision."}
+Source notice: Applied change to .slightnudge\repositories\source-proof\src\app\page.tsx
+Source stage: undo src/app/page.tsx:79:13
+Source navigation: editor /studio/source-proof/edit
+Source navigation: editor /studio/source-proof/edit
+Source API: {"api":"/api/slightnudge/undo","status":200,"success":true}
+Source stage: undo accepted src/app/page.tsx:79:13
+Source navigation: project /
+Source navigation: project /
+Source proof: {"file":"src/app/page.tsx","line":79,"column":13,"expectedClass":"text-lg font-bold text-white mb-2","classes":["text-lg font-bold text-white mb-2"]}
+Source proof: {"success":true,"reason":"The project is still rendering an older source revision."}
+Source notice: Undid font-bold → font-normal.
+Selection 25/30: allowed — src/app/page.tsx:79:13
+Source stage: select src/app/page.tsx:80:13
+Source navigation: editor /studio/source-proof/edit
+Source API: {"api":"/api/slightnudge/preview","status":200,"success":true}
+Source proof: {"success":true,"reason":""}
+Source stage: apply src/app/page.tsx:80:13
+Source proof: {"success":true,"reason":"The page changed after preview. Reload and select again."}
+Source API: {"api":"/api/slightnudge/apply","status":200,"success":true}
+Source stage: apply accepted src/app/page.tsx:80:13
+Source navigation: project /
+Source navigation: editor /studio/source-proof/edit
+Source navigation: project /
+Source proof: {"file":"src/app/page.tsx","line":80,"column":13,"expectedClass":"text-sm text-gray-400 leading-relaxed font-bold","classes":["text-sm text-gray-400 leading-relaxed font-bold"]}
+Source proof: {"success":true,"reason":"The project is still rendering an older source revision."}
+Source notice: Applied change to .slightnudge\repositories\source-proof\src\app\page.tsx
+Source stage: undo src/app/page.tsx:80:13
+Source navigation: editor /studio/source-proof/edit
+Source navigation: editor /studio/source-proof/edit
+Source API: {"api":"/api/slightnudge/undo","status":200,"success":true}
+Source stage: undo accepted src/app/page.tsx:80:13
+Source navigation: project /
+Source navigation: project /
+Source proof: {"file":"src/app/page.tsx","line":80,"column":13,"expectedClass":"text-sm text-gray-400 leading-relaxed","classes":["text-sm text-gray-400 leading-relaxed"]}
+Source proof: {"success":true,"reason":"The project is still rendering an older source revision."}
+Source notice: Undid none → font-bold.
+Source navigation: editor /studio/source-proof/edit
+Selection 26/30: allowed — src/app/page.tsx:80:13
+Source stage: select src/app/page.tsx:84:11
+Source API: {"api":"/api/slightnudge/preview","status":200,"success":true}
+Source proof: {"success":true,"reason":""}
+Source stage: apply src/app/page.tsx:84:11
+Source proof: {"success":true,"reason":"The page changed after preview. Reload and select again."}
+Source API: {"api":"/api/slightnudge/apply","status":200,"success":true}
+Source stage: apply accepted src/app/page.tsx:84:11
+Source navigation: project /
+Source navigation: editor /studio/source-proof/edit
+Source navigation: project /
+Source proof: {"file":"src/app/page.tsx","line":84,"column":11,"expectedClass":"p-6 rounded-2xl bg-gray-900/60 border border-gray-800/80 font-bold","classes":["p-6 rounded-2xl bg-gray-900/60 border border-gray-800/80 font-bold"]}
+Source proof: {"success":true,"reason":"The project is still rendering an older source revision."}
+Source notice: Applied change to .slightnudge\repositories\source-proof\src\app\page.tsx
+Source stage: undo src/app/page.tsx:84:11
+Source navigation: editor /studio/source-proof/edit
+Source navigation: editor /studio/source-proof/edit
+Source API: {"api":"/api/slightnudge/undo","status":200,"success":true}
+Source stage: undo accepted src/app/page.tsx:84:11
+Source navigation: project /
+Source navigation: project /
+Source proof: {"file":"src/app/page.tsx","line":84,"column":11,"expectedClass":"p-6 rounded-2xl bg-gray-900/60 border border-gray-800/80","classes":["p-6 rounded-2xl bg-gray-900/60 border border-gray-800/80"]}
+Source proof: {"success":true,"reason":"The project is still rendering an older source revision."}
+Source notice: Undid none → font-bold.
+Selection 27/30: allowed — src/app/page.tsx:84:11
+Source stage: select src/app/page.tsx:85:13
+Source navigation: editor /studio/source-proof/edit
+Source API: {"api":"/api/slightnudge/preview","status":200,"success":true}
+Source proof: {"success":true,"reason":""}
+Source stage: apply src/app/page.tsx:85:13
+Source proof: {"success":true,"reason":"The page changed after preview. Reload and select again."}
+Source API: {"api":"/api/slightnudge/apply","status":200,"success":true}
+Source stage: apply accepted src/app/page.tsx:85:13
+Source navigation: project /
+Source navigation: editor /studio/source-proof/edit
+Source navigation: project /
+Source proof: {"file":"src/app/page.tsx","line":85,"column":13,"expectedClass":"text-2xl mb-3 font-bold","classes":["text-2xl mb-3 font-bold"]}
+Source proof: {"success":true,"reason":"The project is still rendering an older source revision."}
+Source notice: Applied change to .slightnudge\repositories\source-proof\src\app\page.tsx
+Source stage: undo src/app/page.tsx:85:13
+Source navigation: editor /studio/source-proof/edit
+Source navigation: editor /studio/source-proof/edit
+Source API: {"api":"/api/slightnudge/undo","status":200,"success":true}
+Source stage: undo accepted src/app/page.tsx:85:13
+Source navigation: project /
+Source navigation: project /
+Source proof: {"file":"src/app/page.tsx","line":85,"column":13,"expectedClass":"text-2xl mb-3","classes":["text-2xl mb-3"]}
+Source proof: {"success":true,"reason":"The project is still rendering an older source revision."}
+Source notice: Undid none → font-bold.
+Source navigation: editor /studio/source-proof/edit
+Selection 28/30: allowed — src/app/page.tsx:85:13
+Source stage: select src/app/page.tsx:86:13
+Source proof: {"success":true,"reason":""}
+Source API: {"api":"/api/slightnudge/preview","status":200,"success":true}
+Source stage: apply src/app/page.tsx:86:13
+Source proof: {"success":true,"reason":"The page changed after preview. Reload and select again."}
+Source API: {"api":"/api/slightnudge/apply","status":200,"success":true}
+Source stage: apply accepted src/app/page.tsx:86:13
+Source navigation: project /
+Source navigation: editor /studio/source-proof/edit
+Source navigation: project /
+Source proof: {"file":"src/app/page.tsx","line":86,"column":13,"expectedClass":"text-lg font-normal text-white mb-2","classes":["text-lg font-normal text-white mb-2"]}
+Source proof: {"success":true,"reason":"The project is still rendering an older source revision."}
+Source notice: Applied change to .slightnudge\repositories\source-proof\src\app\page.tsx
+Source stage: undo src/app/page.tsx:86:13
+Source navigation: editor /studio/source-proof/edit
+Source navigation: editor /studio/source-proof/edit
+Source API: {"api":"/api/slightnudge/undo","status":200,"success":true}
+Source stage: undo accepted src/app/page.tsx:86:13
+Source navigation: project /
+Source navigation: project /
+Source proof: {"file":"src/app/page.tsx","line":86,"column":13,"expectedClass":"text-lg font-bold text-white mb-2","classes":["text-lg font-bold text-white mb-2"]}
+Source proof: {"success":true,"reason":"The project is still rendering an older source revision."}
+Source notice: Undid font-bold → font-normal.
+Source navigation: editor /studio/source-proof/edit
+Selection 29/30: allowed — src/app/page.tsx:86:13
+Source stage: select src/app/page.tsx:87:13
+Source API: {"api":"/api/slightnudge/preview","status":200,"success":true}
+Source proof: {"success":true,"reason":""}
+Source stage: apply src/app/page.tsx:87:13
+Source proof: {"success":true,"reason":"The page changed after preview. Reload and select again."}
+Source API: {"api":"/api/slightnudge/apply","status":200,"success":true}
+Source stage: apply accepted src/app/page.tsx:87:13
+Source navigation: project /
+Source navigation: editor /studio/source-proof/edit
+Source navigation: project /
+Source proof: {"file":"src/app/page.tsx","line":87,"column":13,"expectedClass":"text-sm text-gray-400 leading-relaxed font-bold","classes":["text-sm text-gray-400 leading-relaxed font-bold"]}
+Source proof: {"success":true,"reason":"The project is still rendering an older source revision."}
+Source notice: Applied change to .slightnudge\repositories\source-proof\src\app\page.tsx
+Source stage: undo src/app/page.tsx:87:13
+Source navigation: editor /studio/source-proof/edit
+Source navigation: editor /studio/source-proof/edit
+Source API: {"api":"/api/slightnudge/undo","status":200,"success":true}
+Source stage: undo accepted src/app/page.tsx:87:13
+Source navigation: project /
+Source navigation: project /
+Source proof: {"file":"src/app/page.tsx","line":87,"column":13,"expectedClass":"text-sm text-gray-400 leading-relaxed","classes":["text-sm text-gray-400 leading-relaxed"]}
+Source proof: {"success":true,"reason":"The project is still rendering an older source revision."}
+Source notice: Undid none → font-bold.
+Source navigation: editor /studio/source-proof/edit
+Selection 30/30: allowed — src/app/page.tsx:87:13
+Source selection workflows: 24 allowed, 6 refused, 0 wrong targets
+PASS: 30 review-consent browser cases (real API; disposable source copy)

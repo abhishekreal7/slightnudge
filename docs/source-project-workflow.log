@@ -1,0 +1,68 @@
+warning: in the working copy of 'LICENSE', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/globals.css', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/page.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'components/Features.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'package.json', LF will be replaced by CRLF the next time Git touches it
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for getByTitle('Toggle bold', { exact: true })
+    - locator resolved to <button type="button" title="Toggle bold" aria-pressed="false" data-source-line="1054" data-source-column="17" data-source-file="app/studio/page.tsx" class="w-7 h-7 rounded-lg flex items-center justify-center text-xs font-black transition cursor-pointer bg-[#1E293B] text-slate-200 hover:text-white border border-slate-700/60 shadow-xs">B</button>
+  - attempting click action
+    2 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - <button title="Tablet" data-source-line="1732" data-source-column="19" data-source-file="app/studio/page.tsx" class="jsx-fe1209ef422846ce px-2 py-0.5 rounded text-[11px] flex items-center space-x-1.5 transition cursor-pointer text-slate-500 hover:text-slate-800">…</button> from <div data-source-line="1707" data-source-column="13" data-source-file="app/studio/page.tsx" class="jsx-fe1209ef422846ce h-10 bg-white border-b border-[#E5E7EB] px-3.5 flex items-center justify-between shrink-0 z-10 select-none">…</div> subtree intercepts pointer events
+    - retrying click action
+    - waiting 20ms
+    2 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - <button title="Tablet" data-source-line="1732" data-source-column="19" data-source-file="app/studio/page.tsx" class="jsx-fe1209ef422846ce px-2 py-0.5 rounded text-[11px] flex items-center space-x-1.5 transition cursor-pointer text-slate-500 hover:text-slate-800">…</button> from <div data-source-line="1707" data-source-column="13" data-source-file="app/studio/page.tsx" class="jsx-fe1209ef422846ce h-10 bg-white border-b border-[#E5E7EB] px-3.5 flex items-center justify-between shrink-0 z-10 select-none">…</div> subtree intercepts pointer events
+    - retrying click action
+      - waiting 100ms
+    56 × waiting for element to be visible, enabled and stable
+       - element is visible, enabled and stable
+       - scrolling into view if needed
+       - done scrolling
+       - <button title="Tablet" data-source-line="1732" data-source-column="19" data-source-file="app/studio/page.tsx" class="jsx-fe1209ef422846ce px-2 py-0.5 rounded text-[11px] flex items-center space-x-1.5 transition cursor-pointer text-slate-500 hover:text-slate-800">…</button> from <div data-source-line="1707" data-source-column="13" data-source-file="app/studio/page.tsx" class="jsx-fe1209ef422846ce h-10 bg-white border-b border-[#E5E7EB] px-3.5 flex items-center justify-between shrink-0 z-10 select-none">…</div> subtree intercepts pointer events
+     - retrying click action
+       - waiting 500ms
+
+    at checkSourceProject (C:\dev\vibecheck\test\helpers\source-project-browser.ts:44:59)
+    at async <anonymous> (C:\dev\vibecheck\test\review-consent.browser.ts:88:14) {
+  log: [
+    "  - waiting for getByTitle('Toggle bold', { exact: true })",
+    '    - locator resolved to <button type="button" title="Toggle bold" aria-pressed="false" data-source-line="1054" data-source-column="17" data-source-file="app/studio/page.tsx" class="w-7 h-7 rounded-lg flex items-center justify-center text-xs font-black transition cursor-pointer bg-[#1E293B] text-slate-200 hover:text-white border border-slate-700/60 shadow-xs">B</button>',
+    '  - attempting click action',
+    '    2 × waiting for element to be visible, enabled and stable',
+    '      - element is visible, enabled and stable',
+    '      - scrolling into view if needed',
+    '      - done scrolling',
+    '      - <button title="Tablet" data-source-line="1732" data-source-column="19" data-source-file="app/studio/page.tsx" class="jsx-fe1209ef422846ce px-2 py-0.5 rounded text-[11px] flex items-center space-x-1.5 transition cursor-pointer text-slate-500 hover:text-slate-800">…</button> from <div data-source-line="1707" data-source-column="13" data-source-file="app/studio/page.tsx" class="jsx-fe1209ef422846ce h-10 bg-white border-b border-[#E5E7EB] px-3.5 flex items-center justify-between shrink-0 z-10 select-none">…</div> subtree intercepts pointer events',
+    '    - retrying click action',
+    '    - waiting 20ms',
+    '    2 × waiting for element to be visible, enabled and stable',
+    '      - element is visible, enabled and stable',
+    '      - scrolling into view if needed',
+    '      - done scrolling',
+    '      - <button title="Tablet" data-source-line="1732" data-source-column="19" data-source-file="app/studio/page.tsx" class="jsx-fe1209ef422846ce px-2 py-0.5 rounded text-[11px] flex items-center space-x-1.5 transition cursor-pointer text-slate-500 hover:text-slate-800">…</button> from <div data-source-line="1707" data-source-column="13" data-source-file="app/studio/page.tsx" class="jsx-fe1209ef422846ce h-10 bg-white border-b border-[#E5E7EB] px-3.5 flex items-center justify-between shrink-0 z-10 select-none">…</div> subtree intercepts pointer events',
+    '    - retrying click action',
+    '      - waiting 100ms',
+    '    56 × waiting for element to be visible, enabled and stable',
+    '       - element is visible, enabled and stable',
+    '       - scrolling into view if needed',
+    '       - done scrolling',
+    '       - <button title="Tablet" data-source-line="1732" data-source-column="19" data-source-file="app/studio/page.tsx" class="jsx-fe1209ef422846ce px-2 py-0.5 rounded text-[11px] flex items-center space-x-1.5 transition cursor-pointer text-slate-500 hover:text-slate-800">…</button> from <div data-source-line="1707" data-source-column="13" data-source-file="app/studio/page.tsx" class="jsx-fe1209ef422846ce h-10 bg-white border-b border-[#E5E7EB] px-3.5 flex items-center justify-between shrink-0 z-10 select-none">…</div> subtree intercepts pointer events',
+    '     - retrying click action',
+    '       - waiting 500ms'
+  ],
+  name: 'TimeoutError'
+}
+
+Node.js v22.19.0

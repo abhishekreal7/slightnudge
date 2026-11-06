@@ -1,0 +1,107 @@
+app/api/slightnudge\change-set\route.ts:15:        if (!validGroupId(body.transactionId) || !['save', 'status', 'undo'].includes(body.operation) || body.repositoryId !== undefined && typeof body.repositoryId !== 'string')
+app/api/slightnudge\change-set\route.ts:17:        const repositoryId = body.repositoryId as string | undefined;
+app/api/slightnudge\change-set\route.ts:18:        const scope = { repositoryId, root: repositoryId ? await resolveRepositoryRoot(repositoryId) : process.cwd() };
+app/api/slightnudge\change-set\route.ts:29:                if (!validGroupId(member?.previewId) || typeof member.filePath !== 'string' || member.filePath.length > 1000)
+app/api/slightnudge\change-set\route.ts:31:                const filePath = repositoryId ? (await resolveRepositorySourcePath(repositoryId, member.filePath)).filePath : resolveWorkspaceSourcePath(member.filePath);
+app/api/slightnudge\change-set\route.ts:32:                members.push({ previewId: member.previewId, filePath, sourcePath: repositoryId ? member.filePath : undefined });
+app/api/slightnudge\draft-view\route.ts:11:    if (typeof body.previewId !== 'string' || typeof body.filePath !== 'string') return NextResponse.json({ error: 'Choose a saved local draft.' }, { status: 400 });
+app/api/slightnudge\draft-view\route.ts:12:    const repositoryId = typeof body.repositoryId === 'string' ? body.repositoryId : undefined;
+app/api/slightnudge\draft-view\route.ts:13:    const file = repositoryId ? (await resolveRepositorySourcePath(repositoryId, body.sourcePath)).filePath : resolveWorkspaceSourcePath(body.filePath);
+app/api/slightnudge\draft-view\route.ts:14:    return NextResponse.json({ success: true, ...await readRenderableDraft(body.previewId, file, { repositoryId, root: repositoryId ? await resolveRepositoryRoot(repositoryId) : process.cwd() }) });
+app/api/slightnudge\history\route.ts:14:    if (!body || typeof body !== 'object' || Array.isArray(body) || body.repositoryId !== undefined && (typeof body.repositoryId !== 'string' || !body.repositoryId)) return NextResponse.json({ error: 'Choose a valid project.' }, { status: 400, headers });
+app/api/slightnudge\history\route.ts:15:    const root = body.repositoryId ? await resolveRepositoryRoot(body.repositoryId) : process.cwd();
+app/api/slightnudge\history\route.ts:16:    return NextResponse.json({ entries: getHistorySummary(root, body.repositoryId) }, { headers });
+app/api/slightnudge\inspect\route.ts:18:    const { filePath, line, column, elementId, tagName, className, rect, clickedRect } = body;
+app/api/slightnudge\inspect\route.ts:20:    if (!filePath) {
+app/api/slightnudge\inspect\route.ts:21:      return NextResponse.json({ error: 'filePath is required' }, { status: 400, headers: corsHeaders(request) });
+app/api/slightnudge\inspect\route.ts:24:    const resolvedPath = resolveWorkspaceSourcePath(filePath);
+app/api/slightnudge\inspect\route.ts:27:      filePath: resolvedPath,
+app/api/slightnudge\apply\route.ts:17:    if (typeof body.previewId !== 'string') return NextResponse.json({ error: 'Review a change before applying it.' }, { status: 400, headers: corsHeaders(request) });
+app/api/slightnudge\apply\route.ts:18:    const repositoryId = typeof body.repositoryId === 'string' ? body.repositoryId : undefined;
+app/api/slightnudge\apply\route.ts:19:    const sourcePath = typeof body.sourcePath === 'string' ? body.sourcePath : undefined;
+app/api/slightnudge\apply\route.ts:20:    const validatedFilePath = repositoryId && sourcePath ? (await resolveRepositorySourcePath(repositoryId, sourcePath)).filePath : undefined;
+app/api/slightnudge\apply\route.ts:21:    const result = await applyPendingSourceEdit(body.previewId, typeof body.groupId === 'string' ? body.groupId : undefined, repositoryId, sourcePath, validatedFilePath);
+app/api/slightnudge\undo\route.ts:17:    if (typeof body.previewId !== 'string' || !/^[0-9a-f-]{36}$/i.test(body.previewId)) return NextResponse.json({ success: false, code: 'UNDO_TARGET_REQUIRED', error: 'Choose the accepted edit to undo. Unbound Undo requests are not supported.' }, { status: 400, headers: corsHeaders(request) });
+app/api/slightnudge\undo\route.ts:18:    if (body.repositoryId !== undefined && (typeof body.repositoryId !== 'string' || typeof body.sourcePath !== 'string')) return NextResponse.json({ success: false, code: 'UNDO_TARGET_REQUIRED', error: 'Choose the project and source file for this Undo.' }, { status: 400, headers: corsHeaders(request) });
+app/api/slightnudge\undo\route.ts:19:    const filePath = typeof body.repositoryId === 'string' && typeof body.sourcePath === 'string'
+app/api/slightnudge\undo\route.ts:20:      ? (await resolveRepositorySourcePath(body.repositoryId, body.sourcePath)).filePath
+app/api/slightnudge\undo\route.ts:21:      : typeof body.filePath === 'string' && body.filePath.trim() ? resolveWorkspaceSourcePath(body.filePath) : undefined;
+app/api/slightnudge\undo\route.ts:22:    const result = undoReviewedSourceEdit(body.previewId, { filePath, repositoryId: body.repositoryId, sourcePath: body.sourcePath, editId: typeof body.editId === 'string' ? body.editId : undefined });
+app/api/slightnudge\assets\route.ts:11:  const repositoryId = new URL(request.url).searchParams.get('repositoryId');
+app/api/slightnudge\assets\route.ts:12:  const root = repositoryId ? await resolveRepositoryRoot(repositoryId) : process.cwd();
+app/api/slightnudge\apply\status\route.ts:19:    if (typeof body.previewId !== 'string') return NextResponse.json({ success: false, error: 'A reviewed change is required.' }, { status: 400, headers });
+app/api/slightnudge\apply\status\route.ts:20:    const repositoryId = typeof body.repositoryId === 'string' ? body.repositoryId : undefined;
+app/api/slightnudge\apply\status\route.ts:21:    const sourcePath = typeof body.sourcePath === 'string' ? body.sourcePath : undefined;
+app/api/slightnudge\apply\status\route.ts:22:    const filePath = repositoryId && sourcePath ? (await resolveRepositorySourcePath(repositoryId, sourcePath)).filePath : undefined;
+app/api/slightnudge\apply\status\route.ts:23:    const result = getSourceApplyOutcome(body.previewId, repositoryId, sourcePath, filePath);
+app/api/slightnudge\preview\route.ts:46:    const repositoryId = typeof body.repositoryId === 'string' ? body.repositoryId : undefined;
+app/api/slightnudge\preview\route.ts:47:    const sourcePath = typeof body.sourcePath === 'string' ? body.sourcePath : undefined;
+app/api/slightnudge\preview\route.ts:48:    if (repositoryId && !sourcePath) return NextResponse.json({ error: 'Choose a source file from the imported repository.' }, { status: 400 });
+app/api/slightnudge\preview\route.ts:49:    if (!repositoryId && typeof body.filePath !== 'string') return NextResponse.json({ error: 'A source file is required.' }, { status: 400 });
+app/api/slightnudge\preview\route.ts:50:    const filePath = repositoryId ? (await resolveRepositorySourcePath(repositoryId, sourcePath!)).filePath : resolveWorkspaceSourcePath(body.filePath);
+app/api/slightnudge\preview\route.ts:52:      filePath,
+app/api/slightnudge\preview\route.ts:62:    if (drafting && (!['component', 'style', 'text', 'image', 'action', 'icon', 'move', 'nudge', 'reorder', 'reparent'].includes(body.kind) || repositoryId && !['component', 'style', 'text', 'image', 'action', 'icon', 'move', 'reorder', 'reparent'].includes(body.kind))) return NextResponse.json({ error: 'This operation is not available in continuous drafts yet.' }, { status: 422 });
+app/api/slightnudge\preview\route.ts:63:    const scope = { repositoryId, root: repositoryId ? await resolveRepositoryRoot(repositoryId) : process.cwd(), component: body.kind === 'component', image: body.kind === 'image', action: body.kind === 'action', icon: body.kind === 'icon', structural: ['reorder', 'reparent'].includes(body.kind), text: body.kind === 'text' };
+app/api/slightnudge\preview\route.ts:72:      if (!destination || destination.path !== (sourcePath || body.filePath) || !Number.isInteger(destination.line) || !Number.isInteger(destination.column) || destination.line < 1 || destination.column < 1) return NextResponse.json({ error: 'Choose a destination in the same source file.' }, { status: 422 });
+app/api/slightnudge\preview\route.ts:73:      const destinationPlan = prepareDraftTarget({ filePath, line: destination.line, column: destination.column, tagName: destination.tagName, elementId: destination.elementId }, parentId, scope);
+app/api/slightnudge\preview\route.ts:75:      const preview = await draft.create({ filePath, before: result.before, after: result.after, summary: 'Move into container', oldValue: '', newValue: '', previewType: 'reorder', repositoryId, sourcePath }, false, result.sourceOrder);
+app/api/slightnudge\preview\route.ts:99:        filePath,
+app/api/slightnudge\preview\route.ts:107:        repositoryId,
+app/api/slightnudge\preview\route.ts:108:        sourcePath,
+app/api/slightnudge\preview\route.ts:122:        filePath,
+app/api/slightnudge\preview\route.ts:137:        repositoryId,
+app/api/slightnudge\preview\route.ts:138:        sourcePath,
+app/api/slightnudge\preview\route.ts:145:      const source = { sourceText: target.sourceText || readFileSync(filePath, 'utf8'), line: target.line!, column: target.column! };
+app/api/slightnudge\preview\route.ts:149:            const info=inspectInstanceComponent({root:scope.root,filePath:sourcePath||body.filePath,line:body.line,column:body.column,instance:body.instance});
+app/api/slightnudge\preview\route.ts:150:            const id=body.drafts?.[info.owner.filePath];
+app/api/slightnudge\preview\route.ts:152:              const callerPath=repositoryId?(await resolveRepositorySourcePath(repositoryId,info.owner.filePath)).filePath:resolveWorkspaceSourcePath(info.owner.filePath);
+app/api/slightnudge\preview\route.ts:153:              const pending=readDraftSource(id,callerPath,repositoryId);
+app/api/slightnudge\preview\route.ts:163:          const definitionPath=repositoryId?sourcePath!:body.filePath;
+app/api/slightnudge\preview\route.ts:165:          const cross=inspectCrossFileComponent({root:scope.root,filePath:definitionPath,line:target.line!,column:target.column!});
+app/api/slightnudge\preview\route.ts:167:          if(ids&&typeof ids==='object'&&!Array.isArray(ids)&&Object.keys(ids).length<=16&&typeof ids[cross.owner.filePath]==='string'){
+app/api/slightnudge\preview\route.ts:168:            const callerPath=repositoryId?(await resolveRepositorySourcePath(repositoryId,cross.owner.filePath)).filePath:resolveWorkspaceSourcePath(cross.owner.filePath);
+app/api/slightnudge\preview\route.ts:169:            const pending=readDraftSource(ids[cross.owner.filePath],callerPath,repositoryId);
+app/api/slightnudge\preview\route.ts:171:            const prepared=prepareDraftTarget({...cross.owner,filePath:callerPath},pending.id,{...scope,structural:true});
+app/api/slightnudge\preview\route.ts:180:        if(typeof definition.filePath!=='string'||!Number.isSafeInteger(definition.line)||!Number.isSafeInteger(definition.column))throw new Error('Choose an exact component definition.');
+app/api/slightnudge\preview\route.ts:181:        const validated=repositoryId?(await resolveRepositorySourcePath(repositoryId,definition.filePath)).filePath:resolveWorkspaceSourcePath(definition.filePath);
+app/api/slightnudge\preview\route.ts:183:          const info=inspectInstanceComponent({root:scope.root,filePath:definition.filePath,line:definition.line,column:definition.column,instance:definition.instance});
+app/api/slightnudge\preview\route.ts:184:          if(path.resolve(scope.root,info.owner.filePath)!==filePath||body.line!==info.owner.line||body.column!==info.owner.column||body.tagName!==info.owner.tagName)throw Error('The instance write owner changed. Select it again.');
+app/api/slightnudge\preview\route.ts:185:          if(parentId&&readDraftSource(parentId,filePath,repositoryId).sourceOrder?.some((value,index)=>value!==index))throw Error('Save structural changes before editing instance props.');
+app/api/slightnudge\preview\route.ts:187:          const baseline=parentId?readDraftSource(parentId,filePath,repositoryId).before:readFileSync(filePath,'utf8');
+app/api/slightnudge\preview\route.ts:189:          return NextResponse.json({...await createPreview({filePath,...result,componentDependencies:[info.dependency],summary:`Change ${body.property} · this instance`,previewType:'reorder',repositoryId,sourcePath}),ownerPath:info.owner.filePath,success:true});
+app/api/slightnudge\preview\route.ts:191:        const cross=inspectCrossFileComponent({root:scope.root,filePath:definition.filePath,line:definition.line,column:definition.column});
+app/api/slightnudge\preview\route.ts:192:        if(path.resolve(scope.root,cross.owner.filePath)!==filePath||body.line!==cross.owner.line||body.column!==cross.owner.column||body.tagName!==cross.owner.tagName||body.property!==cross.fields[0].name)throw new Error('The component write owner changed. Select it again.');
+app/api/slightnudge\preview\route.ts:193:        if(parentId&&readDraftSource(parentId,filePath,repositoryId).sourceOrder?.some((value,index)=>value!==index))throw new Error('Save structural changes to the caller before editing this prop.');
+app/api/slightnudge\preview\route.ts:196:        return NextResponse.json({...await createPreview({filePath,...result,componentDependencies:[cross.dependency],summary:`Change ${body.property} prop`,previewType:'reorder',repositoryId,sourcePath}),ownerPath:cross.owner.filePath,success:true});
+app/api/slightnudge\preview\route.ts:199:      return NextResponse.json({ ...await createPreview({ filePath, ...result, summary: `Change ${body.property} prop`, previewType: 'reorder', repositoryId, sourcePath }), success: true });
+app/api/slightnudge\preview\route.ts:204:      const source = { sourceText: target.sourceText || readFileSync(filePath, 'utf8'), line: target.line!, column: target.column! };
+app/api/slightnudge\preview\route.ts:217:      return NextResponse.json({ ...await createPreview({ filePath, ...result, summary: `Change icon ${body.property}`, previewType: 'reorder', repositoryId, sourcePath }), success: true });
+app/api/slightnudge\preview\route.ts:222:      const source = { sourceText: target.sourceText || readFileSync(filePath, 'utf8'), line: target.line!, column: target.column! };
+app/api/slightnudge\preview\route.ts:226:      const preview = await createPreview({ filePath, ...result, summary: body.property === 'href' ? 'Change link destination' : body.property === 'target' ? 'Change link opening behavior' : body.property === 'type' ? 'Change button type' : 'Change button availability', previewType: 'reorder', repositoryId, sourcePath });
+app/api/slightnudge\preview\route.ts:239:      const result = await updateAdvancedImage({ root: scope.root, filePath, sourceText: target.sourceText || readFileSync(filePath, 'utf8'), line: target.line!, column: target.column!, property: body.property, value: body.value });
+app/api/slightnudge\preview\route.ts:240:      const preview = await createPreview({ filePath, ...result, summary: body.property === 'src' ? 'Replace image' : 'Edit image description', previewType: 'reorder', repositoryId, sourcePath });
+app/api/slightnudge\preview\route.ts:249:      const responsiveScopes = interaction ? undefined : await getProjectResponsiveScopes(findProjectRoot(filePath));
+app/api/slightnudge\preview\route.ts:257:      const compiled = await verifyTailwindClass(candidate, findProjectRoot(filePath));
+app/api/slightnudge\preview\route.ts:261:        filePath,
+app/api/slightnudge\preview\route.ts:276:        repositoryId,
+app/api/slightnudge\preview\route.ts:277:        sourcePath,
+app/api/slightnudge\preview\route.ts:290:        filePath,
+app/api/slightnudge\preview\route.ts:301:        repositoryId,
+app/api/slightnudge\preview\route.ts:302:        sourcePath,
+app/api/slightnudge\preview\route.ts:309:      const root = repositoryId ? await resolveRepositoryRoot(repositoryId) : process.cwd();
+app/api/slightnudge\preview\route.ts:321:        filePath,
+app/api/slightnudge\preview\route.ts:332:        repositoryId,
+app/api/slightnudge\preview\route.ts:333:        sourcePath,
+app/api/slightnudge\undo\status\route.ts:15:    if (typeof body.previewId !== 'string' || !/^[0-9a-f-]{36}$/i.test(body.previewId)) return NextResponse.json({ success: false, code: 'UNDO_TARGET_REQUIRED', error: 'An accepted edit reference is required.' }, { status: 400, headers });
+app/api/slightnudge\undo\status\route.ts:16:    if (body.repositoryId !== undefined && (typeof body.repositoryId !== 'string' || typeof body.sourcePath !== 'string')) return NextResponse.json({ success: false, code: 'UNDO_TARGET_REQUIRED', error: 'Choose the project and source file for this Undo.' }, { status: 400, headers });
+app/api/slightnudge\undo\status\route.ts:17:    const filePath = typeof body.repositoryId === 'string'
+app/api/slightnudge\undo\status\route.ts:18:      ? (await resolveRepositorySourcePath(body.repositoryId, body.sourcePath)).filePath
+app/api/slightnudge\undo\status\route.ts:19:      : typeof body.filePath === 'string' && body.filePath.trim() ? resolveWorkspaceSourcePath(body.filePath) : undefined;
+app/api/slightnudge\undo\status\route.ts:20:    const result = getSourceUndoOutcome(body.previewId, { filePath, repositoryId: body.repositoryId, sourcePath: body.sourcePath, editId: typeof body.editId === 'string' ? body.editId : undefined });
+app/api/slightnudge\responsive\route.ts:10:    if (typeof body.filePath !== 'string') return NextResponse.json({ error: 'Choose a project source file.' }, { status: 400 });
+app/api/slightnudge\responsive\route.ts:11:    const target = typeof body.repositoryId === 'string' ? (await resolveRepositorySourcePath(body.repositoryId, body.filePath)).filePath : resolveWorkspaceSourcePath(body.filePath);
+app/api/slightnudge\repositories\[id]\inspect\route.ts:34:      filePath: source.filePath,
+app/api/slightnudge\repositories\[id]\inspect\route.ts:43:    const undoTarget = getLatestUndoTarget(source.filePath, id, source.path);
+app/api/slightnudge\repositories\[id]\source\route.ts:7:    const sourcePath = new URL(request.url).searchParams.get('path');
+app/api/slightnudge\repositories\[id]\source\route.ts:8:    if (!sourcePath) return NextResponse.json({ error: 'Choose a source file to inspect.' }, { status: 400 });
+app/api/slightnudge\repositories\[id]\source\route.ts:9:    return NextResponse.json(await readRepositorySource(id, sourcePath));

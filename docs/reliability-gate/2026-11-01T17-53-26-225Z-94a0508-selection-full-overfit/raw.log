@@ -1,0 +1,48 @@
+GATE evidence C:\dev\vibecheck\docs\reliability-gate\2026-11-01T17-53-26-225Z-94a0508-selection-full-overfit
+PRODUCT 94a05082435520c0d948c2922dd670d586b3bf2a TESTS 94a05082435520c0d948c2922dd670d586b3bf2a
+No test assertions or limits changed; same HEAD tests at every historical product ref.
+
+COMMAND prepare-lab-adapters: node --import tsx --input-type=module -e const {installNextSourceAdapter}=await import('./lib/slightnudge/next-source-adapter.ts');for(const id of ['m0-control-lab','m0-overfit-lab'])await installNextSourceAdapter(id);console.log('Temp adapters prepared');
+Temp adapters prepared
+SERVER 3000 PID 11836 C:\dev\vibecheck\scratch\reliability-gate\2026-11-01T17-53-26-225Z-94a0508-selection-full-overfit\worktree
+SERVER 3001 PID 33124 C:\dev\vibecheck\scratch\reliability-gate\2026-11-01T17-53-26-225Z-94a0508-selection-full-overfit\worktree\.slightnudge\repositories\m0-control-lab
+SERVER 3002 PID 16412 C:\dev\vibecheck\scratch\reliability-gate\2026-11-01T17-53-26-225Z-94a0508-selection-full-overfit\worktree\.slightnudge\repositories\m0-overfit-lab
+WARMUP m0-control-lab full: 69.23s
+WARMUP m0-control-lab fit: 8s
+WARMUP m0-overfit-lab full: 22.9s
+WARMUP m0-overfit-lab fit: 4.41s
+
+COMMAND selection-full-overfit: node --import tsx test/m0-overfit.reliability.test.ts
+NAVIGATION http://127.0.0.1:3000/editor/m0-overfit-lab?preview=http%3A%2F%2F127.0.0.1%3A3002&view=full
+GATE_BROWSER_PAGE_ERROR http://127.0.0.1:3000/editor/m0-overfit-lab?preview=http%3A%2F%2F127.0.0.1%3A3002&view=full
+SyntaxError: Unexpected end of JSON input
+    at JSON.parse (<anonymous>)
+    at loadManifest (file://C:\dev\vibecheck\node_modules\next\dist\server\load-manifest.external.js:57:25)
+    at loadManifestFromRelativePath (file://C:\dev\vibecheck\node_modules\next\dist\server\load-manifest.external.js:110:12)
+    at AppPageRouteModule.loadManifests (file://C:\dev\vibecheck\node_modules\next\dist\compiled\next-server\app-page.runtime.dev.js:367:60954)
+    at <unknown> (file://C:\dev\vibecheck\node_modules\next\dist\compiled\next-server\app-page.runtime.dev.js:367:71213)
+    at NextTracerImpl.trace (file://C:\dev\vibecheck\node_modules\next\dist\server\lib\trace\tracer.js:196:72)
+    at AppPageRouteModule.prepareImpl (file://C:\dev\vibecheck\node_modules\next\dist\compiled\next-server\app-page.runtime.dev.js:367:71118)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async handleRequest (webpack-internal:///(rsc)/../../../../node_modules/next/dist/build/templates/app-page-runtime.js:187:31)
+    at async DevServer.renderToResponseWithComponentsImpl (file://C:\dev\vibecheck\node_modules\next\dist\server\base-server.js:1765:9)
+    at async DevServer.renderPageComponent (file://C:\dev\vibecheck\node_modules\next\dist\server\base-server.js:1824:24)
+    at async DevServer.renderToResponseImpl (file://C:\dev\vibecheck\node_modules\next\dist\server\base-server.js:1867:36)
+    at async DevServer.pipeImpl (file://C:\dev\vibecheck\node_modules\next\dist\server\base-server.js:1286:25)
+    at async NextNodeServer.handleCatchallRenderRequest (file://C:\dev\vibecheck\node_modules\next\dist\server\next-server.js:340:17)
+    at async DevServer.handleRequestImpl (file://C:\dev\vibecheck\node_modules\next\dist\server\base-server.js:1008:17)
+    at async (file://C:\dev\vibecheck\node_modules\next\dist\server\dev\next-dev-server.js:384:20)
+    at async Span.traceAsyncFn (file://C:\dev\vibecheck\node_modules\next\dist\trace\trace.js:168:20)
+    at async DevServer.handleRequest (file://C:\dev\vibecheck\node_modules\next\dist\server\dev\next-dev-server.js:380:24)
+    at async invokeRender (file://C:\dev\vibecheck\node_modules\next\dist\server\lib\router-server.js:363:21)
+    at async handleRequest (file://C:\dev\vibecheck\node_modules\next\dist\server\lib\router-server.js:567:24)
+    at async requestHandlerImpl (file://C:\dev\vibecheck\node_modules\next\dist\server\lib\router-server.js:636:13)
+    at async Server.requestListener (file://C:\dev\vibecheck\node_modules\next\dist\server\lib\start-server.js:210:13)
+
+workflow | real or mocked | pass/fail | seconds
+warmup-m0-control-lab-full | REAL | PASS | 69.23
+warmup-m0-control-lab-fit | REAL | PASS | 8
+warmup-m0-overfit-lab-full | REAL | PASS | 22.9
+warmup-m0-overfit-lab-fit | REAL | PASS | 4.41
+selection-full-overfit | REAL | FAIL | 19.81
+GATE FAIL; evidence C:\dev\vibecheck\docs\reliability-gate\2026-11-01T17-53-26-225Z-94a0508-selection-full-overfit

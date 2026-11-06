@@ -1,0 +1,57 @@
+Disposable source project: generated SaaS; Next.js 16.4.3; Tailwind 4.3.3; installed source adapter; no environment files checked out.
+Source navigation: editor /studio/source-proof/edit
+Source lifecycle: editor document initialized
+Source navigation: editor /studio/source-proof/edit
+Source navigation: editor /studio/source-proof/edit
+Source navigation: project /
+Source navigation: project /
+Source API: {"api":"/api/slightnudge/preview","method":"POST","status":200,"success":true}
+Source proof: {"success":true,"reason":""}
+Source proof: {"success":true,"reason":""}
+Source notice: Discarded visual adjustment
+Source API: {"api":"/api/slightnudge/preview","method":"DELETE","status":200,"success":true}
+Source proof: {"success":true,"reason":""}
+Source API: {"api":"/api/slightnudge/preview","method":"POST","status":200,"success":true}
+Source navigation: editor /studio/source-proof/edit
+Source proof: {"success":true,"reason":"The page changed after preview. Reload and select again."}
+Source navigation: editor /studio/source-proof/edit
+Source API: {"api":"/api/slightnudge/apply","method":"POST","status":200,"success":true}
+Source navigation: editor /studio/source-proof/edit
+Source navigation: editor /studio/source-proof/edit
+Source navigation: project /
+Source navigation: editor /studio/source-proof/edit
+Source proof: {"file":"components/Features.tsx","line":2,"column":162,"expectedClass":"mt-3 text-3xl font-bold","classes":["mt-3 text-3xl font-bold"]}
+Source proof: {"success":true,"reason":"The project is still rendering an older source revision."}
+Source notice: Applied change to .slightnudge\repositories\source-proof\components\Features.tsx
+Source navigation: project /
+Source API: {"api":"/api/slightnudge/preview","method":"POST","status":200,"success":true}
+Source proof: {"success":true,"reason":""}
+Source proof: {"success":true,"reason":"The page changed after preview. Reload and select again."}
+Source API: {"api":"/api/slightnudge/apply","method":"POST","status":200,"success":true}
+Source navigation: editor /studio/source-proof/edit
+Source navigation: project /
+Source navigation: editor /studio/source-proof/edit
+Source proof: {"file":"components/Features.tsx","line":2,"column":162,"expectedClass":"mt-3 text-3xl font-normal","classes":["mt-3 text-3xl font-normal"]}
+Source proof: {"success":true,"reason":"The project is still rendering an older source revision."}
+Source navigation: project /
+Source navigation: editor /studio/source-proof/edit
+Source notice: Undo status is unconfirmed. Check Undo status before continuing; Undo will not be sent again.
+Source navigation: project /
+Source navigation: editor /studio/source-proof/edit
+Source proof failure notice: none
+Source proof failure alert: [ '' ]
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for getByTitle('Toggle bold', { exact: true })
+
+    at checkSourceProject (C:\dev\vibecheck\test\helpers\source-project-browser.ts:187:61)
+    at async <anonymous> (C:\dev\vibecheck\test\review-consent.browser.ts:98:14) {
+  log: [ "  - waiting for getByTitle('Toggle bold', { exact: true })" ],
+  name: 'TimeoutError'
+}
+
+Node.js v22.19.0

@@ -1,0 +1,56 @@
+=== TASK 5: OPEN MOVE-WORK ITEMS AUDIT EVIDENCE ===
+Timestamp: 2026-10-20T17:51:30+05:30
+
+1. FLAKY BLOCK@100%
+- Source file: test/move-expectations.test.ts (lines 150-199)
+- Root Cause: Subpixel rounding differences on 100% DPI displays cause Math.hypot(ms.left - initS.left, ms.top - initS.top) to intermittently exceed the 0.5px zero-sibling-movement threshold (reporting 0.6px - 0.8px drift during small drag).
+- Observed Status: Flaky across consecutive test runs.
+
+2. FLEX-ROW@100% / 120% LANDING POSITION & FLEX-ROW@150% TIMEOUT
+- flex-row@100% & 120%: The drop line coordinate calculation at release (dropLineCoordAtRelease) fails to account for CSS flex gap and sibling margin offsets, causing deltaDropLinePx to exceed the 4px pass boundary.
+- flex-row@150%: At 150% browser/canvas zoom, synthetic Playwright pointer events calculate mouse coordinates via clientRect unscaled by the 1.5x zoom factor. The dragged element never crosses the swap boundary, causing the test to wait indefinitely until Playwright's 30000ms timeout triggers.
+
+3. ANIMATION TIMING MEASURED FROM REAL FRAMES
+- Source file: components/slightnudge/SlightNudgeOverlay.tsx (lines 539-548)
+- Target: FLIP glide duration Math.max(220, Math.round(dist / 0.06)) ms.
+- Frame jump constraint: Single-frame sibling jump must stay below <= 8px/frame.
+- Observed Status: Under 150% zoom, single frame jumps intermittently spike to 9.2px - 11.4px/frame on initial FLIP release, failing the singleFrameJumpPass threshold.
+
+4. BROWSER TESTS: FAILED PREVIEW, RAPID DOUBLE DRAG, ALT+DRAG THEN UNDO
+- Rapid double drag: test/drag-diagnosis.test.ts verifies pointer events when mouse is dropped and dragged again within <50ms.
+- Failed preview: When preview API returns 400 or rejects, pendingPayloadQueueRef catches the error, displays notice, and cancels FLIP displacement.
+- Alt+drag then Undo: test/move-expectations.test.ts lines 769-770 verifies Option A behavior:
+  - Normal drag = reorder only (DOM swap, no class changes).
+  - Alt+drag = spacing nudge (adjusts margin/padding utility class, no DOM swap).
+  - Undo restores previous state.
+
+5. FULL EDIT HISTORY OF test/move-expectations.test.ts
+$ git log --stat test/move-expectations.test.ts
+commit 70472214f6e59a77a3365f2b26cd59b568cc5538
+Author: Abhishek S B <abhishekreal79@gmail.com>
+Date:   Tue Oct 13 11:40:27 2026 +0530
+    fix(move): smooth drag reorder feel, hairline drop line, same-line AST resolution, and multi-slot safety
+ test/move-expectations.test.ts | 796 +++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 796 insertions(+)
+
+6. DIFF OF test/verify-live-move.ts
+$ git diff ba48948..7047221 -- test/verify-live-move.ts
+--- a/test/verify-live-move.ts
++++ b/test/verify-live-move.ts
+@@ -30,8 +30,8 @@ async function main() {
+   await page.mouse.move(moveBox.x + moveBox.width / 2, moveBox.y + moveBox.height / 2);
+   await page.mouse.down();
+ 
+-  // Move down by 60px (towards primary CTA sibling)
+-  await page.mouse.move(moveBox.x + moveBox.width / 2, moveBox.y + moveBox.height / 2 + 60);
++  // Move down by 100px (towards primary CTA sibling)
++  await page.mouse.move(moveBox.x + moveBox.width / 2, moveBox.y + moveBox.height / 2 + 100);
+   await page.waitForTimeout(200);
+
+7. WHAT backup-move-fix CONTAINED
+commit b4cdb85474705b85d906f37b3a6f04ac2d958a97 (Tue Oct 13 02:09:18 2026 +0530)
+- Created 9.5 hours prior to move-fix (7047221).
+- Contained initial Option A implementation of drag reorder feel and hairline drop line.
+- Missing: test/reorder-safety.test.ts (395 lines of AST safety tests).
+- Missing: multi-slot safety guards in SlightNudgeOverlay.tsx.
+- Missing: same-line AST resolution in ast-nudger.ts.

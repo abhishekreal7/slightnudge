@@ -1,0 +1,29 @@
+﻿TAP version 13
+# Subtest: S3: Atomic or refuse in atomicWrite
+    # Subtest: refuses and leaves target file unchanged when rename fails permanently without fallback overwrite
+    ok 1 - refuses and leaves target file unchanged when rename fails permanently without fallback overwrite
+      ---
+      duration_ms: 1592.0351
+      type: 'test'
+      ...
+    # Subtest: retries with backoff and succeeds when rename fails twice then succeeds
+    ok 2 - retries with backoff and succeeds when rename fails twice then succeeds
+      ---
+      duration_ms: 224.3842
+      type: 'test'
+      ...
+    1..2
+ok 1 - S3: Atomic or refuse in atomicWrite
+  ---
+  duration_ms: 1818.3938
+  type: 'suite'
+  ...
+1..1
+# tests 2
+# suites 1
+# pass 2
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1833.2809

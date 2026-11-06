@@ -1,0 +1,246 @@
+{
+  "results": [
+    {
+      "id": 1,
+      "name": "Absolute outside path",
+      "targetPath": "C:\\Users\\abhis\\AppData\\Local\\Temp\\sentinels-198eb114-8068-4f83-bceb-83e45ad83528\\outside.tsx",
+      "status": "REFUSED_SAFELY",
+      "refusedSafely": true,
+      "unverified": false,
+      "failureReason": null
+    },
+    {
+      "id": 2,
+      "name": "System directory path",
+      "targetPath": "C:\\Windows\\System32\\drivers\\etc\\hosts",
+      "status": "REFUSED_SAFELY",
+      "refusedSafely": true,
+      "unverified": false,
+      "failureReason": null
+    },
+    {
+      "id": 3,
+      "name": "POSIX root path",
+      "targetPath": "/etc/passwd",
+      "status": "REFUSED_SAFELY",
+      "refusedSafely": true,
+      "unverified": false,
+      "failureReason": null
+    },
+    {
+      "id": 4,
+      "name": "Simple parent traversal",
+      "targetPath": "../outside.tsx",
+      "status": "REFUSED_SAFELY",
+      "refusedSafely": true,
+      "unverified": false,
+      "failureReason": null
+    },
+    {
+      "id": 5,
+      "name": "Multi-level parent traversal",
+      "targetPath": "../../outside.tsx",
+      "status": "REFUSED_SAFELY",
+      "refusedSafely": true,
+      "unverified": false,
+      "failureReason": null
+    },
+    {
+      "id": 6,
+      "name": "Subdirectory parent traversal",
+      "targetPath": "fixtures/../../outside.tsx",
+      "status": "REFUSED_SAFELY",
+      "refusedSafely": true,
+      "unverified": false,
+      "failureReason": null
+    },
+    {
+      "id": 7,
+      "name": "Mixed slashes traversal",
+      "targetPath": "fixtures\\../..\\outside.tsx",
+      "status": "REFUSED_SAFELY",
+      "refusedSafely": true,
+      "unverified": false,
+      "failureReason": null
+    },
+    {
+      "id": 8,
+      "name": "Trailing slash traversal",
+      "targetPath": "fixtures/../../../",
+      "status": "REFUSED_SAFELY",
+      "refusedSafely": true,
+      "unverified": false,
+      "failureReason": null
+    },
+    {
+      "id": 9,
+      "name": "UNC localhost",
+      "targetPath": "\\\\localhost\\c$\\Users\\abhis\\AppData\\Local\\Temp\\sentinels-198eb114-8068-4f83-bceb-83e45ad83528\\outside.tsx",
+      "status": "REFUSED_SAFELY",
+      "refusedSafely": true,
+      "unverified": false,
+      "failureReason": null
+    },
+    {
+      "id": 10,
+      "name": "UNC 127.0.0.1",
+      "targetPath": "\\\\127.0.0.1\\c$\\Users\\abhis\\AppData\\Local\\Temp\\sentinels-198eb114-8068-4f83-bceb-83e45ad83528\\outside.tsx",
+      "status": "REFUSED_SAFELY",
+      "refusedSafely": true,
+      "unverified": false,
+      "failureReason": null
+    },
+    {
+      "id": 11,
+      "name": "Forward-slash UNC",
+      "targetPath": "//localhost/c$/Users\\abhis\\AppData\\Local\\Temp\\sentinels-198eb114-8068-4f83-bceb-83e45ad83528\\outside.tsx",
+      "status": "REFUSED_SAFELY",
+      "refusedSafely": true,
+      "unverified": false,
+      "failureReason": null
+    },
+    {
+      "id": 12,
+      "name": "Extended length device path outside",
+      "targetPath": "\\\\?\\C:\\Users\\abhis\\AppData\\Local\\Temp\\sentinels-198eb114-8068-4f83-bceb-83e45ad83528\\outside.tsx",
+      "status": "REFUSED_SAFELY",
+      "refusedSafely": true,
+      "unverified": false,
+      "failureReason": null
+    },
+    {
+      "id": 13,
+      "name": "Extended length device UNC",
+      "targetPath": "\\\\?\\UNC\\localhost\\c$\\Users\\abhis\\AppData\\Local\\Temp\\sentinels-198eb114-8068-4f83-bceb-83e45ad83528\\outside.tsx",
+      "status": "REFUSED_SAFELY",
+      "refusedSafely": true,
+      "unverified": false,
+      "failureReason": null
+    },
+    {
+      "id": 14,
+      "name": "Extended length device traversal",
+      "targetPath": "\\\\?\\C:\\Users\\abhis\\AppData\\Local\\Temp\\path-battery-copy-2ad1a921-a736-428a-80bf-73c360ff6441\\..\\outside.tsx",
+      "status": "REFUSED_SAFELY",
+      "refusedSafely": true,
+      "unverified": false,
+      "failureReason": null
+    },
+    {
+      "id": 15,
+      "name": "8.3 short name Program Files",
+      "targetPath": "C:\\PROGRA~1\\outside.tsx",
+      "status": "REFUSED_SAFELY",
+      "refusedSafely": true,
+      "unverified": false,
+      "failureReason": null
+    },
+    {
+      "id": 16,
+      "name": "8.3 short name Users",
+      "targetPath": "C:\\Users\\ABHIS~1\\outside.tsx",
+      "status": "REFUSED_SAFELY",
+      "refusedSafely": true,
+      "unverified": false,
+      "failureReason": null
+    },
+    {
+      "id": 17,
+      "name": "Drive letter lower case",
+      "targetPath": "c:\\users\\abhis\\appdata\\local\\temp\\sentinels-198eb114-8068-4f83-bceb-83e45ad83528\\outside.tsx",
+      "status": "REFUSED_SAFELY",
+      "refusedSafely": true,
+      "unverified": false,
+      "failureReason": null
+    },
+    {
+      "id": 18,
+      "name": "Drive letter upper case",
+      "targetPath": "C:\\USERS\\ABHIS\\APPDATA\\LOCAL\\TEMP\\SENTINELS-198EB114-8068-4F83-BCEB-83E45AD83528\\OUTSIDE.TSX",
+      "status": "REFUSED_SAFELY",
+      "refusedSafely": true,
+      "unverified": false,
+      "failureReason": null
+    },
+    {
+      "id": 19,
+      "name": "Trailing dot path",
+      "targetPath": "C:\\Users\\abhis\\AppData\\Local\\Temp\\sentinels-198eb114-8068-4f83-bceb-83e45ad83528\\outside.tsx.",
+      "status": "REFUSED_SAFELY",
+      "refusedSafely": true,
+      "unverified": false,
+      "failureReason": null
+    },
+    {
+      "id": 20,
+      "name": "Trailing space path",
+      "targetPath": "C:\\Users\\abhis\\AppData\\Local\\Temp\\sentinels-198eb114-8068-4f83-bceb-83e45ad83528\\outside.tsx ",
+      "status": "REFUSED_SAFELY",
+      "refusedSafely": true,
+      "unverified": false,
+      "failureReason": null
+    },
+    {
+      "id": 21,
+      "name": "Alternate Data Stream outside",
+      "targetPath": "C:\\Users\\abhis\\AppData\\Local\\Temp\\sentinels-198eb114-8068-4f83-bceb-83e45ad83528\\outside.tsx::$DATA",
+      "status": "REFUSED_SAFELY",
+      "refusedSafely": true,
+      "unverified": false,
+      "failureReason": null
+    },
+    {
+      "id": 22,
+      "name": "Alternate Data Stream inside",
+      "targetPath": "fixtures/test.tsx::$DATA",
+      "status": "REFUSED_SAFELY",
+      "refusedSafely": true,
+      "unverified": false,
+      "failureReason": null
+    },
+    {
+      "id": 23,
+      "name": "Sibling prefix collision",
+      "targetPath": "C:\\Users\\abhis\\AppData\\Local\\Temp\\path-battery-copy-2ad1a921-a736-428a-80bf-73c360ff6441-evil\\outside.tsx",
+      "status": "REFUSED_SAFELY",
+      "refusedSafely": true,
+      "unverified": false,
+      "failureReason": null
+    },
+    {
+      "id": 24,
+      "name": "Sibling relative collision",
+      "targetPath": "../path-battery-copy-2ad1a921-a736-428a-80bf-73c360ff6441-evil/outside.tsx",
+      "status": "REFUSED_SAFELY",
+      "refusedSafely": true,
+      "unverified": false,
+      "failureReason": null
+    },
+    {
+      "id": 25,
+      "name": "Junction pointing outside",
+      "targetPath": "C:\\Users\\abhis\\AppData\\Local\\Temp\\path-battery-copy-2ad1a921-a736-428a-80bf-73c360ff6441\\junc-dff52196-9cb5-4542-9dc0-14597c5acab0\\outside.tsx",
+      "status": "REFUSED_SAFELY",
+      "refusedSafely": true,
+      "unverified": false,
+      "failureReason": null
+    },
+    {
+      "id": 26,
+      "name": "Symlink pointing outside",
+      "status": "UNVERIFIED",
+      "refusedSafely": true,
+      "unverified": true,
+      "failureReason": "Symlink creation requires elevated SeCreateSymbolicLinkPrivilege on Windows (Developer Mode)"
+    },
+    {
+      "id": 27,
+      "name": "TOCTOU junction swap before write",
+      "status": "REFUSED_SAFELY",
+      "refusedSafely": true,
+      "unverified": false,
+      "failureReason": null
+    }
+  ],
+  "writesOutsideRoot": 0
+}

@@ -1,0 +1,155 @@
+▶ S1: Authenticated, local-only mutating requests
+  ✖ rejects mutating request with no Origin and no token with 403 (not 404) (14487.3803ms)
+  ✖ rejects mutating request with wrong Host with 403 (41.6118ms)
+  ✖ rejects mutating request with valid Origin but missing token with 403 (29.5602ms)
+  ✖ rejects mutating request with valid Origin but invalid token with 403 (27.5488ms)
+  ✖ returns normal not-found error for fake previewId with valid token and valid Origin (24.1322ms)
+  ✖ allows missing Origin when valid token is present and proceeds to normal handling (26.7232ms)
+  ✖ completes preview, apply, and undo flow in a temp copy with valid token and Origin (41.2527ms)
+✖ S1: Authenticated, local-only mutating requests (27335.5313ms)
+ℹ tests 7
+ℹ suites 1
+ℹ pass 0
+ℹ fail 7
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 27340.5814
+
+✖ failing tests:
+
+test at test\s1-auth-origin.test.ts:1:1006
+✖ rejects mutating request with no Origin and no token with 403 (not 404) (14487.3803ms)
+  AssertionError [ERR_ASSERTION]: Expected 403, got 500
+  
+  500 !== 403
+  
+      at TestContext.<anonymous> (C:\Users\abhis\AppData\Local\Temp\mutant-m7-0bf372b6-cfc3-460b-8fb7-f931cf143863\test\s1-auth-origin.test.ts:40:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+      at async Test.run (node:internal/test_runner/test:1113:7)
+      at async Promise.all (index 0)
+      at async Suite.run (node:internal/test_runner/test:1518:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:358:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 500,
+    expected: 403,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test\s1-auth-origin.test.ts:1:1328
+✖ rejects mutating request with wrong Host with 403 (41.6118ms)
+  AssertionError [ERR_ASSERTION]: Failed to fetch session token: 500
+  
+  500 !== 200
+  
+      at fetchToken (C:\Users\abhis\AppData\Local\Temp\mutant-m7-0bf372b6-cfc3-460b-8fb7-f931cf143863\test\s1-auth-origin.test.ts:28:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+      at async TestContext.<anonymous> (C:\Users\abhis\AppData\Local\Temp\mutant-m7-0bf372b6-cfc3-460b-8fb7-f931cf143863\test\s1-auth-origin.test.ts:44:19)
+      at async Test.run (node:internal/test_runner/test:1113:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:788:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 500,
+    expected: 200,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test\s1-auth-origin.test.ts:1:1884
+✖ rejects mutating request with valid Origin but missing token with 403 (29.5602ms)
+  AssertionError [ERR_ASSERTION]: Expected 403 on missing token, got 500
+  
+  500 !== 403
+  
+      at TestContext.<anonymous> (C:\Users\abhis\AppData\Local\Temp\mutant-m7-0bf372b6-cfc3-460b-8fb7-f931cf143863\test\s1-auth-origin.test.ts:76:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+      at async Test.run (node:internal/test_runner/test:1113:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:788:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 500,
+    expected: 403,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test\s1-auth-origin.test.ts:1:2240
+✖ rejects mutating request with valid Origin but invalid token with 403 (27.5488ms)
+  AssertionError [ERR_ASSERTION]: Expected 403 on invalid token, got 500
+  
+  500 !== 403
+  
+      at TestContext.<anonymous> (C:\Users\abhis\AppData\Local\Temp\mutant-m7-0bf372b6-cfc3-460b-8fb7-f931cf143863\test\s1-auth-origin.test.ts:89:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+      at async Test.run (node:internal/test_runner/test:1113:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:788:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 500,
+    expected: 403,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test\s1-auth-origin.test.ts:1:2695
+✖ returns normal not-found error for fake previewId with valid token and valid Origin (24.1322ms)
+  AssertionError [ERR_ASSERTION]: Failed to fetch session token: 500
+  
+  500 !== 200
+  
+      at fetchToken (C:\Users\abhis\AppData\Local\Temp\mutant-m7-0bf372b6-cfc3-460b-8fb7-f931cf143863\test\s1-auth-origin.test.ts:28:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+      at async TestContext.<anonymous> (C:\Users\abhis\AppData\Local\Temp\mutant-m7-0bf372b6-cfc3-460b-8fb7-f931cf143863\test\s1-auth-origin.test.ts:93:19)
+      at async Test.run (node:internal/test_runner/test:1113:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:788:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 500,
+    expected: 200,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test\s1-auth-origin.test.ts:1:3263
+✖ allows missing Origin when valid token is present and proceeds to normal handling (26.7232ms)
+  AssertionError [ERR_ASSERTION]: Failed to fetch session token: 500
+  
+  500 !== 200
+  
+      at fetchToken (C:\Users\abhis\AppData\Local\Temp\mutant-m7-0bf372b6-cfc3-460b-8fb7-f931cf143863\test\s1-auth-origin.test.ts:28:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+      at async TestContext.<anonymous> (C:\Users\abhis\AppData\Local\Temp\mutant-m7-0bf372b6-cfc3-460b-8fb7-f931cf143863\test\s1-auth-origin.test.ts:109:19)
+      at async Test.run (node:internal/test_runner/test:1113:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:788:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 500,
+    expected: 200,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test\s1-auth-origin.test.ts:1:3806
+✖ completes preview, apply, and undo flow in a temp copy with valid token and Origin (41.2527ms)
+  AssertionError [ERR_ASSERTION]: Failed to fetch session token: 500
+  
+  500 !== 200
+  
+      at fetchToken (C:\Users\abhis\AppData\Local\Temp\mutant-m7-0bf372b6-cfc3-460b-8fb7-f931cf143863\test\s1-auth-origin.test.ts:28:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+      at async TestContext.<anonymous> (C:\Users\abhis\AppData\Local\Temp\mutant-m7-0bf372b6-cfc3-460b-8fb7-f931cf143863\test\s1-auth-origin.test.ts:124:19)
+      at async Test.run (node:internal/test_runner/test:1113:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:788:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 500,
+    expected: 200,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+--- STDERR ---
+(node:36664) [DEP0190] DeprecationWarning: Passing args to a child process with shell option true can lead to security vulnerabilities, as the arguments are not escaped, only concatenated.
+(Use `node --trace-deprecation ...` to show where the warning was created)

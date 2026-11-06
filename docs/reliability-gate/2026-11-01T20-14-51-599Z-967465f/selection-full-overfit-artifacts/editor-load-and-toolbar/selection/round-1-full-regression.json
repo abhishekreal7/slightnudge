@@ -1,0 +1,15 @@
+{
+  "round": 1,
+  "surface": "full",
+  "suite": "regression",
+  "requestedUrl": "http://127.0.0.1:3000/editor/m0-control-lab?preview=http%3A%2F%2F127.0.0.1%3A3001&view=full",
+  "actualUrl": "http://127.0.0.1:3000/editor/m0-control-lab?preview=http%3A%2F%2F127.0.0.1%3A3001&view=full",
+  "cases": [],
+  "geometry": [],
+  "events": [
+    {
+      "kind": "harness-or-setup-error",
+      "message": "TimeoutError: locator.waitFor: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-source-ready=\"true\"]') to be visible\u001b[22m\n"
+    }
+  ]
+}

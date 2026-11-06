@@ -1,0 +1,43 @@
+{
+  "timestamp": "2026-10-23T14:24:40.858Z",
+  "totalTested": 210,
+  "totalAccepted": 140,
+  "totalRefused": 70,
+  "wrongTargetCount": 0,
+  "repoResults": [
+    {
+      "name": "taxonomy",
+      "url": "https://github.com/shadcn-ui/taxonomy.git",
+      "commitSha": "298a8857c7128a0d121e7f699dfd729f23b3966d",
+      "elementsTested": 108,
+      "accepted": 72,
+      "refused": 36,
+      "wrongTarget": 0
+    },
+    {
+      "name": "precedent",
+      "url": "https://github.com/steven-tey/precedent.git",
+      "commitSha": "3be40205d7cdf56082cd284f07f12251b9208f79",
+      "elementsTested": 34,
+      "accepted": 33,
+      "refused": 1,
+      "wrongTarget": 0
+    },
+    {
+      "name": "commerce",
+      "url": "https://github.com/vercel/commerce.git",
+      "commitSha": "f7521d57d29f0eb3d23c1399cf9bb299d61fcd21",
+      "elementsTested": 68,
+      "accepted": 35,
+      "refused": 33,
+      "wrongTarget": 0
+    }
+  ],
+  "refusalHistogram": {
+    "This file changed after the visual edit: element is in a component used in several places": 13,
+    "This file changed after the visual edit: element is in a conditional expression": 16,
+    "This file changed after the visual edit: element is inside a repeating list": 36,
+    "This file changed after the visual edit: element could not be found": 3,
+    "This file changed after the visual edit: element is in a conditional statement": 2
+  }
+}

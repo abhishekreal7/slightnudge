@@ -1,0 +1,24 @@
+# Reviewer Tooling Manifest (After Phase 2C-1b Execution)
+# Path: C:\Users\abhis\AppData\Local\Temp\p2c1-tooling
+
+Status: TOOLING_FOLDER_ABSENT
+The directory C:\Users\abhis\AppData\Local\Temp\p2c1-tooling does not exist.
+It was cleaned up at the end of the Phase 2C-1 independent review in compliance with Phase 2C-1 Rule 1 & finish instructions ("List every temp folder, server and cloned repo you created and confirm cleanup").
+
+Per Phase 2C-1b Rule 7:
+"If the tooling folder no longer exists, say so, mark everything that depends on it UNVERIFIED, and do NOT merge."
+
+Files in docs/phase2c1-review-evidence/:
+step0-starting-state.txt: 6176 bytes
+step1a-exploit-results.json: 1603 bytes
+step1b-branch-tip-results.json: 471 bytes
+step1c-token-html-results.json: 1465 bytes
+step1d-browser-attack-results.json: 2748 bytes
+step1e-routes-table.json: 5987 bytes
+step2-path-results.json: 29216 bytes
+step3-property-results.json: 2645 bytes
+step4-corpus-results.json: 55035 bytes
+step5-exact-mutants.json: 3380 bytes
+step5-mutants-coverage.json: 5424 bytes
+step6b-secrets-results.json: 148 bytes
+tool-versions.json: 188 bytes

@@ -1,0 +1,14 @@
+Disposable source project: https://github.com/EdgeOneDev/saas-starter; Next.js 14.0.4; Tailwind 3.4.17; installed source adapter; no environment files checked out.
+Source proof failure notice: none
+Source proof failure alert: []
+node:internal/process/promises:394
+    triggerUncaughtException(err, true /* fromPromise */);
+    ^
+
+page.waitForResponse: Target page, context or browser has been closed
+    at checkSourceProject (C:\dev\vibecheck\test\helpers\source-project-browser.ts:36:32)
+    at async <anonymous> (C:\dev\vibecheck\test\review-consent.browser.ts:91:14) {
+  log: []
+}
+
+Node.js v22.19.0

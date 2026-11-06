@@ -1,0 +1,119 @@
+▲ Next.js 16.4.3 (webpack)
+- Local:         http://127.0.0.1:3990
+- Network:       http://127.0.0.1:3990
+✓ Ready in 474ms
+✓ Running next.config.mjs took 29ms
+
+✓ Generated AGENTS.md for AI agents. Set `agentRules: false` in next.config to disable.
+○ Compiling /fixtures/1/page ...
+ GET /fixtures/1 200 in 404ms (next.js: 192ms, application-code: 212ms)
+ GET /editor?view=full&panel=inspector 200 in 2.2s (next.js: 1979ms, application-code: 201ms)
+ GET /studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A3990&__slightnudge_session=7af65b04-02cd-450e-b3a2-8a834ffae249 200 in 2.1s (next.js: 1938ms, application-code: 205ms)
+⚠ ./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+ GET /api/slightnudge/pages 200 in 3.8s (next.js: 2.0s, proxy.ts: 1528ms, application-code: 265ms)
+ POST /api/slightnudge/responsive 200 in 3.9s (next.js: 2.0s, proxy.ts: 1528ms, application-code: 367ms)
+ POST /api/slightnudge/responsive 200 in 4.0s (next.js: 2.0s, proxy.ts: 1528ms, application-code: 407ms)
+ GET /api/slightnudge/pages 200 in 15ms (next.js: 2ms, proxy.ts: 5ms, application-code: 7ms)
+○ Compiling /api/slightnudge/responsive/route ...
+FRAME http://127.0.0.1:3990/editor?view=full&panel=inspector
+Edit
+Browse
+View
+Full page
+Fit canvas
+Fit page
+10%
+25%
+50%
+75%
+100%
+150%
+200%
+Desktop
+px
+Edit
+All sizes
+sm · 640px+
+md · 768px+
+lg · 1024px+
+xl · 1280px+
+2xl · 1536px+
+All changes saved
+Save changes
+
+Loading source page…
+
+Visual editor
+Select an element to edit
+
+Click the page or choose a layer.
+FRAME http://127.0.0.1:3990/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A3990&__slightnudge_session=7af65b04-02cd-450e-b3a2-8a834ffae249
+

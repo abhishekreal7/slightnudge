@@ -1,0 +1,64 @@
+﻿========================================================================
+STEP 4: TAILWIND VERIFIER REGRESSION AUDIT (TEMP COPIES)
+========================================================================
+
+--- Step 4a: v4 Project ---
+  bg-brand-500:          verified=true in 126ms (CSS length: 62)
+  bg-nonexistent-999:    verified=false (error: can't verify this class: "bg-nonexistent-999" produced no CSS)
+  dark:hover:bg-brand-500: verified=true (CSS length: 163)
+  w-[37px]:              verified=true (CSS length: 31)
+  Verdict 4a: CONFIRMED
+
+--- Step 4b: v3 Project (npm installed) ---
+  Installing tailwindcss@3 in temp folder...
+  p-4:                   verified=true
+  bg-brand-500:          verified=true
+  dark:hover:bg-brand-500: verified=true
+  w-[37px]:              verified=true
+  plugin-glow:           verified=true
+
+warn - No utility classes were detected in your source files. If this is unexpected, double-check the `content` option in your Tailwind CSS configuration.
+warn - https://tailwindcss.com/docs/content-configuration
+  bogus-invalid-xyz:     verified=false (error: can't verify this class: "bogus-invalid-xyz" produced no CSS in v3)
+  Apply with unchanged legacy classes: success=true
+  Verdict 4b: CONFIRMED
+
+--- Step 4c: Nested Layout Resolution ---
+  Target file:           C:\Users\abhis\AppData\Local\Temp\sn-step4-8f56bbc935fc\monorepo\apps\web\src\app\page.tsx
+  findProjectRoot:       C:\Users\abhis\AppData\Local\Temp\sn-step4-8f56bbc935fc\monorepo\apps\web
+  Matches apps/web:      true
+  bg-nested-exclusive:   verified=true (CSS: .bg-nested-exclusive {
+  background-color: var(--color-nested-exclusive);
+})
+  bg-root-exclusive:     verified=false (error: can't verify this class: "bg-root-exclusive" produced no CSS)
+  Verdict 4c: CONFIRMED
+
+--- Step 4d: No Tailwind Installed & Engine Throws ---
+  Direct verify with no tailwind: verified=false, error=can't verify this class: tailwindcss is not installed
+  applyPendingSourceEdit result: success=false, error=can't verify this class: tailwindcss is not installed
+  Target file content unchanged on disk: CONFIRMED
+  Verdict 4d: CONFIRMED
+
+--- Step 4e: Cache Invalidation ---
+  1. bg-alpha-100:       verified=true
+  2. bg-beta-200 (pre):  verified=false (refused)
+  3. bg-beta-200 (post): verified=true
+  4. bg-beta-200 (rem):  verified=false
+  Verdict 4e: CONFIRMED
+
+--- Step 4f: Timing Benchmarks ---
+  First verification time:   19.41 ms (cold load)
+  Repeat verification 1:     5.30 ms (cached ds)
+  Repeat verification 2:     4.97 ms (cached ds)
+  Verdict 4f: CONFIRMED (Informational)
+
+--- Step 4 Extra: HTTP Apply API on Isolated Dev Server ---
+(node:8656) [DEP0190] DeprecationWarning: Passing args to a child process with shell option true can lead to security vulnerabilities, as the arguments are not escaped, only concatenated.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+  Test dev server started at http://127.0.0.1:3110 on port 3110
+  HTTP Apply Response: status=200, body={"success":true,"editId":"1cf50d66-fd92-44c8-9a43-7d9df202742b","filePath":"app\\page.tsx","previewType":"className","value":"sn-marketing-page p-8","className":"sn-marketing-page p-8","message":"Applied HTTP Apply Test."}
+  HTTP Apply on isolated server: CONFIRMED
+  Test dev server stopped and cleaned up.
+========================================================================
+ALL STEP 4 VERIFICATIONS COMPLETED SUCCESSFULLY!
+========================================================================

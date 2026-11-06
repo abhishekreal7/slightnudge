@@ -1,0 +1,98 @@
+▲ Next.js 16.4.3 (webpack)
+- Local:         http://127.0.0.1:61272
+- Network:       http://127.0.0.1:61272
+✓ Ready in 625ms
+✓ Running next.config.mjs took 41ms
+
+○ Compiling /editor/[[...project]]/page ...
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\ef621fd7\\worktree\\scratch\\shared-gate-runtime\\.next\\dev\\build-manifest.json","pid":18632,"time":1793600570196,"bytes":344}
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\ef621fd7\\worktree\\scratch\\shared-gate-runtime\\.next\\dev\\build-manifest.json","pid":20748,"time":1793600570443,"bytes":344}
+ GET /editor 200 in 946ms (next.js: 735ms, application-code: 210ms)
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\ef621fd7\\worktree\\scratch\\shared-gate-runtime\\.next\\dev\\build-manifest.json","pid":20748,"time":1793600570819,"bytes":344}
+ GET /editor?panel=inspector 200 in 52ms (next.js: 10ms, application-code: 42ms)
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\ef621fd7\\worktree\\scratch\\shared-gate-runtime\\.next\\dev\\build-manifest.json","pid":14668,"time":1793600571166,"bytes":344}
+○ Compiling /studio/preview/[pageId]/page ...
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\ef621fd7\\worktree\\scratch\\shared-gate-runtime\\.next\\dev\\build-manifest.json","pid":16236,"time":1793600577220,"bytes":344}
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\ef621fd7\\worktree\\scratch\\shared-gate-runtime\\.next\\dev\\build-manifest.json","pid":20748,"time":1793600577523,"bytes":344}
+ GET /studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A61272&__slightnudge_session=5c42db32-3c17-4673-8bc5-816c42a9db75 200 in 1188ms (next.js: 960ms, application-code: 228ms)
+⚠ ./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\ef621fd7\\worktree\\scratch\\shared-gate-runtime\\.next\\dev\\build-manifest.json","pid":20748,"time":1793600580868,"bytes":344}
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\ef621fd7\\worktree\\scratch\\shared-gate-runtime\\.next\\dev\\build-manifest.json","pid":20748,"time":1793600580883,"bytes":344}
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\ef621fd7\\worktree\\scratch\\shared-gate-runtime\\.next\\dev\\build-manifest.json","pid":20748,"time":1793600580892,"bytes":344}
+ GET /api/slightnudge/pages 200 in 4.6s (next.js: 3.9s, proxy.ts: 418ms, application-code: 273ms)
+○ Compiling /api/slightnudge/responsive/route ...
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\ef621fd7\\worktree\\scratch\\shared-gate-runtime\\.next\\dev\\build-manifest.json","pid":20748,"time":1793600581234,"bytes":344}
+ POST /api/slightnudge/responsive 200 in 4.8s (next.js: 3.9s, proxy.ts: 419ms, application-code: 487ms)
+ POST /api/slightnudge/responsive 200 in 4.9s (next.js: 3.9s, proxy.ts: 419ms, application-code: 540ms)
+ GET /editor?panel=inspector 200 in 3.5s (next.js: 3.3s, application-code: 217ms)
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\ef621fd7\\worktree\\scratch\\shared-gate-runtime\\.next\\dev\\build-manifest.json","pid":20748,"time":1793600581453,"bytes":344}
+ GET /api/slightnudge/pages 200 in 39ms (next.js: 20ms, proxy.ts: 10ms, application-code: 9ms)
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\g\\ef621fd7\\worktree\\scratch\\shared-gate-runtime\\.next\\dev\\build-manifest.json","pid":34684,"time":1793600581554,"bytes":344}

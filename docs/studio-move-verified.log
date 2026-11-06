@@ -1,0 +1,20 @@
+Move screenshot: C:\Users\abhis\AppData\Local\Temp\slightnudge-move-control.png
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+'6px' !== '0px'
+
+    at checkStudioResize (C:\dev\vibecheck\test\helpers\studio-resize-browser.ts:82:10)
+    at async <anonymous> (C:\dev\vibecheck\test\review-consent.browser.ts:100:14) {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: '6px',
+  expected: '0px',
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v22.19.0

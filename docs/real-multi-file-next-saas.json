@@ -1,0 +1,54 @@
+{
+  "date": "2026-10-28T07:53:22.859Z",
+  "state": "passed",
+  "checks": [
+    "two original components qualified with exact source markers and read-only AST inspection",
+    "alternating file heads, draft Undo/Redo and browser refresh without source writes",
+    "one Save writes exactly two selected files; read-only status and one Undo restore exact original bytes and DOM",
+    "external source version preserved; all-member prevalidation prevents partial writes; explicit retry after manual resolution works",
+    "actual Save worker death, dropped response and fresh-process/read-only API status preserve the partial state",
+    "imported server restart and browser recovery require explicit Resume Save; both original components render the saved draft",
+    "interrupted grouped Undo, durable status, refresh and explicit Resume Undo restore all tracked source bytes"
+  ],
+  "targets": [
+    {
+      "file": "app/(dashboard)/layout.tsx",
+      "line": 87,
+      "column": 11,
+      "tag": "span",
+      "text": "ACME"
+    },
+    {
+      "file": "app/(dashboard)/page.tsx",
+      "line": 14,
+      "column": 17,
+      "tag": "span",
+      "text": "Faster Than Ever"
+    }
+  ],
+  "faults": [
+    {
+      "operation": "save",
+      "transaction": "9a64f9ac-1f35-49f1-9ef5-f8373861a93f",
+      "workerExit": 47,
+      "boundary": "after first source file, before completing the group; response aborted"
+    },
+    {
+      "operation": "undo",
+      "transaction": "9a64f9ac-1f35-49f1-9ef5-f8373861a93f",
+      "workerExit": 47,
+      "boundary": "after first source file, before completing the group; response aborted"
+    }
+  ],
+  "boundary": "Original public page; tracked application JS/TS/CSS snapshots; no account/payment flows",
+  "services": "Nonfunctional loopback PostgreSQL and Stripe/auth placeholders solely for module validation",
+  "phase": "writer process death after first Undo member",
+  "project": "https://github.com/nextjs/saas-starter",
+  "commit": "6e33e58b1e553a41fe22e6b941a7229a002de361",
+  "next": "15.6.0-canary.59",
+  "tailwind": "4.1.7",
+  "sourceFilesChecked": 42,
+  "expectedRestartErrors": [],
+  "candidateCount": 11,
+  "browserErrors": []
+}

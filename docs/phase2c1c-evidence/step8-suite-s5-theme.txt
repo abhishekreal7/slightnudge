@@ -1,0 +1,54 @@
+TAP version 13
+# Subtest: S5: Theme Support and Config Detection in Tailwind Verifier
+    # Subtest: a. Tailwind v4 project with @theme defining --color-brand-500 accepts bg-brand-500, stacked variant, and arbitrary value, and refuses bogus
+    ok 1 - a. Tailwind v4 project with @theme defining --color-brand-500 accepts bg-brand-500, stacked variant, and arbitrary value, and refuses bogus
+      ---
+      duration_ms: 148.8344
+      type: 'test'
+      ...
+    # Subtest: b. Tailwind v4 project with legacy tailwind.config.js and CSS @config accepts bg-brand-500, stacked variant, and arbitrary value, and refuses bogus
+    ok 2 - b. Tailwind v4 project with legacy tailwind.config.js and CSS @config accepts bg-brand-500, stacked variant, and arbitrary value, and refuses bogus
+      ---
+      duration_ms: 48.3739
+      type: 'test'
+      ...
+NOTICE [d. Tailwind v3]: UNVERIFIED offline. Node_modules has Tailwind v4.3.3 installed, v3 package not present offline.
+    # Subtest: c. Tailwind v4 project with tailwind.config.js but CSS entry WITHOUT @config refuses bg-brand-500 (matches v4 build behavior) while accepting standard utilities
+    ok 3 - c. Tailwind v4 project with tailwind.config.js but CSS entry WITHOUT @config refuses bg-brand-500 (matches v4 build behavior) while accepting standard utilities
+      ---
+      duration_ms: 19.392
+      type: 'test'
+      ...
+    # Subtest: d. Tailwind v3 project: verify offline availability or report UNVERIFIED
+    ok 4 - d. Tailwind v3 project: verify offline availability or report UNVERIFIED
+      ---
+      duration_ms: 0.5556
+      type: 'test'
+      ...
+    # Subtest: f. Project where no Tailwind is installed or engine fails: refuses and writes nothing
+    ok 5 - f. Project where no Tailwind is installed or engine fails: refuses and writes nothing
+      ---
+      duration_ms: 2.7573
+      type: 'test'
+      ...
+    # Subtest: g. Unchanged existing tokens in className are never verified and never cause refusal; only added tokens are verified
+    ok 6 - g. Unchanged existing tokens in className are never verified and never cause refusal; only added tokens are verified
+      ---
+      duration_ms: 311.2298
+      type: 'test'
+      ...
+    1..6
+ok 1 - S5: Theme Support and Config Detection in Tailwind Verifier
+  ---
+  duration_ms: 532.301
+  type: 'suite'
+  ...
+1..1
+# tests 6
+# suites 1
+# pass 6
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 539.0768

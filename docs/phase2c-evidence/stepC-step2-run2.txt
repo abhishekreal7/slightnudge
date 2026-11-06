@@ -1,0 +1,27 @@
+====================================================
+🧪 SLIGHTNUDGE - STEP 2: KEYBOARD ARROW NUDGING SUITE
+====================================================
+
+--- Part A: Spacing Scale Step Calculations ---
+  ✅ [PASS] 1 step increase: 2 -> 2.5
+  ✅ [PASS] 1 step decrease: 2.5 -> 2
+  ✅ [PASS] Shift big step (+4 steps): 2 -> 4
+  ✅ [PASS] Shift big step (-4 steps): 4 -> 2
+  ✅ [PASS] Normal right nudge preserves sibling utilities
+  ✅ [PASS] Shift big right nudge jumps to ml-4
+  ✅ [PASS] Base nudge preserves md:ml-4 and lg:ml-8 responsive variants
+
+--- Part B: Live Browser Arrow Key Interactions ---
+
+- B1: Fixture 1 live ArrowRight & Shift+ArrowRight -
+
+  ❌ [FAIL] ArrowRight nudges ml-2 -> ml-2.5
+Step 2 tests failed: Error: Test failed: ArrowRight nudges ml-2 -> ml-2.5
+    at assert (C:\dev\vibecheck\test\step2-nudging.test.ts:21:13)
+    at runStep2Tests (C:\dev\vibecheck\test\step2-nudging.test.ts:82:5)
+
+Command failed: npx tsx test/step2-nudging.test.ts
+  ❌ [FAIL] ArrowRight nudges ml-2 -> ml-2.5
+Step 2 tests failed: Error: Test failed: ArrowRight nudges ml-2 -> ml-2.5
+    at assert (C:\dev\vibecheck\test\step2-nudging.test.ts:21:13)
+    at runStep2Tests (C:\dev\vibecheck\test\step2-nudging.test.ts:82:5)

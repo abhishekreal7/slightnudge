@@ -1,0 +1,31 @@
+﻿app/design/page.tsx:15:    <header className="sn-design-intro"><p className="sn-eyebrow">SLIGHTNUDGE ┬╖ INTERFACE SYSTEM</p><h1>Clear by design.</h1><p>A compact reference for the type scale, color, and interaction states used across the workspace.</p></header>
+app/layout.tsx:52:            __html: `window.__SLIGHTNUDGE_TOKEN__ = ${JSON.stringify(sessionToken)};`,
+lib/slightnudge/auth.ts:9:  if (process.env.SLIGHTNUDGE_TEST === '1' && process.env.SLIGHTNUDGE_SESSION_TOKEN) {
+lib/slightnudge/auth.ts:10:    return process.env.SLIGHTNUDGE_SESSION_TOKEN;
+lib/slightnudge/client.ts:90:  if (typeof window !== 'undefined' && (window as any).__SLIGHTNUDGE_TOKEN__) {
+lib/slightnudge/client.ts:91:    cachedSessionToken = (window as any).__SLIGHTNUDGE_TOKEN__;
+lib/slightnudge/client.ts:100:        (window as any).__SLIGHTNUDGE_TOKEN__ = data.token;
+lib/slightnudge/edit-history.ts:7:  return process.env.SLIGHTNUDGE_TEST === '1';
+lib/slightnudge/edit-history.ts:11:  return (isTestMode() && process.env.SLIGHTNUDGE_WORKSPACE_ROOT) || process.cwd();
+lib/slightnudge/edit-history.ts:15:  if (isTestMode() && process.env.SLIGHTNUDGE_HISTORY_PATH) {
+lib/slightnudge/edit-history.ts:16:    return process.env.SLIGHTNUDGE_HISTORY_PATH;
+lib/slightnudge/edit-history.ts:18:  const dataDir = (isTestMode() && process.env.SLIGHTNUDGE_DATA_DIR) || path.join(getWorkspacePath(), '.slightnudge');
+lib/slightnudge/edit-history.ts:23:  if (isTestMode() && process.env.SLIGHTNUDGE_PENDING_DIR) {
+lib/slightnudge/edit-history.ts:24:    return process.env.SLIGHTNUDGE_PENDING_DIR;
+lib/slightnudge/edit-history.ts:26:  const dataDir = (isTestMode() && process.env.SLIGHTNUDGE_DATA_DIR) || path.join(getWorkspacePath(), '.slightnudge');
+test/helpers/test-server.ts:39: * Creates an isolated temp data directory and points SLIGHTNUDGE environment
+test/helpers/test-server.ts:55:    SLIGHTNUDGE_TEST: process.env.SLIGHTNUDGE_TEST,
+test/helpers/test-server.ts:56:    SLIGHTNUDGE_WORKSPACE_ROOT: process.env.SLIGHTNUDGE_WORKSPACE_ROOT,
+test/helpers/test-server.ts:57:    SLIGHTNUDGE_DATA_DIR: process.env.SLIGHTNUDGE_DATA_DIR,
+test/helpers/test-server.ts:58:    SLIGHTNUDGE_HISTORY_PATH: process.env.SLIGHTNUDGE_HISTORY_PATH,
+test/helpers/test-server.ts:59:    SLIGHTNUDGE_PENDING_DIR: process.env.SLIGHTNUDGE_PENDING_DIR,
+test/helpers/test-server.ts:63:  process.env.SLIGHTNUDGE_TEST = '1';
+test/helpers/test-server.ts:64:  process.env.SLIGHTNUDGE_WORKSPACE_ROOT = effectiveWorkspace;
+test/helpers/test-server.ts:65:  process.env.SLIGHTNUDGE_DATA_DIR = dataDir;
+test/helpers/test-server.ts:66:  process.env.SLIGHTNUDGE_HISTORY_PATH = editsPath;
+test/helpers/test-server.ts:67:  process.env.SLIGHTNUDGE_PENDING_DIR = pendingDir;
+test/helpers/test-server.ts:175:    SLIGHTNUDGE_TEST: '1',
+test/helpers/test-server.ts:176:    SLIGHTNUDGE_WORKSPACE_ROOT: workspace.wsDir,
+test/helpers/test-server.ts:177:    SLIGHTNUDGE_DATA_DIR: workspace.dataDir,
+test/helpers/test-server.ts:178:    SLIGHTNUDGE_HISTORY_PATH: workspace.editsPath,
+test/helpers/test-server.ts:179:    SLIGHTNUDGE_PENDING_DIR: workspace.pendingDir,

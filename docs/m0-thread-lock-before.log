@@ -1,0 +1,21 @@
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: A live worker thread shares the PID and must not steal its parent’s lock
+
+1 !== 2
+
+    at <anonymous> (C:\dev\vibecheck\test\source-operation-lock.test.ts:74:14)
+    at withSourceOperationLock (C:\dev\vibecheck\lib\slightnudge\source-operation-lock.ts:83:18)
+    at <anonymous> (C:\dev\vibecheck\test\source-operation-lock.test.ts:71:5)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 1,
+  expected: 2,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v22.19.0

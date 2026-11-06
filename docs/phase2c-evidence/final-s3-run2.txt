@@ -1,0 +1,12 @@
+▶ S3: Atomic or refuse in atomicWrite
+  ✔ refuses and leaves target file unchanged when rename fails permanently without fallback overwrite (1606.6767ms)
+  ✔ retries with backoff and succeeds when rename fails twice then succeeds (224.7132ms)
+✔ S3: Atomic or refuse in atomicWrite (1836.1647ms)
+ℹ tests 2
+ℹ suites 1
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1845.0282

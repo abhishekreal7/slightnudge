@@ -1,0 +1,21 @@
+next-saas: clone and install original public application
+Disposable source project: https://github.com/nextjs/saas-starter; Next.js 15.6.0-canary.59; Tailwind 4.1.7; installed source adapter; no environment files checked out.
+next-saas: start and connect original source canvas
+next-saas: qualify literal targets in two original source files
+PASS next-saas: two original components qualified with exact source markers and read-only AST inspection
+next-saas: alternating two-file draft, shared Undo/Redo and refresh
+PASS next-saas: alternating file heads, draft Undo/Redo and browser refresh without source writes
+next-saas: explicit grouped Save and exact grouped Undo
+PASS next-saas: one Save writes exactly two selected files; read-only status and one Undo restore exact original bytes and DOM
+next-saas: separate-window draft and external-edit refusal
+PASS next-saas: external source version preserved; all-member prevalidation prevents partial writes; explicit retry after manual resolution works
+next-saas: writer process death after first Save member
+PASS next-saas: actual Save worker death, dropped response and fresh-process/read-only API status preserve the partial state
+next-saas: restart imported dev server, reload browser and explicitly resume Save
+next-saas: reload browser into durable partial-Save recovery
+next-saas: explicit Resume Save and automatic preview reconnection
+PASS next-saas: imported server restart and browser recovery require explicit Resume Save; both original components render the saved draft
+next-saas: writer process death after first Undo member
+PASS next-saas: interrupted grouped Undo, durable status, refresh and explicit Resume Undo restore all tracked source bytes
+PASS: 7 review-consent browser cases (real API; disposable source copy)
+Temporary copy requires manual cleanup: C:\Users\abhis\AppData\Local\Temp\sn-review-consent-Pz3qfT

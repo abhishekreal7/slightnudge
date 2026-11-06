@@ -1,0 +1,57 @@
+Case 2 apply parent junction refusal message: The target file must be inside the SlightNudge workspace.
+Case 3 file swap refusal message: The file is locked and nothing was changed (EPERM).
+[INFO UNVERIFIED] Windows file symlinks require Developer Mode (SeCreateSymbolicLinkPrivilege).
+To enable: Settings -> System -> For developers -> Developer Mode: ON.
+[INFO CONFIRMED] Directory junctions verified without admin; file symlinks marked UNVERIFIED as expected.
+▶ Mutant M5 Closeout: Parent Directory Junction TOCTOU Attack Battery
+  ✖ case 1 (undoSourceEdit): swaps PARENT directory for junction to outside folder -> containment refusal identifies guard, outside sentinel unchanged (446.8029ms)
+  ✔ case 2 (applyPendingSourceEdit): swaps PARENT directory for junction -> containment refusal identifies guard, outside file unchanged (124.6102ms)
+  ✖ case 3 (swapping file itself - old test case with error identity): asserts specific containment guard identity (1818.2196ms)
+  ✔ case 4 (symlink privilege audit): checks Developer Mode / SeCreateSymbolicLinkPrivilege (1.2874ms)
+✖ Mutant M5 Closeout: Parent Directory Junction TOCTOU Attack Battery (2392.9511ms)
+ℹ tests 4
+ℹ suites 1
+ℹ pass 2
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2401.992
+
+✖ failing tests:
+
+test at test\undo-m5-parent-junction.test.ts:1:713
+✖ case 1 (undoSourceEdit): swaps PARENT directory for junction to outside folder -> containment refusal identifies guard, outside sentinel unchanged (446.8029ms)
+  AssertionError [ERR_ASSERTION]: Undo must be refused when parent directory escapes workspace
+  
+  false !== true
+  
+      at TestContext.<anonymous> (C:\Users\abhis\AppData\Local\Temp\mutant-m5-34e27a83-7ed9-4cd3-b524-16585be6843f\test\undo-m5-parent-junction.test.ts:118:14)
+      at async Test.run (node:internal/test_runner/test:1113:7)
+      at async Promise.all (index 0)
+      at async Suite.run (node:internal/test_runner/test:1518:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:358:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test\undo-m5-parent-junction.test.ts:1:7355
+✖ case 3 (swapping file itself - old test case with error identity): asserts specific containment guard identity (1818.2196ms)
+  AssertionError [ERR_ASSERTION]: Must be containment guard error, got: The file is locked and nothing was changed (EPERM).
+  
+  false !== true
+  
+      at TestContext.<anonymous> (C:\Users\abhis\AppData\Local\Temp\mutant-m5-34e27a83-7ed9-4cd3-b524-16585be6843f\test\undo-m5-parent-junction.test.ts:338:14)
+      at async Test.run (node:internal/test_runner/test:1113:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:788:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

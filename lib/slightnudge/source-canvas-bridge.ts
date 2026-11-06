@@ -525,14 +525,27 @@ function sourceCanvasRuntime(continuous: boolean, repositoryId = '', protocol = 
       catalog(); geometry(); reply(false, error instanceof Error ? error.message : 'The source page could not verify this operation.');
     }
   });
-  let scheduled = false;
-  const changed = () => { if (scheduled) return; scheduled = true; requestAnimationFrame(() => { scheduled = false; geometry(); }); };
+  let scheduled = false, viewportChanged = false;
+  const changed = () => {
+    if (scheduled) return;
+    scheduled = true;
+    requestAnimationFrame(() => {
+      scheduled = false;
+      if (viewportChanged) {
+        viewportChanged = false;
+        viewport();
+        catalog();
+      }
+      geometry();
+    });
+  };
   const viewport = () => {
     const probe = document.createElement('span'); probe.style.cssText = 'display:none!important;font-size:initial!important'; document.documentElement.append(probe);
     const initialFontSize = parseFloat(getComputedStyle(probe).fontSize); probe.remove();
     send('source-viewport', { width: innerWidth, height: innerHeight, initialFontSize });
   };
-  window.addEventListener('scroll', changed, { passive: true }); window.addEventListener('resize', () => { viewport(); catalog(); changed(); });
+  window.addEventListener('scroll', changed, { passive: true });
+  window.addEventListener('resize', () => { viewportChanged = true; changed(); });
   const observer = new ResizeObserver(changed); observer.observe(root);
   let route = location.pathname + location.search;
   const routes = new MutationObserver(() => { const next = location.pathname + location.search; if (next === route) return; route = next; selected = null; catalog(); send('source-route'); });

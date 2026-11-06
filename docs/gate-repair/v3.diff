@@ -1,0 +1,1242 @@
+diff --git a/test/review-consent.browser.ts b/test/review-consent.browser.v3.ts
+index c17daf3..8c61b22 100644
+--- a/test/review-consent.browser.ts
++++ b/test/review-consent.browser.v3.ts
+@@ -1,12 +1,12 @@
+-import { checkAppearanceLayout } from './helpers/appearance-layout-browser';
+-import { checkSharedInstances } from './helpers/shared-instance-browser';
+-import { checkIconProperties } from './helpers/icon-properties-browser';
+-import { checkComponentActions } from './helpers/component-actions-browser';
+-import { checkComponentProps } from './helpers/component-props-browser';
+-import { checkImportedAdvancedImages } from './helpers/imported-advanced-image-browser';
+-import { checkAdvancedImages } from './helpers/advanced-image-browser';
+-import { checkImageContent } from './helpers/image-content-browser';
+-import { checkImageFraming } from './helpers/image-framing-browser';
++import { checkAppearanceLayout } from './helpers/appearance-layout-browser.v3';
++import { checkSharedInstances } from './helpers/shared-instance-browser.v3';
++import { checkIconProperties } from './helpers/icon-properties-browser.v3';
++import { checkComponentActions } from './helpers/component-actions-browser.v3';
++import { checkComponentProps } from './helpers/component-props-browser.v3';
++import { checkImportedAdvancedImages } from './helpers/imported-advanced-image-browser.v3';
++import { checkAdvancedImages } from './helpers/advanced-image-browser.v3';
++import { checkImageContent } from './helpers/image-content-browser.v3';
++import { checkImageFraming } from './helpers/image-framing-browser.v3';
+ import assert from 'node:assert/strict';
+ import fs from 'node:fs';
+ import os from 'node:os';
+@@ -15,36 +15,36 @@ import net from 'node:net';
+ import { execFileSync, spawn } from 'node:child_process';
+ import { chromium } from 'playwright';
+ import { Script } from 'node:vm';
+-import { checkImportedReview } from './helpers/imported-review-browser';
+-import { checkLiveReview } from './helpers/live-review-browser';
+-import { checkCurrentStudioReview } from './helpers/current-studio-review-browser';
+-import { checkCurrentStudioLive } from './helpers/current-studio-live-browser';
+-import { checkM1Interactions } from './helpers/m1-interactions-browser';
+-import { checkStudioResize } from './helpers/studio-resize-browser';
+-import { checkSourceProject } from './helpers/source-project-browser';
+-import { checkWorkspaceRedesign } from './helpers/workspace-redesign-browser';
+-import { checkStudioReloadRecovery } from './helpers/studio-reload-recovery-browser';
+-import { checkDirectManipulation } from './helpers/direct-manipulation-browser';
+-import { checkDragMove } from './helpers/drag-move-browser';
+-import { checkContinuousDraft } from './helpers/continuous-draft-browser';
+-import { checkInlineText } from './helpers/inline-text-browser';
+-import { checkUnifiedCanvas } from './helpers/unified-canvas-browser';
+-import { checkButtonEditing } from './helpers/button-editing-browser';
+-import { checkLiveWindow } from './helpers/live-window-browser';
+-import { checkSectionOrder } from './helpers/section-order-browser';
+-import { checkContainerMove } from './helpers/container-move-browser';
+-import { checkLayoutControls } from './helpers/layout-controls-browser';
+-import { checkMultiFile } from './helpers/multi-file-browser';
+-import { checkProjectCompatibility } from './helpers/project-compatibility-browser';
+-import { checkImportedCanvas } from './helpers/imported-canvas-browser';
+-import { checkRealProjectCanvas } from './helpers/real-project-canvas-browser';
+-import { checkRealMultiFile } from './helpers/real-multi-file-browser';
+-import { checkHighFidelity } from './helpers/high-fidelity-browser';
+-import { checkCoreEditing } from './helpers/core-editing-browser';
+-import { checkSingleCanvas } from './helpers/single-canvas-browser';
+-import { checkEditorErgonomics } from './helpers/editor-ergonomics-browser';
+-import { checkResponsiveEditing } from './helpers/responsive-editing-browser';
+-import { checkImportedResponsive } from './helpers/imported-responsive-browser';
++import { checkImportedReview } from './helpers/imported-review-browser.v3';
++import { checkLiveReview } from './helpers/live-review-browser.v3';
++import { checkCurrentStudioReview } from './helpers/current-studio-review-browser.v3';
++import { checkCurrentStudioLive } from './helpers/current-studio-live-browser.v3';
++import { checkM1Interactions } from './helpers/m1-interactions-browser.v3';
++import { checkStudioResize } from './helpers/studio-resize-browser.v3';
++import { checkSourceProject } from './helpers/source-project-browser.v3';
++import { checkWorkspaceRedesign } from './helpers/workspace-redesign-browser.v3';
++import { checkStudioReloadRecovery } from './helpers/studio-reload-recovery-browser.v3';
++import { checkDirectManipulation } from './helpers/direct-manipulation-browser.v3';
++import { checkDragMove } from './helpers/drag-move-browser.v3';
++import { checkContinuousDraft } from './helpers/continuous-draft-browser.v3';
++import { checkInlineText } from './helpers/inline-text-browser.v3';
++import { checkUnifiedCanvas } from './helpers/unified-canvas-browser.v3';
++import { checkButtonEditing } from './helpers/button-editing-browser.v3';
++import { checkLiveWindow } from './helpers/live-window-browser.v3';
++import { checkSectionOrder } from './helpers/section-order-browser.v3';
++import { checkContainerMove } from './helpers/container-move-browser.v3';
++import { checkLayoutControls } from './helpers/layout-controls-browser.v3';
++import { checkMultiFile } from './helpers/multi-file-browser.v3';
++import { checkProjectCompatibility } from './helpers/project-compatibility-browser.v3';
++import { checkImportedCanvas } from './helpers/imported-canvas-browser.v3';
++import { checkRealProjectCanvas } from './helpers/real-project-canvas-browser.v3';
++import { checkRealMultiFile } from './helpers/real-multi-file-browser.v3';
++import { checkHighFidelity } from './helpers/high-fidelity-browser.v3';
++import { checkCoreEditing } from './helpers/core-editing-browser.v3';
++import { checkSingleCanvas } from './helpers/single-canvas-browser.v3';
++import { checkEditorErgonomics } from './helpers/editor-ergonomics-browser.v3';
++import { checkResponsiveEditing } from './helpers/responsive-editing-browser.v3';
++import { checkImportedResponsive } from './helpers/imported-responsive-browser.v3';
+ 
+ // Run the real UI in a disposable copy. API stubs deliberately make implicit
+ // Apply observable without ever writing source or handling real session tokens.
+@@ -142,7 +142,7 @@ try {
+   let ready = false;
+   for (let attempt = 0; attempt < 120; attempt++) {
+     if (server && server.exitCode !== null) throw new Error('Isolated server exited before startup');
+-    try { if ((await fetch(`${baseURL}/fixtures/1`, { signal: AbortSignal.timeout(10000) })).ok) { ready = true; break; } } catch {}
++    try { if ((await fetch(`${baseURL}/editor`, { signal: AbortSignal.timeout(10000) })).ok) { ready = true; break; } } catch {}
+     await new Promise(resolve => setTimeout(resolve, 500));
+   }
+   assert.ok(ready, 'Isolated server must start');
+diff --git a/test/helpers/appearance-layout-browser.ts b/test/helpers/appearance-layout-browser.v3.ts
+index 711ccb8..30c99d6 100644
+--- a/test/helpers/appearance-layout-browser.ts
++++ b/test/helpers/appearance-layout-browser.v3.ts
+@@ -1,6 +1,9 @@
++import { iframePageV3 } from './gate-page-v3';
+ import assert from 'node:assert/strict';
+ import fs from 'node:fs';import path from 'node:path';import type {Page} from 'playwright';
+ export async function checkAppearanceLayout(page:Page,base:string,workspace:string,root:string,repository?:{id:string;root:string;url:string}){
++ page=iframePageV3(page);
++
+  page.setDefaultTimeout(60000);
+  const file=path.join(repository?.root||workspace,repository?'app/page.tsx':'fixtures/1-plain-static.tsx'),css=path.join(repository?.root||workspace,'app/globals.css');
+  const original=fs.readFileSync(file,'utf8'),originalCss=fs.readFileSync(css,'utf8');
+diff --git a/test/helpers/shared-instance-browser.ts b/test/helpers/shared-instance-browser.v3.ts
+index 1a644b0..7a2de43 100644
+--- a/test/helpers/shared-instance-browser.ts
++++ b/test/helpers/shared-instance-browser.v3.ts
+@@ -1,8 +1,11 @@
++import { iframePageV3 } from './gate-page-v3';
+ import assert from 'node:assert/strict';
+ import fs from 'node:fs';
+ import path from 'node:path';
+ import type { Page } from 'playwright';
+ export async function checkSharedInstances(page:Page,base:string,workspace:string,root:string,repository?:{id:string;root:string;url:string}){
++ page=iframePageV3(page);
++
+  page.setDefaultTimeout(60000);
+  const file=path.join(repository?.root||workspace,repository?'app/page.tsx':'fixtures/1-plain-static.tsx'),definitionFile=path.join(path.dirname(file),'InstanceAction.tsx');
+  const original=fs.readFileSync(file,'utf8'),oldDefinition=fs.existsSync(definitionFile)?fs.readFileSync(definitionFile,'utf8'):undefined;
+@@ -15,7 +18,7 @@ export function Destination({label,to}:{label:string;to:string}){return <a href=
+  const mutate=async(action:()=>Promise<unknown>)=>{const [response]=await Promise.all([page.waitForResponse(response=>{if(new URL(response.url()).pathname!=='/api/slightnudge/preview'||response.request().method()!=='POST')return false;const body=response.request().postDataJSON();return body.kind==='component'&&body.operation!=='inspect'}),action()]);const body=await response.json();assert.equal(body.success,true,JSON.stringify(body));await idle();};
+  const edit=async(name:string,value:string)=>{const control=panel.getByLabel(`Component prop ${name}`,{exact:true});await control.fill(value);await mutate(()=>control.press('Control+Enter'));};
+  try{
+-  for(const windowMode of [false,true]){
++  for(const windowMode of [false,true].filter(value=>!process.env.GATE_SHARED_VIEW||String(value)===process.env.GATE_SHARED_VIEW)){
+    fs.writeFileSync(definitionFile,definition);fs.writeFileSync(file,fixture);await page.goto('about:blank');
+    const route=repository?`/studio/${repository.id}/${windowMode?'window':'edit'}?preview=${encodeURIComponent(repository.url)}`:'/studio'+(windowMode?'/window':'');
+    await page.goto(base+route,{waitUntil:'domcontentloaded',timeout:120000});await page.locator('[data-source-ready="true"]').waitFor({timeout:120000});
+@@ -44,3 +47,4 @@ export function Destination({label,to}:{label:string;to:string}){return <a href=
+  finally{fs.writeFileSync(file,original);if(oldDefinition===undefined)fs.unlinkSync(definitionFile);else fs.writeFileSync(definitionFile,oldDefinition)}
+  return 2;
+ }
++
+diff --git a/test/helpers/icon-properties-browser.ts b/test/helpers/icon-properties-browser.v3.ts
+index c6b7e9d..68d10cd 100644
+--- a/test/helpers/icon-properties-browser.ts
++++ b/test/helpers/icon-properties-browser.v3.ts
+@@ -1,9 +1,12 @@
++import { iframePageV3 } from './gate-page-v3';
+ import assert from 'node:assert/strict';
+ import fs from 'node:fs';
+ import path from 'node:path';
+ import type { Page } from 'playwright';
+ 
+ export async function checkIconProperties(page: Page, baseURL: string, workspace: string, evidenceRoot: string, repository?: { id: string; root: string; url: string }, replacement = false) {
++ page=iframePageV3(page);
++
+   page.setDefaultTimeout(45000);
+   await page.addInitScript(() => { (window as any).__iconMessages = []; addEventListener('message', event => { if (event.data?.channel === 'slightnudge') (window as any).__iconMessages.push({ type: event.data.type, id: event.data.selection?.elementId, tag: event.data.selection?.tagName, reason: event.data.reason }); }); });
+   page.on('pageerror', error => console.log('Icon page error', error.message));
+diff --git a/test/helpers/component-actions-browser.ts b/test/helpers/component-actions-browser.v3.ts
+index d0740b7..baeb129 100644
+--- a/test/helpers/component-actions-browser.ts
++++ b/test/helpers/component-actions-browser.v3.ts
+@@ -1,9 +1,12 @@
++import { iframePageV3 } from './gate-page-v3';
+ import assert from 'node:assert/strict';
+ import fs from 'node:fs';
+ import path from 'node:path';
+ import type { Page } from 'playwright';
+ 
+ export async function checkComponentActions(page: Page, baseURL: string, workspace: string, root: string, repository?: { id: string; root: string; url: string }) {
++ page=iframePageV3(page);
++
+   page.setDefaultTimeout(60000);
+   const file = path.join(repository?.root || workspace, repository ? 'app/page.tsx' : 'fixtures/1-plain-static.tsx'), original = fs.readFileSync(file, 'utf8');
+   const fixture = `'use client';import RouteLink from 'next/link';
+diff --git a/test/helpers/component-props-browser.ts b/test/helpers/component-props-browser.v3.ts
+index aa483c4..747469d 100644
+--- a/test/helpers/component-props-browser.ts
++++ b/test/helpers/component-props-browser.v3.ts
+@@ -1,8 +1,11 @@
++import { iframePageV3 } from './gate-page-v3';
+ import assert from 'node:assert/strict';
+ import fs from 'node:fs';
+ import path from 'node:path';
+ import type { Page } from 'playwright';
+ export async function checkComponentProps(page: Page, base: string, workspace: string, root: string, repository?: {id:string;root:string;url:string}, crossFile=false) {
++ page=iframePageV3(page);
++
+   page.setDefaultTimeout(60000);
+   const file = path.join(repository?.root || workspace, repository ? 'app/page.tsx' : 'fixtures/1-plain-static.tsx');
+   const original = fs.readFileSync(file, 'utf8');
+diff --git a/test/helpers/imported-advanced-image-browser.ts b/test/helpers/imported-advanced-image-browser.v3.ts
+index 418a898..d165d88 100644
+--- a/test/helpers/imported-advanced-image-browser.ts
++++ b/test/helpers/imported-advanced-image-browser.v3.ts
+@@ -1,12 +1,15 @@
++import { iframePageV3 } from './gate-page-v3';
+ import fs from 'node:fs';
+ import path from 'node:path';
+ import net from 'node:net';
+ import { spawn, execFileSync } from 'node:child_process';
+ import type { Page } from 'playwright';
+-import { prepareSourceProject } from './prepare-source-project';
+-import { checkAdvancedImages } from './advanced-image-browser';
++import { prepareSourceProject } from './prepare-source-project.v3';
++import { checkAdvancedImages } from './advanced-image-browser.v3';
+ 
+ export async function checkImportedAdvancedImages(page: Page, baseURL: string, workspace: string, root: string, workflow = checkAdvancedImages) {
++ page=iframePageV3(page);
++
+   const repo = path.join(workspace, '.slightnudge/repositories/source-proof'); fs.mkdirSync(repo, { recursive: true });
+   const env: NodeJS.ProcessEnv = { NODE_ENV: 'development', CI: '1', NEXT_TELEMETRY_DISABLED: '1' };
+   for (const key of ['PATH', 'SystemRoot', 'TEMP', 'TMP', 'USERPROFILE', 'APPDATA', 'LOCALAPPDATA']) if (process.env[key]) env[key] = process.env[key];
+diff --git a/test/helpers/prepare-source-project.ts b/test/helpers/prepare-source-project.v3.ts
+index a92e321..2aaa317 100644
+--- a/test/helpers/prepare-source-project.ts
++++ b/test/helpers/prepare-source-project.v3.ts
+@@ -1,7 +1,7 @@
+ import fs from 'node:fs';
+ import path from 'node:path';
+ import { execFileSync } from 'node:child_process';
+-import { createSaasSample } from './create-saas-sample';
++import { createSaasSample } from './create-saas-sample.v3';
+ 
+ export function prepareSourceProject(root: string, workspace: string, repo: string, env: NodeJS.ProcessEnv) {
+   const selected = process.argv.find(arg => arg.startsWith('--public='))?.split('=')[1];
+diff --git a/test/helpers/advanced-image-browser.ts b/test/helpers/advanced-image-browser.v3.ts
+index ec78bc2..b575ce7 100644
+--- a/test/helpers/advanced-image-browser.ts
++++ b/test/helpers/advanced-image-browser.v3.ts
+@@ -1,3 +1,4 @@
++import { iframePageV3 } from './gate-page-v3';
+ import assert from 'node:assert/strict';
+ import fs from 'node:fs';
+ import path from 'node:path';
+@@ -5,6 +6,8 @@ import sharp from 'sharp';
+ import type { Page } from 'playwright';
+ 
+ export async function checkAdvancedImages(page: Page, baseURL: string, workspace: string, root: string, repository?: { id: string; root: string; url: string }) {
++ page=iframePageV3(page);
++
+   page.setDefaultTimeout(60000);
+   const projectRoot = repository?.root || workspace;
+   const file = path.join(projectRoot, repository ? 'app/page.tsx' : 'fixtures/1-plain-static.tsx'), original = fs.readFileSync(file, 'utf8');
+diff --git a/test/helpers/image-content-browser.ts b/test/helpers/image-content-browser.v3.ts
+index aa67b47..fd9adbb 100644
+--- a/test/helpers/image-content-browser.ts
++++ b/test/helpers/image-content-browser.v3.ts
+@@ -1,3 +1,4 @@
++import { iframePageV3 } from './gate-page-v3';
+ import assert from 'node:assert/strict';
+ import fs from 'node:fs';
+ import path from 'node:path';
+@@ -5,6 +6,8 @@ import sharp from 'sharp';
+ import type { Page } from 'playwright';
+ 
+ export async function checkImageContent(page: Page, baseURL: string, workspace: string, root: string) {
++ page=iframePageV3(page);
++
+   page.setDefaultTimeout(60000);
+   const file = path.join(workspace, 'fixtures/1-plain-static.tsx'), original = fs.readFileSync(file, 'utf8');
+   const svg = '<svg xmlns="http://www.w3.org/2000/svg" width="200" height="100"><path fill="red" d="M0 0h200v100H0z"/></svg>';
+diff --git a/test/helpers/image-framing-browser.ts b/test/helpers/image-framing-browser.v3.ts
+index 331946d..8b3d47c 100644
+--- a/test/helpers/image-framing-browser.ts
++++ b/test/helpers/image-framing-browser.v3.ts
+@@ -1,3 +1,4 @@
++import { iframePageV3 } from './gate-page-v3';
+ import assert from 'node:assert/strict';
+ import fs from 'node:fs';
+ import path from 'node:path';
+@@ -5,6 +6,8 @@ import sharp from 'sharp';
+ import type { Page } from 'playwright';
+ 
+ export async function checkImageFraming(page: Page, baseURL: string, workspace: string, root: string) {
++ page=iframePageV3(page);
++
+   const file = path.join(workspace, 'fixtures/1-plain-static.tsx'), original = fs.readFileSync(file, 'utf8');
+   const svg = '<svg xmlns="http://www.w3.org/2000/svg" width="600" height="200"><path fill="red" d="M0 0h300v200H0z"/><path fill="blue" d="M300 0h300v200H300z"/></svg>';
+   const baseline = `export default function Page(){return <main className="p-12"><img id="photo" src="data:image/svg+xml,${encodeURIComponent(svg)}" width="240" height="240" alt="Two color photograph" className="w-60 h-60 object-contain object-center" /></main>}`;
+diff --git a/test/helpers/imported-review-browser.ts b/test/helpers/imported-review-browser.v3.ts
+index 4331f35..d098d82 100644
+--- a/test/helpers/imported-review-browser.ts
++++ b/test/helpers/imported-review-browser.v3.ts
+@@ -1,8 +1,11 @@
++import { iframePageV3 } from './gate-page-v3';
+ import assert from 'node:assert/strict';
+ import type { Page } from 'playwright';
+ 
+ /** Browser messages use the real iframe/origin/session contract; source APIs are mocked. */
+ export async function checkImportedReview(page: Page, baseURL: string) {
++ page=iframePageV3(page);
++
+   let applies = 0;
+   let previews = 0;
+   let rejectApply = true;
+diff --git a/test/helpers/live-review-browser.ts b/test/helpers/live-review-browser.v3.ts
+index eb22c0f..47c5da3 100644
+--- a/test/helpers/live-review-browser.ts
++++ b/test/helpers/live-review-browser.v3.ts
+@@ -1,3 +1,4 @@
++import { iframePageV3 } from './gate-page-v3';
+ import assert from 'node:assert/strict';
+ import fs from 'node:fs';
+ import path from 'node:path';
+@@ -5,6 +6,8 @@ import type { Page } from 'playwright';
+ 
+ /** No API mocks. Every writable file lives in the throwaway application copy. */
+ export async function checkLiveReview(page: Page, baseURL: string, workspace: string) {
++ page=iframePageV3(page);
++
+   const file = path.join(workspace, 'fixtures/1-plain-static.tsx');
+   const original = fs.readFileSync(file, 'utf8');
+   const classes = original.match(/<h1\s+id="target"[^>]*className="([^"]*)"/)?.[1];
+diff --git a/test/helpers/current-studio-review-browser.ts b/test/helpers/current-studio-review-browser.v3.ts
+index 8a3619a..3fc72ee 100644
+--- a/test/helpers/current-studio-review-browser.ts
++++ b/test/helpers/current-studio-review-browser.v3.ts
+@@ -1,3 +1,4 @@
++import { iframePageV3 } from './gate-page-v3';
+ import assert from 'node:assert/strict';
+ import os from 'node:os';
+ import path from 'node:path';
+@@ -5,6 +6,8 @@ import type { Page } from 'playwright';
+ 
+ // Contracts are checked against the existing Studio, in an isolated app copy.
+ export async function checkCurrentStudioReview(page: Page, baseURL: string) {
++ page=iframePageV3(page);
++
+   let passed = 0, previews = 0, applies = 0, undos = 0;
+   let rejectPreview = false, staleApply = false, failApply = false, failUndo = false;
+   let refuseInspection = false;
+diff --git a/test/helpers/current-studio-live-browser.ts b/test/helpers/current-studio-live-browser.v3.ts
+index 1d7a141..d901cc3 100644
+--- a/test/helpers/current-studio-live-browser.ts
++++ b/test/helpers/current-studio-live-browser.v3.ts
+@@ -1,9 +1,12 @@
++import { iframePageV3 } from './gate-page-v3';
+ import assert from 'node:assert/strict';
+ import fs from 'node:fs';
+ import path from 'node:path';
+ import type { Page } from 'playwright';
+ 
+ export async function checkCurrentStudioLive(page: Page, baseURL: string, workspace: string) {
++ page=iframePageV3(page);
++
+   const file = path.join(workspace, 'fixtures/1-plain-static.tsx');
+   const original = fs.readFileSync(file, 'utf8');
+   const classes = original.match(/<h1\s+id="target"[^>]*className="([^"]*)"/)![1];
+diff --git a/test/helpers/m1-interactions-browser.ts b/test/helpers/m1-interactions-browser.v3.ts
+index d7c20e9..dca9341 100644
+--- a/test/helpers/m1-interactions-browser.ts
++++ b/test/helpers/m1-interactions-browser.v3.ts
+@@ -1,3 +1,4 @@
++import { iframePageV3 } from './gate-page-v3';
+ import assert from 'node:assert/strict';
+ import fs from 'node:fs';
+ import path from 'node:path';
+@@ -5,27 +6,30 @@ import os from 'node:os';
+ import type { Page } from 'playwright';
+ 
+ export async function checkM1Interactions(page: Page, baseURL: string, workspace: string) {
++ page=iframePageV3(page);
++
+   page.on('pageerror', error => console.log('Studio browser error:', error.message));
+   const file = path.join(workspace, 'fixtures/1-plain-static.tsx');
+   const original = fs.readFileSync(file, 'utf8');
+   const classes = original.match(/<h1\s+id="target"[^>]*className="([^"]*)"/)![1];
+   const ready = page.waitForResponse(r => new URL(r.url()).pathname.endsWith('/pages'), { timeout: 120000 });
+   await page.goto(`${baseURL}/studio`, { waitUntil: 'domcontentloaded' }); await ready;
++  await page.locator('[data-source-ready="true"]').waitFor();
+   const heading = page.locator('h1'); await heading.click();
+   const originalWeight = await heading.evaluate(el => getComputedStyle(el).fontWeight);
+-  const apply = page.getByRole('button', { name: 'Apply to code', exact: true });
++  const apply = page.getByLabel('Draft controls', { exact: true }).getByRole('button', { name: 'Save changes', exact: true }).and(page.locator('button:enabled'));
+   const state = page.getByRole('group', { name: 'Element state' });
+   let passed = 0;
+   for (const [label, prefix] of [['Hover', 'hover'], ['Focus', 'focus-visible'], ['Pressed', 'active']]) {
+     await state.getByRole('button', { name: label, exact: true }).click();
+     const prepared = page.waitForResponse(r => new URL(r.url()).pathname.endsWith('/preview') && r.request().method() === 'POST');
+-    await page.getByTitle('Toggle bold', { exact: true }).click();
++    await page.getByRole('button', { name: 'Toggle bold', exact: true }).click();
+     const proposal = await (await prepared).json();
+     assert.equal(proposal.success, true, proposal.error);
+     assert.equal(proposal.newClassName, `${classes} ${prefix}:font-bold`);
+     await apply.waitFor();
+     assert.equal(fs.readFileSync(file, 'utf8'), original);
+-    await page.waitForFunction(() => getComputedStyle(document.querySelector('h1')!).fontWeight === '700'); passed++;
++    await page.waitForFunction(() => getComputedStyle(document.querySelector('iframe')!.contentDocument!.querySelector('h1')!).fontWeight === '700'); passed++;
+     if (process.argv.includes('--screenshot') && label === 'Hover') {
+       const screenshot = path.join(os.tmpdir(), 'slightnudge-m1-studio.png');
+       await page.screenshot({ path: screenshot, animations: 'disabled' });
+@@ -36,9 +40,9 @@ export async function checkM1Interactions(page: Page, baseURL: string, workspace
+     await page.getByText('Not saved to source', { exact: true }).waitFor({ state: 'hidden' });
+     assert.equal(fs.readFileSync(file, 'utf8'), original.replace(`className="${classes}"`, `className="${classes} ${prefix}:font-bold"`)); passed++;
+     await state.getByRole('button', { name: 'Default', exact: true }).click();
+-    await page.waitForFunction(w => getComputedStyle(document.querySelector('h1')!).fontWeight === w, originalWeight); passed++;
++    await page.waitForFunction(w => getComputedStyle(document.querySelector('iframe')!.contentDocument!.querySelector('h1')!).fontWeight === w, originalWeight); passed++;
+     const undone = page.waitForResponse(r => new URL(r.url()).pathname.endsWith('/undo'));
+-    await page.getByTitle('Undo visual adjustment (Ctrl+Z)').click();
++    await page.getByRole('button', { name: 'Undo', exact: true }).click();
+     assert.equal((await (await undone).json()).success, true);
+     assert.equal(fs.readFileSync(file, 'utf8'), original); passed++;
+   }
+@@ -47,8 +51,9 @@ export async function checkM1Interactions(page: Page, baseURL: string, workspace
+     await page.getByLabel(label, { exact: true }).selectOption(value);
+     await apply.waitFor();
+     assert.equal(fs.readFileSync(file, 'utf8'), original);
++    await page.getByRole('button', { name: 'Review changes', exact: true }).click();
+     assert.ok((await page.getByLabel('After change').textContent())!.includes(value));
+-    await page.getByRole('button', { name: 'Discard', exact: true }).click();
++    await page.getByRole('button', { name: 'Discard draft', exact: true }).click();
+     await page.getByText('Not saved to source', { exact: true }).waitFor({ state: 'hidden' });
+     assert.equal(fs.readFileSync(file, 'utf8'), original); passed++;
+     await page.getByLabel(label, { exact: true }).selectOption(value);
+@@ -67,11 +72,11 @@ export async function checkM1Interactions(page: Page, baseURL: string, workspace
+       assert.equal(fs.readFileSync(file, 'utf8'), unchanged); passed++;
+     }
+     const undone = page.waitForResponse(r => new URL(r.url()).pathname.endsWith('/undo'));
+-    await page.getByTitle('Undo visual adjustment (Ctrl+Z)').click();
++    await page.getByRole('button', { name: 'Undo', exact: true }).click();
+     assert.equal((await (await undone).json()).success, true);
+     assert.equal(fs.readFileSync(file, 'utf8'), original); passed++;
+   }
+-  await page.getByTitle('More actions').click();
++  await page.getByRole('button', { name: 'More formatting options', exact: true }).click();
+   assert.equal(await page.getByRole('button', { name: 'Move earlier', exact: true }).count(), 0);
+   assert.equal(await page.getByTitle('Drag to reorder element (iOS style)').count(), 0);
+   assert.equal(await page.getByText('Overflow', { exact: true }).count(), 0);
+diff --git a/test/helpers/studio-resize-browser.ts b/test/helpers/studio-resize-browser.v3.ts
+index 97c9200..ee06ad5 100644
+--- a/test/helpers/studio-resize-browser.ts
++++ b/test/helpers/studio-resize-browser.v3.ts
+@@ -1,3 +1,4 @@
++import { iframePageV3 } from './gate-page-v3';
+ import assert from 'node:assert/strict';
+ import fs from 'node:fs';
+ import path from 'node:path';
+@@ -5,6 +6,8 @@ import os from 'node:os';
+ import type { Page } from 'playwright';
+ 
+ export async function checkStudioResize(page: Page, baseURL: string, workspace: string) {
++ page=iframePageV3(page);
++
+   page.on('pageerror', error => console.log('Resize browser error:', error.message));
+   const file = path.join(workspace, 'fixtures/1-plain-static.tsx');
+   const original = fs.readFileSync(file, 'utf8');
+diff --git a/test/helpers/source-project-browser.ts b/test/helpers/source-project-browser.v3.ts
+index 3f19ee3..88ab2e9 100644
+--- a/test/helpers/source-project-browser.ts
++++ b/test/helpers/source-project-browser.v3.ts
+@@ -1,13 +1,16 @@
++import { iframePageV3 } from './gate-page-v3';
+ import assert from 'node:assert/strict';
+ import fs from 'node:fs';
+ import path from 'node:path';
+ import net from 'node:net';
+ import { spawn, execFileSync } from 'node:child_process';
+ import type { Page } from 'playwright';
+-import { prepareSourceProject } from './prepare-source-project';
+-import { checkSourceSelections } from './source-selection-workflows';
++import { prepareSourceProject } from './prepare-source-project.v3';
++import { checkSourceSelections } from './source-selection-workflows.v3';
+ 
+ export async function checkSourceProject(page: Page, baseURL: string, workspace: string) {
++ page=iframePageV3(page);
++
+   if (process.argv.includes('--trace-source')) {
+     page.on('console', message => { if (/^Source (proof|notice|lifecycle):/.test(message.text())) console.log(message.text()); });
+     page.on('pageerror', cause => console.log('Source page error:', cause.message));
+diff --git a/test/helpers/source-selection-workflows.ts b/test/helpers/source-selection-workflows.v3.ts
+index c216295..2cfebc6 100644
+--- a/test/helpers/source-selection-workflows.ts
++++ b/test/helpers/source-selection-workflows.v3.ts
+@@ -1,3 +1,4 @@
++import { iframePageV3 } from './gate-page-v3';
+ import assert from 'node:assert/strict';
+ import fs from 'node:fs';
+ import path from 'node:path';
+@@ -6,6 +7,8 @@ import type { Page } from 'playwright';
+ 
+ /** Thirty candidates; exposed elements use physical clicks and real source edits. */
+ export async function checkSourceSelections(page: Page, repo: string, output: string) {
++ page=iframePageV3(page);
++
+   const frame = page.frameLocator('iframe[title="Actual project"]');
+   const currentFrame = (await (await page.locator('iframe[title="Actual project"]').elementHandle())!.contentFrame())!;
+   await currentFrame.waitForLoadState('domcontentloaded');
+diff --git a/test/helpers/workspace-redesign-browser.ts b/test/helpers/workspace-redesign-browser.v3.ts
+index 708cec6..daa1a88 100644
+--- a/test/helpers/workspace-redesign-browser.ts
++++ b/test/helpers/workspace-redesign-browser.v3.ts
+@@ -1,9 +1,12 @@
++import { iframePageV3 } from './gate-page-v3';
+ import assert from 'node:assert/strict';
+ import path from 'node:path';
+ import os from 'node:os';
+ import type { Page } from 'playwright';
+ 
+ export async function checkWorkspaceRedesign(page: Page, baseURL: string) {
++ page=iframePageV3(page);
++
+   let imports = 0;
+   let received: unknown;
+   await page.route('**/api/slightnudge/**', async route => {
+diff --git a/test/helpers/studio-reload-recovery-browser.ts b/test/helpers/studio-reload-recovery-browser.v3.ts
+index 4f777b5..6f48dc9 100644
+--- a/test/helpers/studio-reload-recovery-browser.ts
++++ b/test/helpers/studio-reload-recovery-browser.v3.ts
+@@ -1,9 +1,12 @@
++import { iframePageV3 } from './gate-page-v3';
+ import assert from 'node:assert/strict';
+ import fs from 'node:fs';
+ import path from 'node:path';
+ import type { Page } from 'playwright';
+ 
+ export async function checkStudioReloadRecovery(page: Page, baseURL: string, workspace: string) {
++ page=iframePageV3(page);
++
+   const source = path.join(workspace, 'fixtures/1-plain-static.tsx');
+   const original = fs.readFileSync(source, 'utf8');
+   const counts = { apply: 0, undo: 0, applyStatus: 0, undoStatus: 0 };
+@@ -21,7 +24,8 @@ export async function checkStudioReloadRecovery(page: Page, baseURL: string, wor
+   });
+   const hydrated = page.waitForResponse(response => new URL(response.url()).pathname.endsWith('/pages'));
+   await page.goto(`${baseURL}/studio`, { waitUntil: 'domcontentloaded' }); await hydrated;
+-  const apply = page.getByRole('button', { name: 'Apply to code', exact: true });
++  await page.locator('[data-source-ready="true"]').waitFor();
++  const apply = page.getByLabel('Draft controls', { exact: true }).getByRole('button', { name: 'Save changes', exact: true }).and(page.locator('button:enabled'));
+   const dialog = page.getByRole('dialog', { name: 'Recover previous source operation' });
+   const idle = () => page.waitForFunction(() => document.querySelector('[aria-label="Visual editing workspace"]')?.getAttribute('aria-busy') === 'false');
+   const renderCurrent = async () => {
+@@ -32,7 +36,7 @@ export async function checkStudioReloadRecovery(page: Page, baseURL: string, wor
+   const prepare = async () => {
+     await renderCurrent(); await page.locator('h1').click();
+     const prepared = page.waitForResponse(response => new URL(response.url()).pathname.endsWith('/preview') && response.request().method() === 'POST');
+-    await page.getByTitle('Toggle bold', { exact: true }).click();
++    await page.getByRole('button', { name: 'Toggle bold', exact: true }).click();
+     const proposal = await (await prepared).json(); assert.equal(proposal.success, true, proposal.error);
+     await apply.waitFor(); return proposal;
+   };
+@@ -40,7 +44,7 @@ export async function checkStudioReloadRecovery(page: Page, baseURL: string, wor
+   const undo = async () => {
+     await renderCurrent();
+     const response = page.waitForResponse(response => new URL(response.url()).pathname.endsWith('/undo'));
+-    await page.getByTitle('Undo visual adjustment (Ctrl+Z)').click(); assert.equal((await (await response).json()).success, true); await renderCurrent();
++    await page.getByRole('button', { name: 'Undo', exact: true }).click(); assert.equal((await (await response).json()).success, true); await renderCurrent();
+   };
+   const drop = async (kind: 'apply' | 'undo', write: boolean) => {
+     await page.route(`**/api/slightnudge/${kind}`, async route => {
+@@ -64,7 +68,7 @@ export async function checkStudioReloadRecovery(page: Page, baseURL: string, wor
+     await page.reload({ waitUntil: 'domcontentloaded' }); await idle(); await dialog.waitFor({ state: 'hidden' });
+     assert.equal(counts.apply, before.apply); assert.equal(counts.undo, before.undo);
+     assert.equal(fs.readFileSync(source, 'utf8'), accepted);
+-    await page.waitForFunction(() => getComputedStyle(document.querySelector('h1')!).fontWeight === '700');
++    await page.waitForFunction(() => getComputedStyle(document.querySelector('iframe')!.contentDocument!.querySelector('h1')!).fontWeight === '700');
+     await undo(); assert.equal(fs.readFileSync(source, 'utf8'), original);
+     console.log('PASS: a confirmed editing checkpoint restores after normal reload, verifies its receipt, and preserves explicit Undo without replaying a write');
+   };
+@@ -80,7 +84,7 @@ export async function checkStudioReloadRecovery(page: Page, baseURL: string, wor
+   await page.screenshot({ path: path.join(process.cwd(), 'docs/m0-tab-recovery.png'), animations: 'disabled' });
+   statusAvailable = true; await checkSave.click(); await dialog.waitFor({ state: 'hidden' });
+   assert.equal(fs.readFileSync(source, 'utf8'), saved); assert.equal(counts.apply, applyBeforeReload);
+-  await page.waitForFunction(() => getComputedStyle(document.querySelector('h1')!).fontWeight === '700');
++  await page.waitForFunction(() => getComputedStyle(document.querySelector('iframe')!.contentDocument!.querySelector('h1')!).fontWeight === '700');
+   await undo(); assert.equal(fs.readFileSync(source, 'utf8'), original);
+   console.log('PASS: full reload preserves an unknown accepted Apply; only read-only status checks run; restored accepted edit can be undone');
+ 
+@@ -101,7 +105,7 @@ export async function checkStudioReloadRecovery(page: Page, baseURL: string, wor
+   await prepare(); await save(); const older = fs.readFileSync(source, 'utf8');
+   await prepare(); await save(); assert.notEqual(fs.readFileSync(source, 'utf8'), older);
+   statusAvailable = false; await drop('undo', true);
+-  await page.getByTitle('Undo visual adjustment (Ctrl+Z)').click();
++  await page.getByRole('button', { name: 'Undo', exact: true }).click();
+   await page.getByText('Undo status unconfirmed. Editing is paused until it is checked.', { exact: true }).waitFor();
+   const undoBeforeReload = counts.undo;
+   const checkUndo = await reloadBlocked('Undo');
+@@ -110,13 +114,13 @@ export async function checkStudioReloadRecovery(page: Page, baseURL: string, wor
+   statusAvailable = true; await checkUndo.click(); await dialog.waitFor({ state: 'hidden' });
+   assert.equal(counts.undo, undoBeforeReload);
+   assert.equal(fs.readFileSync(source, 'utf8'), older);
+-  await page.waitForFunction(() => getComputedStyle(document.querySelector('h1')!).fontWeight === '700');
++  await page.waitForFunction(() => getComputedStyle(document.querySelector('iframe')!.contentDocument!.querySelector('h1')!).fontWeight === '700');
+   await undo(); assert.equal(fs.readFileSync(source, 'utf8'), original);
+   assert.equal(counts.undo, undoBeforeReload + 1, 'Only a separate explicit Undo may restore the older edit');
+   console.log('PASS: full reload pins unknown Undo to the newer accepted edit and preserves the older Undo step');
+ 
+   await prepare(); await save(); statusAvailable = false; await drop('undo', false);
+-  await page.getByTitle('Undo visual adjustment (Ctrl+Z)').click();
++  await page.getByRole('button', { name: 'Undo', exact: true }).click();
+   await page.getByText('Undo status unconfirmed. Editing is paused until it is checked.', { exact: true }).waitFor();
+   const unstartedUndo = counts.undo;
+   await reloadBlocked('Undo'); statusAvailable = true;
+diff --git a/test/helpers/direct-manipulation-browser.ts b/test/helpers/direct-manipulation-browser.v3.ts
+index 21a306d..bbc9d40 100644
+--- a/test/helpers/direct-manipulation-browser.ts
++++ b/test/helpers/direct-manipulation-browser.v3.ts
+@@ -1,9 +1,12 @@
++import { iframePageV3 } from './gate-page-v3';
+ import assert from 'node:assert/strict';
+ import fs from 'node:fs';
+ import path from 'node:path';
+ import type { Page } from 'playwright';
+ 
+ export async function checkDirectManipulation(page: Page, baseURL: string, workspace: string) {
++ page=iframePageV3(page);
++
+   const file = path.join(workspace, 'fixtures/1-plain-static.tsx');
+   const original = fs.readFileSync(file, 'utf8');
+   let previews = 0;
+diff --git a/test/helpers/drag-move-browser.ts b/test/helpers/drag-move-browser.v3.ts
+index eddc539..535fec4 100644
+--- a/test/helpers/drag-move-browser.ts
++++ b/test/helpers/drag-move-browser.v3.ts
+@@ -1,27 +1,34 @@
++import { iframePageV3 } from './gate-page-v3';
+ import assert from 'node:assert/strict';
+ import fs from 'node:fs';
+ import path from 'node:path';
+ import type { Page } from 'playwright';
+ 
+ export async function checkDragMove(page: Page, baseURL: string, workspace: string) {
++ page=iframePageV3(page);
++
+   const file = path.join(workspace, 'fixtures/1-plain-static.tsx');
+   const original = fs.readFileSync(file, 'utf8');
+   let previews = 0;
+-  page.on('request', request => { if (new URL(request.url()).pathname.endsWith('/preview') && request.method() === 'POST') previews++; });
++  page.on('request', request => { if (new URL(request.url()).pathname.endsWith('/preview') && request.method() === 'POST' && request.postDataJSON()?.operation !== 'inspect') previews++; });
+   const ready = page.waitForResponse(response => new URL(response.url()).pathname.endsWith('/pages'), { timeout: 120000 });
+-  await page.goto(`${baseURL}/studio`, { waitUntil: 'domcontentloaded', timeout: 120000 }); await ready;
++  await page.goto(`${baseURL}/studio?view=fit`, { waitUntil: 'domcontentloaded', timeout: 120000 }); await ready;
++  await page.locator('[data-source-ready="true"]').waitFor();
++  await page.getByRole('combobox', { name: 'Canvas zoom', exact: true }).selectOption('1');
+   await page.locator('h1').click();
+   const handle = page.getByRole('button', { name: 'Move element', exact: true });
+-  const apply = page.getByRole('button', { name: 'Apply to code', exact: true });
++  const apply = page.getByLabel('Draft controls', { exact: true }).getByRole('button', { name: 'Save changes', exact: true }).and(page.locator('button:enabled'));
+   const measurement = page.getByLabel('Move measurement', { exact: true });
+-  const rectangle = () => page.locator('h1').evaluate(element => { const r = element.parentElement!.getBoundingClientRect(); return { x: r.x, y: r.y, width: r.width }; });
++  // Playwright's boundingBox includes the iframe offset and canvas transform.
++  // The real preview selects the heading itself, not a synthetic parent wrapper.
++  const rectangle = async () => (await page.locator('h1').boundingBox())!;
+   const origin = await rectangle();
+   const button = (await handle.boundingBox())!;
+   assert.ok(Math.abs(button.x + button.width / 2 - origin.x - origin.width / 2) < 1, 'Move handle is centered above the selection');
+   await handle.click(); await page.getByRole('group', { name: 'Move selected element', exact: true }).waitFor();
+   await handle.click(); assert.equal(await page.getByRole('group', { name: 'Move selected element', exact: true }).count(), 0, 'A second click closes the precise controls without creating a drag');
+   const start = async () => { const box = (await handle.boundingBox())!; const point = { x: box.x + box.width / 2, y: box.y + box.height / 2 }; await page.mouse.move(point.x, point.y); await page.mouse.down(); return point; };
+-  const restored = () => page.waitForFunction(expected => { const r = document.querySelector('h1')!.parentElement!.getBoundingClientRect(); return Math.abs(r.x - expected.x) < 1 && Math.abs(r.y - expected.y) < 1; }, origin);
++  const restored = () => page.waitForFunction(expected => { const iframe=document.querySelector('iframe')!;const r=iframe.contentDocument!.querySelector('h1')!.getBoundingClientRect(),outer=iframe.getBoundingClientRect(),sx=outer.width/iframe.offsetWidth,sy=outer.height/iframe.offsetHeight; return Math.abs(outer.x+r.x*sx - expected.x) < 1 && Math.abs(outer.y+r.y*sy - expected.y) < 1; }, origin);
+   for (const cancellation of ['Escape', 'blur', 'pointercancel', 'capture', 'scroll', 'scope']) {
+     const point = await start(); await page.mouse.move(point.x + 25, point.y + 15, { steps: 5 });
+     await measurement.waitFor();
+@@ -35,14 +42,14 @@ export async function checkDragMove(page: Page, baseURL: string, workspace: stri
+     if (cancellation === 'scope') await page.getByRole('group', { name: 'Element state' }).getByRole('button', { name: 'Default', exact: true }).click();
+   }
+   console.log('PASS: centered Move handle, live two-axis snapped geometry and six cancellation paths; no source proposals while dragging');
+-  await page.locator('[data-selection-artboard]').evaluate(element => { (element as HTMLElement).style.transform = 'scale(.75)'; });
++  await page.getByRole('combobox', { name: 'Canvas zoom', exact: true }).selectOption('.75');
+   await page.waitForFunction(() => { const element = document.querySelector('[data-selection-artboard]') as HTMLElement; return Math.abs(element.getBoundingClientRect().width / element.offsetWidth - .75) < .001; });
+   const scaledOrigin = await rectangle();
+   let scaledPoint = await start(); await page.mouse.move(scaledPoint.x + 18, scaledPoint.y + 12); await measurement.waitFor();
+   const scaledRect = await rectangle(); assert.ok(Math.abs(scaledRect.x - scaledOrigin.x - 18) < 1); assert.ok(Math.abs(scaledRect.y - scaledOrigin.y - 12) < 1);
+   assert.ok((await measurement.textContent())?.includes('24px'));
+   await page.keyboard.press('Escape'); await page.mouse.up();
+-  await page.locator('[data-selection-artboard]').evaluate(element => { (element as HTMLElement).style.transform = ''; }); await restored();
++  await page.getByRole('combobox', { name: 'Canvas zoom', exact: true }).selectOption('1'); await restored();
+   assert.equal(previews, 0);
+   console.log('PASS: scaled-canvas drag tracks CSS coordinates and cancels without preparing source');
+   let point = await start(); await page.keyboard.down('Shift'); await page.mouse.move(point.x + 40, point.y + 27);
+@@ -53,7 +60,7 @@ export async function checkDragMove(page: Page, baseURL: string, workspace: stri
+   const locked = await (await proposed).json(); assert.equal(locked.success, true, locked.error);
+   assert.ok(locked.newClassName.includes('translate-x-[40px]')); assert.ok(locked.newClassName.includes('translate-y-[0px]'));
+   await apply.waitFor(); assert.equal(previews, 1);
+-  await page.getByRole('button', { name: 'Discard', exact: true }).click(); await apply.waitFor({ state: 'hidden' }); await restored();
++  await page.getByRole('button', { name: 'Discard draft', exact: true }).click(); await apply.waitFor({ state: 'hidden' }); await restored();
+   assert.equal(fs.readFileSync(file, 'utf8'), original);
+   console.log('PASS: Shift axis lock, one review per completed drag, exact Discard restoration');
+   point = await start(); await page.mouse.move(point.x + 24, point.y + 16, { steps: 4 }); await measurement.waitFor();
+@@ -85,20 +92,21 @@ export async function checkDragMove(page: Page, baseURL: string, workspace: stri
+     };
+     await confirm({ x: 24, y: 16 });
+     const undone = page.waitForResponse(response => new URL(response.url()).pathname.endsWith('/undo'));
+-    await page.getByTitle('Undo visual adjustment (Ctrl+Z)').click(); assert.equal((await (await undone).json()).success, true);
++    await page.getByRole('button', { name: 'Undo', exact: true }).click(); assert.equal((await (await undone).json()).success, true);
+     assert.equal(fs.readFileSync(file, 'utf8'), original); await restored();
+     await actual.reload({ waitUntil: 'domcontentloaded' }); await confirm({ x: 0, y: 0 });
+   } finally { await actualContext.close(); }
+   console.log('PASS: Apply and exact Undo; actual source-rendered page confirms the same X/Y movement and restoration');
+   await page.getByText('One thoughtful workspace for the people, projects, and plans that move your business forward.', { exact: true }).click();
+-  const paragraph = await page.getByText('One thoughtful workspace for the people, projects, and plans that move your business forward.', { exact: true }).evaluate(element => { const r = element.parentElement!.getBoundingClientRect(); return { x: r.x, y: r.y, width: r.width, height: r.height }; });
++  const paragraph = (await page.getByText('One thoughtful workspace for the people, projects, and plans that move your business forward.', { exact: true }).boundingBox())!;
+   const centered = (await handle.boundingBox())!;
+   assert.ok(Math.abs(centered.x + centered.width / 2 - paragraph.x - paragraph.width / 2) < 1);
+   await page.screenshot({ path: path.join(process.cwd(), 'docs/center-move-selection.png'), animations: 'disabled' });
+   await page.screenshot({ path: path.join(process.cwd(), 'docs/center-move-detail.png'), clip: { x: Math.floor(paragraph.x - 18), y: Math.floor(paragraph.y - 38), width: Math.ceil(paragraph.width + 36), height: Math.ceil(paragraph.height + 58) }, animations: 'disabled' });
+   await handle.click(); await page.getByRole('button', { name: 'Move right', exact: true }).click(); await apply.waitFor();
++  await page.getByRole('button', { name: 'Review changes', exact: true }).click();
+   assert.ok((await page.getByLabel('After change').innerText()).includes('translate-x-[4px]'));
+-  await page.getByRole('button', { name: 'Discard', exact: true }).click(); await apply.waitFor({ state: 'hidden' });
++  await page.getByRole('button', { name: 'Discard draft', exact: true }).click(); await apply.waitFor({ state: 'hidden' });
+   assert.equal(fs.readFileSync(file, 'utf8'), original);
+   console.log('PASS: paragraph selection matches the centered-handle design; click opens precise movement controls');
+   return 4;
+diff --git a/test/helpers/continuous-draft-browser.ts b/test/helpers/continuous-draft-browser.v3.ts
+index 9e909ab..09c935e 100644
+--- a/test/helpers/continuous-draft-browser.ts
++++ b/test/helpers/continuous-draft-browser.v3.ts
+@@ -1,9 +1,12 @@
++import { iframePageV3 } from './gate-page-v3';
+ import assert from 'node:assert/strict';
+ import fs from 'node:fs';
+ import path from 'node:path';
+ import type { Page } from 'playwright';
+ 
+ export async function checkContinuousDraft(page: Page, baseURL: string, workspace: string) {
++ page=iframePageV3(page);
++
+   page.setDefaultTimeout(30000);
+   const file = path.join(workspace, 'fixtures/1-plain-static.tsx');
+   const original = fs.readFileSync(file, 'utf8');
+diff --git a/test/helpers/inline-text-browser.ts b/test/helpers/inline-text-browser.v3.ts
+index f327f87..14fc52b 100644
+--- a/test/helpers/inline-text-browser.ts
++++ b/test/helpers/inline-text-browser.v3.ts
+@@ -1,23 +1,27 @@
++import { iframePageV3 } from './gate-page-v3';
+ import assert from 'node:assert/strict';
+ import fs from 'node:fs';
+ import path from 'node:path';
+ import type { Page } from 'playwright';
+ 
+ export async function checkInlineText(page: Page, baseURL: string, workspace: string) {
++ page=iframePageV3(page);
++
+   page.setDefaultTimeout(30000);
+   const file = path.join(workspace, 'fixtures/1-plain-static.tsx');
+   const original = fs.readFileSync(file, 'utf8');
+   let previews = 0, saves = 0;
+   page.on('request', request => {
+     if (request.method() !== 'POST') return;
+-    if (new URL(request.url()).pathname.endsWith('/preview')) previews++;
++    if (new URL(request.url()).pathname.endsWith('/preview') && request.postDataJSON()?.operation !== 'inspect') previews++;
+     if (new URL(request.url()).pathname.endsWith('/apply')) saves++;
+   });
+   await page.goto(`${baseURL}/studio`, { waitUntil: 'networkidle', timeout: 120000 });
++  await page.locator('[data-source-ready="true"]').waitFor();
+   const idle = () => page.waitForFunction(() => document.querySelector('[aria-label="Visual editing workspace"]')?.getAttribute('aria-busy') === 'false', undefined, { timeout: 30000 });
+   await idle(); await page.locator('h1').click();
+   const toolbar = page.getByRole('toolbar', { name: 'Selection formatting' });
+-  const heading = page.getByRole('textbox', { name: 'Edit heading text', exact: true });
++  const heading = page.frameLocator('iframe[title="Actual project"]').getByRole('textbox', { name: 'Edit selected text', exact: true });
+   const metrics = () => page.locator('h1').evaluate(element => {
+     const style = getComputedStyle(element), rect = element.getBoundingClientRect();
+     return { size: style.fontSize, family: style.fontFamily, weight: style.fontWeight, lineHeight: style.lineHeight, spacing: style.letterSpacing, align: style.textAlign, width: rect.width, height: rect.height };
+@@ -58,7 +62,7 @@ export async function checkInlineText(page: Page, baseURL: string, workspace: st
+   console.log('PASS live size/typeface/alignment preserve typed text; Ctrl+S saves text plus typography once; saved batch Undo restores bytes');
+ 
+   const paragraphText = 'One thoughtful workspace for the people, projects, and plans that move your business forward.';
+-  const paragraph = page.getByRole('textbox', { name: 'Edit paragraph text', exact: true });
++  const paragraph = page.frameLocator('iframe[title="Actual project"]').getByRole('textbox', { name: 'Edit selected text', exact: true });
+   await page.getByText(paragraphText, { exact: true }).dblclick(); await paragraph.waitFor();
+   const initialCount = previews;
+   await paragraph.dispatchEvent('compositionstart', { data: '' }); await paragraph.press('Enter');
+diff --git a/test/helpers/unified-canvas-browser.ts b/test/helpers/unified-canvas-browser.v3.ts
+index 37ef388..d410b4a 100644
+--- a/test/helpers/unified-canvas-browser.ts
++++ b/test/helpers/unified-canvas-browser.v3.ts
+@@ -1,12 +1,15 @@
++import { iframePageV3 } from './gate-page-v3';
+ import assert from 'node:assert/strict';
+ import fs from 'node:fs';
+ import path from 'node:path';
+ import net from 'node:net';
+ import { spawn, execFileSync } from 'node:child_process';
+ import type { Page } from 'playwright';
+-import { prepareSourceProject } from './prepare-source-project';
++import { prepareSourceProject } from './prepare-source-project.v3';
+ 
+ export async function checkUnifiedCanvas(page: Page, baseURL: string, workspace: string) {
++ page=iframePageV3(page);
++
+   page.setDefaultTimeout(45000);
+   let navigations = 0;
+   const browserErrors: string[] = [];
+diff --git a/test/helpers/button-editing-browser.ts b/test/helpers/button-editing-browser.v3.ts
+index af33c03..f8dff73 100644
+--- a/test/helpers/button-editing-browser.ts
++++ b/test/helpers/button-editing-browser.v3.ts
+@@ -1,9 +1,12 @@
++import { iframePageV3 } from './gate-page-v3';
+ import assert from 'node:assert/strict';
+ import fs from 'node:fs';
+ import path from 'node:path';
+ import type { Page } from 'playwright';
+ 
+ export async function checkButtonEditing(page: Page, baseURL: string, workspace: string) {
++ page=iframePageV3(page);
++
+   page.setDefaultTimeout(45000);
+   const browserErrors: string[] = []; page.on('pageerror', error => browserErrors.push(error.message));
+   await page.addInitScript(() => { (window as any).buttonNotices = []; addEventListener('DOMContentLoaded', () => new MutationObserver(() => { const notice = document.querySelector('[aria-label="Editor notice"]')?.textContent; if (notice && (window as any).buttonNotices.at(-1) !== notice) (window as any).buttonNotices.push(notice); }).observe(document.body, { childList: true, subtree: true, characterData: true })); });
+diff --git a/test/helpers/live-window-browser.ts b/test/helpers/live-window-browser.v3.ts
+index c67b409..f8d0ab0 100644
+--- a/test/helpers/live-window-browser.ts
++++ b/test/helpers/live-window-browser.v3.ts
+@@ -1,12 +1,15 @@
++import { iframePageV3 } from './gate-page-v3';
+ import assert from 'node:assert/strict';
+ import fs from 'node:fs';
+ import path from 'node:path';
+ import net from 'node:net';
+ import { spawn, execFileSync } from 'node:child_process';
+ import type { Page } from 'playwright';
+-import { prepareSourceProject } from './prepare-source-project';
++import { prepareSourceProject } from './prepare-source-project.v3';
+ 
+ export async function checkLiveWindow(page: Page, baseURL: string, workspace: string) {
++ page=iframePageV3(page);
++
+   page.setDefaultTimeout(45000);
+   const errors: string[] = []; page.on('pageerror', error => errors.push(error.stack || error.message));
+   page.on('response', async response => { if (response.url().includes('/preview-check')) console.log('Connection check', response.request().postData(), response.status(), await response.text()); });
+diff --git a/test/helpers/section-order-browser.ts b/test/helpers/section-order-browser.v3.ts
+index cfc5ea3..0e1d638 100644
+--- a/test/helpers/section-order-browser.ts
++++ b/test/helpers/section-order-browser.v3.ts
+@@ -1,9 +1,12 @@
++import { iframePageV3 } from './gate-page-v3';
+ import assert from 'node:assert/strict';
+ import fs from 'node:fs';
+ import path from 'node:path';
+ import type { Page } from 'playwright';
+ 
+ export async function checkSectionOrder(page: Page, baseURL: string, workspace: string) {
++ page=iframePageV3(page);
++
+   page.setDefaultTimeout(45000);
+   const errors: string[] = []; page.on('pageerror', error => errors.push(error.stack || error.message));
+   const file = path.join(workspace, 'fixtures/1-plain-static.tsx');
+diff --git a/test/helpers/container-move-browser.ts b/test/helpers/container-move-browser.v3.ts
+index 65c8c93..2a368bc 100644
+--- a/test/helpers/container-move-browser.ts
++++ b/test/helpers/container-move-browser.v3.ts
+@@ -1,9 +1,12 @@
++import { iframePageV3 } from './gate-page-v3';
+ import assert from 'node:assert/strict';
+ import fs from 'node:fs';
+ import path from 'node:path';
+ import type { Page } from 'playwright';
+ 
+ export async function checkContainerMove(page: Page, baseURL: string, workspace: string) {
++ page=iframePageV3(page);
++
+   page.setDefaultTimeout(45000); const errors: string[] = []; page.on('pageerror', error => errors.push(error.stack || error.message));
+   const file = path.join(workspace, 'fixtures/1-plain-static.tsx');
+   const empty = process.argv.includes('--empty-destination');
+diff --git a/test/helpers/layout-controls-browser.ts b/test/helpers/layout-controls-browser.v3.ts
+index 63ae6b6..f98d969 100644
+--- a/test/helpers/layout-controls-browser.ts
++++ b/test/helpers/layout-controls-browser.v3.ts
+@@ -1,9 +1,12 @@
++import { iframePageV3 } from './gate-page-v3';
+ import assert from 'node:assert/strict';
+ import fs from 'node:fs';
+ import path from 'node:path';
+ import type { Page } from 'playwright';
+ 
+ export async function checkLayoutControls(page: Page, baseURL: string, workspace: string) {
++ page=iframePageV3(page);
++
+   page.setDefaultTimeout(45000); const errors: string[] = []; page.on('pageerror', error => errors.push(error.stack || error.message));
+   const file = path.join(workspace, 'fixtures/1-plain-static.tsx'), before = `'use client';export default function Page(){return <main className="p-12"><section id="layout" className="grid grid-cols-1 gap-4 rounded-xl border p-8"><article className="rounded-lg bg-slate-50 p-6"><h2>First card</h2></article><article className="rounded-lg bg-slate-50 p-6"><h2>Second card</h2></article></section></main>}`;
+   fs.writeFileSync(file, before);
+diff --git a/test/helpers/multi-file-browser.ts b/test/helpers/multi-file-browser.v3.ts
+index 6fa593d..5bbaaca 100644
+--- a/test/helpers/multi-file-browser.ts
++++ b/test/helpers/multi-file-browser.v3.ts
+@@ -1,11 +1,14 @@
++import { iframePageV3 } from './gate-page-v3';
+ import assert from 'node:assert/strict';
+ import fs from 'node:fs';
+ import path from 'node:path';
+ import net from 'node:net';
+ import { spawn, execFileSync } from 'node:child_process';
+ import type { Page } from 'playwright';
+-import { prepareSourceProject } from './prepare-source-project';
++import { prepareSourceProject } from './prepare-source-project.v3';
+ export async function checkMultiFile(page: Page, baseURL: string, workspace: string) {
++ page=iframePageV3(page);
++
+     page.setDefaultTimeout(60000);
+     const errors: string[] = [];
+     page.on('pageerror', e => errors.push(e.message));
+diff --git a/test/helpers/project-compatibility-browser.ts b/test/helpers/project-compatibility-browser.v3.ts
+index fa2ae5c..3dc8f20 100644
+--- a/test/helpers/project-compatibility-browser.ts
++++ b/test/helpers/project-compatibility-browser.v3.ts
+@@ -1,3 +1,4 @@
++import { iframePageV3 } from './gate-page-v3';
+ import assert from 'node:assert/strict';
+ import fs from 'node:fs';
+ import path from 'node:path';
+@@ -5,6 +6,8 @@ import { execFileSync } from 'node:child_process';
+ import type { Page } from 'playwright';
+ 
+ export async function checkProjectCompatibility(page: Page, baseURL: string, workspace: string, evidenceRoot: string) {
++ page=iframePageV3(page);
++
+   const storage = path.join(workspace, '.slightnudge');
+   fs.mkdirSync(storage, { recursive: true });
+   const repositories = [];
+diff --git a/test/helpers/imported-canvas-browser.ts b/test/helpers/imported-canvas-browser.v3.ts
+index 0b4246f..6bad84e 100644
+--- a/test/helpers/imported-canvas-browser.ts
++++ b/test/helpers/imported-canvas-browser.v3.ts
+@@ -1,12 +1,15 @@
++import { iframePageV3 } from './gate-page-v3';
+ import assert from 'node:assert/strict';
+ import fs from 'node:fs';
+ import path from 'node:path';
+ import net from 'node:net';
+ import { spawn, execFileSync } from 'node:child_process';
+ import type { Page } from 'playwright';
+-import { prepareSourceProject } from './prepare-source-project';
++import { prepareSourceProject } from './prepare-source-project.v3';
+ 
+ export async function checkImportedCanvas(page: Page, baseURL: string, workspace: string) {
++ page=iframePageV3(page);
++
+   page.setDefaultTimeout(60000);
+   const repo = path.join(workspace, '.slightnudge/repositories/source-proof');
+   fs.mkdirSync(repo, { recursive: true });
+diff --git a/test/helpers/real-project-canvas-browser.ts b/test/helpers/real-project-canvas-browser.v3.ts
+index dc983e4..2e5a68e 100644
+--- a/test/helpers/real-project-canvas-browser.ts
++++ b/test/helpers/real-project-canvas-browser.v3.ts
+@@ -1,15 +1,18 @@
++import { iframePageV3 } from './gate-page-v3';
+ import assert from 'node:assert/strict';
+ import fs from 'node:fs';
+ import path from 'node:path';
+ import net from 'node:net';
+ import { spawn, execFileSync } from 'node:child_process';
+ import type { Page } from 'playwright';
+-import { prepareSourceProject } from './prepare-source-project';
++import { prepareSourceProject } from './prepare-source-project.v3';
+ 
+ type Target = { file: string; line: string; column: string; tag: string; text: string };
+ 
+ // Exercise unmodified application elements in fresh public checkouts, not injected fixtures.
+ export async function checkRealProjectCanvas(page: Page, baseURL: string, workspace: string, evidenceRoot: string) {
++ page=iframePageV3(page);
++
+   assert.ok(process.argv.some(arg => arg.startsWith('--public=')), 'Real-project qualification requires a public repository');
+   page.setDefaultTimeout(60000);
+   const repo = path.join(workspace, '.slightnudge/repositories/source-proof');
+diff --git a/test/helpers/real-multi-file-browser.ts b/test/helpers/real-multi-file-browser.v3.ts
+index 88184a7..d88636d 100644
+--- a/test/helpers/real-multi-file-browser.ts
++++ b/test/helpers/real-multi-file-browser.v3.ts
+@@ -1,10 +1,11 @@
++import { iframePageV3 } from './gate-page-v3';
+ import assert from 'node:assert/strict';
+ import fs from 'node:fs';
+ import path from 'node:path';
+ import net from 'node:net';
+ import { spawn, execFileSync } from 'node:child_process';
+ import type { Page } from 'playwright';
+-import { prepareSourceProject } from './prepare-source-project';
++import { prepareSourceProject } from './prepare-source-project.v3';
+ 
+ type Target = { file: string; line: number; column: number; tag: string; text: string };
+ type GroupBody = { operation: string; transactionId: string; repositoryId: string; members: { previewId: string; filePath: string }[] };
+@@ -12,6 +13,8 @@ type GroupBody = { operation: string; transactionId: string; repositoryId: strin
+ /** Original public components, real drafts and group writer. Fault injection
+  * replaces only the transport with a worker that exits inside the real writer. */
+ export async function checkRealMultiFile(page: Page, baseURL: string, workspace: string, evidenceRoot: string) {
++ page=iframePageV3(page);
++
+   const selected = process.argv.find(arg => arg.startsWith('--public='))?.slice(9);
+   assert.ok(selected === 'next-saas' || selected === 'open-react', 'Choose a public multi-component project');
+   const evidence = path.join(evidenceRoot, `docs/real-multi-file-${selected}`);
+diff --git a/test/helpers/high-fidelity-browser.ts b/test/helpers/high-fidelity-browser.v3.ts
+index faff4c0..bcf31b7 100644
+--- a/test/helpers/high-fidelity-browser.ts
++++ b/test/helpers/high-fidelity-browser.v3.ts
+@@ -1,14 +1,17 @@
++import { iframePageV3 } from './gate-page-v3';
+ import assert from 'node:assert/strict';
+ import fs from 'node:fs';
+ import path from 'node:path';
+ import net from 'node:net';
+ import { execFileSync, spawn } from 'node:child_process';
+ import type { Page } from 'playwright';
+-import { prepareSourceProject } from './prepare-source-project';
++import { prepareSourceProject } from './prepare-source-project.v3';
+ 
+ /** Keep the upstream design and components intact. Exercise the actual UI/API,
+  * compare against its native page, and check all tracked application source. */
+ export async function checkHighFidelity(page: Page, baseURL: string, workspace: string, evidenceRoot: string) {
++ page=iframePageV3(page);
++
+   assert.ok(process.argv.includes('--public=open-react'), 'This qualification targets the original Open React site');
+   const evidence = path.join(evidenceRoot, 'docs/high-fidelity-open-react');
+   const report: Record<string, any> = { date: new Date().toISOString(), state: 'running', checks: [], modes: [], errors: [], limits: [
+diff --git a/test/helpers/core-editing-browser.ts b/test/helpers/core-editing-browser.v3.ts
+index 2967b29..b2366b9 100644
+--- a/test/helpers/core-editing-browser.ts
++++ b/test/helpers/core-editing-browser.v3.ts
+@@ -1,3 +1,4 @@
++import { iframePageV3 } from './gate-page-v3';
+ import assert from 'node:assert/strict';
+ import fs from 'node:fs';
+ import path from 'node:path';
+@@ -5,6 +6,8 @@ import type { Page } from 'playwright';
+ 
+ /** The same authored document and user actions in both workspace presentations. */
+ export async function checkCoreEditing(page: Page, baseURL: string, workspace: string) {
++ page=iframePageV3(page);
++
+   const file = path.join(workspace, 'fixtures/1-plain-static.tsx');
+   const original = fs.readFileSync(file, 'utf8');
+   const fixture = `'use client';
+diff --git a/test/helpers/single-canvas-browser.ts b/test/helpers/single-canvas-browser.v3.ts
+index 1db6fe2..e62c956 100644
+--- a/test/helpers/single-canvas-browser.ts
++++ b/test/helpers/single-canvas-browser.v3.ts
+@@ -1,9 +1,12 @@
++import { iframePageV3 } from './gate-page-v3';
+ import assert from 'node:assert/strict';
+ import fs from 'node:fs';
+ import path from 'node:path';
+ import type { Page } from 'playwright';
+ 
+ export async function checkSingleCanvas(page: Page, baseURL: string, workspace: string) {
++ page=iframePageV3(page);
++
+   page.setDefaultTimeout(45000);
+   const file = path.join(workspace, 'fixtures/1-plain-static.tsx');
+   const original = `'use client';export default function Page(){return <main className="min-h-[2200px] bg-white p-10"><h1 id="canvas-heading" className="max-w-xl text-4xl font-semibold">One page. Room to create.</h1><p className="mt-6 text-lg text-slate-600">Move around your work without changing its layout.</p><section className="mt-16 h-[1700px] rounded-xl bg-slate-50 p-8"><p>A full page on the canvas.</p></section><footer className="mt-12 text-sm text-slate-500">The end of the page.</footer></main>}`;
+diff --git a/test/helpers/editor-ergonomics-browser.ts b/test/helpers/editor-ergonomics-browser.v3.ts
+index ffddd3d..8043510 100644
+--- a/test/helpers/editor-ergonomics-browser.ts
++++ b/test/helpers/editor-ergonomics-browser.v3.ts
+@@ -1,9 +1,12 @@
++import { iframePageV3 } from './gate-page-v3';
+ import assert from 'node:assert/strict';
+ import fs from 'node:fs';
+ import path from 'node:path';
+ import type { Page } from 'playwright';
+ 
+ export async function checkEditorErgonomics(page: Page, baseURL: string, workspace: string) {
++ page=iframePageV3(page);
++
+   page.setDefaultTimeout(45000);
+   const file = path.join(workspace, 'fixtures/1-plain-static.tsx');
+   const original = fs.readFileSync(file, 'utf8');
+diff --git a/test/helpers/responsive-editing-browser.ts b/test/helpers/responsive-editing-browser.v3.ts
+index 6c32aff..fa28e80 100644
+--- a/test/helpers/responsive-editing-browser.ts
++++ b/test/helpers/responsive-editing-browser.v3.ts
+@@ -1,9 +1,12 @@
++import { iframePageV3 } from './gate-page-v3';
+ import assert from 'node:assert/strict';
+ import fs from 'node:fs';
+ import path from 'node:path';
+ import type { Page } from 'playwright';
+ 
+ export async function checkResponsiveEditing(page: Page, baseURL: string, workspace: string, classic = false) {
++ page=iframePageV3(page);
++
+   page.setDefaultTimeout(45000); const errors: string[] = []; page.on('pageerror', error => errors.push(error.stack || error.message));
+   page.on('console', message => { if (message.text().startsWith('Responsive bridge refusal:')) console.log(message.text()); });
+   await page.addInitScript(() => { window.addEventListener('message', event => { if (event.data?.type === 'edit-result' && event.data.success === false) console.log('Responsive bridge refusal:', event.data.reason); }); });
+diff --git a/test/helpers/imported-responsive-browser.ts b/test/helpers/imported-responsive-browser.v3.ts
+index 9473c20..d33c14d 100644
+--- a/test/helpers/imported-responsive-browser.ts
++++ b/test/helpers/imported-responsive-browser.v3.ts
+@@ -1,12 +1,15 @@
++import { iframePageV3 } from './gate-page-v3';
+ import assert from 'node:assert/strict';
+ import fs from 'node:fs';
+ import path from 'node:path';
+ import net from 'node:net';
+ import { spawn, execFileSync } from 'node:child_process';
+ import type { Page } from 'playwright';
+-import { prepareSourceProject } from './prepare-source-project';
++import { prepareSourceProject } from './prepare-source-project.v3';
+ 
+ export async function checkImportedResponsive(page: Page, baseURL: string, workspace: string) {
++ page=iframePageV3(page);
++
+   page.setDefaultTimeout(60000); const errors: string[] = []; page.on('pageerror', error => errors.push(error.stack || error.message));
+   const repo = path.join(workspace, '.slightnudge/repositories/source-proof'); fs.mkdirSync(repo, { recursive: true });
+   const env: NodeJS.ProcessEnv = { NODE_ENV: 'development', CI: '1', NEXT_TELEMETRY_DISABLED: '1' }; for (const name of ['PATH', 'SystemRoot', 'TEMP', 'TMP', 'USERPROFILE', 'APPDATA', 'LOCALAPPDATA']) if (process.env[name]) env[name] = process.env[name];
+diff --git a/test/shared-instance-security.v2.browser.ts b/test/shared-instance-security.v2.browser.v3.ts
+index 237cdd1..837af83 100644
+--- a/test/shared-instance-security.v2.browser.ts
++++ b/test/shared-instance-security.v2.browser.v3.ts
+@@ -1,12 +1,12 @@
+-import { checkAppearanceLayout } from './helpers/appearance-layout-browser';
+-import { checkSharedInstances as originalCheckSharedInstances } from './helpers/shared-instance-browser';
+-import { checkIconProperties } from './helpers/icon-properties-browser';
+-import { checkComponentActions } from './helpers/component-actions-browser';
+-import { checkComponentProps } from './helpers/component-props-browser';
+-import { checkImportedAdvancedImages } from './helpers/imported-advanced-image-browser';
+-import { checkAdvancedImages } from './helpers/advanced-image-browser';
+-import { checkImageContent } from './helpers/image-content-browser';
+-import { checkImageFraming } from './helpers/image-framing-browser';
++import { checkAppearanceLayout } from './helpers/appearance-layout-browser.v3';
++import { checkSharedInstances as originalCheckSharedInstances } from './helpers/shared-instance-browser.v3';
++import { checkIconProperties } from './helpers/icon-properties-browser.v3';
++import { checkComponentActions } from './helpers/component-actions-browser.v3';
++import { checkComponentProps } from './helpers/component-props-browser.v3';
++import { checkImportedAdvancedImages } from './helpers/imported-advanced-image-browser.v3';
++import { checkAdvancedImages } from './helpers/advanced-image-browser.v3';
++import { checkImageContent } from './helpers/image-content-browser.v3';
++import { checkImageFraming } from './helpers/image-framing-browser.v3';
+ import assert from 'node:assert/strict';
+ import fs from 'node:fs';
+ import os from 'node:os';
+@@ -15,36 +15,36 @@ import net from 'node:net';
+ import { execFileSync, spawn } from 'node:child_process';
+ import { chromium } from 'playwright';
+ import { Script } from 'node:vm';
+-import { checkImportedReview } from './helpers/imported-review-browser';
+-import { checkLiveReview } from './helpers/live-review-browser';
+-import { checkCurrentStudioReview } from './helpers/current-studio-review-browser';
+-import { checkCurrentStudioLive } from './helpers/current-studio-live-browser';
+-import { checkM1Interactions } from './helpers/m1-interactions-browser';
+-import { checkStudioResize } from './helpers/studio-resize-browser';
+-import { checkSourceProject } from './helpers/source-project-browser';
+-import { checkWorkspaceRedesign } from './helpers/workspace-redesign-browser';
+-import { checkStudioReloadRecovery } from './helpers/studio-reload-recovery-browser';
+-import { checkDirectManipulation } from './helpers/direct-manipulation-browser';
+-import { checkDragMove } from './helpers/drag-move-browser';
+-import { checkContinuousDraft } from './helpers/continuous-draft-browser';
+-import { checkInlineText } from './helpers/inline-text-browser';
+-import { checkUnifiedCanvas } from './helpers/unified-canvas-browser';
+-import { checkButtonEditing } from './helpers/button-editing-browser';
+-import { checkLiveWindow } from './helpers/live-window-browser';
+-import { checkSectionOrder } from './helpers/section-order-browser';
+-import { checkContainerMove } from './helpers/container-move-browser';
+-import { checkLayoutControls } from './helpers/layout-controls-browser';
+-import { checkMultiFile } from './helpers/multi-file-browser';
+-import { checkProjectCompatibility } from './helpers/project-compatibility-browser';
+-import { checkImportedCanvas } from './helpers/imported-canvas-browser';
+-import { checkRealProjectCanvas } from './helpers/real-project-canvas-browser';
+-import { checkRealMultiFile } from './helpers/real-multi-file-browser';
+-import { checkHighFidelity } from './helpers/high-fidelity-browser';
+-import { checkCoreEditing } from './helpers/core-editing-browser';
+-import { checkSingleCanvas } from './helpers/single-canvas-browser';
+-import { checkEditorErgonomics } from './helpers/editor-ergonomics-browser';
+-import { checkResponsiveEditing } from './helpers/responsive-editing-browser';
+-import { checkImportedResponsive } from './helpers/imported-responsive-browser';
++import { checkImportedReview } from './helpers/imported-review-browser.v3';
++import { checkLiveReview } from './helpers/live-review-browser.v3';
++import { checkCurrentStudioReview } from './helpers/current-studio-review-browser.v3';
++import { checkCurrentStudioLive } from './helpers/current-studio-live-browser.v3';
++import { checkM1Interactions } from './helpers/m1-interactions-browser.v3';
++import { checkStudioResize } from './helpers/studio-resize-browser.v3';
++import { checkSourceProject } from './helpers/source-project-browser.v3';
++import { checkWorkspaceRedesign } from './helpers/workspace-redesign-browser.v3';
++import { checkStudioReloadRecovery } from './helpers/studio-reload-recovery-browser.v3';
++import { checkDirectManipulation } from './helpers/direct-manipulation-browser.v3';
++import { checkDragMove } from './helpers/drag-move-browser.v3';
++import { checkContinuousDraft } from './helpers/continuous-draft-browser.v3';
++import { checkInlineText } from './helpers/inline-text-browser.v3';
++import { checkUnifiedCanvas } from './helpers/unified-canvas-browser.v3';
++import { checkButtonEditing } from './helpers/button-editing-browser.v3';
++import { checkLiveWindow } from './helpers/live-window-browser.v3';
++import { checkSectionOrder } from './helpers/section-order-browser.v3';
++import { checkContainerMove } from './helpers/container-move-browser.v3';
++import { checkLayoutControls } from './helpers/layout-controls-browser.v3';
++import { checkMultiFile } from './helpers/multi-file-browser.v3';
++import { checkProjectCompatibility } from './helpers/project-compatibility-browser.v3';
++import { checkImportedCanvas } from './helpers/imported-canvas-browser.v3';
++import { checkRealProjectCanvas } from './helpers/real-project-canvas-browser.v3';
++import { checkRealMultiFile } from './helpers/real-multi-file-browser.v3';
++import { checkHighFidelity } from './helpers/high-fidelity-browser.v3';
++import { checkCoreEditing } from './helpers/core-editing-browser.v3';
++import { checkSingleCanvas } from './helpers/single-canvas-browser.v3';
++import { checkEditorErgonomics } from './helpers/editor-ergonomics-browser.v3';
++import { checkResponsiveEditing } from './helpers/responsive-editing-browser.v3';
++import { checkImportedResponsive } from './helpers/imported-responsive-browser.v3';
+ 
+ // Run the real UI in a disposable copy. API stubs deliberately make implicit
+ // Apply observable without ever writing source or handling real session tokens.
+@@ -155,7 +155,7 @@ try {
+   let ready = false;
+   for (let attempt = 0; attempt < 120; attempt++) {
+     if (server && server.exitCode !== null) throw new Error('Isolated server exited before startup');
+-    try { if ((await fetch(`${baseURL}/fixtures/1`, { signal: AbortSignal.timeout(10000) })).ok) { ready = true; break; } } catch {}
++    try { if ((await fetch(`${baseURL}/editor`, { signal: AbortSignal.timeout(10000) })).ok) { ready = true; break; } } catch {}
+     await new Promise(resolve => setTimeout(resolve, 500));
+   }
+   assert.ok(ready, 'Isolated server must start');
+@@ -168,8 +168,8 @@ try {
+     passed=await checkAppearanceLayout(page,baseURL,workspace,root);
+     passed+=await checkImportedAdvancedImages(page,baseURL,workspace,root,checkAppearanceLayout);
+   }else if(process.argv.includes('--shared-instances')){
+-    passed=await checkSharedInstances(page,baseURL,workspace,workspace);
+-    fs.mkdirSync(path.join(workspace,'docs'),{recursive:true});passed+=await checkImportedAdvancedImages(page,baseURL,workspace,workspace,checkSharedInstances);
++    if(process.env.GATE_SHARED_KIND!=='imported')passed=await checkSharedInstances(page,baseURL,workspace,workspace);
++    fs.mkdirSync(path.join(workspace,'docs'),{recursive:true});if(process.env.GATE_SHARED_KIND!=='local')passed+=await checkImportedAdvancedImages(page,baseURL,workspace,workspace,checkSharedInstances);
+   }else if(process.argv.includes('--component-ownership-all')||process.argv.includes('--component-ownership-project')){
+     const workflow=(page:Parameters<typeof checkComponentProps>[0],base:string,workspace:string,root:string,repository?:Parameters<typeof checkComponentProps>[4])=>checkComponentProps(page,base,workspace,root,repository,true);
+     if(!process.argv.includes('--component-ownership-project'))passed=await workflow(page,baseURL,workspace,root);
+@@ -436,3 +436,4 @@ try {
+   try { fs.unlinkSync(path.join(workspace, 'node_modules')); fs.rmSync(workspace, { recursive: true, force: true }); }
+   catch { console.log(`Temporary copy requires manual cleanup: ${workspace}`); }
+ }
++
+diff --git a/test/m0-regression.reliability.test.ts b/test/m0-regression.reliability.v3.test.ts
+index c14b04e..d6ef581 100644
+--- a/test/m0-regression.reliability.test.ts
++++ b/test/m0-regression.reliability.v3.test.ts
+@@ -229,5 +229,5 @@ const SELECTIONS: SelectionSpec[] = [
+   },
+ ];
+ 
+-import { runSelectionGate } from './helpers/editor-reliability-selection';
++import { runSelectionGate } from './helpers/editor-reliability-selection.v3';
+ runSelectionGate(SELECTIONS, 'regression').catch(error=>{console.error(error);process.exitCode=1;});
+diff --git a/test/m0-overfit.reliability.test.ts b/test/m0-overfit.reliability.v3.test.ts
+index 98dcf33..f0b7a5f 100644
+--- a/test/m0-overfit.reliability.test.ts
++++ b/test/m0-overfit.reliability.v3.test.ts
+@@ -229,5 +229,5 @@ const OVERFIT_SELECTIONS: OverfitSelectionSpec[] = [
+   },
+ ];
+ 
+-import { runSelectionGate } from './helpers/editor-reliability-selection';
++import { runSelectionGate } from './helpers/editor-reliability-selection.v3';
+ runSelectionGate(OVERFIT_SELECTIONS, 'overfit').catch(error=>{console.error(error);process.exitCode=1;});

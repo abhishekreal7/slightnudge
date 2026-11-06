@@ -1,0 +1,40 @@
+{
+  "head": "94a05082435520c0d948c2922dd670d586b3bf2a",
+  "productRef": "94a05082435520c0d948c2922dd670d586b3bf2a",
+  "testRef": "94a05082435520c0d948c2922dd670d586b3bf2a",
+  "fatal": true,
+  "rows": [
+    {
+      "workflow": "warmup-m0-control-lab-full",
+      "api": "REAL",
+      "result": "PASS",
+      "seconds": 69.23
+    },
+    {
+      "workflow": "warmup-m0-control-lab-fit",
+      "api": "REAL",
+      "result": "PASS",
+      "seconds": 8
+    },
+    {
+      "workflow": "warmup-m0-overfit-lab-full",
+      "api": "REAL",
+      "result": "PASS",
+      "seconds": 22.9
+    },
+    {
+      "workflow": "warmup-m0-overfit-lab-fit",
+      "api": "REAL",
+      "result": "PASS",
+      "seconds": 4.41
+    },
+    {
+      "workflow": "selection-full-overfit",
+      "api": "REAL",
+      "result": "FAIL",
+      "seconds": 19.81,
+      "exitCode": 1,
+      "historical": "docs/editor-load-and-toolbar/selection/round-1-raw.log"
+    }
+  ]
+}

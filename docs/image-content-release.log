@@ -1,0 +1,162 @@
+Image content: Studio
+PASS image content Studio: real upload and crop pixels, repeated escaped alt edits, immutable drafts, Undo/Redo, refresh, Save, exact source/DOM Undo
+Image content: window
+PASS image content window: real upload and crop pixels, repeated escaped alt edits, immutable drafts, Undo/Redo, refresh, Save, exact source/DOM Undo
+PASS: 2 review-consent browser cases (real API; disposable source copy)
+Application typecheck: exit 0 (disposable application plus new harness; excludes historical tests/docs/scratch)
+▲ Next.js 16.4.3 (webpack)
+✓ Running next.config.mjs took 28ms
+⚠ No build cache found. Please configure build caching for faster rebuilds. Read more: https://nextjs.org/docs/messages/no-cache
+
+  Creating an optimized production build ...
+⚠ Compiled with warnings in 52s
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/preview/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/preview/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/preview/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/preview/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/preview/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/preview/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/preview/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/preview/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/preview/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/preview/route.ts
+
+  Running TypeScript ...
+  Finished TypeScript in 1374ms ...
+  Collecting page data using 19 workers ...
+  Generating static pages using 19 workers (0/46) ...
+  Generating static pages using 19 workers (11/46) 
+  Generating static pages using 19 workers (22/46) 
+  Generating static pages using 19 workers (34/46) 
+✓ Generating static pages using 19 workers (46/46) in 5.5s
+  Finalizing page optimization ...
+  Collecting build traces ...
+
+Route (app)
+┌ ƒ /
+├ ƒ /_not-found
+├ ƒ /admin
+├ ƒ /api/admin/metrics
+├ ƒ /api/checkout
+├ ƒ /api/checkout/simulate
+├ ƒ /api/runs
+├ ƒ /api/runs/[id]
+├ ƒ /api/runs/[id]/report.pdf
+├ ƒ /api/sites
+├ ƒ /api/sites/[id]/verify
+├ ƒ /api/slightnudge/apply
+├ ƒ /api/slightnudge/apply/status
+├ ƒ /api/slightnudge/assets
+├ ƒ /api/slightnudge/change-set
+├ ƒ /api/slightnudge/draft-view
+├ ƒ /api/slightnudge/history
+├ ƒ /api/slightnudge/inspect
+├ ƒ /api/slightnudge/nudge
+├ ƒ /api/slightnudge/pages
+├ ƒ /api/slightnudge/preview
+├ ƒ /api/slightnudge/repositories
+├ ƒ /api/slightnudge/repositories/[id]
+├ ƒ /api/slightnudge/repositories/[id]/adapter
+├ ƒ /api/slightnudge/repositories/[id]/docker-preview
+├ ƒ /api/slightnudge/repositories/[id]/inspect
+├ ƒ /api/slightnudge/repositories/[id]/preview-check
+├ ƒ /api/slightnudge/repositories/[id]/source
+├ ƒ /api/slightnudge/responsive
+├ ƒ /api/slightnudge/style
+├ ƒ /api/slightnudge/token
+├ ƒ /api/slightnudge/undo
+├ ƒ /api/slightnudge/undo/status
+├ ƒ /api/webhooks/dodo
+├ ƒ /dashboard
+├ ƒ /design
+├ ƒ /fixtures
+├ ƒ /fixtures/1
+├ ƒ /fixtures/2
+├ ƒ /fixtures/3
+├ ƒ /fixtures/4
+├ ƒ /fixtures/5
+├ ƒ /how-it-works
+├ ○ /icon.svg
+├ ƒ /login
+├ ƒ /new
+├ ○ /opengraph-image
+├ ƒ /pricing
+├ ƒ /privacy
+├ ƒ /refunds
+├ ƒ /runs/[id]
+├ ƒ /studio
+├ ƒ /studio/[repoId]
+├ ƒ /studio/[repoId]/edit
+├ ƒ /studio/[repoId]/window
+├ ƒ /studio/preview/[pageId]
+├ ƒ /studio/window
+├ ƒ /terms
+└ ƒ /workspace
+
+
+ƒ Proxy (Middleware)
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+
+Application build: exit 0 (disposable application plus new harness; excludes historical tests/docs/scratch)

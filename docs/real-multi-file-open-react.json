@@ -1,0 +1,53 @@
+{
+  "date": "2026-10-28T08:00:09.772Z",
+  "state": "passed",
+  "checks": [
+    "two original components qualified with exact source markers and read-only AST inspection",
+    "alternating file heads, draft Undo/Redo and browser refresh without source writes",
+    "one Save writes exactly two selected files; read-only status and one Undo restore exact original bytes and DOM",
+    "external source version preserved; all-member prevalidation prevents partial writes; explicit retry after manual resolution works",
+    "actual Save worker death, dropped response and fresh-process/read-only API status preserve the partial state",
+    "imported server restart and browser recovery require explicit Resume Save; both original components render the saved draft",
+    "interrupted grouped Undo, durable status, refresh and explicit Resume Undo restore all tracked source bytes"
+  ],
+  "targets": [
+    {
+      "file": "components/hero-home.tsx",
+      "line": 12,
+      "column": 13,
+      "tag": "h1",
+      "text": "AI-driven tools for product teams"
+    },
+    {
+      "file": "components/workflows.tsx",
+      "line": 15,
+      "column": 15,
+      "tag": "span",
+      "text": "Tailored Workflows"
+    }
+  ],
+  "faults": [
+    {
+      "operation": "save",
+      "transaction": "0355cb7c-6a46-48f7-8b01-4d27aa212331",
+      "workerExit": 47,
+      "boundary": "after first source file, before completing the group; response aborted"
+    },
+    {
+      "operation": "undo",
+      "transaction": "0355cb7c-6a46-48f7-8b01-4d27aa212331",
+      "workerExit": 47,
+      "boundary": "after first source file, before completing the group; response aborted"
+    }
+  ],
+  "boundary": "Original public page; tracked application JS/TS/CSS snapshots; no account/payment flows",
+  "phase": "writer process death after first Undo member",
+  "project": "https://github.com/cruip/open-react-template",
+  "commit": "9da36763df216be7840f3c063edcdcaf7862401e",
+  "next": "15.1.11",
+  "tailwind": "4.3.3",
+  "sourceFilesChecked": 26,
+  "expectedRestartErrors": [],
+  "candidateCount": 86,
+  "browserErrors": []
+}

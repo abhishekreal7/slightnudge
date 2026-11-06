@@ -1,0 +1,13 @@
+GATE evidence C:\dev\vibecheck\docs\reliability-gate\2026-11-01T20-07-58-765Z-b65e00b-shared-local-studio
+PRODUCT b65e00b07b19bbee200c51a9b4b342c66907aa61 TESTS b65e00b07b19bbee200c51a9b4b342c66907aa61
+No test assertions or limits changed; same HEAD tests at every historical product ref.
+
+COMMAND shared-local-studio: node --import tsx test/shared-instance-security.v2.browser.v3.ts --shared-instances
+HARNESS-V3 NAVIGATION about:blank
+HARNESS-V3 NAVIGATION http://127.0.0.1:62129/editor
+TIMEOUT shared-local-studio after 120s
+
+workflow | harness | REAL or MOCKED | result | seconds
+shared-local-studio | HARNESS-V3 | REAL | TIMEOUT | 121.46
+TOTAL ELAPSED 123.56s
+GATE FAIL; evidence C:\dev\vibecheck\docs\reliability-gate\2026-11-01T20-07-58-765Z-b65e00b-shared-local-studio

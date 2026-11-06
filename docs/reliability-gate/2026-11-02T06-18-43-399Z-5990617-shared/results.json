@@ -1,0 +1,47 @@
+{
+  "head": "59906170550b171609453af37d56c9c827c5e647",
+  "productRef": "59906170550b171609453af37d56c9c827c5e647",
+  "testRef": "59906170550b171609453af37d56c9c827c5e647",
+  "fatal": false,
+  "rows": [
+    {
+      "workflow": "shared-compiler-warmup",
+      "harness": "HARNESS-V3",
+      "api": "REAL",
+      "result": "FAIL",
+      "seconds": 3.41
+    },
+    {
+      "workflow": "shared-local-studio",
+      "harness": "HARNESS-V3",
+      "api": "REAL",
+      "result": "HARNESS-ERROR",
+      "seconds": 0,
+      "error": "Shared compiler warm-up failed; see shared-compiler-warmup.log"
+    },
+    {
+      "workflow": "shared-local-window",
+      "harness": "HARNESS-V3",
+      "api": "REAL",
+      "result": "HARNESS-ERROR",
+      "seconds": 0,
+      "error": "Shared compiler warm-up failed; see shared-compiler-warmup.log"
+    },
+    {
+      "workflow": "shared-imported-studio",
+      "harness": "HARNESS-V3",
+      "api": "REAL",
+      "result": "HARNESS-ERROR",
+      "seconds": 0,
+      "error": "Shared compiler warm-up failed; see shared-compiler-warmup.log"
+    },
+    {
+      "workflow": "shared-imported-window",
+      "harness": "HARNESS-V3",
+      "api": "REAL",
+      "result": "HARNESS-ERROR",
+      "seconds": 0,
+      "error": "Shared compiler warm-up failed; see shared-compiler-warmup.log"
+    }
+  ]
+}

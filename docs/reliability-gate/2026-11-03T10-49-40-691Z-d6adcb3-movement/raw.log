@@ -1,0 +1,242 @@
+GATE evidence C:\dev\vibecheck\docs\reliability-gate\2026-11-03T10-49-40-691Z-d6adcb3-movement
+PRODUCT d6adcb32f6e19a5838b39d3b8ce5b08b3878259a TESTS d6adcb32f6e19a5838b39d3b8ce5b08b3878259a
+No test assertions or limits changed; same HEAD tests at every historical product ref.
+
+COMMAND movement: node --import tsx test/review-consent.browser.v3.ts --drag-move
+SETUP 1793702983414 START git ["ls-files"]
+SETUP END elapsed 38ms
+HARNESS-V3 NAVIGATION http://127.0.0.1:63577/editor?view=fit&panel=inspector
+TIMING 1793703027947 REQUEST http://127.0.0.1:63577/editor?view=fit&panel=inspector
+TIMING 1793703029489 RESPONSE 200 http://127.0.0.1:63577/editor?view=fit&panel=inspector
+TIMING 1793703035221 REQUEST http://127.0.0.1:63577/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A63577&__slightnudge_session=2a9cd698-d20e-4fa1-a407-e4e685c7d683&__slightnudge_canvas=1
+TIMING 1793703035245 REQUEST http://127.0.0.1:63577/api/slightnudge/responsive
+TIMING 1793703035246 REQUEST http://127.0.0.1:63577/api/slightnudge/responsive
+TIMING 1793703055411 RESPONSE 200 http://127.0.0.1:63577/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A63577&__slightnudge_session=2a9cd698-d20e-4fa1-a407-e4e685c7d683&__slightnudge_canvas=1
+TIMING 1793703055426 REQUEST http://127.0.0.1:63577/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+HARNESS-V3 OP 1793703068487 START waitFor locator('[data-source-ready="true"]')
+TIMING 1793703069915 RESPONSE 200 http://127.0.0.1:63577/api/slightnudge/responsive
+TIMING 1793703070157 RESPONSE 200 http://127.0.0.1:63577/api/slightnudge/responsive
+TIMING 1793703070804 RESPONSE 200 http://127.0.0.1:63577/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+HARNESS-V3 OP 1793703074000 END waitFor locator('[data-source-ready="true"]')
+HARNESS-V3 OP 1793703074001 START selectOption getByRole('combobox', { name: 'Canvas zoom', exact: true })
+HARNESS-V3 OP 1793703074256 END selectOption getByRole('combobox', { name: 'Canvas zoom', exact: true })
+HARNESS-V3 OP 1793703074257 START click locator('h1')
+TIMING 1793703075327 REQUEST http://127.0.0.1:63577/api/slightnudge/preview
+HARNESS-V3 OP 1793703075342 END click locator('h1')
+HARNESS-V3 OP 1793703075343 START boundingBox locator('h1')
+HARNESS-V3 OP 1793703075895 END boundingBox locator('h1')
+HARNESS-V3 OP 1793703075896 START boundingBox getByRole('button', { name: 'Move element', exact: true })
+HARNESS-V3 OP 1793703076007 END boundingBox getByRole('button', { name: 'Move element', exact: true })
+HARNESS-V3 OP 1793703076008 START click getByRole('button', { name: 'Move element', exact: true })
+HARNESS-V3 OP 1793703076995 END click getByRole('button', { name: 'Move element', exact: true })
+HARNESS-V3 OP 1793703076996 START waitFor getByRole('group', { name: 'Move selected element', exact: true })
+HARNESS-V3 OP 1793703077016 END waitFor getByRole('group', { name: 'Move selected element', exact: true })
+HARNESS-V3 OP 1793703077016 START click getByRole('button', { name: 'Move element', exact: true })
+HARNESS-V3 OP 1793703077866 END click getByRole('button', { name: 'Move element', exact: true })
+HARNESS-V3 OP 1793703077866 START count getByRole('group', { name: 'Move selected element', exact: true })
+HARNESS-V3 OP 1793703077879 END count getByRole('group', { name: 'Move selected element', exact: true })
+HARNESS-V3 OP 1793703077880 START boundingBox getByRole('button', { name: 'Move element', exact: true })
+HARNESS-V3 OP 1793703077913 END boundingBox getByRole('button', { name: 'Move element', exact: true })
+HARNESS-V3 OP 1793703080391 START waitFor getByLabel('Move measurement', { exact: true })
+HARNESS-V3 OP 1793703080737 END waitFor getByLabel('Move measurement', { exact: true })
+HARNESS-V3 OP 1793703080739 START boundingBox locator('h1')
+HARNESS-V3 OP 1793703080825 END boundingBox locator('h1')
+HARNESS-V3 OP 1793703081474 START boundingBox locator('h1')
+HARNESS-V3 OP 1793703082185 END boundingBox locator('h1')
+HARNESS-V3 OP 1793703082185 START isVisible getByLabel('Move measurement', { exact: true })
+HARNESS-V3 OP 1793703082193 END isVisible getByLabel('Move measurement', { exact: true })
+HARNESS-V3 OP 1793703082193 START evaluate locator('h1')
+HARNESS-V3 OP 1793703082238 END evaluate locator('h1')
+CANCEL_DIAGNOSTIC {"cancellation":"Escape","origin":{"x":356,"y":428.375,"width":368,"height":32},"current":{"x":356,"y":428.375,"width":368,"height":32},"measurementVisible":false,"state":{"style":null,"translate":"none","rect":{"x":156,"y":253.375,"width":368,"height":32,"top":253.375,"right":524,"bottom":285.375,"left":156}}}
+HARNESS-V3 OP 1793703082361 START count getByLabel('Draft controls', { exact: true }).getByRole('button', { name: 'Save changes', exact: true }).and(locator('button:enabled'))
+HARNESS-V3 OP 1793703082393 END count getByLabel('Draft controls', { exact: true }).getByRole('button', { name: 'Save changes', exact: true }).and(locator('button:enabled'))
+HARNESS-V3 OP 1793703082394 START boundingBox getByRole('button', { name: 'Move element', exact: true })
+HARNESS-V3 OP 1793703082435 END boundingBox getByRole('button', { name: 'Move element', exact: true })
+HARNESS-V3 OP 1793703084943 START waitFor getByLabel('Move measurement', { exact: true })
+HARNESS-V3 OP 1793703085244 END waitFor getByLabel('Move measurement', { exact: true })
+HARNESS-V3 OP 1793703085244 START boundingBox locator('h1')
+HARNESS-V3 OP 1793703085294 END boundingBox locator('h1')
+HARNESS-V3 OP 1793703086039 START boundingBox locator('h1')
+HARNESS-V3 OP 1793703086750 END boundingBox locator('h1')
+HARNESS-V3 OP 1793703086751 START isVisible getByLabel('Move measurement', { exact: true })
+HARNESS-V3 OP 1793703086781 END isVisible getByLabel('Move measurement', { exact: true })
+HARNESS-V3 OP 1793703086783 START evaluate locator('h1')
+HARNESS-V3 OP 1793703086838 END evaluate locator('h1')
+CANCEL_DIAGNOSTIC {"cancellation":"blur","origin":{"x":356,"y":428.375,"width":368,"height":32},"current":{"x":356,"y":428.375,"width":368,"height":32},"measurementVisible":false,"state":{"style":null,"translate":"none","rect":{"x":156,"y":253.375,"width":368,"height":32,"top":253.375,"right":524,"bottom":285.375,"left":156}}}
+HARNESS-V3 OP 1793703086843 START count getByLabel('Draft controls', { exact: true }).getByRole('button', { name: 'Save changes', exact: true }).and(locator('button:enabled'))
+HARNESS-V3 OP 1793703086847 END count getByLabel('Draft controls', { exact: true }).getByRole('button', { name: 'Save changes', exact: true }).and(locator('button:enabled'))
+HARNESS-V3 OP 1793703086847 START boundingBox getByRole('button', { name: 'Move element', exact: true })
+HARNESS-V3 OP 1793703086882 END boundingBox getByRole('button', { name: 'Move element', exact: true })
+HARNESS-V3 OP 1793703089672 START waitFor getByLabel('Move measurement', { exact: true })
+HARNESS-V3 OP 1793703089922 END waitFor getByLabel('Move measurement', { exact: true })
+HARNESS-V3 OP 1793703089922 START boundingBox locator('h1')
+HARNESS-V3 OP 1793703090100 END boundingBox locator('h1')
+HARNESS-V3 OP 1793703090548 START boundingBox locator('h1')
+HARNESS-V3 OP 1793703091422 END boundingBox locator('h1')
+HARNESS-V3 OP 1793703091422 START isVisible getByLabel('Move measurement', { exact: true })
+HARNESS-V3 OP 1793703091428 END isVisible getByLabel('Move measurement', { exact: true })
+HARNESS-V3 OP 1793703091428 START evaluate locator('h1')
+HARNESS-V3 OP 1793703091483 END evaluate locator('h1')
+CANCEL_DIAGNOSTIC {"cancellation":"pointercancel","origin":{"x":356,"y":428.375,"width":368,"height":32},"current":{"x":356,"y":428.375,"width":368,"height":32},"measurementVisible":false,"state":{"style":null,"translate":"none","rect":{"x":156,"y":253.375,"width":368,"height":32,"top":253.375,"right":524,"bottom":285.375,"left":156}}}
+HARNESS-V3 OP 1793703091547 START count getByLabel('Draft controls', { exact: true }).getByRole('button', { name: 'Save changes', exact: true }).and(locator('button:enabled'))
+HARNESS-V3 OP 1793703091557 END count getByLabel('Draft controls', { exact: true }).getByRole('button', { name: 'Save changes', exact: true }).and(locator('button:enabled'))
+HARNESS-V3 OP 1793703091557 START boundingBox getByRole('button', { name: 'Move element', exact: true })
+HARNESS-V3 OP 1793703091576 END boundingBox getByRole('button', { name: 'Move element', exact: true })
+TIMING 1793703091792 RESPONSE 200 http://127.0.0.1:63577/api/slightnudge/preview
+HARNESS-V3 OP 1793703094366 START waitFor getByLabel('Move measurement', { exact: true })
+HARNESS-V3 OP 1793703094717 END waitFor getByLabel('Move measurement', { exact: true })
+HARNESS-V3 OP 1793703094717 START boundingBox locator('h1')
+HARNESS-V3 OP 1793703095005 END boundingBox locator('h1')
+HARNESS-V3 OP 1793703095649 START boundingBox locator('h1')
+HARNESS-V3 OP 1793703096560 END boundingBox locator('h1')
+HARNESS-V3 OP 1793703096560 START isVisible getByLabel('Move measurement', { exact: true })
+HARNESS-V3 OP 1793703096575 END isVisible getByLabel('Move measurement', { exact: true })
+HARNESS-V3 OP 1793703096575 START evaluate locator('h1')
+HARNESS-V3 OP 1793703096602 END evaluate locator('h1')
+CANCEL_DIAGNOSTIC {"cancellation":"capture","origin":{"x":356,"y":428.375,"width":368,"height":32},"current":{"x":356,"y":428.375,"width":368,"height":32},"measurementVisible":false,"state":{"style":null,"translate":"none","rect":{"x":156,"y":253.375,"width":368,"height":32,"top":253.375,"right":524,"bottom":285.375,"left":156}}}
+HARNESS-V3 OP 1793703096649 START count getByLabel('Draft controls', { exact: true }).getByRole('button', { name: 'Save changes', exact: true }).and(locator('button:enabled'))
+HARNESS-V3 OP 1793703096693 END count getByLabel('Draft controls', { exact: true }).getByRole('button', { name: 'Save changes', exact: true }).and(locator('button:enabled'))
+HARNESS-V3 OP 1793703096697 START boundingBox getByRole('button', { name: 'Move element', exact: true })
+HARNESS-V3 OP 1793703096724 END boundingBox getByRole('button', { name: 'Move element', exact: true })
+HARNESS-V3 OP 1793703099431 START waitFor getByLabel('Move measurement', { exact: true })
+HARNESS-V3 OP 1793703099824 END waitFor getByLabel('Move measurement', { exact: true })
+HARNESS-V3 OP 1793703099824 START boundingBox locator('h1')
+HARNESS-V3 OP 1793703099905 END boundingBox locator('h1')
+HARNESS-V3 OP 1793703100472 START boundingBox locator('h1')
+HARNESS-V3 OP 1793703101500 END boundingBox locator('h1')
+HARNESS-V3 OP 1793703101500 START isVisible getByLabel('Move measurement', { exact: true })
+HARNESS-V3 OP 1793703101518 END isVisible getByLabel('Move measurement', { exact: true })
+HARNESS-V3 OP 1793703101518 START evaluate locator('h1')
+HARNESS-V3 OP 1793703101573 END evaluate locator('h1')
+CANCEL_DIAGNOSTIC {"cancellation":"scroll","origin":{"x":356,"y":428.375,"width":368,"height":32},"current":{"x":356,"y":428.375,"width":368,"height":32},"measurementVisible":false,"state":{"style":null,"translate":"none","rect":{"x":156,"y":253.375,"width":368,"height":32,"top":253.375,"right":524,"bottom":285.375,"left":156}}}
+HARNESS-V3 OP 1793703101595 START count getByLabel('Draft controls', { exact: true }).getByRole('button', { name: 'Save changes', exact: true }).and(locator('button:enabled'))
+HARNESS-V3 OP 1793703101614 END count getByLabel('Draft controls', { exact: true }).getByRole('button', { name: 'Save changes', exact: true }).and(locator('button:enabled'))
+HARNESS-V3 OP 1793703101615 START boundingBox getByRole('button', { name: 'Move element', exact: true })
+HARNESS-V3 OP 1793703101675 END boundingBox getByRole('button', { name: 'Move element', exact: true })
+HARNESS-V3 OP 1793703103987 START waitFor getByLabel('Move measurement', { exact: true })
+HARNESS-V3 OP 1793703104150 END waitFor getByLabel('Move measurement', { exact: true })
+HARNESS-V3 OP 1793703104150 START boundingBox locator('h1')
+HARNESS-V3 OP 1793703104302 END boundingBox locator('h1')
+HARNESS-V3 OP 1793703104302 START dispatchEvent getByRole('group', { name: 'Element state' }).getByRole('button', { name: 'Hover', exact: true })
+HARNESS-V3 OP 1793703104462 END dispatchEvent getByRole('group', { name: 'Element state' }).getByRole('button', { name: 'Hover', exact: true })
+HARNESS-V3 OP 1793703104512 START boundingBox locator('h1')
+HARNESS-V3 OP 1793703105667 END boundingBox locator('h1')
+HARNESS-V3 OP 1793703105667 START isVisible getByLabel('Move measurement', { exact: true })
+HARNESS-V3 OP 1793703105672 END isVisible getByLabel('Move measurement', { exact: true })
+HARNESS-V3 OP 1793703105672 START evaluate locator('h1')
+HARNESS-V3 OP 1793703105688 END evaluate locator('h1')
+CANCEL_DIAGNOSTIC {"cancellation":"scope","origin":{"x":356,"y":428.375,"width":368,"height":32},"current":{"x":356,"y":428.375,"width":368,"height":32},"measurementVisible":false,"state":{"style":null,"translate":"none","rect":{"x":156,"y":253.375,"width":368,"height":32,"top":253.375,"right":524,"bottom":285.375,"left":156}}}
+HARNESS-V3 OP 1793703105693 START count getByLabel('Draft controls', { exact: true }).getByRole('button', { name: 'Save changes', exact: true }).and(locator('button:enabled'))
+HARNESS-V3 OP 1793703105699 END count getByLabel('Draft controls', { exact: true }).getByRole('button', { name: 'Save changes', exact: true }).and(locator('button:enabled'))
+HARNESS-V3 OP 1793703105699 START click getByRole('group', { name: 'Element state' }).getByRole('button', { name: 'Default', exact: true })
+HARNESS-V3 OP 1793703106103 END click getByRole('group', { name: 'Element state' }).getByRole('button', { name: 'Default', exact: true })
+PASS: centered Move handle, live two-axis snapped geometry and six cancellation paths; no source proposals while dragging
+HARNESS-V3 OP 1793703106103 START selectOption getByRole('combobox', { name: 'Canvas zoom', exact: true })
+HARNESS-V3 OP 1793703106484 END selectOption getByRole('combobox', { name: 'Canvas zoom', exact: true })
+HARNESS-V3 OP 1793703106853 START boundingBox locator('h1')
+HARNESS-V3 OP 1793703106888 END boundingBox locator('h1')
+HARNESS-V3 OP 1793703106888 START boundingBox getByRole('button', { name: 'Move element', exact: true })
+HARNESS-V3 OP 1793703106932 END boundingBox getByRole('button', { name: 'Move element', exact: true })
+HARNESS-V3 OP 1793703107440 START waitFor getByLabel('Move measurement', { exact: true })
+HARNESS-V3 OP 1793703107687 END waitFor getByLabel('Move measurement', { exact: true })
+HARNESS-V3 OP 1793703107688 START boundingBox locator('h1')
+HARNESS-V3 OP 1793703107805 END boundingBox locator('h1')
+HARNESS-V3 OP 1793703107806 START textContent getByLabel('Move measurement', { exact: true })
+HARNESS-V3 OP 1793703107812 END textContent getByLabel('Move measurement', { exact: true })
+HARNESS-V3 OP 1793703108313 START selectOption getByRole('combobox', { name: 'Canvas zoom', exact: true })
+HARNESS-V3 OP 1793703109272 END selectOption getByRole('combobox', { name: 'Canvas zoom', exact: true })
+PASS: scaled-canvas drag tracks CSS coordinates and cancels without preparing source
+HARNESS-V3 OP 1793703109581 START boundingBox getByRole('button', { name: 'Move element', exact: true })
+HARNESS-V3 OP 1793703109597 END boundingBox getByRole('button', { name: 'Move element', exact: true })
+HARNESS-V3 OP 1793703109980 START waitFor getByLabel('Move measurement', { exact: true })
+HARNESS-V3 OP 1793703110257 END waitFor getByLabel('Move measurement', { exact: true })
+HARNESS-V3 OP 1793703110257 START boundingBox locator('h1')
+HARNESS-V3 OP 1793703110364 END boundingBox locator('h1')
+TIMING 1793703110532 REQUEST http://127.0.0.1:63577/api/slightnudge/preview
+TIMING 1793703113623 RESPONSE 200 http://127.0.0.1:63577/api/slightnudge/preview
+HARNESS-V3 OP 1793703113679 START waitFor getByLabel('Draft controls', { exact: true }).getByRole('button', { name: 'Save changes', exact: true }).and(locator('button:enabled'))
+TIMING 1793703114547 REQUEST http://127.0.0.1:63577/api/slightnudge/preview
+HARNESS-V3 OP 1793703115096 END waitFor getByLabel('Draft controls', { exact: true }).getByRole('button', { name: 'Save changes', exact: true }).and(locator('button:enabled'))
+HARNESS-V3 OP 1793703115097 START click getByRole('button', { name: 'Discard draft', exact: true })
+TIMING 1793703115804 REQUEST http://127.0.0.1:63577/api/slightnudge/preview
+HARNESS-V3 OP 1793703116604 END click getByRole('button', { name: 'Discard draft', exact: true })
+HARNESS-V3 OP 1793703116604 START waitFor getByLabel('Draft controls', { exact: true }).getByRole('button', { name: 'Save changes', exact: true }).and(locator('button:enabled'))
+HARNESS-V3 OP 1793703116621 END waitFor getByLabel('Draft controls', { exact: true }).getByRole('button', { name: 'Save changes', exact: true }).and(locator('button:enabled'))
+PASS: Shift axis lock, one review per completed drag, exact Discard restoration
+HARNESS-V3 OP 1793703116626 START boundingBox getByRole('button', { name: 'Move element', exact: true })
+HARNESS-V3 OP 1793703116644 END boundingBox getByRole('button', { name: 'Move element', exact: true })
+TIMING 1793703117523 RESPONSE 200 http://127.0.0.1:63577/api/slightnudge/preview
+HARNESS-V3 OP 1793703118619 START waitFor getByLabel('Move measurement', { exact: true })
+HARNESS-V3 OP 1793703118811 END waitFor getByLabel('Move measurement', { exact: true })
+HARNESS-V3 OP 1793703119329 START waitFor getByLabel('Draft controls', { exact: true }).getByRole('button', { name: 'Save changes', exact: true }).and(locator('button:enabled'))
+TIMING 1793703119330 REQUEST http://127.0.0.1:63577/api/slightnudge/preview
+TIMING 1793703121140 RESPONSE 200 http://127.0.0.1:63577/api/slightnudge/preview
+TIMING 1793703122179 REQUEST http://127.0.0.1:63577/api/slightnudge/preview
+HARNESS-V3 OP 1793703122210 END waitFor getByLabel('Draft controls', { exact: true }).getByRole('button', { name: 'Save changes', exact: true }).and(locator('button:enabled'))
+HARNESS-V3 OP 1793703122211 START click getByLabel('Draft controls', { exact: true }).getByRole('button', { name: 'Save changes', exact: true }).and(locator('button:enabled'))
+HARNESS-V3 OP 1793703123041 END click getByLabel('Draft controls', { exact: true }).getByRole('button', { name: 'Save changes', exact: true }).and(locator('button:enabled'))
+TIMING 1793703123208 RESPONSE 200 http://127.0.0.1:63577/api/slightnudge/preview
+TIMING 1793703126823 REQUEST http://127.0.0.1:63577/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A63577&__slightnudge_session=a9638c57-50a4-484a-895d-e30729b8b565&__slightnudge_canvas=1&__slightnudge_refresh=a9bc650f-6059-4063-a309-3415f024405f
+HARNESS-V3 OP 1793703126844 START waitFor getByLabel('Draft controls', { exact: true }).getByRole('button', { name: 'Save changes', exact: true }).and(locator('button:enabled'))
+HARNESS-V3 OP 1793703127037 END waitFor getByLabel('Draft controls', { exact: true }).getByRole('button', { name: 'Save changes', exact: true }).and(locator('button:enabled'))
+TIMING 1793703127236 REQUEST http://127.0.0.1:63577/fixtures/1
+TIMING 1793703135683 REQUEST http://127.0.0.1:63577/_next/static/webpack/app/studio/preview/[pageId]/page.1574297515a6714f.hot-update.js
+TIMING 1793703135847 RESPONSE 200 http://127.0.0.1:63577/_next/static/webpack/app/studio/preview/[pageId]/page.1574297515a6714f.hot-update.js
+TIMING 1793703140902 REQUEST http://127.0.0.1:63577/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A63577&__slightnudge_session=2a9cd698-d20e-4fa1-a407-e4e685c7d683&__slightnudge_canvas=1&_rsc=ct7pfROX5nLuJM3f
+TIMING 1793703141730 REQUEST http://127.0.0.1:63577/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A63577&__slightnudge_session=073ab5de-d792-416c-b806-111b69f51759&__slightnudge_canvas=1&__slightnudge_refresh=c9c7116d-add4-4659-af12-0b4e5f5206f4
+TIMING 1793703143092 RESPONSE 200 http://127.0.0.1:63577/fixtures/1
+TIMING 1793703144053 RESPONSE 200 http://127.0.0.1:63577/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A63577&__slightnudge_session=2a9cd698-d20e-4fa1-a407-e4e685c7d683&__slightnudge_canvas=1&_rsc=ct7pfROX5nLuJM3f
+TIMING 1793703144337 RESPONSE 200 http://127.0.0.1:63577/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A63577&__slightnudge_session=073ab5de-d792-416c-b806-111b69f51759&__slightnudge_canvas=1&__slightnudge_refresh=c9c7116d-add4-4659-af12-0b4e5f5206f4
+TIMING 1793703144374 REQUEST http://127.0.0.1:63577/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+HARNESS-V3 OP 1793703144899 START click getByRole('button', { name: 'Undo', exact: true })
+TIMING 1793703145070 RESPONSE 200 http://127.0.0.1:63577/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+HARNESS-V3 OP 1793703149744 END click getByRole('button', { name: 'Undo', exact: true })
+TIMING 1793703152996 REQUEST http://127.0.0.1:63577/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A63577&__slightnudge_session=1ea13a74-4e5f-49da-9dff-a8208f700f37&__slightnudge_canvas=1&__slightnudge_refresh=040e19e6-e3db-444c-a0f4-0d7fa96565c4
+TIMING 1793703157877 REQUEST http://127.0.0.1:63577/_next/static/webpack/app/studio/preview/[pageId]/page.091fab058c0becb0.hot-update.js
+TIMING 1793703158210 RESPONSE 200 http://127.0.0.1:63577/_next/static/webpack/app/studio/preview/[pageId]/page.091fab058c0becb0.hot-update.js
+TIMING 1793703160103 REQUEST http://127.0.0.1:63577/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A63577&__slightnudge_session=073ab5de-d792-416c-b806-111b69f51759&__slightnudge_canvas=1&__slightnudge_refresh=c9c7116d-add4-4659-af12-0b4e5f5206f4&_rsc=Vcl3NiAS9sBgYuzJ
+TIMING 1793703161523 RESPONSE 200 http://127.0.0.1:63577/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A63577&__slightnudge_session=1ea13a74-4e5f-49da-9dff-a8208f700f37&__slightnudge_canvas=1&__slightnudge_refresh=040e19e6-e3db-444c-a0f4-0d7fa96565c4
+TIMING 1793703161820 REQUEST http://127.0.0.1:63577/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+TIMING 1793703164882 RESPONSE 200 http://127.0.0.1:63577/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+TIMING 1793703167832 REQUEST http://127.0.0.1:63577/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A63577&__slightnudge_session=fdb7bfdb-29bb-4f08-a8c9-dd6a0aacb805&__slightnudge_canvas=1&__slightnudge_refresh=85c66a0a-31aa-4791-8ac3-a5af6cd2f0b6
+TIMING 1793703168176 RESPONSE 200 http://127.0.0.1:63577/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A63577&__slightnudge_session=fdb7bfdb-29bb-4f08-a8c9-dd6a0aacb805&__slightnudge_canvas=1&__slightnudge_refresh=85c66a0a-31aa-4791-8ac3-a5af6cd2f0b6
+TIMING 1793703168206 REQUEST http://127.0.0.1:63577/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+TIMING 1793703168294 RESPONSE 200 http://127.0.0.1:63577/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+TIMING 1793703171308 REQUEST http://127.0.0.1:63577/fixtures/1
+TIMING 1793703171796 RESPONSE 200 http://127.0.0.1:63577/fixtures/1
+PASS: Apply and exact Undo; actual source-rendered page confirms the same X/Y movement and restoration
+HARNESS-V3 OP 1793703172108 START click getByText('One thoughtful workspace for the people, projects, and plans that move your business forward.', { exact: true })
+TIMING 1793703173104 REQUEST http://127.0.0.1:63577/api/slightnudge/preview
+HARNESS-V3 OP 1793703173518 END click getByText('One thoughtful workspace for the people, projects, and plans that move your business forward.', { exact: true })
+HARNESS-V3 OP 1793703173518 START boundingBox getByText('One thoughtful workspace for the people, projects, and plans that move your business forward.', { exact: true })
+HARNESS-V3 OP 1793703173657 END boundingBox getByText('One thoughtful workspace for the people, projects, and plans that move your business forward.', { exact: true })
+HARNESS-V3 OP 1793703173657 START boundingBox getByRole('button', { name: 'Move element', exact: true })
+HARNESS-V3 OP 1793703173686 END boundingBox getByRole('button', { name: 'Move element', exact: true })
+HARNESS-V3 OP 1793703173984 START click getByRole('button', { name: 'Move element', exact: true })
+TIMING 1793703174926 RESPONSE 200 http://127.0.0.1:63577/api/slightnudge/preview
+HARNESS-V3 OP 1793703175178 END click getByRole('button', { name: 'Move element', exact: true })
+HARNESS-V3 OP 1793703175178 START click getByRole('button', { name: 'Move right', exact: true })
+TIMING 1793703175557 REQUEST http://127.0.0.1:63577/api/slightnudge/preview
+HARNESS-V3 OP 1793703175719 END click getByRole('button', { name: 'Move right', exact: true })
+HARNESS-V3 OP 1793703175719 START waitFor getByLabel('Draft controls', { exact: true }).getByRole('button', { name: 'Save changes', exact: true }).and(locator('button:enabled'))
+TIMING 1793703177809 RESPONSE 200 http://127.0.0.1:63577/api/slightnudge/preview
+TIMING 1793703179317 REQUEST http://127.0.0.1:63577/api/slightnudge/preview
+HARNESS-V3 OP 1793703179322 END waitFor getByLabel('Draft controls', { exact: true }).getByRole('button', { name: 'Save changes', exact: true }).and(locator('button:enabled'))
+HARNESS-V3 OP 1793703179323 START click getByRole('button', { name: 'Review changes', exact: true })
+HARNESS-V3 OP 1793703180000 END click getByRole('button', { name: 'Review changes', exact: true })
+HARNESS-V3 OP 1793703180001 START innerText getByLabel('After change')
+HARNESS-V3 OP 1793703180029 END innerText getByLabel('After change')
+HARNESS-V3 OP 1793703180029 START click getByRole('button', { name: 'Discard draft', exact: true })
+TIMING 1793703180710 REQUEST http://127.0.0.1:63577/api/slightnudge/preview
+HARNESS-V3 OP 1793703181522 END click getByRole('button', { name: 'Discard draft', exact: true })
+HARNESS-V3 OP 1793703181522 START waitFor getByLabel('Draft controls', { exact: true }).getByRole('button', { name: 'Save changes', exact: true }).and(locator('button:enabled'))
+HARNESS-V3 OP 1793703181553 END waitFor getByLabel('Draft controls', { exact: true }).getByRole('button', { name: 'Save changes', exact: true }).and(locator('button:enabled'))
+PASS: paragraph selection matches the centered-handle design; click opens precise movement controls
+PASS: 4 review-consent browser cases (real API; disposable source copy)
+SETUP 1793703184159 START taskkill ["/pid","25380","/T","/F"]
+SETUP END elapsed 320ms
+
+workflow | harness | REAL or MOCKED | result | seconds
+movement | HARNESS-V3 | REAL | PASS | 203.59
+TOTAL ELAPSED 205.58s
+GATE PASS; evidence C:\dev\vibecheck\docs\reliability-gate\2026-11-03T10-49-40-691Z-d6adcb3-movement

@@ -1,0 +1,289 @@
+
+> slightnudge@1.0.0 test:real-projects
+> tsx test/review-consent.browser.ts --real-project --public=2 && tsx test/review-consent.browser.ts --real-project --public=3 && tsx test/review-consent.browser.ts --real-project --public=next-saas
+
+Disposable source project: https://github.com/bennyjoel/nextjs-saas-starter-lite; Next.js 14.2.35; Tailwind 3.4.19; installed source adapter; no environment files checked out.
+Real project 2: start public application with development adapter
+Real project 2: connect current full-page canvas
+PASS 2: single full-page canvas with stable document height
+PASS 2: project breakpoints discovered through the actual compiled API
+Real project 2: edit original a: src/app/page.tsx:13
+Real project 2: save src/app/page.tsx:13
+Real project 2: undo src/app/page.tsx:13
+Real project 2: edit original p: src/app/page.tsx:45
+Real project 2: save src/app/page.tsx:45
+Real project 2: undo src/app/page.tsx:45
+Real project 2: edit original h3: src/app/page.tsx:72
+Real project 2: save src/app/page.tsx:72
+Real project 2: undo src/app/page.tsx:72
+PASS 2: original mapped text targets: physical selection, native typography, draft recovery, source Save and exact Undo
+Real project 2: scaled movement on original element
+Real project 2: save src/app/page.tsx:45
+Real project 2: undo src/app/page.tsx:45
+PASS 2: scaled Move, source Save and exact Undo
+Real project 2: save src/app/page.tsx:45
+Real project 2: undo src/app/page.tsx:45
+PASS 2: real breakpoint style edit, smaller-screen isolation, Save and exact Undo
+PASS 2: native responsive widths: 375, 768 and 1200
+Real project 2: separate window
+Real project 2: save src/app/page.tsx:45
+Real project 2: undo src/app/page.tsx:45
+PASS 2: separate-window native document, text edit, Save and exact Undo
+PASS: 7 review-consent browser cases (real API; disposable source copy)
+Disposable source project: https://github.com/EdgeOneDev/saas-starter; Next.js 14.0.4; Tailwind 3.4.17; installed source adapter; no environment files checked out.
+Real project 3: start public application with development adapter
+Real project 3: connect current full-page canvas
+PASS 3: single full-page canvas with stable document height
+PASS 3: project breakpoints discovered through the actual compiled API
+Real project 3: edit original p: src/components/sections/hero.tsx:125
+Real project 3: edit original button: src/components/ui/button.tsx:73
+Real-project diagnostics: C:\dev\vibecheck\docs\real-project-current-3.json
+Isolated application diagnostics ▲ Next.js 16.4.3 (webpack)
+- Local:         http://127.0.0.1:61961
+- Network:       http://127.0.0.1:61961
+✓ Ready in 518ms
+✓ Running next.config.mjs took 29ms
+
+○ Compiling /fixtures/1/page ...
+ GET /fixtures/1 200 in 2.5s (next.js: 1110ms, application-code: 1384ms)
+○ Compiling /studio/[repoId]/edit/page ...
+ GET /studio/source-proof/edit?preview=http%3A%2F%2F127.0.0.1%3A64781%2Fen 200 in 2.5s (next.js: 1458ms, application-code: 1064ms)
+○ Compiling proxy ...
+○ Compiling /api/slightnudge/repositories/[id]/route ...
+ GET /api/slightnudge/pages 200 in 15.7s (next.js: 14.8s, proxy.ts: 667ms, application-code: 207ms)
+ GET /api/slightnudge/pages 200 in 1141ms (next.js: 13ms, proxy.ts: 1082ms, application-code: 46ms)
+ GET /api/slightnudge/repositories/source-proof 200 in 16.2s (next.js: 15.3s, proxy.ts: 666ms, application-code: 228ms)
+ GET /api/slightnudge/repositories/source-proof 200 in 1583ms (next.js: 258ms, proxy.ts: 1081ms, application-code: 243ms)
+ POST /api/slightnudge/repositories/source-proof/preview-check 200 in 2.3s (next.js: 1796ms, proxy.ts: 31ms, application-code: 432ms)
+⚠ ./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+○ Compiling /api/slightnudge/responsive/route ...
+ POST /api/slightnudge/responsive 200 in 10.6s (next.js: 1876ms, proxy.ts: 31ms, application-code: 8.7s)
+ POST /api/slightnudge/responsive 200 in 10.6s (next.js: 17ms, proxy.ts: 26ms, application-code: 10.6s)
+ POST /api/slightnudge/responsive 200 in 5.0s (next.js: 28ms, proxy.ts: 56ms, application-code: 4.9s)
+⚠ ./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+⚠ ./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+ POST /api/slightnudge/repositories/source-proof/inspect 200 in 4.7s (next.js: 4.3s, proxy.ts: 22ms, application-code: 342ms)
+ POST /api/slightnudge/responsive 200 in 4.7s (next.js: 20ms, proxy.ts: 37ms, application-code: 4.6s)
+
+Temporary copy requires manual cleanup: C:\Users\abhis\AppData\Local\Temp\sn-review-consent-NxXYSt
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+locator.waitFor: Timeout 60000ms exceeded.
+Call log:
+  - waiting for getByLabel('Editor notice', { exact: true }).filter({ hasText: /several rendered instances/ }) to be visible
+
+    at checkRealProjectCanvas (C:\dev\vibecheck\test\helpers\real-project-canvas-browser.ts:102:138)
+    at async <anonymous> (C:\dev\vibecheck\test\review-consent.browser.ts:139:14) {
+  log: [
+    "  - waiting for getByLabel('Editor notice', { exact: true }).filter({ hasText: /several rendered instances/ }) to be visible"
+  ],
+  name: 'TimeoutError'
+}
+
+Node.js v22.19.0

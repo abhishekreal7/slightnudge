@@ -1,0 +1,93 @@
+﻿========================================================================
+STEP 5a: TOKEN AND SERVER RESTART TEST
+========================================================================
+
+Temp workspace: C:\Users\abhis\AppData\Local\Temp\sn-step5a-cfb2e4e6-a35b-480f-90c7-0679654e382c
+Port: 3125
+1. Starting initial dev server...
+(node:22764) [DEP0190] DeprecationWarning: Passing args to a child process with shell option true can lead to security vulnerabilities, as the arguments are not escaped, only concatenated.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+   Dev server 1 is responsive.
+2. Navigating to http://127.0.0.1:3125/studio ...
+[PAGE LOG] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[PAGE LOG] [HMR] connected
+[REQ] GET http://127.0.0.1:3125/api/slightnudge/pages
+[REQ] GET http://127.0.0.1:3125/api/slightnudge/pages
+[PAGE LOG] [Fast Refresh] rebuilding
+[RES] 200 http://127.0.0.1:3125/api/slightnudge/pages
+[RES] 200 http://127.0.0.1:3125/api/slightnudge/pages
+[PAGE LOG] [Fast Refresh] done in 827ms
+   Waiting 3s for Next.js dev compiler and Fast Refresh to settle...
+   Waiting for layers sidebar...
+   Layers sidebar rendered.
+3. Selecting Text layer and nudging...
+   Selected layer element text: "Text"
+[REQ] POST http://127.0.0.1:3125/api/slightnudge/preview
+   Pressed ArrowRight. Waiting for pending edit UI...
+[PAGE LOG] [Fast Refresh] rebuilding
+[RES] 200 http://127.0.0.1:3125/api/slightnudge/preview
+[PAGE LOG] [Fast Refresh] done in 1304ms
+   Apply button is visible.
+4. Killing initial dev server and restarting new server process on same port...
+[PAGE LOG] WebSocket connection to 'ws://127.0.0.1:3125/_next/hmr?id=3CdrnsnvZNNRY2EPJxvlK' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED
+[PAGE LOG] WebSocket connection to 'ws://127.0.0.1:3125/_next/hmr?id=3CdrnsnvZNNRY2EPJxvlK' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED
+[PAGE LOG] [HMR] connected
+   Dev server 2 is responsive on the same port.
+5. Clicking "Apply to Source"...
+[PAGE LOG] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[PAGE LOG] [HMR] connected
+[REQ] GET http://127.0.0.1:3125/api/slightnudge/pages
+[REQ] GET http://127.0.0.1:3125/api/slightnudge/pages
+[PAGE LOG] [Fast Refresh] rebuilding
+[RES] 200 http://127.0.0.1:3125/api/slightnudge/pages
+[RES] 200 http://127.0.0.1:3125/api/slightnudge/pages
+[PAGE LOG] [Fast Refresh] done in 932ms
+   applyButton.click caught: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('button:has-text("Apply to Source"), button:has-text("Apply to code")').first()
+    - waiting for "http://127.0.0.1:3125/studio" navigation to finish...
+    - navigated to "http://127.0.0.1:3125/studio"
+
+   Screenshot saved: C:\dev\vibecheck\docs\phase2b-review-evidence\step5a-restart-apply.png
+[REQ] POST http://127.0.0.1:3125/api/slightnudge/apply
+[PAGE LOG] [Fast Refresh] rebuilding
+[RES] 400 http://127.0.0.1:3125/api/slightnudge/apply
+[PAGE LOG] Failed to load resource: the server responded with a status of 400 (Bad Request)
+   API response with old token on restarted server: status=400, body={"error":"ENOENT: no such file or directory, open 'C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-step5a-cfb2e4e6-a35b-480f-90c7-0679654e382c\\.slightnudge\\pending\\00000000-0000-0000-0000-000000000000.json'"}
+
+--- OBSERVATIONS AFTER RESTART & APPLY ---
+Apply Button visible:  false
+Apply Button text:     "N/A"
+Apply Button disabled: false
+Click error:           locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('button:has-text("Apply to Source"), button:has-text("Apply to code")').first()
+    - waiting for "http://127.0.0.1:3125/studio" navigation to finish...
+    - navigated to "http://127.0.0.1:3125/studio"
+
+Toast / alert elements found:
+[]
+
+7. Reloading page...
+[PAGE LOG] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[PAGE LOG] [HMR] connected
+[REQ] GET http://127.0.0.1:3125/api/slightnudge/pages
+[REQ] GET http://127.0.0.1:3125/api/slightnudge/pages
+[PAGE LOG] [Fast Refresh] rebuilding
+[PAGE LOG] [Fast Refresh] done in 533ms
+[RES] 200 http://127.0.0.1:3125/api/slightnudge/pages
+[RES] 200 http://127.0.0.1:3125/api/slightnudge/pages
+   Screenshot saved: C:\dev\vibecheck\docs\phase2b-review-evidence\step5a-after-reload.png
+   New token in browser window.__SLIGHTNUDGE_TOKEN__: f06893843aca5e43...
+   Testing fresh nudge and apply after reload...
+[REQ] POST http://127.0.0.1:3125/api/slightnudge/preview
+[PAGE LOG] [Fast Refresh] rebuilding
+[RES] 200 http://127.0.0.1:3125/api/slightnudge/preview
+[PAGE LOG] [Fast Refresh] done in 775ms
+[REQ] POST http://127.0.0.1:3125/api/slightnudge/apply
+[RES] 200 http://127.0.0.1:3125/api/slightnudge/apply
+[PAGE LOG] [Fast Refresh] rebuilding
+[PAGE LOG] [Fast Refresh] done in 1398ms
+   Apply button after reload apply: visible=false, text="N/A"
+
+Step 5a results written to docs/phase2b-review-evidence/step5a-results.json

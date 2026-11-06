@@ -54,6 +54,13 @@ if (process.argv.includes('--demo') && (process.argv.includes('--live') || proce
   throw new Error('Imported-project interactive demos are not available yet. Use --m1 --demo for the current Studio with real edits in a disposable copy.');
 }
 const workspace = fs.mkdtempSync(path.join(os.tmpdir(), 'sn-review-consent-'));
+// Runtime dependencies added by gesture and draft recovery must also exist in
+// the disposable app, including when they have not yet been committed.
+for (const file of ['lib/slightnudge/draft-conflict-recovery.ts', 'lib/slightnudge/resize-layout.ts']) {
+  const dest = path.join(workspace, file);
+  fs.mkdirSync(path.dirname(dest), { recursive: true });
+  fs.copyFileSync(path.join(root, file), dest);
+}
 for (const file of ['lib/slightnudge/appearance-values.ts','components/slightnudge/AppearanceControls.tsx','components/slightnudge/ConstraintControls.tsx','components/slightnudge/appearance-controls.module.css','test/helpers/appearance-layout-browser.ts','lib/slightnudge/instance-ownership.ts','lib/slightnudge/instance-props.ts','lib/slightnudge/instance-trace.ts','test/helpers/shared-instance-browser.ts','lib/slightnudge/component-ownership.ts', 'lib/slightnudge/component-props.ts', 'components/slightnudge/ComponentProps.tsx', 'test/helpers/component-props-browser.ts']) { const dest = path.join(workspace, file); fs.mkdirSync(path.dirname(dest), { recursive: true }); fs.copyFileSync(path.join(root, file), dest); }
 for (const file of ['test/helpers/high-fidelity-browser.ts', 'test/preview-connection.test.ts', 'test/helpers/real-multi-file-browser.ts', 'lib/slightnudge/editing-capabilities.ts', 'test/helpers/core-editing-browser.ts', 'test/helpers/real-project-canvas-browser.ts', 'components/marketing/ReviewWorkflowSection.tsx', 'lib/slightnudge/jsx-text.ts']) {
   const dest = path.join(workspace, file); fs.mkdirSync(path.dirname(dest), { recursive: true }); fs.copyFileSync(path.join(root, file), dest);
@@ -106,6 +113,11 @@ for (const file of ['lib/slightnudge/direct-manipulation.ts', 'test/direct-manip
 }
 if (process.argv.includes('--baseline')) {
   fs.writeFileSync(path.join(workspace, 'components/slightnudge/SlightNudgeOverlay.tsx'), execFileSync('git', ['show', 'HEAD:components/slightnudge/SlightNudgeOverlay.tsx']));
+}
+if (process.argv.includes('--performance-baseline')) {
+  for (const file of ['app/layout.tsx', 'lib/slightnudge/imported-canvas-runtime.ts']) {
+    fs.writeFileSync(path.join(workspace, file), execFileSync('git', ['show', `HEAD:${file}`]));
+  }
 }
 if (process.argv.includes('--current-baseline')) {
   fs.writeFileSync(path.join(workspace, 'app/studio/page.tsx'), execFileSync('git', ['show', 'HEAD:app/studio/page.tsx']));

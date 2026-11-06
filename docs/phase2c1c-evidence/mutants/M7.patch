@@ -1,0 +1,24 @@
+diff --git a/lib/slightnudge/edit-history.ts b/lib/slightnudge/edit-history.ts
+index 493373a..6a08f77 100644
+--- a/lib/slightnudge/edit-history.ts
++++ b/lib/slightnudge/edit-history.ts
+@@ -652,18 +652,7 @@ export function undoSourceEdit(target?: string | { filePath?: string; editId?: s
+   }
+ 
+   // Check 4: If the same element was edited twice, undoing the older edit while a newer one is on top must refuse
+-  for (let i = index + 1; i < records.length; i++) {
+-    const newer = records[i];
+-    if (newer.status !== 'undone' && isSamePath(newer.filePath, record.filePath)) {
+-      const sameElement = (record.elementId && newer.elementId && record.elementId === newer.elementId) ||
+-        (record.line && newer.line && record.line === newer.line && record.tagName === newer.tagName) ||
+-        (newer.before === record.after);
+-      if (sameElement) {
+-        return {
+-          success: false as const,
+-          error: 'Cannot undo this edit because a newer edit on the same element depends on it. Undo the newer edit first.',
+-        };
+-      }
++  /* M7 stacked check dropped */
+     }
+   }
+ 

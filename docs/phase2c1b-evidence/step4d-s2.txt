@@ -1,0 +1,29 @@
+TAP version 13
+# Subtest: S2: Path traversal refusal regression test
+    # Subtest: refuses pending-preview with ..\\ traversing outside project root, leaving target file unchanged
+    ok 1 - refuses pending-preview with ..\\ traversing outside project root, leaving target file unchanged
+      ---
+      duration_ms: 3.6536
+      type: 'test'
+      ...
+    # Subtest: refuses pending-preview using symlink/junction pointing outside project root, leaving target file unchanged
+    ok 2 - refuses pending-preview using symlink/junction pointing outside project root, leaving target file unchanged
+      ---
+      duration_ms: 3.1215
+      type: 'test'
+      ...
+    1..2
+ok 1 - S2: Path traversal refusal regression test
+  ---
+  duration_ms: 11.0416
+  type: 'suite'
+  ...
+1..1
+# tests 2
+# suites 1
+# pass 2
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 27.2452

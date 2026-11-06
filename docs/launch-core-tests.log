@@ -1,0 +1,159 @@
+
+> slightnudge@1.0.0 test
+> tsx test/unit.test.ts && tsx test/payments.test.ts && tsx test/security-hardening.test.ts && tsx test/analytics-funnel.test.ts
+
+====================================================
+🧪 RUNNING SHIPCHECK UNIT TESTS
+====================================================
+
+--- 1. SSRF & Private IP Blocking ---
+  ✅ [PASS] 127.0.0.1 is detected as private/loopback
+  ✅ [PASS] 10.0.0.5 is detected as private
+  ✅ [PASS] 172.16.0.1 is detected as private
+  ✅ [PASS] 192.168.1.100 is detected as private
+  ✅ [PASS] AWS/GCP metadata IP 169.254.169.254 is blocked
+  ✅ [PASS] IPv6 loopback ::1 is blocked
+  ✅ [PASS] Public IP 93.184.216.34 is allowed
+  ✅ [PASS] file:// URLs are strictly rejected
+  ✅ [PASS] Instance metadata URL is strictly rejected
+
+--- 2. Credential Encryption at Rest (AES-256-GCM) ---
+  ✅ [PASS] Encrypted string differs from plain text
+  ✅ [PASS] Encrypted output contains IV and Auth Tag
+  ✅ [PASS] Decrypted output matches original credentials exactly
+
+--- 3. Strict Zod Schema Validation ---
+  ✅ [PASS] Valid finding passes FindingSchema
+  ✅ [PASS] Malformed finding is correctly rejected by Zod
+
+--- 4. Cost and Margin Guardrail Calculations ---
+  ✅ [PASS] Margin $8.89 exceeds min margin requirement of $3.00
+
+--- 5. Webhook Idempotency Verification ---
+  ✅ [PASS] First payment webhook fulfills order
+  ✅ [PASS] Duplicate payment webhook is safely skipped (idempotent)
+
+====================================================
+🎉 ALL 17/17 UNIT TESTS PASSED!
+====================================================
+
+====================================================
+🧪 RUNNING PHASE 4 PAYMENTS & WEBHOOK TESTS
+====================================================
+
+--- 1. Checkout Session Creation ---
+[Dodo Payments] No live API key configured. Providing simulated checkout URL.
+  ✅ [PASS] Checkout session URL successfully generated
+  ✅ [PASS] Checkout URL contains run reference
+
+--- 2. Webhook Event Processing & Full Scan Unlock ---
+[Funnel Analytics Server] 📊 Event: paid {
+  paymentId: 'dodo_pay_1793036283111',
+  runId: 'run_pay_test_1793036283110',
+  amountUsd: 9.99
+}
+  ✅ [PASS] Webhook processed successfully
+  ✅ [PASS] Webhook action was "fulfilled"
+  ✅ [PASS] Run kind was upgraded from preview to full
+  ✅ [PASS] Run status was re-enqueued for full scan
+  ✅ [PASS] Scenario limits expanded to full 12
+
+--- 3. Webhook Idempotency Check ---
+  ✅ [PASS] Duplicate webhook returns success
+  ✅ [PASS] Duplicate webhook was safely skipped (idempotent)
+
+--- 4. Automatic Failure Refund Trigger ---
+[Dodo Payments] Automatically refunded payment dodo_pay_1793036283111 for run run_pay_test_1793036283110
+  ✅ [PASS] Automatic refund triggered cleanly
+  ✅ [PASS] Run record marked as status="refunded"
+  ✅ [PASS] Run error field explains automatic refund reason
+
+====================================================
+🎉 ALL 12/12 PAYMENTS TESTS PASSED!
+====================================================
+
+====================================================
+🛡️ RUNNING PHASE 5 SECURITY & HARDENING TESTS
+====================================================
+
+--- 1. SSRF Attack Matrix & Non-HTTP Schemes ---
+  ✅ [PASS] Blocked forbidden target: file:///etc/shadow
+  ✅ [PASS] Blocked forbidden target: ftp://internal.server/data
+  ✅ [PASS] Blocked forbidden target: gopher://127.0.0.1:70/
+  ✅ [PASS] Blocked forbidden target: http://169.254.169.254/computeMetadata/v1/
+  ✅ [PASS] Blocked forbidden target: http://127.0.0.1:8080/admin
+  ✅ [PASS] Blocked forbidden target: http://10.0.1.25/internal
+  ✅ [PASS] Blocked forbidden target: http://172.16.5.1/db
+  ✅ [PASS] Blocked forbidden target: http://192.168.0.1/router
+  ✅ [PASS] Blocked forbidden target: http://[::1]/secret
+  ✅ [PASS] Blocked forbidden target: http://localhost.localdomain/test
+
+--- 2. Sliding Window Rate Limiting ---
+  ✅ [PASS] Request #1 allowed within limit
+  ✅ [PASS] Request #2 allowed within limit
+  ✅ [PASS] Request #3 allowed within limit
+  ✅ [PASS] Request #4 allowed within limit
+  ✅ [PASS] Request #5 allowed within limit
+  ✅ [PASS] Request #6 blocked by IP rate limiter
+
+--- 3. Single Active Run per User Guard ---
+  ✅ [PASS] First run allowed for user
+  ✅ [PASS] Second concurrent run blocked for same user
+  ✅ [PASS] Run allowed again after previous completed
+
+--- 4. Global Daily Spend Cap Protection ---
+  ✅ [PASS] Runs permitted when under daily cap
+  ✅ [PASS] Runs blocked when global daily cap exceeded
+  ✅ [PASS] User sees polite capacity message
+
+--- 5. Unit Economics Margin Startup Verification ---
+  ✅ [PASS] Unit margin economics meet minimum target
+  ✅ [PASS] Net margin $8.89 >= $3.00
+
+--- 6. Prompt-Injection Robustness Against Malicious Page Text ---
+  ✅ [PASS] Prompt injection defense explicitly treats website text as untrusted data
+  ✅ [PASS] Adversarial prompt injection failed to suppress real 500 error
+  ✅ [PASS] Health score was not spoofed to 100 by injected instruction
+
+====================================================
+🎉 ALL 27/27 SECURITY & HARDENING TESTS PASSED!
+====================================================
+
+--- SHIPCHECK FUNNEL ANALYTICS SUITE ---
+
+✅ PASS: Event log clears correctly
+[Funnel Analytics Server] 📊 Event: visit { referrer: 'direct', page: '/' }
+✅ PASS: Visit event logged
+✅ PASS: Visit event name matches
+✅ PASS: Visit properties match
+[Funnel Analytics Server] 📊 Event: url_submitted { url: 'https://vibeapp.example.com', authProvided: true }
+✅ PASS: url_submitted event logged
+✅ PASS: url_submitted event name matches
+✅ PASS: url_submitted auth flag matches
+[Funnel Analytics Server] 📊 Event: preview_viewed {
+  runId: 'run-test-123',
+  kind: 'preview',
+  healthScore: 72,
+  totalFindings: 4
+}
+✅ PASS: preview_viewed event logged
+✅ PASS: preview_viewed event name matches
+✅ PASS: health score logged in funnel
+[Funnel Analytics Server] 📊 Event: checkout_started { runId: 'run-test-123' }
+✅ PASS: checkout_started event logged
+✅ PASS: checkout_started name matches
+[Funnel Analytics Server] 📊 Event: paid {
+  orderId: 'ord-test-456',
+  dodoPaymentId: 'pay_dodo_789',
+  runId: 'run-test-123',
+  amountCents: 999
+}
+✅ PASS: paid event logged
+✅ PASS: paid event name matches
+✅ PASS: paid amount matches $9.99
+✅ PASS: Strict 5-step conversion funnel preserved in order
+
+========================================
+Funnel Analytics Results: 16 passed, 0 failed
+========================================
+

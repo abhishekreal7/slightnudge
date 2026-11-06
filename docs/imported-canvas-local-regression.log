@@ -1,0 +1,3 @@
+PASS canvas document chrome: html/body scrollbar and gutter suppression beats authored root scroll rules and survives iframe-only reload
+PASS single-page canvas: one full-height page, no nested scroller, fit/25%/50%, unchanged responsive width and typography, constant-size Move control, scaled drag coordinates, pan, wheel forwarding, Save and exact source Undo
+PASS: 1 review-consent browser cases (real API; disposable source copy)

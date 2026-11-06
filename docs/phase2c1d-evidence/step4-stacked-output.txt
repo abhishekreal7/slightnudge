@@ -1,0 +1,26 @@
+Multi-Element Stacked Edits Undo Battery
+Command: npx tsx --test test/undo-stacked-edits.test.ts
+Output:
+Same element refusal message: Cannot undo this edit because a newer edit ("font-normal → font-bold") on the same element depends on it. Undo the newer edit first.
+Legacy record refusal message: This file changed after the visual edit: element identity cannot be established. Open fixtures/page4.tsx near line 1 and change the className to remove "none" and restore "none". Nothing was changed.
+Structural edit refusal message: Cannot undo this edit because a structural edit ("reorder: move earlier") was applied to this file. Undo the structural edit first.
+Same-line refusal message: Cannot undo this edit because a newer edit on the same line depends on it. Undo the newer edit first.
+Starting 300 randomized order test runs (seed base: 771234)...
+All 300 randomized order test runs passed successfully!
+▶ Multi-Element Stacked Edits Undo Battery
+  ✔ (1) edit A on elem1, edit B on elem2: undo A accepted, then undo B accepted -> byte-identical (1131.6713ms)
+  ✔ (2) edit A then B, undo B first then A -> byte-identical (357.8127ms)
+  ✔ (3) edit A then edit B on the SAME element: undo A refused naming newer edit, undo B accepted, then undo A accepted (430.3163ms)
+  ✔ (4) legacy records without elementId and without derivable identity: undo of older refused with manual instructions (28.07ms)
+  ✔ (5) newer record of structural kind (reorder) in same file: undo of older edit refused (283.5939ms)
+  ✔ (6) different elements on the SAME line: refused due to same-line ambiguity (256.1546ms)
+  ✔ (7) randomized order test: 300 seeded runs with N (2..5) edits undone in random order (513460.0934ms)
+✔ Multi-Element Stacked Edits Undo Battery (515951.6495ms)
+ℹ tests 7
+ℹ suites 1
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 516819.4071

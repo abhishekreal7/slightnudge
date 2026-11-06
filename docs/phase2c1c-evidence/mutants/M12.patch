@@ -1,0 +1,37 @@
+diff --git a/lib/slightnudge/auth.ts b/lib/slightnudge/auth.ts
+index 6fed4ec..55fa080 100644
+--- a/lib/slightnudge/auth.ts
++++ b/lib/slightnudge/auth.ts
+@@ -45,31 +45,7 @@ export function isRequestHostAllowed(headers: Headers | { get(name: string): str
+     return false;
+   }
+ 
+-  const xForwardedHost = headers.get('x-forwarded-host');
+-  if (xForwardedHost) {
+-    const parts = xForwardedHost.split(',').map((s) => s.trim()).filter(Boolean);
+-    for (const part of parts) {
+-      if (!isValidHost(part)) {
+-        return false;
+-      }
+-    }
+-  }
+-
+-  const forwarded = headers.get('forwarded');
+-  if (forwarded) {
+-    const matches = forwarded.matchAll(/(?:^|[;,])\s*host=([^;,\s]+)/gi);
+-    for (const match of matches) {
+-      let forwardedHost = match[1];
+-      if (forwardedHost.startsWith('"') && forwardedHost.endsWith('"')) {
+-        forwardedHost = forwardedHost.slice(1, -1);
+-      }
+-      if (!isValidHost(forwardedHost)) {
+-        return false;
+-      }
+-    }
+-  }
+-
+-  return true;
++  return true; /* M12 dropped forwarded checks */
+ }
+ 
+ export function timingSafeEqualStrings(a: string | null | undefined, b: string): boolean {

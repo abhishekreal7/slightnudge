@@ -97,15 +97,21 @@ export const SourceProjectCanvas = forwardRef<SourceCanvasHandle, {
       if (!windowMode) next.searchParams.set('__slightnudge_canvas', '1');
       documentUrl.current = next.toString(); setUrl(next.toString()); return;
     }
-    let active = true;
-    fetch(`/api/slightnudge/repositories/${encodeURIComponent(repositoryId)}`).then(async response => {
+    const request = new AbortController();
+    fetch(`/api/slightnudge/repositories/${encodeURIComponent(repositoryId)}`, {
+      signal: AbortSignal.any([request.signal, AbortSignal.timeout(15000)]),
+    }).then(async response => {
       const data = await readApiJson(response);
       if (!response.ok) throw new Error(data.error || 'Could not inspect project compatibility.');
-      if (!active) return;
+      if (request.signal.aborted) return;
       setFramework(data.framework);
       if (data.framework !== 'Next.js') setError(`${data.framework} source mapping is unsupported. No source changes are available.`);
-    }).catch(cause => { if (active) { setFramework('Unavailable'); setError(cause.message); } });
-    return () => { active = false; };
+    }).catch(cause => {
+      if (request.signal.aborted) return;
+      setFramework('Unavailable');
+      setError(cause.name === 'TimeoutError' ? 'Reading project compatibility timed out. Reload the editor to retry.' : cause.message);
+    });
+    return () => request.abort();
   }, [repositoryId, localPageId, windowMode]);
 
   useEffect(() => {
@@ -235,12 +241,13 @@ export const SourceProjectCanvas = forwardRef<SourceCanvasHandle, {
     setLoading(true); setError('');
     try {
       const token = await getClientSessionToken();
+      const signal = AbortSignal.timeout(35000);
       let data: { url?: string; error?: string } | undefined;
       // Only retry the read-only connection probe, never Save or Undo. A
       // restarted Next server can be listening while its route still rebuilds.
       for (let attempt = 0; attempt < 3; attempt++) {
         const response = await fetch(`/api/slightnudge/repositories/${encodeURIComponent(repositoryId)}/preview-check`, {
-          method: 'POST', headers: { 'content-type': 'application/json', 'x-slightnudge-token': token }, body: JSON.stringify({ url: address }),
+          signal, method: 'POST', headers: { 'content-type': 'application/json', 'x-slightnudge-token': token }, body: JSON.stringify({ url: address }),
         });
         data = await readApiJson(response);
         if (response.ok) break;
@@ -259,7 +266,7 @@ export const SourceProjectCanvas = forwardRef<SourceCanvasHandle, {
       else next.searchParams.delete('__slightnudge_canvas');
       setPageHeight(720);
       setUrl(next.toString());
-    } catch (cause) { setError(cause instanceof Error ? cause.message : 'Could not connect.'); }
+    } catch (cause) { setError(cause instanceof Error && cause.name === 'TimeoutError' ? 'Connecting to the local preview timed out. Check its server and try again.' : cause instanceof Error ? cause.message : 'Could not connect.'); }
     finally { setLoading(false); }
   }
   function connect(event: React.FormEvent) { event.preventDefault(); void connectTo(input); }

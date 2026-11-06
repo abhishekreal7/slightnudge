@@ -1,0 +1,1190 @@
+{
+  "suite": "regression",
+  "round": "1",
+  "surface": "old-studio",
+  "requestedUrl": "http://127.0.0.1:3000/studio/m0-control-lab/edit?preview=http%3A%2F%2F127.0.0.1%3A3001&panel=inspector&legacyStudio=1",
+  "actualUrl": "http://127.0.0.1:3000/studio/m0-control-lab/edit?preview=http%3A%2F%2F127.0.0.1%3A3001&panel=inspector&legacyStudio=1",
+  "cases": [
+    {
+      "index": 1,
+      "selector": "section#top",
+      "clickPosition": {
+        "x": 15,
+        "y": 15
+      },
+      "expected": {
+        "file": "Hero.tsx",
+        "line": 10,
+        "tag": "section",
+        "outcome": "allowed"
+      },
+      "dom": {
+        "file": "src/components/sections/Hero.tsx",
+        "line": 10,
+        "column": 5,
+        "tag": "section",
+        "classes": "mx-auto grid max-w-7xl gap-16 px-6 pb-28 pt-20 lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:px-10 lg:pb-36 lg:pt-28",
+        "markerRect": {
+          "top": 84,
+          "left": 0,
+          "width": 1200,
+          "height": 668
+        },
+        "clickedRect": {
+          "top": 84,
+          "left": 0,
+          "width": 1200,
+          "height": 668
+        }
+      },
+      "position": {
+        "x": 2.9287109375,
+        "y": 2.9286349176646707
+      },
+      "insideHit": {
+        "point": {
+          "x": 15,
+          "y": 99
+        },
+        "hit": {
+          "tag": "section",
+          "id": "top",
+          "classes": "mx-auto grid max-w-7xl gap-16 px-6 pb-28 pt-20 lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:px-10 lg:pb-36 lg:pt-28",
+          "file": "src/components/sections/Hero.tsx",
+          "line": "10"
+        },
+        "scroll": {
+          "x": 0,
+          "y": 0
+        },
+        "viewport": {
+          "width": 1200,
+          "height": 3749
+        }
+      },
+      "parentHit": {
+        "point": {
+          "x": 581.7724609375,
+          "y": 67.33488491766467
+        },
+        "hit": {
+          "tag": "iframe",
+          "classes": "block w-full border-0 bg-white",
+          "role": null,
+          "label": null,
+          "isIframe": true
+        }
+      },
+      "signals": [
+        {
+          "type": "source-selection",
+          "selection": {
+            "path": "src/components/sections/Hero.tsx",
+            "line": 10,
+            "column": 5,
+            "tagName": "section"
+          }
+        }
+      ],
+      "pointer": [
+        {
+          "x": 14.9873046875,
+          "y": 99.00048828125,
+          "tag": "section",
+          "id": "top",
+          "classes": "mx-auto grid max-w-7xl gap-16 px-6 pb-28 pt-20 lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:px-10 lg:pb-36 lg:pt-28",
+          "file": "src/components/sections/Hero.tsx",
+          "line": "10"
+        }
+      ],
+      "selected": "src/components/sections/Hero.tsx:10:5:section",
+      "actual": {
+        "file": "Hero.tsx",
+        "line": 10,
+        "column": 5,
+        "tag": "section"
+      },
+      "offset": {
+        "x": 0,
+        "y": -0.00506591796875,
+        "width": 0.005615234375,
+        "height": 0.0064697265625
+      },
+      "outcome": "allowed",
+      "inspection": {
+        "found": true,
+        "safeToEdit": true,
+        "filePath": "C:\\dev\\vibecheck\\.slightnudge\\repositories\\m0-control-lab\\src\\components\\sections\\Hero.tsx",
+        "line": 10,
+        "column": 5,
+        "tagName": "section",
+        "className": "mx-auto grid max-w-7xl gap-16 px-6 pb-28 pt-20 lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:px-10 lg:pb-36 lg:pt-28",
+        "textEditable": false,
+        "textReason": "For safety, text editing currently supports elements with one plain text value and no nested elements."
+      },
+      "verdict": "allowed",
+      "expectedMatch": true
+    },
+    {
+      "index": 2,
+      "selector": "section#top p.mb-6",
+      "clickPosition": "default centre",
+      "expected": {
+        "file": "Hero.tsx",
+        "line": 12,
+        "tag": "p",
+        "outcome": "allowed"
+      },
+      "dom": {
+        "file": "src/components/sections/Hero.tsx",
+        "line": 12,
+        "column": 9,
+        "tag": "p",
+        "classes": "mb-6 flex items-center gap-2 text-sm font-medium text-emerald-800",
+        "markerRect": {
+          "top": 217.84375,
+          "left": 40,
+          "width": 475.1875,
+          "height": 20
+        },
+        "clickedRect": {
+          "top": 217.84375,
+          "left": 40,
+          "width": 475.1875,
+          "height": 20
+        }
+      },
+      "insideHit": {
+        "point": {
+          "x": 277.59375,
+          "y": 227.84375
+        },
+        "hit": {
+          "tag": "p",
+          "id": "",
+          "classes": "mb-6 flex items-center gap-2 text-sm font-medium text-emerald-800",
+          "file": "src/components/sections/Hero.tsx",
+          "line": "12"
+        },
+        "scroll": {
+          "x": 0,
+          "y": 0
+        },
+        "viewport": {
+          "width": 1200,
+          "height": 3749
+        }
+      },
+      "parentHit": {
+        "point": {
+          "x": 633.046875,
+          "y": 92.484375
+        },
+        "hit": {
+          "tag": "iframe",
+          "classes": "block w-full border-0 bg-white",
+          "role": null,
+          "label": null,
+          "isIframe": true
+        }
+      },
+      "signals": [
+        {
+          "type": "source-selection",
+          "selection": {
+            "path": "src/components/sections/Hero.tsx",
+            "line": 12,
+            "column": 9,
+            "tagName": "p"
+          }
+        }
+      ],
+      "pointer": [
+        {
+          "x": 14.9873046875,
+          "y": 99.00048828125,
+          "tag": "section",
+          "id": "top",
+          "classes": "mx-auto grid max-w-7xl gap-16 px-6 pb-28 pt-20 lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:px-10 lg:pb-36 lg:pt-28",
+          "file": "src/components/sections/Hero.tsx",
+          "line": "10"
+        },
+        {
+          "x": 277.5712890625,
+          "y": 227.80810546875,
+          "tag": "p",
+          "id": "",
+          "classes": "mb-6 flex items-center gap-2 text-sm font-medium text-emerald-800",
+          "file": "src/components/sections/Hero.tsx",
+          "line": "12"
+        }
+      ],
+      "selected": "src/components/sections/Hero.tsx:12:9:p",
+      "actual": {
+        "file": "Hero.tsx",
+        "line": 12,
+        "column": 9,
+        "tag": "p"
+      },
+      "offset": {
+        "x": -0.00244140625,
+        "y": 0.003173828125,
+        "width": 0.0001220703125,
+        "height": -0.001220703125
+      },
+      "outcome": "allowed",
+      "inspection": {
+        "found": true,
+        "safeToEdit": true,
+        "filePath": "C:\\dev\\vibecheck\\.slightnudge\\repositories\\m0-control-lab\\src\\components\\sections\\Hero.tsx",
+        "line": 12,
+        "column": 9,
+        "tagName": "p",
+        "className": "mb-6 flex items-center gap-2 text-sm font-medium text-emerald-800",
+        "textEditable": false,
+        "textReason": "This text comes from prop 'eyebrow' and cannot be edited directly. Nothing was changed.",
+        "propSource": "eyebrow"
+      },
+      "verdict": "allowed",
+      "expectedMatch": true
+    },
+    {
+      "index": 3,
+      "selector": "section#top h1",
+      "clickPosition": "default centre",
+      "expected": {
+        "file": "Hero.tsx",
+        "line": 13,
+        "tag": "h1",
+        "outcome": "allowed"
+      },
+      "dom": {
+        "file": "src/components/sections/Hero.tsx",
+        "line": 13,
+        "column": 9,
+        "tag": "h1",
+        "classes": "max-w-xl text-5xl font-semibold leading-[1.03] tracking-[-0.055em] text-slate-950 sm:text-6xl lg:text-7xl",
+        "markerRect": {
+          "top": 261.84375,
+          "left": 40,
+          "width": 475.1875,
+          "height": 148.3125
+        },
+        "clickedRect": {
+          "top": 261.84375,
+          "left": 40,
+          "width": 475.1875,
+          "height": 148.3125
+        }
+      },
+      "insideHit": {
+        "point": {
+          "x": 277.59375,
+          "y": 336
+        },
+        "hit": {
+          "tag": "h1",
+          "id": "",
+          "classes": "max-w-xl text-5xl font-semibold leading-[1.03] tracking-[-0.055em] text-slate-950 sm:text-6xl lg:text-7xl",
+          "file": "src/components/sections/Hero.tsx",
+          "line": "13"
+        },
+        "scroll": {
+          "x": 0,
+          "y": 0
+        },
+        "viewport": {
+          "width": 1200,
+          "height": 3749
+        }
+      },
+      "parentHit": {
+        "point": {
+          "x": 633.046875,
+          "y": 113.6015625
+        },
+        "hit": {
+          "tag": "iframe",
+          "classes": "block w-full border-0 bg-white",
+          "role": null,
+          "label": null,
+          "isIframe": true
+        }
+      },
+      "signals": [
+        {
+          "type": "source-selection",
+          "selection": {
+            "path": "src/components/sections/Hero.tsx",
+            "line": 13,
+            "column": 9,
+            "tagName": "h1"
+          }
+        }
+      ],
+      "pointer": [
+        {
+          "x": 14.9873046875,
+          "y": 99.00048828125,
+          "tag": "section",
+          "id": "top",
+          "classes": "mx-auto grid max-w-7xl gap-16 px-6 pb-28 pt-20 lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:px-10 lg:pb-36 lg:pt-28",
+          "file": "src/components/sections/Hero.tsx",
+          "line": "10"
+        },
+        {
+          "x": 277.5712890625,
+          "y": 227.80810546875,
+          "tag": "p",
+          "id": "",
+          "classes": "mb-6 flex items-center gap-2 text-sm font-medium text-emerald-800",
+          "file": "src/components/sections/Hero.tsx",
+          "line": "12"
+        },
+        {
+          "x": 277.5712890625,
+          "y": 335.97607421875,
+          "tag": "h1",
+          "id": "",
+          "classes": "max-w-xl text-5xl font-semibold leading-[1.03] tracking-[-0.055em] text-slate-950 sm:text-6xl lg:text-7xl",
+          "file": "src/components/sections/Hero.tsx",
+          "line": "13"
+        }
+      ],
+      "selected": "src/components/sections/Hero.tsx:13:9:h1",
+      "actual": {
+        "file": "Hero.tsx",
+        "line": 13,
+        "column": 9,
+        "tag": "h1"
+      },
+      "offset": {
+        "x": -0.00244140625,
+        "y": 0.00054931640625,
+        "width": 0.0001220703125,
+        "height": 0.00518798828125
+      },
+      "outcome": "allowed",
+      "inspection": {
+        "found": true,
+        "safeToEdit": true,
+        "filePath": "C:\\dev\\vibecheck\\.slightnudge\\repositories\\m0-control-lab\\src\\components\\sections\\Hero.tsx",
+        "line": 13,
+        "column": 9,
+        "tagName": "h1",
+        "className": "max-w-xl text-5xl font-semibold leading-[1.03] tracking-[-0.055em] text-slate-950 sm:text-6xl lg:text-7xl",
+        "textEditable": false,
+        "textReason": "This text comes from prop 'title' and cannot be edited directly. Nothing was changed.",
+        "propSource": "title"
+      },
+      "verdict": "allowed",
+      "expectedMatch": true
+    },
+    {
+      "index": 4,
+      "selector": "section#top p.leading-8",
+      "clickPosition": "default centre",
+      "expected": {
+        "file": "Hero.tsx",
+        "line": 14,
+        "tag": "p",
+        "outcome": "allowed"
+      },
+      "dom": {
+        "file": "src/components/sections/Hero.tsx",
+        "line": 14,
+        "column": 9,
+        "tag": "p",
+        "classes": "mt-7 max-w-lg text-lg leading-8 text-slate-600",
+        "markerRect": {
+          "top": 438.15625,
+          "left": 40,
+          "width": 475.1875,
+          "height": 64
+        },
+        "clickedRect": {
+          "top": 438.15625,
+          "left": 40,
+          "width": 475.1875,
+          "height": 64
+        }
+      },
+      "insideHit": {
+        "point": {
+          "x": 277.59375,
+          "y": 470.15625
+        },
+        "hit": {
+          "tag": "p",
+          "id": "",
+          "classes": "mt-7 max-w-lg text-lg leading-8 text-slate-600",
+          "file": "src/components/sections/Hero.tsx",
+          "line": "14"
+        },
+        "scroll": {
+          "x": 0,
+          "y": 0
+        },
+        "viewport": {
+          "width": 1200,
+          "height": 3749
+        }
+      },
+      "parentHit": {
+        "point": {
+          "x": 633.046875,
+          "y": 139.796875
+        },
+        "hit": {
+          "tag": "iframe",
+          "classes": "block w-full border-0 bg-white",
+          "role": null,
+          "label": null,
+          "isIframe": true
+        }
+      },
+      "signals": [
+        {
+          "type": "source-selection",
+          "selection": {
+            "path": "src/components/sections/Hero.tsx",
+            "line": 14,
+            "column": 9,
+            "tagName": "p"
+          }
+        }
+      ],
+      "pointer": [
+        {
+          "x": 14.9873046875,
+          "y": 99.00048828125,
+          "tag": "section",
+          "id": "top",
+          "classes": "mx-auto grid max-w-7xl gap-16 px-6 pb-28 pt-20 lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:px-10 lg:pb-36 lg:pt-28",
+          "file": "src/components/sections/Hero.tsx",
+          "line": "10"
+        },
+        {
+          "x": 277.5712890625,
+          "y": 227.80810546875,
+          "tag": "p",
+          "id": "",
+          "classes": "mb-6 flex items-center gap-2 text-sm font-medium text-emerald-800",
+          "file": "src/components/sections/Hero.tsx",
+          "line": "12"
+        },
+        {
+          "x": 277.5712890625,
+          "y": 335.97607421875,
+          "tag": "h1",
+          "id": "",
+          "classes": "max-w-xl text-5xl font-semibold leading-[1.03] tracking-[-0.055em] text-slate-950 sm:text-6xl lg:text-7xl",
+          "file": "src/components/sections/Hero.tsx",
+          "line": "13"
+        },
+        {
+          "x": 277.5712890625,
+          "y": 470.1103515625,
+          "tag": "p",
+          "id": "",
+          "classes": "mt-7 max-w-lg text-lg leading-8 text-slate-600",
+          "file": "src/components/sections/Hero.tsx",
+          "line": "14"
+        }
+      ],
+      "selected": "src/components/sections/Hero.tsx:14:9:p",
+      "actual": {
+        "file": "Hero.tsx",
+        "line": 14,
+        "column": 9,
+        "tag": "p"
+      },
+      "offset": {
+        "x": -0.00244140625,
+        "y": 0.0040283203125,
+        "width": 0.0001220703125,
+        "height": -0.00384521484375
+      },
+      "outcome": "allowed",
+      "inspection": {
+        "found": true,
+        "safeToEdit": true,
+        "filePath": "C:\\dev\\vibecheck\\.slightnudge\\repositories\\m0-control-lab\\src\\components\\sections\\Hero.tsx",
+        "line": 14,
+        "column": 9,
+        "tagName": "p",
+        "className": "mt-7 max-w-lg text-lg leading-8 text-slate-600",
+        "textEditable": false,
+        "textReason": "This text comes from prop 'description' and cannot be edited directly. Nothing was changed.",
+        "propSource": "description"
+      },
+      "verdict": "allowed",
+      "expectedMatch": true
+    },
+    {
+      "index": 5,
+      "selector": "section#top a[href=\"#pricing\"]",
+      "clickPosition": "default centre",
+      "expected": {
+        "file": "Hero.tsx",
+        "line": 16,
+        "tag": "a",
+        "outcome": "allowed"
+      },
+      "dom": {
+        "file": "src/components/sections/Hero.tsx",
+        "line": 16,
+        "column": 11,
+        "tag": "a",
+        "classes": "rounded-full bg-emerald-700 px-6 py-3.5 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-800 active:scale-[0.98]",
+        "markerRect": {
+          "top": 538.15625,
+          "left": 40,
+          "width": 226.515625,
+          "height": 48
+        },
+        "clickedRect": {
+          "top": 538.15625,
+          "left": 40,
+          "width": 226.515625,
+          "height": 48
+        }
+      },
+      "insideHit": {
+        "point": {
+          "x": 153.2578125,
+          "y": 562.15625
+        },
+        "hit": {
+          "tag": "a",
+          "id": "",
+          "classes": "rounded-full bg-emerald-700 px-6 py-3.5 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-800 active:scale-[0.98]",
+          "file": "src/components/sections/Hero.tsx",
+          "line": "16"
+        },
+        "scroll": {
+          "x": 0,
+          "y": 0
+        },
+        "viewport": {
+          "width": 1200,
+          "height": 3749
+        }
+      },
+      "parentHit": {
+        "point": {
+          "x": 608.765625,
+          "y": 157.765625
+        },
+        "hit": {
+          "tag": "iframe",
+          "classes": "block w-full border-0 bg-white",
+          "role": null,
+          "label": null,
+          "isIframe": true
+        }
+      },
+      "signals": [
+        {
+          "type": "source-selection",
+          "selection": {
+            "path": "src/components/sections/Hero.tsx",
+            "line": 16,
+            "column": 11,
+            "tagName": "a"
+          }
+        }
+      ],
+      "pointer": [
+        {
+          "x": 14.9873046875,
+          "y": 99.00048828125,
+          "tag": "section",
+          "id": "top",
+          "classes": "mx-auto grid max-w-7xl gap-16 px-6 pb-28 pt-20 lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:px-10 lg:pb-36 lg:pt-28",
+          "file": "src/components/sections/Hero.tsx",
+          "line": "10"
+        },
+        {
+          "x": 277.5712890625,
+          "y": 227.80810546875,
+          "tag": "p",
+          "id": "",
+          "classes": "mb-6 flex items-center gap-2 text-sm font-medium text-emerald-800",
+          "file": "src/components/sections/Hero.tsx",
+          "line": "12"
+        },
+        {
+          "x": 277.5712890625,
+          "y": 335.97607421875,
+          "tag": "h1",
+          "id": "",
+          "classes": "max-w-xl text-5xl font-semibold leading-[1.03] tracking-[-0.055em] text-slate-950 sm:text-6xl lg:text-7xl",
+          "file": "src/components/sections/Hero.tsx",
+          "line": "13"
+        },
+        {
+          "x": 277.5712890625,
+          "y": 470.1103515625,
+          "tag": "p",
+          "id": "",
+          "classes": "mt-7 max-w-lg text-lg leading-8 text-slate-600",
+          "file": "src/components/sections/Hero.tsx",
+          "line": "14"
+        },
+        {
+          "x": 153.21875,
+          "y": 562.1455078125,
+          "tag": "a",
+          "id": "",
+          "classes": "rounded-full bg-emerald-700 px-6 py-3.5 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-800 active:scale-[0.98]",
+          "file": "src/components/sections/Hero.tsx",
+          "line": "16"
+        }
+      ],
+      "selected": "src/components/sections/Hero.tsx:16:11:a",
+      "actual": {
+        "file": "Hero.tsx",
+        "line": 16,
+        "column": 11,
+        "tag": "a"
+      },
+      "offset": {
+        "x": -0.00244140625,
+        "y": -0.00201416015625,
+        "width": 0.0089111328125,
+        "height": -0.00286865234375
+      },
+      "outcome": "allowed",
+      "inspection": {
+        "found": true,
+        "safeToEdit": true,
+        "filePath": "C:\\dev\\vibecheck\\.slightnudge\\repositories\\m0-control-lab\\src\\components\\sections\\Hero.tsx",
+        "line": 16,
+        "column": 11,
+        "tagName": "a",
+        "className": "rounded-full bg-emerald-700 px-6 py-3.5 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-800 active:scale-[0.98]",
+        "textEditable": false,
+        "textReason": "This text comes from prop 'primaryAction' and cannot be edited directly. Nothing was changed.",
+        "propSource": "primaryAction"
+      },
+      "verdict": "allowed",
+      "expectedMatch": true
+    },
+    {
+      "index": 6,
+      "selector": "section#features",
+      "clickPosition": {
+        "x": 15,
+        "y": 15
+      },
+      "expected": {
+        "file": "Features.tsx",
+        "line": 11,
+        "tag": "section",
+        "outcome": "allowed"
+      },
+      "dom": {
+        "file": "src/components/sections/Features.tsx",
+        "line": 11,
+        "column": 5,
+        "tag": "section",
+        "classes": "border-y border-slate-200 bg-white py-24 sm:py-32",
+        "markerRect": {
+          "top": 752,
+          "left": 0,
+          "width": 1200,
+          "height": 668
+        },
+        "clickedRect": {
+          "top": 752,
+          "left": 0,
+          "width": 1200,
+          "height": 668
+        }
+      },
+      "position": {
+        "x": 2.9287109375,
+        "y": 2.928985778443114
+      },
+      "insideHit": {
+        "point": {
+          "x": 15,
+          "y": 767
+        },
+        "hit": {
+          "tag": "section",
+          "id": "features",
+          "classes": "border-y border-slate-200 bg-white py-24 sm:py-32",
+          "file": "src/components/sections/Features.tsx",
+          "line": "11"
+        },
+        "scroll": {
+          "x": 0,
+          "y": 0
+        },
+        "viewport": {
+          "width": 1200,
+          "height": 3749
+        }
+      },
+      "parentHit": {
+        "point": {
+          "x": 581.7724609375,
+          "y": 197.75711077844312
+        },
+        "hit": {
+          "tag": "iframe",
+          "classes": "block w-full border-0 bg-white",
+          "role": null,
+          "label": null,
+          "isIframe": true
+        }
+      },
+      "signals": [
+        {
+          "type": "source-selection",
+          "selection": {
+            "path": "src/components/sections/Features.tsx",
+            "line": 11,
+            "column": 5,
+            "tagName": "section"
+          }
+        }
+      ],
+      "pointer": [
+        {
+          "x": 14.9873046875,
+          "y": 99.00048828125,
+          "tag": "section",
+          "id": "top",
+          "classes": "mx-auto grid max-w-7xl gap-16 px-6 pb-28 pt-20 lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:px-10 lg:pb-36 lg:pt-28",
+          "file": "src/components/sections/Hero.tsx",
+          "line": "10"
+        },
+        {
+          "x": 277.5712890625,
+          "y": 227.80810546875,
+          "tag": "p",
+          "id": "",
+          "classes": "mb-6 flex items-center gap-2 text-sm font-medium text-emerald-800",
+          "file": "src/components/sections/Hero.tsx",
+          "line": "12"
+        },
+        {
+          "x": 277.5712890625,
+          "y": 335.97607421875,
+          "tag": "h1",
+          "id": "",
+          "classes": "max-w-xl text-5xl font-semibold leading-[1.03] tracking-[-0.055em] text-slate-950 sm:text-6xl lg:text-7xl",
+          "file": "src/components/sections/Hero.tsx",
+          "line": "13"
+        },
+        {
+          "x": 277.5712890625,
+          "y": 470.1103515625,
+          "tag": "p",
+          "id": "",
+          "classes": "mt-7 max-w-lg text-lg leading-8 text-slate-600",
+          "file": "src/components/sections/Hero.tsx",
+          "line": "14"
+        },
+        {
+          "x": 153.21875,
+          "y": 562.1455078125,
+          "tag": "a",
+          "id": "",
+          "classes": "rounded-full bg-emerald-700 px-6 py-3.5 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-800 active:scale-[0.98]",
+          "file": "src/components/sections/Hero.tsx",
+          "line": "16"
+        },
+        {
+          "x": 14.9873046875,
+          "y": 772.0791015625,
+          "tag": "section",
+          "id": "features",
+          "classes": "border-y border-slate-200 bg-white py-24 sm:py-32",
+          "file": "src/components/sections/Features.tsx",
+          "line": "11"
+        }
+      ],
+      "selected": "src/components/sections/Features.tsx:11:5:section",
+      "actual": {
+        "file": "Features.tsx",
+        "line": 11,
+        "column": 5,
+        "tag": "section"
+      },
+      "offset": {
+        "x": 0,
+        "y": 0.00140380859375,
+        "width": 0.005615234375,
+        "height": -0.00909423828125
+      },
+      "outcome": "allowed",
+      "inspection": {
+        "found": true,
+        "safeToEdit": true,
+        "filePath": "C:\\dev\\vibecheck\\.slightnudge\\repositories\\m0-control-lab\\src\\components\\sections\\Features.tsx",
+        "line": 11,
+        "column": 5,
+        "tagName": "section",
+        "className": "border-y border-slate-200 bg-white py-24 sm:py-32",
+        "textEditable": false,
+        "textReason": "This text is generated dynamically and cannot be edited safely."
+      },
+      "verdict": "allowed",
+      "expectedMatch": true
+    },
+    {
+      "index": 7,
+      "selector": "section#features h2",
+      "clickPosition": "default centre",
+      "expected": {
+        "file": "Features.tsx",
+        "line": 13,
+        "tag": "h2",
+        "outcome": "allowed"
+      },
+      "dom": {
+        "file": "src/components/sections/Features.tsx",
+        "line": 13,
+        "column": 122,
+        "tag": "h2",
+        "classes": "mt-4 text-4xl font-semibold tracking-[-0.045em] sm:text-5xl",
+        "markerRect": {
+          "top": 917,
+          "left": 40,
+          "width": 672,
+          "height": 96
+        },
+        "clickedRect": {
+          "top": 917,
+          "left": 40,
+          "width": 672,
+          "height": 96
+        }
+      },
+      "insideHit": {
+        "point": {
+          "x": 376,
+          "y": 965
+        },
+        "hit": {
+          "tag": "h2",
+          "id": "",
+          "classes": "mt-4 text-4xl font-semibold tracking-[-0.045em] sm:text-5xl",
+          "file": "src/components/sections/Features.tsx",
+          "line": "13"
+        },
+        "scroll": {
+          "x": 0,
+          "y": 0
+        },
+        "viewport": {
+          "width": 1200,
+          "height": 3749
+        }
+      },
+      "parentHit": {
+        "point": {
+          "x": 652.2578125,
+          "y": 236.421875
+        },
+        "hit": {
+          "tag": "iframe",
+          "classes": "block w-full border-0 bg-white",
+          "role": null,
+          "label": null,
+          "isIframe": true
+        }
+      },
+      "signals": [
+        {
+          "type": "source-selection",
+          "selection": {
+            "path": "src/components/sections/Features.tsx",
+            "line": 13,
+            "column": 122,
+            "tagName": "h2"
+          }
+        }
+      ],
+      "pointer": [
+        {
+          "x": 14.9873046875,
+          "y": 99.00048828125,
+          "tag": "section",
+          "id": "top",
+          "classes": "mx-auto grid max-w-7xl gap-16 px-6 pb-28 pt-20 lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:px-10 lg:pb-36 lg:pt-28",
+          "file": "src/components/sections/Hero.tsx",
+          "line": "10"
+        },
+        {
+          "x": 277.5712890625,
+          "y": 227.80810546875,
+          "tag": "p",
+          "id": "",
+          "classes": "mb-6 flex items-center gap-2 text-sm font-medium text-emerald-800",
+          "file": "src/components/sections/Hero.tsx",
+          "line": "12"
+        },
+        {
+          "x": 277.5712890625,
+          "y": 335.97607421875,
+          "tag": "h1",
+          "id": "",
+          "classes": "max-w-xl text-5xl font-semibold leading-[1.03] tracking-[-0.055em] text-slate-950 sm:text-6xl lg:text-7xl",
+          "file": "src/components/sections/Hero.tsx",
+          "line": "13"
+        },
+        {
+          "x": 277.5712890625,
+          "y": 470.1103515625,
+          "tag": "p",
+          "id": "",
+          "classes": "mt-7 max-w-lg text-lg leading-8 text-slate-600",
+          "file": "src/components/sections/Hero.tsx",
+          "line": "14"
+        },
+        {
+          "x": 153.21875,
+          "y": 562.1455078125,
+          "tag": "a",
+          "id": "",
+          "classes": "rounded-full bg-emerald-700 px-6 py-3.5 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-800 active:scale-[0.98]",
+          "file": "src/components/sections/Hero.tsx",
+          "line": "16"
+        },
+        {
+          "x": 14.9873046875,
+          "y": 772.0791015625,
+          "tag": "section",
+          "id": "features",
+          "classes": "border-y border-slate-200 bg-white py-24 sm:py-32",
+          "file": "src/components/sections/Features.tsx",
+          "line": "11"
+        },
+        {
+          "x": 375.95654296875,
+          "y": 965.00927734375,
+          "tag": "h2",
+          "id": "",
+          "classes": "mt-4 text-4xl font-semibold tracking-[-0.045em] sm:text-5xl",
+          "file": "src/components/sections/Features.tsx",
+          "line": "13"
+        }
+      ],
+      "selected": "src/components/sections/Features.tsx:13:122:h2",
+      "actual": {
+        "file": "Features.tsx",
+        "line": 13,
+        "column": 122,
+        "tag": "h2"
+      },
+      "offset": {
+        "x": -0.00244140625,
+        "y": -0.000732421875,
+        "width": 0.00634765625,
+        "height": -0.005859375
+      },
+      "outcome": "allowed",
+      "inspection": {
+        "found": true,
+        "safeToEdit": true,
+        "filePath": "C:\\dev\\vibecheck\\.slightnudge\\repositories\\m0-control-lab\\src\\components\\sections\\Features.tsx",
+        "line": 13,
+        "column": 122,
+        "tagName": "h2",
+        "className": "mt-4 text-4xl font-semibold tracking-[-0.045em] sm:text-5xl",
+        "textEditable": true
+      },
+      "verdict": "allowed",
+      "expectedMatch": true
+    },
+    {
+      "index": 8,
+      "selector": "section#features div.mt-12.grid",
+      "clickPosition": {
+        "x": 2,
+        "y": 2
+      },
+      "expected": {
+        "file": "Features.tsx",
+        "line": 14,
+        "tag": "div",
+        "outcome": "allowed"
+      },
+      "dom": {
+        "file": "src/components/sections/Features.tsx",
+        "line": 14,
+        "column": 9,
+        "tag": "div",
+        "classes": "mt-12 grid gap-4 md:grid-cols-3",
+        "markerRect": {
+          "top": 1061,
+          "left": 40,
+          "width": 1120,
+          "height": 230
+        },
+        "clickedRect": {
+          "top": 1061,
+          "left": 40,
+          "width": 1120,
+          "height": 230
+        }
+      },
+      "position": {
+        "x": 0.39051339285714287,
+        "y": 0.390625
+      },
+      "insideHit": {
+        "point": {
+          "x": 42,
+          "y": 1063
+        },
+        "hit": {
+          "tag": "div",
+          "id": "",
+          "classes": "mt-12 grid gap-4 md:grid-cols-3",
+          "file": "src/components/sections/Features.tsx",
+          "line": "14"
+        },
+        "scroll": {
+          "x": 0,
+          "y": 0
+        },
+        "viewport": {
+          "width": 1200,
+          "height": 3749
+        }
+      },
+      "parentHit": {
+        "point": {
+          "x": 587.0467633928571,
+          "y": 255.546875
+        },
+        "hit": {
+          "tag": "iframe",
+          "classes": "block w-full border-0 bg-white",
+          "role": null,
+          "label": null,
+          "isIframe": true
+        }
+      },
+      "signals": [
+        {
+          "type": "source-selection",
+          "selection": {
+            "path": "src/components/sections/Features.tsx",
+            "line": 14,
+            "column": 9,
+            "tagName": "div"
+          }
+        }
+      ],
+      "pointer": [
+        {
+          "x": 14.9873046875,
+          "y": 99.00048828125,
+          "tag": "section",
+          "id": "top",
+          "classes": "mx-auto grid max-w-7xl gap-16 px-6 pb-28 pt-20 lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:px-10 lg:pb-36 lg:pt-28",
+          "file": "src/components/sections/Hero.tsx",
+          "line": "10"
+        },
+        {
+          "x": 277.5712890625,
+          "y": 227.80810546875,
+          "tag": "p",
+          "id": "",
+          "classes": "mb-6 flex items-center gap-2 text-sm font-medium text-emerald-800",
+          "file": "src/components/sections/Hero.tsx",
+          "line": "12"
+        },
+        {
+          "x": 277.5712890625,
+          "y": 335.97607421875,
+          "tag": "h1",
+          "id": "",
+          "classes": "max-w-xl text-5xl font-semibold leading-[1.03] tracking-[-0.055em] text-slate-950 sm:text-6xl lg:text-7xl",
+          "file": "src/components/sections/Hero.tsx",
+          "line": "13"
+        },
+        {
+          "x": 277.5712890625,
+          "y": 470.1103515625,
+          "tag": "p",
+          "id": "",
+          "classes": "mt-7 max-w-lg text-lg leading-8 text-slate-600",
+          "file": "src/components/sections/Hero.tsx",
+          "line": "14"
+        },
+        {
+          "x": 153.21875,
+          "y": 562.1455078125,
+          "tag": "a",
+          "id": "",
+          "classes": "rounded-full bg-emerald-700 px-6 py-3.5 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-800 active:scale-[0.98]",
+          "file": "src/components/sections/Hero.tsx",
+          "line": "16"
+        },
+        {
+          "x": 14.9873046875,
+          "y": 772.0791015625,
+          "tag": "section",
+          "id": "features",
+          "classes": "border-y border-slate-200 bg-white py-24 sm:py-32",
+          "file": "src/components/sections/Features.tsx",
+          "line": "11"
+        },
+        {
+          "x": 375.95654296875,
+          "y": 965.00927734375,
+          "tag": "h2",
+          "id": "",
+          "classes": "mt-4 text-4xl font-semibold tracking-[-0.045em] sm:text-5xl",
+          "file": "src/components/sections/Features.tsx",
+          "line": "13"
+        },
+        {
+          "x": 41.97802734375,
+          "y": 1062.93408203125,
+          "tag": "div",
+          "id": "",
+          "classes": "mt-12 grid gap-4 md:grid-cols-3",
+          "file": "src/components/sections/Features.tsx",
+          "line": "14"
+        }
+      ],
+      "selected": "src/components/sections/Features.tsx:14:9:div",
+      "actual": {
+        "file": "Features.tsx",
+        "line": 14,
+        "column": 9,
+        "tag": "div"
+      },
+      "offset": {
+        "x": -0.00244140625,
+        "y": 0.0062255859375,
+        "width": -0.005126953125,
+        "height": -0.013916015625
+      },
+      "outcome": "allowed",
+      "inspection": {
+        "found": true,
+        "safeToEdit": true,
+        "filePath": "C:\\dev\\vibecheck\\.slightnudge\\repositories\\m0-control-lab\\src\\components\\sections\\Features.tsx",
+        "line": 14,
+        "column": 9,
+        "tagName": "div",
+        "className": "mt-12 grid gap-4 md:grid-cols-3",
+        "textEditable": false,
+        "textReason": "This text is generated dynamically and cannot be edited safely."
+      },
+      "verdict": "allowed",
+      "expectedMatch": true
+    }
+  ],
+  "geometry": []
+}

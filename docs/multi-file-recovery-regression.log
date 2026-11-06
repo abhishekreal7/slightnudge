@@ -1,0 +1,38 @@
+
+> slightnudge@1.0.0 test:recovery
+> tsx test/apply-client-recovery.test.ts && tsx test/apply-denial.test.ts && tsx test/apply-outcome.test.ts && tsx test/apply-review-race.test.ts && tsx test/apply-crash-recovery.test.ts && tsx test/source-operation-lock.test.ts && tsx test/token-undo.test.ts && tsx test/undo-recovery.test.ts && tsx test/undo-client-recovery.test.ts && tsx test/studio-recovery.test.ts
+
+PASS: client lost-response reconciliation, unknown outcome, read-only retry, restarted-session authorization, and changed-source result
+PASS: pre-write authorization denial, preserved review, no automatic write retry, explicit authorized Apply
+PASS: Apply outcome recovery (duplicate/concurrent requests, process restart, status auth/origin, no snapshots, outside edits, Undo, grouped receipts, project/file scope)
+PASS: 4 Apply race cases (late outside edit, normal Apply, exact Undo, discard during validation; disposable source)
+PASS: crash boundaries; no replay; exact Undo; grouped recovery; unrelated history preserved; conflict refusal; project/file scope; expiry/cache loss; history I/O failure; concurrent reconciliation
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Error: EPERM: operation not permitted, rename 'C:\Users\abhis\AppData\Local\Temp\sn-source-lock-GKbNJi\race-0\locks\32380-77b0341d-60ce-45c1-a3f8-9b66c6788595.json.tmp' -> 'C:\Users\abhis\AppData\Local\Temp\sn-source-lock-GKbNJi\race-0\locks\32380-77b0341d-60ce-45c1-a3f8-9b66c6788595.json'
+    at Object.renameSync (node:fs:1020:11)
+    at withSourceOperationLock (C:\dev\vibecheck\lib\slightnudge\source-operation-lock.ts:79:8)
+    at <anonymous> (C:\dev\vibecheck\test\helpers\source-lock-worker.ts:7:3)
+    at ModuleJob.run (node:internal/modules/esm/module_job:345:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:651:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5) {
+  errno: -4048,
+  code: 'EPERM',
+  syscall: 'rename',
+  path: 'C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-source-lock-GKbNJi\\race-0\\locks\\32380-77b0341d-60ce-45c1-a3f8-9b66c6788595.json.tmp',
+  dest: 'C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-source-lock-GKbNJi\\race-0\\locks\\32380-77b0341d-60ce-45c1-a3f8-9b66c6788595.json'
+}
+
+    at <anonymous> (C:\dev\vibecheck\test\source-operation-lock.test.ts:46:42)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v22.19.0

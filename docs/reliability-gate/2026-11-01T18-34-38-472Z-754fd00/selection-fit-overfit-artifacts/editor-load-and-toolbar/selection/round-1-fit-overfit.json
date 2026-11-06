@@ -1,0 +1,19 @@
+{
+  "round": 1,
+  "surface": "fit",
+  "suite": "overfit",
+  "requestedUrl": "http://127.0.0.1:3000/editor/m0-overfit-lab?preview=http%3A%2F%2F127.0.0.1%3A3002&view=fit",
+  "actualUrl": "http://127.0.0.1:3000/editor/m0-overfit-lab?preview=http%3A%2F%2F127.0.0.1%3A3002&view=fit",
+  "cases": [],
+  "geometry": [],
+  "events": [
+    {
+      "kind": "pageerror",
+      "message": "Unexpected end of JSON input"
+    },
+    {
+      "kind": "harness-or-setup-error",
+      "message": "SyntaxError: Unexpected end of JSON input"
+    }
+  ]
+}

@@ -1,0 +1,464 @@
+{
+  "headerMatrix": [
+    {
+      "route": "/",
+      "scenario": "allowed-127",
+      "hostHeader": "127.0.0.1:3500",
+      "extraHeaders": {},
+      "statusCode": 200,
+      "containsRealToken": true,
+      "containsTokenString": true,
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "pass": true
+    },
+    {
+      "route": "/",
+      "scenario": "allowed-localhost",
+      "hostHeader": "localhost:3500",
+      "extraHeaders": {},
+      "statusCode": 200,
+      "containsRealToken": true,
+      "containsTokenString": true,
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "pass": true
+    },
+    {
+      "route": "/",
+      "scenario": "disallowed-evil",
+      "hostHeader": "evil.localhost:3500",
+      "extraHeaders": {},
+      "statusCode": 200,
+      "containsRealToken": false,
+      "containsTokenString": false,
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "pass": true
+    },
+    {
+      "route": "/",
+      "scenario": "disallowed-attacker",
+      "hostHeader": "attacker.example",
+      "extraHeaders": {},
+      "statusCode": 200,
+      "containsRealToken": false,
+      "containsTokenString": false,
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "pass": true
+    },
+    {
+      "route": "/",
+      "scenario": "disallowed-wrongport",
+      "hostHeader": "localhost:3501",
+      "extraHeaders": {},
+      "statusCode": 200,
+      "containsRealToken": false,
+      "containsTokenString": false,
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "pass": true
+    },
+    {
+      "route": "/",
+      "scenario": "disallowed-nohost",
+      "hostHeader": null,
+      "extraHeaders": {},
+      "statusCode": 200,
+      "containsRealToken": true,
+      "containsTokenString": true,
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "pass": false
+    },
+    {
+      "route": "/",
+      "scenario": "contradictory-x-forwarded",
+      "hostHeader": "localhost:3500",
+      "extraHeaders": {
+        "X-Forwarded-Host": "evil.localhost"
+      },
+      "statusCode": 200,
+      "containsRealToken": false,
+      "containsTokenString": false,
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "pass": true
+    },
+    {
+      "route": "/",
+      "scenario": "contradictory-forwarded",
+      "hostHeader": "localhost:3500",
+      "extraHeaders": {
+        "Forwarded": "host=evil.localhost"
+      },
+      "statusCode": 200,
+      "containsRealToken": false,
+      "containsTokenString": false,
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "pass": true
+    },
+    {
+      "route": "/studio",
+      "scenario": "allowed-127",
+      "hostHeader": "127.0.0.1:3500",
+      "extraHeaders": {},
+      "statusCode": 200,
+      "containsRealToken": true,
+      "containsTokenString": true,
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "pass": true
+    },
+    {
+      "route": "/studio",
+      "scenario": "allowed-localhost",
+      "hostHeader": "localhost:3500",
+      "extraHeaders": {},
+      "statusCode": 200,
+      "containsRealToken": true,
+      "containsTokenString": true,
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "pass": true
+    },
+    {
+      "route": "/studio",
+      "scenario": "disallowed-evil",
+      "hostHeader": "evil.localhost:3500",
+      "extraHeaders": {},
+      "statusCode": 200,
+      "containsRealToken": false,
+      "containsTokenString": false,
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "pass": true
+    },
+    {
+      "route": "/studio",
+      "scenario": "disallowed-attacker",
+      "hostHeader": "attacker.example",
+      "extraHeaders": {},
+      "statusCode": 200,
+      "containsRealToken": false,
+      "containsTokenString": false,
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "pass": true
+    },
+    {
+      "route": "/studio",
+      "scenario": "disallowed-wrongport",
+      "hostHeader": "localhost:3501",
+      "extraHeaders": {},
+      "statusCode": 200,
+      "containsRealToken": false,
+      "containsTokenString": false,
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "pass": true
+    },
+    {
+      "route": "/studio",
+      "scenario": "disallowed-nohost",
+      "hostHeader": null,
+      "extraHeaders": {},
+      "statusCode": 200,
+      "containsRealToken": true,
+      "containsTokenString": true,
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "pass": false
+    },
+    {
+      "route": "/studio",
+      "scenario": "contradictory-x-forwarded",
+      "hostHeader": "localhost:3500",
+      "extraHeaders": {
+        "X-Forwarded-Host": "evil.localhost"
+      },
+      "statusCode": 200,
+      "containsRealToken": false,
+      "containsTokenString": false,
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "pass": true
+    },
+    {
+      "route": "/studio",
+      "scenario": "contradictory-forwarded",
+      "hostHeader": "localhost:3500",
+      "extraHeaders": {
+        "Forwarded": "host=evil.localhost"
+      },
+      "statusCode": 200,
+      "containsRealToken": false,
+      "containsTokenString": false,
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "pass": true
+    },
+    {
+      "route": "/api/slightnudge/token",
+      "scenario": "allowed-127",
+      "hostHeader": "127.0.0.1:3500",
+      "extraHeaders": {},
+      "statusCode": 200,
+      "containsRealToken": true,
+      "containsTokenString": false,
+      "cacheControl": "no-store",
+      "pass": true
+    },
+    {
+      "route": "/api/slightnudge/token",
+      "scenario": "allowed-localhost",
+      "hostHeader": "localhost:3500",
+      "extraHeaders": {},
+      "statusCode": 200,
+      "containsRealToken": true,
+      "containsTokenString": false,
+      "cacheControl": "no-store",
+      "pass": true
+    },
+    {
+      "route": "/api/slightnudge/token",
+      "scenario": "disallowed-evil",
+      "hostHeader": "evil.localhost:3500",
+      "extraHeaders": {},
+      "statusCode": 403,
+      "containsRealToken": false,
+      "containsTokenString": false,
+      "cacheControl": "no-store",
+      "pass": true
+    },
+    {
+      "route": "/api/slightnudge/token",
+      "scenario": "disallowed-attacker",
+      "hostHeader": "attacker.example",
+      "extraHeaders": {},
+      "statusCode": 403,
+      "containsRealToken": false,
+      "containsTokenString": false,
+      "cacheControl": "no-store",
+      "pass": true
+    },
+    {
+      "route": "/api/slightnudge/token",
+      "scenario": "disallowed-wrongport",
+      "hostHeader": "localhost:3501",
+      "extraHeaders": {},
+      "statusCode": 403,
+      "containsRealToken": false,
+      "containsTokenString": false,
+      "cacheControl": "no-store",
+      "pass": true
+    },
+    {
+      "route": "/api/slightnudge/token",
+      "scenario": "disallowed-nohost",
+      "hostHeader": null,
+      "extraHeaders": {},
+      "statusCode": 200,
+      "containsRealToken": true,
+      "containsTokenString": false,
+      "cacheControl": "no-store",
+      "pass": false
+    },
+    {
+      "route": "/api/slightnudge/token",
+      "scenario": "contradictory-x-forwarded",
+      "hostHeader": "localhost:3500",
+      "extraHeaders": {
+        "X-Forwarded-Host": "evil.localhost"
+      },
+      "statusCode": 403,
+      "containsRealToken": false,
+      "containsTokenString": false,
+      "cacheControl": "no-store",
+      "pass": true
+    },
+    {
+      "route": "/api/slightnudge/token",
+      "scenario": "contradictory-forwarded",
+      "hostHeader": "localhost:3500",
+      "extraHeaders": {
+        "Forwarded": "host=evil.localhost"
+      },
+      "statusCode": 403,
+      "containsRealToken": false,
+      "containsTokenString": false,
+      "cacheControl": "no-store",
+      "pass": true
+    }
+  ],
+  "browserAttacks": [
+    {
+      "name": "CORS token fetch",
+      "outcome": {
+        "error": "Failed to fetch"
+      },
+      "tokenLeaked": false,
+      "mutationSucceeded": false
+    },
+    {
+      "name": "Cross-origin POST apply with json",
+      "outcome": {
+        "status": 403
+      },
+      "tokenLeaked": false,
+      "mutationSucceeded": false
+    },
+    {
+      "name": "Cross-origin POST apply with text/plain (no-preflight)",
+      "outcome": {
+        "status": 403
+      },
+      "tokenLeaked": false,
+      "mutationSucceeded": false
+    }
+  ],
+  "reorderPathAttack": {
+    "argvTriggerPresent": true,
+    "slightnudgeTestUnset": true,
+    "bypassed": false,
+    "refused": true
+  },
+  "routeInventory": [
+    {
+      "route": "app/api/admin/metrics/route.ts",
+      "isMutating": false,
+      "invokesValidateMutatingRequest": false,
+      "protected": true
+    },
+    {
+      "route": "app/api/checkout/route.ts",
+      "isMutating": true,
+      "invokesValidateMutatingRequest": false,
+      "protected": false
+    },
+    {
+      "route": "app/api/checkout/simulate/route.ts",
+      "isMutating": false,
+      "invokesValidateMutatingRequest": false,
+      "protected": true
+    },
+    {
+      "route": "app/api/runs/route.ts",
+      "isMutating": true,
+      "invokesValidateMutatingRequest": false,
+      "protected": false
+    },
+    {
+      "route": "app/api/runs/[id]/report.pdf/route.ts",
+      "isMutating": false,
+      "invokesValidateMutatingRequest": false,
+      "protected": true
+    },
+    {
+      "route": "app/api/runs/[id]/route.ts",
+      "isMutating": false,
+      "invokesValidateMutatingRequest": false,
+      "protected": true
+    },
+    {
+      "route": "app/api/sites/route.ts",
+      "isMutating": true,
+      "invokesValidateMutatingRequest": false,
+      "protected": false
+    },
+    {
+      "route": "app/api/sites/[id]/verify/route.ts",
+      "isMutating": true,
+      "invokesValidateMutatingRequest": false,
+      "protected": false
+    },
+    {
+      "route": "app/api/slightnudge/apply/route.ts",
+      "isMutating": true,
+      "invokesValidateMutatingRequest": true,
+      "protected": true
+    },
+    {
+      "route": "app/api/slightnudge/assets/route.ts",
+      "isMutating": true,
+      "invokesValidateMutatingRequest": true,
+      "protected": true
+    },
+    {
+      "route": "app/api/slightnudge/inspect/route.ts",
+      "isMutating": true,
+      "invokesValidateMutatingRequest": false,
+      "protected": false
+    },
+    {
+      "route": "app/api/slightnudge/nudge/route.ts",
+      "isMutating": true,
+      "invokesValidateMutatingRequest": false,
+      "protected": false
+    },
+    {
+      "route": "app/api/slightnudge/pages/route.ts",
+      "isMutating": false,
+      "invokesValidateMutatingRequest": false,
+      "protected": true
+    },
+    {
+      "route": "app/api/slightnudge/preview/route.ts",
+      "isMutating": true,
+      "invokesValidateMutatingRequest": true,
+      "protected": true
+    },
+    {
+      "route": "app/api/slightnudge/repositories/route.ts",
+      "isMutating": true,
+      "invokesValidateMutatingRequest": true,
+      "protected": true
+    },
+    {
+      "route": "app/api/slightnudge/repositories/[id]/adapter/route.ts",
+      "isMutating": true,
+      "invokesValidateMutatingRequest": true,
+      "protected": true
+    },
+    {
+      "route": "app/api/slightnudge/repositories/[id]/docker-preview/route.ts",
+      "isMutating": true,
+      "invokesValidateMutatingRequest": true,
+      "protected": true
+    },
+    {
+      "route": "app/api/slightnudge/repositories/[id]/inspect/route.ts",
+      "isMutating": true,
+      "invokesValidateMutatingRequest": false,
+      "protected": false
+    },
+    {
+      "route": "app/api/slightnudge/repositories/[id]/preview-check/route.ts",
+      "isMutating": true,
+      "invokesValidateMutatingRequest": true,
+      "protected": true
+    },
+    {
+      "route": "app/api/slightnudge/repositories/[id]/route.ts",
+      "isMutating": false,
+      "invokesValidateMutatingRequest": false,
+      "protected": true
+    },
+    {
+      "route": "app/api/slightnudge/repositories/[id]/source/route.ts",
+      "isMutating": false,
+      "invokesValidateMutatingRequest": false,
+      "protected": true
+    },
+    {
+      "route": "app/api/slightnudge/style/route.ts",
+      "isMutating": true,
+      "invokesValidateMutatingRequest": false,
+      "protected": false
+    },
+    {
+      "route": "app/api/slightnudge/token/route.ts",
+      "isMutating": false,
+      "invokesValidateMutatingRequest": false,
+      "protected": true
+    },
+    {
+      "route": "app/api/slightnudge/undo/route.ts",
+      "isMutating": true,
+      "invokesValidateMutatingRequest": true,
+      "protected": true
+    },
+    {
+      "route": "app/api/webhooks/dodo/route.ts",
+      "isMutating": true,
+      "invokesValidateMutatingRequest": false,
+      "protected": false
+    }
+  ]
+}

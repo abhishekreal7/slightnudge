@@ -1,0 +1,32 @@
+[
+  {
+    "ref": "phase2a-merged",
+    "passed": true,
+    "exitCode": 0,
+    "output": ""
+  },
+  {
+    "ref": "phase2a-history-merged",
+    "passed": true,
+    "exitCode": 0,
+    "output": ""
+  },
+  {
+    "ref": "f7d680a",
+    "passed": true,
+    "exitCode": 0,
+    "output": ""
+  },
+  {
+    "ref": "75c13ba",
+    "passed": false,
+    "exitCode": 1,
+    "output": "test/test-override-guard.test.ts(52,17): error TS2540: Cannot assign to 'NODE_ENV' because it is a read-only property.\ntest/test-override-guard.test.ts(72,17): error TS2540: Cannot assign to 'NODE_ENV' because it is a read-only property.\ntest/test-override-guard.test.ts(89,17): error TS2540: Cannot assign to 'NODE_ENV' because it is a read-only property."
+  },
+  {
+    "ref": "9d5f1aa",
+    "passed": false,
+    "exitCode": 1,
+    "output": "test/labs/m0-control-lab/src/app/layout.tsx(20,50): error TS2304: Cannot find name 'LayoutProps'.\ntest/labs/m0-control-lab/src/app/page.tsx(1,21): error TS2307: Cannot find module '@/components/sections/FAQ' or its corresponding type declarations.\ntest/labs/m0-control-lab/src/app/page.tsx(2,26): error TS2307: Cannot find module '@/components/sections/Features' or its corresponding type declarations.\ntest/labs/m0-control-lab/src/app/page.tsx(3,24): error TS2307: Cannot find module '@/components/sections/Footer' or its corresponding type declarations.\ntest/labs/m0-control-lab/src/app/page.tsx(4,22): error TS2307: Cannot find module '@/components/sections/Hero' or its corresponding type declarations.\ntest/labs/m0-control-lab/src/app/page.tsx(5,25): error TS2307: Cannot find module '@/components/sections/Pricing' or its corresponding type declarations.\ntest/labs/m0-control-lab/src/app/page.tsx(6,30): error TS2307: Cannot find module '@/components/sections/Testimonials' or its corresponding type declarations.\ntest/labs/m0-control-lab/src/components/sections/FAQ.tsx(1,20): error TS2307: Cannot find module '@/lib/cn' or its corresponding type declarations.\ntest/labs/m0-control-lab/src/components/sections/Features.tsx(1,20): error TS2307: Cannot find module '@/lib/cn' or its corresponding type declarations.\ntest/labs/m0-overfit-lab/src/app/page.tsx(5,29): error TS2307: Cannot find module '@/components/ShellLayout' or its corresponding type declarations.\ntest/labs/m0-overfit-lab/src/app/page.tsx(6,24): error TS2307: Cannot find module '@/components/Banner' or its corresponding type declarations.\ntest/labs/m0-overfit-lab/src/app/page.tsx(7,35): error TS2307: Cannot find module '@/components/NestedGridSection' or its corresponding type declarations.\ntest/labs/m0-overfit-lab/src/app/page.tsx(8,33): error TS2307: Cannot find module '@/components/CardListSection' or its corresponding type declarations.\ntest/labs/m0-overfit-lab/src/app/page.tsx(9,31): error TS2307: Cannot find module '@/components/FooterSection' or its corresponding type declarations.\ntest/labs/m0-overfit-lab/src/app/page.tsx(11,44): error TS2307: Cannot find module '@/components/DynamicWidget' or its corresponding type declarations.\ntest/labs/m0-overfit-lab/src/components/CardListSection.tsx(1,20): error TS2307: Cannot find module '@/lib/cn' or its corresponding type declarations.\ntest/s1-auth-bypass.test.ts(15,15): error TS2540: Cannot assign to 'NODE_ENV' because it is a read-only property.\ntest/s1-auth-bypass.test.ts(40,15): error TS2540: Cannot assign to 'NODE_ENV' because it is a read-only property.\ntest/test-override-guard.test.ts(52,17): error TS2540: Cannot assign to 'NODE_ENV' because it is a read-only property.\ntest/test-override-guard.test.ts(72,17): error TS2540: Cannot assign to 'NODE_ENV' because it is a read-only property.\ntest/test-override-guard.test.ts(89,17): error TS2540: Cannot assign to 'NODE_ENV' because it is a read-only property."
+  }
+]

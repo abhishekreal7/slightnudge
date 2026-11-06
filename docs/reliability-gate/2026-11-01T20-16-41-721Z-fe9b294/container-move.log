@@ -1,0 +1,156 @@
+SETUP 1793566695279 START git ["ls-files"]
+SETUP END elapsed 37ms
+HARNESS-V3 NAVIGATION http://127.0.0.1:60233/editor
+TIMING 1793566735979 REQUEST http://127.0.0.1:60233/editor
+TIMING 1793566755021 RESPONSE 200 http://127.0.0.1:60233/editor
+TIMING 1793566757545 REQUEST http://127.0.0.1:60233/api/slightnudge/responsive
+TIMING 1793566757545 REQUEST http://127.0.0.1:60233/api/slightnudge/responsive
+TIMING 1793566757640 REQUEST http://127.0.0.1:60233/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A60233&__slightnudge_session=b198279b-d820-4224-ada2-650dc9d5aa05
+TIMING 1793566774291 RESPONSE 200 http://127.0.0.1:60233/studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A60233&__slightnudge_session=b198279b-d820-4224-ada2-650dc9d5aa05
+TIMING 1793566774311 REQUEST http://127.0.0.1:60233/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+TIMING 1793566774669 RESPONSE 200 http://127.0.0.1:60233/_next/static/chunks/app/studio/preview/%5BpageId%5D/page.js
+TIMING 1793566795212 RESPONSE 200 http://127.0.0.1:60233/api/slightnudge/responsive
+TIMING 1793566795456 RESPONSE 200 http://127.0.0.1:60233/api/slightnudge/responsive
+Container editor state Edit
+Browse
+View
+Full page
+Fit canvas
+Fit page
+10%
+25%
+50%
+75%
+100%
+150%
+200%
+Desktop
+px
+Edit
+All sizes
+sm · 640px+
+md · 768px+
+lg · 1024px+
+xl · 1280px+
+2xl · 1536px+
+All changes saved
+Save changes
+
+Live source connected
+Browser errors []
+Isolated application diagnostics ▲ Next.js 16.4.3 (webpack)
+- Local:         http://127.0.0.1:60233
+- Network:       http://127.0.0.1:60233
+✓ Ready in 674ms
+✓ Running next.config.mjs took 48ms
+
+○ Compiling /fixtures/1/page ...
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\reliability-gate\\2026-11-01T20-16-41-721Z-fe9b294\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-G9dqsb\\.next\\dev\\build-manifest.json","pid":33952,"time":1793566734280,"bytes":344}
+ GET /fixtures/1 200 in 1408ms (next.js: 551ms, application-code: 856ms)
+○ Compiling /editor/[[...project]]/page ...
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\reliability-gate\\2026-11-01T20-16-41-721Z-fe9b294\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-G9dqsb\\.next\\dev\\build-manifest.json","pid":20184,"time":1793566754258,"bytes":344}
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\reliability-gate\\2026-11-01T20-16-41-721Z-fe9b294\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-G9dqsb\\.next\\dev\\build-manifest.json","pid":33952,"time":1793566754538,"bytes":344}
+ GET /editor 200 in 1541ms (next.js: 1019ms, application-code: 522ms)
+○ Compiling /studio/preview/[pageId]/page ...
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\reliability-gate\\2026-11-01T20-16-41-721Z-fe9b294\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-G9dqsb\\.next\\dev\\build-manifest.json","pid":34136,"time":1793566770698,"bytes":344}
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\reliability-gate\\2026-11-01T20-16-41-721Z-fe9b294\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-G9dqsb\\.next\\dev\\build-manifest.json","pid":33952,"time":1793566771343,"bytes":344}
+ GET /studio/preview/fixture-1?__slightnudge_parent=http%3A%2F%2F127.0.0.1%3A60233&__slightnudge_session=b198279b-d820-4224-ada2-650dc9d5aa05 200 in 4.8s (next.js: 1813ms, application-code: 3.0s)
+○ Compiling /api/slightnudge/responsive/route ...
+⚠ ./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/responsive/route.ts
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\reliability-gate\\2026-11-01T20-16-41-721Z-fe9b294\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-G9dqsb\\.next\\dev\\build-manifest.json","pid":33952,"time":1793566789899,"bytes":344}
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\reliability-gate\\2026-11-01T20-16-41-721Z-fe9b294\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-G9dqsb\\.next\\dev\\build-manifest.json","pid":33952,"time":1793566789908,"bytes":344}
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\reliability-gate\\2026-11-01T20-16-41-721Z-fe9b294\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-G9dqsb\\.next\\dev\\build-manifest.json","pid":33952,"time":1793566789912,"bytes":344}
+ GET /api/slightnudge/pages 200 in 24.3s (next.js: 17.8s, proxy.ts: 2.6s, application-code: 3.9s)
+ POST /api/slightnudge/responsive 200 in 25.7s (next.js: 17.8s, proxy.ts: 2.6s, application-code: 5.3s)
+ POST /api/slightnudge/responsive 200 in 25.9s (next.js: 17.8s, proxy.ts: 2.6s, application-code: 5.6s)
+NEXT_MANIFEST_IO {"event":"read","file":"C:\\dev\\vibecheck\\scratch\\reliability-gate\\2026-11-01T20-16-41-721Z-fe9b294\\worktree\\scratch\\security-hardening-20261101\\os-temp\\sn-review-consent-G9dqsb\\.next\\dev\\build-manifest.json","pid":33952,"time":1793566795469,"bytes":344}
+ GET /api/slightnudge/pages 200 in 6.0s (next.js: 599ms, proxy.ts: 5.4s, application-code: 21ms)
+
+SETUP 1793566857649 START taskkill ["/pid","14520","/T","/F"]
+SETUP END elapsed 309ms
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+page.goto: Timeout 120000ms exceeded.
+Call log:
+[2m  - navigating to "http://127.0.0.1:60233/editor", waiting until "networkidle"[22m
+
+    at Proxy.<anonymous> (C:\dev\vibecheck\scratch\reliability-gate\2026-11-01T20-16-41-721Z-fe9b294\worktree\test\helpers\gate-page-v3.ts:9:66)
+    at checkContainerMove (C:\dev\vibecheck\scratch\reliability-gate\2026-11-01T20-16-41-721Z-fe9b294\worktree\test\helpers\container-move-browser.v3.ts:25:16)
+    at <anonymous> (C:\dev\vibecheck\scratch\reliability-gate\2026-11-01T20-16-41-721Z-fe9b294\worktree\test\review-consent.browser.v3.ts:215:20) {
+  log: [
+    '  - navigating to "http://127.0.0.1:60233/editor", waiting until "networkidle"'
+  ],
+  name: 'TimeoutError'
+}
+
+Node.js v22.19.0

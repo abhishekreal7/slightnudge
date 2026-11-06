@@ -1,0 +1,37 @@
+🧪 RUNNING TOKEN-LEVEL UNDO TEST SUITE
+--- Test (j): Exact-match restores byte-for-byte ---
+  ✅ [PASS] (j) Exact match restores byte for byte
+--- Test (a): Prettier reformat preserved on undo ---
+  ✅ [PASS] (a) Prettier reformat preserved on undo
+--- Test (b): Unrelated file edit preserved ---
+  ✅ [PASS] (b) Unrelated file edit preserved
+--- Test (c): Other classes on same element preserved ---
+  ✅ [PASS] (c) Other classes on same element preserved
+--- Test (d): User changed same token -> refuse with manual instructions ---
+  ✅ [PASS] (d) User changed same token refused with instructions
+--- Test (e): Element deleted -> refuse ---
+  ✅ [PASS] (e) Element deleted refused
+--- Test (f): Two identical elements ambiguous -> refuse ---
+
+--- STDERR ---
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Must refuse when element candidate is ambiguous
+
+true !== false
+
+    at <anonymous> (C:\Users\abhis\AppData\Local\Temp\mutant-m1-b2bffaee-fc26-427a-a8bd-f0b3b53f870d\test\token-undo.test.ts:184:10)
+    at ModuleJob.run (node:internal/modules/esm/module_job:413:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:660:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: true,
+  expected: false,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.13.0

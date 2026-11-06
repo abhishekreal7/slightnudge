@@ -266,6 +266,7 @@ export async function discardEditAPI(previewId: string): Promise<boolean> {
   try {
     const token = await getClientSessionToken();
     const res = await fetch(`/api/slightnudge/preview?id=${encodeURIComponent(previewId)}`, {
+      signal: AbortSignal.timeout(10000),
       method: 'DELETE',
       headers: {
         'x-slightnudge-token': token,

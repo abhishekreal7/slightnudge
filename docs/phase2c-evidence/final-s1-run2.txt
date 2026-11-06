@@ -1,0 +1,17 @@
+▶ S1: Authenticated, local-only mutating requests
+  ✔ rejects mutating request with no Origin and no token with 403 (not 404) (3398.5408ms)
+  ✔ rejects mutating request with wrong Host with 403 (57.8826ms)
+  ✔ rejects mutating request with valid Origin but missing token with 403 (19.2838ms)
+  ✔ rejects mutating request with valid Origin but invalid token with 403 (18.3689ms)
+  ✔ returns normal not-found error for fake previewId with valid token and valid Origin (42.9153ms)
+  ✔ allows missing Origin when valid token is present and proceeds to normal handling (35.4188ms)
+  ✔ completes preview, apply, and undo flow in a temp copy with valid token and Origin (2663.0025ms)
+✔ S1: Authenticated, local-only mutating requests (20461.9862ms)
+ℹ tests 7
+ℹ suites 1
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 20469.4422

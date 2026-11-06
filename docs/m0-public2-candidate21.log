@@ -1,0 +1,26 @@
+Disposable source project: https://github.com/bennyjoel/nextjs-saas-starter-lite; Next.js 14.2.35; Tailwind 3.4.19; installed source adapter; no environment files checked out.
+Source navigation: editor /studio/source-proof/edit
+Source navigation: editor /studio/source-proof/edit
+Source navigation: editor /studio/source-proof/edit
+Source navigation: project /
+Source navigation: project /
+Source proof: {"success":true,"reason":""}
+Source proof: {"success":true,"reason":"The page changed after preview. Reload and select again."}
+Source navigation: project /
+Source navigation: editor /studio/source-proof/edit
+Source proof: {"file":"src/app/page.tsx","line":72,"column":13,"expectedClass":"text-lg font-normal text-white mb-2","classes":["text-lg font-normal text-white mb-2"]}
+Source navigation: project /
+Source proof: {"success":true,"reason":"The project is still rendering an older source revision."}
+Source navigation: editor /studio/source-proof/edit
+Source navigation: project /
+Source navigation: project /
+Source proof: {"file":"src/app/page.tsx","line":72,"column":13,"expectedClass":"text-lg font-bold text-white mb-2","classes":["text-lg font-normal text-white mb-2"]}
+Source proof: {"success":false,"reason":"The project is still rendering an older source revision."}
+Source navigation: editor /studio/source-proof/edit
+Source navigation: project /
+Source navigation: project /
+Source proof: {"file":"src/app/page.tsx","line":72,"column":13,"expectedClass":"text-lg font-bold text-white mb-2","classes":["text-lg font-bold text-white mb-2"]}
+Source proof: {"success":true,"reason":"The project is still rendering an older source revision."}
+Selection 1/1: allowed — src/app/page.tsx:72:13
+Source selection workflows: 1 allowed, 0 refused, 0 wrong targets
+PASS: 1 review-consent browser cases (real API; disposable source copy)

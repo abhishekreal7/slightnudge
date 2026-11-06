@@ -1,0 +1,857 @@
+{
+  "timestamp": "2026-10-21T18:58:37.675Z",
+  "totalCases": 27,
+  "passedCases": 26,
+  "failedCases": 0,
+  "skippedCases": 1,
+  "sentinelsIntact": true,
+  "sentinels": {
+    "initial": {
+      "keep-me.txt": "d8ca20a85242bc3f07937df635c89e888d452ff0e61fa25ef459dad28ff85f61",
+      "outside.tsx": "55a4d07709eaa89f58a4bf2c9c6d7e0258e3ce2959b6be8e910f0f17b4a367ef",
+      "outside-data.json": "654cc8f1c556599b7ec3daa49ec73b9d0b60952853559d9b263cca6b5092d0b1"
+    },
+    "final": {
+      "keep-me.txt": "d8ca20a85242bc3f07937df635c89e888d452ff0e61fa25ef459dad28ff85f61",
+      "outside.tsx": "55a4d07709eaa89f58a4bf2c9c6d7e0258e3ce2959b6be8e910f0f17b4a367ef",
+      "outside-data.json": "654cc8f1c556599b7ec3daa49ec73b9d0b60952853559d9b263cca6b5092d0b1"
+    }
+  },
+  "results": [
+    {
+      "category": "cat1_absolute_outside",
+      "categoryName": "Absolute outside path",
+      "testName": "Windows Temp sentinel outside.tsx",
+      "path": "C:\\Users\\abhis\\AppData\\Local\\Temp\\p2c1-sentinels\\outside.tsx",
+      "isOutside": true,
+      "previewResult": {
+        "status": 400,
+        "body": {
+          "error": "The selected file must be inside the SlightNudge workspace."
+        },
+        "refused": true,
+        "error": "The selected file must be inside the SlightNudge workspace."
+      },
+      "undoResult": {
+        "success": false,
+        "error": "The edited file must be inside the SlightNudge workspace.",
+        "refused": true
+      },
+      "applyResult": {
+        "success": false,
+        "error": "The edited file must be inside the SlightNudge workspace.",
+        "exception": true,
+        "refused": true
+      },
+      "resolveResult": {
+        "success": false,
+        "error": "The selected file must be inside the SlightNudge workspace.",
+        "refused": true
+      },
+      "passed": true
+    },
+    {
+      "category": "cat1_absolute_outside",
+      "categoryName": "Absolute outside path",
+      "testName": "C:\\Windows\\System32\\drivers\\etc\\hosts",
+      "path": "C:\\Windows\\System32\\drivers\\etc\\hosts",
+      "isOutside": true,
+      "previewResult": {
+        "status": 400,
+        "body": {
+          "error": "The selected file must be inside the SlightNudge workspace."
+        },
+        "refused": true,
+        "error": "The selected file must be inside the SlightNudge workspace."
+      },
+      "undoResult": {
+        "success": false,
+        "error": "The edited file must be inside the SlightNudge workspace.",
+        "refused": true
+      },
+      "applyResult": {
+        "success": false,
+        "error": "The edited file must be inside the SlightNudge workspace.",
+        "exception": true,
+        "refused": true
+      },
+      "resolveResult": {
+        "success": false,
+        "error": "The selected file must be inside the SlightNudge workspace.",
+        "refused": true
+      },
+      "passed": true
+    },
+    {
+      "category": "cat1_absolute_outside",
+      "categoryName": "Absolute outside path",
+      "testName": "POSIX-style /etc/passwd",
+      "path": "/etc/passwd",
+      "isOutside": true,
+      "previewResult": {
+        "status": 400,
+        "body": {
+          "error": "The selected file must be inside the SlightNudge workspace."
+        },
+        "refused": true,
+        "error": "The selected file must be inside the SlightNudge workspace."
+      },
+      "undoResult": {
+        "success": false,
+        "error": "The edited file must be inside the SlightNudge workspace.",
+        "refused": true
+      },
+      "applyResult": {
+        "success": false,
+        "error": "ENOENT: no such file or directory, lstat 'C:\\etc'",
+        "exception": true,
+        "refused": true
+      },
+      "resolveResult": {
+        "success": false,
+        "error": "The selected file must be inside the SlightNudge workspace.",
+        "refused": true
+      },
+      "passed": true
+    },
+    {
+      "category": "cat2_dot_dot_escape",
+      "categoryName": "..\\ and ../ mixes that escape root",
+      "testName": "..\\p2c1-sentinels\\outside.tsx",
+      "path": "..\\p2c1-sentinels\\outside.tsx",
+      "isOutside": true,
+      "previewResult": {
+        "status": 400,
+        "body": {
+          "error": "The selected file must be inside the SlightNudge workspace."
+        },
+        "refused": true,
+        "error": "The selected file must be inside the SlightNudge workspace."
+      },
+      "undoResult": {
+        "success": false,
+        "error": "The edited file must be inside the SlightNudge workspace.",
+        "refused": true
+      },
+      "applyResult": {
+        "success": false,
+        "error": "The edited file must be inside the SlightNudge workspace.",
+        "exception": true,
+        "refused": true
+      },
+      "resolveResult": {
+        "success": false,
+        "error": "The selected file must be inside the SlightNudge workspace.",
+        "refused": true
+      },
+      "passed": true
+    },
+    {
+      "category": "cat2_dot_dot_escape",
+      "categoryName": "..\\ and ../ mixes that escape root",
+      "testName": "../../outside.tsx",
+      "path": "../../outside.tsx",
+      "isOutside": true,
+      "previewResult": {
+        "status": 400,
+        "body": {
+          "error": "The selected file must be inside the SlightNudge workspace."
+        },
+        "refused": true,
+        "error": "The selected file must be inside the SlightNudge workspace."
+      },
+      "undoResult": {
+        "success": false,
+        "error": "The edited file must be inside the SlightNudge workspace.",
+        "refused": true
+      },
+      "applyResult": {
+        "success": false,
+        "error": "ENOENT: no such file or directory, lstat 'C:\\Users\\abhis\\AppData\\Local\\outside.tsx'",
+        "exception": true,
+        "refused": true
+      },
+      "resolveResult": {
+        "success": false,
+        "error": "The selected file must be inside the SlightNudge workspace.",
+        "refused": true
+      },
+      "passed": true
+    },
+    {
+      "category": "cat2_dot_dot_escape",
+      "categoryName": "..\\ and ../ mixes that escape root",
+      "testName": "fixtures/../../p2c1-sentinels/outside.tsx",
+      "path": "fixtures/../../p2c1-sentinels/outside.tsx",
+      "isOutside": true,
+      "previewResult": {
+        "status": 400,
+        "body": {
+          "error": "The selected file must be inside the SlightNudge workspace."
+        },
+        "refused": true,
+        "error": "The selected file must be inside the SlightNudge workspace."
+      },
+      "undoResult": {
+        "success": false,
+        "error": "The edited file must be inside the SlightNudge workspace.",
+        "refused": true
+      },
+      "applyResult": {
+        "success": false,
+        "error": "The edited file must be inside the SlightNudge workspace.",
+        "exception": true,
+        "refused": true
+      },
+      "resolveResult": {
+        "success": false,
+        "error": "The selected file must be inside the SlightNudge workspace.",
+        "refused": true
+      },
+      "passed": true
+    },
+    {
+      "category": "cat2_dot_dot_escape",
+      "categoryName": "..\\ and ../ mixes that escape root",
+      "testName": "app/../../outside.tsx",
+      "path": "app/../../outside.tsx",
+      "isOutside": true,
+      "previewResult": {
+        "status": 400,
+        "body": {
+          "error": "The selected file must be inside the SlightNudge workspace."
+        },
+        "refused": true,
+        "error": "The selected file must be inside the SlightNudge workspace."
+      },
+      "undoResult": {
+        "success": false,
+        "error": "The edited file must be inside the SlightNudge workspace.",
+        "refused": true
+      },
+      "applyResult": {
+        "success": false,
+        "error": "ENOENT: no such file or directory, lstat 'C:\\Users\\abhis\\AppData\\Local\\Temp\\outside.tsx'",
+        "exception": true,
+        "refused": true
+      },
+      "resolveResult": {
+        "success": false,
+        "error": "The selected file must be inside the SlightNudge workspace.",
+        "refused": true
+      },
+      "passed": true
+    },
+    {
+      "category": "cat2_dot_dot_escape",
+      "categoryName": "..\\ and ../ mixes that escape root",
+      "testName": "app\\..\\..\\outside.tsx",
+      "path": "app\\..\\..\\outside.tsx",
+      "isOutside": true,
+      "previewResult": {
+        "status": 400,
+        "body": {
+          "error": "The selected file must be inside the SlightNudge workspace."
+        },
+        "refused": true,
+        "error": "The selected file must be inside the SlightNudge workspace."
+      },
+      "undoResult": {
+        "success": false,
+        "error": "The edited file must be inside the SlightNudge workspace.",
+        "refused": true
+      },
+      "applyResult": {
+        "success": false,
+        "error": "ENOENT: no such file or directory, lstat 'C:\\Users\\abhis\\AppData\\Local\\Temp\\outside.tsx'",
+        "exception": true,
+        "refused": true
+      },
+      "resolveResult": {
+        "success": false,
+        "error": "The selected file must be inside the SlightNudge workspace.",
+        "refused": true
+      },
+      "passed": true
+    },
+    {
+      "category": "cat3_unc_paths",
+      "categoryName": "UNC paths (\\\\localhost\\c$\\..., \\\\127.0.0.1\\...)",
+      "testName": "\\\\localhost\\c$\\...\\outside.tsx",
+      "path": "\\\\localhost\\c$\\Users\\abhis\\AppData\\Local\\Temp\\p2c1-sentinels\\outside.tsx",
+      "isOutside": true,
+      "previewResult": {
+        "status": 400,
+        "body": {
+          "error": "The selected file must be inside the SlightNudge workspace."
+        },
+        "refused": true,
+        "error": "The selected file must be inside the SlightNudge workspace."
+      },
+      "undoResult": {
+        "success": false,
+        "error": "The edited file must be inside the SlightNudge workspace.",
+        "refused": true
+      },
+      "applyResult": {
+        "success": false,
+        "error": "The edited file must be inside the SlightNudge workspace.",
+        "exception": true,
+        "refused": true
+      },
+      "resolveResult": {
+        "success": false,
+        "error": "The selected file must be inside the SlightNudge workspace.",
+        "refused": true
+      },
+      "passed": true
+    },
+    {
+      "category": "cat3_unc_paths",
+      "categoryName": "UNC paths (\\\\localhost\\c$\\..., \\\\127.0.0.1\\...)",
+      "testName": "\\\\127.0.0.1\\c$\\...\\outside.tsx",
+      "path": "\\\\127.0.0.1\\c$\\Users\\abhis\\AppData\\Local\\Temp\\p2c1-sentinels\\outside.tsx",
+      "isOutside": true,
+      "previewResult": {
+        "status": 400,
+        "body": {
+          "error": "The selected file must be inside the SlightNudge workspace."
+        },
+        "refused": true,
+        "error": "The selected file must be inside the SlightNudge workspace."
+      },
+      "undoResult": {
+        "success": false,
+        "error": "The edited file must be inside the SlightNudge workspace.",
+        "refused": true
+      },
+      "applyResult": {
+        "success": false,
+        "error": "The edited file must be inside the SlightNudge workspace.",
+        "exception": true,
+        "refused": true
+      },
+      "resolveResult": {
+        "success": false,
+        "error": "The selected file must be inside the SlightNudge workspace.",
+        "refused": true
+      },
+      "passed": true
+    },
+    {
+      "category": "cat3_unc_paths",
+      "categoryName": "UNC paths (\\\\localhost\\c$\\..., \\\\127.0.0.1\\...)",
+      "testName": "\\\\?\\UNC\\localhost\\c$\\...\\outside.tsx",
+      "path": "\\\\?\\UNC\\localhost\\c$\\Users\\abhis\\AppData\\Local\\Temp\\p2c1-sentinels\\outside.tsx",
+      "isOutside": true,
+      "previewResult": {
+        "status": 400,
+        "body": {
+          "error": "The selected file must be inside the SlightNudge workspace."
+        },
+        "refused": true,
+        "error": "The selected file must be inside the SlightNudge workspace."
+      },
+      "undoResult": {
+        "success": false,
+        "error": "The edited file must be inside the SlightNudge workspace.",
+        "refused": true
+      },
+      "applyResult": {
+        "success": false,
+        "error": "EISDIR: illegal operation on a directory, lstat 'UNC'",
+        "exception": true,
+        "refused": true
+      },
+      "resolveResult": {
+        "success": false,
+        "error": "The selected file must be inside the SlightNudge workspace.",
+        "refused": true
+      },
+      "passed": true
+    },
+    {
+      "category": "cat4_extended_path_prefix",
+      "categoryName": "\\\\?\\ prefix (inside and outside)",
+      "testName": "\\\\?\\ outside path",
+      "path": "\\\\?\\C:\\Users\\abhis\\AppData\\Local\\Temp\\p2c1-sentinels\\outside.tsx",
+      "isOutside": true,
+      "previewResult": {
+        "status": 400,
+        "body": {
+          "error": "The selected file must be inside the SlightNudge workspace."
+        },
+        "refused": true,
+        "error": "The selected file must be inside the SlightNudge workspace."
+      },
+      "undoResult": {
+        "success": false,
+        "error": "The edited file must be inside the SlightNudge workspace.",
+        "refused": true
+      },
+      "applyResult": {
+        "success": false,
+        "error": "EISDIR: illegal operation on a directory, lstat 'C:'",
+        "exception": true,
+        "refused": true
+      },
+      "resolveResult": {
+        "success": false,
+        "error": "The selected file must be inside the SlightNudge workspace.",
+        "refused": true
+      },
+      "passed": true
+    },
+    {
+      "category": "cat4_extended_path_prefix",
+      "categoryName": "\\\\?\\ prefix (inside and outside)",
+      "testName": "\\\\?\\ inside valid fixture path",
+      "path": "\\\\?\\C:\\Users\\abhis\\AppData\\Local\\Temp\\p2c1-step2-ws\\fixtures\\1-plain-static.tsx",
+      "isOutside": false,
+      "previewResult": {
+        "status": 400,
+        "body": {
+          "error": "The selected file must be inside the SlightNudge workspace."
+        },
+        "refused": true,
+        "error": "The selected file must be inside the SlightNudge workspace."
+      },
+      "undoResult": {
+        "success": false,
+        "error": "The edited file must be inside the SlightNudge workspace.",
+        "refused": true
+      },
+      "applyResult": {
+        "success": false,
+        "error": "EISDIR: illegal operation on a directory, lstat 'C:'",
+        "exception": true,
+        "refused": true
+      },
+      "resolveResult": {
+        "success": false,
+        "error": "The selected file must be inside the SlightNudge workspace.",
+        "refused": true
+      },
+      "passed": true
+    },
+    {
+      "category": "cat5_short_8_3_names",
+      "categoryName": "8.3 short names",
+      "testName": "C:\\PROGRA~1\\test.tsx",
+      "path": "C:\\PROGRA~1\\test.tsx",
+      "isOutside": true,
+      "previewResult": {
+        "status": 400,
+        "body": {
+          "error": "The selected file must be inside the SlightNudge workspace."
+        },
+        "refused": true,
+        "error": "The selected file must be inside the SlightNudge workspace."
+      },
+      "undoResult": {
+        "success": false,
+        "error": "The edited file must be inside the SlightNudge workspace.",
+        "refused": true
+      },
+      "applyResult": {
+        "success": false,
+        "error": "ENOENT: no such file or directory, lstat 'C:\\PROGRA~1\\test.tsx'",
+        "exception": true,
+        "refused": true
+      },
+      "resolveResult": {
+        "success": false,
+        "error": "The selected file must be inside the SlightNudge workspace.",
+        "refused": true
+      },
+      "passed": true
+    },
+    {
+      "category": "cat6_drive_letter_and_case",
+      "categoryName": "Drive-letter case and path case differences",
+      "testName": "c:\\ lowercase drive outside sentinel",
+      "path": "c:\\Users\\abhis\\AppData\\Local\\Temp\\p2c1-sentinels\\outside.tsx",
+      "isOutside": true,
+      "previewResult": {
+        "status": 400,
+        "body": {
+          "error": "The selected file must be inside the SlightNudge workspace."
+        },
+        "refused": true,
+        "error": "The selected file must be inside the SlightNudge workspace."
+      },
+      "undoResult": {
+        "success": false,
+        "error": "The edited file must be inside the SlightNudge workspace.",
+        "refused": true
+      },
+      "applyResult": {
+        "success": false,
+        "error": "The edited file must be inside the SlightNudge workspace.",
+        "exception": true,
+        "refused": true
+      },
+      "resolveResult": {
+        "success": false,
+        "error": "The selected file must be inside the SlightNudge workspace.",
+        "refused": true
+      },
+      "passed": true
+    },
+    {
+      "category": "cat6_drive_letter_and_case",
+      "categoryName": "Drive-letter case and path case differences",
+      "testName": "C:\\ uppercase drive outside sentinel",
+      "path": "C:\\Users\\abhis\\AppData\\Local\\Temp\\p2c1-sentinels\\outside.tsx",
+      "isOutside": true,
+      "previewResult": {
+        "status": 400,
+        "body": {
+          "error": "The selected file must be inside the SlightNudge workspace."
+        },
+        "refused": true,
+        "error": "The selected file must be inside the SlightNudge workspace."
+      },
+      "undoResult": {
+        "success": false,
+        "error": "The edited file must be inside the SlightNudge workspace.",
+        "refused": true
+      },
+      "applyResult": {
+        "success": false,
+        "error": "The edited file must be inside the SlightNudge workspace.",
+        "exception": true,
+        "refused": true
+      },
+      "resolveResult": {
+        "success": false,
+        "error": "The selected file must be inside the SlightNudge workspace.",
+        "refused": true
+      },
+      "passed": true
+    },
+    {
+      "category": "cat6_drive_letter_and_case",
+      "categoryName": "Drive-letter case and path case differences",
+      "testName": "FIXTURES\\1-PLAIN-STATIC.TSX (inside mixed casing)",
+      "path": "FIXTURES\\1-plain-static.tsx",
+      "isOutside": false,
+      "previewResult": {
+        "status": 400,
+        "body": {
+          "error": "That style value or breakpoint is not supported."
+        },
+        "refused": true,
+        "error": "That style value or breakpoint is not supported."
+      },
+      "undoResult": {
+        "success": false,
+        "error": "There is no visual edit to undo.",
+        "refused": true
+      },
+      "applyResult": {
+        "success": true,
+        "refused": false
+      },
+      "resolveResult": {
+        "success": true,
+        "resolved": "C:\\dev\\vibecheck\\FIXTURES\\1-plain-static.tsx"
+      },
+      "passed": true
+    },
+    {
+      "category": "cat7_trailing_dots_and_spaces",
+      "categoryName": "Trailing dots and spaces",
+      "testName": "fixtures/1-plain-static.tsx.",
+      "path": "fixtures/1-plain-static.tsx.",
+      "isOutside": false,
+      "previewResult": {
+        "status": 400,
+        "body": {
+          "error": "Only JavaScript and TypeScript source files can be edited."
+        },
+        "refused": true,
+        "error": "Only JavaScript and TypeScript source files can be edited."
+      },
+      "undoResult": {
+        "success": false,
+        "error": "That file no longer exists.",
+        "refused": true
+      },
+      "applyResult": {
+        "success": false,
+        "error": "ENOENT: no such file or directory, lstat 'C:\\Users\\abhis\\AppData\\Local\\Temp\\p2c1-step2-ws\\fixtures\\1-plain-static.tsx.'",
+        "exception": true,
+        "refused": true
+      },
+      "resolveResult": {
+        "success": false,
+        "error": "Only JavaScript and TypeScript source files can be edited.",
+        "refused": true
+      },
+      "passed": true
+    },
+    {
+      "category": "cat7_trailing_dots_and_spaces",
+      "categoryName": "Trailing dots and spaces",
+      "testName": "fixtures/1-plain-static.tsx ",
+      "path": "fixtures/1-plain-static.tsx ",
+      "isOutside": false,
+      "previewResult": {
+        "status": 400,
+        "body": {
+          "error": "Only JavaScript and TypeScript source files can be edited."
+        },
+        "refused": true,
+        "error": "Only JavaScript and TypeScript source files can be edited."
+      },
+      "undoResult": {
+        "success": false,
+        "error": "That file no longer exists.",
+        "refused": true
+      },
+      "applyResult": {
+        "success": false,
+        "error": "ENOENT: no such file or directory, lstat 'C:\\Users\\abhis\\AppData\\Local\\Temp\\p2c1-step2-ws\\fixtures\\1-plain-static.tsx '",
+        "exception": true,
+        "refused": true
+      },
+      "resolveResult": {
+        "success": false,
+        "error": "Only JavaScript and TypeScript source files can be edited.",
+        "refused": true
+      },
+      "passed": true
+    },
+    {
+      "category": "cat7_trailing_dots_and_spaces",
+      "categoryName": "Trailing dots and spaces",
+      "testName": "C:\\Users\\abhis\\AppData\\Local\\Temp\\p2c1-sentinels\\outside.tsx.",
+      "path": "C:\\Users\\abhis\\AppData\\Local\\Temp\\p2c1-sentinels\\outside.tsx.",
+      "isOutside": true,
+      "previewResult": {
+        "status": 400,
+        "body": {
+          "error": "The selected file must be inside the SlightNudge workspace."
+        },
+        "refused": true,
+        "error": "The selected file must be inside the SlightNudge workspace."
+      },
+      "undoResult": {
+        "success": false,
+        "error": "The edited file must be inside the SlightNudge workspace.",
+        "refused": true
+      },
+      "applyResult": {
+        "success": false,
+        "error": "ENOENT: no such file or directory, lstat 'C:\\Users\\abhis\\AppData\\Local\\Temp\\p2c1-sentinels\\outside.tsx.'",
+        "exception": true,
+        "refused": true
+      },
+      "resolveResult": {
+        "success": false,
+        "error": "The selected file must be inside the SlightNudge workspace.",
+        "refused": true
+      },
+      "passed": true
+    },
+    {
+      "category": "cat7_trailing_dots_and_spaces",
+      "categoryName": "Trailing dots and spaces",
+      "testName": "C:\\Users\\abhis\\AppData\\Local\\Temp\\p2c1-sentinels\\outside.tsx ",
+      "path": "C:\\Users\\abhis\\AppData\\Local\\Temp\\p2c1-sentinels\\outside.tsx ",
+      "isOutside": true,
+      "previewResult": {
+        "status": 400,
+        "body": {
+          "error": "The selected file must be inside the SlightNudge workspace."
+        },
+        "refused": true,
+        "error": "The selected file must be inside the SlightNudge workspace."
+      },
+      "undoResult": {
+        "success": false,
+        "error": "The edited file must be inside the SlightNudge workspace.",
+        "refused": true
+      },
+      "applyResult": {
+        "success": false,
+        "error": "ENOENT: no such file or directory, lstat 'C:\\Users\\abhis\\AppData\\Local\\Temp\\p2c1-sentinels\\outside.tsx '",
+        "exception": true,
+        "refused": true
+      },
+      "resolveResult": {
+        "success": false,
+        "error": "The selected file must be inside the SlightNudge workspace.",
+        "refused": true
+      },
+      "passed": true
+    },
+    {
+      "category": "cat8_alternate_data_streams",
+      "categoryName": "Alternate Data Streams (::$DATA, :stream)",
+      "testName": "fixtures/1-plain-static.tsx::$DATA",
+      "path": "fixtures/1-plain-static.tsx::$DATA",
+      "isOutside": false,
+      "previewResult": {
+        "status": 400,
+        "body": {
+          "error": "Only JavaScript and TypeScript source files can be edited."
+        },
+        "refused": true,
+        "error": "Only JavaScript and TypeScript source files can be edited."
+      },
+      "undoResult": {
+        "success": false,
+        "error": "There is no visual edit to undo.",
+        "refused": true
+      },
+      "applyResult": {
+        "success": false,
+        "error": "This source changed after the preview. Review it again before applying.",
+        "refused": true
+      },
+      "resolveResult": {
+        "success": false,
+        "error": "Only JavaScript and TypeScript source files can be edited.",
+        "refused": true
+      },
+      "passed": true
+    },
+    {
+      "category": "cat8_alternate_data_streams",
+      "categoryName": "Alternate Data Streams (::$DATA, :stream)",
+      "testName": "fixtures/1-plain-static.tsx:evil",
+      "path": "fixtures/1-plain-static.tsx:evil",
+      "isOutside": false,
+      "previewResult": {
+        "status": 400,
+        "body": {
+          "error": "Only JavaScript and TypeScript source files can be edited."
+        },
+        "refused": true,
+        "error": "Only JavaScript and TypeScript source files can be edited."
+      },
+      "undoResult": {
+        "success": false,
+        "error": "That file no longer exists.",
+        "refused": true
+      },
+      "applyResult": {
+        "success": false,
+        "error": "ENOENT: no such file or directory, lstat 'C:\\Users\\abhis\\AppData\\Local\\Temp\\p2c1-step2-ws\\fixtures\\1-plain-static.tsx:evil'",
+        "exception": true,
+        "refused": true
+      },
+      "resolveResult": {
+        "success": false,
+        "error": "Only JavaScript and TypeScript source files can be edited.",
+        "refused": true
+      },
+      "passed": true
+    },
+    {
+      "category": "cat8_alternate_data_streams",
+      "categoryName": "Alternate Data Streams (::$DATA, :stream)",
+      "testName": "C:\\Users\\abhis\\AppData\\Local\\Temp\\p2c1-sentinels\\outside.tsx::$DATA",
+      "path": "C:\\Users\\abhis\\AppData\\Local\\Temp\\p2c1-sentinels\\outside.tsx::$DATA",
+      "isOutside": true,
+      "previewResult": {
+        "status": 400,
+        "body": {
+          "error": "The selected file must be inside the SlightNudge workspace."
+        },
+        "refused": true,
+        "error": "The selected file must be inside the SlightNudge workspace."
+      },
+      "undoResult": {
+        "success": false,
+        "error": "The edited file must be inside the SlightNudge workspace.",
+        "refused": true
+      },
+      "applyResult": {
+        "success": false,
+        "error": "The edited file must be inside the SlightNudge workspace.",
+        "exception": true,
+        "refused": true
+      },
+      "resolveResult": {
+        "success": false,
+        "error": "The selected file must be inside the SlightNudge workspace.",
+        "refused": true
+      },
+      "passed": true
+    },
+    {
+      "category": "cat9_junctions_to_outside",
+      "categoryName": "Junctions pointing outside workspace",
+      "testName": "outside-junction\\outside.tsx",
+      "path": "outside-junction\\outside.tsx",
+      "isOutside": true,
+      "previewResult": {
+        "status": 400,
+        "body": {
+          "error": "That style value or breakpoint is not supported."
+        },
+        "refused": true,
+        "error": "That style value or breakpoint is not supported."
+      },
+      "undoResult": {
+        "success": false,
+        "error": "The edited file must be inside the SlightNudge workspace.",
+        "refused": true
+      },
+      "applyResult": {
+        "success": false,
+        "error": "The edited file must be inside the SlightNudge workspace.",
+        "exception": true,
+        "refused": true
+      },
+      "resolveResult": {
+        "success": true,
+        "resolved": "C:\\dev\\vibecheck\\outside-junction\\outside.tsx"
+      },
+      "passed": true
+    },
+    {
+      "category": "cat10_symlinks_to_outside",
+      "categoryName": "Symlinks pointing outside workspace",
+      "testName": "outside-symlink\\outside.tsx",
+      "path": "outside-symlink\\outside.tsx",
+      "skipped": true,
+      "skipReason": "Command failed: cmd /c mklink /D \"C:\\Users\\abhis\\AppData\\Local\\Temp\\p2c1-step2-ws\\outside-symlink\" \"C:\\Users\\abhis\\AppData\\Local\\Temp\\p2c1-sentinels\"\nYou do not have sufficient privilege to perform this operation."
+    },
+    {
+      "category": "cat11_prefix_only_match",
+      "categoryName": "Prefix-only match (<workspace>-evil vs <workspace>)",
+      "testName": "C:\\Users\\abhis\\AppData\\Local\\Temp\\p2c1-step2-ws-evil\\evil.tsx",
+      "path": "C:\\Users\\abhis\\AppData\\Local\\Temp\\p2c1-step2-ws-evil\\evil.tsx",
+      "isOutside": true,
+      "previewResult": {
+        "status": 400,
+        "body": {
+          "error": "The selected file must be inside the SlightNudge workspace."
+        },
+        "refused": true,
+        "error": "The selected file must be inside the SlightNudge workspace."
+      },
+      "undoResult": {
+        "success": false,
+        "error": "The edited file must be inside the SlightNudge workspace.",
+        "refused": true
+      },
+      "applyResult": {
+        "success": false,
+        "error": "The edited file must be inside the SlightNudge workspace.",
+        "exception": true,
+        "refused": true
+      },
+      "resolveResult": {
+        "success": false,
+        "error": "The selected file must be inside the SlightNudge workspace.",
+        "refused": true
+      },
+      "passed": true
+    }
+  ]
+}

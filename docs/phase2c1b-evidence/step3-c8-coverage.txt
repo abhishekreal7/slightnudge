@@ -1,0 +1,245 @@
+﻿TAP version 13
+# Symlink creation requires elevated privileges (marked UNVERIFIED per instructions)
+# Subtest: M5: Pre-write containment check & helper verification
+    # Subtest: Unit tests for assertWriteTargetInsideWorkspace
+        # Subtest: refuses path with .. segments escaping workspace root
+        ok 1 - refuses path with .. segments escaping workspace root
+          ---
+          duration_ms: 2.0271
+          type: 'test'
+          ...
+        # Subtest: refuses relative .. path traversal
+        ok 2 - refuses relative .. path traversal
+          ---
+          duration_ms: 0.6469
+          type: 'test'
+          ...
+        # Subtest: refuses UNC paths
+        ok 3 - refuses UNC paths
+          ---
+          duration_ms: 0.1615
+          type: 'test'
+          ...
+        # Subtest: refuses \\\\?\\ paths pointing outside workspace
+        ok 4 - refuses \\\\?\\ paths pointing outside workspace
+          ---
+          duration_ms: 0.1183
+          type: 'test'
+          ...
+        # Subtest: refuses 8.3 short names pointing outside workspace
+        ok 5 - refuses 8.3 short names pointing outside workspace
+          ---
+          duration_ms: 0.4852
+          type: 'test'
+          ...
+        # Subtest: refuses junction to an outside directory
+        ok 6 - refuses junction to an outside directory
+          ---
+          duration_ms: 2.0654
+          type: 'test'
+          ...
+        # Subtest: verifies or marks symlink test UNVERIFIED if admin rights are missing
+        ok 7 - verifies or marks symlink test UNVERIFIED if admin rights are missing
+          ---
+          duration_ms: 1.1914
+          type: 'test'
+          ...
+        # Subtest: accepts valid path inside workspace
+        ok 8 - accepts valid path inside workspace
+          ---
+          duration_ms: 0.9713
+          type: 'test'
+          ...
+        1..8
+    ok 1 - Unit tests for assertWriteTargetInsideWorkspace
+      ---
+      duration_ms: 8.5068
+      type: 'suite'
+      ...
+    # Subtest: Wiring test for TOCTOU pre-write swap via hook
+        # Subtest: refuses undo and preserves outside sentinel when target is swapped for junction before write
+        ok 1 - refuses undo and preserves outside sentinel when target is swapped for junction before write
+          ---
+          duration_ms: 15.2977
+          type: 'test'
+          ...
+        1..1
+    ok 2 - Wiring test for TOCTOU pre-write swap via hook
+      ---
+      duration_ms: 15.43
+      type: 'suite'
+      ...
+    1..2
+ok 1 - M5: Pre-write containment check & helper verification
+  ---
+  duration_ms: 33.0565
+  type: 'suite'
+  ...
+# ≡ƒº¬ RUNNING PRE-WRITE HOOK GUARD SUITE
+# Γ£à ALL PRE-WRITE HOOK GUARD TESTS PASSED
+# Subtest: test\\prewrite-hook-guard.test.ts
+ok 2 - test\\prewrite-hook-guard.test.ts
+  ---
+  duration_ms: 1062.8872
+  type: 'test'
+  ...
+# ≡ƒº¬ RUNNING TOKEN-LEVEL UNDO TEST SUITE
+# --- Test (j): Exact-match restores byte-for-byte ---
+#   Γ£à [PASS] (j) Exact match restores byte for byte
+# --- Test (a): Prettier reformat preserved on undo ---
+#   Γ£à [PASS] (a) Prettier reformat preserved on undo
+# --- Test (b): Unrelated file edit preserved ---
+#   Γ£à [PASS] (b) Unrelated file edit preserved
+# --- Test (c): Other classes on same element preserved ---
+#   Γ£à [PASS] (c) Other classes on same element preserved
+# --- Test (d): User changed same token -> refuse with manual instructions ---
+#   Γ£à [PASS] (d) User changed same token refused with instructions
+# --- Test (e): Element deleted -> refuse ---
+#   Γ£à [PASS] (e) Element deleted refused
+# --- Test (f): Two identical elements ambiguous -> refuse ---
+#   Γ£à [PASS] (f) Two identical elements ambiguous refused
+# --- Test (g): File deleted -> clear error ---
+#   Γ£à [PASS] (g) File deleted returned clear error
+# --- Test (h): Stacked edits on one element ---
+#   Γ£à [PASS] (h) Stacked edits on one element verified
+# --- Test (i): Path escaping project root refused ---
+#   Γ£à [PASS] (i) Path escaping project root refused
+# --- Test (k): Atomic write failure leaves file unchanged and clean ---
+#   Γ£à [PASS] (k) Atomic write failure leaves file unchanged and clean
+# ≡ƒÄë ALL 12 TOKEN-LEVEL UNDO TESTS PASSED!
+# Subtest: test\\token-undo.test.ts
+ok 3 - test\\token-undo.test.ts
+  ---
+  duration_ms: 21020.8431
+  type: 'test'
+  ...
+# Subtest: Undo Refusals & Safety Mutants Battery
+    # Subtest: M3: refuses undo when element already contains a removed token (user restored it)
+    ok 1 - M3: refuses undo when element already contains a removed token (user restored it)
+      ---
+      duration_ms: 866.5086
+      type: 'test'
+      ...
+    # Subtest: M6: refuses undo when history record contains tampered malicious tokens
+    ok 2 - M6: refuses undo when history record contains tampered malicious tokens
+      ---
+      duration_ms: 1406.0417
+      type: 'test'
+      ...
+    # Subtest: Branch 1: path-containment catch refuses escaping path
+    ok 3 - Branch 1: path-containment catch refuses escaping path
+      ---
+      duration_ms: 10.5483
+      type: 'test'
+      ...
+    # Subtest: Branch 2: interrupted-undo recovery succeeds when status is undoing and file equals before
+    ok 4 - Branch 2: interrupted-undo recovery succeeds when status is undoing and file equals before
+      ---
+      duration_ms: 25.4052
+      type: 'test'
+      ...
+    # Subtest: Branch 3: textContent refusal when file changed after visual edit
+    ok 5 - Branch 3: textContent refusal when file changed after visual edit
+      ---
+      duration_ms: 18.9899
+      type: 'test'
+      ...
+    # Subtest: Branch 4: imageSource refusal when file changed after visual edit
+    ok 6 - Branch 4: imageSource refusal when file changed after visual edit
+      ---
+      duration_ms: 17.4073
+      type: 'test'
+      ...
+    # Subtest: Branch 5: non-className fallback refusal when neither textContent nor imageSource
+    ok 7 - Branch 5: non-className fallback refusal when neither textContent nor imageSource
+      ---
+      duration_ms: 16.7729
+      type: 'test'
+      ...
+    # Subtest: Branch 6: existing-file parse failure refuses cleanly
+    ok 8 - Branch 6: existing-file parse failure refuses cleanly
+      ---
+      duration_ms: 1854.1263
+      type: 'test'
+      ...
+    # Subtest: Branch 7: multiple candidate elements without unique id refuses ambiguity
+    ok 9 - Branch 7: multiple candidate elements without unique id refuses ambiguity
+      ---
+      duration_ms: 1786.9267
+      type: 'test'
+      ...
+    # Subtest: Branch 8: element inside repeating list refuses
+    ok 10 - Branch 8: element inside repeating list refuses
+      ---
+      duration_ms: 1849.272
+      type: 'test'
+      ...
+    # Subtest: Branch 9: component used multiple times refuses
+    ok 11 - Branch 9: component used multiple times refuses
+      ---
+      duration_ms: 1535.0772
+      type: 'test'
+      ...
+    # Subtest: Branch 10: element inside conditional expression refuses
+    ok 12 - Branch 10: element inside conditional expression refuses
+      ---
+      duration_ms: 3040.0918
+      type: 'test'
+      ...
+    # Subtest: Branch 11: element inside an if statement refuses
+    ok 13 - Branch 11: element inside an if statement refuses
+      ---
+      duration_ms: 2265.3945
+      type: 'test'
+      ...
+    # Subtest: Branch 12: same-line sibling ambiguity refuses
+    ok 14 - Branch 12: same-line sibling ambiguity refuses
+      ---
+      duration_ms: 1704.8886
+      type: 'test'
+      ...
+    # Subtest: Branch 13: className attribute missing refuses
+    ok 15 - Branch 13: className attribute missing refuses
+      ---
+      duration_ms: 1591.945
+      type: 'test'
+      ...
+    # Subtest: Branch 14: dynamic or template-literal className refuses
+    ok 16 - Branch 14: dynamic or template-literal className refuses
+      ---
+      duration_ms: 1611.7342
+      type: 'test'
+      ...
+    # Subtest: Branch 15: re-parse failure after substitution refuses
+    ok 17 - Branch 15: re-parse failure after substitution refuses
+      ---
+      duration_ms: 3628.2155
+      type: 'test'
+      ...
+    # Subtest: Branch 16: atomicWrite I/O error resets status to applied
+    ok 18 - Branch 16: atomicWrite I/O error resets status to applied
+      ---
+      duration_ms: 1622.0255
+      type: 'test'
+      ...
+    1..18
+ok 4 - Undo Refusals & Safety Mutants Battery
+  ---
+  duration_ms: 24854.7883
+  type: 'suite'
+  ...
+1..4
+# tests 29
+# suites 4
+# pass 29
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 26239.9369
+-----------------|---------|----------|---------|---------|-----------------------------------------
+File             | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s                       
+-----------------|---------|----------|---------|---------|-----------------------------------------
+All files        |   71.24 |     74.4 |      64 |   71.24 |                                         
+ edit-history.ts |   71.24 |     74.4 |      64 |   71.24 | ...-857,880-881,894-895,911-916,922-939 
+-----------------|---------|----------|---------|---------|-----------------------------------------

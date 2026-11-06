@@ -1,0 +1,68 @@
+GATE evidence C:\dev\vibecheck\docs\reliability-gate\2026-11-01T17-49-59-049Z-94a0508
+PRODUCT 94a05082435520c0d948c2922dd670d586b3bf2a TESTS 94a05082435520c0d948c2922dd670d586b3bf2a
+No test assertions or limits changed; same HEAD tests at every historical product ref.
+
+COMMAND prepare-lab-adapters: node --import tsx --input-type=module -e const {installNextSourceAdapter}=await import('./lib/slightnudge/next-source-adapter.ts');for(const id of ['m0-control-lab','m0-overfit-lab'])await installNextSourceAdapter(id);console.log('Temp adapters prepared');
+Temp adapters prepared
+SERVER 3000 PID 4496 C:\dev\vibecheck\scratch\reliability-gate\2026-11-01T17-49-59-049Z-94a0508\worktree
+SERVER 3001 PID 21216 C:\dev\vibecheck\scratch\reliability-gate\2026-11-01T17-49-59-049Z-94a0508\worktree\.slightnudge\repositories\m0-control-lab
+SERVER 3002 PID 17372 C:\dev\vibecheck\scratch\reliability-gate\2026-11-01T17-49-59-049Z-94a0508\worktree\.slightnudge\repositories\m0-overfit-lab
+WARMUP m0-control-lab full: 64.7s
+WARMUP m0-control-lab fit: 7.9s
+WARMUP m0-overfit-lab full: 20.78s
+WARMUP m0-overfit-lab fit: 3.64s
+
+COMMAND selection-full-regression: node --import tsx test/m0-regression.reliability.test.ts
+NAVIGATION http://127.0.0.1:3000/editor/m0-control-lab?preview=http%3A%2F%2F127.0.0.1%3A3001&view=full
+GATE_BROWSER_PAGE_ERROR http://127.0.0.1:3000/editor/m0-control-lab?preview=http%3A%2F%2F127.0.0.1%3A3001&view=full
+SyntaxError: Unexpected end of JSON input
+    at JSON.parse (<anonymous>)
+    at loadManifest (file://C:\dev\vibecheck\node_modules\next\dist\server\load-manifest.external.js:57:25)
+    at loadManifestFromRelativePath (file://C:\dev\vibecheck\node_modules\next\dist\server\load-manifest.external.js:110:12)
+    at AppPageRouteModule.loadManifests (file://C:\dev\vibecheck\node_modules\next\dist\compiled\next-server\app-page.runtime.dev.js:367:60954)
+    at <unknown> (file://C:\dev\vibecheck\node_modules\next\dist\compiled\next-server\app-page.runtime.dev.js:367:71213)
+    at NextTracerImpl.trace (file://C:\dev\vibecheck\node_modules\next\dist\server\lib\trace\tracer.js:196:72)
+    at AppPageRouteModule.prepareImpl (file://C:\dev\vibecheck\node_modules\next\dist\compiled\next-server\app-page.runtime.dev.js:367:71118)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async handleRequest (webpack-internal:///(rsc)/../../../../node_modules/next/dist/build/templates/app-page-runtime.js:187:31)
+    at async DevServer.renderToResponseWithComponentsImpl (file://C:\dev\vibecheck\node_modules\next\dist\server\base-server.js:1765:9)
+    at async DevServer.renderPageComponent (file://C:\dev\vibecheck\node_modules\next\dist\server\base-server.js:1824:24)
+    at async DevServer.renderToResponseImpl (file://C:\dev\vibecheck\node_modules\next\dist\server\base-server.js:1867:36)
+    at async DevServer.pipeImpl (file://C:\dev\vibecheck\node_modules\next\dist\server\base-server.js:1286:25)
+    at async NextNodeServer.handleCatchallRenderRequest (file://C:\dev\vibecheck\node_modules\next\dist\server\next-server.js:340:17)
+    at async DevServer.handleRequestImpl (file://C:\dev\vibecheck\node_modules\next\dist\server\base-server.js:1008:17)
+    at async (file://C:\dev\vibecheck\node_modules\next\dist\server\dev\next-dev-server.js:384:20)
+    at async Span.traceAsyncFn (file://C:\dev\vibecheck\node_modules\next\dist\trace\trace.js:168:20)
+    at async DevServer.handleRequest (file://C:\dev\vibecheck\node_modules\next\dist\server\dev\next-dev-server.js:380:24)
+    at async invokeRender (file://C:\dev\vibecheck\node_modules\next\dist\server\lib\router-server.js:363:21)
+    at async handleRequest (file://C:\dev\vibecheck\node_modules\next\dist\server\lib\router-server.js:567:24)
+    at async requestHandlerImpl (file://C:\dev\vibecheck\node_modules\next\dist\server\lib\router-server.js:636:13)
+    at async Server.requestListener (file://C:\dev\vibecheck\node_modules\next\dist\server\lib\start-server.js:210:13)
+
+workflow | real or mocked | pass/fail | seconds
+warmup-m0-control-lab-full | REAL | PASS | 64.7
+warmup-m0-control-lab-fit | REAL | PASS | 7.9
+warmup-m0-overfit-lab-full | REAL | PASS | 20.78
+warmup-m0-overfit-lab-fit | REAL | PASS | 3.64
+selection-full-regression | REAL | FAIL | 20.3
+selection-full-overfit | REAL | NOT RUN | 0
+selection-fit-regression | REAL | NOT RUN | 0
+selection-fit-overfit | REAL | NOT RUN | 0
+shared-instances-four | REAL | NOT RUN | 0
+movement | REAL | NOT RUN | 0
+state-and-transitions | REAL | NOT RUN | 0
+responsive | REAL | NOT RUN | 0
+responsive-imported | REAL | NOT RUN | 0
+appearance-layout | REAL | NOT RUN | 0
+images-local | REAL | NOT RUN | 0
+images-imported | REAL | NOT RUN | 0
+component-actions-local | REAL + MOCKED failure injection | NOT RUN | 0
+component-actions-imported | REAL + MOCKED failure injection | NOT RUN | 0
+icon-replacement | REAL | NOT RUN | 0
+icon-properties | REAL | NOT RUN | 0
+section-order | REAL | NOT RUN | 0
+container-move | REAL | NOT RUN | 0
+text-editing | REAL | NOT RUN | 0
+history | REAL | NOT RUN | 0
+recovery | REAL + MOCKED failure injection | NOT RUN | 0
+GATE FAIL; evidence C:\dev\vibecheck\docs\reliability-gate\2026-11-01T17-49-59-049Z-94a0508

@@ -1,0 +1,20 @@
+HARNESS-V3 OP 1793598757315 START click getByRole('region', { name: 'Component properties', exact: true }).getByRole('button', { name: 'Change', exact: true })
+HARNESS-V3 OP 1793598757831 END click getByRole('region', { name: 'Component properties', exact: true }).getByRole('button', { name: 'Change', exact: true })
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: A delayed editor control must not route into the website
+
+null !== 'host'
+
+    at <anonymous> (C:\dev\vibecheck\test\gate-harness-routing.test.ts:20:9) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: null,
+  expected: 'host',
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v22.19.0

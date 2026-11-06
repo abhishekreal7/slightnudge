@@ -1,0 +1,48 @@
+====================================================
+🧪 RUNNING REORDER SAFETY & SAME-LINE RESOLUTION TESTS
+====================================================
+
+--- 1. Same-line Element Resolution (Column + Tag Name) ---
+  ✅ [PASS] Same-line without column does not succeed
+  ✅ [PASS] Same-line without column refuses safely
+  ✅ [PASS] Refusal exact message: "I can't tell which element on this line you mean. Nothing was changed."
+  ✅ [PASS] Targets First button using col 7 + tagName
+  ✅ [PASS] First button correctly swapped later
+  ✅ [PASS] Targets Second button using col 52 + tagName
+  ✅ [PASS] Second button correctly swapped earlier
+  ✅ [PASS] Non-matching column refuses
+  ✅ [PASS] Non-matching column returns exact refusal message
+
+--- 2. Multi-slot Reorder Safety (Loops, Conditionals, Permutation) ---
+  ✅ [PASS] Reorder across map() list refused
+  ✅ [PASS] map() list refused safely
+  ✅ [PASS] Reorder across conditional element refused
+  ✅ [PASS] Conditional element refused safely
+  ✅ [PASS] Permutation swap succeeded
+  ✅ [PASS] Unchanged sibling item-c has identical bytes
+  ✅ [PASS] Whitespace and all comments are preserved byte-for-byte
+  ✅ [PASS] Order is pure permutation (item-b before item-a)
+
+--- 3. Preview Route targetIndex Validation ---
+  ✅ [PASS] targetIndex NaN returns status 400
+  ✅ [PASS] targetIndex float (1.5) returns status 400
+  ✅ [PASS] targetIndex negative (-2) returns status 400
+
+--- 4. Interaction Safety Tests (Failed Preview, Rapid Drag, Alt+Drag, Resize) ---
+  ✅ [PASS] Failed preview returns error status 422
+  ✅ [PASS] Failed preview returns informative error message
+  ✅ [PASS] Rapid drag: First reorder succeeds
+  ✅ [PASS] Rapid drag: Second immediate reorder succeeds
+  ✅ [PASS] Rapid drag: Final order is item-2, item-3, item-1 without corruption
+  ✅ [PASS] Alt+drag (spacing nudge down) succeeds
+  ✅ [PASS] Alt+drag nudged margin from mt-1 to mt-1.5
+  ✅ [PASS] Undo Alt+drag (nudge back up) succeeds
+  ✅ [PASS] Undo restores original mt-1 spacing cleanly
+  ✅ [PASS] Heading resize (width update) succeeds
+  ✅ [PASS] Resized heading contains new width class w-full
+  ✅ [PASS] Heading resize leaves typography classes (text-2xl, font-bold, text color) 100% unchanged
+
+====================================================
+🎉 ALL 32/32 REORDER & VALIDATION TESTS PASSED!
+====================================================
+

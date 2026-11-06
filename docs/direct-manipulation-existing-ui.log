@@ -1,0 +1,46 @@
+Move screenshot: C:\Users\abhis\AppData\Local\Temp\slightnudge-move-control.png
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for getByRole('button', { name: 'Move element', exact: true })
+    - locator resolved to <button disabled type="button" aria-expanded="false" data-source-column="9" data-source-line="1248" aria-label="Move element" data-source-file="app/studio/page.tsx" aria-controls="selection-move-controls" class="review-controls_moveTrigger__9o_3v" aria-keyshortcuts="ArrowUp ArrowDown ArrowLeft ArrowRight" title="Adjust spacing with the arrow controls or keyboard arrow keys">…</button>
+  - attempting click action
+    2 × waiting for element to be visible, enabled and stable
+      - element is not enabled
+    - retrying click action
+    - waiting 20ms
+    2 × waiting for element to be visible, enabled and stable
+      - element is not enabled
+    - retrying click action
+      - waiting 100ms
+    56 × waiting for element to be visible, enabled and stable
+       - element is not enabled
+     - retrying click action
+       - waiting 500ms
+
+    at checkStudioResize (C:\dev\vibecheck\test\helpers\studio-resize-browser.ts:96:16)
+    at async <anonymous> (C:\dev\vibecheck\test\review-consent.browser.ts:106:14) {
+  log: [
+    "  - waiting for getByRole('button', { name: 'Move element', exact: true })",
+    '    - locator resolved to <button disabled type="button" aria-expanded="false" data-source-column="9" data-source-line="1248" aria-label="Move element" data-source-file="app/studio/page.tsx" aria-controls="selection-move-controls" class="review-controls_moveTrigger__9o_3v" aria-keyshortcuts="ArrowUp ArrowDown ArrowLeft ArrowRight" title="Adjust spacing with the arrow controls or keyboard arrow keys">…</button>',
+    '  - attempting click action',
+    '    2 × waiting for element to be visible, enabled and stable',
+    '      - element is not enabled',
+    '    - retrying click action',
+    '    - waiting 20ms',
+    '    2 × waiting for element to be visible, enabled and stable',
+    '      - element is not enabled',
+    '    - retrying click action',
+    '      - waiting 100ms',
+    '    56 × waiting for element to be visible, enabled and stable',
+    '       - element is not enabled',
+    '     - retrying click action',
+    '       - waiting 500ms'
+  ],
+  name: 'TimeoutError'
+}
+
+Node.js v22.19.0

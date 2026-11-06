@@ -1,0 +1,46 @@
+TAP version 13
+# Subtest: S5: Verify Tailwind compilation before write
+    # Subtest: refuses applying an edit with a bogus non-compiling class and leaves file unchanged
+    not ok 1 - refuses applying an edit with a bogus non-compiling class and leaves file unchanged
+      ---
+      duration_ms: 37.7741
+      type: 'test'
+      location: 'C:\\dev\\vibecheck\\test\\s5-tailwind-compile.test.ts:14:3'
+      failureType: 'testCodeFailure'
+      error: |-
+        Applying a bogus class MUST fail
+        
+        true !== false
+        
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: false
+      actual: true
+      operator: 'strictEqual'
+      stack: |-
+        TestContext.<anonymous> (C:\dev\vibecheck\test\s5-tailwind-compile.test.ts:35:14)
+        Test.runInAsyncScope (node:async_hooks:214:14)
+        Test.run (node:internal/test_runner/test:1047:25)
+        async Promise.all (index 0)
+        async Suite.run (node:internal/test_runner/test:1442:7)
+        async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+      ...
+    1..1
+not ok 1 - S5: Verify Tailwind compilation before write
+  ---
+  duration_ms: 38.7478
+  type: 'suite'
+  location: 'C:\\dev\\vibecheck\\test\\s5-tailwind-compile.test.ts:7:1'
+  failureType: 'subtestsFailed'
+  error: '1 subtest failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+1..1
+# tests 1
+# suites 1
+# pass 0
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 233.5695

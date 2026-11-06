@@ -1,0 +1,49 @@
+docs/phase2b-review-evidence/step2-audit.ts(103,17): error TS2540: Cannot assign to 'NODE_ENV' because it is a read-only property.
+docs/phase2b-review-evidence/step4-regression.ts(176,51): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+docs/phase2b-review-evidence/step4-regression.ts(283,51): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+scratch/evaluate-40-detailed.ts(3,80): error TS2307: Cannot find module './lib/slightnudge/ast-nudger' or its corresponding type declarations.
+scratch/evaluate-40-detailed.ts(180,17): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{ REPRODUCED: number; PARTIAL: number; REFUSED: number; UNSUPPORTED: number; }'.
+  No index signature with a parameter of type 'string' was found on type '{ REPRODUCED: number; PARTIAL: number; REFUSED: number; UNSUPPORTED: number; }'.
+scratch/test-engine-on-samples.ts(3,80): error TS2307: Cannot find module './lib/slightnudge/ast-nudger' or its corresponding type declarations.
+scratch/test-step1c-adversarial.ts(168,7): error TS2353: Object literal may only specify known properties, and 'changeCount' does not exist in type '{ draft?: boolean | undefined; sourceOrder?: number[] | undefined; filePath: string; before: string; after: string; summary: string; oldValue: string; newValue: string; previewType?: "className" | "imageSource" | "reorder" | "textContent" | undefined; ... 9 more ...; sourcePath?: string | undefined; }'.
+scratch/test-step1c-adversarial.ts(172,54): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+scratch/test-tw3-direct.ts(44,27): error TS7031: Binding element 'addUtilities' implicitly has an 'any' type.
+scratch/test-tw3-direct.ts(72,27): error TS7006: Parameter 'r' implicitly has an 'any' type.
+test/account-isolation.test.ts(12,106): error TS2540: Cannot assign to 'NODE_ENV' because it is a read-only property.
+test/account-isolation.test.ts(22,15): error TS2540: Cannot assign to 'NODE_ENV' because it is a read-only property.
+test/account-isolation.test.ts(32,143): error TS2540: Cannot assign to 'NODE_ENV' because it is a read-only property.
+test/button-editing.test.ts(26,90): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+test/container-move.test.ts(23,165): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+test/container-move.test.ts(47,131): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+test/imported-draft.test.ts(33,141): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+test/production-boundaries.test.ts(12,15): error TS2540: Cannot assign to 'NODE_ENV' because it is a read-only property.
+test/production-boundaries.test.ts(26,15): error TS2540: Cannot assign to 'NODE_ENV' because it is a read-only property.
+test/production-boundaries.test.ts(30,52): error TS2704: The operand of a 'delete' operator cannot be a read-only property.
+test/production-boundaries.test.ts(30,91): error TS2540: Cannot assign to 'NODE_ENV' because it is a read-only property.
+test/responsive-tailwind3.test.ts(12,9): error TS2741: Property 'NODE_ENV' is missing in type '{ CI: string; }' but required in type 'ProcessEnv'.
+test/section-order.test.ts(20,102): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+test/section-order.test.ts(27,123): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+test/section-order.test.ts(30,13): error TS2532: Object is possibly 'undefined'.
+test/section-order.test.ts(43,13): error TS2532: Object is possibly 'undefined'.
+test/source-rendered-bridge.test.ts(57,45): error TS2540: Cannot assign to 'className' because it is a read-only property.

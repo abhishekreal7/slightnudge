@@ -1,0 +1,13 @@
+diff --git a/lib/slightnudge/auth.ts b/lib/slightnudge/auth.ts
+index 6fed4ec..c9c9e89 100644
+--- a/lib/slightnudge/auth.ts
++++ b/lib/slightnudge/auth.ts
+@@ -93,7 +93,7 @@ export function timingSafeEqualStrings(a: string | null | undefined, b: string):
+  */
+ export function validateMutatingRequest(request: Request): { valid: true } | { valid: false; response: NextResponse } {
+   // Allow bypass ONLY in isolated test mode when running the legacy reorder-safety test in Node
+-  if (process.env.SLIGHTNUDGE_TEST === '1' && process.env.NODE_ENV !== 'production' && process.argv.some(arg => arg.includes('reorder-safety'))) {
++  if (process.argv.some(arg => arg.includes('reorder-safety'))) {
+     return { valid: true };
+   }
+ 

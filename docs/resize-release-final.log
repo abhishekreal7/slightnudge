@@ -1,0 +1,20 @@
+Resize API: 200 {"found":true,"safeToEdit":true,"filePath":"C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-review-consent-a49AMi\\fixtures\\1-plain-static.tsx","line":8,"column":370,"tagName":"h1","className":"ml-2.5 mt-1 text-2xl","textEditable":true}
+Resize API: 200 {"changed":true,"id":"ccb0310b-6fcc-4354-b486-cf07bdb17d91","filePath":"fixtures\\1-plain-static.tsx","line":8,"summary":"none → max-w-4xl","oldValue":"ml-2.5 mt-1 text-2xl","newValue":"max-w-4xl","previewType":"className","oldClassName":"ml-2.5 mt-1 text-2xl","newClassName":"ml-2.5 mt-1 text-2xl max-w-4xl","success":true}
+Resize API: 200 {"found":true,"safeToEdit":true,"filePath":"C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-review-consent-a49AMi\\fixtures\\1-plain-static.tsx","line":8,"column":370,"tagName":"h1","className":"ml-2.5 mt-1 text-2xl","textEditable":true}
+Resize API: 200 {"changed":true,"id":"31331fb3-015e-4704-a9f7-3a03dabb114c","filePath":"fixtures\\1-plain-static.tsx","line":8,"summary":"none → max-w-lg","oldValue":"ml-2.5 mt-1 text-2xl","newValue":"max-w-lg","previewType":"className","oldClassName":"ml-2.5 mt-1 text-2xl","newClassName":"ml-2.5 mt-1 text-2xl max-w-lg","success":true}
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: false == true
+    at checkStudioResize (C:\dev\vibecheck\test\helpers\studio-resize-browser.ts:39:10)
+    at async <anonymous> (C:\dev\vibecheck\test\review-consent.browser.ts:90:14) {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v22.19.0

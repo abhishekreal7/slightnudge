@@ -1,0 +1,20 @@
+{
+  "head": "ea42e26d8b11f8ce581a95d4dc17673009329db4",
+  "productRef": "ea42e26d8b11f8ce581a95d4dc17673009329db4",
+  "testRef": "ea42e26d8b11f8ce581a95d4dc17673009329db4",
+  "fatal": false,
+  "rows": [
+    {
+      "workflow": "movement",
+      "harness": "HARNESS-V3",
+      "api": "REAL",
+      "result": "FAIL",
+      "testPassed": false,
+      "seconds": 120.19,
+      "exitCode": 1,
+      "historical": "docs/center-move-release.log",
+      "invalidManifestServers": [],
+      "invalidChildServerLogs": []
+    }
+  ]
+}

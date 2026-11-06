@@ -1,0 +1,21 @@
+=== TASK 6: ATOMIC WRITE AUDIT EXPERIMENTS ===
+
+--- 1. Testing permanent rename failure (renameSync throws EBUSY) ---
+Error thrown as expected: true
+Error message: The file is locked and nothing was changed (EBUSY).
+Total rename attempts made (initial + 5 retries): 6
+File content unchanged: true
+Temp files remaining (expected 0): 0 []
+
+--- 2. Testing transient lock failure (fails 2x, succeeds on attempt 3) ---
+atomicWrite succeeded: true
+Transient failures handled: 2
+Total calls to renameSync: 3
+File content correctly updated: true
+Temp files remaining (expected 0): 0 []
+
+--- 3. Testing non-lock failure (EINVAL / EXDEV) without retry loops ---
+Non-lock error aborted immediately without looping: true
+Total attempts made: 1
+
+All Task 6 atomic write experiments completed successfully.

@@ -1,0 +1,25 @@
+﻿≡ƒº¬ RUNNING TOKEN-LEVEL UNDO TEST SUITE
+--- Test (j): Exact-match restores byte-for-byte ---
+  Γ£à [PASS] (j) Exact match restores byte for byte
+--- Test (a): Prettier reformat preserved on undo ---
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+System.Management.Automation.RemoteException
+AssertionError [ERR_ASSERTION]: Prettier reformatted undo must succeed
+System.Management.Automation.RemoteException
+false !== true
+System.Management.Automation.RemoteException
+    at <anonymous> (C:\dev\vibecheck\test\token-undo.test.ts:61:10)
+    at ModuleJob.run (node:internal/modules/esm/module_job:413:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:660:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+System.Management.Automation.RemoteException
+Node.js v24.13.0

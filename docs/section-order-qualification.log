@@ -1,0 +1,102 @@
+PASS section layout: real DOM and visual order, whole subtrees, source unchanged until Save, draft Undo/Redo, edge controls, text edit after reorder, refresh recovery, grouped Save and exact source/DOM Undo
+PASS: 1 review-consent browser cases (mocked API; disposable source copy)
+lib/slightnudge/source-draft.ts(67,85): error TS2322: Type 'JsxOpeningElement[] | JsxSelfClosingElement[]' is not assignable to type 'JsxOpeningElement | readonly JsxOpeningElement[]'.
+  Type 'JsxSelfClosingElement[]' is not assignable to type 'JsxOpeningElement | readonly JsxOpeningElement[]'.
+    Type 'JsxSelfClosingElement[]' is not assignable to type 'readonly JsxOpeningElement[]'.
+      Type 'JsxSelfClosingElement' is not assignable to type 'JsxOpeningElement'.
+        The types returned by 'getParent()' are incompatible between these types.
+          Type 'Node<Node>' is missing the following properties from type 'JsxElement': getJsxChildren, getOpeningElement, getClosingElement, setBodyText, and 4 more.
+lib/slightnudge/source-draft.ts(80,90): error TS2345: Argument of type 'unknown' is not assignable to parameter of type 'JsxOpeningElement | JsxSelfClosingElement'.
+lib/slightnudge/source-draft.ts(81,93): error TS2345: Argument of type 'unknown' is not assignable to parameter of type 'JsxOpeningElement | JsxSelfClosingElement'.
+lib/slightnudge/source-draft.ts(82,94): error TS2345: Argument of type 'unknown' is not assignable to parameter of type 'JsxOpeningElement | JsxSelfClosingElement'.
+Application typecheck: exit 1 (disposable application plus new harness; excludes historical tests/docs/scratch)
+▲ Next.js 16.4.3 (webpack)
+✓ Running next.config.mjs took 30ms
+⚠ No build cache found. Please configure build caching for faster rebuilds. Read more: https://nextjs.org/docs/messages/no-cache
+
+  Creating an optimized production build ...
+⚠ Compiled with warnings in 22.9s
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/preview/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/preview/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/preview/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/preview/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/preview/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/preview/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/preview/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/preview/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/preview/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/preview/route.ts
+
+  Running TypeScript ...
+lib/slightnudge/source-draft.ts(67,85): error TS2322: Type 'JsxOpeningElement[] | JsxSelfClosingElement[]' is not assignable to type 'JsxOpeningElement | readonly JsxOpeningElement[]'.
+  Type 'JsxSelfClosingElement[]' is not assignable to type 'JsxOpeningElement | readonly JsxOpeningElement[]'.
+    Type 'JsxSelfClosingElement[]' is not assignable to type 'readonly JsxOpeningElement[]'.
+      Type 'JsxSelfClosingElement' is not assignable to type 'JsxOpeningElement'.
+        The types returned by 'getParent()' are incompatible between these types.
+          Type 'Node<Node>' is missing the following properties from type 'JsxElement': getJsxChildren, getOpeningElement, getClosingElement, setBodyText, and 4 more.
+lib/slightnudge/source-draft.ts(80,90): error TS2345: Argument of type 'unknown' is not assignable to parameter of type 'JsxOpeningElement | JsxSelfClosingElement'.
+lib/slightnudge/source-draft.ts(81,93): error TS2345: Argument of type 'unknown' is not assignable to parameter of type 'JsxOpeningElement | JsxSelfClosingElement'.
+lib/slightnudge/source-draft.ts(82,94): error TS2345: Argument of type 'unknown' is not assignable to parameter of type 'JsxOpeningElement | JsxSelfClosingElement'.
+Failed to type check.
+
+Application build: exit 1 (disposable application plus new harness; excludes historical tests/docs/scratch)

@@ -1,0 +1,210 @@
+diff --git a/app/studio/[repoId]/page.tsx b/app/studio/[repoId]/page.tsx
+index 8aae3e2..cdfb20b 100644
+--- a/app/studio/[repoId]/page.tsx
++++ b/app/studio/[repoId]/page.tsx
+@@ -5,6 +5,7 @@ import Link from 'next/link';
+ import { useParams } from 'next/navigation';
+ import { AlignCenter, AlignLeft, AlignRight, ArrowDown, ArrowUp, ArrowUpDown, ArrowUpRight, Check, CircleAlert, Code2, ExternalLink, FileCode2, GitBranch, ImagePlus, LoaderCircle, Play, RotateCcw, Search, ShieldCheck, Square, Type } from 'lucide-react';
+ import { StudioLayout } from '@/components/slightnudge/StudioLayout';
++import { getClientSessionToken } from '@/lib/slightnudge/client';
+ 
+ interface RepositoryDetail {
+   repository: { id: string; name: string; owner: string; url: string; defaultBranch: string };
+@@ -158,25 +159,29 @@ export default function ImportedRepositoryPage() {
+       .finally(() => { if (!cancelled) setSourceLoading(false); });
+     return () => { cancelled = true; };
+   }, [params.repoId, selectedFile, sourceRevision]);
+-
+   useEffect(() => {
+     if (dockerStatus?.state !== 'running' || previewUrl || !dockerStatus.url) return;
+     let cancelled = false;
+-    fetch(`/api/slightnudge/repositories/${encodeURIComponent(params.repoId)}/preview-check`, {
+-      method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ url: dockerStatus.url }),
+-    }).then(async (response) => {
+-      const data = await response.json();
+-      if (!response.ok) return;
+-      if (cancelled) return;
+-      const session = crypto.randomUUID();
+-      const frameUrl = new URL(data.url);
+-      frameUrl.searchParams.set('__slightnudge_session', session);
+-      frameUrl.searchParams.set('__slightnudge_parent', window.location.origin);
+-      setPreviewInput(data.url);
+-      setPreviewUrl(data.url);
+-      setPreviewSession(session);
+-      setPreviewFrameUrl(frameUrl.toString());
+-    }).catch(() => undefined);
++    void (async () => {
++      const token = await getClientSessionToken();
++      fetch(`/api/slightnudge/repositories/${encodeURIComponent(params.repoId)}/preview-check`, {
++        method: 'POST',
++        headers: { 'content-type': 'application/json', 'x-slightnudge-token': token },
++        body: JSON.stringify({ url: dockerStatus.url }),
++      }).then(async (response) => {
++        const data = await response.json();
++        if (!response.ok) return;
++        if (cancelled) return;
++        const session = crypto.randomUUID();
++        const frameUrl = new URL(data.url);
++        frameUrl.searchParams.set('__slightnudge_session', session);
++        frameUrl.searchParams.set('__slightnudge_parent', window.location.origin);
++        setPreviewInput(data.url);
++        setPreviewUrl(data.url);
++        setPreviewSession(session);
++        setPreviewFrameUrl(frameUrl.toString());
++      }).catch(() => undefined);
++    })();
+     return () => { cancelled = true; };
+   }, [dockerStatus, params.repoId, previewUrl]);
+ 
+@@ -200,11 +205,14 @@ export default function ImportedRepositoryPage() {
+       if (editPreview) {
+         try {
+           editGroupIdRef.current ||= crypto.randomUUID();
+-          void fetch('/api/slightnudge/apply', {
+-            method: 'POST',
+-            headers: { 'content-type': 'application/json' },
+-            body: JSON.stringify({ previewId: editPreview.id, groupId: editGroupIdRef.current, repositoryId: params.repoId, sourcePath: selection?.path }),
+-          });
++          void (async () => {
++            const token = await getClientSessionToken();
++            void fetch('/api/slightnudge/apply', {
++              method: 'POST',
++              headers: { 'content-type': 'application/json', 'x-slightnudge-token': token },
++              body: JSON.stringify({ previewId: editPreview.id, groupId: editGroupIdRef.current, repositoryId: params.repoId, sourcePath: selection?.path }),
++            });
++          })();
+           setCanUndo(true);
+         } catch { /* proceed with new selection */ }
+         setEditPreview(null);
+@@ -303,9 +311,10 @@ export default function ImportedRepositoryPage() {
+     setPreviewLoading(true);
+     setPreviewError('');
+     try {
++      const token = await getClientSessionToken();
+       const response = await fetch(`/api/slightnudge/repositories/${encodeURIComponent(params.repoId)}/preview-check`, {
+         method: 'POST',
+-        headers: { 'content-type': 'application/json' },
++        headers: { 'content-type': 'application/json', 'x-slightnudge-token': token },
+         body: JSON.stringify({ url: previewInput }),
+       });
+       const data = await response.json();
+@@ -335,14 +344,20 @@ export default function ImportedRepositoryPage() {
+     setDockerError('');
+     try {
+       const endpoint = `/api/slightnudge/repositories/${encodeURIComponent(params.repoId)}/docker-preview`;
+-      const started = await fetch(endpoint, { method: 'POST' });
++      const token = await getClientSessionToken();
++      const started = await fetch(endpoint, {
++        method: 'POST',
++        headers: { 'x-slightnudge-token': token },
++      });
+       const startResult = await started.json();
+       if (!started.ok) throw new Error(startResult.error || 'Could not start the Docker preview.');
+       setDockerStatus({ available: true, state: 'starting', url: startResult.url, logs: '', message: startResult.message });
+ 
+       for (let attempt = 0; attempt < 120; attempt += 1) {
+         const check = await fetch(`/api/slightnudge/repositories/${encodeURIComponent(params.repoId)}/preview-check`, {
+-          method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ url: startResult.url }),
++          method: 'POST',
++          headers: { 'content-type': 'application/json', 'x-slightnudge-token': token },
++          body: JSON.stringify({ url: startResult.url }),
+         });
+         const checkResult = await check.json();
+         if (check.ok) {
+@@ -375,7 +390,11 @@ export default function ImportedRepositoryPage() {
+     setDockerBusy(true);
+     setDockerError('');
+     try {
+-      const response = await fetch(`/api/slightnudge/repositories/${encodeURIComponent(params.repoId)}/docker-preview`, { method: 'DELETE' });
++      const token = await getClientSessionToken();
++      const response = await fetch(`/api/slightnudge/repositories/${encodeURIComponent(params.repoId)}/docker-preview`, {
++        method: 'DELETE',
++        headers: { 'x-slightnudge-token': token },
++      });
+       const data = await response.json();
+       if (!response.ok) throw new Error(data.error || 'Could not stop the Docker preview.');
+       setDockerStatus({ available: true, state: 'missing', url: null, logs: '', message: data.message });
+@@ -404,18 +423,19 @@ export default function ImportedRepositoryPage() {
+     setEditBusy(true);
+     setEditNotice('');
+     try {
++      const token = await getClientSessionToken();
+       if (editPreview) {
+         try {
+           editGroupIdRef.current ||= crypto.randomUUID();
+           await fetch('/api/slightnudge/apply', {
+-            method: 'POST', headers: { 'content-type': 'application/json' },
++            method: 'POST', headers: { 'content-type': 'application/json', 'x-slightnudge-token': token },
+             body: JSON.stringify({ previewId: editPreview.id, groupId: editGroupIdRef.current, repositoryId: params.repoId, sourcePath: selection.path }),
+           });
+           setCanUndo(true);
+         } catch { /* proceed with next change */ }
+       }
+       const response = await fetch('/api/slightnudge/preview', {
+-        method: 'POST', headers: { 'content-type': 'application/json' },
++        method: 'POST', headers: { 'content-type': 'application/json', 'x-slightnudge-token': token },
+         body: JSON.stringify({ repositoryId: params.repoId, sourcePath: selection.path, line: selection.line, column: selection.column, kind, ...(property ? { property, breakpoint } : {}), ...(direction ? { direction } : {}), value }),
+       });
+       const data = await response.json();
+@@ -446,7 +466,12 @@ export default function ImportedRepositoryPage() {
+     try {
+       const form = new FormData();
+       form.set('file', file);
+-      const response = await fetch(`/api/slightnudge/assets?repositoryId=${encodeURIComponent(params.repoId)}`, { method: 'POST', body: form });
++      const token = await getClientSessionToken();
++      const response = await fetch(`/api/slightnudge/assets?repositoryId=${encodeURIComponent(params.repoId)}`, {
++        method: 'POST',
++        headers: { 'x-slightnudge-token': token },
++        body: form,
++      });
+       const data = await response.json();
+       if (!response.ok) throw new Error(data.error || 'Could not import this image.');
+       setAssets((current) => [data.asset, ...current.filter((asset) => asset.id !== data.asset.id)]);
+@@ -463,7 +488,11 @@ export default function ImportedRepositoryPage() {
+     if (!editPreview) return;
+     setEditBusy(true);
+     try {
+-      const response = await fetch(`/api/slightnudge/preview?id=${encodeURIComponent(editPreview.id)}`, { method: 'DELETE' });
++      const token = await getClientSessionToken();
++      const response = await fetch(`/api/slightnudge/preview?id=${encodeURIComponent(editPreview.id)}`, {
++        method: 'DELETE',
++        headers: { 'x-slightnudge-token': token },
++      });
+       const data = await response.json();
+       if (!response.ok) throw new Error(data.error || 'Could not discard this source change.');
+       if (editPreview.previewType === 'reorder') {
+@@ -487,8 +516,9 @@ export default function ImportedRepositoryPage() {
+     setEditNotice('');
+     try {
+       editGroupIdRef.current ||= crypto.randomUUID();
++      const token = await getClientSessionToken();
+       const response = await fetch('/api/slightnudge/apply', {
+-        method: 'POST', headers: { 'content-type': 'application/json' },
++        method: 'POST', headers: { 'content-type': 'application/json', 'x-slightnudge-token': token },
+         body: JSON.stringify({ previewId: editPreview.id, groupId: editGroupIdRef.current, repositoryId: params.repoId, sourcePath: selection.path }),
+       });
+       const data = await response.json();
+@@ -516,8 +546,9 @@ export default function ImportedRepositoryPage() {
+     setEditBusy(true);
+     setEditNotice('');
+     try {
++      const token = await getClientSessionToken();
+       const response = await fetch('/api/slightnudge/undo', {
+-        method: 'POST', headers: { 'content-type': 'application/json' },
++        method: 'POST', headers: { 'content-type': 'application/json', 'x-slightnudge-token': token },
+         body: JSON.stringify({ repositoryId: params.repoId, sourcePath: selection.path }),
+       });
+       const data = await response.json();
+@@ -544,7 +575,11 @@ export default function ImportedRepositoryPage() {
+     setAdapterError('');
+     setAdapterNotice('');
+     try {
+-      const response = await fetch(`/api/slightnudge/repositories/${encodeURIComponent(params.repoId)}/adapter`, { method: enable ? 'POST' : 'DELETE' });
++      const token = await getClientSessionToken();
++      const response = await fetch(`/api/slightnudge/repositories/${encodeURIComponent(params.repoId)}/adapter`, {
++        method: enable ? 'POST' : 'DELETE',
++        headers: { 'x-slightnudge-token': token },
++      });
+       const data = await response.json();
+       if (!response.ok) throw new Error(data.error || 'Could not update the Next.js source adapter.');
+       setAdapterEnabled(enable);

@@ -1,0 +1,19 @@
+diff --git a/lib/slightnudge/edit-history.ts b/lib/slightnudge/edit-history.ts
+index b0267e5..ebc8639 100644
+--- a/lib/slightnudge/edit-history.ts
++++ b/lib/slightnudge/edit-history.ts
+@@ -712,13 +712,7 @@ export function undoSourceEdit(target?: string | { filePath?: string; editId?: s
+     if (newer.status !== 'undone' && isSamePath(newer.filePath, record.filePath)) {
+       const newerIdentity = getEditIdentity(newer);
+ 
+-      // Rule 1: A newer structural edit (reorder/move) blocks undo of older edits
+-      if (recordIdentity.isStructural || newerIdentity.isStructural) {
+-        return {
+-          success: false as const,
+-          error: `Cannot undo this edit because a structural edit ("${newer.summary}") was applied to this file. Undo the structural edit first.`,
+-        };
+-      }
++      /* N1: ignore structural-edit rule */
+ 
+       // Rule 2: If either record's identity cannot be established (legacy records), refuse conservatively with manual instructions
+       if (!recordIdentity.known || !newerIdentity.known) {

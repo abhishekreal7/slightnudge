@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { ChevronRight, Frame, PanelsTopLeft, Navigation, PanelTop, PanelBottom, Image, PenTool, TextCursorInput, SquareMousePointer, Link2, FileText, Rows3, Columns3, Grid2X2, Type, Heading, Search, X } from 'lucide-react';
 import type { CanvasLayer } from '@/lib/slightnudge/source-canvas-contract';
 import styles from './source-layers.module.css';
@@ -37,9 +37,11 @@ function layerAppearance(layer: CanvasLayer) {
   return { Icon: Frame, kind: 'frame' };
 }
 
-export function SourceLayers({ layers, selected, onSelect }: { layers: CanvasLayer[]; selected: string | null; onSelect(key: string): void }) {
+export function SourceLayers({ layers, selected, panelVisible, onSelect }: { layers: CanvasLayer[]; selected: string | null; panelVisible: boolean; onSelect(key: string): void }) {
   const [collapsed, setCollapsed] = useState<Set<string>>(new Set());
   const [query, setQuery] = useState('');
+  const scrollPane = useRef<HTMLElement>(null);
+  const selectedRow = useRef<HTMLDivElement>(null);
   // Styled block containers own padding, fills and clipping too. They can be
   // covered by a parent's decorative pseudo-element, making Layers their only
   // reliable selection route. Keep unstyled pass-through divs out of the tree.
@@ -72,6 +74,15 @@ export function SourceLayers({ layers, selected, onSelect }: { layers: CanvasLay
     previousSelection.current = selected;
     if (selected && needle && !matches.has(selected)) setQuery('');
   }, [selected]);
+  useLayoutEffect(() => {
+    const pane = scrollPane.current;
+    const row = selectedRow.current;
+    if (!panelVisible || !pane || !row) return;
+    const list = pane.getBoundingClientRect();
+    const item = row.getBoundingClientRect();
+    if (item.top < list.top) pane.scrollTop += item.top - list.top;
+    else if (item.bottom > list.bottom) pane.scrollTop += item.bottom - list.bottom;
+  }, [selected, panelVisible, collapsed, needle]);
   const childParents = new Set(parents.values());
   return <section className={styles.panel} aria-label="Layers panel">
     <div className={styles.searchRow}>
@@ -81,13 +92,13 @@ export function SourceLayers({ layers, selected, onSelect }: { layers: CanvasLay
         {query && <button type="button" aria-label="Clear layer search" onClick={() => setQuery('')}><X size={12}/></button>}
       </div>
     </div>
-    <nav className={styles.layers} aria-label="Source layers">
+    <nav ref={scrollPane} className={styles.layers} aria-label="Source layers">
       {!visible.length && <p className={styles.empty}>Your page layers will appear here.</p>}
       {needle && !matches.size && <div className={styles.empty} role="status"><p>No matching layers.</p><button type="button" onClick={() => setQuery('')}>Clear search</button></div>}
       {visible.filter(layer => needle ? shown.has(layer.key) : !ancestors(layer.key).some(key => collapsed.has(key))).map(layer => {
         const children = childParents.has(layer.key), repeated = (layer.instances || 1) > 1;
         const { Icon, kind } = layerAppearance(layer);
-        return <div key={layer.key} className={styles.row} data-selected={selected === layer.key} data-layer-kind={kind} data-layer-tag={layer.tagName} style={{ paddingLeft: 4 + Math.min(ancestors(layer.key).length, 5) * 12 }}>
+        return <div key={layer.key} ref={selected === layer.key ? selectedRow : undefined} className={styles.row} data-selected={selected === layer.key} data-layer-kind={kind} data-layer-tag={layer.tagName} style={{ paddingLeft: 4 + Math.min(ancestors(layer.key).length, 5) * 12 }}>
           {children ? <button type="button" className={styles.disclosure} disabled={Boolean(needle)} aria-label={`${collapsed.has(layer.key) && !needle ? 'Expand' : 'Collapse'} ${layerLabel(layer)}`} aria-expanded={Boolean(needle) || !collapsed.has(layer.key)}
             onClick={() => setCollapsed(previous => { const next = new Set(previous); if (next.has(layer.key)) next.delete(layer.key); else next.add(layer.key); return next; })}><ChevronRight size={12} /></button> : <span className={styles.spacer} />}
           <button type="button" className={styles.select} disabled={repeated} aria-pressed={selected === layer.key} onClick={() => onSelect(layer.key)}

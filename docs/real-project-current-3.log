@@ -1,0 +1,22 @@
+Disposable source project: https://github.com/EdgeOneDev/saas-starter; Next.js 14.0.4; Tailwind 3.4.17; installed source adapter; no environment files checked out.
+Real project 3: start public application with development adapter
+Real project 3: connect current full-page canvas
+PASS 3: single full-page canvas with stable document height
+PASS 3: project breakpoints discovered through the actual compiled API
+Real project 3: edit original p: src/components/sections/hero.tsx:125
+Real project 3: edit original button: src/components/ui/button.tsx:73
+Real project 3: edit original h3: src/components/ui/card.tsx:35
+Real project 3: edit original a: src/components/sections/features.tsx:34
+Real project 3: edit original h2: src/components/sections/cta-section.tsx:129
+Real project 3: edit original p: src/components/layout/section-layout.tsx:133
+Real project 3: edit original p: src/components/ui/card.tsx:50
+Real project 3: edit original p: src/components/sections/faq.tsx:30
+Real project 3: edit original a: src/components/sections/faq.tsx:33
+PASS 3: translated text safely refused before inline editing
+Real project 3: scaled movement on original element
+PASS 3: shared/dynamic source movement refused with original source and position intact
+PASS 3: shared/dynamic source responsive edit explicitly protected
+PASS 3: native responsive widths: 375, 768 and 1200
+Real project 3: separate window
+PASS 3: separate-window native document with translated-text protection
+PASS: 7 review-consent browser cases (real API; disposable source copy)

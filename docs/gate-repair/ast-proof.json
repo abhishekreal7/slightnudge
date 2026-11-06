@@ -1,0 +1,370 @@
+[
+  {
+    "original": "test/review-consent.browser.ts",
+    "copy": "test/review-consent.browser.v3.ts",
+    "assertions": 27,
+    "timeoutProperties": 0,
+    "expectedLists": 0,
+    "identical": true
+  },
+  {
+    "original": "test/helpers/appearance-layout-browser.ts",
+    "copy": "test/helpers/appearance-layout-browser.v3.ts",
+    "assertions": 22,
+    "timeoutProperties": 4,
+    "expectedLists": 0,
+    "identical": true
+  },
+  {
+    "original": "test/helpers/shared-instance-browser.ts",
+    "copy": "test/helpers/shared-instance-browser.v3.ts",
+    "assertions": 17,
+    "timeoutProperties": 3,
+    "expectedLists": 0,
+    "identical": true
+  },
+  {
+    "original": "test/helpers/icon-properties-browser.ts",
+    "copy": "test/helpers/icon-properties-browser.v3.ts",
+    "assertions": 27,
+    "timeoutProperties": 3,
+    "expectedLists": 0,
+    "identical": true
+  },
+  {
+    "original": "test/helpers/component-actions-browser.ts",
+    "copy": "test/helpers/component-actions-browser.v3.ts",
+    "assertions": 32,
+    "timeoutProperties": 4,
+    "expectedLists": 0,
+    "identical": true
+  },
+  {
+    "original": "test/helpers/component-props-browser.ts",
+    "copy": "test/helpers/component-props-browser.v3.ts",
+    "assertions": 19,
+    "timeoutProperties": 3,
+    "expectedLists": 0,
+    "identical": true
+  },
+  {
+    "original": "test/helpers/imported-advanced-image-browser.ts",
+    "copy": "test/helpers/imported-advanced-image-browser.v3.ts",
+    "assertions": 0,
+    "timeoutProperties": 0,
+    "expectedLists": 0,
+    "identical": true
+  },
+  {
+    "original": "test/helpers/prepare-source-project.ts",
+    "copy": "test/helpers/prepare-source-project.v3.ts",
+    "assertions": 0,
+    "timeoutProperties": 3,
+    "expectedLists": 0,
+    "identical": true
+  },
+  {
+    "original": "test/helpers/create-saas-sample.ts",
+    "copy": "test/helpers/create-saas-sample.v3.ts",
+    "assertions": 0,
+    "timeoutProperties": 0,
+    "expectedLists": 0,
+    "identical": true
+  },
+  {
+    "original": "test/helpers/advanced-image-browser.ts",
+    "copy": "test/helpers/advanced-image-browser.v3.ts",
+    "assertions": 23,
+    "timeoutProperties": 3,
+    "expectedLists": 0,
+    "identical": true
+  },
+  {
+    "original": "test/helpers/image-content-browser.ts",
+    "copy": "test/helpers/image-content-browser.v3.ts",
+    "assertions": 26,
+    "timeoutProperties": 4,
+    "expectedLists": 0,
+    "identical": true
+  },
+  {
+    "original": "test/helpers/image-framing-browser.ts",
+    "copy": "test/helpers/image-framing-browser.v3.ts",
+    "assertions": 15,
+    "timeoutProperties": 3,
+    "expectedLists": 0,
+    "identical": true
+  },
+  {
+    "original": "test/helpers/imported-review-browser.ts",
+    "copy": "test/helpers/imported-review-browser.v3.ts",
+    "assertions": 19,
+    "timeoutProperties": 0,
+    "expectedLists": 0,
+    "identical": true
+  },
+  {
+    "original": "test/helpers/live-review-browser.ts",
+    "copy": "test/helpers/live-review-browser.v3.ts",
+    "assertions": 23,
+    "timeoutProperties": 0,
+    "expectedLists": 0,
+    "identical": true
+  },
+  {
+    "original": "test/helpers/current-studio-review-browser.ts",
+    "copy": "test/helpers/current-studio-review-browser.v3.ts",
+    "assertions": 24,
+    "timeoutProperties": 0,
+    "expectedLists": 0,
+    "identical": true
+  },
+  {
+    "original": "test/helpers/current-studio-live-browser.ts",
+    "copy": "test/helpers/current-studio-live-browser.v3.ts",
+    "assertions": 15,
+    "timeoutProperties": 0,
+    "expectedLists": 0,
+    "identical": true
+  },
+  {
+    "original": "test/helpers/m1-interactions-browser.ts",
+    "copy": "test/helpers/m1-interactions-browser.v3.ts",
+    "assertions": 22,
+    "timeoutProperties": 1,
+    "expectedLists": 0,
+    "identical": true
+  },
+  {
+    "original": "test/helpers/studio-resize-browser.ts",
+    "copy": "test/helpers/studio-resize-browser.v3.ts",
+    "assertions": 29,
+    "timeoutProperties": 2,
+    "expectedLists": 0,
+    "identical": true
+  },
+  {
+    "original": "test/helpers/source-project-browser.ts",
+    "copy": "test/helpers/source-project-browser.v3.ts",
+    "assertions": 48,
+    "timeoutProperties": 5,
+    "expectedLists": 0,
+    "identical": true
+  },
+  {
+    "original": "test/helpers/source-selection-workflows.ts",
+    "copy": "test/helpers/source-selection-workflows.v3.ts",
+    "assertions": 30,
+    "timeoutProperties": 6,
+    "expectedLists": 0,
+    "identical": true
+  },
+  {
+    "original": "test/helpers/workspace-redesign-browser.ts",
+    "copy": "test/helpers/workspace-redesign-browser.v3.ts",
+    "assertions": 13,
+    "timeoutProperties": 0,
+    "expectedLists": 0,
+    "identical": true
+  },
+  {
+    "original": "test/helpers/studio-reload-recovery-browser.ts",
+    "copy": "test/helpers/studio-reload-recovery-browser.v3.ts",
+    "assertions": 35,
+    "timeoutProperties": 0,
+    "expectedLists": 0,
+    "identical": true
+  },
+  {
+    "original": "test/helpers/direct-manipulation-browser.ts",
+    "copy": "test/helpers/direct-manipulation-browser.v3.ts",
+    "assertions": 23,
+    "timeoutProperties": 6,
+    "expectedLists": 0,
+    "identical": true
+  },
+  {
+    "original": "test/helpers/drag-move-browser.ts",
+    "copy": "test/helpers/drag-move-browser.v3.ts",
+    "assertions": 25,
+    "timeoutProperties": 4,
+    "expectedLists": 0,
+    "identical": true
+  },
+  {
+    "original": "test/helpers/continuous-draft-browser.ts",
+    "copy": "test/helpers/continuous-draft-browser.v3.ts",
+    "assertions": 20,
+    "timeoutProperties": 4,
+    "expectedLists": 0,
+    "identical": true
+  },
+  {
+    "original": "test/helpers/inline-text-browser.ts",
+    "copy": "test/helpers/inline-text-browser.v3.ts",
+    "assertions": 24,
+    "timeoutProperties": 2,
+    "expectedLists": 0,
+    "identical": true
+  },
+  {
+    "original": "test/helpers/unified-canvas-browser.ts",
+    "copy": "test/helpers/unified-canvas-browser.v3.ts",
+    "assertions": 42,
+    "timeoutProperties": 13,
+    "expectedLists": 0,
+    "identical": true
+  },
+  {
+    "original": "test/helpers/button-editing-browser.ts",
+    "copy": "test/helpers/button-editing-browser.v3.ts",
+    "assertions": 26,
+    "timeoutProperties": 4,
+    "expectedLists": 0,
+    "identical": true
+  },
+  {
+    "original": "test/helpers/live-window-browser.ts",
+    "copy": "test/helpers/live-window-browser.v3.ts",
+    "assertions": 47,
+    "timeoutProperties": 10,
+    "expectedLists": 0,
+    "identical": true
+  },
+  {
+    "original": "test/helpers/section-order-browser.ts",
+    "copy": "test/helpers/section-order-browser.v3.ts",
+    "assertions": 15,
+    "timeoutProperties": 6,
+    "expectedLists": 0,
+    "identical": true
+  },
+  {
+    "original": "test/helpers/container-move-browser.ts",
+    "copy": "test/helpers/container-move-browser.v3.ts",
+    "assertions": 14,
+    "timeoutProperties": 6,
+    "expectedLists": 0,
+    "identical": true
+  },
+  {
+    "original": "test/helpers/layout-controls-browser.ts",
+    "copy": "test/helpers/layout-controls-browser.v3.ts",
+    "assertions": 13,
+    "timeoutProperties": 5,
+    "expectedLists": 0,
+    "identical": true
+  },
+  {
+    "original": "test/helpers/multi-file-browser.ts",
+    "copy": "test/helpers/multi-file-browser.v3.ts",
+    "assertions": 12,
+    "timeoutProperties": 10,
+    "expectedLists": 0,
+    "identical": true
+  },
+  {
+    "original": "test/helpers/project-compatibility-browser.ts",
+    "copy": "test/helpers/project-compatibility-browser.v3.ts",
+    "assertions": 12,
+    "timeoutProperties": 0,
+    "expectedLists": 0,
+    "identical": true
+  },
+  {
+    "original": "test/helpers/imported-canvas-browser.ts",
+    "copy": "test/helpers/imported-canvas-browser.v3.ts",
+    "assertions": 28,
+    "timeoutProperties": 4,
+    "expectedLists": 0,
+    "identical": true
+  },
+  {
+    "original": "test/helpers/real-project-canvas-browser.ts",
+    "copy": "test/helpers/real-project-canvas-browser.v3.ts",
+    "assertions": 28,
+    "timeoutProperties": 4,
+    "expectedLists": 0,
+    "identical": true
+  },
+  {
+    "original": "test/helpers/real-multi-file-browser.ts",
+    "copy": "test/helpers/real-multi-file-browser.v3.ts",
+    "assertions": 24,
+    "timeoutProperties": 9,
+    "expectedLists": 0,
+    "identical": true
+  },
+  {
+    "original": "test/helpers/high-fidelity-browser.ts",
+    "copy": "test/helpers/high-fidelity-browser.v3.ts",
+    "assertions": 28,
+    "timeoutProperties": 5,
+    "expectedLists": 0,
+    "identical": true
+  },
+  {
+    "original": "test/helpers/core-editing-browser.ts",
+    "copy": "test/helpers/core-editing-browser.v3.ts",
+    "assertions": 28,
+    "timeoutProperties": 4,
+    "expectedLists": 0,
+    "identical": true
+  },
+  {
+    "original": "test/helpers/single-canvas-browser.ts",
+    "copy": "test/helpers/single-canvas-browser.v3.ts",
+    "assertions": 24,
+    "timeoutProperties": 3,
+    "expectedLists": 0,
+    "identical": true
+  },
+  {
+    "original": "test/helpers/editor-ergonomics-browser.ts",
+    "copy": "test/helpers/editor-ergonomics-browser.v3.ts",
+    "assertions": 16,
+    "timeoutProperties": 2,
+    "expectedLists": 0,
+    "identical": true
+  },
+  {
+    "original": "test/helpers/responsive-editing-browser.ts",
+    "copy": "test/helpers/responsive-editing-browser.v3.ts",
+    "assertions": 42,
+    "timeoutProperties": 6,
+    "expectedLists": 0,
+    "identical": true
+  },
+  {
+    "original": "test/helpers/imported-responsive-browser.ts",
+    "copy": "test/helpers/imported-responsive-browser.v3.ts",
+    "assertions": 12,
+    "timeoutProperties": 5,
+    "expectedLists": 0,
+    "identical": true
+  },
+  {
+    "original": "test/shared-instance-security.v2.browser.ts",
+    "copy": "test/shared-instance-security.v2.browser.v3.ts",
+    "assertions": 27,
+    "timeoutProperties": 0,
+    "expectedLists": 0,
+    "identical": true
+  },
+  {
+    "original": "test/m0-regression.reliability.test.ts",
+    "copy": "test/m0-regression.reliability.v3.test.ts",
+    "assertions": 0,
+    "timeoutProperties": 0,
+    "expectedLists": 1,
+    "identical": true
+  },
+  {
+    "original": "test/m0-overfit.reliability.test.ts",
+    "copy": "test/m0-overfit.reliability.v3.test.ts",
+    "assertions": 0,
+    "timeoutProperties": 0,
+    "expectedLists": 1,
+    "identical": true
+  }
+]

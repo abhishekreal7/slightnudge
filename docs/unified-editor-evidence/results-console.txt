@@ -1,0 +1,112 @@
+# Verification results
+
+## 01-baseline-shared
+
+```text
+PASS shared instances local Studio: identical callers, text/inline, destination, enabled state, variant, refresh, Save, exact Undo
+PASS shared instances local window: identical callers, text/inline, destination, enabled state, variant, refresh, Save, exact Undo
+PASS shared instances imported Studio: identical callers, text/inline, destination, enabled state, variant, refresh, Save, exact Undo
+PASS shared instances imported window: identical callers, text/inline, destination, enabled state, variant, refresh, Save, exact Undo
+```
+
+[Raw output](01-baseline-shared.log) · [Exit status](01-baseline-shared.exit.json)
+
+## 02-baseline-selection
+
+```text
+Test run failed: page.waitForSelector: Timeout 30000ms exceeded.
+```
+
+[Raw output](02-baseline-selection.log) · [Exit status](02-baseline-selection.exit.json)
+
+## round-1
+
+```text
+PASS four HTTP redirects: project path and repeated/empty/encoded query values preserved
+ROUND 1 VIEW full
+PASS shared instances local Studio: identical callers, text/inline, destination, enabled state, variant, refresh, Save, exact Undo
+PASS shared instances local window: identical callers, text/inline, destination, enabled state, variant, refresh, Save, exact Undo
+PASS migration local full: real legacy edit, refresh, same draft ID in canonical route, continue, project/file history, persisted Save history, exact Undo, selection geometry <=1px, scale 1
+PASS shared instances imported Studio: identical callers, text/inline, destination, enabled state, variant, refresh, Save, exact Undo
+PASS shared instances imported window: identical callers, text/inline, destination, enabled state, variant, refresh, Save, exact Undo
+PASS migration imported full: real legacy edit, refresh, same draft ID in canonical route, continue, project/file history, persisted Save history, exact Undo, selection geometry <=1px, scale 1
+UNCHANGED SELECTION full: exit 1; raw output C:\dev\vibecheck\docs\unified-editor-evidence\round-1-selection-full.log
+SELECTION NAVIGATION /editor?view=full&fixture=1
+Test run failed: page.waitForSelector: Timeout 30000ms exceeded.
+ROUND 1 VIEW fit
+PASS shared instances local Studio: identical callers, text/inline, destination, enabled state, variant, refresh, Save, exact Undo
+PASS shared instances local window: identical callers, text/inline, destination, enabled state, variant, refresh, Save, exact Undo
+PASS migration local fit: real legacy edit, refresh, same draft ID in canonical route, continue, project/file history, persisted Save history, exact Undo, selection geometry <=1px, scale 0.752
+FAILED imported setup/workflow fit Error: EEXIST: file already exists, symlink 'C:\dev\vibecheck\node_modules' -> 'C:\Users\abhis\AppData\Local\Temp\sn-review-consent-8HjE6c\.slightnudge\repositories\source-proof\node_modules'
+UNCHANGED SELECTION fit: exit 1; raw output C:\dev\vibecheck\docs\unified-editor-evidence\round-1-selection-fit.log
+SELECTION NAVIGATION /editor?view=fit&fixture=1
+Test run failed: page.waitForSelector: Timeout 30000ms exceeded.
+COMPLETED 6/8 existing shared-instance workflows on canonical route; old workflow assertions and limits unchanged. Failures and unreached cases remain failures.
+```
+
+[Raw output](round-1.log) · [Exit status](round-1.exit.json) · [Git status](round-1-git-status.txt)
+
+## round-1-supplement-fit
+
+```text
+PASS four HTTP redirects: project path and repeated/empty/encoded query values preserved
+ROUND 1 VIEW fit
+PASS shared instances imported Studio: identical callers, text/inline, destination, enabled state, variant, refresh, Save, exact Undo
+PASS shared instances imported window: identical callers, text/inline, destination, enabled state, variant, refresh, Save, exact Undo
+PASS migration imported fit: real legacy edit, refresh, same draft ID in canonical route, continue, project/file history, persisted Save history, exact Undo, selection geometry <=1px, scale 0.752
+COMPLETED 2/8 existing shared-instance workflows on canonical route; old workflow assertions and limits unchanged. Failures and unreached cases remain failures.
+```
+
+[Raw output](round-1-supplement-fit.log) · [Exit status](round-1-supplement-fit.exit.json) · [Git status](round-1-supplement-fit-git-status.txt)
+
+## round-2
+
+```text
+PASS four HTTP redirects: project path and repeated/empty/encoded query values preserved
+ROUND 2 VIEW full
+PASS shared instances local Studio: identical callers, text/inline, destination, enabled state, variant, refresh, Save, exact Undo
+PASS shared instances local window: identical callers, text/inline, destination, enabled state, variant, refresh, Save, exact Undo
+PASS shared instances imported Studio: identical callers, text/inline, destination, enabled state, variant, refresh, Save, exact Undo
+PASS shared instances imported window: identical callers, text/inline, destination, enabled state, variant, refresh, Save, exact Undo
+UNCHANGED SELECTION full: exit 1; raw output C:\dev\vibecheck\docs\unified-editor-evidence\round-2-selection-full.log
+SELECTION NAVIGATION /editor?view=full&fixture=1
+Test run failed: page.waitForSelector: Timeout 30000ms exceeded.
+ROUND 2 VIEW fit
+PASS shared instances local Studio: identical callers, text/inline, destination, enabled state, variant, refresh, Save, exact Undo
+PASS shared instances local window: identical callers, text/inline, destination, enabled state, variant, refresh, Save, exact Undo
+PASS shared instances imported Studio: identical callers, text/inline, destination, enabled state, variant, refresh, Save, exact Undo
+PASS shared instances imported window: identical callers, text/inline, destination, enabled state, variant, refresh, Save, exact Undo
+UNCHANGED SELECTION fit: exit 1; raw output C:\dev\vibecheck\docs\unified-editor-evidence\round-2-selection-fit.log
+SELECTION NAVIGATION /editor?view=fit&fixture=1
+Test run failed: page.waitForSelector: Timeout 30000ms exceeded.
+COMPLETED 8/8 existing shared-instance workflows on canonical route; old workflow assertions and limits unchanged. Failures and unreached cases remain failures.
+```
+
+[Raw output](round-2.log) · [Exit status](round-2.exit.json) · [Git status](round-2-git-status.txt)
+
+## round-3
+
+```text
+PASS four HTTP redirects: project path and repeated/empty/encoded query values preserved
+ROUND 3 VIEW full
+PASS shared instances local Studio: identical callers, text/inline, destination, enabled state, variant, refresh, Save, exact Undo
+PASS shared instances local window: identical callers, text/inline, destination, enabled state, variant, refresh, Save, exact Undo
+PASS shared instances imported Studio: identical callers, text/inline, destination, enabled state, variant, refresh, Save, exact Undo
+PASS shared instances imported window: identical callers, text/inline, destination, enabled state, variant, refresh, Save, exact Undo
+UNCHANGED SELECTION full: exit 1; raw output C:\dev\vibecheck\docs\unified-editor-evidence\round-3-selection-full.log
+SELECTION NAVIGATION /editor?view=full&fixture=1
+Test run failed: page.waitForSelector: Timeout 30000ms exceeded.
+ROUND 3 VIEW fit
+PASS shared instances local Studio: identical callers, text/inline, destination, enabled state, variant, refresh, Save, exact Undo
+PASS shared instances local window: identical callers, text/inline, destination, enabled state, variant, refresh, Save, exact Undo
+PASS shared instances imported Studio: identical callers, text/inline, destination, enabled state, variant, refresh, Save, exact Undo
+PASS shared instances imported window: identical callers, text/inline, destination, enabled state, variant, refresh, Save, exact Undo
+UNCHANGED SELECTION fit: exit 1; raw output C:\dev\vibecheck\docs\unified-editor-evidence\round-3-selection-fit.log
+SELECTION NAVIGATION /editor?view=fit&fixture=1
+Test run failed: page.waitForSelector: Timeout 30000ms exceeded.
+COMPLETED 8/8 existing shared-instance workflows on canonical route; old workflow assertions and limits unchanged. Failures and unreached cases remain failures.
+```
+
+[Raw output](round-3.log) · [Exit status](round-3.exit.json) · [Git status](round-3-git-status.txt)
+
+

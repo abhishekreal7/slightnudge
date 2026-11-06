@@ -1,0 +1,54 @@
+====================================================
+🧪 STUDIO BACKEND RESTORATION BROWSER SUITE
+====================================================
+
+1. Loading http://localhost:3000/studio...
+   ✅ [PASS] Studio page loaded successfully (200 OK)
+2. Clicking canvas <h1> element to test in-situ selection...
+   ✅ [PASS] In-situ HUD rendered above selected element
+   ✅ [PASS] Inspector activated for Headline Text layer
+3. Triggering Bold toggle in HUD...
+   ✅ [PASS] POST /api/slightnudge/preview returned status 200
+   ✅ [PASS] Server generated real preview id: a797cf24-5da7-41f2-8d4e-22235b28819b
+   ✅ [PASS] Pending edit dock displayed with summary: none → font-bold
+5. Clicking "Apply to code" button in pending dock...
+   ✅ [PASS] POST /api/slightnudge/apply returned status 200
+   ✅ [PASS] Source file verified modified on disk with new AST class
+7. Triggering Undo via keyboard shortcut (Control+z)...
+   ✅ [PASS] POST /api/slightnudge/undo returned status 200 {
+  success: true,
+  editId: '42a055d0-d9d7-4f91-9e42-5b52e4b3715f',
+  message: 'Undid none → font-bold.'
+}
+   ✅ [PASS] Source file restored byte-for-byte on disk
+8. Verifying non-backend controls are properly disabled...
+   ✅ [PASS] Overflow control properly disabled with tooltip
+   ✅ [PASS] Object styles control properly disabled with tooltip
+   ✅ [PASS] Position modes control properly disabled with tooltip
+9. Testing second Apply button ("Apply to Source" in bottom floating bar)...
+   ✅ [PASS] Paragraph style preview generated: undefined
+
+
+❌ Test assertion failed: locator.waitFor: Timeout 5000ms exceeded.
+Call log:
+[2m  - waiting for locator('button:has-text("Apply to Source")') to be visible[22m
+
+    at main (C:\dev\vibecheck\test\studio-restore.test.ts:110:28) {
+  log: [
+    `  - waiting for locator('button:has-text("Apply to Source")') to be visible`
+  ],
+  name: 'TimeoutError'
+}
+
+Command failed: npx tsx test/studio-restore.test.ts
+
+❌ Test assertion failed: locator.waitFor: Timeout 5000ms exceeded.
+Call log:
+[2m  - waiting for locator('button:has-text("Apply to Source")') to be visible[22m
+
+    at main (C:\dev\vibecheck\test\studio-restore.test.ts:110:28) {
+  log: [
+    `  - waiting for locator('button:has-text("Apply to Source")') to be visible`
+  ],
+  name: 'TimeoutError'
+}

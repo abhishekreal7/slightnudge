@@ -34,7 +34,7 @@ export async function checkImportedCanvas(page: Page, baseURL: string, workspace
     let ready = false;
     for (let i = 0; i < 100; i++) { try { if ((await fetch(previewURL, { signal: AbortSignal.timeout(5000) })).ok) { ready = true; break; } } catch {} await page.waitForTimeout(300); }
     assert.ok(ready, diagnostic);
-    const navigate = () => page.goto(`${baseURL}/studio/source-proof/edit?preview=${encodeURIComponent(previewURL)}`, { waitUntil: 'domcontentloaded', timeout: 120000 });
+    const navigate = () => page.goto(`${baseURL}/editor/source-proof?view=fit&panel=inspector&preview=${encodeURIComponent(previewURL)}`, { waitUntil: 'domcontentloaded', timeout: 120000 });
     await navigate(); await connected();
     const stage = page.locator('[data-canvas-stage]'), iframe = page.locator('iframe[title="Actual project"]');
     const zoom = page.getByRole('combobox', { name: 'Canvas zoom', exact: true });
@@ -112,7 +112,7 @@ export async function checkImportedCanvas(page: Page, baseURL: string, workspace
     await page.getByRole('button', { name: 'Fit page to canvas', exact: true }).click();
     await page.screenshot({ path: path.join(process.cwd(), 'docs/imported-canvas.png') });
     // The separate editing window retains the site's native viewport/scrolling.
-    await page.goto(`${baseURL}/studio/source-proof/window?preview=${encodeURIComponent(previewURL)}`, { waitUntil: 'domcontentloaded', timeout: 120000 }); await connected();
+    await page.goto(`${baseURL}/editor/source-proof?view=full&panel=inspector&preview=${encodeURIComponent(previewURL)}`, { waitUntil: 'domcontentloaded', timeout: 120000 }); await connected();
     assert.equal(await frame.locator('html').getAttribute('data-editor-canvas-page'), null);
     assert.equal(await hero.evaluate(() => getComputedStyle(document.documentElement).overflow), 'scroll');
     assert.deepEqual(errors, []);

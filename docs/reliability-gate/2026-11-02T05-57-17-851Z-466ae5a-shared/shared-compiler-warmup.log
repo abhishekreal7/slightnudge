@@ -1,0 +1,20 @@
+SETUP 1793599042189 START git ["ls-files"]
+SETUP END elapsed 44ms
+TIMING 1793599042396 REQUEST http://127.0.0.1:59216/editor?panel=inspector
+TIMING 1793599079610 RESPONSE 200 http://127.0.0.1:59216/editor?panel=inspector
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+page.goto: Timeout 30000ms exceeded.
+Call log:
+[2m  - navigating to "http://127.0.0.1:59216/editor?panel=inspector", waiting until "domcontentloaded"[22m
+
+    at <anonymous> (C:\dev\vibecheck\scratch\g\23290495\worktree\test\gate-shared-runner.v3.ts:53:14) {
+  log: [
+    '  - navigating to "http://127.0.0.1:59216/editor?panel=inspector", waiting until "domcontentloaded"'
+  ],
+  name: 'TimeoutError'
+}
+
+Node.js v22.19.0
