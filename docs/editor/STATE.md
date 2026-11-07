@@ -15,14 +15,16 @@
 
 - Part 1a, CONFIRMED complete. Apply and both undo write paths re-compare reviewed bytes at write time. Three red tests now pass, all three comparison-removal mutants were killed, six targeted regression suites and TypeScript passed. [Red](evidence/part-1a-cas-red.txt) · [Pass](evidence/part-1a-cas-green.txt)
 
+- Part 1, CONFIRMED complete. Eight conditional-ancestor cases passed, with byte-identical exact undo, safe manual refusals and successful token undo for a once-used component. TypeScript passed. Part 1a is committed as `1b93d2b`. [Characterization](evidence/part-1b-conditional-characterization.txt)
+
 ## Next
 
-Part 0 is CONFIRMED complete. All 23 battery suites passed on the unchanged engine baseline, including 300 seeded stacked-edit cases. Every protected-state snapshot matched. [Results](evidence/part-0c-battery-results.json) · [Cleanup](evidence/part-0c-cleanup-summary.json) The dynamic integrity guard is complete in commit `6cadd06`. Next is Part 1b, conditional-ancestor characterization. Part 1b and Parts 2–6 are pending.
+Part 0 is CONFIRMED complete. All 23 battery suites passed on the unchanged engine baseline, including 300 seeded stacked-edit cases. Every protected-state snapshot matched. [Results](evidence/part-0c-battery-results.json) · [Cleanup](evidence/part-0c-cleanup-summary.json) The dynamic integrity guard is complete in commit `6cadd06`. Next is Part 2a, write the overlay contract before its tests and implementation. Parts 2–6 are pending.
 
 ```powershell
 Set-Location -LiteralPath 'C:\dev\vibecheck'
 git status --porcelain=v1
-Get-Content -LiteralPath lib/slightnudge/edit-history.ts -Raw
+Get-Content -LiteralPath app/studio/page.tsx,components/slightnudge/SlightNudgeOverlay.tsx -Raw
 ```
 
 Use a fresh evidence label per run. The isolation runner archives the current HEAD, omits the environment template, and runs the unchanged engine in a temporary repository with the source repository's line-ending setting. The outer runner takes snapshots with the unchanged real-state helper. Retry an assertion failure once in a fresh isolation and apply Amendment 3's four stop conditions.

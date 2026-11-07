@@ -60,9 +60,17 @@ The three new regression cases failed against the unchanged engine and passed af
 
 CONFIRMED. History resilience, the hook production guard, parent-junction containment, token undo, undo refusals, restored-token refusal and TypeScript passed with the fix. All protected-state snapshots matched. Windows file symlink privilege remains UNVERIFIED, as the existing containment suite reports. [History](editor/evidence/part-1a-regression-history-resilience.txt) · [Hook guard](editor/evidence/part-1a-regression-prewrite-hook-guard.txt) · [Containment](editor/evidence/part-1a-regression-undo-m5-parent-junction.txt) · [Token undo](editor/evidence/part-1a-regression-token-undo.txt) · [Refusals](editor/evidence/part-1a-regression-undo-refusals.txt) · [Restored token](editor/evidence/part-1a-regression-undo-m3-restored-token.txt) · [TypeScript](editor/evidence/part-1a-regression-typecheck.txt)
 
-## Parts 1b–6
+## Part 1b — Conditional ancestor characterization
 
-UNVERIFIED. Conditional-ancestor characterization, overlay polish, test infrastructure, controls, real-site validation and the closing gate are pending their scheduled parts. Tag `pre-sprint1` was created on baseline `955007d` and branch `feat/editor-sprint1` was created under Amendment 2. The helper work initially landed in `b96f47c` and is complete after the Amendment 3 correction.
+CONFIRMED. Eight cases cover ternary, logical AND, if-statement ancestors and a component used once. Every unchanged file applies and undoes byte-identically. After an unrelated external text edit, the three conditional contexts refuse with file, line and exact token restoration instructions, preserve the external bytes, and keep the history record retryable. The once-used component completes token undo while preserving the external text. A same-class sibling is checked to catch wrong-target changes. The suite completed in 1.9 seconds. [Characterization](editor/evidence/part-1b-conditional-characterization.txt)
+
+No behavior change was required for conditional ancestors because these tests exposed neither a wrong target nor a stuck state. This characterization passed on its initial run. An initial TypeScript check identified two optional assertion-message arguments, which were given fallback messages without changing the asserted conditions. TypeScript then passed. [Initial type output](editor/evidence/part-1b-typecheck.txt) · [TypeScript pass](editor/evidence/part-1b-typecheck-fixed.txt)
+
+Part 1a is committed as `1b93d2b`. The implementation changes only the three write-time comparisons and undo-status restoration on refusal.
+
+## Parts 2–6
+
+UNVERIFIED. Overlay polish, UI test infrastructure, controls, real-site validation and the closing gate remain pending. Tag `pre-sprint1` was created on baseline `955007d` and branch `feat/editor-sprint1` was created under Amendment 2. The helper work initially landed in `b96f47c` and is complete after the Amendment 3 correction.
 
 ## Amendment 2
 
@@ -100,4 +108,4 @@ All Amendment 3 isolation roots were confirmed absent after cleanup, including a
 
 ## What I did NOT verify
 
-The writer responsible for the historical history-file change, and Part 1b characterization and all implementation and verification work in Parts 2–6.
+The writer responsible for the historical history-file change, and All implementation and verification work in Parts 2–6, including the full gate on the final branch tip.
