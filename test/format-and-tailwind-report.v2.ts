@@ -1,3 +1,4 @@
+const mutableTestEnvironment: Record<string, string | undefined> = process.env;
 import fs from 'node:fs';
 import path from 'node:path';
 import {execFileSync} from 'node:child_process';
@@ -7,7 +8,7 @@ fs.symlinkSync(path.join(project,'node_modules'),path.join(root,'node_modules'),
 fs.copyFileSync(path.join(project,'.slightnudge/repositories/m0-control-lab/package.json'),path.join(root,'package.json'));
 fs.copyFileSync(path.join(project,'.slightnudge/repositories/m0-control-lab/src/app/globals.css'),path.join(root,'app/globals.css'));
 fs.writeFileSync(path.join(root,'tsconfig.json'),JSON.stringify({compilerOptions:{jsx:'preserve',target:'ES2020',module:'esnext'}}));
-process.chdir(root);process.env.SLIGHTNUDGE_TEST='1';process.env.NODE_ENV='test';process.env.SLIGHTNUDGE_WORKSPACE_ROOT=root;process.env.SLIGHTNUDGE_DATA_DIR=path.join(root,'.slightnudge');
+process.chdir(root);process.env.SLIGHTNUDGE_TEST='1';mutableTestEnvironment.NODE_ENV='test';process.env.SLIGHTNUDGE_WORKSPACE_ROOT=root;process.env.SLIGHTNUDGE_DATA_DIR=path.join(root,'.slightnudge');
 const {createPendingSourceEdit,applyPendingSourceEdit,undoReviewedSourceEdit}=await import('../lib/slightnudge/edit-history');
 const file=path.join(root,'app/page.tsx'),before='export default function Page(){return <div id="target" className="p-2">Hello</div>}\n';fs.writeFileSync(file,before);
 const after=before.replace('p-2','p-4');

@@ -1,10 +1,11 @@
+const mutableTestEnvironment: Record<string, string | undefined> = process.env;
 import fs from 'node:fs';
 import path from 'node:path';
 import {randomUUID} from 'node:crypto';
 import {syncBuiltinESMExports} from 'node:module';
 const project=path.resolve(import.meta.dirname,'..'),base=path.join(project,'scratch/security-hardening-20261101'),root=path.join(base,'proof-workspace');
 if(path.resolve(process.cwd())!==root)throw Error('Proofs must run only in the designated temp-copy cwd');
-process.env.SLIGHTNUDGE_TEST='1';process.env.NODE_ENV='test';process.env.SLIGHTNUDGE_WORKSPACE_ROOT=root;process.env.SLIGHTNUDGE_DATA_DIR=path.join(root,'.slightnudge');
+process.env.SLIGHTNUDGE_TEST='1';mutableTestEnvironment.NODE_ENV='test';process.env.SLIGHTNUDGE_WORKSPACE_ROOT=root;process.env.SLIGHTNUDGE_DATA_DIR=path.join(root,'.slightnudge');
 const mode=process.argv.find(arg=>/^--S[123]$/.test(arg))?.slice(2),label=process.env.PROOF_LABEL||'before',rows:any[]=[];
 const out=path.join(project,'docs/security-hardening');fs.mkdirSync(out,{recursive:true});
 const check=(name:string,pass:boolean,detail?:unknown)=>{const row={name,pass,detail};rows.push(row);console.log(JSON.stringify(row));};
