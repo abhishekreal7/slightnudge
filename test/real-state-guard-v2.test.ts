@@ -8,7 +8,7 @@ import path from 'node:path';
 import { snapshot, assertUnchanged } from './helpers/real-state';
 
 describe('Real state integrity guard v2', () => {
-  it('matches every fixture to its Git HEAD blob', () => {
+  it('matches every fixture to its Git HEAD blob after CRLF normalization and reports fixtures clean', () => {
     const state = snapshot();
     const tracked = execFileSync('git', ['ls-tree', '-r', '--name-only', 'HEAD', '--', 'fixtures/'], { encoding: 'utf8' })
       .split(/\r?\n/).filter(Boolean);
@@ -16,11 +16,13 @@ describe('Real state integrity guard v2', () => {
     assert.deepEqual(actual.sort(), tracked.sort(), 'Fixture additions and deletions must be detected');
     for (const file of tracked) {
       const blob = execFileSync('git', ['show', `HEAD:${file}`]);
-      const hash = createHash('sha256').update(blob).digest('hex');
+      const hash = createHash('sha256').update(blob.toString('utf8').replace(/\r\n/g, '\n')).digest('hex');
       const observed = state.files[file];
       assert.notEqual(observed, 'absent', `${file} must exist`);
-      assert.equal(typeof observed === 'object' && observed.sha256, hash, `${file} must equal HEAD`);
+      const content = fs.readFileSync(file, 'utf8').replace(/\r\n/g, '\n');
+      assert.equal(createHash('sha256').update(content).digest('hex'), hash, `${file} must equal HEAD after CRLF normalization`);
     }
+    assert.equal(execFileSync('git', ['status', '--porcelain=v1', '--', 'fixtures/'], { encoding: 'utf8' }).trim(), '', 'Git must report fixtures clean');
   });
 
   it('has no tracked modification beyond the allowed generated imports', () => {
