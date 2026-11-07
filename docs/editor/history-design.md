@@ -10,7 +10,7 @@ The synthetic baseline measured readHistory median 30.28 ms at 100 small-source 
 
 ## Versioned store
 
-Keep the original edits.json byte-for-byte and never replace, delete or compact it. Place a sibling `store-v2/` beside it, honoring the same test-only path overrides as the existing history path; production ignores those overrides. The new code uses v2 only after a valid activation manifest exists. Legacy fallback is read-only until an explicit migration or the first write finishes migration successfully.
+Keep the original edits.json byte-for-byte and never replace, delete or compact it. Place a sibling `store-v2/` beside it, honoring the same test-only path overrides as the existing history path; production ignores those overrides. The new code uses v2 only after a valid activation manifest exists. Legacy fallback is read-only until an explicit, consented migration finishes successfully. An ordinary append never grants consent.
 
 ```text
 history/edits.json                  immutable legacy fallback
@@ -72,3 +72,16 @@ Malformed metadata, a missing blob, wrong hash or escaping record yields a typed
 4. Corrupt hash, missing blob, path escape, symlink/reparse containment and corrupt index tests verify skip/report versus fail-without-write behavior. Named mutants remove blob verification, remove read containment, and publish index before blobs; each must fail a named assertion.
 5. Wire Apply and both Undo paths only after store tests pass. Prove legacy and v2 exact/token Undo and unchanged history-resilience, token-undo, undo-refusals, undo-stacked-edits, s3-atomic-write and containment suites. Add the new suites to BRIEF.md's final battery only when created; do not list nonexistent suites as passing.
 6. Rerun all eight baseline cells with 20 attempts each plus append timings/physical-byte counters. Report full compatibility reads separately from paginated metadata listing. Then run the complete Part 0c battery, unchanged assertions, in isolated sources with real-state snapshots around every group. No real legacy migration, maintenance, write or blob read is authorized by this design.
+
+
+## Amendment 6 — approved changes (take precedence)
+
+The UI line of record is stage/S1; this module stays self-contained on the sprint branch. Neither stage/S1 nor any live server is touched. Porting is deliberate and deferred.
+
+The activation manifest records exactly one mode: legacy-only, migrating, v2-active. Every writer acquires the cross-process mutation lock and reads mode while holding it. A sibling marker `<legacy filename>.migrated-to-v2` tells cooperating legacy writers to refuse writes. The existing legacy engine does not yet honor it; it must be guarded before production activation. Old versions cannot be forced to honor a marker. Concurrent old/new writers are forbidden by deployment coordination across both code lines, not magically made safe by the new store.
+
+`dryRunMigration()` streams generated/consented legacy input and returns only aggregate legacy bytes, estimated record count, estimated v2 bytes and blob count. Parsing for these counts must not expose record fields. `migrate({consent: true})` is mandatory and refuses missing/false consent before mutating anything. Session scripts/tests may migrate only explicitly generated disposable workspaces. Mode migrating must survive a process death and allow idempotent, consented recovery; active index corruption is never overwritten via a legacy fallback.
+
+Pending operation intents are capped at eight per store. A full cap refuses writes with a recoverable reason code, without evicting intents. Apply, exact Undo and token Undo each need process-death tests at every source-write/history-publish boundary. Recovery accepts only verified source-before or source-after identity; any third state refuses with instructions. Reopening and recovering must not guess or overwrite external changes.
+
+All store diagnostics are aggregate counts and fixed reason codes only. No path, hash, size, token, source text or record id may appear in thrown errors or logs. A privacy test captures every store failure case and checks the complete thrown/log output against synthetic secret sentinel values and payload representations. The public API remains openStore, append, updateStatus, listPage, getRecord, getBlob, recover, dryRunMigration, migrate(consent), plus a readHistory-shaped compatibility adapter. Unimplemented API portions must stay explicitly marked pending, never silently fall back to writes.

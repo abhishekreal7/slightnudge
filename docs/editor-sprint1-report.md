@@ -189,6 +189,20 @@ Continued directly with Step 2a, CONFIRMED complete as a design artifact. The pr
 
 Step 2 implementation is INCOMPLETE: no product storage code or tests were added, no speedup claimed and no history was migrated. Step 2b's failing tests, implementation, mutations, before/after measurements and full unchanged safety battery remain next. Step 3 timings and Step 4 queue are pending. UI-only work remains deferred while engine work continues on this branch. The complete request is saved in BRIEF.md. No temporary workspace, server or clone was created in this documentation checkpoint; existing live servers were not contacted or stopped.
 
+## Amendment 6 — partial storage primitives, incomplete store
+
+The owner chose stage/S1 as the UI line of record. No UI or stage/S1 change was made, no live server contacted or stopped, and the approved design amendments were applied before code. [Design](editor/history-design.md) · [Deliberate future port plan](editor/port-plan.md)
+
+CONFIRMED: the new module imports Node builtins and its own types/errors only, with explicit roots and no implicit history location. Atomic writes use temporary files, flush/close and the legacy retry/backoff schedule; byte counters count physical writes. Identical snapshots share SHA-256 blobs; reads verify length and hash. Path traversal and junction reads refuse before reading outside bytes. Fixed errors expose no payload detail. Modules remain UNWIRED: no Apply/Undo/storage-format behavior changed. [Expected missing-module red](editor/evidence/amendment6-blobs-red.txt) · [Five primitive tests, including privacy](editor/evidence/amendment6-blobs-privacy.txt)
+
+Two named primitive mutants killed: removing blob digest comparison fails **rejects wrong hashes, missing blobs and bad sizes without private diagnostics**; removing read containment fails **rejects path escapes and junction reads before reading outside bytes**. These mutations existed only in isolated sources. The index-before-blob mutant is PENDING because metadata publication is not implemented. [Hash mutant](editor/evidence/amendment6-mutant-hash.txt) · [Containment mutant](editor/evidence/amendment6-mutant-containment.txt)
+
+CONFIRMED: TypeScript passed. Existing history-resilience (six tests) and atomic-write (two tests) passed unchanged against the old engine; they do not exercise a new v2 adapter. [TypeScript](editor/evidence/amendment6-typecheck.txt) · [History](editor/evidence/amendment6-regression-history.txt) · [Atomic](editor/evidence/amendment6-regression-atomic.txt)
+
+INCOMPLETE: public store, mode/marker, locking, metadata pages, pagination, migration/consent/dry-run, bounded operation intents and source recovery, compatibility, store-wide privacy, complete mutations, all baseline cells with append counters, and full safety battery. No new before/after speedup table exists yet: existing baseline measurements remain unchanged and no store performance improvement is claimed. The port plan is analysis only and must not be executed in this session.
+
+All 8 Amendment 6 snapshot pairs match. All 5 named isolation roots were removed, including mutant copies, junctions and nested temp data. Primitive tests also remove their own sn-blob-contract- directories in finally; individual generated suffixes were not captured. No server or clone was created. [Audit](editor/evidence/amendment6-audit.json)
+
 ## What I did NOT verify
 
 The writer responsible for the historical history-file change, Windows file-symlink attacks requiring unavailable privilege, and implementation and verification work in Parts 2bâ€“6, including the final full safety battery, production start smoke test and real-site validation.
