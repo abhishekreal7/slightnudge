@@ -217,6 +217,10 @@ CONFIRMED: four new tests pass after missing-module red. An exclusive create-new
 
 All fifteen storage tests and TypeScript passed. This does not prove migration, intents, engine wiring or the complete safety battery. Paths are explicit roots; the production/test-override compatibility resolver remains item 4 work. No before/after storage latency improvement is claimed. [Combined storage regression](editor/evidence/amendment7-storage-regression.txt) · [TypeScript](editor/evidence/amendment7-mode-types.txt)
 
+A further legacy-writer contract first failed: its callback could run before a legacy-only manifest existed. The writer now persists that mode under the lock before calling the cooperating writer. All sixteen storage tests and final TypeScript pass. Items 1 and 2 are saved; items 3–8 remain INCOMPLETE and the branch's engine work is not finished. Existing Apply/Undo are still unwired. [Legacy-mode red](editor/evidence/amendment7-legacy-mode-red.txt) · [Sixteen tests](editor/evidence/amendment7-storage-final.txt) · [Final types](editor/evidence/amendment7-store-types-final.txt)
+
+All 11 protected-state snapshot pairs match; all 3 named isolation roots were removed. Mode tests remove generated sn-mode-contract directories (individual suffixes not captured), and their child processes exited. No live server was contacted/stopped, no stage/S1 worktree changed and no developer history records were parsed/migrated/written. [Audit](editor/evidence/amendment7-audit.json)
+
 ## What I did NOT verify
 
 The writer responsible for the historical history-file change, Windows file-symlink attacks requiring unavailable privilege, and implementation and verification work in Parts 2bâ€“6, including the final full safety battery, production start smoke test and real-site validation.

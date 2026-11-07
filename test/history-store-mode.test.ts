@@ -37,6 +37,14 @@ if (process.argv[2] === '--worker') {
     assert.throws(() => s.assertLegacyWritable(), /STORE_MODE/);
     assert.equal(s.getRecord('a')?.after.toString(), 'b');
   }));
+  it('records legacy-only mode under the lock before a cooperating legacy write', () => temporary(root => {
+    const s = store(root);
+    s.withLegacyWrite(() => {
+      const manifest = JSON.parse(fs.readFileSync(path.join(root, 'store-v2/active.json'), 'utf8'));
+      assert.equal(manifest.mode, 'legacy-only');
+      assert.throws(() => s.withLegacyWrite(() => {}), /STORE_BUSY/);
+    });
+  }));
   it('never steals busy or abandoned locks and checks migrating mode while locked', () => temporary(root => {
     const s = store(root); const io = createNodeIO(root);
     io.withMutationLock(() => { assert.throws(() => s.append(entry('a')), /STORE_BUSY/); });

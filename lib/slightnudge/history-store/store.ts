@@ -61,6 +61,12 @@ export function openStore(options: { directory: string; validateSource: (relativ
     /** Diagnostic only: a successful check must not authorize a later write. */
     assertLegacyWritable() { return io.withMutationLock(legacyAllowed); },
     /** Cooperating legacy writers must keep check and write in this one lock. */
-    withLegacyWrite<T>(operation: () => T): T { return io.withMutationLock(() => { legacyAllowed(); return operation(); }); },
+    withLegacyWrite<T>(operation: () => T): T {
+      return io.withMutationLock(() => {
+        legacyAllowed();
+        if (!load()) publish({ version: 2, mode: 'legacy-only', generation: randomUUID() });
+        return operation();
+      });
+    },
   };
 }
