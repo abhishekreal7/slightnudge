@@ -2,7 +2,7 @@
 
 ## Done
 
-- The original sprint brief and amendments 1–6 are saved in [BRIEF.md](BRIEF.md).
+- The original sprint brief and amendments 1–7 are saved in [BRIEF.md](BRIEF.md).
 - Part 0a, CONFIRMED under Amendment 1. Both changed imports in `next-env.d.ts` match HEAD after removing the development path segment. The baseline was `955007d231d7da7783c6d3222ea2942be03eafb4`. [Programmatic check](evidence/part-0a-amended-check.txt)
 - Part 0b, CONFIRMED. The original range contained one Next.js dependency upgrade. Zero commits touched the designated sensitive paths. [Inventory](evidence/part-0b-commit-inventory.txt)
 - Part 0c, CONFIRMED for the prior TypeScript, production build and browser smoke. Chromium received the token and applied a nudge in the archive. [TypeScript](evidence/part-0c-tsc.txt) Â· [Build](evidence/part-0c-build.txt) Â· [Smoke](evidence/part-0c-studio-rerun.txt)
@@ -25,19 +25,19 @@
 
 ## Next
 
-Amendment 6 wins. UI line of record is stage/S1 (/editor). Legacy UI work is frozen; do not contact/stop live servers or modify stage/S1 or its worktree. B, C, D-UI and browser perf proofs belong to its later session. The full decision is appended verbatim to BRIEF.md, and history-design.md includes the approved mode/marker, migration consent, privacy and eight-intent-cap amendments.
+Amendment 7 controls the sequence; complete items 1–8 before declaring this branch's engine work finished. UI work stays frozen and stage/S1/live servers remain untouched.
 
-**INCOMPLETE store-v2 checkpoint:** self-contained atomic I/O, fixed-code errors and content-addressed blobs exist under lib/slightnudge/history-store/. Five primitive tests pass, including privacy; two isolated mutants were killed. TypeScript, unchanged history-resilience and s3-atomic-write pass. No engine wiring, store activation, migration or developer-history access occurred. These tests do not prove a full store or v2 Apply/Undo.
+Item 1 metadata primitives: COMPLETE as the internal single-writer layer (not a deployable store). Six tests and TypeScript pass: fixed-length head/count, pages <=50 bounded records, locators, cursor restart, status update, blob-first publication and ten fault boundaries. Counting adapter append bytes: 3241 at 10 records, 395 at 2000 (new page), 14507 at 1999 (full page). These are memory-adapter counts/timings, not a disk benchmark or the required eight-cell after table. [Proof](evidence/amendment7-pages-final.txt)
 
-Next implement failing tests then the public openStore/append/updateStatus/listPage/getRecord/getBlob/recover/dryRunMigration/migrate APIs and compatibility adapter. Pending: bounded metadata pages, store lock/mode/legacy marker coordination, explicit migration consent and streaming dry run, eight-intent cap and apply/exact-undo/token-undo death-point recovery, all privacy failure cases, cross-process consistency, bytes/append bounds, pagination, index-before-blob mutant, before/after performance table and full unchanged Part 0c safety battery. Keep primitives unwired until the full contract passes. Add the new actual suites to the final battery; history-store-blobs is now listed in BRIEF.md.
+Resume item 2: public store mode and cross-process mutation lock; then item 3 capped recovery intents, item 4 compatibility/wiring decision, item 5 streaming consented migration, item 6 comprehensive privacy/tamper/mutants, item 7 full baseline and battery, item 8 final closure. `openPagedStore` is internal and must not be used by a writer without the future mode/lock owner. No engine wiring or real migration occurred. The full store and this branch's engine work are INCOMPLETE.
 
 ```powershell
 Set-Location -LiteralPath 'C:\dev\vibecheck'
-Get-Content docs/editor/BRIEF.md,docs/editor/STATE.md,docs/editor/history-design.md,docs/editor/port-plan.md -Raw
-node --import tsx scratch/editor-sprint1-run-group.ts amendment6-blobs-resume node --import tsx --test test/history-store-blobs.test.ts
+Get-Content docs/editor/BRIEF.md,docs/editor/STATE.md,docs/editor/history-design.md -Raw
+node --import tsx scratch/editor-sprint1-run-group.ts amendment7-pages-resume node --import tsx --test test/history-store-pages.test.ts
 ```
 
-The deliberate [port plan](port-plan.md) is written but not executed. Carry completed safety work by review and tests, never merge or blind replay. After completing the engine/storage validation requested in Amendment 6, stop. For the later stage/S1 session: execute port plan on a new integration worktree, establish disposable port plan, B preview correctness, C shared control design, D-UI and browser-side performance proofs. No end-to-end speedup is claimed by the current primitives.
+After completion, later work belongs only to the new integration worktree proposed in port-plan.md: deliberate safety port, B preview fix, C design, controls/D-UI and browser perf. Do not create that worktree here.
 
 ## Open issues
 

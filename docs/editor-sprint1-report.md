@@ -203,6 +203,14 @@ INCOMPLETE: public store, mode/marker, locking, metadata pages, pagination, migr
 
 All 8 Amendment 6 snapshot pairs match. All 5 named isolation roots were removed, including mutant copies, junctions and nested temp data. Primitive tests also remove their own sn-blob-contract- directories in finally; individual generated suffixes were not captured. No server or clone was created. [Audit](editor/evidence/amendment6-audit.json)
 
+## Amendment 7 item 1 — paged metadata primitive
+
+CONFIRMED: six tests pass after the raw missing-module red. A fixed-length committed-count head, metadata pages capped at 50 records and 8192 bytes per record, hashed-ID locators, idempotent append, status changes and revision cursors are implemented in the internal single-writer layer. Listing 50 reads head and one bounded page, no blobs. Ten before/after blob/page/locator/head fault boundaries reopen consistently; obsolete tail locators cannot expose discarded entries. Source materialization requires an owner-supplied validation callback. [Red](editor/evidence/amendment7-pages-red.txt) · [Pass](editor/evidence/amendment7-pages-final.txt) · [TypeScript](editor/evidence/amendment7-pages-types.txt)
+
+Counting-adapter append results (one sample each, no timing gates): 10 records: 3241 bytes / 0.1011 ms; 2000: 395 bytes / 0.0537 ms; 1999: 14507 bytes / 0.1537 ms. Different page occupancy explains different constants. These are not physical-disk latency or the required full before/after baseline matrix. Read/write counters assert bounded I/O payload bytes.
+
+The public concurrent store remains INCOMPLETE. Item 2 mode/locking and items 3–8 remain pending. No production engine wiring, developer-data migration or stage/S1 changes occurred.
+
 ## What I did NOT verify
 
 The writer responsible for the historical history-file change, Windows file-symlink attacks requiring unavailable privilege, and implementation and verification work in Parts 2bâ€“6, including the final full safety battery, production start smoke test and real-site validation.
