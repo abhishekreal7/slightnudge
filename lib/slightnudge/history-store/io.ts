@@ -9,9 +9,13 @@ export interface StoreIO {
   exists(relative: string): boolean;
   atomicWrite(relative: string, value: Buffer): void;
 }
+export interface NodeStoreIO extends StoreIO {
+  withMutationLock<T>(operation: () => T): T;
+  markReadOnly(relative: string): void;
+}
 
 /** Explicit root only: never resolves the developer's history implicitly. */
-export function createNodeIO(directory: string, beforeRename?: () => void): StoreIO {
+export function createNodeIO(directory: string, beforeRename?: () => void): NodeStoreIO {
   let root: string;
   try { root = fs.realpathSync(directory); } catch { throw new StoreError('STORE_IO'); }
   const stats = { bytesRead: 0, bytesWritten: 0, writes: 0 };
@@ -37,6 +41,17 @@ export function createNodeIO(directory: string, beforeRename?: () => void): Stor
   }
   return {
     stats,
+    markReadOnly(relative) { protect(() => { fs.chmodSync(locate(relative), 0o444); }); },
+    withMutationLock<T>(operation: () => T): T {
+      return protect(() => {
+        const relative = 'store-v2-mutation.lock'; const lock = locate(relative);
+        let descriptor: number;
+        try { descriptor = fs.openSync(lock, 'wx', 0o600); }
+        catch (error) { if ((error as NodeJS.ErrnoException).code === 'EEXIST') throw new StoreError('STORE_BUSY'); throw error; }
+        try { return operation(); }
+        finally { fs.closeSync(descriptor); fs.unlinkSync(locate(relative)); }
+      });
+    },
     read(relative) { return protect(() => { const value = fs.readFileSync(locate(relative)); stats.bytesRead += value.length; return value; }); },
     exists(relative) { return protect(() => { const target = locate(relative); return fs.existsSync(target); }); },
     atomicWrite(relative, value) {

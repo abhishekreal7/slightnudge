@@ -29,7 +29,9 @@ Amendment 7 controls the sequence; complete items 1–8 before declaring this br
 
 Item 1 metadata primitives: COMPLETE as the internal single-writer layer (not a deployable store). Six tests and TypeScript pass: fixed-length head/count, pages <=50 bounded records, locators, cursor restart, status update, blob-first publication and ten fault boundaries. Counting adapter append bytes: 3241 at 10 records, 395 at 2000 (new page), 14507 at 1999 (full page). These are memory-adapter counts/timings, not a disk benchmark or the required eight-cell after table. [Proof](evidence/amendment7-pages-final.txt)
 
-Resume item 2: public store mode and cross-process mutation lock; then item 3 capped recovery intents, item 4 compatibility/wiring decision, item 5 streaming consented migration, item 6 comprehensive privacy/tamper/mutants, item 7 full baseline and battery, item 8 final closure. `openPagedStore` is internal and must not be used by a writer without the future mode/lock owner. No engine wiring or real migration occurred. The full store and this branch's engine work are INCOMPLETE.
+Item 2 mode/lock: COMPLETE for explicit-root generated stores. Four tests pass, including two-process appends (30 records), busy/abandoned lock refusal, immutable legacy input, marker refusal, and corrupt-manifest/head/page refusal. All 15 storage tests and TypeScript pass. [Proof](evidence/amendment7-mode-green.txt)
+
+Resume item 3 capped recovery intents, item 4 compatibility/wiring decision, item 5 streaming consented migration, item 6 comprehensive privacy/tamper/mutants, item 7 full baseline and battery, item 8 final closure. `openPagedStore` is internal and must not be used by a writer without the future mode/lock owner. No engine wiring or real migration occurred. The full store and this branch's engine work are INCOMPLETE.
 
 ```powershell
 Set-Location -LiteralPath 'C:\dev\vibecheck'

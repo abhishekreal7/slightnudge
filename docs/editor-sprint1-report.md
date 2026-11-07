@@ -211,6 +211,12 @@ Counting-adapter append results (one sample each, no timing gates): 10 records: 
 
 The public concurrent store remains INCOMPLETE. Item 2 mode/locking and items 3–8 remain pending. No production engine wiring, developer-data migration or stage/S1 changes occurred.
 
+## Amendment 7 item 2 — modes and cross-process lock
+
+CONFIRMED: four new tests pass after missing-module red. An exclusive create-new lock serializes writers and is never stolen on age; busy and abandoned locks refuse with STORE_BUSY. Public mutations read mode while holding the lock. An empty store activates with a read-only sibling marker; existing legacy input refuses implicit migration. The withLegacyWrite callback holds the same lock across check and write; assertLegacyWritable is diagnostic only and must not authorize a later write. Corrupt manifest/head/page inputs remain unchanged after refusal. Two worker processes append 15 records each without losing or duplicating IDs. [Red](editor/evidence/amendment7-mode-red.txt) · [Pass](editor/evidence/amendment7-mode-green.txt)
+
+All fifteen storage tests and TypeScript passed. This does not prove migration, intents, engine wiring or the complete safety battery. Paths are explicit roots; the production/test-override compatibility resolver remains item 4 work. No before/after storage latency improvement is claimed. [Combined storage regression](editor/evidence/amendment7-storage-regression.txt) · [TypeScript](editor/evidence/amendment7-mode-types.txt)
+
 ## What I did NOT verify
 
 The writer responsible for the historical history-file change, Windows file-symlink attacks requiring unavailable privilege, and implementation and verification work in Parts 2bâ€“6, including the final full safety battery, production start smoke test and real-site validation.

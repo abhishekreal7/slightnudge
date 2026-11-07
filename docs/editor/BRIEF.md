@@ -156,3 +156,5 @@ SCOPE (in this order; commit after each item with explicit paths, never next-env
 8. Close: update STATE.md and the report: what is complete, the before and after tables, mutant table with named killing tests, the privacy result, the wiring decision and the exact next step. State plainly that this branch's engine work is finished and that every later task (port, preview fix, design pass, controls, browser-side performance) happens in the integration worktree created from stage/S1 per docs/editor/port-plan.md. Do not create that worktree in this session and do not start any other work.
 
 New final battery suite: history-store-pages (metadata publication contracts).
+
+New final battery suite: history-store-mode (mode, marker, lock and cross-process contracts).
