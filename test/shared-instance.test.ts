@@ -32,7 +32,7 @@ try{
   edit=await request({...write,property:'variant',value:'quiet',parentPreviewId:edit.id});assert.equal(edit.success,true,JSON.stringify(edit));assert.equal(edit.renderPatches[0].className,'bg-white');
   const first=await request({operation:'inspect',instance:marker(indices[0]),drafts:{'page.tsx':edit.id}});assert.equal(first.component.fields[0].value,'Same');
   const second=await request({operation:'inspect',drafts:{'page.tsx':edit.id}});assert.equal(second.component.fields[0].value,'Only second');
-  const replay=await readRenderableDraft(edit.id,path.join(root,'page.tsx'),{root});assert.equal(replay.renderPatches.length,1);assert.equal(replay.renderPatches[0].text,'Only second');
+  const replay=await readRenderableDraft(edit.id,path.join(root,'page.tsx'),{root});assert.ok(replay.renderPatches,'Draft replay must contain render patches');assert.equal(replay.renderPatches.length,1);assert.equal(replay.renderPatches[0].text,'Only second');
   assert.equal(fs.readFileSync('page.tsx','utf8'),content);
   assert.equal((await applyPendingSourceEdit(edit.id)).success,true);assert.match(fs.readFileSync('page.tsx','utf8'),/<Action label="Same"\/>/);assert.equal(undoReviewedSourceEdit(edit.id).success,true);assert.equal(fs.readFileSync('page.tsx','utf8'),content);
   const toggle=await request({...write,property:'disabled',value:'true'});assert.equal(toggle.success,true,JSON.stringify(toggle));const untoggle=await request({...write,property:'disabled',value:'false',parentPreviewId:toggle.id});assert.equal(untoggle.draftClean,true,JSON.stringify(untoggle));

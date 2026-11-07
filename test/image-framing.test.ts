@@ -17,7 +17,7 @@ try {
   let edit = await preview({ property: 'objectFit', value: 'object-cover' }); assert.equal(edit.success, true, edit.error);
   edit = await preview({ property: 'objectPosition', value: 'object-right', parentPreviewId: edit.id }); assert.equal(edit.success, true, edit.error);
   assert.equal(fs.readFileSync(file, 'utf8'), baseline);
-  const saved = await applyPendingSourceEdit(edit.id); assert.equal(saved.success, true, saved.error);
+  const saved = await applyPendingSourceEdit(edit.id); assert.equal(saved.success, true, saved.error ?? 'Expected the operation to succeed');
   const after = fs.readFileSync(file, 'utf8'); assert.ok(after.includes('object-cover object-right md:object-right hover:opacity-80')); assert.ok(after.includes('srcSet="/original.webp 1x, /large.webp 2x" sizes="50vw" width={640} height={360} loading="lazy" alt="An original"'));
   assert.equal(undoReviewedSourceEdit(edit.id).success, true); assert.equal(fs.readFileSync(file, 'utf8'), baseline);
   assert.equal((await preview({ property: 'objectFit', value: 'object-cover', elementId: 'box' })).success, undefined);

@@ -27,7 +27,7 @@ try {
   edit = await request({ kind: 'style', property: 'objectFit', value: 'object-contain', parentPreviewId: edit.id }); assert.equal(edit.success, true, edit.error);
   assert.equal(edit.renderPatches[0].attributes.src, asset); assert.match(edit.renderPatches[0].className, /object-contain/);
   assert.equal(fs.readFileSync(file, 'utf8'), before);
-  const saved = await applyPendingSourceEdit(edit.id); assert.equal(saved.success, true, saved.error);
+  const saved = await applyPendingSourceEdit(edit.id); assert.equal(saved.success, true, saved.error ?? 'Expected the operation to succeed');
   assert.ok(fs.readFileSync(file, 'utf8').includes('width={200} height={100} className="object-contain"'));
   assert.equal(undoReviewedSourceEdit(edit.id).success, true); assert.equal(fs.readFileSync(file, 'utf8'), before);
   assert.equal((await request({ property: 'src', value: '/etc/passwd' })).success, undefined);

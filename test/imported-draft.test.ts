@@ -30,7 +30,7 @@ try {
   assert.equal(second.renderPatches.length, 2); assert.ok(second.renderPatches.every((patch: any) => patch.before.path === 'page.tsx'));
   assert.equal(fs.readFileSync(file, 'utf8'), before);
   assert.equal((await applyPendingSourceEdit(second.id)).success, false);
-  const saved = await applyPendingSourceEdit(second.id, undefined, scope.repositoryId, 'page.tsx', file); assert.equal(saved.success, true, saved.error);
+  const saved = await applyPendingSourceEdit(second.id, undefined, scope.repositoryId, 'page.tsx', file); assert.equal(saved.success, true, saved.error ?? 'Expected the operation to succeed');
   assert.ok(fs.readFileSync(file, 'utf8').includes('text-4xl')); assert.ok(fs.readFileSync(file, 'utf8').includes('Build locally'));
   assert.equal(readHistory().length, 1);
   assert.equal(undoReviewedSourceEdit(second.id, { repositoryId: scope.repositoryId, sourcePath: 'page.tsx', filePath: file }).success, true);

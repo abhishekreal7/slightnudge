@@ -23,7 +23,7 @@ try {
   edit = await preview({ kind: 'style', elementId: 'cta', property: 'backgroundColor', value: 'bg-rose-500', important: true, parentPreviewId: edit.id }); assert.equal(edit.success, true, edit.error);
   edit = await preview({ kind: 'text', elementId: 'native', value: 'Save changes', parentPreviewId: edit.id }); assert.equal(edit.success, true, edit.error);
   assert.equal(fs.readFileSync(file, 'utf8'), before);
-  const saved = await applyPendingSourceEdit(edit.id); assert.equal(saved.success, true, saved.error);
+  const saved = await applyPendingSourceEdit(edit.id); assert.equal(saved.success, true, saved.error ?? 'Expected the operation to succeed');
   const after = fs.readFileSync(file, 'utf8');
   assert.ok(after.includes('<span aria-hidden="true">→</span>') && after.includes('<svg><path d="M0 0"/></svg>'));
   assert.ok(after.includes('href="#start"') && after.includes('type="button"'));

@@ -20,7 +20,7 @@ try {
   const draft = await plan.create({ filePath: file, before, after: moved.after, summary: 'Move button', oldValue: '', newValue: '' }, false, moved.sourceOrder); assert.ok(draft.id);
   assert.equal(draft.renderPatches.filter(patch => patch.order).length, 2); assert.equal(fs.readFileSync(file, 'utf8'), before);
   assert.deepEqual((await readRenderableDraft(draft.id, file)).renderPatches, draft.renderPatches);
-  const editPlan = prepareDraftTarget(source, draft.id); const edited = updateStaticJsxText({ ...editPlan.target, value: 'Start here' }); assert.ok(edited.success, edited.reason);
+  const editPlan = prepareDraftTarget(source, draft.id); const edited = updateStaticJsxText({ ...editPlan.target, value: 'Start here' }); assert.ok(edited.success, edited.reason ?? 'Expected the operation to succeed');
   const composed = await editPlan.create({ filePath: file, before: edited.originalSource!, after: edited.updatedSource!, summary: 'Edit moved button', oldValue: 'Continue', newValue: 'Start here' }); assert.ok(composed.id);
   assert.equal((await applyPendingSourceEdit(composed.id)).success, true); const after = fs.readFileSync(file, 'utf8'); assert.ok(after.indexOf('<aside>') < after.indexOf('Start here')); assert.ok(after.includes('type="button"')); assert.ok(after.includes('<span>→</span>'));
   assert.equal(undoReviewedSourceEdit(composed.id).success, true); assert.equal(fs.readFileSync(file, 'utf8'), before);
@@ -44,7 +44,7 @@ try {
     assert.deepEqual(destinationPatch?.beforeOrder, [], 'Self-closing containers have no prior children');
     assert.throws(() => prepareDraftTarget(from, pending.id), /className/, 'Text support must not bypass the separate style-editing checks');
     const continued = prepareDraftTarget(from, pending.id, { text: true });
-    const changed = updateStaticJsxText({ ...continued.target, value: 'Moved into empty container' }); assert.ok(changed.success, changed.reason);
+    const changed = updateStaticJsxText({ ...continued.target, value: 'Moved into empty container' }); assert.ok(changed.success, changed.reason ?? 'Expected the operation to succeed');
     const saved = await continued.create({ filePath: file, before: changed.originalSource!, after: changed.updatedSource!, summary: 'Edit after moving into empty container', oldValue: 'Continue', newValue: 'Moved into empty container' }); assert.ok(saved.id);
     assert.equal((await applyPendingSourceEdit(saved.id)).success, true);
     assert.ok(fs.readFileSync(file, 'utf8').includes('Moved into empty container'));
