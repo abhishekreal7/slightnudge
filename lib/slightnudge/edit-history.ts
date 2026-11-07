@@ -568,6 +568,9 @@ export async function applyPendingSourceEdit(id: string, groupId?: string, repos
   invokePreWriteHook(filePath);
   try {
     assertWriteTargetInsideWorkspace(filePath);
+    if (readFileSync(filePath, 'utf8') !== pending.before) {
+      return { success: false as const, error: 'This source changed after verification. Review it again before applying.' };
+    }
     atomicWrite(filePath, pending.after);
   } catch (error) {
     return {
@@ -780,6 +783,11 @@ export function undoSourceEdit(target?: string | { filePath?: string; editId?: s
     invokePreWriteHook(absolutePath);
     try {
       assertWriteTargetInsideWorkspace(absolutePath);
+      if (readFileSync(absolutePath, 'utf8') !== current) {
+        records[index] = { ...record, status: 'applied' };
+        writeHistory(records);
+        return { success: false as const, error: 'This file changed while undo was being prepared. Review it again before undoing.' };
+      }
       atomicWrite(absolutePath, record.before);
       records[index] = { ...record, status: 'undone' };
       writeHistory(records);
@@ -1001,6 +1009,11 @@ export function undoSourceEdit(target?: string | { filePath?: string; editId?: s
   records[index] = { ...record, status: 'undoing' };
   writeHistory(records);
   try {
+    if (readFileSync(absolutePath, 'utf8') !== current) {
+      records[index] = { ...record, status: 'applied' };
+      writeHistory(records);
+      return { success: false as const, error: 'This file changed while undo was being prepared. Review it again before undoing.' };
+    }
     atomicWrite(absolutePath, newContent);
     records[index] = { ...record, status: 'undone' };
     writeHistory(records);

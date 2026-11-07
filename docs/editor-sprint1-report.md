@@ -46,9 +46,23 @@ The first smoke runner assumed the nudge HTTP response contained the full old an
 
 The stacked suite passed 300 seeded cases with seed base 771234 in 779.8 seconds. M0 regression passed 30 selections with 18 allowed, 12 refused and zero wrong targets. M0 overfit passed 30 selections with 26 allowed, 4 refused and zero wrong targets. TypeScript passed again after the guard correction. [TypeScript](editor/evidence/amendment-3-typecheck.txt)
 
-## Parts 1–6
+## Part 1a — Write-time comparison
 
-UNVERIFIED. Engine closeouts, overlay polish, test infrastructure, controls, real-site validation and the closing gate are pending Part 0. Tag `pre-sprint1` was created on baseline `955007d` and branch `feat/editor-sprint1` was created under Amendment 2. The helper work initially landed in `b96f47c` and is complete after the Amendment 3 correction.
+CONFIRMED. Apply now re-reads the file after Tailwind and parse verification, the guarded pre-write hook, and the containment check, immediately before the source write. Both exact and token undo re-read immediately before their source writes and restore the history status to applied on refusal. The external file content survives and undo remains retryable.
+
+The three new regression cases failed against the unchanged engine and passed after the implementation. The suite completed in 1.3 seconds. [Raw red](editor/evidence/part-1a-cas-red.txt) · [Pass](editor/evidence/part-1a-cas-green.txt)
+
+| Removed comparison | Killing test | Evidence |
+| --- | --- | --- |
+| Apply | Apply preserves an external edit inserted after verification, without history or temporary source files | [Assertion failure](editor/evidence/part-1a-mutant-cas-apply.txt) |
+| Exact undo | Exact undo preserves a concurrent edit and remains retryable | [Assertion failure](editor/evidence/part-1a-mutant-cas-undo-exact.txt) |
+| Token undo | Token undo preserves a concurrent edit and remains retryable | [Assertion failure](editor/evidence/part-1a-mutant-cas-undo-token.txt) |
+
+CONFIRMED. History resilience, the hook production guard, parent-junction containment, token undo, undo refusals, restored-token refusal and TypeScript passed with the fix. All protected-state snapshots matched. Windows file symlink privilege remains UNVERIFIED, as the existing containment suite reports. [History](editor/evidence/part-1a-regression-history-resilience.txt) · [Hook guard](editor/evidence/part-1a-regression-prewrite-hook-guard.txt) · [Containment](editor/evidence/part-1a-regression-undo-m5-parent-junction.txt) · [Token undo](editor/evidence/part-1a-regression-token-undo.txt) · [Refusals](editor/evidence/part-1a-regression-undo-refusals.txt) · [Restored token](editor/evidence/part-1a-regression-undo-m3-restored-token.txt) · [TypeScript](editor/evidence/part-1a-regression-typecheck.txt)
+
+## Parts 1b–6
+
+UNVERIFIED. Conditional-ancestor characterization, overlay polish, test infrastructure, controls, real-site validation and the closing gate are pending their scheduled parts. Tag `pre-sprint1` was created on baseline `955007d` and branch `feat/editor-sprint1` was created under Amendment 2. The helper work initially landed in `b96f47c` and is complete after the Amendment 3 correction.
 
 ## Amendment 2
 
@@ -86,4 +100,4 @@ All Amendment 3 isolation roots were confirmed absent after cleanup, including a
 
 ## What I did NOT verify
 
-The writer responsible for the historical history-file change, and all implementation and verification work in Parts 1–6.
+The writer responsible for the historical history-file change, and Part 1b characterization and all implementation and verification work in Parts 2–6.

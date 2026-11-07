@@ -13,9 +13,11 @@
 - Fixture byte diagnosis, CONFIRMED. All five fixtures have CRLF in the worktree and LF in HEAD. Their bytes match after CRLF normalization, and Git reports the fixtures clean. The raw-byte equality required by Amendment 2 fails. [Byte comparison](evidence/amendment-2-fixture-byte-diagnosis.txt)
 - Protected-state integrity, CONFIRMED. The red bootstrap snapshots and the helper-based post-implementation snapshots match. The bootstrap red run used a read-only PowerShell snapshot because the required helper did not exist yet. [Helper before](evidence/amendment-2-guard-green-before.json) · [Helper after](evidence/amendment-2-guard-green-after.json)
 
+- Part 1a, CONFIRMED complete. Apply and both undo write paths re-compare reviewed bytes at write time. Three red tests now pass, all three comparison-removal mutants were killed, six targeted regression suites and TypeScript passed. [Red](evidence/part-1a-cas-red.txt) · [Pass](evidence/part-1a-cas-green.txt)
+
 ## Next
 
-Part 0 is CONFIRMED complete. All 23 battery suites passed on the unchanged engine baseline, including 300 seeded stacked-edit cases. Every protected-state snapshot matched. [Results](evidence/part-0c-battery-results.json) · [Cleanup](evidence/part-0c-cleanup-summary.json) The dynamic integrity guard is complete in commit `6cadd06`. Next is Part 1a, compare-and-swap at write time. Engine closeouts and Parts 2–6 are pending.
+Part 0 is CONFIRMED complete. All 23 battery suites passed on the unchanged engine baseline, including 300 seeded stacked-edit cases. Every protected-state snapshot matched. [Results](evidence/part-0c-battery-results.json) · [Cleanup](evidence/part-0c-cleanup-summary.json) The dynamic integrity guard is complete in commit `6cadd06`. Next is Part 1b, conditional-ancestor characterization. Part 1b and Parts 2–6 are pending.
 
 ```powershell
 Set-Location -LiteralPath 'C:\dev\vibecheck'
