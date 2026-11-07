@@ -31,7 +31,12 @@ try {
   assert.equal(fs.readFileSync(file, 'utf8'), before);
   const setup = (name: string, context: { repositoryId?: string; sourcePath?: string } = {}) => {
     const root = path.join(workspace, name); fs.mkdirSync(root);
-    file = path.join(root, 'page.tsx'); fs.writeFileSync(file, before);
+    const sourceRoot = context.repositoryId ? path.join(root, '.slightnudge', 'repositories', context.repositoryId) : root;
+    fs.mkdirSync(sourceRoot, { recursive: true });
+    if (context.repositoryId) {
+      fs.writeFileSync(path.join(root, '.slightnudge', 'repositories.json'), JSON.stringify([{ id: context.repositoryId, localPath: sourceRoot }]));
+    }
+    file = path.join(sourceRoot, 'page.tsx'); fs.writeFileSync(file, before);
     process.env.SLIGHTNUDGE_WORKSPACE_ROOT = root;
     process.env.SLIGHTNUDGE_DATA_DIR = path.join(root, '.slightnudge');
     const proposal = createPendingSourceEdit({ filePath: file, before, after, oldValue: 'Before', newValue: 'After', summary: 'Change heading', previewType: 'textContent', ...context });
