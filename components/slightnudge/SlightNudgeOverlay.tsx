@@ -985,7 +985,15 @@ export function SlightNudgeOverlay({
         if (pendingEdit) { void discardPreview(); return; }
         setSelected(null); window.dispatchEvent(new CustomEvent('slightnudge:selection', { detail: null })); selectedNodeRef.current = null; editGroupIdRef.current = null; originalStyleRef.current = null; setNotice(null); return;
       }
-      if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'z') { event.preventDefault(); void undo(); return; }
+      if ((event.ctrlKey || event.metaKey) && event.key === 'Enter') {
+        event.preventDefault();
+        if (!event.repeat) void applyPreview();
+        return;
+      }
+      if ((event.ctrlKey || event.metaKey) && !event.shiftKey && event.key.toLowerCase() === 'z') {
+        if (event.target instanceof HTMLElement && event.target.closest('input, textarea, [contenteditable="true"]')) return;
+        event.preventDefault(); if (!event.repeat) void undo(); return;
+      }
       if (event.key === 'Enter' && selected && isTextElement(selected.tagName) && selected.textEditable !== false) {
         event.preventDefault();
         startInlineEditing();
@@ -1029,7 +1037,7 @@ export function SlightNudgeOverlay({
       document.removeEventListener('dblclick', onDoubleClick, true);
       document.removeEventListener('keydown', onEscapeOrNudge);
     };
-  }, [active, busy, defaultFilePath, discardPreview, finishInlineEditing, inspect, isInlineEditing, pendingEdit, previewChange, resolveSource, selected, startInlineEditing, undo, updateSelectedRect]);
+  }, [active, applyPreview, busy, defaultFilePath, discardPreview, finishInlineEditing, inspect, isInlineEditing, pendingEdit, previewChange, resolveSource, selected, startInlineEditing, undo, updateSelectedRect]);
 
   async function updateStyle(property: keyof typeof propertyNames, value: string, breakpoint = activeBreakpoint) {
     if (!selected || selected.safeToEdit !== true || !selectedNodeRef.current) return;

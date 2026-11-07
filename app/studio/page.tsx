@@ -670,7 +670,7 @@ export default function StudioPage() {
 
   // Apply Pending Edit to Source Disk
   const applySourceEdit = async () => {
-    if (!pendingEdit) return;
+    if (!pendingEdit || isApplying) return;
     setIsApplying(true);
     try {
       const result = await applyEditAPI(pendingEdit.id);
@@ -744,14 +744,22 @@ export default function StudioPage() {
     }
   };
 
-  // Keyboard shortcut Ctrl+Z / Cmd+Z and Escape to clear selection
+  // Review shortcuts share the same guarded actions as the buttons.
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.key === 'z') {
+      const editing = e.target instanceof HTMLElement && !!e.target.closest('input, textarea, [contenteditable="true"]');
+      if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
         e.preventDefault();
-        handleUndo();
+        if (!e.repeat && !isApplying) void applySourceEdit();
+      } else if ((e.metaKey || e.ctrlKey) && !e.shiftKey && e.key.toLowerCase() === 'z' && !editing) {
+        e.preventDefault();
+        if (!e.repeat && !isApplying) {
+          if (pendingEdit) void discardPendingEdit();
+          else void handleUndo();
+        }
       } else if (e.key === 'Escape') {
-        setSelectedLayer(null);
+        if (pendingEdit && !isApplying) void discardPendingEdit();
+        else if (!isApplying) setSelectedLayer(null);
       } else if (selectedLayer && ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
         if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
         e.preventDefault();
@@ -761,7 +769,7 @@ export default function StudioPage() {
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [activeElement.filePath, selectedLayer]);
+  }, [activeElement.filePath, selectedLayer, pendingEdit, isApplying, applySourceEdit, discardPendingEdit, handleUndo]);
 
   // Update property helper
   const updateStyle = (property: string, value: string) => {
@@ -2471,15 +2479,7 @@ export default function StudioPage() {
                       </span>
                     </div>
                     <div className="flex items-center space-x-2 pt-0.5">
-                      <button
-                        type="button"
-                        onClick={applySourceEdit}
-                        disabled={isApplying}
-                        className="flex-1 h-7 rounded-md bg-emerald-700 hover:bg-emerald-600 disabled:opacity-50 text-white text-[11px] font-semibold flex items-center justify-center space-x-1 shadow-2xs transition cursor-pointer"
-                      >
-                        <Check size={12} />
-                        <span>{isApplying ? 'Applying...' : 'Apply to code'}</span>
-                      </button>
+
                       <button
                         type="button"
                         onClick={discardPendingEdit}
@@ -3351,3 +3351,4 @@ export default function StudioPage() {
     </>
   );
 }
+

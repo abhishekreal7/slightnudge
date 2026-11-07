@@ -117,13 +117,30 @@ The previously pending suites, now all passed, were reorder-safety, adapter, his
 
 CONFIRMED. The v2 guard compares fixture content with HEAD after normalizing CRLF to LF on both sides and independently requires clean Git status for fixtures. Its tracked-modification check and temporary helper self-test remain in place. The real-state snapshot helper is unchanged and continues to compare raw bytes, size and mtime between observations. All three checks passed in an isolated archive with the amended test applied. The previous incomplete work is complete. [Pass and protected-state result](editor/evidence/amendment-3-guard-pass-retry.txt)
 
+## Part 2b — One Apply and shortcuts
+
+CONFIRMED. Before removal, both playground buttons posted the same nonempty preview ID to the same `/api/slightnudge/apply` save path. The characterization deliberately refused the writes so both clicks reviewed the same draft. The inspector duplicate is removed; the floating Apply remains. No engine or API save path changed. [Shared-path proof](editor/evidence/part-2b-shared-path-isolated.txt)
+
+CONFIRMED. The unchanged baseline produced `2 !== 1` for the one-Apply assertion and no source-editor Apply response for Ctrl+Enter. The corrected, stable-worktree red run preserved protected state and Git status. [Raw failures](editor/evidence/part-2b-red-stable.txt)
+
+CONFIRMED. Six browser cases cover both surfaces: Control/Meta+Enter writes the disposable source, Control/Meta+Z restores its exact original bytes, and Escape calls preview DELETE and clears the review. Five cases passed in the independent run; its Control Undo timeout passed with the same test on isolated rerun (FLAKY under Amendment 3). No assertion was loosened or timeout raised. Native text-field Undo is preserved and repeating a key does not resubmit Apply. Redo is a [written specification](editor/shortcuts.md), because the current history API has no redo operation. [Six-case run](editor/evidence/part-2b-green-independent.txt) · [Unchanged Control rerun](editor/evidence/part-2b-control-rerun.txt) · [TypeScript](editor/evidence/part-2b-typecheck-final.txt)
+
+Visible review pair, inspected: [Before](editor/evidence/screens/part-2b-before.png) · [After](editor/evidence/screens/part-2b-after.png). Each PNG is about 140 KB. External browser resources were blocked, as in Part 2a; the pair shows the inspector duplicate disappearing while the floating review remains.
+
+Budget boundary: Part 2b complete; next is the user-promoted preview class-preservation fix, then Part 2c. No new dependencies, copied assets or competitor UI strings were introduced.
+
 ## Noticed but not fixed
+
+CONFIRMED. One early group snapshot flagged my own implementation edits because I started editing before the group finished. Its protected `files` snapshots match; only the two intended implementation paths changed in porcelain. This was an orchestration error, not a test-induced protected-state mutation. Both outputs are preserved, and the baseline red was rerun with stable Git status. [Flagged run](editor/evidence/part-2b-red-corrected.txt) · [Stable rerun](editor/evidence/part-2b-red-stable.txt) · [Audit](editor/evidence/part-2b-audit.json)
+
+CONFIRMED. Startup/response timeouts occurred; the initial source test also used the wrong existing button label and was corrected before the stable red. Chained editing after Undo hit preview/selection timeouts. Dev refresh remounting is a possible cause, UNVERIFIED. The final cases use separate disposable servers for independent shortcut proofs, retaining all six behavior assertions. Continuous editing after a refresh remains unverified for Part 2c. [Chained run](editor/evidence/part-2b-green-platforms.txt)
+
 
 CONFIRMED. The screenshots are canvas crops. Applying progress and Error notices outside those crops are covered by state assertions, while their detailed message behavior remains Part 2c work. The installed internal Playwright comparator API may need adjustment on a dependency upgrade.
 
 CONFIRMED. Initial browser attempts encountered cold compilation, remote font loading and interaction before hydration. Setup now warms both local routes, blocks external browser resources, waits for hydration and waits for source inspection before source-editor interaction. One preview-response timeout occurred during a concurrent build; the subsequent full suite passed. Action timeouts stayed at 5000 milliseconds. [Timeout run](editor/evidence/part-2a-overlay-final.txt) Â· [Verified run](editor/evidence/part-2a-overlay-verified.txt)
 
-CONFIRMED by code and screenshot review. The existing source-editor nudge preview uses the response's newValue as the whole DOM className. A token response can therefore change unrelated preview styling. The source mutation uses the separately reviewed pending snapshot. This preview issue is deferred to the UI control proofs in Part 3. [Preview state crop](../test/visual-baselines/source-previewing.png)
+CONFIRMED by code and screenshot review. The existing source-editor nudge preview uses the response's newValue as the whole DOM className. A token response can therefore change unrelated preview styling. The source mutation uses the separately reviewed pending snapshot. The user promoted this preview issue to the next item, before Part 2c. [Preview state crop](../test/visual-baselines/source-previewing.png)
 
 
 The production build emitted webpack warnings about parsing the `module.createRequire` argument in `lib/slightnudge/tailwind-verifier.ts`. [Build output](editor/evidence/part-0c-build.txt)
@@ -145,6 +162,8 @@ The v2 helper self-test created and removed one temporary directory with prefix 
 All Amendment 3 isolation roots were confirmed absent after cleanup, including archive sources, dependency junctions and nested temporary directories. [Root inventory](editor/evidence/part-0c-cleanup-summary.json)
 
 All isolation roots through Part 1 were confirmed removed, and all helper-based before-and-after snapshot pairs matched, including recovery snapshots for the interrupted wrapper runs. [Audit](editor/evidence/through-part-1-audit.json) Â· [Cleanup inventory](editor/evidence/through-part-1-cleanup.json)
+
+All 14 Part 2b isolation roots were removed, including nested disposable server workspaces, dependency junctions and browser scratch folders. Their servers were stopped by the helper. All 14 protected-file snapshot pairs match; 13 full snapshots match, with the intentional-edit orchestration exception explained above. No clones were created. [Audit and cleanup inventory](editor/evidence/part-2b-audit.json)
 
 ## What I did NOT verify
 

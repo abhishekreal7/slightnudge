@@ -21,25 +21,30 @@
 
 - Part 2a, CONFIRMED complete in commit `50e2d69`. Both editors pass ten overlay contract tests with eighteen pixelmatch baselines, plus the refused-drop transform regression, final TypeScript and production build. All thirteen protected-state snapshot pairs matched, and the real-worktree v2 guard passed after commit. [Guard](evidence/part-2a-real-state-final.txt) Â· [Proof](evidence/part-2a-overlay-verified.txt) Â· [Cleanup](evidence/part-2a-cleanup.json)
 
+- Part 2b, CONFIRMED complete. Both former playground Apply buttons posted the same preview ID to the same save route; only the floating button remains. Both editors pass Control/Meta Apply and exact-byte Undo plus Escape discard (six cases; one timeout passed unchanged on isolated rerun). TypeScript passed. [Proof](evidence/part-2b-green-independent.txt) · [Rerun](evidence/part-2b-control-rerun.txt) · [Before](evidence/screens/part-2b-before.png) · [After](evidence/screens/part-2b-after.png)
+
 ## Next
 
-Budget boundary after Part 2a. Resume directly at Part 2b. First prove that both playground Apply buttons reach the same save path, then retain the floating Apply and add Ctrl/Cmd+Enter, Escape discard and Ctrl/Cmd+Z. Parts 0, 1 and 2a are complete. Continue with 2c, Part 3 and visible controls in the user-specified order as budget permits. Parts 5 and 6 remain pending.
+Budget boundary after Part 2b. Resume at the user-promoted **preview correctness fix**, before Part 2c. First write failing browser tests for multi-class token preservation, unchanged unrelated computed styles, pending source as Apply truth, and exact DOM className restoration on Discard and Undo. Cover both editors if affected. Then implement the fix. Parts 0, 1, 2a and 2b are complete; do not redo them.
+
+Continue with Part 2c (single token refresh/retry, real dev and production restart, reload notices and visible Applying/Error copy), Part 3 suite diagnosis/repair and Babel control proofs, Part 4 visible controls first, then Parts 5 and 6 as budget permits. The previous preview issue is promoted from Part 3 to the next item. Every visible UI change needs a small before/after PNG pair under docs/editor/evidence/screens/, linked in the report. Keep Amendment 3, explicit-path commits and helper snapshots in force.
 
 ```powershell
 Set-Location -LiteralPath 'C:\dev\vibecheck'
+Get-Content docs/editor/BRIEF.md,docs/editor/STATE.md -Raw
 git branch --show-current
 git status --porcelain=v1
-Get-Content -LiteralPath docs/editor/BRIEF.md,docs/editor/STATE.md -Raw
-rg -n 'applySourceEdit|Apply to Source|Apply to code|handleKeyDown' app/studio/page.tsx
+rg -n 'preview.newValue|pending.oldValue|className =' components/slightnudge/SlightNudgeOverlay.tsx
+rg -n 'newClassName|oldClassName|setPendingEdit' app/studio/page.tsx
 ```
 
-For each new test group, use a fresh label with the existing protected runner and isolated suite runner. Add new source/test paths explicitly as overlays until they are committed.
+After creating the next test file, run its red case in isolation (fresh label, explicit new file overlay):
 
 ```powershell
-node --import tsx scratch/editor-sprint1-run-group.ts part-2b-red node --import tsx scratch/editor-sprint1-isolate.ts overlay-apply test/overlay-apply.test.ts
+node --import tsx scratch/editor-sprint1-run-group.ts preview-correctness-red node --import tsx scratch/editor-sprint1-isolate.ts preview-correctness test/preview-correctness.test.ts
 ```
 
-The last command is the intended command once the Part 2b test file exists. Follow Amendment 3 for environment recovery and the four stop conditions. Baseline regeneration instructions are in test/visual-baselines/README.md.
+Parts 5 and 6 remain pending. At that stage use fresh labels with the same runner; the full gate commands are `node --import tsx scratch/editor-sprint1-isolate.ts typecheck`, `... build`, and `node --import tsx scratch/editor-sprint1-battery.ts`, each wrapped by the protected group runner. Add the new suites to the final battery and follow BRIEF.md for the production browser smoke, real-site controls, mutation checks and cleanup. Never run v1 real-state-guard.
 
 ## Open issues
 
@@ -47,5 +52,7 @@ The last command is the intended command once the Part 2b test file exists. Foll
 - The helper and v2 guard passed all three checks, and archive TypeScript verification passed.
 - The build emitted webpack warnings about `module.createRequire` in `tailwind-verifier.ts`.
 - The prior archive omitted tracked `.env.example` to avoid reading it.
-- The source editor can replace the DOM className with a single token during nudge preview. Preserve the pending-source transaction and address the preview styling discrepancy during Part 3 control proofs.
+- The source editor can replace the DOM className with a single token during nudge preview. Preserve the pending-source transaction and address the preview styling discrepancy as the next item, before Part 2c.
 - Run `git diff --cached --name-only` before every sprint commit and confirm that `next-env.d.ts` is absent.
+
+- Continuous editing after dev refresh is UNVERIFIED: chained post-Undo selection/preview timeouts remain recorded; independent shortcut cases passed. Investigate during the Part 2c reload work.
