@@ -905,7 +905,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
   }, [selectedLayer, repositoryId, elements, breakpoint, showQuickActions, liveMove, isResizing, childOrder, elementDimensions, sourceLayers, windowMode, windowPanel, windowDock.position, definitionStyleKey]);
 
   // Position movement preserves document flow and never reorders siblings.
-  const startDragMove = (layerKey: string, e: React.PointerEvent) => {
+  const startDragMove = (layerKey: string, e: React.PointerEvent<HTMLElement>) => {
     e.stopPropagation();
     if (e.button !== 0 || operationRef.current || blocksReview() || undoRecoveryRef.current || resizeGesture.current || moveGesture.current) return;
     if (!usesDrafts || !/^(h[1-6]|p|section|div|article|aside|header|footer|nav|main|a|button|img)$/.test(elements[layerKey]?.tag || '') || activeVariant || activeBreakpoint) { showToast('To move an element, choose All sizes and the Default state.'); return; }
