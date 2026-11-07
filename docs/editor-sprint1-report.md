@@ -68,6 +68,17 @@ No behavior change was required for conditional ancestors because these tests ex
 
 Part 1a is committed as `1b93d2b`. The implementation changes only the three write-time comparisons and undo-status restoration on refusal.
 
+## Committed checkpoint
+
+| Commit | Work |
+| --- | --- |
+| `6cadd06` | Complete v2 guard with normalized fixture comparison |
+| `3e924ad` | Passing baseline and initial editor documentation |
+| `1b93d2b` | Apply and undo write-time comparisons |
+| `faea178` | Conditional-ancestor characterization |
+
+The current run ends at a budget boundary after Part 1. Next is Part 2a. A final v2 run against the real worktree passed all three checks, and the before-and-after protected-state snapshots matched. [Final real-worktree guard](editor/evidence/part-1-final-real-guard.txt)
+
 ## Parts 2–6
 
 UNVERIFIED. Overlay polish, UI test infrastructure, controls, real-site validation and the closing gate remain pending. Tag `pre-sprint1` was created on baseline `955007d` and branch `feat/editor-sprint1` was created under Amendment 2. The helper work initially landed in `b96f47c` and is complete after the Amendment 3 correction.
@@ -98,6 +109,8 @@ CONFIRMED. The first Amendment 3 isolated guard run used core.autocrlf=false whi
 
 The battery wrapper initially treated the text P0 in the passing token/Host suite title as a failure marker. Matching only the outer snapshot failure marker corrected that orchestration error. The existing stacked-edit suite exceeded the wrapper’s 180-second cap. Both interrupted copies were removed, their recovery snapshots matched, and the unchanged suite passed with the wrapper cap removed. No suite assertion or internal timeout was changed. [Recovery](editor/evidence/part-0c-stacked-wrapper-recovery.txt)
 
+Windows file symlinks remain UNVERIFIED because the current account lacks the required privilege. Directory-junction containment cases passed. [Privilege audit](editor/evidence/part-1a-regression-undo-m5-parent-junction.txt)
+
 ## Cleanup
 
 Removed one temporary root and its archive, workspace, dependency junction and browser scratch directory. Stopped both production servers on ports 57403 and 65187 and confirmed neither port was listening. No external repositories were cloned. [Workspace and cleanup log](editor/evidence/part-0c-workspace.txt)
@@ -106,6 +119,8 @@ The v2 helper self-test created and removed one temporary directory with prefix 
 
 All Amendment 3 isolation roots were confirmed absent after cleanup, including archive sources, dependency junctions and nested temporary directories. [Root inventory](editor/evidence/part-0c-cleanup-summary.json)
 
+All isolation roots through Part 1 were confirmed removed, and all helper-based before-and-after snapshot pairs matched, including recovery snapshots for the interrupted wrapper runs. [Audit](editor/evidence/through-part-1-audit.json) · [Cleanup inventory](editor/evidence/through-part-1-cleanup.json)
+
 ## What I did NOT verify
 
-The writer responsible for the historical history-file change, and All implementation and verification work in Parts 2–6, including the full gate on the final branch tip.
+The writer responsible for the historical history-file change, Windows file-symlink attacks requiring unavailable privilege, and implementation and verification work in Parts 2–6, including the full production gate on the final branch tip.
