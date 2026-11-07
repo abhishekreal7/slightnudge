@@ -167,6 +167,20 @@ All isolation roots through Part 1 were confirmed removed, and all helper-based 
 
 All 14 Part 2b isolation roots were removed, including nested disposable server workspaces, dependency junctions and browser scratch folders. Their servers were stopped by the helper. All 15 protected-file snapshot pairs match; 14 full snapshots match, with the intentional-edit orchestration exception explained above. No clones were created. [Audit and cleanup inventory](editor/evidence/part-2b-audit.json)
 
+## Amendment 4 — A1 incomplete checkpoint
+
+The owner's P0 reports take priority: A performance, B preview correctness, C control design, then D remaining sprint. The full request is saved in BRIEF.md. No completed part was restarted. No product behavior changed in this checkpoint.
+
+CONFIRMED: deterministic synthetic source/history fixtures and summary statistics have red/green tests. The history-read microbenchmark ran eight cells with twenty attempts each, entirely in disposable directories. Small-file / 100-record read median was 30.28 ms; small-file / 2000-record median was 1850.78 ms. A 2000-line source / 2000-record history is 607632892 bytes and failed all twenty read attempts with ERR_STRING_TOO_LONG. These are legacy sprint-engine library measurements, not dev/production HTTP or newer-editor performance. No before/after speedup, stable timing gate or ranked three bottlenecks is claimed. [Baseline table, scope and resume](editor/perf/baseline.md) · [Raw streamed measurements](editor/evidence/amendment4-history-streamed.txt) · [Expected fixture red](editor/evidence/amendment4-fixtures-red.txt) · [Fixture green](editor/evidence/amendment4-fixtures-final.txt)
+
+The initial harness exceeded V8's string limit during setup; streaming setup now permits the engine's own failure to be recorded separately. Both owned sn-perf-history directories were confirmed removed, and the helper snapshots matched for the failed initial and completed streamed groups. No temporary server, external clone, dependency or product-code instrumentation was added by this checkpoint. Existing owner-requested preview servers remain outside the measurement workstream.
+
+CONFIRMED branch mismatch: the owner's newer interface exists in stage/S1 at scratch/program/worktree (/editor), while feat/editor-sprint1 serves the older /studio. The newer preview was started on 3102 and returned HTTP 200 in the preceding turn. The newer UI has not been migrated, measured or performance-verified here. No UI files were deleted and no branches were merged or rebased. The A1 matrix and newer-UI provenance must be resolved as part of continuation; measurements here do not answer the owner's UI performance complaint.
+
+**INCOMPLETE:** browser collectors, dev/prod matrix, stage breakdown and production-inert instrumentation proofs; A2–A4; B, C and D. The WIP checkpoint does not claim A1 complete. All nine hypotheses remain unverified for end-to-end latency; h1's readHistory component alone has measured scaling evidence.
+
+CONFIRMED: TypeScript passed after replacing a direct NODE_ENV assignment rejected by the Next type declarations with Object.assign in the test-only harness. All 7 Amendment 4 helper snapshot pairs match. Both typecheck isolation roots were removed. [TypeScript](editor/evidence/amendment4-typecheck-final.txt) · [Snapshot audit](editor/evidence/amendment4-audit.json)
+
 ## What I did NOT verify
 
 The writer responsible for the historical history-file change, Windows file-symlink attacks requiring unavailable privilege, and implementation and verification work in Parts 2bâ€“6, including the final full safety battery, production start smoke test and real-site validation.
