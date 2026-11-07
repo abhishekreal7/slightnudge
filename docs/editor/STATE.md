@@ -2,7 +2,7 @@
 
 ## Done
 
-- The original sprint brief and amendments 1–4 are saved in [BRIEF.md](BRIEF.md).
+- The original sprint brief and amendments 1–5 are saved in [BRIEF.md](BRIEF.md).
 - Part 0a, CONFIRMED under Amendment 1. Both changed imports in `next-env.d.ts` match HEAD after removing the development path segment. The baseline was `955007d231d7da7783c6d3222ea2942be03eafb4`. [Programmatic check](evidence/part-0a-amended-check.txt)
 - Part 0b, CONFIRMED. The original range contained one Next.js dependency upgrade. Zero commits touched the designated sensitive paths. [Inventory](evidence/part-0b-commit-inventory.txt)
 - Part 0c, CONFIRMED for the prior TypeScript, production build and browser smoke. Chromium received the token and applied a nudge in the archive. [TypeScript](evidence/part-0c-tsc.txt) Â· [Build](evidence/part-0c-build.txt) Â· [Smoke](evidence/part-0c-studio-rerun.txt)
@@ -25,19 +25,20 @@
 
 ## Next
 
-AMENDMENT 4 wins: A performance measurement and fixes, B preview correctness, C design consistency, D Part 2c, Part 3, controls wave 1, Parts 5–6. Parts 0, 1, 2a and 2b remain complete. The complete Amendment 4 request is appended verbatim to BRIEF.md.
+Amendment 5 wins. Step 1 UI inventory is complete; recommendation (c) keeps both lines until the owner chooses. No merge/rebase/switch/delete was performed; no live server was contacted or stopped and stage/S1's worktree was not modified. [Inventory](ui-line-inventory.md)
 
-A1 is **INCOMPLETE**. The synthetic library harness and its tests are saved; eight cells of 20 readHistory attempts have been measured. The 608 MB history failed all 20 reads with ERR_STRING_TOO_LONG. No speedup or end-to-end UI baseline is claimed. [Numbers, limitations and exact resume commands](perf/baseline.md).
+Step 2a history storage design is complete **as a design only**. Step 2 implementation is INCOMPLETE, and no store or source-write behavior has changed. The design covers bounded metadata pages, content-addressed blobs, immutable legacy fallback, streaming/idempotent migration, commit ordering, crash intent recovery, cross-process mutation coordination, skip/report rules and rollback limits. [Design](history-design.md)
 
-Resume A1 browser/server instrumentation and the full dev/production scenario matrix, then A2 budgets, measured-impact A3 fixes and A4 proofs. Do not optimize without a before number, add timing gates before five stable runs, or weaken a safety check. The newer UI is in the stage/S1 worktree; do not attribute legacy sprint-branch measurements to it. Reconciliation remains pending under the original no-merge/work-on-sprint-branch constraints. No old UI files have been removed.
+Resume Step 2b with failing isolated store contract tests, then implement and wire storage (2c), compare all baseline cells, and run the full unchanged safety battery (2d). Do not start UI work or wait for the owner's UI decision to proceed with the engine. Keep exact restore bytes, token Undo, auth, containment, syntax, Tailwind and write-time CAS checks. Real history and fixtures remain read-only; use the helper around every test group. Never migrate the real legacy file.
 
 ```powershell
 Set-Location -LiteralPath 'C:\dev\vibecheck'
-Get-Content docs/editor/BRIEF.md,docs/editor/STATE.md,docs/editor/perf/baseline.md -Raw
-node --import tsx scratch/editor-sprint1-run-group.ts amendment4-fixtures-resume node --import tsx --test test/perf-fixtures.test.ts
+Get-Content docs/editor/BRIEF.md,docs/editor/STATE.md,docs/editor/history-design.md -Raw
+# After creating test/history-store.test.ts, run its expected red with a fresh label:
+node --import tsx scratch/editor-sprint1-run-group.ts amendment5-store-red node --import tsx scratch/editor-sprint1-isolate.ts history-store test/history-store.test.ts
 ```
 
-Then implement the remaining A1 collectors and run the matrix in isolated sources on free ports, with helper snapshots for each group. Every visible UI change still needs before/after PNGs under docs/editor/evidence/screens/. A3 delayed-save and continuous-edit proofs and video, B exact DOM preview restoration, C design-system audit and screenshots, D and Parts 5–6 are pending. Original final gate/battery commands remain in BRIEF.md and prior evidence; use v2 real-state guard, never v1. No new dependencies or product instrumentation were added in this checkpoint.
+The proposed test does not exist yet. Its required contracts and named mutation checks are enumerated in history-design.md. Add actual new suites to the final battery when created. After Step 2, proceed with UI-independent Step 3 request timings and Step 4 per-file queue, then stop at the requested boundary. B/C/D and browser performance proofs are deferred until the owner chooses the UI line. The complete Amendment 5 request is appended in BRIEF.md. A1 library baseline remains valid evidence for the legacy engine and is not a newer-UI result.
 
 ## Open issues
 
@@ -51,3 +52,5 @@ Then implement the remaining A1 collectors and run the matrix in isolated source
 - Continuous editing after dev refresh is UNVERIFIED: chained post-Undo selection/preview timeouts remain recorded; independent shortcut cases passed. Investigate during the Part 2c reload work.
 
 - Amendment 4 A1 checkpoint: INCOMPLETE. Synthetic readHistory measurements saved (20 attempts x 8 cells), fixture tests red then green, protected snapshots unchanged. See perf/baseline.md.
+
+- Amendment 5 Step 1: COMPLETE, source-only UI/engine inventory; Step 2a: design complete, storage implementation and all new-store validation PENDING.

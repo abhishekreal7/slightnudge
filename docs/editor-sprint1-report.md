@@ -181,6 +181,14 @@ CONFIRMED branch mismatch: the owner's newer interface exists in stage/S1 at scr
 
 CONFIRMED: TypeScript passed after replacing a direct NODE_ENV assignment rejected by the Next type declarations with Object.assign in the test-only harness. All 7 Amendment 4 helper snapshot pairs match. Both typecheck isolation roots were removed. [TypeScript](editor/evidence/amendment4-typecheck-final.txt) · [Snapshot audit](editor/evidence/amendment4-audit.json)
 
+## Amendment 5 — UI inventory and storage design
+
+Step 1 CONFIRMED complete. stage/S1 and the sprint share baseline 955007d; stage/S1 has 79 unique commits and this captured sprint head has 12. None of the four named sprint commits is in stage/S1's ancestry. There are 68 changed engine/API paths, including auth, mutation locking, recovery, history and Tailwind contracts. Recommendation (c) preserves both until the owner chooses; equivalent behavior has not been proven. Read-only Git/source inventory only; no live server or stage/S1 worktree changes. [Inventory and source entry points](editor/ui-line-inventory.md) · [Untruncated raw evidence](editor/evidence/amendment5-inventory.json)
+
+Continued directly with Step 2a, CONFIRMED complete as a design artifact. The proposed store uses immutable content-addressed blobs, bounded metadata pages and an atomic committed-count head rather than rewriting an ever-growing array. It explicitly handles immutable legacy fallback, streaming migration, cross-process mutation locking, publication ordering, source/history crash intents, corrupted records, non-disclosure and rollback limitations. [History design](editor/history-design.md)
+
+Step 2 implementation is INCOMPLETE: no product storage code or tests were added, no speedup claimed and no history was migrated. Step 2b's failing tests, implementation, mutations, before/after measurements and full unchanged safety battery remain next. Step 3 timings and Step 4 queue are pending. UI-only work remains deferred while engine work continues on this branch. The complete request is saved in BRIEF.md. No temporary workspace, server or clone was created in this documentation checkpoint; existing live servers were not contacted or stopped.
+
 ## What I did NOT verify
 
 The writer responsible for the historical history-file change, Windows file-symlink attacks requiring unavailable privilege, and implementation and verification work in Parts 2bâ€“6, including the final full safety battery, production start smoke test and real-site validation.
