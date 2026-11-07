@@ -15,18 +15,19 @@
 
 ## Next
 
-Part 0 is IN PROGRESS. The dynamic integrity guard is complete and the baseline safety battery is next under Amendment 3. Engine closeouts and Parts 2–6 are pending.
+Part 0 is CONFIRMED complete. All 23 battery suites passed on the unchanged engine baseline, including 300 seeded stacked-edit cases. Every protected-state snapshot matched. [Results](evidence/part-0c-battery-results.json) · [Cleanup](evidence/part-0c-cleanup-summary.json) The dynamic integrity guard is complete in commit `6cadd06`. Next is Part 1a, compare-and-swap at write time. Engine closeouts and Parts 2–6 are pending.
 
 ```powershell
 Set-Location -LiteralPath 'C:\dev\vibecheck'
-node --import tsx scratch/editor-sprint1-run-group.ts part-0c-reorder-safety node --import tsx scratch/editor-sprint1-isolate.ts reorder-safety
+git status --porcelain=v1
+Get-Content -LiteralPath lib/slightnudge/edit-history.ts -Raw
 ```
 
 Use a fresh evidence label per run. The isolation runner archives the current HEAD, omits the environment template, and runs the unchanged engine in a temporary repository with the source repository's line-ending setting. The outer runner takes snapshots with the unchanged real-state helper. Retry an assertion failure once in a fresh isolation and apply Amendment 3's four stop conditions.
 ## Open issues
 
 - The prior CRLF block is resolved. An initial archive setup used core.autocrlf=false and was corrected to match the source environment.
-- The helper and v2 guard passed all three checks. TypeScript verification of the new helper remains pending.
+- The helper and v2 guard passed all three checks, and archive TypeScript verification passed.
 - The build emitted webpack warnings about `module.createRequire` in `tailwind-verifier.ts`.
 - The prior archive omitted tracked `.env.example` to avoid reading it.
 - Run `git diff --cached --name-only` before every sprint commit and confirm that `next-env.d.ts` is absent.
