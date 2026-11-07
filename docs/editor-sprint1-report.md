@@ -225,6 +225,16 @@ All 11 protected-state snapshot pairs match; all 3 named isolation roots were re
 
 CONFIRMED: store-v2 is parked at a4bd2e6, unwired, with items 1–2 complete as module contracts and items 3–8 unfinished. The 100-record synthetic read cost is not evidence for the reported multi-second newer-editor lag. Work pivots to a new committed-tip-only integration checkout and measured reproduction. [Parked scope and resume](editor/store-v2-parked.md)
 
+## Amendment 8 Steps 1–2 — committed-tip baseline STOP
+
+CONFIRMED: created C:/dev/vibecheck/scratch/editor-safety-port-20261108 on codex/editor-safety-port-20261108 from 7a4c44a. Five original S1 uncommitted entries were summarized by count/top-level location only; no contents were inspected. The new checkout excludes those changes. Differing dependency hashes required npm ci (124 packages; four npm audit findings recorded, no dependency edits). The integration helper was added only because absent. No integration product commit, safety port, environment-file copy, existing-worktree modification or live-server contact occurred.
+
+CONFIRMED baseline failures: TypeScript and production build fail unchanged. Four Apply race cases passed. Crash recovery failed twice with `1 !== 73`: generated project-scope repositories.json is missing and the intended crash point is not reached. Both outputs are preserved. This reproduced baseline safety assertion triggers the retained STOP rule; remaining baseline suites and all performance work remain UNVERIFIED. [Baseline method, results, raw outputs and resume](editor/perf/s1-baseline.md)
+
+All ten main/integration protected-file comparisons match. One main Git-status snapshot flagged my creation of an untracked orchestration script during the build; the only difference is documented and the raw flag retained. All five named disposable roots were removed; the authorized integration checkout/dependencies remain for continuation. No test server was created. The owner S1 status count/top-level breakdown remains unchanged. [Audit](editor/evidence/amendment8-baseline-audit.json)
+
+No lag reproduction, top-three bottlenecks, timing table, performance fix, preview assessment or before/after video is claimed. Store-v2 stays parked. Steps 3–6 remain pending behind the required baseline STOP resolution; design and controls were not started.
+
 ## What I did NOT verify
 
 The writer responsible for the historical history-file change, Windows file-symlink attacks requiring unavailable privilege, and implementation and verification work in Parts 2bâ€“6, including the final full safety battery, production start smoke test and real-site validation.

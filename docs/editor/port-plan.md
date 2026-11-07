@@ -1,6 +1,6 @@
 # Deliberate safety port to stage/S1
 
-Read-only source analysis at stage/S1 `7a4c44a9b8a1c1b08d0c8d15541dabb1900636df`. No commands below were executed against its worktree, no live server was contacted, and no port was performed. The newer `/editor` is the owner's chosen UI. Legacy `/studio` UI work is frozen.
+Read-only source analysis at stage/S1 `7a4c44a9b8a1c1b08d0c8d15541dabb1900636df`. At the original plan checkpoint no commands below were executed, no live server was contacted, and no port was performed. Amendment 8 subsequently authorized creation of the independent integration checkout; see perf/s1-baseline.md. The original stage/S1 checkout remains unchanged. The newer `/editor` is the owner's chosen UI. Legacy `/studio` UI work is frozen.
 
 | Sprint safety item | stage/S1 source already present | Difference / port risk | Tests to carry and retain |
 | --- | --- | --- | --- |
@@ -45,3 +45,5 @@ git -C $portDirectory log -1 --oneline
 ```
 
 No merge, rebase, branch deletion, checkout of existing worktrees, environment-file copy or blind cherry-pick is part of this plan. The existing stage/S1 uncommitted work and live servers remain untouched.
+
+Amendment 8 execution note: the proposed new worktree/branch now exist at committed tip 7a4c44a. Do not rerun creation commands: their refusal guards are intentionally required. No safety port has been performed. See [baseline status](perf/s1-baseline.md).

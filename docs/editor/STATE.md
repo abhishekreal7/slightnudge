@@ -25,11 +25,15 @@
 
 ## Next
 
-Amendment 8 wins. Store-v2 is PARKED at a4bd2e6, unwired; Amendment 7 items 3–8 remain unfinished. [Parking record and verbatim remaining scope](store-v2-parked.md)
+Amendment 8: store-v2 PARKED; real-editor performance pivot is INCOMPLETE and **STOPPED under Amendment 3 after a reproduced baseline safety assertion**. Step 0 was committed as 54f001a. Step 1 created the new integration checkout from the committed stage/S1 tip; no product changes/commits were made there.
 
-Proceed with the new isolated integration worktree from stage/S1, then its clean baseline, measurement of the owner's actual lag, measured-impact fixes and preview correctness check. Never contact/stop live servers or change the existing stage/S1 checkout/branch. Read-only status inventory reports only counts and top-level directories; the new checkout includes committed tip only. No environment files are copied manually.
+Worktree: `C:\dev\vibecheck\scratch\editor-safety-port-20261108`; branch `codex/editor-safety-port-20261108`; tip `7a4c44a9b8a1c1b08d0c8d15541dabb1900636df`. It excludes five uncommitted owner entries (docs:2, test:2, root:1); those contents were never opened or copied. The real-state helper was copied as a new untracked file because it was missing. Dependencies installed with npm ci from the differing lockfile. No environment files copied manually; no existing S1 changes or live-server contact.
 
-New authorized path: C:\dev\vibecheck\scratch\editor-safety-port-20261108, branch codex/editor-safety-port-20261108. Refuse if either already exists. Follow port-plan.md commands and Amendment 8 sequence. Do not port the parked store or perform speculative optimization. This performance pivot is not yet complete.
+Step 2 baseline: tsc and build FAIL on the unmodified tip. Apply race suite PASS. apply-crash-recovery FAILS twice unchanged: expected exit 73, actual 1, because generated project-scope repositories.json is absent before the intended crash point. Both raw outputs are saved. The stop rule prevents moving to performance fixes. [Complete baseline/STOP evidence and exact rerun command](perf/s1-baseline.md)
+
+Current action: resolve the baseline STOP condition under explicit direction, preserving source-scope and containment checks, then resume the remaining S1 baseline inventory. Do not recreate the worktree or blindly rerun completed checks. Steps 3–6 (measurement, measured fixes, preview check and video/close) are PENDING; no lag diagnosis or speedup has been claimed. Original stage/S1 and live servers remain untouched; all five disposable check roots were removed. The new integration worktree is intentionally retained.
+
+Store-v2 items 3–8 remain parked. Later work: deliberate port of sprint safety items in port-plan order, B preview correctness, design C, controls and Part 2c items. Do not start them during this stopped baseline.
 
 ## Open issues
 
