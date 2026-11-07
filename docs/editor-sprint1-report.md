@@ -221,6 +221,10 @@ A further legacy-writer contract first failed: its callback could run before a l
 
 All 11 protected-state snapshot pairs match; all 3 named isolation roots were removed. Mode tests remove generated sn-mode-contract directories (individual suffixes not captured), and their child processes exited. No live server was contacted/stopped, no stage/S1 worktree changed and no developer history records were parsed/migrated/written. [Audit](editor/evidence/amendment7-audit.json)
 
+## Amendment 8 Step 0 — store parked
+
+CONFIRMED: store-v2 is parked at a4bd2e6, unwired, with items 1–2 complete as module contracts and items 3–8 unfinished. The 100-record synthetic read cost is not evidence for the reported multi-second newer-editor lag. Work pivots to a new committed-tip-only integration checkout and measured reproduction. [Parked scope and resume](editor/store-v2-parked.md)
+
 ## What I did NOT verify
 
 The writer responsible for the historical history-file change, Windows file-symlink attacks requiring unavailable privilege, and implementation and verification work in Parts 2bâ€“6, including the final full safety battery, production start smoke test and real-site validation.

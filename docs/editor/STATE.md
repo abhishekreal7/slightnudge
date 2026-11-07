@@ -2,7 +2,7 @@
 
 ## Done
 
-- The original sprint brief and amendments 1–7 are saved in [BRIEF.md](BRIEF.md).
+- The original sprint brief and amendments 1–8 are saved in [BRIEF.md](BRIEF.md).
 - Part 0a, CONFIRMED under Amendment 1. Both changed imports in `next-env.d.ts` match HEAD after removing the development path segment. The baseline was `955007d231d7da7783c6d3222ea2942be03eafb4`. [Programmatic check](evidence/part-0a-amended-check.txt)
 - Part 0b, CONFIRMED. The original range contained one Next.js dependency upgrade. Zero commits touched the designated sensitive paths. [Inventory](evidence/part-0b-commit-inventory.txt)
 - Part 0c, CONFIRMED for the prior TypeScript, production build and browser smoke. Chromium received the token and applied a nudge in the archive. [TypeScript](evidence/part-0c-tsc.txt) Â· [Build](evidence/part-0c-build.txt) Â· [Smoke](evidence/part-0c-studio-rerun.txt)
@@ -25,21 +25,11 @@
 
 ## Next
 
-Amendment 7 controls the sequence; complete items 1–8 before declaring this branch's engine work finished. UI work stays frozen and stage/S1/live servers remain untouched.
+Amendment 8 wins. Store-v2 is PARKED at a4bd2e6, unwired; Amendment 7 items 3–8 remain unfinished. [Parking record and verbatim remaining scope](store-v2-parked.md)
 
-Item 1 metadata primitives: COMPLETE as the internal single-writer layer (not a deployable store). Six tests and TypeScript pass: fixed-length head/count, pages <=50 bounded records, locators, cursor restart, status update, blob-first publication and ten fault boundaries. Counting adapter append bytes: 3241 at 10 records, 395 at 2000 (new page), 14507 at 1999 (full page). These are memory-adapter counts/timings, not a disk benchmark or the required eight-cell after table. [Proof](evidence/amendment7-pages-final.txt)
+Proceed with the new isolated integration worktree from stage/S1, then its clean baseline, measurement of the owner's actual lag, measured-impact fixes and preview correctness check. Never contact/stop live servers or change the existing stage/S1 checkout/branch. Read-only status inventory reports only counts and top-level directories; the new checkout includes committed tip only. No environment files are copied manually.
 
-Item 2 mode/lock: COMPLETE for explicit-root generated stores. Five tests pass, including recorded legacy-only mode before legacy writes, two-process appends (30 records), busy/abandoned lock refusal, immutable legacy input, marker refusal, and corrupt-manifest/head/page refusal. All 16 storage tests and TypeScript pass. [Proof](evidence/amendment7-mode-green.txt)
-
-Resume item 3 capped recovery intents, item 4 compatibility/wiring decision, item 5 streaming consented migration, item 6 comprehensive privacy/tamper/mutants, item 7 full baseline and battery, item 8 final closure. `openPagedStore` is internal and must not be used by a writer without the future mode/lock owner. No engine wiring or real migration occurred. The full store and this branch's engine work are INCOMPLETE.
-
-```powershell
-Set-Location -LiteralPath 'C:\dev\vibecheck'
-Get-Content docs/editor/BRIEF.md,docs/editor/STATE.md,docs/editor/history-design.md -Raw
-node --import tsx scratch/editor-sprint1-run-group.ts amendment7-pages-resume node --import tsx --test test/history-store-pages.test.ts
-```
-
-After completion, later work belongs only to the new integration worktree proposed in port-plan.md: deliberate safety port, B preview fix, C design, controls/D-UI and browser perf. Do not create that worktree here.
+New authorized path: C:\dev\vibecheck\scratch\editor-safety-port-20261108, branch codex/editor-safety-port-20261108. Refuse if either already exists. Follow port-plan.md commands and Amendment 8 sequence. Do not port the parked store or perform speculative optimization. This performance pivot is not yet complete.
 
 ## Open issues
 
