@@ -19,7 +19,7 @@
 
 - Part 1 checkpoint is committed as `faea178`. A final v2 run against the real worktree passed. All helper snapshot pairs matched and all isolation roots were removed. [Audit](evidence/through-part-1-audit.json) · [Cleanup](evidence/through-part-1-cleanup.json)
 
-- Part 2a, CONFIRMED complete. Both editors pass ten overlay contract tests with eighteen pixelmatch baselines, plus the refused-drop transform regression, final TypeScript and production build. Every protected-state snapshot matched. [Proof](evidence/part-2a-overlay-verified.txt) · [Cleanup](evidence/part-2a-cleanup.json)
+- Part 2a, CONFIRMED complete in commit `50e2d69`. Both editors pass ten overlay contract tests with eighteen pixelmatch baselines, plus the refused-drop transform regression, final TypeScript and production build. All thirteen protected-state snapshot pairs matched, and the real-worktree v2 guard passed after commit. [Guard](evidence/part-2a-real-state-final.txt) · [Proof](evidence/part-2a-overlay-verified.txt) · [Cleanup](evidence/part-2a-cleanup.json)
 
 ## Next
 

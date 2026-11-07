@@ -93,6 +93,8 @@ TypeScript and the final production build passed with the overlay changes. The e
 
 CONFIRMED. Every Part 2a helper-based before-and-after snapshot matched, and all owned isolation roots were removed. Nested workspace copies, browser scratch directories, dependency junctions and dev servers were cleaned up. [Audit](editor/evidence/part-2a-audit.json) · [Cleanup inventory](editor/evidence/part-2a-cleanup.json)
 
+Part 2a is committed as `50e2d69`. A post-commit guard run against the real worktree passed all three checks, bringing the Part 2a helper snapshot audit to thirteen matched pairs. [Real-worktree guard](editor/evidence/part-2a-real-state-final.txt)
+
 This session ends at the completed Part 2a budget boundary. Next is Part 2b. Both Apply buttons and their shared save handler are preserved for the required proof before removing the duplicate.
 
 ## Parts 2b–6
