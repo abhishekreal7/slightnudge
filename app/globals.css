@@ -2522,52 +2522,23 @@ body { font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif
   box-shadow: 0 4px 14px rgba(239, 68, 68, 0.15) !important;
 }
 
-.sn-drop-line {
-  position: absolute;
+.sn-drop-line { position: absolute; }
+.sn-editor-drop-line {
   height: 2px;
-  background: #0071e3;
-  border-radius: 1px;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12);
-  z-index: 9999;
+  min-height: 2px;
+  max-height: 2px;
+  border: 0;
+  border-radius: 0;
+  background: var(--studio-accent, #059669);
+  box-shadow: none;
+  filter: none;
   pointer-events: none;
-  transition: opacity 0.14s ease, background-color 0.14s ease;
+  z-index: 9999;
 }
-
-.sn-drop-line::before {
-  content: '';
-  position: absolute;
-  left: -2px;
-  top: -2px;
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: #0071e3;
-  border: 1.5px solid #ffffff;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.16);
-  transition: background 0.14s, border-color 0.14s;
-}
-
-.sn-drop-line.is-vertical {
-  width: 2px !important;
-  border-radius: 1px;
-}
-
-.sn-drop-line.is-vertical::before {
-  left: -2px;
-  top: -2px;
-}
-
-/* Prohibited Boundary Stop (Calm slate hairline barrier, ZERO neon glow) */
-.sn-drop-line.is-invalid {
-  background: #71717a !important;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08) !important;
-}
-
-.sn-drop-line.is-invalid::before {
-  background: #71717a !important;
-  border-color: #ffffff !important;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12) !important;
-}
+.sn-editor-drop-line::before, .sn-editor-drop-line::after { content: none; }
+[data-overlays-dismissed="true"] [data-editor-element]:hover { border-color: transparent; }
+[data-editor-state="Dragging"] [data-editor-element]:not([data-testid="editor-target"]):hover,
+[data-editor-state="Resizing"] [data-editor-element]:not([data-testid="editor-target"]):hover { border-color: transparent; }
 
 /* ==========================================================
    DEDICATED BUTTON SHELL & CONTENT STUDIO

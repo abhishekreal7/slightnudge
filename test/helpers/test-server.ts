@@ -112,7 +112,8 @@ export function createTempWorkspace(prefix = 'sn-ws', options?: TempWorkspaceOpt
   // Copy tracked files
   const trackedFiles = execSync('git ls-files', { cwd: projectRoot, encoding: 'utf8' })
     .split(/\r?\n/)
-    .filter(Boolean);
+    .filter(Boolean)
+    .filter((file) => !file.split(/[\\/]/).some((segment) => segment.startsWith('.env')));
 
   for (const file of trackedFiles) {
     const src = path.join(projectRoot, file);

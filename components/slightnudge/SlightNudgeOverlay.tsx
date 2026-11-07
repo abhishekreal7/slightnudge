@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { AlignCenter, AlignLeft, AlignRight, ArrowDown, ArrowUp, ArrowUpDown, Check, ChevronDown, ChevronsDown, ChevronsUp, CircleAlert, Code2, Columns2, GripVertical, Laptop2, LayoutGrid, Layers, LoaderCircle, MoreHorizontal, MousePointer2, Pencil, Play, RotateCcw, Sparkles, Trash2, Type, Undo2, X } from 'lucide-react';
 import { getClientSessionToken } from '@/lib/slightnudge/client';
+import { useOverlayPresentation } from './useOverlayPresentation';
 
 interface SelectedElementInfo {
   tagName: string;
@@ -384,6 +385,9 @@ export function SlightNudgeOverlay({
   const [hoveredRect, setHoveredRect] = useState<SelectedElementInfo['rect'] | null>(null);
   const [selected, setSelected] = useState<SelectedElementInfo | null>(null);
   const [busy, setBusy] = useState(false);
+  const [preparing, setPreparing] = useState(false);
+  const [applying, setApplying] = useState(false);
+  const [overlayError, setOverlayError] = useState(false);
   const [notice, setNotice] = useState<string | null>(null);
   const [warning, setWarning] = useState(false);
   const [pendingEdit, setPendingEdit] = useState<PendingEdit | null>(null);
@@ -397,10 +401,7 @@ export function SlightNudgeOverlay({
   const [exploreTab, setExploreTab] = useState<'text' | 'media' | 'columns' | 'box' | 'code' | 'inspect'>('box');
   const inlineInitialTextRef = useRef<string>('');
   const [isResizing, setIsResizing] = useState(false);
-  const [resizeBadge, setResizeBadge] = useState<string | null>(null);
-  const [resizeDelta, setResizeDelta] = useState<{ w: number; h: number }>({ w: 0, h: 0 });
   const [isDraggingMove, setIsDraggingMove] = useState(false);
-  const [dragCursor, setDragCursor] = useState<{ x: number; y: number } | null>(null);
   const [moveNotice, setMoveNotice] = useState<string | null>(null);
   const [moveShift, setMoveShift] = useState<{ x: number; y: number } | null>(null);
   const [dropIndicator, setDropIndicator] = useState<{
@@ -413,6 +414,9 @@ export function SlightNudgeOverlay({
     orientation?: 'horizontal' | 'vertical';
   } | null>(null);
   const selectedNodeRef = useRef<HTMLElement | null>(null);
+  const overlay = useOverlayPresentation(selectedNodeRef.current, isDraggingMove || isResizing);
+  const gestureCleanupRef = useRef<(() => void) | null>(null);
+  useEffect(() => () => gestureCleanupRef.current?.(), []);
   const editGroupIdRef = useRef<string | null>(null);
   const originalStyleRef = useRef<string | null>(null);
   const originalPositionRef = useRef<{ parent: HTMLElement; nextSibling: HTMLElement | null } | null>(null);
@@ -450,6 +454,8 @@ export function SlightNudgeOverlay({
       return;
     }
     isSyncingRef.current = true;
+    setPreparing(true);
+    setOverlayError(false);
     setNotice(null);
     try {
       if (pendingEdit) {
@@ -559,8 +565,10 @@ export function SlightNudgeOverlay({
       }
       setPendingEdit(preview);
     } catch (error) {
+      setOverlayError(true);
       setNotice(error instanceof Error ? error.message : 'Could not prepare this change.');
     } finally {
+      setPreparing(false);
       isSyncingRef.current = false;
       if (pendingPayloadQueueRef.current) {
         const nextPayload = pendingPayloadQueueRef.current;
@@ -632,7 +640,7 @@ export function SlightNudgeOverlay({
       debounceTimerRef.current = null;
     }
     if (!pendingEdit || busy) return;
-    setBusy(true); setNotice(null);
+    setBusy(true); setApplying(true); setNotice(null);
     try {
       editGroupIdRef.current ||= crypto.randomUUID();
       const token = await getClientSessionToken();
@@ -676,7 +684,7 @@ export function SlightNudgeOverlay({
       animateSelectionRect(260);
     } catch (error) {
       setNotice(error instanceof Error ? error.message : 'Could not apply this change.');
-    } finally { setBusy(false); }
+    } finally { setBusy(false); setApplying(false); }
   }, [animateSelectionRect, busy, pendingEdit]);
 
   const inspect = useCallback(async (element: HTMLElement, info: SelectedElementInfo) => {
@@ -1164,11 +1172,6 @@ export function SlightNudgeOverlay({
         }
       }
 
-      if (isText) {
-        setResizeBadge(targetStep > 0 ? 'Enlarging text (A+)' : targetStep < 0 ? 'Shrinking text (A−)' : 'Drag corner to resize text');
-      } else {
-        setResizeBadge(targetStep > 0 ? 'Padding (p+)' : targetStep < 0 ? 'Padding (p−)' : 'Drag corner to resize padding');
-      }
     };
 
     const cleanup = () => {
@@ -1178,16 +1181,22 @@ export function SlightNudgeOverlay({
       window.removeEventListener('pointermove', onPointerMove);
       window.removeEventListener('pointerup', cleanup);
       window.removeEventListener('pointercancel', cleanup);
+      window.removeEventListener('blur', cleanup);
+      window.removeEventListener('keydown', cancelOnEscape);
+      gestureCleanupRef.current = null;
+      overlay.dismiss();
       setIsResizing(false);
-      setResizeBadge(null);
-      setResizeDelta({ w: 0, h: 0 });
       requestAnimationFrame(updateSelectedRect);
     };
+    const cancelOnEscape = (event: KeyboardEvent) => { if (event.key === 'Escape') cleanup(); };
+    gestureCleanupRef.current = cleanup;
 
     window.addEventListener('pointermove', onPointerMove);
     window.addEventListener('pointerup', cleanup);
     window.addEventListener('pointercancel', cleanup);
-  }, [selected, stepFontSize, stepPadding, updateSelectedRect]);
+    window.addEventListener('blur', cleanup);
+    window.addEventListener('keydown', cancelOnEscape);
+  }, [selected, stepFontSize, stepPadding, updateSelectedRect, overlay.dismiss]);
 
   const handleMoveDragStart = useCallback((e: React.PointerEvent) => {
     e.preventDefault();
@@ -1196,7 +1205,6 @@ export function SlightNudgeOverlay({
 
     setIsDraggingMove(true);
     setMoveNotice(null);
-    setDragCursor({ x: e.clientX, y: e.clientY });
 
     const startX = e.clientX;
     const startY = e.clientY;
@@ -1208,21 +1216,15 @@ export function SlightNudgeOverlay({
     const currentIndex = allSiblings.indexOf(el);
     if (currentIndex === -1 || allSiblings.length <= 1) {
       setMoveNotice(`Cannot reorder: this element is the only child in <${parent.tagName.toLowerCase()}>.`);
-      const cleanupOnly = () => {
-        window.removeEventListener('pointermove', cleanupOnly);
-        window.removeEventListener('pointerup', cleanupOnly);
-        window.removeEventListener('pointercancel', cleanupOnly);
-        setIsDraggingMove(false);
-        setDragCursor(null);
-        setDropIndicator(null);
-        setMoveNotice(null);
-      };
-      window.addEventListener('pointerup', cleanupOnly);
-      window.addEventListener('pointercancel', cleanupOnly);
+      setIsDraggingMove(false);
+      overlay.dismiss();
       return;
     }
 
     const elRect = el.getBoundingClientRect();
+    const originalOpacity = el.style.opacity;
+    const originalMovementStyles = allSiblings.map((node) => ({ node, transform: node.style.transform, transition: node.style.transition }));
+    el.style.opacity = '0.25';
     const parentRect = parent.getBoundingClientRect();
     const siblingRects = allSiblings.map((s) => s.getBoundingClientRect());
 
@@ -1295,7 +1297,6 @@ export function SlightNudgeOverlay({
     const onPointerMove = (moveEvent: PointerEvent) => {
       const cursorX = moveEvent.clientX;
       const cursorY = moveEvent.clientY;
-      setDragCursor({ x: cursorX, y: cursorY });
 
       const scale = getPreviewScale();
       const rawDx = cursorX - startX;
@@ -1628,21 +1629,30 @@ export function SlightNudgeOverlay({
       }
     };
 
-    const cleanup = () => {
+    const cleanup = (event?: Event) => {
+      if (event?.type !== 'pointerup') {
+        currentDropDirection = null;
+        currentDropTargetIndex = undefined;
+      }
       window.removeEventListener('pointermove', onPointerMove);
       window.removeEventListener('pointerup', cleanup);
       window.removeEventListener('pointercancel', cleanup);
       window.removeEventListener('keydown', onKeyDown);
+      window.removeEventListener('blur', cleanup);
+      gestureCleanupRef.current = null;
+      el.style.opacity = originalOpacity;
+      overlay.dismiss();
       setIsDraggingMove(false);
-      setDragCursor(null);
       setDropIndicator(null);
       setMoveNotice(null);
       setMoveShift(null);
 
       const directionToApply = currentDropDirection;
       const targetIndexToApply = currentDropTargetIndex;
-      if (!directionToApply) {
-        resetTransforms(true);
+      resetTransforms(false);
+      for (const original of originalMovementStyles) {
+        original.node.style.transform = original.transform;
+        original.node.style.transition = original.transition;
       }
 
       if (directionToApply && selected) {
@@ -1679,6 +1689,7 @@ export function SlightNudgeOverlay({
         requestAnimationFrame(updateSelectedRect);
       }
     };
+    gestureCleanupRef.current = cleanup;
 
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
@@ -1694,7 +1705,8 @@ export function SlightNudgeOverlay({
     window.addEventListener('pointerup', cleanup);
     window.addEventListener('pointercancel', cleanup);
     window.addEventListener('keydown', onKeyDown);
-  }, [previewChange, selected, updateSelectedRect]);
+    window.addEventListener('blur', cleanup);
+  }, [previewChange, selected, updateSelectedRect, overlay.dismiss]);
 
   const hudPlacement = useMemo(() => {
     if (!selected || !selectedNodeRef.current) return { top: 12, left: 12 };
@@ -1731,10 +1743,22 @@ export function SlightNudgeOverlay({
     Math.max(12, viewportWidth - inspectorInset - hudWidthLimit - 12),
   );
 
-  return <div id="slightnudge-ui">
-    {active && hoveredRect && !selected && <div className="sn-hover-outline" style={{ top: hoveredRect.top, left: hoveredRect.left, width: hoveredRect.width, height: hoveredRect.height }} aria-hidden="true"/>}
-    {selected && (
+  const overlayState =
+    isDraggingMove ? 'Dragging' :
+    isResizing ? 'Resizing' :
+    applying ? 'Applying' :
+    isInlineEditing ? 'TextEditing' :
+    overlayError ? 'Error' :
+    overlay.dismissed ? 'Idle' :
+    pendingEdit || preparing ? 'Previewing' :
+    selected ? 'Selected' :
+    hoveredRect ? 'Hover' : 'Idle';
+
+  return <div id="slightnudge-ui" data-editor-state={overlayState}>
+    {active && hoveredRect && !selected && !overlay.dismissed && <div className="sn-hover-outline" style={{ top: hoveredRect.top, left: hoveredRect.left, width: hoveredRect.width, height: hoveredRect.height }} aria-hidden="true"/>}
+    {selected && !overlay.dismissed && (
       <div
+        data-testid="editor-target" data-editor-overlay="outline"
         id="slightnudge-selected-box"
         className={`sn-selection-outline ${warning ? 'is-warning' : ''} ${isInlineEditing ? 'is-editing' : ''} ${isDraggingMove ? 'is-dragging' : ''} ${dropIndicator?.isInvalid ? 'is-invalid-drop' : ''}`}
         style={{
@@ -1747,7 +1771,7 @@ export function SlightNudgeOverlay({
         }}
         aria-hidden="true"
       >
-        {!isInlineEditing && !isDraggingMove && (
+        {!isInlineEditing && !isDraggingMove && !isResizing && (
           <button
             type="button"
             className="sn-corner-dismiss"
@@ -1765,7 +1789,7 @@ export function SlightNudgeOverlay({
             <X size={10} />
           </button>
         )}
-        {selected.safeToEdit !== false && !isInlineEditing && (
+        {selected.safeToEdit !== false && !isInlineEditing && !isDraggingMove && !isResizing && (
           <div
             className={`sn-drag-move-bar ${isDraggingMove ? 'is-dragging' : ''} ${dropIndicator?.isInvalid ? 'is-invalid' : ''}`}
             onPointerDown={handleMoveDragStart}
@@ -1775,57 +1799,37 @@ export function SlightNudgeOverlay({
             {moveNotice && !isDraggingMove && <span className={`sn-move-feedback-badge ${dropIndicator?.isInvalid ? 'is-invalid' : ''}`}>{moveNotice}</span>}
           </div>
         )}
-        {selected.safeToEdit !== false && !isInlineEditing && !isDraggingMove && (
+        {selected.safeToEdit !== false && !isInlineEditing && !isDraggingMove && !isResizing && (
           <div
             className={`sn-corner-slider ${isResizing ? 'is-resizing' : ''}`}
             onPointerDown={handleResizeStart}
             title="Drag corner slider to resize"
           >
-            {resizeBadge && <div className="sn-resize-badge">{resizeBadge}</div>}
           </div>
         )}
       </div>
     )}
 
-    {dropIndicator && (
+    {dropIndicator && !overlay.dismissed && (
       <div
-        className={`sn-drop-line ${dropIndicator.isInvalid ? 'is-invalid' : ''} ${dropIndicator.orientation === 'vertical' ? 'is-vertical' : ''}`}
+        data-testid="editor-drop-indicator" data-editor-overlay="destination"
+        className="sn-drop-line sn-editor-drop-line"
         style={{
           top: dropIndicator.top,
-          left: dropIndicator.left,
-          width: dropIndicator.width,
-          height: dropIndicator.height,
+          left: (selectedNodeRef.current?.parentElement?.getBoundingClientRect().left ?? dropIndicator.left) + window.scrollX,
+          width: selectedNodeRef.current?.parentElement?.getBoundingClientRect().width,
+          height: 2,
         }}
         aria-hidden="true"
       />
     )}
 
-    {selected && isDraggingMove && dragCursor && (
+    {selected && selected.safeToEdit !== false && !overlay.toolbarHidden && (
       <div
-        className={`sn-drag-ghost-chip ${dropIndicator?.isInvalid ? 'is-invalid' : ''}`}
-        style={{
-          position: 'fixed',
-          left: `${dragCursor.x + 14}px`,
-          top: `${dragCursor.y + 14}px`,
-        }}
-        aria-hidden="true"
-      >
-        <GripVertical size={12} />
-        <span>Move &lt;{selected.tagName}&gt;</span>
-        {moveNotice && <span className={`sn-move-feedback-badge ${dropIndicator?.isInvalid ? 'is-invalid' : ''}`}>{moveNotice}</span>}
-      </div>
-    )}
-
-    {selected && selected.safeToEdit !== false && (
-      <div
+        ref={overlay.toolbarRef}
+        data-testid="editor-toolbar" data-editor-overlay="toolbar"
         className="sn-canvas-hud"
-        style={{
-          top: `${hudPlacement.top}px`,
-          left: `${hudLeft}px`,
-          opacity: isDraggingMove ? 0 : 1,
-          pointerEvents: isDraggingMove ? 'none' : 'auto',
-          transition: isResizing || isDraggingMove ? 'none' : 'top 0.24s cubic-bezier(0.16, 1, 0.3, 1), left 0.24s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.15s',
-        }}
+        style={overlay.toolbarStyle}
       >
         <div className="sn-hud-badge" title={`HTML Tag: <${selected.tagName}>`}>
           <span className="sn-hud-tag-bracket">&lt;</span>
@@ -2250,7 +2254,7 @@ export function SlightNudgeOverlay({
       </div>
     )}
 
-    {showExploreMore && selected && selected.safeToEdit !== false && (
+    {showExploreMore && selected && selected.safeToEdit !== false && !overlay.toolbarHidden && (
       <div
         className="sn-explore-card"
         style={{

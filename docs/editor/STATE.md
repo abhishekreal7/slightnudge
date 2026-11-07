@@ -19,18 +19,27 @@
 
 - Part 1 checkpoint is committed as `faea178`. A final v2 run against the real worktree passed. All helper snapshot pairs matched and all isolation roots were removed. [Audit](evidence/through-part-1-audit.json) · [Cleanup](evidence/through-part-1-cleanup.json)
 
+- Part 2a, CONFIRMED complete. Both editors pass ten overlay contract tests with eighteen pixelmatch baselines, plus the refused-drop transform regression, final TypeScript and production build. Every protected-state snapshot matched. [Proof](evidence/part-2a-overlay-verified.txt) · [Cleanup](evidence/part-2a-cleanup.json)
+
 ## Next
 
-Budget boundary after Part 1. Resume directly at Part 2a without repeating the completed baseline. Part 0 is CONFIRMED complete. All 23 battery suites passed on the unchanged engine baseline, including 300 seeded stacked-edit cases. Every protected-state snapshot matched. [Results](evidence/part-0c-battery-results.json) · [Cleanup](evidence/part-0c-cleanup-summary.json) The dynamic integrity guard is complete in commit `6cadd06`. Next is Part 2a, write the overlay contract before its tests and implementation. Parts 2–6 are pending.
+Budget boundary after Part 2a. Resume directly at Part 2b. First prove that both playground Apply buttons reach the same save path, then retain the floating Apply and add Ctrl/Cmd+Enter, Escape discard and Ctrl/Cmd+Z. Parts 0, 1 and 2a are complete. Continue with 2c, Part 3 and visible controls in the user-specified order as budget permits. Parts 5 and 6 remain pending.
 
 ```powershell
 Set-Location -LiteralPath 'C:\dev\vibecheck'
 git branch --show-current
 git status --porcelain=v1
-Get-Content -LiteralPath app/studio/page.tsx,components/slightnudge/SlightNudgeOverlay.tsx -Raw
+Get-Content -LiteralPath docs/editor/BRIEF.md,docs/editor/STATE.md -Raw
+rg -n 'applySourceEdit|Apply to Source|Apply to code|handleKeyDown' app/studio/page.tsx
 ```
 
-Use a fresh evidence label per run. The isolation runner archives the current HEAD, omits the environment template, and runs the unchanged engine in a temporary repository with the source repository's line-ending setting. The outer runner takes snapshots with the unchanged real-state helper. Retry an assertion failure once in a fresh isolation and apply Amendment 3's four stop conditions.
+For each new test group, use a fresh label with the existing protected runner and isolated suite runner. Add new source/test paths explicitly as overlays until they are committed.
+
+```powershell
+node --import tsx scratch/editor-sprint1-run-group.ts part-2b-red node --import tsx scratch/editor-sprint1-isolate.ts overlay-apply test/overlay-apply.test.ts
+```
+
+The last command is the intended command once the Part 2b test file exists. Follow Amendment 3 for environment recovery and the four stop conditions. Baseline regeneration instructions are in test/visual-baselines/README.md.
 
 ## Open issues
 
@@ -38,4 +47,5 @@ Use a fresh evidence label per run. The isolation runner archives the current HE
 - The helper and v2 guard passed all three checks, and archive TypeScript verification passed.
 - The build emitted webpack warnings about `module.createRequire` in `tailwind-verifier.ts`.
 - The prior archive omitted tracked `.env.example` to avoid reading it.
+- The source editor can replace the DOM className with a single token during nudge preview. Preserve the pending-source transaction and address the preview styling discrepancy during Part 3 control proofs.
 - Run `git diff --cached --name-only` before every sprint commit and confirm that `next-env.d.ts` is absent.

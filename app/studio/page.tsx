@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useOverlayPresentation } from '@/components/slightnudge/useOverlayPresentation';
 import {
   Code2,
   ArrowLeft,
@@ -393,9 +394,12 @@ export default function StudioPage() {
   // Pending Source Edits (SaaS Backend Integration)
   const [pendingEdit, setPendingEdit] = useState<PendingEdit | null>(null);
   const [isApplying, setIsApplying] = useState(false);
+  const [overlayError, setOverlayError] = useState(false);
+  const [hoveredLayer, setHoveredLayer] = useState<string | null>(null);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   const showToast = (msg: string) => {
+    setOverlayError(msg.startsWith('⚠️'));
     setToastMessage(msg);
     setTimeout(() => setToastMessage(null), 3000);
   };
@@ -420,6 +424,18 @@ export default function StudioPage() {
 
   // Dynamic DOM refs & element bounding dimensions
   const elementRefs = useRef<Record<string, HTMLDivElement | null>>({});
+  const overlay = useOverlayPresentation(elementRefs.current[selectedLayer || ''] || null, isDraggingMove || isResizing);
+  const cancelManipulation = useCallback(() => {
+    setIsDraggingMove(false);
+    setDragLayerKey(null);
+    setDragOffset(0);
+    setDropSlotIndex(null);
+    setIsResizing(false);
+    setResizeHandle(null);
+    setLiveWidth(null);
+    setDimensionTooltip(null);
+    overlay.dismiss();
+  }, [overlay.dismiss]);
   const [elementDimensions, setElementDimensions] = useState<Record<string, { w: number; h: number }>>({
     text: { w: 672, h: 114 },
     paragraph: { w: 576, h: 48 },
@@ -479,6 +495,7 @@ export default function StudioPage() {
       if (!activeKey) return;
       const targetElem = elements[activeKey] || activeElement;
       setBusy(true);
+      setOverlayError(false);
       try {
         const result = await previewEditAPI({
           kind,
@@ -628,38 +645,28 @@ export default function StudioPage() {
         setDimensionTooltip(null);
         setLiveWidth(null);
       }
+      overlay.dismiss();
     };
 
     window.addEventListener('pointermove', onPointerMove);
     window.addEventListener('pointerup', onPointerUp);
+    window.addEventListener('pointercancel', cancelManipulation);
+    window.addEventListener('blur', cancelManipulation);
     return () => {
       window.removeEventListener('pointermove', onPointerMove);
       window.removeEventListener('pointerup', onPointerUp);
+      window.removeEventListener('pointercancel', cancelManipulation);
+      window.removeEventListener('blur', cancelManipulation);
     };
-  }, [isDraggingMove, isResizing, dragLayerKey, dragStartY, childOrder, dropSlotIndex, resizeHandle, resizeStartX, resizeStartY, resizeStartWidth, resizeStartHeight, dimensionTooltip, selectedLayer, triggerBackendPreview]);
+  }, [isDraggingMove, isResizing, dragLayerKey, dragStartY, childOrder, dropSlotIndex, resizeHandle, resizeStartX, resizeStartY, resizeStartWidth, resizeStartHeight, dimensionTooltip, selectedLayer, triggerBackendPreview, cancelManipulation, overlay.dismiss]);
 
-  // Cancel manipulation or clear selection on Escape key
   useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        if (isDraggingMove) {
-          setIsDraggingMove(false);
-          setDragLayerKey(null);
-          setDragOffset(0);
-          setDropSlotIndex(null);
-        } else if (isResizing) {
-          setIsResizing(false);
-          setResizeHandle(null);
-          setLiveWidth(null);
-          setDimensionTooltip(null);
-        } else {
-          setSelectedLayer(null);
-        }
-      }
+    const onEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') cancelManipulation();
     };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isDraggingMove, isResizing]);
+    window.addEventListener('keydown', onEscape);
+    return () => window.removeEventListener('keydown', onEscape);
+  }, [cancelManipulation]);
 
   // Apply Pending Edit to Source Disk
   const applySourceEdit = async () => {
@@ -995,12 +1002,15 @@ export default function StudioPage() {
 
   // Floating In-Situ Canvas HUD Bar matching user benchmark reference exactly
   const renderHUDBar = () => {
-    if (!selectedLayer) return null;
+    if (!selectedLayer || overlay.toolbarHidden) return null;
 
     return (
       <div
-        className="absolute -top-16 left-1/2 -translate-x-1/2 z-40 flex flex-col items-center select-none"
-        style={{ minWidth: 'max-content' }}
+        ref={overlay.toolbarRef}
+        data-testid="editor-toolbar"
+        data-editor-overlay="toolbar"
+        className="flex flex-col items-center select-none"
+        style={overlay.toolbarStyle}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Precise Obsidian Pill HUD Bar Matching User Reference Exactly */}
@@ -1345,6 +1355,17 @@ export default function StudioPage() {
     );
   };
 
+  const overlayState =
+    isDraggingMove ? 'Dragging' :
+    isResizing ? 'Resizing' :
+    isApplying ? 'Applying' :
+    isInlineEditing ? 'TextEditing' :
+    overlayError ? 'Error' :
+    overlay.dismissed ? 'Idle' :
+    pendingEdit || busy ? 'Previewing' :
+    selectedLayer ? 'Selected' :
+    hoveredLayer ? 'Hover' : 'Idle';
+
   return (
     <>
       {/* Google Fonts: Manrope & Inter */}
@@ -1382,7 +1403,7 @@ export default function StudioPage() {
       `}</style>
 
       {/* Main Studio Shell: Fullscreen SlightNudge SaaS Environment */}
-      <div className="fixed inset-0 z-50 flex flex-col h-screen w-screen bg-[#F8F9FA] select-none text-slate-800 text-xs overflow-hidden">
+      <div data-editor-state={overlayState} data-overlays-dismissed={overlay.dismissed} className="fixed inset-0 z-50 flex flex-col h-screen w-screen bg-[#F8F9FA] select-none text-slate-800 text-xs overflow-hidden">
         
         {/* Toast Notification */}
         {toastMessage && (
@@ -1501,7 +1522,7 @@ export default function StudioPage() {
                       <svg className="w-3 h-3 text-slate-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                         <polyline points="9 18 15 12 9 6" />
                       </svg>
-                      <svg className={`w-3.5 h-3.5 shrink-0 ${selectedLayer === 'nav' ? 'text-[#059669]' : 'text-slate-400'}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <svg className={`w-3.5 h-3.5 shrink-0 ${selectedLayer === 'nav' && !overlay.dismissed ? 'text-[#059669]' : 'text-slate-400'}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                         <rect x="3" y="3" width="18" height="18" rx="3" />
                       </svg>
                       <span className="text-[11.5px]">Nav Menu</span>
@@ -1518,7 +1539,7 @@ export default function StudioPage() {
                         }`}
                       >
                         <svg
-                          className={`w-3 h-3 shrink-0 ${selectedLayer === 'hero' ? 'text-[#059669]' : 'text-slate-400'}`}
+                          className={`w-3 h-3 shrink-0 ${selectedLayer === 'hero' && !overlay.dismissed ? 'text-[#059669]' : 'text-slate-400'}`}
                           viewBox="0 0 24 24"
                           fill="none"
                           stroke="currentColor"
@@ -1527,7 +1548,7 @@ export default function StudioPage() {
                           <polyline points="6 9 12 15 18 9" />
                         </svg>
                         <svg
-                          className={`w-3.5 h-3.5 shrink-0 ${selectedLayer === 'hero' ? 'text-[#059669]' : 'text-slate-400'}`}
+                          className={`w-3.5 h-3.5 shrink-0 ${selectedLayer === 'hero' && !overlay.dismissed ? 'text-[#059669]' : 'text-slate-400'}`}
                           viewBox="0 0 24 24"
                           fill="none"
                           stroke="currentColor"
@@ -1628,7 +1649,7 @@ export default function StudioPage() {
                       <svg className="w-3 h-3 text-slate-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                         <polyline points="9 18 15 12 9 6" />
                       </svg>
-                      <svg className={`w-3.5 h-3.5 shrink-0 ${selectedLayer === 'waitlist' ? 'text-[#059669]' : 'text-slate-400'}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <svg className={`w-3.5 h-3.5 shrink-0 ${selectedLayer === 'waitlist' && !overlay.dismissed ? 'text-[#059669]' : 'text-slate-400'}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                         <rect x="3" y="3" width="18" height="18" rx="3" />
                       </svg>
                       <span className="text-[11.5px]">Waitlist Wrapper</span>
@@ -1784,6 +1805,7 @@ export default function StudioPage() {
 
             {/* Canvas Main Scroll Area */}
             <main
+              data-testid="editor-canvas"
               onClick={() => setSelectedLayer(null)}
               className="flex-1 overflow-auto bg-[#F8F9FA] relative flex flex-col justify-between p-6 md:p-12 items-center"
             >
@@ -1796,12 +1818,13 @@ export default function StudioPage() {
               
               {/* Artboard Nav Header */}
               <nav
+                data-editor-element="nav"
                 onClick={(e) => {
                   e.stopPropagation();
                   if (inspectorActive) setSelectedLayer('nav');
                 }}
                 className={`w-full px-8 py-6 flex items-center justify-between transition cursor-pointer ${
-                  selectedLayer === 'nav' ? 'ring-2 ring-[#059669] ring-inset' : ''
+                  selectedLayer === 'nav' && !overlay.dismissed ? 'ring-2 ring-[#059669] ring-inset' : ''
                 }`}
               >
                 {/* Brand Logo & Links */}
@@ -1839,12 +1862,13 @@ export default function StudioPage() {
                 {/* ======================================================== */}
                 <div
                   ref={(el) => { elementRefs.current['hero'] = el; }}
+                  data-editor-element="hero"
                   onClick={(e) => {
                     e.stopPropagation();
                     if (inspectorActive) setSelectedLayer('hero');
                   }}
                   className={`relative w-full max-w-[780px] rounded-sm p-8 transition-all cursor-pointer bg-transparent ${
-                    selectedLayer === 'hero' ? 'border-2 border-[#059669] shadow-sm' : 'border border-transparent hover:border-slate-200'
+                    selectedLayer === 'hero' && !overlay.dismissed ? 'border-2 border-[#059669] shadow-sm' : 'border border-transparent hover:border-slate-200'
                   }`}
                   style={{
                     paddingTop: `${elements.hero.paddingTop}px`,
@@ -1854,7 +1878,7 @@ export default function StudioPage() {
                   }}
                 >
                   {/* Selection Badge Tag (Top-Left attached pill in SlightNudge Emerald) */}
-                  {selectedLayer === 'hero' && (
+                  {selectedLayer === 'hero' && !overlay.dismissed && !isDraggingMove && !isResizing && (
                     <div className="absolute -top-[21px] -left-[1px] bg-[#059669] text-white font-mono text-[10px] font-bold px-2 py-0.5 rounded-t-[5px] flex items-center space-x-1 shadow-xs border-t border-l border-r border-emerald-400/30">
                       <svg className="w-2.5 h-2.5 text-white/90" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
                         <rect x="3" y="3" width="18" height="18" rx="3" />
@@ -1866,29 +1890,23 @@ export default function StudioPage() {
                   {/* Floating In-Situ Canvas HUD Dock when Hero is selected */}
                   {selectedLayer === 'hero' && renderHUDBar()}
 
-                  {/* Magnetic Drag Slot Drop Indicator (Before First Child) */}
-                  {isDraggingMove && dropSlotIndex === 0 && (
-                    <div className="w-full my-3 flex items-center justify-center relative animate-fade-in z-50 pointer-events-none">
-                      <div className="w-full h-1 bg-gradient-to-r from-emerald-400 via-teal-300 to-emerald-400 rounded-full shadow-[0_0_14px_rgba(16,185,129,0.9)] relative">
-                        <div className="absolute -left-1 -top-0.5 w-2 h-2 rounded-full bg-emerald-400 ring-2 ring-white shadow" />
-                        <div className="absolute -right-1 -top-0.5 w-2 h-2 rounded-full bg-emerald-400 ring-2 ring-white shadow" />
-                      </div>
-                      <div className="absolute -top-3 bg-emerald-600 text-white font-sans text-[10px] font-semibold px-2 py-0.5 rounded-full shadow-md flex items-center space-x-1">
-                        <Sparkles size={10} className="text-emerald-200" />
-                        <span>Drop here (Position 1 of {childOrder.length})</span>
-                      </div>
-                    </div>
-                  )}
+
+                  {isDraggingMove && dropSlotIndex !== null && elementRefs.current.hero && (() => {
+                    const parent = elementRefs.current.hero.getBoundingClientRect();
+                    const slot = elementRefs.current[childOrder[dropSlotIndex]]?.getBoundingClientRect();
+                    const movingIndex = childOrder.indexOf(dragLayerKey || '');
+                    return slot && <div data-testid="editor-drop-indicator" data-editor-overlay="destination" className="sn-editor-drop-line" style={{ position: 'fixed', left: parent.left, top: dropSlotIndex > movingIndex ? slot.bottom : slot.top, width: parent.width }} />;
+                  })()}
 
                   {childOrder.map((layerKey, index) => {
-                    const isSelected = selectedLayer === layerKey;
+                    const isSelected = selectedLayer === layerKey && !overlay.dismissed;
                     const isTargetOfMove = isDraggingMove && dragLayerKey === layerKey;
                     const dim = elementDimensions[layerKey] || { w: 672, h: 100 };
 
                     // Calculate dynamic transform if dragging
                     let transformStyle: string | undefined = undefined;
                     if (isTargetOfMove) {
-                      transformStyle = `translate3d(0, ${dragOffset}px, 0) scale(1.02)`;
+                      transformStyle = `translate3d(0, ${dragOffset}px, 0)`;
                     } else if (isDraggingMove && dragLayerKey) {
                       const curIdx = childOrder.indexOf(dragLayerKey);
                       if (dropSlotIndex !== null) {
@@ -1900,8 +1918,8 @@ export default function StudioPage() {
                       }
                     }
 
-                    // Common interactive handles (Figma vector micro-handles, precision hardware sliders, centered dimension badge, flush corner tag)
-                    const interactiveHandles = isSelected && inspectorActive ? (
+                    // Selection controls are hidden for the duration of a gesture.
+                    const interactiveHandles = isSelected && inspectorActive && !isDraggingMove && !isResizing ? (
                       <>
                         {/* Floating In-Situ Canvas HUD Dock attached directly to active child element */}
                         {renderHUDBar()}
@@ -2026,6 +2044,11 @@ export default function StudioPage() {
                         <React.Fragment key="text">
                           <div
                             ref={(el) => { elementRefs.current['text'] = el; }}
+                            data-editor-element="text"
+                            data-testid={isSelected ? "editor-target" : undefined}
+                            data-editor-overlay={isSelected ? "outline" : undefined}
+                            onPointerEnter={() => setHoveredLayer("text")}
+                            onPointerLeave={() => setHoveredLayer(null)}
                             onClick={(e) => {
                               e.stopPropagation();
                               if (inspectorActive) setSelectedLayer('text');
@@ -2036,11 +2059,12 @@ export default function StudioPage() {
                               isSelected
                                 ? 'border-[1.5px] border-[#059669] shadow-[0_0_0_1px_rgba(5,150,105,0.08)]'
                                 : 'border-[1.5px] border-transparent hover:border-slate-300'
-                            } ${isTargetOfMove ? 'scale-[1.02] shadow-2xl ring-2 ring-emerald-500/80 opacity-95 z-40' : ''}`}
+                            } ${isTargetOfMove ? 'z-40' : ''}`}
                             style={{
                               width: isSelected && liveWidth ? `${liveWidth}px` : undefined,
                               maxWidth: isSelected && liveWidth ? `${liveWidth}px` : undefined,
                               transform: transformStyle,
+                              opacity: isTargetOfMove ? 0.25 : 1,
                               transition: isDraggingMove ? 'transform 0.2s cubic-bezier(0.16, 1, 0.3, 1)' : 'max-width 0.1s ease-out, width 0.1s ease-out',
                             }}
                           >
@@ -2104,19 +2128,6 @@ export default function StudioPage() {
                             )}
                           </div>
 
-                          {/* Magnetic Drop Slot Line between siblings */}
-                          {isDraggingMove && dropSlotIndex === index + 1 && (
-                            <div className="w-full my-3 flex items-center justify-center relative animate-fade-in z-50 pointer-events-none">
-                              <div className="w-full h-1 bg-gradient-to-r from-emerald-400 via-teal-300 to-emerald-400 rounded-full shadow-[0_0_14px_rgba(16,185,129,0.9)] relative">
-                                <div className="absolute -left-1 -top-0.5 w-2 h-2 rounded-full bg-emerald-400 ring-2 ring-white shadow" />
-                                <div className="absolute -right-1 -top-0.5 w-2 h-2 rounded-full bg-emerald-400 ring-2 ring-white shadow" />
-                              </div>
-                              <div className="absolute -top-3 bg-emerald-600 text-white font-sans text-[10px] font-semibold px-2 py-0.5 rounded-full shadow-md flex items-center space-x-1">
-                                <Sparkles size={10} className="text-emerald-200" />
-                                <span>Drop here (Position {index + 2} of {childOrder.length})</span>
-                              </div>
-                            </div>
-                          )}
                         </React.Fragment>
                       );
                     }
@@ -2126,6 +2137,11 @@ export default function StudioPage() {
                         <React.Fragment key="paragraph">
                           <div
                             ref={(el) => { elementRefs.current['paragraph'] = el; }}
+                            data-editor-element="paragraph"
+                            data-testid={isSelected ? "editor-target" : undefined}
+                            data-editor-overlay={isSelected ? "outline" : undefined}
+                            onPointerEnter={() => setHoveredLayer("paragraph")}
+                            onPointerLeave={() => setHoveredLayer(null)}
                             onClick={(e) => {
                               e.stopPropagation();
                               if (inspectorActive) setSelectedLayer('paragraph');
@@ -2136,11 +2152,12 @@ export default function StudioPage() {
                               isSelected
                                 ? 'border-[1.5px] border-[#059669] shadow-[0_0_0_1px_rgba(5,150,105,0.08)]'
                                 : 'border-[1.5px] border-transparent hover:border-slate-300'
-                            } ${isTargetOfMove ? 'scale-[1.02] shadow-2xl ring-2 ring-emerald-500/80 opacity-95 z-40' : ''}`}
+                            } ${isTargetOfMove ? 'z-40' : ''}`}
                             style={{
                               width: isSelected && liveWidth ? `${liveWidth}px` : undefined,
                               maxWidth: isSelected && liveWidth ? `${liveWidth}px` : undefined,
                               transform: transformStyle,
+                              opacity: isTargetOfMove ? 0.25 : 1,
                               transition: isDraggingMove ? 'transform 0.2s cubic-bezier(0.16, 1, 0.3, 1)' : 'max-width 0.1s ease-out, width 0.1s ease-out',
                             }}
                           >
@@ -2155,19 +2172,6 @@ export default function StudioPage() {
                             </p>
                           </div>
 
-                          {/* Magnetic Drop Slot Line between siblings */}
-                          {isDraggingMove && dropSlotIndex === index + 1 && (
-                            <div className="w-full my-3 flex items-center justify-center relative animate-fade-in z-50 pointer-events-none">
-                              <div className="w-full h-1 bg-gradient-to-r from-emerald-400 via-teal-300 to-emerald-400 rounded-full shadow-[0_0_14px_rgba(16,185,129,0.9)] relative">
-                                <div className="absolute -left-1 -top-0.5 w-2 h-2 rounded-full bg-emerald-400 ring-2 ring-white shadow" />
-                                <div className="absolute -right-1 -top-0.5 w-2 h-2 rounded-full bg-emerald-400 ring-2 ring-white shadow" />
-                              </div>
-                              <div className="absolute -top-3 bg-emerald-600 text-white font-sans text-[10px] font-semibold px-2 py-0.5 rounded-full shadow-md flex items-center space-x-1">
-                                <Sparkles size={10} className="text-emerald-200" />
-                                <span>Drop here (Position {index + 2} of {childOrder.length})</span>
-                              </div>
-                            </div>
-                          )}
                         </React.Fragment>
                       );
                     }
@@ -2177,6 +2181,11 @@ export default function StudioPage() {
                         <React.Fragment key="button">
                           <div
                             ref={(el) => { elementRefs.current['button'] = el; }}
+                            data-editor-element="button"
+                            data-testid={isSelected ? "editor-target" : undefined}
+                            data-editor-overlay={isSelected ? "outline" : undefined}
+                            onPointerEnter={() => setHoveredLayer("button")}
+                            onPointerLeave={() => setHoveredLayer(null)}
                             onClick={(e) => {
                               e.stopPropagation();
                               if (inspectorActive) setSelectedLayer('button');
@@ -2185,11 +2194,12 @@ export default function StudioPage() {
                               isSelected
                                 ? 'border-[1.5px] border-[#059669] shadow-[0_0_0_1px_rgba(5,150,105,0.08)]'
                                 : 'border-[1.5px] border-transparent hover:border-slate-300'
-                            } ${isTargetOfMove ? 'scale-[1.02] shadow-2xl ring-2 ring-emerald-500/80 opacity-95 z-40' : ''}`}
+                            } ${isTargetOfMove ? 'z-40' : ''}`}
                             style={{
                               width: isSelected && liveWidth ? `${liveWidth}px` : undefined,
                               maxWidth: isSelected && liveWidth ? `${liveWidth}px` : undefined,
                               transform: transformStyle,
+                              opacity: isTargetOfMove ? 0.25 : 1,
                               transition: isDraggingMove ? 'transform 0.2s cubic-bezier(0.16, 1, 0.3, 1)' : undefined,
                             }}
                           >
@@ -2206,19 +2216,6 @@ export default function StudioPage() {
                             </button>
                           </div>
 
-                          {/* Magnetic Drop Slot Line between siblings */}
-                          {isDraggingMove && dropSlotIndex === index + 1 && (
-                            <div className="w-full my-3 flex items-center justify-center relative animate-fade-in z-50 pointer-events-none">
-                              <div className="w-full h-1 bg-gradient-to-r from-emerald-400 via-teal-300 to-emerald-400 rounded-full shadow-[0_0_14px_rgba(16,185,129,0.9)] relative">
-                                <div className="absolute -left-1 -top-0.5 w-2 h-2 rounded-full bg-emerald-400 ring-2 ring-white shadow" />
-                                <div className="absolute -right-1 -top-0.5 w-2 h-2 rounded-full bg-emerald-400 ring-2 ring-white shadow" />
-                              </div>
-                              <div className="absolute -top-3 bg-emerald-600 text-white font-sans text-[10px] font-semibold px-2 py-0.5 rounded-full shadow-md flex items-center space-x-1">
-                                <Sparkles size={10} className="text-emerald-200" />
-                                <span>Drop here (Position {index + 2} of {childOrder.length})</span>
-                              </div>
-                            </div>
-                          )}
                         </React.Fragment>
                       );
                     }
@@ -2230,17 +2227,18 @@ export default function StudioPage() {
                 {/* Social Proof Stack under block */}
                 <div
                   ref={(el) => { elementRefs.current['waitlist'] = el; }}
+                  data-editor-element="waitlist"
                   onClick={(e) => {
                     e.stopPropagation();
                     if (inspectorActive) setSelectedLayer('waitlist');
                   }}
                   className={`relative mt-8 flex flex-col items-center space-y-2.5 cursor-pointer rounded-lg p-2.5 transition-all ${
-                    selectedLayer === 'waitlist'
+                    selectedLayer === 'waitlist' && !overlay.dismissed
                       ? 'border-[1.5px] border-[#059669] shadow-[0_0_0_1px_rgba(5,150,105,0.08)]'
                       : 'border-[1.5px] border-transparent hover:border-slate-300'
                   }`}
                 >
-                  {selectedLayer === 'waitlist' && inspectorActive && (
+                  {selectedLayer === 'waitlist' && inspectorActive && !overlay.dismissed && !isDraggingMove && !isResizing && (
                     <>
                       {renderHUDBar()}
                     <div className="absolute -top-[21px] -left-[1px] bg-[#059669] text-white font-mono text-[10px] font-bold px-2 py-0.5 rounded-t-[5px] flex items-center space-x-1 shadow-xs border-t border-l border-r border-emerald-400/30">
@@ -2318,7 +2316,7 @@ export default function StudioPage() {
             </div>
 
             {/* Floating Source Review Bar (Appears when an edit is made) */}
-            {pendingEdit && (
+            {pendingEdit && !overlay.toolbarHidden && (
               <div
                 onClick={(e) => e.stopPropagation()}
                 className="fixed bottom-12 left-1/2 -translate-x-1/2 z-40 flex flex-col items-center"

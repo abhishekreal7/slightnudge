@@ -79,9 +79,25 @@ Part 1a is committed as `1b93d2b`. The implementation changes only the three wri
 
 The current run ends at a budget boundary after Part 1. Next is Part 2a. A final v2 run against the real worktree passed all three checks, and the before-and-after protected-state snapshots matched. [Final real-worktree guard](editor/evidence/part-1-final-real-guard.txt)
 
-## Parts 2–6
+## Part 2a — Overlay contract and polish
 
-UNVERIFIED. Overlay polish, UI test infrastructure, controls, real-site validation and the closing gate remain pending. Tag `pre-sprint1` was created on baseline `955007d` and branch `feat/editor-sprint1` was created under Amendment 2. The helper work initially landed in `b96f47c` and is complete after the Amendment 3 correction.
+CONFIRMED complete. Both playground and source-mapped editors follow the [overlay contract](editor/overlay-contract.md). The shared measured toolbar placement prefers above, flips below, clamps to the viewport, uses free sides when needed and hides when a nonoverlapping position cannot fit. It hides during drag, resize and scroll. Reordering uses one solid 2 CSS pixel parent-width accent line and a target at 0.25 opacity. Dots, destination shadows, text badges and the cursor chip were removed. Drop, Escape, pointer cancellation, refused drop and blur dismiss transient canvas overlays.
+
+The contract was written before the new tests and implementation. The original browser run reproduced stuck-toolbar assertions during drag, resize and gesture completion. [Raw initial failure](editor/evidence/part-2a-overlay-red.txt) · [Local-resource baseline run](editor/evidence/part-2a-overlay-red-local.txt)
+
+The ten contract tests pass across both real entry points and compare eighteen reviewed 720 by 440 PNGs, totaling 702712 bytes, with Playwright's bundled pixelmatch comparator. Threshold is 0.15 with a 0.2% differing-pixel limit. Independent geometry assertions enforce bounds, above/below placement, absence of overlap, exact line thickness and parent width. Completion assertions check successful preview preparation, refused preview, cancellation without requests and restored element opacity. [Verified contract suite](editor/evidence/part-2a-overlay-verified.txt) · [Baseline review sheet](editor/evidence/overlay-baselines-review.png) · [Regeneration instructions](../test/visual-baselines/README.md)
+
+A dedicated regression exposed target and sibling transforms left behind after a refused source-editor drop. It failed before the cleanup fix and passed after movement styles were restored. [Raw failure](editor/evidence/part-2a-transform-red.txt) · [Pass](editor/evidence/part-2a-transform-green.txt)
+
+TypeScript and the final production build passed with the overlay changes. The existing webpack createRequire warnings remain. The integration suite took 150.8 seconds on its final run. The cold-start and eighteen-image justification was documented before the tests ran. No existing assertion or timeout was weakened. The server helper now omits environment files from workspace copies. No dependency was added, and no existing studio suite selector was changed. [TypeScript](editor/evidence/part-2a-typecheck-final.txt) · [Build](editor/evidence/part-2a-build-final.txt)
+
+CONFIRMED. Every Part 2a helper-based before-and-after snapshot matched, and all owned isolation roots were removed. Nested workspace copies, browser scratch directories, dependency junctions and dev servers were cleaned up. [Audit](editor/evidence/part-2a-audit.json) · [Cleanup inventory](editor/evidence/part-2a-cleanup.json)
+
+This session ends at the completed Part 2a budget boundary. Next is Part 2b. Both Apply buttons and their shared save handler are preserved for the required proof before removing the duplicate.
+
+## Parts 2b–6
+
+UNVERIFIED. One Apply and shortcuts, token/restart/reload behavior, UI test infrastructure, controls, real-site validation and the closing gate remain pending. Tag `pre-sprint1` was created on baseline `955007d` and branch `feat/editor-sprint1` was created under Amendment 2. The helper work initially landed in `b96f47c` and is complete after the Amendment 3 correction.
 
 ## Amendment 2
 
@@ -100,6 +116,13 @@ The previously pending suites, now all passed, were reorder-safety, adapter, his
 CONFIRMED. The v2 guard compares fixture content with HEAD after normalizing CRLF to LF on both sides and independently requires clean Git status for fixtures. Its tracked-modification check and temporary helper self-test remain in place. The real-state snapshot helper is unchanged and continues to compare raw bytes, size and mtime between observations. All three checks passed in an isolated archive with the amended test applied. The previous incomplete work is complete. [Pass and protected-state result](editor/evidence/amendment-3-guard-pass-retry.txt)
 
 ## Noticed but not fixed
+
+CONFIRMED. The screenshots are canvas crops. Applying progress and Error notices outside those crops are covered by state assertions, while their detailed message behavior remains Part 2c work. The installed internal Playwright comparator API may need adjustment on a dependency upgrade.
+
+CONFIRMED. Initial browser attempts encountered cold compilation, remote font loading and interaction before hydration. Setup now warms both local routes, blocks external browser resources, waits for hydration and waits for source inspection before source-editor interaction. One preview-response timeout occurred during a concurrent build; the subsequent full suite passed. Action timeouts stayed at 5000 milliseconds. [Timeout run](editor/evidence/part-2a-overlay-final.txt) · [Verified run](editor/evidence/part-2a-overlay-verified.txt)
+
+CONFIRMED by code and screenshot review. The existing source-editor nudge preview uses the response's newValue as the whole DOM className. A token response can therefore change unrelated preview styling. The source mutation uses the separately reviewed pending snapshot. This preview issue is deferred to the UI control proofs in Part 3. [Preview state crop](../test/visual-baselines/source-previewing.png)
+
 
 The production build emitted webpack warnings about parsing the `module.createRequire` argument in `lib/slightnudge/tailwind-verifier.ts`. [Build output](editor/evidence/part-0c-build.txt)
 
@@ -123,4 +146,4 @@ All isolation roots through Part 1 were confirmed removed, and all helper-based 
 
 ## What I did NOT verify
 
-The writer responsible for the historical history-file change, Windows file-symlink attacks requiring unavailable privilege, and implementation and verification work in Parts 2–6, including the full production gate on the final branch tip.
+The writer responsible for the historical history-file change, Windows file-symlink attacks requiring unavailable privilege, and implementation and verification work in Parts 2b–6, including the final full safety battery, production start smoke test and real-site validation.
