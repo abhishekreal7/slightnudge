@@ -37,7 +37,7 @@ export async function runSelectionGate(specs:Spec[],suite:'regression'|'overfit'
    const locator=frame.locator(s.selector);
    if(!await locator.count())return {...row,verdict:'MISSING-TARGET',reason:'Original locator missing'};
    try{await clearEditorSelection(page);await locator.scrollIntoViewIfNeeded();}catch(error){return {...row,verdict:'MISSING-TARGET',reason:String(error)};}
-   const probe=await probeElement(locator,s.clickPosition);row.probe={...probe,candidates:undefined,candidateCount:probe.candidates.length};
+   const probe=await probeElement(locator,s.clickPosition);if(!probe.source?.path)throw Error('Expected source metadata for the selected element');row.probe={...probe,candidates:undefined,candidateCount:probe.candidates.length};
    const candidates=await logicalToScreen(page,probe.candidates);
    const blocked=candidates.filter(c=>c.parentHit&&!c.parentHit.isIframe);row.blocked=blocked.slice(0,1);
    if(blocked.length)await page.screenshot({path:path.join(dir,`${name}-case-${s.index}-blocked${scale?'-'+scale:''}.png`)});

@@ -21,7 +21,7 @@ try {
   const image = () => page.frames()[1].locator('img'); let id = 0;
   const command = async (operation: string, patches: any[]) => {
     const requestId = String(++id);
-    await page.evaluate(message => (document.querySelector('iframe') as HTMLIFrameElement).contentWindow!.postMessage(message, location.origin), { channel: 'slightnudge', session: 'test', type: 'source-edit', requestId, operation, patches });
+    await page.evaluate(message => (document.querySelector('iframe') as HTMLIFrameElement).contentWindow!.postMessage(message, window.location.origin), { channel: 'slightnudge', session: 'test', type: 'source-edit', requestId, operation, patches });
     await page.waitForFunction(id => (window as any).messages.some((m: any) => m.type === 'edit-result' && m.requestId === id), requestId);
     return page.evaluate(id => (window as any).messages.find((m: any) => m.type === 'edit-result' && m.requestId === id), requestId);
   };

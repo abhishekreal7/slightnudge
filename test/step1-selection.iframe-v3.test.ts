@@ -30,7 +30,7 @@ try{
    }
    await page.locator('[data-source-ready="true"]').waitFor();await clearEditorSelection(page);
    const frame=await (await page.locator('iframe[title="Actual project"]').elementHandle())!.contentFrame();if(!frame)throw Error('No source iframe');
-   const locator=frame.locator(expected.selector);await locator.waitFor();await locator.scrollIntoViewIfNeeded();const probe=await probeElement(locator);
+   const locator=frame.locator(expected.selector);await locator.waitFor();await locator.scrollIntoViewIfNeeded();const probe=await probeElement(locator);if(!probe.source?.path)throw Error('Expected source metadata for the selected element');
    const candidates=await logicalToScreen(page,probe.candidates),point=candidates.find(c=>c.parentHit?.isIframe);if(!point){row.result='NOT-CLICKABLE';row.reason='No exposed point found';rows.push(row);console.log(JSON.stringify(row));continue;}
    const before=await page.evaluate(()=>(window as any).__step1Signals.length);await page.mouse.click(point.screen.x,point.screen.y);await page.waitForFunction(n=>(window as any).__step1Signals.length>n,before);
    const selected=await page.evaluate(()=>(window as any).__step1Signals.at(-1));row.selected=selected;row.pointerSource=probe.source;

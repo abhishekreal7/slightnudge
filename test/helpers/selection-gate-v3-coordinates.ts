@@ -45,8 +45,8 @@ export async function probeElement(locator:Locator,position?:Point){
  };
  // Remove only esbuild's function-name decorator while serializing the test
  // callback. This avoids injecting a helper into the application page.
- const serializable=Function('return ('+callback.toString().replace(/\b__name\(/g,'((value)=>value)(')+')')();
- return locator.evaluate(serializable,position) as Promise<any>;
+ const serializable:typeof callback=Function('return ('+callback.toString().replace(/\b__name\(/g,'((value)=>value)(')+')')();
+ return locator.evaluate(serializable,position) as Promise<ReturnType<typeof callback>>;
 }
 
 export async function hitSource(frame:Frame,point:Point){

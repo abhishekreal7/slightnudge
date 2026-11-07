@@ -76,7 +76,7 @@ try {
   assert.equal(await frame.locator('h1').evaluate(element => element.getBoundingClientRect().width), 300); passed++;
   await command('discard');
   await command('preview');
-  await frame.locator('h1').evaluate(e => e.className = 'outside-change');
+  await frame.locator('h1').evaluate(e => { if (!(e instanceof HTMLElement)) throw Error('Expected an HTML heading'); e.className = 'outside-change'; });
   assert.equal((await command('check')).success, false); passed++;
   assert.equal((await command('discard')).success, false); passed++;
   assert.equal(await frame.locator('h1').getAttribute('class'), 'outside-change'); passed++;

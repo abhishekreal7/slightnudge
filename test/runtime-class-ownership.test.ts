@@ -20,7 +20,7 @@ try {
   let id = 0;
   const command = async (operation: string, extra: Record<string, unknown> = {}) => {
     const requestId = String(++id);
-    await page.evaluate(data => (document.querySelector('iframe') as HTMLIFrameElement).contentWindow!.postMessage(data, location.origin), { channel: 'slightnudge', session: 'test', type: 'source-edit', requestId, operation, selection, ...extra });
+    await page.evaluate(data => (document.querySelector('iframe') as HTMLIFrameElement).contentWindow!.postMessage(data, window.location.origin), { channel: 'slightnudge', session: 'test', type: 'source-edit', requestId, operation, selection, ...extra });
     await page.waitForFunction(id => (window as any).messages.some((m: any) => m.type === 'edit-result' && m.requestId === id), requestId);
     return page.evaluate(id => (window as any).messages.find((m: any) => m.type === 'edit-result' && m.requestId === id), requestId);
   };
@@ -32,7 +32,7 @@ try {
   assert.equal((await command('check', { patches: [patch] })).success, true);
   assert.equal((await command('restore', { patches: [] })).success, true);
   assert.equal(await target.getAttribute('class'), 'font-normal aos-init', 'Undo/discard preserves the live animation state');
-  await target.evaluate(el => { el.className = 'font-bold aos-init aos-animate'; });
+  await target.evaluate(el => { if (!(el instanceof HTMLElement)) throw Error('Expected an HTML heading'); el.className = 'font-bold aos-init aos-animate'; });
   assert.equal((await command('verify-batch', { patches: [patch] })).success, true, 'Saved authored classes may coexist with AOS state');
   await target.evaluate(el => el.classList.add('unknown-runtime'));
   assert.equal((await command('verify-batch', { patches: [patch] })).success, false, 'Unknown classes still invalidate source verification');
