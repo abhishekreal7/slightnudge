@@ -127,6 +127,8 @@ CONFIRMED. Six browser cases cover both surfaces: Control/Meta+Enter writes the 
 
 Visible review pair, inspected: [Before](editor/evidence/screens/part-2b-before.png) · [After](editor/evidence/screens/part-2b-after.png). Each PNG is about 140 KB. External browser resources were blocked, as in Part 2a; the pair shows the inspector duplicate disappearing while the floating review remains.
 
+Part 2b implementation commit: `fa2d69c`. The post-commit real-state v2 guard passed all three checks. [Guard](editor/evidence/part-2b-real-state-final.txt)
+
 Budget boundary: Part 2b complete; next is the user-promoted preview class-preservation fix, then Part 2c. No new dependencies, copied assets or competitor UI strings were introduced.
 
 ## Noticed but not fixed
@@ -163,7 +165,7 @@ All Amendment 3 isolation roots were confirmed absent after cleanup, including a
 
 All isolation roots through Part 1 were confirmed removed, and all helper-based before-and-after snapshot pairs matched, including recovery snapshots for the interrupted wrapper runs. [Audit](editor/evidence/through-part-1-audit.json) Â· [Cleanup inventory](editor/evidence/through-part-1-cleanup.json)
 
-All 14 Part 2b isolation roots were removed, including nested disposable server workspaces, dependency junctions and browser scratch folders. Their servers were stopped by the helper. All 14 protected-file snapshot pairs match; 13 full snapshots match, with the intentional-edit orchestration exception explained above. No clones were created. [Audit and cleanup inventory](editor/evidence/part-2b-audit.json)
+All 14 Part 2b isolation roots were removed, including nested disposable server workspaces, dependency junctions and browser scratch folders. Their servers were stopped by the helper. All 15 protected-file snapshot pairs match; 14 full snapshots match, with the intentional-edit orchestration exception explained above. No clones were created. [Audit and cleanup inventory](editor/evidence/part-2b-audit.json)
 
 ## What I did NOT verify
 
