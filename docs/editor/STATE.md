@@ -2,7 +2,7 @@
 
 ## Done
 
-- The original sprint brief and amendments 1–8 are saved in [BRIEF.md](BRIEF.md).
+- The original sprint brief and amendments 1–9 are saved in [BRIEF.md](BRIEF.md).
 - Part 0a, CONFIRMED under Amendment 1. Both changed imports in `next-env.d.ts` match HEAD after removing the development path segment. The baseline was `955007d231d7da7783c6d3222ea2942be03eafb4`. [Programmatic check](evidence/part-0a-amended-check.txt)
 - Part 0b, CONFIRMED. The original range contained one Next.js dependency upgrade. Zero commits touched the designated sensitive paths. [Inventory](evidence/part-0b-commit-inventory.txt)
 - Part 0c, CONFIRMED for the prior TypeScript, production build and browser smoke. Chromium received the token and applied a nudge in the archive. [TypeScript](evidence/part-0c-tsc.txt) Â· [Build](evidence/part-0c-build.txt) Â· [Smoke](evidence/part-0c-studio-rerun.txt)
@@ -25,15 +25,31 @@
 
 ## Next
 
-Amendment 8: store-v2 PARKED; real-editor performance pivot is INCOMPLETE and **STOPPED under Amendment 3 after a reproduced baseline safety assertion**. Step 0 was committed as 54f001a. Step 1 created the new integration checkout from the committed stage/S1 tip; no product changes/commits were made there.
+Amendment 9 items 2–4 COMPLETE at the clean engine/typing checkpoint. Only raw proof of a violated safety property stops work; setup/typing/environment failures stay BASELINE DEFECTs. Work only in C:/dev/vibecheck/scratch/editor-safety-port-20261108, branch codex/editor-safety-port-20261108, current tip 33feb48. Original stage/S1, developer history records and pre-existing servers remain untouched.
 
-Worktree: `C:\dev\vibecheck\scratch\editor-safety-port-20261108`; branch `codex/editor-safety-port-20261108`; tip `7a4c44a9b8a1c1b08d0c8d15541dabb1900636df`. It excludes five uncommitted owner entries (docs:2, test:2, root:1); those contents were never opened or copied. The real-state helper was copied as a new untracked file because it was missing. Dependencies installed with npm ci from the differing lockfile. No environment files copied manually; no existing S1 changes or live-server contact.
+- Fixture triage/repair COMPLETE, 8c61361: scoped crash fixture now generates its managed root/registry; original assertions and expected exit 73 unchanged; full suite passes. [Diagnosis](evidence/amendment9-fixture-triage.txt)
+- Selected engine/recovery baseline COMPLETE: 53 passing suites including repaired crash/race, nine reproduced BASELINE DEFECTs, zero demonstrated safety violations; 28 browser/lab/live-URL baseline candidates deferred. All 300 randomized stacked-Undo cases pass. Six deferred bridge suites later pass as typing validation. [90-candidate results and raw failures](perf/s1-baseline.md)
+- EventTarget focus typing COMPLETE, ed11f8a: HTML pointer target; remaining diagnostics 55; drag/direct-manipulation pass.
+- Readonly NODE_ENV typing COMPLETE, cd08451: typed mutable environment record in tests; remaining diagnostics 46; account/production and S1/S2/S3 proofs pass. Historical formatter script has a recorded missing-tool setup defect.
+- Optional-value typing COMPLETE, 6037c3f: require draft patches and supply diagnostic-message fallbacks; remaining diagnostics 26; eight affected direct suites pass, imported-draft's missing-registry defect remains and reproduces.
+- Browser-test typing COMPLETE, e86cc17: browser globals, HTML/source-metadata checks, inferred probe return type, browser existence; zero diagnostics; six bridge suites and transformed-iframe coordinate proof pass. Full legacy live-URL/lab workflows remain unrun.
+- Unchanged protected-state helper retained, 33feb48. Integration checkout is clean. Fresh committed-HEAD archive TypeScript passes, and the candidate-equivalent literal npm run build passes. [Committed tsc](evidence/amendment9-committed-tsc.txt) · [Build](evidence/amendment9-types-build.txt)
 
-Step 2 baseline: tsc and build FAIL on the unmodified tip. Apply race suite PASS. apply-crash-recovery FAILS twice unchanged: expected exit 73, actual 1, because generated project-scope repositories.json is absent before the intended crash point. Both raw outputs are saved. The stop rule prevents moving to performance fixes. [Complete baseline/STOP evidence and exact rerun command](perf/s1-baseline.md)
+NEXT: Amendment 9 item 5 / Amendment 8 Step 3, dev-first guarded instrumentation and the full 20-run scenario matrix, then production, measured-impact fixes, S1 preview check and videos. **No lag measurement or performance fix has been made.** h2–h9 remain unverified by timing evidence. Store-v2 stays parked; no design or controls work begins here. Do not redo completed baseline or typing groups.
 
-Current action: resolve the baseline STOP condition under explicit direction, preserving source-scope and containment checks, then resume the remaining S1 baseline inventory. Do not recreate the worktree or blindly rerun completed checks. Steps 3–6 (measurement, measured fixes, preview check and video/close) are PENDING; no lag diagnosis or speedup has been claimed. Original stage/S1 and live servers remain untouched; all five disposable check roots were removed. The new integration worktree is intentionally retained.
+Resume commands (fresh labels; the future guard test must first be created in the integration checkout):
 
-Store-v2 items 3–8 remain parked. Later work: deliberate port of sprint safety items in port-plan order, B preview correctness, design C, controls and Part 2c items. Do not start them during this stopped baseline.
+```powershell
+Set-Location -LiteralPath 'C:\dev\vibecheck'
+git -C scratch/editor-safety-port-20261108 status --short
+git -C scratch/editor-safety-port-20261108 log -6 --oneline
+# After writing test/perf-stage-guard.test.ts: missing-instrumentation red
+node --import tsx scratch/editor-sprint1-run-group.ts amendment9-perf-guard-red node --import tsx scratch/editor-s1-group.ts amendment9-perf-guard-red perf-stage-guard test/perf-stage-guard.test.ts
+```
+
+The measurement guard/harness does not yet exist. Implement it test-first with TEST=1/non-production gating and no private output, using the existing isolation/helper wrapper. Do not contact or stop any owner's server, recreate a worktree, modify original stage/S1 or read developer history records. Detailed method, classifications, limitations and exact next scope are in [s1-baseline.md](perf/s1-baseline.md).
+
+Final Amendment 9 checkpoint audit: 208 matching snapshot pairs; 105 named isolation roots removed; zero surviving Node processes referencing those roots. [Audit](evidence/amendment9-audit.json) · [Owned-process audit](evidence/amendment9-owned-process-audit.json).
 
 ## Open issues
 
