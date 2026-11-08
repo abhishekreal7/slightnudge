@@ -366,3 +366,210 @@ export async function undoEditAPI(filePath?: string, context: UndoContext = {}):
     return outcome.success ? outcome : { ...outcome, error: (outcome.error || '') + apiResponseDiagnostic(error) };
   }
 }
+
+// ---------------------------------------------------------------------------
+// Client-Side Ordered Operation Queue (FIFO per file, non-blocking UI)
+// ---------------------------------------------------------------------------
+
+export interface QueueNotification {
+  status: 'idle' | 'saving' | 'saved' | 'error';
+  isSaving: boolean;
+  activeCount: number;
+  pendingCount: number;
+  message?: string;
+}
+
+export type QueueStateListener = (notification: QueueNotification) => void;
+
+interface PendingQueueItem<T = any> {
+  id: string;
+  filePath: string;
+  op: () => Promise<T>;
+  resolve: (value: T | PromiseLike<T>) => void;
+  reject: (reason?: any) => void;
+  onRollback?: () => void;
+  cancelled?: boolean;
+}
+
+const fileQueues = new Map<string, PendingQueueItem[]>();
+const fileActive = new Map<string, boolean>();
+const queueListeners = new Set<QueueStateListener>();
+let currentQueueStatus: 'idle' | 'saving' | 'saved' | 'error' = 'idle';
+let currentStatusMessage: string | undefined;
+let savedResetTimer: ReturnType<typeof setTimeout> | null = null;
+
+function getTotalPending(): number {
+  let count = 0;
+  for (const queue of fileQueues.values()) {
+    count += queue.length;
+  }
+  return count;
+}
+
+function getTotalActive(): number {
+  let count = 0;
+  for (const active of fileActive.values()) {
+    if (active) count++;
+  }
+  return count;
+}
+
+function broadcastQueueState(
+  overrideStatus?: 'idle' | 'saving' | 'saved' | 'error',
+  message?: string
+) {
+  const activeCount = getTotalActive();
+  const pendingCount = getTotalPending();
+  const isSaving = activeCount > 0 || pendingCount > 0;
+
+  if (overrideStatus) {
+    currentQueueStatus = overrideStatus;
+  } else if (isSaving) {
+    currentQueueStatus = 'saving';
+  }
+
+  if (message !== undefined) {
+    currentStatusMessage = message;
+  }
+
+  const notification: QueueNotification = {
+    status: currentQueueStatus,
+    isSaving,
+    activeCount,
+    pendingCount,
+    message: currentStatusMessage,
+  };
+
+  for (const listener of queueListeners) {
+    try {
+      listener(notification);
+    } catch (err) {
+      console.error('Queue listener error:', err);
+    }
+  }
+}
+
+export function subscribeQueueState(listener: QueueStateListener): () => void {
+  queueListeners.add(listener);
+  const activeCount = getTotalActive();
+  const pendingCount = getTotalPending();
+  listener({
+    status: currentQueueStatus,
+    isSaving: activeCount > 0 || pendingCount > 0,
+    activeCount,
+    pendingCount,
+    message: currentStatusMessage,
+  });
+  return () => {
+    queueListeners.delete(listener);
+  };
+}
+
+export function getFileQueueStatus(filePath?: string): { inFlight: boolean; queuedCount: number } {
+  if (filePath) {
+    return {
+      inFlight: Boolean(fileActive.get(filePath)),
+      queuedCount: fileQueues.get(filePath)?.length || 0,
+    };
+  }
+  return {
+    inFlight: getTotalActive() > 0,
+    queuedCount: getTotalPending(),
+  };
+}
+
+export function cancelPendingFileOperations(filePath: string): number {
+  const queue = fileQueues.get(filePath);
+  if (!queue || queue.length === 0) return 0;
+  const count = queue.length;
+  while (queue.length > 0) {
+    const item = queue.shift()!;
+    item.cancelled = true;
+    item.reject(new Error(`Operation cancelled on ${filePath}`));
+  }
+  fileQueues.delete(filePath);
+  broadcastQueueState();
+  return count;
+}
+
+async function processFileQueue(filePath: string) {
+  if (savedResetTimer) {
+    clearTimeout(savedResetTimer);
+    savedResetTimer = null;
+  }
+
+  while (true) {
+    const queue = fileQueues.get(filePath);
+    if (!queue || queue.length === 0) {
+      fileActive.delete(filePath);
+      break;
+    }
+
+    const item = queue.shift()!;
+    if (item.cancelled) {
+      item.reject(new Error(`Operation cancelled on ${filePath}`));
+      continue;
+    }
+
+    broadcastQueueState('saving');
+
+    try {
+      const result = await item.op();
+      item.resolve(result);
+    } catch (err: any) {
+      try {
+        item.onRollback?.();
+      } catch (rbErr) {
+        console.error('Queue rollback callback failed:', rbErr);
+      }
+      item.reject(err);
+      broadcastQueueState('error', err?.message || 'Save failed');
+    }
+  }
+
+  if (getTotalActive() === 0 && getTotalPending() === 0) {
+    broadcastQueueState('saved', 'Saved');
+    if (savedResetTimer) clearTimeout(savedResetTimer);
+    savedResetTimer = setTimeout(() => {
+      if (getTotalActive() === 0 && getTotalPending() === 0) {
+        broadcastQueueState('idle');
+      }
+    }, 1500);
+  }
+}
+
+export function enqueueFileOperation<T>(
+  filePath: string,
+  op: () => Promise<T>,
+  options?: {
+    onRollback?: () => void;
+    description?: string;
+  }
+): Promise<T> {
+  return new Promise<T>((resolve, reject) => {
+    let queue = fileQueues.get(filePath);
+    if (!queue) {
+      queue = [];
+      fileQueues.set(filePath, queue);
+    }
+
+    const item: PendingQueueItem<T> = {
+      id: Math.random().toString(36).slice(2),
+      filePath,
+      op,
+      resolve,
+      reject,
+      onRollback: options?.onRollback,
+    };
+
+    queue.push(item);
+
+    if (!fileActive.get(filePath)) {
+      fileActive.set(filePath, true);
+      void processFileQueue(filePath);
+    } else {
+      broadcastQueueState();
+    }
+  });
+}
+
