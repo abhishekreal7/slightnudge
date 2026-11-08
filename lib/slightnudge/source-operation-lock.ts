@@ -1,3 +1,4 @@
+import { perfTimer } from './perf-stages';
 import { randomUUID } from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -27,10 +28,11 @@ function alive(pid: number) {
  * Algorithm reference: https://lamport.azurewebsites.net/pubs/bakery.pdf
  */
 export function withSourceOperationLock<T>(directory: string, operation: () => T): T {
+  const finishAcquisition = perfTimer('lock');
   fs.mkdirSync(directory, { recursive: true });
   const root = fs.realpathSync(directory);
   const held = globalLocks[heldKey] ||= new Set<string>();
-  if (held.has(root)) return operation(); // Nested synchronous history helpers.
+  if (held.has(root)) { finishAcquisition(); return operation(); } // Nested synchronous history helpers.
   const name = `${process.pid}-${randomUUID()}.json`;
   const own = path.join(root, name);
   const readOthers = () => {
@@ -90,10 +92,11 @@ export function withSourceOperationLock<T>(directory: string, operation: () => T
     for (const other of readOthers()) {
       if (other.ticket === null || other.ticket < ticket || (other.ticket === ticket && other.name < name)) throw new SourceOperationBusyError();
     }
-    held.add(root);
+    held.add(root); finishAcquisition();
     try { return operation(); }
     finally { held.delete(root); }
   } finally {
+    finishAcquisition();
     // Cleanup failure cannot turn an accepted source/history mutation into a
     // reported failed write. An undeleted live ticket blocks further mutations.
     try { fs.unlinkSync(own); } catch { /* A dead owner's unique ticket can be cleared on restart. */ }

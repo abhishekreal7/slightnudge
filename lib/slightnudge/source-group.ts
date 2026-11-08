@@ -1,3 +1,4 @@
+import { perfSync } from './perf-stages';
 import fs from 'node:fs';
 import path from 'node:path';
 import { randomUUID } from 'node:crypto';
@@ -37,7 +38,7 @@ const checkpoint = (phase: string, id: string, index?: number) => { if (process.
     testHook?.(phase, id, index); };
 const fail = (id: string, error: unknown, code = 'GROUP_REFUSED'): SourceGroupResult => ({ success: false, transactionId: id, code, error: error instanceof Error ? error.message : String(error) });
 const absolute = (m: GroupMember) => path.resolve(getWorkspacePath(), m.filePath);
-const persist = (j: SourceGroupJournal) => atomicWrite(groupJournalPath(directory(), j.id), JSON.stringify(j));
+const persist = (j: SourceGroupJournal) => perfSync('journal-write', () => atomicWrite(groupJournalPath(directory(), j.id), JSON.stringify(j)));
 function bind(j: SourceGroupJournal, scope: GroupScope) {
     const root = fs.realpathSync(scope.root), stored = path.resolve(getWorkspacePath(), j.root);
     if (j.repositoryId !== scope.repositoryId || fs.realpathSync(stored) !== root)

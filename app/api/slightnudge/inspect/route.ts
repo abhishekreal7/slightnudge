@@ -1,3 +1,4 @@
+import { withPerfRequest } from '@/lib/slightnudge/perf-stages';
 import { NextResponse } from 'next/server';
 import { inspectElement } from '@/lib/slightnudge/ast-nudger';
 import { getLatestUndoTarget } from '@/lib/slightnudge/edit-history';
@@ -8,7 +9,7 @@ export async function OPTIONS(request: Request) {
   return handleCorsPreflight(request) || new NextResponse(null, { status: 204 });
 }
 
-export async function POST(request: Request) {
+async function measuredPost(request: Request) {
   try {
     const origin = request.headers.get('origin');
     if (origin && !isAllowedOrigin(origin, request.url)) {
@@ -43,3 +44,5 @@ export async function POST(request: Request) {
   }
 }
 
+
+export const POST = withPerfRequest(measuredPost);

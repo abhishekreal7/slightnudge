@@ -1,3 +1,4 @@
+import { perfSync, perfCount, perfDelay } from './perf-stages';
 import { createHash, randomUUID } from 'node:crypto';
 import fs, { chmodSync, closeSync, existsSync, fsyncSync, mkdirSync, openSync, readFileSync, readdirSync, realpathSync, statSync, unlinkSync, writeSync } from 'node:fs';
 import path from 'node:path';
@@ -124,13 +125,13 @@ class SourceRecoveryRequiredError extends Error {
 }
 
 export function withHistoryMutation<T>(operation: () => T): T {
-  return withSourceOperationLock(path.join(path.dirname(getHistoryPath()), 'mutation-locks'), operation);
+  return perfSync('history-mutation', () => withSourceOperationLock(path.join(path.dirname(getHistoryPath()), 'mutation-locks'), operation));
 }
 
-export function readHistory(): EditRecord[] {
+function readHistoryUnmeasured(): EditRecord[] {
   let contents: string;
   try {
-    contents = readFileSync(getHistoryPath(), 'utf8');
+    contents = readFileSync(getHistoryPath(), 'utf8'); perfCount('history-read-bytes', Buffer.byteLength(contents));
   } catch (error) {
     if ((error as NodeJS.ErrnoException).code === 'ENOENT') return [];
     throw error;
@@ -213,7 +214,7 @@ function sleepSync(ms: number) {
   }
 }
 
-export function atomicWrite(filePath: string, contents: string) {
+function atomicWriteUnmeasured(filePath: string, contents: string) {
   mkdirSync(path.dirname(filePath), { recursive: true });
   const tempPath = `${filePath}.${randomUUID()}.tmp`;
   const existingMode = (() => {
@@ -262,11 +263,11 @@ export function atomicWrite(filePath: string, contents: string) {
   }
 }
 
-export function writeHistory(records: EditRecord[]) {
+function writeHistoryUnmeasured(records: EditRecord[]) {
   // An interrupted Undo is a recovery intent, so ordinary history retention
   // must not erase it while edits to other files continue.
   const retained = records.filter((record, index) => record.status === 'undoing' || index >= records.length - maxHistoryEntries);
-  atomicWrite(getHistoryPath(), JSON.stringify(retained, null, 2));
+  const serialized = JSON.stringify(retained, null, 2); perfCount('history-write-bytes', Buffer.byteLength(serialized)); atomicWrite(getHistoryPath(), serialized);
 }
 
 let preWriteTestHook: ((filePath: string) => void) | null = null;
@@ -278,6 +279,7 @@ export function setPreWriteTestHook(hook: ((filePath: string) => void) | null): 
 }
 
 export function invokePreWriteHook(filePath: string): void {
+  perfDelay();
   if (process.env.SLIGHTNUDGE_TEST === '1' && process.env.NODE_ENV !== 'production' && preWriteTestHook) {
     preWriteTestHook(filePath);
   }
@@ -337,9 +339,9 @@ function relativeFilePath(filePath: string) {
 
 export function deriveClassEditDetails(before: string, after: string, lineHint?: number) {
   try {
-    const project = new Project({ useInMemoryFileSystem: true, skipAddingFilesFromTsConfig: true });
-    const beforeFile = project.createSourceFile('before.tsx', before);
-    const afterFile = project.createSourceFile('after.tsx', after);
+    const project = perfSync('ast-project', () => new Project({ useInMemoryFileSystem: true, skipAddingFilesFromTsConfig: true }));
+    const beforeFile = perfSync('ast-parse', () => project.createSourceFile('before.tsx', before));
+    const afterFile = perfSync('ast-parse', () => project.createSourceFile('after.tsx', after));
 
     const beforeEls = [
       ...beforeFile.getDescendantsOfKind(SyntaxKind.JsxOpeningElement),
@@ -487,11 +489,11 @@ export function withRecordedSourceEdit<T extends { success: boolean }>(filePath:
 }
 
 function withRecordedSourceEditUnlocked<T extends { success: boolean }>(filePath: string, summary: string, edit: () => T): T & { editId?: string } {
-  const before = readFileSync(filePath, 'utf8');
+  const before = perfSync('cas-read', () => readFileSync(filePath, 'utf8'));
   try {
     const result = edit();
     if (!result.success) return result;
-    const after = readFileSync(filePath, 'utf8');
+    const after = perfSync('cas-read', () => readFileSync(filePath, 'utf8'));
     try {
       return { ...result, ...recordSourceEdit(filePath, before, after, summary) };
     } catch (error) {
@@ -499,7 +501,7 @@ function withRecordedSourceEditUnlocked<T extends { success: boolean }>(filePath
       throw error;
     }
   } catch (error) {
-    const current = readFileSync(filePath, 'utf8');
+    const current = perfSync('cas-read', () => readFileSync(filePath, 'utf8'));
     if (current !== before) atomicWrite(filePath, before);
     throw error;
   }
@@ -607,7 +609,7 @@ export function readPendingSourceEdit(id: string): PendingEdit {
 export function readDraftSource(id: string, filePath: string, repositoryId?: string) {
   const pending = readPendingSourceEdit(id);
   if (!pending.draft || pending.repositoryId !== repositoryId || realpathSync(filePath) !== realpathSync(path.resolve(getWorkspacePath(), pending.filePath))) throw new Error('This draft belongs to a different source file or project.');
-  if (readFileSync(filePath, 'utf8') !== pending.before) throw new Error('The source changed outside this draft. Your draft is preserved; resolve the source change before saving.');
+  if (perfSync('cas-read', () => readFileSync(filePath, 'utf8')) !== pending.before) throw new Error('The source changed outside this draft. Your draft is preserved; resolve the source change before saving.');
   return pending;
 }
 
@@ -712,7 +714,7 @@ function readSourceApplyOutcome(id: string, repositoryId?: string, sourcePath?: 
   }
   const filePath = repositoryId ? validatedFilePath! : path.resolve(getWorkspacePath(), record.filePath);
   assertWriteTargetInsideWorkspace(filePath);
-  if (record.previewIds?.at(-1) !== id || !existsSync(filePath) || readFileSync(filePath, 'utf8') !== record.after) {
+  if (record.previewIds?.at(-1) !== id || !existsSync(filePath) || perfSync('cas-read', () => readFileSync(filePath, 'utf8')) !== record.after) {
     return { success: false as const, code: 'SOURCE_CHANGED' as const, error: 'This change was saved, but its source changed afterward. Review the current source before editing again.' };
   }
   return { success: true as const, editId: record.id, filePath: record.filePath, line: record.line, previewType: record.previewType || 'className', value: record.newValue, className: record.previewType === 'textContent' ? undefined : record.newClassName ?? record.newValue, message: `Applied ${record.summary}.` };
@@ -741,7 +743,7 @@ export function getSourceApplyOutcome(id: string, repositoryId?: string, sourceP
     if (!matchesPendingScope(pending, repositoryId, sourcePath, validatedFilePath)) return { success: false as const, code: 'OUTCOME_SCOPE_MISMATCH', error: 'This change belongs to a different project or source file.' };
     const filePath = path.resolve(getWorkspacePath(), pending.filePath);
     assertWriteTargetInsideWorkspace(filePath);
-    if (relativeFilePath(filePath) !== path.normalize(pending.filePath) || readFileSync(filePath, 'utf8') !== pending.before) return { success: false as const, code: 'SOURCE_CHANGED', error: 'The source changed after review. Inspect its current version before continuing.' };
+    if (relativeFilePath(filePath) !== path.normalize(pending.filePath) || perfSync('cas-read', () => readFileSync(filePath, 'utf8')) !== pending.before) return { success: false as const, code: 'SOURCE_CHANGED', error: 'The source changed after review. Inspect its current version before continuing.' };
     return { success: false as const, code: 'APPLY_NOT_APPLIED', error: 'The reviewed source is unchanged and no save is recorded. Explicitly apply the review when you are ready.' };
   });
   return withHistoryMutation(() => {
@@ -758,12 +760,12 @@ export function getSourceApplyOutcome(id: string, repositoryId?: string, sourceP
     if (relativeFilePath(filePath) !== path.normalize(pending.filePath) || !existsSync(filePath) || fileHistoryDigest(pending.filePath) !== intent.historyDigest) {
       return { success: false as const, code: intent.phase === 'not-applied' ? 'SOURCE_CHANGED' as const : 'SOURCE_RECOVERY_REQUIRED' as const, error: 'This file or its history changed after the interrupted save. Nothing was overwritten; review its source before continuing.' };
     }
-    const current = readFileSync(filePath, 'utf8');
+    const current = perfSync('cas-read', () => readFileSync(filePath, 'utf8'));
     if (intent.phase === 'not-applied' && current !== pending.before) {
       return { success: false as const, code: 'SOURCE_CHANGED' as const, error: 'The interrupted save was not applied, and the source changed afterward. Review the current source before editing again.' };
     }
     if (current === pending.before) {
-      if (intent.phase !== 'not-applied') atomicWrite(applyIntentPath(id), JSON.stringify({ ...intent, phase: 'not-applied' }));
+      if (intent.phase !== 'not-applied') perfSync('receipt-write', () => atomicWrite(applyIntentPath(id), JSON.stringify({ ...intent, phase: 'not-applied' })));
       return { success: false as const, code: 'APPLY_NOT_APPLIED' as const, error: 'The source still matches the reviewed original. Apply the reviewed change again, or discard it.' };
     }
     if (current !== pending.after) {
@@ -781,7 +783,7 @@ export async function applyPendingSourceEdit(id: string, groupId?: string, repos
   const pending = readPendingSourceEdit(id);
   if (!matchesPendingScope(pending, repositoryId, sourcePath, validatedFilePath)) return { success: false as const, error: 'This preview belongs to a different project or source file. Review the change again.' };
   const filePath = pending.repositoryId ? validatedFilePath! : path.resolve(getWorkspacePath(), pending.filePath);
-  const current = readFileSync(filePath, 'utf8');
+  const current = perfSync('cas-read', () => readFileSync(filePath, 'utf8'));
   if (current !== pending.before) {
     if (!pending.draft) try { discardPendingSourceEdit(id); } catch { /* Invalid proposals remain unusable and expire automatically. */ }
     return { success: false as const, code: 'SOURCE_CHANGED' as const, error: 'This source changed after the preview. Review it again before applying.' };
@@ -833,16 +835,16 @@ export async function applyPendingSourceEdit(id: string, groupId?: string, repos
       }
       // Validation can compile Tailwind asynchronously. Recheck while holding
       // the mutation lock, then journal the approved snapshots before the write.
-      if (readFileSync(filePath, 'utf8') !== pending.before) {
+      if (perfSync('cas-read', () => readFileSync(filePath, 'utf8')) !== pending.before) {
         try { discardPendingSourceEdit(id); } catch { /* Invalid proposals expire automatically. */ }
         return { success: false as const, code: 'SOURCE_CHANGED' as const, error: 'This source changed after the preview. Review it again before applying.' };
       }
       const intent: ApplyIntent = { version: 1, phase: 'applying', pending, groupId, historyDigest: fileHistoryDigest(pending.filePath) };
-      atomicWrite(applyIntentPath(id), JSON.stringify(intent));
+      perfSync('receipt-write', () => atomicWrite(applyIntentPath(id), JSON.stringify(intent)));
       // Journal persistence can take time. Preserve an outside edit arriving
       // during it, without turning that outside edit into our accepted receipt.
-      if (readFileSync(filePath, 'utf8') !== pending.before) {
-        atomicWrite(applyIntentPath(id), JSON.stringify({ ...intent, phase: 'not-applied' }));
+      if (perfSync('cas-read', () => readFileSync(filePath, 'utf8')) !== pending.before) {
+        perfSync('receipt-write', () => atomicWrite(applyIntentPath(id), JSON.stringify({ ...intent, phase: 'not-applied' })));
         return { success: false as const, code: 'SOURCE_CHANGED' as const, error: 'This source changed while the save was being prepared. Nothing was overwritten.' };
       }
       try {
@@ -1046,7 +1048,7 @@ function undoSourceEditUnlocked(target?: string | { filePath?: string; editId?: 
     }
   }
 
-  const current = readFileSync(absolutePath, 'utf8');
+  const current = perfSync('cas-read', () => readFileSync(absolutePath, 'utf8'));
 
   // Recover a partially completed undo after a process interruption
   if (record.status === 'undoing' && current === (record.undoAfter ?? record.before)) {
@@ -1109,8 +1111,8 @@ function undoSourceEditUnlocked(target?: string | { filePath?: string; editId?: 
   let project: Project;
   let sourceFile: any;
   try {
-    project = new Project({ useInMemoryFileSystem: true, skipAddingFilesFromTsConfig: true });
-    sourceFile = project.createSourceFile('current.tsx', current);
+    project = perfSync('ast-project', () => new Project({ useInMemoryFileSystem: true, skipAddingFilesFromTsConfig: true }));
+    sourceFile = perfSync('ast-parse', () => project.createSourceFile('current.tsx', current));
   } catch (err: any) {
     return refuseWithInstructions(`parse failure (${err.message})`);
   }
@@ -1272,7 +1274,7 @@ function commitSourceUndo(records: EditRecord[], index: number, filePath: string
     invokePreWriteHook(filePath);
     validateComponentDependencies(record.componentDependencies,{}, {root:findProjectRoot(filePath),caller:filePath});
     assertWriteTargetInsideWorkspace(filePath);
-    if (readFileSync(filePath, 'utf8') !== before) {
+    if (perfSync('cas-read', () => readFileSync(filePath, 'utf8')) !== before) {
       records[index] = { ...record, status: 'applied', undoBefore: undefined, undoAfter: undefined };
       writeHistory(records);
       return { success: false as const, error: 'The source changed while Undo was being prepared. Nothing was overwritten.' };
@@ -1284,7 +1286,7 @@ function commitSourceUndo(records: EditRecord[], index: number, filePath: string
     // Reset only when the source is still the exact Undo input. If a source
     // replacement completed, retain the durable intent for status reconciliation.
     try {
-      if (readFileSync(filePath, 'utf8') === before) {
+      if (perfSync('cas-read', () => readFileSync(filePath, 'utf8')) === before) {
         records[index] = { ...record, status: 'applied', undoBefore: undefined, undoAfter: undefined };
         writeHistory(records);
       }
@@ -1413,3 +1415,9 @@ export function canUndoSourceEdit(filePath: string) {
     return false;
   }
 }
+
+export function readHistory(): EditRecord[] { return perfSync('history-read', readHistoryUnmeasured); }
+
+export function atomicWrite(filePath: string, contents: string) { return perfSync('atomic-write', () => atomicWriteUnmeasured(filePath, contents)); }
+
+export function writeHistory(records: EditRecord[]) { return perfSync('history-write', () => writeHistoryUnmeasured(records)); }

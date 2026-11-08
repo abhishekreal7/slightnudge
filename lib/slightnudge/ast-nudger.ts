@@ -1,3 +1,4 @@
+import { perfSync } from './perf-stages';
 import { appearanceValue, gradientPattern, shadowPattern, parseGradient, parseShadow } from './appearance-values';
 import { isNextLink } from './link-identity';
 import { isLucideIcon } from './icon-identity';
@@ -276,12 +277,12 @@ export function analyzeElementText(targetNode: JsxOpeningElement | JsxSelfClosin
 export function nudgeElement(options: NudgeOptions): NudgeResult {
   const { filePath, line, column, elementId, direction, stepSize = 'normal', breakpoint = '' } = options;
 
-  const project = new Project({
+  const project = perfSync('ast-project', () => new Project({
     skipAddingFilesFromTsConfig: true,
-  });
+  }));
 
   if (options.sourceText !== undefined && !options.dryRun) throw new Error('Draft source is read-only until Save.');
-  const sourceFile = options.sourceText === undefined ? project.addSourceFileAtPath(filePath) : project.createSourceFile(filePath, options.sourceText, { overwrite: true });
+  const sourceFile = options.sourceText === undefined ? perfSync('ast-parse', () => project.addSourceFileAtPath(filePath)) : perfSync('ast-parse', () => project.createSourceFile(filePath, options.sourceText, { overwrite: true }));
 
   // 1. Locate the JSX element by line number or element ID
   const jsxElements = [
@@ -522,14 +523,14 @@ export interface InspectResult {
  * Inspects a JSX element in source code without modifying it.
  * Verifies safety constraints (variables, conditions, loops, shared component usages, and runtime DOM matches).
  */
-export function inspectElement(options: InspectOptions): InspectResult {
+function inspectElementUnmeasured(options: InspectOptions): InspectResult {
   const { filePath, line, column, elementId, tagName: expectedTagName, className: domClassName } = options;
 
-  const project = new Project({
+  const project = perfSync('ast-project', () => new Project({
     skipAddingFilesFromTsConfig: true,
-  });
+  }));
 
-  const sourceFile = options.sourceText === undefined ? project.addSourceFileAtPath(filePath) : project.createSourceFile(filePath, options.sourceText, { overwrite: true });
+  const sourceFile = options.sourceText === undefined ? perfSync('ast-parse', () => project.addSourceFileAtPath(filePath)) : perfSync('ast-parse', () => project.createSourceFile(filePath, options.sourceText, { overwrite: true }));
 
   const jsxElements = [
     ...sourceFile.getDescendantsOfKind(SyntaxKind.JsxOpeningElement),
@@ -863,8 +864,8 @@ export interface ReorderResult {
 export function reorderElement(options: ReorderOptions): ReorderResult {
   const { filePath, line, column, elementId, direction, dryRun = false } = options;
   if (options.sourceText !== undefined && !dryRun) throw new Error('Draft source is read-only until Save.');
-  const project = new Project({ skipAddingFilesFromTsConfig: true });
-  const sourceFile = project.addSourceFileAtPath(filePath);
+  const project = perfSync('ast-project', () => new Project({ skipAddingFilesFromTsConfig: true }));
+  const sourceFile = perfSync('ast-parse', () => project.addSourceFileAtPath(filePath));
   if (options.sourceText !== undefined) sourceFile.replaceWithText(options.sourceText);
   const elements = [
     ...sourceFile.getDescendantsOfKind(SyntaxKind.JsxOpeningElement),
@@ -1049,8 +1050,8 @@ export function reorderElement(options: ReorderOptions): ReorderResult {
 export function updateStaticImageSource(options: { filePath: string; line?: number; column?: number; elementId?: string; value: string; dryRun?: boolean }) {
   const { filePath, line, column, elementId, value, dryRun = false } = options;
   if (!/^\/slightnudge-assets\/[a-f0-9-]{36}\.(?:png|jpe?g|webp|gif)$/i.test(value)) throw new Error('Choose an image from the imported asset library.');
-  const project = new Project({ skipAddingFilesFromTsConfig: true });
-  const sourceFile = project.addSourceFileAtPath(filePath);
+  const project = perfSync('ast-project', () => new Project({ skipAddingFilesFromTsConfig: true }));
+  const sourceFile = perfSync('ast-parse', () => project.addSourceFileAtPath(filePath));
   const elements = [...sourceFile.getDescendantsOfKind(SyntaxKind.JsxOpeningElement), ...sourceFile.getDescendantsOfKind(SyntaxKind.JsxSelfClosingElement)];
   const target = elements.find((element) => {
     if (element.getTagNameNode().getText().toLowerCase() !== 'img') return false;
@@ -1080,9 +1081,9 @@ export function updateStaticImageSource(options: { filePath: string; line?: numb
 export function updateStaticJsxText(options: { sourceText?: string; filePath: string; line?: number; column?: number; elementId?: string; value: string; dryRun?: boolean }) {
   const { filePath, line, column, elementId, value, dryRun = false } = options;
   if (value.length > 2000 || /[\u0000-\u0008\u000B\u000C\u000E-\u001F]/.test(value)) throw new Error('Text must be under 2,000 characters and cannot contain control characters.');
-  const project = new Project({ skipAddingFilesFromTsConfig: true });
+  const project = perfSync('ast-project', () => new Project({ skipAddingFilesFromTsConfig: true }));
   if (options.sourceText !== undefined && !dryRun) throw new Error('Draft source is read-only until Save.');
-  const sourceFile = options.sourceText === undefined ? project.addSourceFileAtPath(filePath) : project.createSourceFile(filePath, options.sourceText, { overwrite: true });
+  const sourceFile = options.sourceText === undefined ? perfSync('ast-parse', () => project.addSourceFileAtPath(filePath)) : perfSync('ast-parse', () => project.createSourceFile(filePath, options.sourceText, { overwrite: true }));
   const elements = [...sourceFile.getDescendantsOfKind(SyntaxKind.JsxOpeningElement), ...sourceFile.getDescendantsOfKind(SyntaxKind.JsxSelfClosingElement)];
   const target = elements.find((element) => {
     const idAttr = element.getAttribute('id');
@@ -1185,9 +1186,9 @@ export function updateStaticTailwindClass(options: { sourceText?: string; filePa
     return { success: false as const, reason: inspected.reason || 'This element cannot be edited safely.' };
   }
 
-  const project = new Project({ skipAddingFilesFromTsConfig: true });
+  const project = perfSync('ast-project', () => new Project({ skipAddingFilesFromTsConfig: true }));
   if (options.sourceText !== undefined && !dryRun) throw new Error('Draft source is read-only until Save.');
-  const sourceFile = options.sourceText === undefined ? project.addSourceFileAtPath(filePath) : project.createSourceFile(filePath, options.sourceText, { overwrite: true });
+  const sourceFile = options.sourceText === undefined ? perfSync('ast-parse', () => project.addSourceFileAtPath(filePath)) : perfSync('ast-parse', () => project.createSourceFile(filePath, options.sourceText, { overwrite: true }));
   const elements = [
     ...sourceFile.getDescendantsOfKind(SyntaxKind.JsxOpeningElement),
     ...sourceFile.getDescendantsOfKind(SyntaxKind.JsxSelfClosingElement),
@@ -1248,3 +1249,5 @@ export function updateStaticTailwindClass(options: { sourceText?: string; filePa
   if (!dryRun) sourceFile.saveSync();
   return { success: true as const, oldClassName: original, newClassName: updated, oldToken, newToken, filePath, line: target.getStartLineNumber(), updatedSource: dryRun ? updatedSource : undefined, originalSource: dryRun ? originalSource : undefined };
 }
+
+export function inspectElement(options: InspectOptions): InspectResult { return perfSync('inspect', () => inspectElementUnmeasured(options)); }

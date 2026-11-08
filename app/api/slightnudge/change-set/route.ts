@@ -1,3 +1,4 @@
+import { withPerfRequest } from '@/lib/slightnudge/perf-stages';
 import { NextResponse } from 'next/server';
 import { validateMutatingRequest } from '@/lib/slightnudge/auth';
 import { corsHeaders, handleCorsPreflight } from '@/lib/slightnudge/cors';
@@ -5,7 +6,7 @@ import { resolveRepositoryRoot, resolveRepositorySourcePath, resolveWorkspaceSou
 import { saveSourceGroup, sourceGroupStatus, undoSourceGroup } from '@/lib/slightnudge/source-group';
 import { validGroupId } from '@/lib/slightnudge/source-group-journal';
 export async function OPTIONS(request: Request) { return handleCorsPreflight(request) || new NextResponse(null, { status: 204 }); }
-export async function POST(request: Request) {
+async function measuredPost(request: Request) {
     const auth = validateMutatingRequest(request);
     if (!auth.valid)
         return auth.response;
@@ -39,3 +40,5 @@ export async function POST(request: Request) {
         return NextResponse.json({ success: false, code: 'GROUP_REQUEST_REFUSED', error: error instanceof Error ? error.message : 'The change set could not be checked.' }, { status: 400, headers });
     }
 }
+
+export const POST = withPerfRequest(measuredPost);

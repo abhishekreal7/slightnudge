@@ -1,3 +1,4 @@
+import { perfSync } from './perf-stages';
 import fs from 'node:fs';
 import path from 'node:path';
 import { createHash } from 'node:crypto';
@@ -20,7 +21,7 @@ const symbolCache=new Map<string,{hash:string;file:SourceFile}>();
 function symbols(file:SourceFile){
   const name=key(file.getFilePath()),hash=componentSourceHash(file.getFullText()),cached=symbolCache.get(name);
   if(cached?.hash===hash)return cached.file;
-  const local=new Project({useInMemoryFileSystem:true,compilerOptions:{noLib:true,noResolve:true,types:[]}}).createSourceFile(file.getFilePath(),file.getFullText());
+  const local=perfSync('ast-parse', () => perfSync('ast-project', () => new Project({useInMemoryFileSystem:true,compilerOptions:{noLib:true,noResolve:true,types:[]}})).createSourceFile(file.getFilePath(),file.getFullText()));
   symbolCache.set(name,{hash,file:local});if(symbolCache.size>32)symbolCache.delete(symbolCache.keys().next().value!);return local;
 }
 function inside(root: string, file: string) { const relative = path.relative(root, file); return !!relative && !relative.startsWith('..'+path.sep) && relative!=='..' && !path.isAbsolute(relative); }
@@ -53,7 +54,7 @@ function graph(rootInput: string, overlays: Record<string,string>={}) {
   const digest=createHash('sha256').update(root);
   for(const [file,value]of [...sources].sort(([a],[b])=>a.localeCompare(b)))digest.update(file).update('\0').update(value.source).update('\0');
   const signature=digest.digest('hex');
-  if(graphCache?.signature!==signature){const project=new Project({useInMemoryFileSystem:true}),files=new Map<string,SourceFile>();for(const [file,value]of sources)files.set(file,project.createSourceFile(value.file.replaceAll('\\','/'),value.source));graphCache={signature,project,files};}
+  if(graphCache?.signature!==signature){const project=perfSync('ast-project', () => new Project({useInMemoryFileSystem:true})),files=new Map<string,SourceFile>();for(const [file,value]of sources)files.set(file,perfSync('ast-parse', () => project.createSourceFile(value.file.replaceAll('\\','/'),value.source)));graphCache={signature,project,files};}
   const {project,files}=graphCache;
   // All consumers finish synchronously; no AST escapes an ownership operation.
   // Reuse one bounded graph, but hash actual bytes every time rather than trust mtimes.
@@ -153,12 +154,12 @@ export function inspectCrossFileComponent(options:{root:string;filePath:string;l
 
 export function updateCrossFileComponent(source:string,owner:ComponentOwner,property:string,value:string){
   if(typeof value!=='string'||value.length>10000||/[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f]/.test(value)) throw new Error('Use text without control characters, up to 10,000 characters.');
-  const file=new Project({useInMemoryFileSystem:true}).createSourceFile('/caller.tsx',source),node=locate(file,owner.line,owner.column);
+  const file=perfSync('ast-parse', () => perfSync('ast-project', () => new Project({useInMemoryFileSystem:true})).createSourceFile('/caller.tsx',source)),node=locate(file,owner.line,owner.column);
   if(!node||node.getTagNameNode().getText()!==owner.tagName) throw new Error('The component caller changed. Select it again.');
   const field=textAttribute(node,property); if(field.value!==value) field.attribute.setInitializer(`{${JSON.stringify(value)}}`);
   return {before:source,after:file.getFullText(),oldValue:field.value,newValue:value};
 }
-export function crossFilePropValue(source:string,owner:ComponentOwner,property:string){const file=new Project({useInMemoryFileSystem:true}).createSourceFile('/caller.tsx',source),node=locate(file,owner.line,owner.column);if(!node||node.getTagNameNode().getText()!==owner.tagName)throw new Error('The caller changed.');return textAttribute(node,property).value;}
+export function crossFilePropValue(source:string,owner:ComponentOwner,property:string){const file=perfSync('ast-parse', () => perfSync('ast-project', () => new Project({useInMemoryFileSystem:true})).createSourceFile('/caller.tsx',source)),node=locate(file,owner.line,owner.column);if(!node||node.getTagNameNode().getText()!==owner.tagName)throw new Error('The caller changed.');return textAttribute(node,property).value;}
 
 /** Recompute cross-file projection from actual caller source, also used on replay. */
 export function crossFileTextPatches(root:string,callerFile:string,before:string,after:string,records:ComponentDependency[]=[]) {
@@ -167,7 +168,7 @@ export function crossFileTextPatches(root:string,callerFile:string,before:string
   const explicit=instancePatches(root,callerFile,before,after,records);
   const g=graph(root,{[key(callerFile)]:after}), source=g.files.get(key(callerFile)); if(!source) throw new Error('The caller is outside its project.');
   const caller=symbols(source);
-  const original=new Project({useInMemoryFileSystem:true}).createSourceFile('/__slightnudge_caller_before.tsx',before),oldNodes=openings(original),newNodes=openings(caller);
+  const original=perfSync('ast-parse', () => perfSync('ast-project', () => new Project({useInMemoryFileSystem:true})).createSourceFile('/__slightnudge_caller_before.tsx',before)),oldNodes=openings(original),newNodes=openings(caller);
   const patches:CanvasRenderPatch[]=[],dependencies:ComponentDependency[]=[];
   patches.push(...explicit.patches);dependencies.push(...explicit.dependencies);
   for(let index=0;index<newNodes.length;index++){

@@ -1,3 +1,4 @@
+import { perfSync, perfAsync, perfCount } from './perf-stages';
 import { Project } from 'ts-morph';
 import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import path from 'node:path';
@@ -87,15 +88,15 @@ export async function getProjectResponsiveScopes(projectDir: string): Promise<Re
   return scopes.sort((a, b) => a.minWidth - b.minWidth || a.name.localeCompare(b.name));
 }
 
-export function verifySyntacticParse(filePath: string, content: string): { valid: boolean; error?: string } {
+function verifySyntacticParseUnmeasured(filePath: string, content: string): { valid: boolean; error?: string } {
   try {
     const ext = path.extname(filePath).toLowerCase();
     // Only parse JavaScript/TypeScript/JSX/TSX source files
     if (!['.tsx', '.jsx', '.ts', '.js', '.mjs', '.cjs'].includes(ext)) {
       return { valid: true };
     }
-    const project = new Project({ useInMemoryFileSystem: true, skipAddingFilesFromTsConfig: true });
-    const sourceFile = project.createSourceFile(`temp${ext || '.tsx'}`, content);
+    const project = perfSync('ast-project', () => new Project({ useInMemoryFileSystem: true, skipAddingFilesFromTsConfig: true }));
+    const sourceFile = perfSync('ast-parse', () => project.createSourceFile(`temp${ext || '.tsx'}`, content));
     const diags = project.getProgram().compilerObject.getSyntacticDiagnostics(sourceFile.compilerNode);
     if (diags.length > 0) {
       const messages = diags.map((d: any) => typeof d.messageText === 'string' ? d.messageText : d.messageText.messageText);
@@ -361,7 +362,7 @@ interface V4CacheEntry {
 
 const v4DesignSystemCache = new Map<string, V4CacheEntry>();
 
-export async function verifyTailwindClass(candidate: string, projectDir: string): Promise<{ verified: boolean; css?: string; layer?: 'utilities'; error?: string }> {
+async function verifyTailwindClassUnmeasured(candidate: string, projectDir: string): Promise<{ verified: boolean; css?: string; layer?: 'utilities'; error?: string }> {
   let rootDir = path.resolve(projectDir);
   if (existsSync(rootDir)) {
     try {
@@ -405,10 +406,11 @@ export async function verifyTailwindClass(candidate: string, projectDir: string)
       let ds: any = null;
       const cached = v4DesignSystemCache.get(rootDir);
       if (cached && cached.cacheKey === cacheKey) {
-        ds = cached.ds;
+        ds = cached.ds; perfCount('tailwind-hit');
       }
 
       if (!ds) {
+        perfCount('tailwind-miss');
         let cssInput: string;
         let baseDir: string;
 
@@ -458,15 +460,15 @@ export async function verifyTailwindClass(candidate: string, projectDir: string)
 
       if (ds) {
         if (typeof ds.candidatesToCss === 'function') {
-          const css = ds.candidatesToCss([candidate]);
+          const css = perfSync('tailwind-compile', () => ds.candidatesToCss([candidate]));
           if (Array.isArray(css) && css[0] && typeof css[0] === 'string' && css[0].trim().length > 0) {
             return { verified: true, css: css[0], layer: 'utilities' };
           }
           return { verified: false, error: `can't verify this class: "${candidate}" produced no CSS` };
         }
         if (typeof ds.build === 'function') {
-          const empty = ds.build([]);
-          const generated = ds.build([candidate]);
+          const empty = perfSync('tailwind-compile', () => ds.build([]));
+          const generated = perfSync('tailwind-compile', () => ds.build([candidate]));
           if (generated !== empty && generated.length > empty.length) {
             return { verified: true, css: generated, layer: 'utilities' };
           }
@@ -509,3 +511,7 @@ export async function verifyTailwindClass(candidate: string, projectDir: string)
 
   return { verified: false, error: `can't verify this class: unsupported tailwindcss version ${twVersion}` };
 }
+
+export function verifySyntacticParse(filePath: string, content: string): ReturnType<typeof verifySyntacticParseUnmeasured> { return perfSync('syntactic-parse', () => verifySyntacticParseUnmeasured(filePath, content)); }
+
+export function verifyTailwindClass(candidate: string, projectDir: string): ReturnType<typeof verifyTailwindClassUnmeasured> { return perfAsync('tailwind-lookup', () => verifyTailwindClassUnmeasured(candidate, projectDir)); }

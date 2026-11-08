@@ -1,3 +1,4 @@
+import { perfSync } from './perf-stages';
 import { lucideIconName } from './icon-identity';
 import { componentTextBinding } from './component-props';
 import { crossFileTextPatches, validateComponentDependencies } from './component-ownership';
@@ -20,9 +21,9 @@ export function prepareDraftTarget(options: InspectOptions, parentId?: string, s
   const parent = parentId ? readDraftSource(parentId, options.filePath, scope.repositoryId) : undefined;
   const before = parent?.before ?? readFileSync(options.filePath, 'utf8');
   const after = parent?.after ?? before;
-  const project = new Project({ useInMemoryFileSystem: true });
-  const original = project.createSourceFile('/original.tsx', before);
-  const draft = project.createSourceFile('/draft.tsx', after);
+  const project = perfSync('ast-project', () => new Project({ useInMemoryFileSystem: true }));
+  const original = perfSync('ast-parse', () => project.createSourceFile('/original.tsx', before));
+  const draft = perfSync('ast-parse', () => project.createSourceFile('/draft.tsx', after));
   const openings = (file: typeof original) => [...file.getDescendantsOfKind(SyntaxKind.JsxOpeningElement), ...file.getDescendantsOfKind(SyntaxKind.JsxSelfClosingElement)].sort((a, b) => a.getStart() - b.getStart());
   const baseNodes = openings(original), currentNodes = openings(draft);
   const sameTarget = (a: typeof baseNodes[number], b: typeof baseNodes[number] | undefined) => Boolean(b && (a.getTagNameNode().getText() === b.getTagNameNode().getText() || isLucideIcon(a) && isLucideIcon(b)));
@@ -61,7 +62,7 @@ export function prepareDraftTarget(options: InspectOptions, parentId?: string, s
     target,
     async create(options: Parameters<typeof createPendingSourceEdit>[0], renderOnly = false, permutation?: number[]) {
       if (options.before === options.after && !renderOnly) return { changed: false as const };
-      const resultFile = project.createSourceFile('/result.tsx', options.after, { overwrite: true });
+      const resultFile = perfSync('ast-parse', () => project.createSourceFile('/result.tsx', options.after, { overwrite: true }));
       if (permutation && !validOrder(permutation)) throw new Error('The new source order cannot be matched safely.');
       const resultOrder = permutation ? draftOrder.map(index => permutation[index]) : draftOrder;
       const componentDependencies=[...(parent?.componentDependencies||[]),...(options.componentDependencies||[])];
@@ -159,8 +160,8 @@ export function prepareDraftTarget(options: InspectOptions, parentId?: string, s
 
 export async function readRenderableDraft(id: string, filePath: string, scope: { repositoryId?: string; root?: string } = {}) {
   const pending = readDraftSource(id, filePath, scope.repositoryId);
-  const project = new Project({ useInMemoryFileSystem: true });
-  const source = project.createSourceFile('/source.tsx', pending.before);
+  const project = perfSync('ast-project', () => new Project({ useInMemoryFileSystem: true }));
+  const source = perfSync('ast-parse', () => project.createSourceFile('/source.tsx', pending.before));
   const node = [...source.getDescendantsOfKind(SyntaxKind.JsxOpeningElement), ...source.getDescendantsOfKind(SyntaxKind.JsxSelfClosingElement)].sort((a, b) => a.getStart() - b.getStart())[0];
   if (!node) throw new Error('The draft has no source elements.');
   const position = source.getLineAndColumnAtPos(node.getStart());

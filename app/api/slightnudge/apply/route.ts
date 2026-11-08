@@ -1,3 +1,4 @@
+import { withPerfRequest } from '@/lib/slightnudge/perf-stages';
 import { NextResponse } from 'next/server';
 import { applyPendingSourceEdit } from '@/lib/slightnudge/edit-history';
 import { resolveRepositorySourcePath } from '@/lib/slightnudge/repository-store';
@@ -8,7 +9,7 @@ export async function OPTIONS(request: Request) {
   return handleCorsPreflight(request) || new NextResponse(null, { status: 204 });
 }
 
-export async function POST(request: Request) {
+async function measuredPost(request: Request) {
   const auth = validateMutatingRequest(request);
   if (!auth.valid) return auth.response;
 
@@ -25,3 +26,5 @@ export async function POST(request: Request) {
   }
 }
 
+
+export const POST = withPerfRequest(measuredPost);

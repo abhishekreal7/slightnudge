@@ -1,3 +1,4 @@
+import { perfSync } from './perf-stages';
 import crypto from 'node:crypto';
 import { NextResponse } from 'next/server';
 import { isAllowedOrigin, corsHeaders } from './cors';
@@ -88,7 +89,7 @@ export function timingSafeEqualStrings(a: string | null | undefined, b: string):
  * Any failure returns 403 with a short generic message and does nothing else.
  * A missing Origin is rejected even when the token is valid.
  */
-export function validateMutatingRequest(request: Request): { valid: true } | { valid: false; response: NextResponse } {
+function validateMutatingRequestUnmeasured(request: Request): { valid: true } | { valid: false; response: NextResponse } {
   // 1. Host check: Host must be exactly localhost:PORT or 127.0.0.1:PORT for the server's actual port,
   // and no forwarded host header may contradict it
   if (!isRequestHostAllowed(request.headers)) {
@@ -119,3 +120,5 @@ export function validateMutatingRequest(request: Request): { valid: true } | { v
 
   return { valid: true };
 }
+
+export function validateMutatingRequest(request: Request): ReturnType<typeof validateMutatingRequestUnmeasured> { return perfSync('auth', () => validateMutatingRequestUnmeasured(request)); }

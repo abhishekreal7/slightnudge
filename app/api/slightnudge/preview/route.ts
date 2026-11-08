@@ -1,3 +1,4 @@
+import { withPerfRequest } from '@/lib/slightnudge/perf-stages';
 import { inspectActionSource, updateActionSource } from '@/lib/slightnudge/link-source';
 import { inspectComponentProps, updateComponentProp } from '@/lib/slightnudge/component-props';
 import { inspectCrossFileComponent, updateCrossFileComponent, crossFilePropValue } from '@/lib/slightnudge/component-ownership';
@@ -34,7 +35,7 @@ export async function OPTIONS(request: Request) {
   return handleCorsPreflight(request) || new NextResponse(null, { status: 204 });
 }
 
-export async function POST(request: Request) {
+async function measuredPost(request: Request) {
   const auth = validateMutatingRequest(request);
   if (!auth.valid) return auth.response;
 
@@ -355,3 +356,5 @@ export async function DELETE(request: Request) {
   }
 }
 
+
+export const POST = withPerfRequest(measuredPost);
