@@ -71,6 +71,7 @@ import {
   Sparkles,
   Copy,
   Palette,
+  SquareDashed,
 } from 'lucide-react';
 import {
   changeSetAPI,
@@ -475,6 +476,19 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
   const [browseMode, setBrowseMode] = useState(false);
   const [canvasZoom, setCanvasZoom] = useState<CanvasZoom>(unified && view === 'full' ? 1 : 'fit');
   useEffect(()=>{if(unified)setCanvasZoom(view==='fit'?'fit':1);},[unified,view]);
+  const [outlineDrag, setOutlineDrag] = useState<boolean>(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        return localStorage.getItem('slightnudge:outline-drag') === '1';
+      } catch {}
+    }
+    return false;
+  });
+  useEffect(() => {
+    try {
+      localStorage.setItem('slightnudge:outline-drag', outlineDrag ? '1' : '0');
+    } catch {}
+  }, [outlineDrag]);
   const [canvasReset, setCanvasReset] = useState(0);
   const [canvasPan, setCanvasPan] = useState(false);
   const [inspectorWidth, setInspectorWidth] = useState(288);
@@ -821,7 +835,8 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
     containerRect?: ContainerRect;
     targetEl: HTMLElement | null;
     initialTargetStyle: string | null;
-    latestPointer: { x: number; y: number; shiftKey: boolean; altKey: boolean; ctrlKey: boolean };
+    outlineOnly?: boolean;
+    latestPointer: { x: number; y: number; shiftKey: boolean; altKey: boolean; ctrlKey: boolean; metaKey?: boolean };
     rafPending: boolean;
     moved: boolean;
     nextWidth: number;
@@ -1042,7 +1057,8 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
         siblings,
         targetEl,
         initialTargetStyle,
-        latestPointer: { x: e.clientX, y: e.clientY, shiftKey: e.shiftKey, altKey: e.altKey, ctrlKey: e.ctrlKey || e.metaKey },
+        outlineOnly: outlineDrag,
+        latestPointer: { x: e.clientX, y: e.clientY, shiftKey: e.shiftKey, altKey: e.altKey, ctrlKey: e.ctrlKey || e.metaKey, metaKey: e.metaKey },
         rafPending: false,
         moved: false,
         nextWidth: node.offsetWidth,
@@ -1137,7 +1153,8 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
       siblings,
       targetEl,
       initialTargetStyle,
-      latestPointer: { x: e.clientX, y: e.clientY, shiftKey: e.shiftKey, altKey: e.altKey, ctrlKey: e.ctrlKey || e.metaKey },
+      outlineOnly: outlineDrag,
+      latestPointer: { x: e.clientX, y: e.clientY, shiftKey: e.shiftKey, altKey: e.altKey, ctrlKey: e.ctrlKey || e.metaKey, metaKey: e.metaKey },
       rafPending: false,
       moved: false,
       nextWidth: currentW,
@@ -1393,9 +1410,9 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
         }
 
         // 2. Direct style write on canvas element (same-origin direct or bridge gesture)
-        if (gesture.targetEl) {
+        if (gesture.targetEl && !gesture.outlineOnly) {
           gesture.targetEl.style.maxWidth = `${Math.round(gesture.nextWidth)}px`;
-        } else if (sourceCanvas.current && gesture.moved) {
+        } else if (sourceCanvas.current && gesture.moved && !gesture.outlineOnly) {
           const selection = sourceSelections.current[gesture.key];
           if (selection) {
             void sourceCanvas.current.command('gesture', selection, { maxWidth: Math.round(gesture.nextWidth) });
@@ -1467,9 +1484,9 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
           overlayNode.style.transform = `translate3d(${snappedX - gesture.baseTranslation.x}px, ${snappedY - gesture.baseTranslation.y}px, 0)`;
         }
 
-        if (gesture.targetEl) {
+        if (gesture.targetEl && !gesture.outlineOnly) {
           gesture.targetEl.style.translate = `${snappedX}px ${snappedY}px`;
-        } else if (sourceCanvas.current && gesture.moved) {
+        } else if (sourceCanvas.current && gesture.moved && !gesture.outlineOnly) {
           const selection = sourceSelections.current[gesture.key];
           if (selection) {
             void sourceCanvas.current.command('gesture', selection, { x: snappedX, y: snappedY });
@@ -1551,6 +1568,16 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
         setResizeHandle(null);
 
         if (gesture.moved && Math.abs(gesture.nextWidth - gesture.startWidth) > 0.5) {
+          if (gesture.outlineOnly) {
+            if (gesture.targetEl) {
+              gesture.targetEl.style.maxWidth = `${Math.round(gesture.nextWidth)}px`;
+            } else if (sourceCanvas.current) {
+              const selection = sourceSelections.current[gesture.key];
+              if (selection) {
+                void sourceCanvas.current.command('gesture', selection, { maxWidth: Math.round(gesture.nextWidth) });
+              }
+            }
+          }
           const rem = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
           const snapped = snapWidth(gesture.nextWidth, rem);
           const token = snapped.token;
@@ -1584,6 +1611,16 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
 
         const changed = gesture.moved && (gesture.nextTranslation.x !== gesture.baseTranslation.x || gesture.nextTranslation.y !== gesture.baseTranslation.y);
         if (changed) {
+          if (gesture.outlineOnly) {
+            if (gesture.targetEl) {
+              gesture.targetEl.style.translate = `${gesture.nextTranslation.x}px ${gesture.nextTranslation.y}px`;
+            } else if (sourceCanvas.current) {
+              const selection = sourceSelections.current[gesture.key];
+              if (selection) {
+                void sourceCanvas.current.command('gesture', selection, { x: gesture.nextTranslation.x, y: gesture.nextTranslation.y });
+              }
+            }
+          }
           enqueueFileOperation(
             gesture.filePath,
             async () => {
@@ -2623,7 +2660,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
     const layerKey = sourceKey(selection);
     if (selectedLayer !== layerKey || !elements[layerKey]) return null;
     return <div ref={element => { elementRefs.current[layerKey] = element; }}
-      className={reviewStyles.sourceSelection} aria-label="Selected source element"
+      className={`${reviewStyles.sourceSelection} ${outlineDrag ? reviewStyles.sourceSelectionOutline : ''}`} aria-label="Selected source element"
       style={{ width: '100%', height: '100%', fontSize: selection.computed.fontSize, textAlign: selection.computed.textAlign as React.CSSProperties['textAlign'] }}>
       {usesDrafts && (!selection.instance || definitionStyleKey === layerKey) && !isInlineEditing && <div className={reviewStyles.moveAnchor}>{renderMoveControl()}</div>}
       {!isInlineEditing && !isDraggingMove && (
@@ -2922,6 +2959,18 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
                 {view === 'fit' && <select aria-label="Canvas zoom" title="Fit starts with automatic scaling; zoom can also be adjusted manually." value={canvasZoom} disabled={busy || isApplying || isInlineEditing || isResizing || Boolean(liveMove)} onChange={event => setCanvasZoom(event.target.value === 'fit' ? 'fit' : Number(event.target.value))}>
                   <option value="fit">Fit page</option>{[.1,.25,.5,.75,1,1.5,2].map(value=><option key={value} value={value}>{Math.round(value*100)}%</option>)}{typeof canvasZoom==='number'&&![.1,.25,.5,.75,1,1.5,2].includes(canvasZoom)&&<option value={canvasZoom}>{Math.round(canvasZoom*100)}%</option>}
                 </select>}
+                <button
+                  type="button"
+                  aria-label="Toggle lightweight outline drag"
+                  title={outlineDrag ? "Outline-only drag active (wireframe preview for zero reflow)" : "Enable lightweight outline drag"}
+                  aria-pressed={outlineDrag}
+                  disabled={busy || isApplying || isInlineEditing || isResizing || Boolean(liveMove)}
+                  onClick={() => setOutlineDrag(v => !v)}
+                  className={`inline-flex items-center gap-1 px-2 py-1 text-xs rounded border transition-colors ${outlineDrag ? 'bg-emerald-50 text-emerald-700 border-emerald-300 font-medium' : 'text-slate-600 border-slate-200 hover:bg-slate-50'}`}
+                >
+                  <SquareDashed size={13} />
+                  <span>Outline</span>
+                </button>
               </div>}
               {renderCanvasControls()}
               <div className={reviewStyles.topbarActions}>{renderDraftControls()}</div>
@@ -3003,6 +3052,17 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
                 {typeof canvasZoom === 'number' && ![.1,.25,.5,.75,1,1.5,2].includes(canvasZoom) && <option value={canvasZoom}>{Math.round(canvasZoom * 100)}%</option>}
               </select>
               <button type="button" aria-label="Fit page to canvas" title="Fit page to canvas" disabled={busy || isApplying || isInlineEditing || isResizing || moveArmed || Boolean(liveMove)} onClick={() => { setCanvasZoom('fit'); setCanvasReset(value => value + 1); }}><Scan size={15}/></button>
+              <button
+                type="button"
+                aria-label="Toggle lightweight outline drag"
+                title={outlineDrag ? "Outline-only drag active (wireframe preview for zero reflow)" : "Enable lightweight outline drag"}
+                aria-pressed={outlineDrag}
+                disabled={busy || isApplying || isInlineEditing || isResizing || moveArmed || Boolean(liveMove)}
+                onClick={() => setOutlineDrag(v => !v)}
+                className={`p-1.5 text-xs rounded border transition-colors ${outlineDrag ? 'bg-emerald-50 text-emerald-700 border-emerald-300 font-medium' : 'text-slate-600 border-transparent hover:bg-slate-100'}`}
+              >
+                <SquareDashed size={14} />
+              </button>
             </div>}
             {renderCanvasControls()}
             <button type="button" className={reviewStyles.panelToggle} aria-label={inspectorCollapsed || focusMode ? 'Show design panel' : 'Hide design panel'} aria-expanded={!inspectorCollapsed && !focusMode} title={inspectorCollapsed || focusMode ? 'Show design panel' : 'Hide design panel'} onClick={() => { if (focusMode) { setFocusMode(false); setInspectorCollapsed(false); } else setInspectorCollapsed(value => !value); }}><Pencil size={14}/></button>

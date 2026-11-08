@@ -172,3 +172,4 @@ When the user releases the pointer (`pointerup`):
         ▼
 [12. Parent onGeometry handler calls setElementDimensions (React Commit #3)]
 ```
+

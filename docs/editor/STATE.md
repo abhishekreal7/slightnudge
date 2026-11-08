@@ -38,6 +38,14 @@ This document summarizes the current technical state, architectural changes, emp
    - All 8 comprehensive browser end-to-end tests in `test/direct-manipulation.browser.test.ts` pass.
    - All 40 unit bridge tests (`test/source-rendered-bridge.test.ts`, `advanced-image-bridge.test.ts`, etc.) pass with zero weakened assertions.
    - Coordinate hit testing and drag-move tests pass.
+9. **Lightweight Outline-Only Mode**:
+   - Implemented user-toggleable outline/wireframe drag mode (`SquareDashed` toggle in toolbar dock and canvas navigation) with `localStorage` persistence.
+   - When enabled, intermediate pointermove steps mutate zero DOM styles on the target element inside the iframe, eliminating layout reflows on massive component trees; overlay translates/resizes smoothly at 60 fps.
+   - Commits the final computed size/position to the target element on release (`pointerup`).
+   - Cleanly restores element on `Escape` or `pointercancel`.
+   - Verified in end-to-end browser test `test/outline-drag.browser.test.ts`.
+10. **Cmd / metaKey Snap Disabling**:
+   - Pressing either `Ctrl` or `Cmd` (`metaKey` on macOS) temporarily bypasses smart snapping and guides, giving fluid unconstrained manipulation. Verified in unit and browser suites.
 
 ### Not Proven / Out of Scope for this Sprint
 1. **Multi-Element Group Dragging / Selection Box**:
@@ -119,8 +127,14 @@ This document summarizes the current technical state, architectural changes, emp
   - Added CSS classes for handles, dots, guides, cursor tags, and badges in `editor-workspace.module.css`.
 - `028725c`: `fix(editor): ensure resize handles receive pointer events above canvas iframe`
   - Set `pointer-events: auto` on `.resizeHandle` and `zIndex: 30`, `overflow: 'visible'` on the selection overlay container.
-- `[Subsequent Commit]`: `docs(editor): add performance baseline, video comparisons, and browser test suite`
-  - Added `docs/editor/resize-architecture.md`, `docs/editor/perf/resize-baseline.md`, `test/direct-manipulation.browser.test.ts`, and `docs/editor/STATE.md`.
+- `4d8b573`: `test(editor): add playwright browser test suite for direct manipulation and queue`
+  - Added `test/run-baseline-benchmark.ts` and `test/direct-manipulation.browser.test.ts` with comprehensive coverage of 8 handles, anchor accuracy at 50/100/200% zoom, modifier constraints, zero requests during drag, and non-blocking saves.
+- `b98bfdc`: `docs(editor): add architecture trace, performance baseline, and state documentation`
+  - Added `docs/editor/resize-architecture.md`, `docs/editor/perf/resize-baseline.md`, screenshot baselines, video comparisons, and initial state report.
+- `[Subsequent Commit]`: `feat(editor): add lightweight outline-only drag mode and Cmd snap bypass`
+  - Added user-toggleable outline/wireframe drag mode with localStorage persistence.
+  - Enabled Cmd/metaKey bypass for smart snapping.
+  - Added unit and browser tests in `test/outline-drag.test.ts` and `test/outline-drag.browser.test.ts`.
 
 ---
 
@@ -138,12 +152,21 @@ components/slightnudge/SourceProjectCanvas.tsx
 components/slightnudge/direct-manipulation-engine.ts
 components/slightnudge/editor-workspace.module.css
 docs/editor/STATE.md
+docs/editor/perf/after-resize-move.webm
+docs/editor/perf/before-resize-move.webm
+docs/editor/perf/resize-baseline.json
 docs/editor/perf/resize-baseline.md
+docs/editor/perf/screenshots/dragging-shift.png
+docs/editor/perf/screenshots/hover-handle.png
+docs/editor/perf/screenshots/idle-selection.png
+docs/editor/perf/screenshots/snapped-guide.png
 docs/editor/resize-architecture.md
 lib/slightnudge/client.ts
 test/client-queue.test.ts
 test/direct-manipulation-math.test.ts
 test/direct-manipulation.browser.test.ts
+test/outline-drag.browser.test.ts
+test/outline-drag.test.ts
 test/run-baseline-benchmark.ts
 ```
 
@@ -166,17 +189,16 @@ Audit against off-limits list:
 ## 5. Temporary Environments and Cleanup Confirmation
 
 - **Temp Workspaces Created**:
-  - `sn-bench-*`, `sn-dm-test-*`, `sn-video-after-*`, `sn-video-before-*`, `sn-after-*` in OS temp directory (`C:\Users\abhis\AppData\Local\Temp`).
+  - `sn-bench-*`, `sn-dm-test-*`, `sn-video-*`, `sn-outline-test-*` in OS temp directory (`C:\Users\abhis\AppData\Local\Temp`).
   - All temporary symlink/junctions to `node_modules` unlinked.
-  - All test folders cleaned up.
+  - All test workspaces cleaned up.
 - **Test Server Ports Used**:
-  - Ephemeral ports dynamically assigned outside restricted range (e.g. 3600, 3710, 3720, 3740, 3806).
+  - Ephemeral ports dynamically assigned outside restricted range (e.g. 3600, 3710, 3720, 3740, 3850, 3860).
   - Restricted ports 3000–3002 were never contacted or bound.
   - All test server child processes terminated with SIGTERM / taskkill. Zero dangling processes.
 
 ---
 
-## 6. One Recommended Next Step
+## 6. Next Steps
 
-**Recommended Next Step**:
-Now that direct manipulation is 60 fps smooth with zero React commits during drag, implement the **Lightweight Outline-Only Mode toggle** in the user preferences/view options so users on low-powered machines editing massive enterprise pages (> 10,000 DOM nodes) can choose outline-only wireframe dragging during element manipulation.
+With 60 fps direct manipulation, 8 precision handles, smart snapping, client-side non-blocking save queues, and lightweight outline-only mode fully proven and operational, the resize and drag smoothness sprint is complete. The editor is now ready for subsequent design-pass polish.
