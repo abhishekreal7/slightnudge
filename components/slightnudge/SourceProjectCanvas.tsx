@@ -329,7 +329,7 @@ export const SourceProjectCanvas = forwardRef<SourceCanvasHandle, {
     {url && windowMode && ready && <p role="status" className={windowStyles.status}>Live source connected</p>}
     {url && <div data-selection-artboard className={windowMode ? windowStyles.artboard : 'relative mx-auto'} style={{ width, flexShrink: 0, maxWidth: width === '100%' ? '100%' : undefined }}>
       <iframe ref={frame} title="Actual project" src={url} onLoad={() => setDocumentRevision(value => value + 1)} scrolling={!windowMode ? 'no' : undefined} inert={!ready} tabIndex={ready ? 0 : -1} className="block w-full border-0 bg-white" style={{ height: windowMode ? '100dvh' : pageHeight, pointerEvents: ready ? 'auto' : 'none' }} />
-      {geometry && ready && renderSelection && <div className="absolute pointer-events-none" style={{ inset: 0, overflow: 'clip' }}><div style={{ position: 'absolute', top: geometry.rect.top, left: geometry.rect.left, width: geometry.rect.width, height: geometry.rect.height }}>{renderSelection(geometry)}</div></div>}
+      {geometry && ready && renderSelection && <div className="absolute pointer-events-none" style={{ inset: 0, zIndex: 30, overflow: 'visible' }}><div style={{ position: 'absolute', top: geometry.rect.top, left: geometry.rect.left, width: geometry.rect.width, height: geometry.rect.height }}>{renderSelection(geometry)}</div></div>}
       {destinationMode && destination && ready && <div className={windowStyles.destinationTarget} aria-label="Move destination preview" style={{ top: destination.rect.top, left: destination.rect.left, width: destination.rect.width, height: destination.rect.height }}><span>Move to end</span><i/></div>}
     </div>}
   </section>;

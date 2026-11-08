@@ -269,7 +269,7 @@
 .floatingFormatting { z-index: 70; display: flex; flex-direction: column; align-items: center; min-width: max-content; user-select: none; }
 .sourceSelection { position: relative; border: 1px solid #0ccb8b; border-radius: 2px; pointer-events: none; }
 .sourceLayer:disabled { cursor: default; opacity: .55; }
-.sourceSelection .moveAnchor, .sourceSelection .edgeResizeHandle, .sourceSelection .cornerResizeHandle { pointer-events: auto; }
+.sourceSelection .moveAnchor, .sourceSelection .edgeResizeHandle, .sourceSelection .cornerResizeHandle, .sourceSelection .resizeHandle { pointer-events: auto; }
 .sourceLayer { display: flex; align-items: center; gap: 8px; width: 100%; min-height: 30px; padding: 5px 8px; border: 0; border-radius: 5px; background: transparent; text-align: left; cursor: pointer; }
 .sourceLayer > span:first-child { flex-shrink: 0; width: 33px; color: #9aa69d; font-family: monospace; font-size: 9px; }
 .sourceLayer > span:last-child { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #68776c; font-size: 10.5px; }
@@ -527,6 +527,7 @@
   border: 0;
   background: transparent;
   touch-action: none;
+  pointer-events: auto;
   display: flex;
   align-items: center;
   justify-content: center;
