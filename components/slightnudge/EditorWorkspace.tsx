@@ -83,7 +83,20 @@ import {
   inspectElementAPI,
   getClientSessionToken,
   inspectComponentPropsAPI,
+  enqueueFileOperation,
+  subscribeQueueState,
+  cancelPendingFileOperations,
+  type QueueNotification,
 } from '@/lib/slightnudge/client';
+import {
+  compute8HandleResize,
+  computeSmartSnapping,
+  computeArrowNudge,
+  estimateTailwindClasses,
+  type HandleDirection,
+  type SiblingRect,
+  type ContainerRect,
+} from '@/components/slightnudge/direct-manipulation-engine';
 
 interface ElementMeta {
   instance?: string;
@@ -773,6 +786,53 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
   const resizeGesture = useRef<{ key: string; handle: string; pointerId: number; capture: HTMLElement; x: number; width: number; scale: number; rem: number; nextWidth: number; token: string; moved: boolean } | null>(null);
   const [dimensionTooltip, setDimensionTooltip] = useState<string | null>(null);
 
+  // Save Queue State
+  const [saveQueueState, setSaveQueueState] = useState<QueueNotification>({
+    status: 'idle',
+    isSaving: false,
+    activeCount: 0,
+    pendingCount: 0,
+  });
+  useEffect(() => {
+    return subscribeQueueState(setSaveQueueState);
+  }, []);
+
+  // Direct Manipulation & Overlay Refs (60fps rAF DOM writes)
+  const eventShieldRef = useRef<HTMLDivElement | null>(null);
+  const cursorTagRef = useRef<HTMLDivElement | null>(null);
+  const guideVRef = useRef<HTMLDivElement | null>(null);
+  const guideHRef = useRef<HTMLDivElement | null>(null);
+  const directDragRef = useRef<{
+    type: 'resize' | 'move';
+    handle?: HandleDirection;
+    pointerId: number;
+    capture: HTMLElement;
+    key: string;
+    filePath: string;
+    startX: number;
+    startY: number;
+    startLeft: number;
+    startTop: number;
+    startWidth: number;
+    startHeight: number;
+    baseTranslation: Translation;
+    zoom: number;
+    siblings: SiblingRect[];
+    containerRect?: ContainerRect;
+    targetEl: HTMLElement | null;
+    initialTargetStyle: string | null;
+    latestPointer: { x: number; y: number; shiftKey: boolean; altKey: boolean; ctrlKey: boolean };
+    rafPending: boolean;
+    moved: boolean;
+    nextWidth: number;
+    nextHeight: number;
+    nextLeft: number;
+    nextTop: number;
+    nextTranslation: Translation;
+    token: string;
+    lastClassEstimateTime: number;
+  } | null>(null);
+
   // Dynamic DOM refs & element bounding dimensions
   const elementRefs = useRef<Record<string, HTMLElement | null>>({});
   const [formattingPosition, setFormattingPosition] = useState<{ left: number; top: number; visible: boolean; menuSide: 'above' | 'below' } | null>(null);
@@ -850,7 +910,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
       }
     }
     setElementDimensions((prev) => ({ ...prev, ...nextDims }));
-  }, [selectedLayer, liveWidth, elements, childOrder]);
+  }, [selectedLayer, elements, childOrder]);
 
   useLayoutEffect(() => {
     if (!selectedLayer || liveMove || isResizing) return;
@@ -905,69 +965,224 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
   }, [selectedLayer, repositoryId, elements, breakpoint, showQuickActions, liveMove, isResizing, childOrder, elementDimensions, sourceLayers, windowMode, windowPanel, windowDock.position, definitionStyleKey]);
 
   // Position movement preserves document flow and never reorders siblings.
+  // Position movement preserves document flow and never reorders siblings.
   const startDragMove = (layerKey: string, e: React.PointerEvent<HTMLElement>) => {
     e.stopPropagation();
-    if (e.button !== 0 || operationRef.current || blocksReview() || undoRecoveryRef.current || resizeGesture.current || moveGesture.current) return;
-    if (!usesDrafts || !/^(h[1-6]|p|section|div|article|aside|header|footer|nav|main|a|button|img)$/.test(elements[layerKey]?.tag || '') || activeVariant || activeBreakpoint) { showToast('To move an element, choose All sizes and the Default state.'); return; }
+    if (e.button !== 0 || blocksReview() || undoRecoveryRef.current || directDragRef.current) return;
+    if (!usesDrafts || !/^(h[1-6]|p|section|div|article|aside|header|footer|nav|main|a|button|img)$/.test(elements[layerKey]?.tag || '') || activeVariant || activeBreakpoint) {
+      showToast('To move an element, choose All sizes and the Default state.');
+      return;
+    }
     const node = elementRefs.current[layerKey];
     const frame = node?.closest('[data-selection-artboard]');
     if (!node || !frame) return;
+
     try {
       const base = readTranslation(elements[layerKey].classes);
-      const rect = node.getBoundingClientRect(); const canvas = frame.getBoundingClientRect();
-      const scale = rect.width / node.offsetWidth;
-      const container = /^(section|div|article|aside|header|footer|nav|main)$/.test(elements[layerKey].tag);
-      // Sections can exceed the viewport. Keep part of their bounds reachable
-      // instead of requiring the entire container to fit on the canvas.
-      const bounds = { minX: Math.max((canvas.left + (container ? 24 - rect.width : 0) - rect.left) / scale, -2048 - base.x), maxX: Math.min((canvas.right - (container ? 24 : rect.width) - rect.left) / scale, 2048 - base.x), minY: Math.max((canvas.top + (container ? 24 - rect.height : 0) - rect.top) / scale, -2048 - base.y), maxY: Math.min((canvas.bottom - (container ? 24 : rect.height) - rect.top) / scale, 2048 - base.y) };
-      snappedMove(0, 0, scale, bounds);
-      e.preventDefault(); e.currentTarget.focus({ preventScroll: true }); e.currentTarget.setPointerCapture(e.pointerId);
-      moveClickSuppressed.current = false; setMoveArmed(true);
-      moveGesture.current = { key: layerKey, pointerId: e.pointerId, capture: e.currentTarget as HTMLElement, x: e.clientX, y: e.clientY, base, scale, bounds, next: base, moved: false };
-    } catch (error) { showToast(error instanceof Error ? error.message : 'This element cannot be moved safely.'); }
+      const targetElem = elements[layerKey] || activeElement;
+      const actualSelection = sourceSelections.current[layerKey] || sourceSelection.current;
+      const zoom = typeof canvasZoom === 'number' ? canvasZoom : 1;
+
+      // Check same-origin iframe target element
+      const iframeDoc = sourceCanvas.current?.getDocument?.();
+      let targetEl: HTMLElement | null = null;
+      if (iframeDoc && actualSelection) {
+        if (actualSelection.elementId) targetEl = iframeDoc.getElementById(actualSelection.elementId);
+        if (!targetEl && actualSelection.tagName) targetEl = iframeDoc.querySelector(actualSelection.tagName) as HTMLElement | null;
+      }
+      const initialTargetStyle = targetEl?.getAttribute('style') || null;
+
+      const siblings: SiblingRect[] = [];
+      if (sourceLayers && sourceLayers.length > 0) {
+        for (const layer of sourceLayers) {
+          if (layer.key !== layerKey && layer.rect) {
+            siblings.push({
+              left: layer.rect.left,
+              top: layer.rect.top,
+              right: layer.rect.left + layer.rect.width,
+              bottom: layer.rect.top + layer.rect.height,
+              width: layer.rect.width,
+              height: layer.rect.height,
+              centerX: layer.rect.left + layer.rect.width / 2,
+              centerY: layer.rect.top + layer.rect.height / 2,
+            });
+          }
+        }
+      }
+
+      e.preventDefault();
+      try {
+        e.currentTarget.focus({ preventScroll: true });
+        e.currentTarget.setPointerCapture(e.pointerId);
+      } catch {}
+
+      moveClickSuppressed.current = false;
+      setMoveArmed(true);
+      setIsDraggingMove(true);
+
+      if (eventShieldRef.current) {
+        eventShieldRef.current.style.display = 'block';
+        eventShieldRef.current.style.cursor = 'move';
+      }
+
+      directDragRef.current = {
+        type: 'move',
+        pointerId: e.pointerId,
+        capture: e.currentTarget as HTMLElement,
+        key: layerKey,
+        filePath: targetElem.filePath,
+        startX: e.clientX,
+        startY: e.clientY,
+        startLeft: actualSelection?.rect?.left || 0,
+        startTop: actualSelection?.rect?.top || 0,
+        startWidth: node.offsetWidth,
+        startHeight: node.offsetHeight,
+        baseTranslation: base,
+        zoom,
+        siblings,
+        targetEl,
+        initialTargetStyle,
+        latestPointer: { x: e.clientX, y: e.clientY, shiftKey: e.shiftKey, altKey: e.altKey, ctrlKey: e.ctrlKey || e.metaKey },
+        rafPending: false,
+        moved: false,
+        nextWidth: node.offsetWidth,
+        nextHeight: node.offsetHeight,
+        nextLeft: actualSelection?.rect?.left || 0,
+        nextTop: actualSelection?.rect?.top || 0,
+        nextTranslation: base,
+        token: '',
+        lastClassEstimateTime: 0,
+      };
+    } catch (error) {
+      showToast(error instanceof Error ? error.message : 'This element cannot be moved safely.');
+    }
   };
 
-  // Handler for Drag to Resize
-  const startResize = (handle: 'e' | 'w' | 's' | 'se' | 'sw' | 'nw' | 'ne', e: React.PointerEvent) => {
+  // Direct 60fps 8-Handle Resize
+  const startResize = (handle: HandleDirection, e: React.PointerEvent) => {
     e.stopPropagation();
     e.preventDefault();
-    if (operationRef.current || blocksReview() || undoRecoveryRef.current) { showToast(undoRecoveryRef.current ? 'Check Undo status before making another change.' : reviewNotice); return; }
+    if (blocksReview() || undoRecoveryRef.current || directDragRef.current) return;
     if (e.button !== 0) return;
-    if (moveGesture.current || liveMove) return;
-    if (resizeGesture.current) return;
-    e.currentTarget.setPointerCapture(e.pointerId);
+
+    const key = selectedLayer || 'text';
+    const renderedElement = elements[key] || activeElement;
+    const targetElem = renderedElement;
+    const actualSelection = sourceSelections.current[key] || sourceSelection.current;
+
+    const zoom = typeof canvasZoom === 'number' ? canvasZoom : 1;
+    const currentW = elementRefs.current[key]?.offsetWidth || actualSelection?.rect?.width || 672;
+    const currentH = elementRefs.current[key]?.offsetHeight || actualSelection?.rect?.height || 114;
+    const startLeft = actualSelection?.rect?.left || 0;
+    const startTop = actualSelection?.rect?.top || 0;
+
+    // Check same-origin iframe target element
+    const iframeDoc = sourceCanvas.current?.getDocument?.();
+    let targetEl: HTMLElement | null = null;
+    if (iframeDoc && actualSelection) {
+      if (actualSelection.elementId) targetEl = iframeDoc.getElementById(actualSelection.elementId);
+      if (!targetEl && actualSelection.tagName) targetEl = iframeDoc.querySelector(actualSelection.tagName) as HTMLElement | null;
+    }
+    const initialTargetStyle = targetEl?.getAttribute('style') || null;
+
+    const siblings: SiblingRect[] = [];
+    if (sourceLayers && sourceLayers.length > 0) {
+      for (const layer of sourceLayers) {
+        if (layer.key !== key && layer.rect) {
+          siblings.push({
+            left: layer.rect.left,
+            top: layer.rect.top,
+            right: layer.rect.left + layer.rect.width,
+            bottom: layer.rect.top + layer.rect.height,
+            width: layer.rect.width,
+            height: layer.rect.height,
+            centerX: layer.rect.left + layer.rect.width / 2,
+            centerY: layer.rect.top + layer.rect.height / 2,
+          });
+        }
+      }
+    }
+
+    try {
+      e.currentTarget.setPointerCapture(e.pointerId);
+    } catch {}
+
+    if (eventShieldRef.current) {
+      eventShieldRef.current.style.display = 'block';
+      eventShieldRef.current.style.cursor = getComputedStyle(e.currentTarget).cursor;
+    }
+
     setIsResizing(true);
-    setResizeHandle(handle);
+    setResizeHandle(handle as any);
     setResizeStartX(e.clientX);
     setResizeStartY(e.clientY);
-    const key = selectedLayer || 'text';
-    const currentW = elementRefs.current[key]?.offsetWidth || 672;
-    const currentH = elementRefs.current[key]?.offsetHeight || 114;
-    const scale = (elementRefs.current[key]?.getBoundingClientRect().width || currentW) / currentW;
-    const rem = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
-    resizeGesture.current = { key, handle, pointerId: e.pointerId, capture: e.currentTarget as HTMLElement, x: e.clientX, width: currentW, scale, rem, nextWidth: currentW, token: '', moved: false };
     setResizeStartWidth(currentW);
     setResizeStartHeight(currentH);
-    setLiveWidth(currentW);
+
+    directDragRef.current = {
+      type: 'resize',
+      handle,
+      pointerId: e.pointerId,
+      capture: e.currentTarget as HTMLElement,
+      key,
+      filePath: targetElem.filePath,
+      startX: e.clientX,
+      startY: e.clientY,
+      startLeft,
+      startTop,
+      startWidth: currentW,
+      startHeight: currentH,
+      baseTranslation: { x: 0, y: 0 },
+      zoom,
+      siblings,
+      targetEl,
+      initialTargetStyle,
+      latestPointer: { x: e.clientX, y: e.clientY, shiftKey: e.shiftKey, altKey: e.altKey, ctrlKey: e.ctrlKey || e.metaKey },
+      rafPending: false,
+      moved: false,
+      nextWidth: currentW,
+      nextHeight: currentH,
+      nextLeft: startLeft,
+      nextTop: startTop,
+      nextTranslation: { x: 0, y: 0 },
+      token: '',
+      lastClassEstimateTime: 0,
+    };
   };
 
   // Backend Integration: Trigger Preview on Style/Text/Nudge/Reorder
   const triggerBackendPreview = useCallback(
-    async (kind: 'style' | 'text' | 'nudge' | 'reorder' | 'reparent' | 'move' | 'image' | 'action' | 'icon' | 'component', payload: Record<string, any>, layerKeyOverride?: string, commitVisual?: () => void) => {
-      if (moveGesture.current) { showToast('Release the Move handle or press Escape to cancel.'); return; }
-      if (resizeGesture.current) { showToast('Release the width handle or press Escape to cancel resizing.'); return; }
-      if (operationRef.current || draftReplayPromise.current || blocksReview() || undoRecoveryRef.current) { showToast(undoRecoveryRef.current ? 'Check Undo status before making another change.' : reviewNotice); return; }
-      if ((kind === 'reorder' || kind === 'reparent') && !usesDrafts) { showToast('Open the editing window to arrange source elements.'); return; }
+    async (
+      kind: 'style' | 'text' | 'nudge' | 'reorder' | 'reparent' | 'move' | 'image' | 'action' | 'icon' | 'component',
+      payload: Record<string, any>,
+      layerKeyOverride?: string,
+      commitVisual?: () => void,
+      background = false
+    ) => {
+      if (directDragRef.current) return;
+      if (!background && (operationRef.current || draftReplayPromise.current || blocksReview() || undoRecoveryRef.current)) {
+        showToast(undoRecoveryRef.current ? 'Check Undo status before making another change.' : reviewNotice);
+        return;
+      }
+      if ((kind === 'reorder' || kind === 'reparent') && !usesDrafts) {
+        showToast('Open the editing window to arrange source elements.');
+        return;
+      }
       const activeKey = layerKeyOverride || selectedLayer;
       if (!activeKey) return;
       const renderedElement = elements[activeKey] || activeElement;
       const owner = kind==='component' ? payload.owner as import('@/lib/slightnudge/component-ownership').ComponentOwner|undefined : undefined;
       let targetElem = owner ? {...renderedElement,filePath:owner.filePath,line:owner.line,column:owner.column,tag:owner.tagName,id:''} : renderedElement;
       const fileHead = draftHeads(reviewRef.current)[targetElem.filePath];
-      if (usesDrafts && !fileHead && Object.keys(draftHeads(reviewRef.current)).length >= 16) { showToast('This change set already contains 16 files. Save it before editing another source file.'); return; }
+      if (usesDrafts && !fileHead && Object.keys(draftHeads(reviewRef.current)).length >= 16) {
+        showToast('This change set already contains 16 files. Save it before editing another source file.');
+        return;
+      }
       const snapshot = { element: { ...renderedElement }, order: [...childOrder] };
-      operationRef.current = true;
-      setBusy(true);
+      if (!background) {
+        operationRef.current = true;
+        setBusy(true);
+      }
       try {
         const inspection = { found: true, safeToEdit: true, textEditable: true, tagName: targetElem.tag.split('.')[0], line: targetElem.line, column: targetElem.column, reason: undefined, textReason: undefined };
         if (!repositoryId && targetElem.id && inspection.found && inspection.safeToEdit && inspection.tagName === targetElem.tag.split('.')[0]) {
@@ -993,7 +1208,10 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
           return;
         }
         const importedScopeSupported = !state || usesDrafts && responsiveScopes.some(scope => scope.name === state);
-        if (repositoryId && (!importedScopeSupported || kind === 'nudge' || kind === 'move' && !usesDrafts)) { showToast('This live-page operation is not yet visually verified. Nothing was changed.'); return; }
+        if (repositoryId && (!importedScopeSupported || kind === 'nudge' || kind === 'move' && !usesDrafts)) {
+          showToast('This live-page operation is not yet visually verified. Nothing was changed.');
+          return;
+        }
         const result = await previewEditAPI({
           ...(usesDrafts ? { draft: true, parentPreviewId: fileHead?.id } : {}),
           ...(repositoryId ? { repositoryId, sourcePath: targetElem.filePath } : {}),
@@ -1078,14 +1296,15 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
           setReview(usesDrafts ? composeDraft(reviewRef.current, targetElem.filePath, nextHead) : nextHead);
           return true;
         } else {
-          // Backend refusal - never create fake client edits!
           showToast(`⚠️ ${result.refusalReason || result.error || 'Edit refused'}`);
         }
       } catch (err: any) {
         showToast(`⚠️ ${err?.message || 'Could not prepare preview'}`);
       } finally {
-        setBusy(false);
-        operationRef.current = false;
+        if (!background) {
+          setBusy(false);
+          operationRef.current = false;
+        }
         if (queuedSelectionRef.current !== undefined) {
           const key = queuedSelectionRef.current; queuedSelectionRef.current = undefined;
           setSelectedLayerState(key);
@@ -1096,144 +1315,388 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
     [activeBreakpoint, activeVariant, activeElement, elements, selectedLayer, childOrder, repositoryId, usesDrafts, responsiveScopes, definitionStyleKey]
   );
 
+  // 60fps Unified Direct Manipulation Pointer Engine
   useEffect(() => {
-    let animation = 0;
-    const reset = (cancel = true, keepPreview = false) => {
-      const gesture = moveGesture.current;
+    let animationId = 0;
+
+    const onTick = () => {
+      const gesture = directDragRef.current;
       if (!gesture) return;
-      cancelAnimationFrame(animation); moveGesture.current = null;
-      setMoveArmed(false);
-      if (cancel || gesture.moved) { moveClickSuppressed.current = true; suppressResizeClick.current = true; }
-      if (gesture.capture.hasPointerCapture(gesture.pointerId)) gesture.capture.releasePointerCapture(gesture.pointerId);
-      if (!keepPreview) setLiveMove(null);
-    };
-    const update = (event: PointerEvent) => {
-      const gesture = moveGesture.current;
-      if (!gesture || event.pointerId !== gesture.pointerId) return null;
-      const delta = snappedMove(event.clientX - gesture.x, event.clientY - gesture.y, gesture.scale, gesture.bounds, event.shiftKey);
-      gesture.moved = Math.hypot(event.clientX - gesture.x, event.clientY - gesture.y) / gesture.scale >= 4;
-      gesture.next = { x: gesture.base.x + delta.x, y: gesture.base.y + delta.y };
-      return gesture;
-    };
-    const move = (event: PointerEvent) => {
-      const gesture = update(event); if (!gesture) return;
-      if (gesture.moved) setMoveOpen(false);
-      cancelAnimationFrame(animation);
-      animation = requestAnimationFrame(() => { setLiveMove(gesture.moved ? { key: gesture.key, ...gesture.next } : null); });
-    };
-    const up = (event: PointerEvent) => {
-      const gesture = update(event); if (!gesture) return;
-      const changed = gesture.moved && (gesture.next.x !== gesture.base.x || gesture.next.y !== gesture.base.y);
-      reset(false, changed);
-      if (changed) {
-        setLiveMove({ key: gesture.key, ...gesture.next });
-        void triggerBackendPreview('move', gesture.next, gesture.key).finally(() => setLiveMove(null));
+      gesture.rafPending = false;
+
+      const p = gesture.latestPointer;
+      const overlayNode = elementRefs.current[gesture.key];
+
+      if (gesture.type === 'resize' && gesture.handle) {
+        const deltaScreen = { x: p.x - gesture.startX, y: p.y - gesture.startY };
+        if (Math.hypot(deltaScreen.x, deltaScreen.y) >= 3) {
+          gesture.moved = true;
+        }
+
+        const res = compute8HandleResize({
+          handle: gesture.handle,
+          startRect: {
+            left: gesture.startLeft,
+            top: gesture.startTop,
+            width: gesture.startWidth,
+            height: gesture.startHeight,
+          },
+          zoom: gesture.zoom,
+          grabOffset: { x: 0, y: 0 },
+          pointerDeltaScreen: deltaScreen,
+          shiftKey: p.shiftKey,
+          altKey: p.altKey,
+          minSize: 1,
+        });
+
+        // Smart snapping (< 1ms for 50 siblings)
+        const snap = computeSmartSnapping({
+          box: {
+            left: res.left,
+            top: res.top,
+            right: res.right,
+            bottom: res.bottom,
+            width: res.width,
+            height: res.height,
+          },
+          siblings: gesture.siblings,
+          thresholdScreenPx: 4,
+          zoom: gesture.zoom,
+          disabled: p.ctrlKey,
+        });
+
+        if (snap.snappedX) {
+          res.width += snap.dx;
+          res.right += snap.dx;
+        }
+        if (snap.snappedY) {
+          res.height += snap.dy;
+          res.bottom += snap.dy;
+        }
+
+        gesture.nextWidth = Math.max(1, res.width);
+        gesture.nextHeight = Math.max(1, res.height);
+        gesture.nextLeft = res.left;
+        gesture.nextTop = res.top;
+
+        // 1. Direct overlay write (transform + width/height)
+        if (overlayNode) {
+          overlayNode.style.width = `${Math.round(gesture.nextWidth)}px`;
+          overlayNode.style.height = `${Math.round(gesture.nextHeight)}px`;
+          const dx = gesture.nextLeft - gesture.startLeft;
+          const dy = gesture.nextTop - gesture.startTop;
+          if (Math.abs(dx) > 0.1 || Math.abs(dy) > 0.1) {
+            overlayNode.style.transform = `translate3d(${Math.round(dx)}px, ${Math.round(dy)}px, 0)`;
+          } else {
+            overlayNode.style.transform = '';
+          }
+        }
+
+        // 2. Direct style write on canvas element (same-origin direct or bridge gesture)
+        if (gesture.targetEl) {
+          gesture.targetEl.style.maxWidth = `${Math.round(gesture.nextWidth)}px`;
+        } else if (sourceCanvas.current && gesture.moved) {
+          const selection = sourceSelections.current[gesture.key];
+          if (selection) {
+            void sourceCanvas.current.command('gesture', selection, { maxWidth: Math.round(gesture.nextWidth) });
+          }
+        }
+
+        // 3. Smart 1px guides
+        if (snap.guides.length > 0 && gesture.moved) {
+          for (const g of snap.guides) {
+            if (g.type === 'vertical' && guideVRef.current) {
+              guideVRef.current.style.display = 'block';
+              guideVRef.current.style.left = `${g.position}px`;
+              guideVRef.current.style.top = `${g.start}px`;
+              guideVRef.current.style.height = `${Math.max(10, g.end - g.start)}px`;
+            } else if (g.type === 'horizontal' && guideHRef.current) {
+              guideHRef.current.style.display = 'block';
+              guideHRef.current.style.top = `${g.position}px`;
+              guideHRef.current.style.left = `${g.start}px`;
+              guideHRef.current.style.width = `${Math.max(10, g.end - g.start)}px`;
+            }
+          }
+        } else {
+          if (guideVRef.current) guideVRef.current.style.display = 'none';
+          if (guideHRef.current) guideHRef.current.style.display = 'none';
+        }
+
+        // 4. Live cursor W x H tag
+        if (cursorTagRef.current && gesture.moved) {
+          cursorTagRef.current.style.display = 'block';
+          cursorTagRef.current.textContent = `W: ${Math.round(gesture.nextWidth)}px × H: ${Math.round(gesture.nextHeight)}px`;
+          cursorTagRef.current.style.transform = `translate3d(${p.x + 14}px, ${p.y + 14}px, 0)`;
+        }
+      } else if (gesture.type === 'move') {
+        const deltaScreenX = p.x - gesture.startX;
+        const deltaScreenY = p.y - gesture.startY;
+        if (Math.hypot(deltaScreenX, deltaScreenY) >= 3) {
+          gesture.moved = true;
+        }
+
+        const deltaX = deltaScreenX / gesture.zoom;
+        const deltaY = deltaScreenY / gesture.zoom;
+
+        let nextX = gesture.baseTranslation.x + deltaX;
+        let nextY = gesture.baseTranslation.y + deltaY;
+
+        const snap = computeSmartSnapping({
+          box: {
+            left: gesture.startLeft + nextX - gesture.baseTranslation.x,
+            top: gesture.startTop + nextY - gesture.baseTranslation.y,
+            right: gesture.startLeft + nextX - gesture.baseTranslation.x + gesture.startWidth,
+            bottom: gesture.startTop + nextY - gesture.baseTranslation.y + gesture.startHeight,
+            width: gesture.startWidth,
+            height: gesture.startHeight,
+          },
+          siblings: gesture.siblings,
+          thresholdScreenPx: 4,
+          zoom: gesture.zoom,
+          disabled: p.ctrlKey,
+        });
+
+        if (snap.snappedX) nextX += snap.dx;
+        if (snap.snappedY) nextY += snap.dy;
+
+        const snappedX = Math.round(nextX / 4) * 4;
+        const snappedY = Math.round(nextY / 4) * 4;
+        gesture.nextTranslation = { x: snappedX, y: snappedY };
+
+        if (overlayNode) {
+          overlayNode.style.transform = `translate3d(${snappedX - gesture.baseTranslation.x}px, ${snappedY - gesture.baseTranslation.y}px, 0)`;
+        }
+
+        if (gesture.targetEl) {
+          gesture.targetEl.style.translate = `${snappedX}px ${snappedY}px`;
+        } else if (sourceCanvas.current && gesture.moved) {
+          const selection = sourceSelections.current[gesture.key];
+          if (selection) {
+            void sourceCanvas.current.command('gesture', selection, { x: snappedX, y: snappedY });
+          }
+        }
+
+        if (snap.guides.length > 0 && gesture.moved) {
+          for (const g of snap.guides) {
+            if (g.type === 'vertical' && guideVRef.current) {
+              guideVRef.current.style.display = 'block';
+              guideVRef.current.style.left = `${g.position}px`;
+              guideVRef.current.style.top = `${g.start}px`;
+              guideVRef.current.style.height = `${Math.max(10, g.end - g.start)}px`;
+            } else if (g.type === 'horizontal' && guideHRef.current) {
+              guideHRef.current.style.display = 'block';
+              guideHRef.current.style.top = `${g.position}px`;
+              guideHRef.current.style.left = `${g.start}px`;
+              guideHRef.current.style.width = `${Math.max(10, g.end - g.start)}px`;
+            }
+          }
+        } else {
+          if (guideVRef.current) guideVRef.current.style.display = 'none';
+          if (guideHRef.current) guideHRef.current.style.display = 'none';
+        }
+
+        if (cursorTagRef.current && gesture.moved) {
+          cursorTagRef.current.style.display = 'block';
+          cursorTagRef.current.textContent = `X: ${snappedX}px  Y: ${snappedY}px Snapped`;
+          cursorTagRef.current.style.transform = `translate3d(${p.x + 14}px, ${p.y + 14}px, 0)`;
+        }
       }
     };
-    const cancel = () => reset();
-    const lost = (event: PointerEvent) => { if (event.pointerId === moveGesture.current?.pointerId) reset(); };
-    const escape = (event: KeyboardEvent) => {
-      if (event.key === 'Escape' && moveGesture.current) { event.preventDefault(); event.stopImmediatePropagation(); reset(); }
-    };
-    const visibility = () => { if (document.hidden) reset(); };
-    window.addEventListener('pointermove', move); window.addEventListener('pointerup', up);
-    window.addEventListener('pointercancel', cancel); window.addEventListener('lostpointercapture', lost);
-    window.addEventListener('blur', cancel); window.addEventListener('scroll', cancel, true); window.addEventListener('resize', cancel);
-    window.addEventListener('keydown', escape, true); document.addEventListener('visibilitychange', visibility);
-    return () => {
-      window.removeEventListener('pointermove', move); window.removeEventListener('pointerup', up);
-      window.removeEventListener('pointercancel', cancel); window.removeEventListener('lostpointercapture', lost);
-      window.removeEventListener('blur', cancel); window.removeEventListener('scroll', cancel, true); window.removeEventListener('resize', cancel);
-      window.removeEventListener('keydown', escape, true); document.removeEventListener('visibilitychange', visibility);
-      reset();
-    };
-  }, [triggerBackendPreview]);
 
-  useEffect(() => {
-    if (!usesDrafts || !selectedLayer || !sourceReady) return;
-    const selection = sourceSelections.current[selectedLayer]; if (!selection) return;
-    if (liveMove) void sourceCanvas.current?.command('gesture', selection, { x: liveMove.x, y: liveMove.y }).catch(error => showToast(error.message));
-    else if (liveWidth !== null) void sourceCanvas.current?.command('gesture', selection, { maxWidth: liveWidth }).catch(error => showToast(error.message));
-    else void sourceCanvas.current?.command('cancel-gesture', selection).catch(() => {});
-  }, [liveMove, liveWidth, selectedLayer, sourceReady, repositoryId]);
+    const cleanupVisuals = () => {
+      cancelAnimationFrame(animationId);
+      if (eventShieldRef.current) eventShieldRef.current.style.display = 'none';
+      if (guideVRef.current) guideVRef.current.style.display = 'none';
+      if (guideHRef.current) guideHRef.current.style.display = 'none';
+      if (cursorTagRef.current) cursorTagRef.current.style.display = 'none';
+    };
 
-  // Keep the final pointer position independent of React render timing.
-  useEffect(() => {
-    let animation = 0;
-    const reset = () => {
-      cancelAnimationFrame(animation);
-      const gesture = resizeGesture.current; resizeGesture.current = null;
-      if (gesture) suppressResizeClick.current = true;
-      if (gesture?.capture.hasPointerCapture(gesture.pointerId)) gesture.capture.releasePointerCapture(gesture.pointerId);
-      setIsResizing(false); setResizeHandle(null); setLiveWidth(null); setDimensionTooltip(null);
+    const onPointerMove = (e: PointerEvent) => {
+      const gesture = directDragRef.current;
+      if (!gesture || e.pointerId !== gesture.pointerId) return;
+
+      const events = (e as any).getCoalescedEvents ? (e as any).getCoalescedEvents() : [e];
+      const last = events[events.length - 1];
+      gesture.latestPointer = {
+        x: last.clientX,
+        y: last.clientY,
+        shiftKey: last.shiftKey,
+        altKey: last.altKey,
+        ctrlKey: last.ctrlKey || last.metaKey,
+      };
+
+      if (!gesture.rafPending) {
+        gesture.rafPending = true;
+        animationId = requestAnimationFrame(onTick);
+      }
     };
-    const update = (event: PointerEvent) => {
-      const gesture = resizeGesture.current;
-      if (!gesture || event.pointerId !== gesture.pointerId) return false;
-      const requested = widthFromPointer(gesture.width, gesture.x, event.clientX, gesture.handle, gesture.scale);
-      gesture.moved = Math.abs(event.clientX - gesture.x) / gesture.scale >= 4;
-      const snapped = snapWidth(requested, gesture.rem, gesture.token);
-      gesture.nextWidth = snapped.width; gesture.token = snapped.token;
-      return true;
+
+    const onPointerUp = (e: PointerEvent) => {
+      const gesture = directDragRef.current;
+      if (!gesture || e.pointerId !== gesture.pointerId) return;
+      directDragRef.current = null;
+      cleanupVisuals();
+
+      try {
+        if (gesture.capture.hasPointerCapture(gesture.pointerId)) {
+          gesture.capture.releasePointerCapture(gesture.pointerId);
+        }
+      } catch {}
+
+      const overlayNode = elementRefs.current[gesture.key];
+      if (overlayNode) overlayNode.style.transform = '';
+
+      if (gesture.type === 'resize') {
+        setIsResizing(false);
+        setResizeHandle(null);
+
+        if (gesture.moved && Math.abs(gesture.nextWidth - gesture.startWidth) > 0.5) {
+          const rem = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
+          const snapped = snapWidth(gesture.nextWidth, rem);
+          const token = snapped.token;
+
+          // Optimistic update immediately
+          setElements(prev => ({
+            ...prev,
+            [gesture.key]: { ...prev[gesture.key], maxWidth: token },
+          }));
+
+          // Background save via client-side queue (never blocking input)
+          enqueueFileOperation(
+            gesture.filePath,
+            async () => {
+              return triggerBackendPreview('style', { property: 'maxWidth', value: token }, gesture.key, undefined, true);
+            },
+            {
+              onRollback: () => {
+                if (gesture.targetEl) {
+                  if (gesture.initialTargetStyle === null) gesture.targetEl.removeAttribute('style');
+                  else gesture.targetEl.setAttribute('style', gesture.initialTargetStyle);
+                }
+                showToast('Could not save resized width.');
+              },
+            }
+          );
+        }
+      } else if (gesture.type === 'move') {
+        setIsDraggingMove(false);
+        setMoveArmed(false);
+
+        const changed = gesture.moved && (gesture.nextTranslation.x !== gesture.baseTranslation.x || gesture.nextTranslation.y !== gesture.baseTranslation.y);
+        if (changed) {
+          enqueueFileOperation(
+            gesture.filePath,
+            async () => {
+              return triggerBackendPreview('move', gesture.nextTranslation, gesture.key, undefined, true);
+            },
+            {
+              onRollback: () => {
+                if (gesture.targetEl) {
+                  if (gesture.initialTargetStyle === null) gesture.targetEl.removeAttribute('style');
+                  else gesture.targetEl.setAttribute('style', gesture.initialTargetStyle);
+                }
+                showToast('Could not save moved position.');
+              },
+            }
+          );
+        }
+      }
     };
-    const move = (event: PointerEvent) => {
-      if (!update(event)) return;
-      const gesture = resizeGesture.current!;
-      cancelAnimationFrame(animation);
-      animation = requestAnimationFrame(() => { setLiveWidth(gesture.moved ? gesture.nextWidth : gesture.width); setDimensionTooltip(gesture.moved ? 'Snapped' : null); });
-    };
-    const up = (event: PointerEvent) => {
-      if (!update(event)) return;
-      const gesture = resizeGesture.current;
+
+    const cancelDrag = () => {
+      const gesture = directDragRef.current;
       if (!gesture) return;
-      reset();
-      if (gesture.moved && gesture.token && Math.abs(gesture.nextWidth - gesture.width) > .5) { setLiveWidth(gesture.nextWidth); void triggerBackendPreview('style', { property: 'maxWidth', value: gesture.token }, gesture.key, () => {
-        setElements(previous => ({ ...previous, [gesture.key]: { ...previous[gesture.key], maxWidth: gesture.token } }));
-      }).finally(() => setLiveWidth(null)); }
+      directDragRef.current = null;
+      cleanupVisuals();
+
+      try {
+        if (gesture.capture.hasPointerCapture(gesture.pointerId)) {
+          gesture.capture.releasePointerCapture(gesture.pointerId);
+        }
+      } catch {}
+
+      if (gesture.targetEl) {
+        if (gesture.initialTargetStyle === null) gesture.targetEl.removeAttribute('style');
+        else gesture.targetEl.setAttribute('style', gesture.initialTargetStyle);
+      } else if (sourceCanvas.current) {
+        const selection = sourceSelections.current[gesture.key];
+        if (selection) void sourceCanvas.current.command('cancel-gesture', selection);
+      }
+
+      const overlayNode = elementRefs.current[gesture.key];
+      if (overlayNode) {
+        overlayNode.style.width = `${Math.round(gesture.startWidth)}px`;
+        overlayNode.style.height = `${Math.round(gesture.startHeight)}px`;
+        overlayNode.style.transform = '';
+      }
+
+      if (gesture.type === 'resize') {
+        setIsResizing(false);
+        setResizeHandle(null);
+      } else {
+        setIsDraggingMove(false);
+        setMoveArmed(false);
+      }
     };
-    const keydown = (event: KeyboardEvent) => {
-      if (event.key !== 'Escape' || !resizeGesture.current) return;
-      event.preventDefault(); event.stopImmediatePropagation(); reset();
+
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && directDragRef.current) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        cancelDrag();
+      }
     };
-    const lostCapture = (event: PointerEvent) => { if (event.pointerId === resizeGesture.current?.pointerId) reset(); };
-    const visibility = () => { if (document.hidden) reset(); };
-    const pointerDown = () => { suppressResizeClick.current = false; };
-    const click = (event: MouseEvent) => {
-      if (!suppressResizeClick.current) return;
-      suppressResizeClick.current = false;
-      // Releasing pointer capture during cancellation can otherwise turn the
-      // old pointer release into a click on whichever layer is now beneath it.
-      if (event.detail > 0) { event.preventDefault(); event.stopPropagation(); }
-    };
-    window.addEventListener('pointermove', move); window.addEventListener('pointerup', up);
-    window.addEventListener('pointercancel', reset); window.addEventListener('blur', reset); window.addEventListener('keydown', keydown, true);
-    window.addEventListener('lostpointercapture', lostCapture); window.addEventListener('scroll', reset, true); window.addEventListener('resize', reset);
-    document.addEventListener('visibilitychange', visibility);
-    window.addEventListener('pointerdown', pointerDown, true); window.addEventListener('click', click, true);
+
+    window.addEventListener('pointermove', onPointerMove, { passive: false });
+    window.addEventListener('pointerup', onPointerUp);
+    window.addEventListener('pointercancel', cancelDrag);
+    window.addEventListener('blur', cancelDrag);
+    window.addEventListener('keydown', onKeyDown, true);
+
     return () => {
-      cancelAnimationFrame(animation);
-      window.removeEventListener('pointermove', move); window.removeEventListener('pointerup', up);
-      window.removeEventListener('pointercancel', reset); window.removeEventListener('blur', reset); window.removeEventListener('keydown', keydown, true);
-      window.removeEventListener('lostpointercapture', lostCapture); window.removeEventListener('scroll', reset, true); window.removeEventListener('resize', reset);
-      document.removeEventListener('visibilitychange', visibility);
-      window.removeEventListener('pointerdown', pointerDown, true); window.removeEventListener('click', click, true);
-      if (resizeGesture.current) reset();
+      window.removeEventListener('pointermove', onPointerMove);
+      window.removeEventListener('pointerup', onPointerUp);
+      window.removeEventListener('pointercancel', cancelDrag);
+      window.removeEventListener('blur', cancelDrag);
+      window.removeEventListener('keydown', onKeyDown, true);
+      cleanupVisuals();
     };
   }, [triggerBackendPreview]);
 
   const resizeWithKeyboard = (event: React.KeyboardEvent) => {
-    if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+    if (!['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home', 'End'].includes(event.key)) return;
     event.preventDefault(); event.stopPropagation();
-    if (event.repeat || resizeGesture.current || operationRef.current || blocksReview() || undoRecoveryRef.current || !selectedLayer) return;
+    if (event.repeat || directDragRef.current || blocksReview() || undoRecoveryRef.current || !selectedLayer) return;
     const current = elementRefs.current[selectedLayer]?.offsetWidth;
     if (!current) return;
     const rem = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
-    const next = event.key === 'Home' ? snapWidth(0, rem) : event.key === 'End' ? snapWidth(Number.MAX_SAFE_INTEGER, rem) : stepWidth(current, event.key === 'ArrowRight' ? 1 : -1, rem);
-    if (Math.abs(next.width - current) < .5) return;
+    const step = event.shiftKey ? 10 : 1;
+    const nextWidth = event.key === 'Home'
+      ? 1
+      : event.key === 'End'
+      ? 2048
+      : event.key === 'ArrowRight' || event.key === 'ArrowDown'
+      ? current + step
+      : Math.max(1, current - step);
+    const next = snapWidth(nextWidth, rem);
     const key = selectedLayer;
-    void triggerBackendPreview('style', { property: 'maxWidth', value: next.token }, key, () => {
-      setElements(previous => ({ ...previous, [key]: { ...previous[key], maxWidth: next.token } }));
-    });
+    const targetElem = elements[key] || activeElement;
+
+    // Optimistic update immediately
+    setElements(previous => ({ ...previous, [key]: { ...previous[key], maxWidth: next.token } }));
+
+    // Non-blocking background save
+    enqueueFileOperation(
+      targetElem.filePath,
+      async () => {
+        return triggerBackendPreview('style', { property: 'maxWidth', value: next.token }, key, undefined, true);
+      },
+      {
+        onRollback: () => {
+          showToast('Could not save keyboard resize.');
+        },
+      }
+    );
   };
 
   // Cancel manipulation or clear selection on Escape key
@@ -2145,63 +2608,44 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
     return createPortal(hud, document.body);
   };
 
+  const ALL_8_HANDLES: { dir: HandleDirection; label: string; title: string; styleClass: string }[] = [
+    { dir: 'nw', label: 'Resize width from top left', title: 'Drag corner to resize width', styleClass: reviewStyles.handleNw },
+    { dir: 'n', label: 'Resize width from top', title: 'Drag side to resize width', styleClass: reviewStyles.handleN },
+    { dir: 'ne', label: 'Resize width from top right', title: 'Drag corner to resize width', styleClass: reviewStyles.handleNe },
+    { dir: 'e', label: 'Resize width from right', title: 'Drag side to resize width', styleClass: reviewStyles.handleE },
+    { dir: 'se', label: 'Resize width from bottom right', title: 'Drag corner to resize width', styleClass: reviewStyles.handleSe },
+    { dir: 's', label: 'Resize width from bottom', title: 'Drag side to resize width', styleClass: reviewStyles.handleS },
+    { dir: 'sw', label: 'Resize width from bottom left', title: 'Drag corner to resize width', styleClass: reviewStyles.handleSw },
+    { dir: 'w', label: 'Resize width from left', title: 'Drag side to resize width', styleClass: reviewStyles.handleW },
+  ];
+
   const renderSourceSelection = (selection: SourceSelection) => {
     const layerKey = sourceKey(selection);
     if (selectedLayer !== layerKey || !elements[layerKey]) return null;
-    const dim = { w: Math.round(selection.rect.width), h: Math.round(selection.rect.height) };
     return <div ref={element => { elementRefs.current[layerKey] = element; }}
       className={reviewStyles.sourceSelection} aria-label="Selected source element"
       style={{ width: '100%', height: '100%', fontSize: selection.computed.fontSize, textAlign: selection.computed.textAlign as React.CSSProperties['textAlign'] }}>
-{usesDrafts && (!selection.instance || definitionStyleKey === layerKey) && !isInlineEditing && <div className={reviewStyles.moveAnchor}>{renderMoveControl()}</div>}
-{liveMove?.key === layerKey && <output aria-label="Move measurement" aria-live="polite" className={`${reviewStyles.measurementBadge} ${reviewStyles.moveMeasurement}`}><span>X</span><strong>{liveMove.x}px</strong><span>Y</span><strong>{liveMove.y}px</strong><span>Snapped</span></output>}
-      {!repositoryId && <>
-{/* Precision Handles System (Benchmark Match) */}
-{!isInlineEditing && !isDraggingMove && (
-<>
-{/* Matching width handles at the side midpoints and bottom corners. */}
-<button type="button" aria-label="Resize width from left" onKeyDown={resizeWithKeyboard} onClick={event => event.stopPropagation()}
-aria-describedby="selection-width-hint" disabled={busy || isApplying || reviewBlocking || Boolean(uncertainUndoId)}
-onPointerDown={(e) => startResize('w', e)}
-className={`${reviewStyles.edgeResizeHandle} ${reviewStyles.westHandle}`}
-aria-pressed={isResizing && resizeHandle === 'w'}
-title="Drag side to resize width"
-/>
-{/* East midpoint width handle. */}
-<button type="button" aria-label="Resize width from right" onKeyDown={resizeWithKeyboard} onClick={event => event.stopPropagation()}
-aria-describedby="selection-width-hint" disabled={busy || isApplying || reviewBlocking || Boolean(uncertainUndoId)}
-onPointerDown={(e) => startResize('e', e)}
-className={`${reviewStyles.edgeResizeHandle} ${reviewStyles.eastHandle}`}
-aria-pressed={isResizing && resizeHandle === 'e'}
-title="Drag side to resize width"
-/>
-<span id="selection-width-hint" className="sr-only">Drag horizontally to snap to supported maximum widths. Left and Right choose a size; Home and End choose the limits. Escape cancels dragging.</span>
-{/* Southwest width handle. */}
-<button type="button" aria-label="Resize width from bottom left" onKeyDown={resizeWithKeyboard} onClick={event => event.stopPropagation()}
-aria-describedby="selection-width-hint" disabled={busy || isApplying || reviewBlocking || Boolean(uncertainUndoId)}
-onPointerDown={(e) => startResize('sw', e)}
-className={`${reviewStyles.cornerResizeHandle} ${reviewStyles.westCorner}`} aria-pressed={isResizing && resizeHandle === 'sw'}
-title="Drag corner to resize width"
-/>
-{/* Southeast width handle. */}
-<button type="button" aria-label="Resize width from bottom right" onKeyDown={resizeWithKeyboard} onClick={event => event.stopPropagation()}
-aria-describedby="selection-width-hint" disabled={busy || isApplying || reviewBlocking || Boolean(uncertainUndoId)}
-onPointerDown={(e) => startResize('se', e)}
-className={`${reviewStyles.cornerResizeHandle} ${reviewStyles.eastCorner}`} aria-pressed={isResizing && resizeHandle === 'se'}
-title="Drag corner to resize width"
-/>
-{/* Live Dimension Tooltip - Only visible while actively resizing */}
-{isResizing && (
-<>
-<span aria-hidden="true" className={`${reviewStyles.resizeGuide} ${reviewStyles.leftGuide}`} />
-<span aria-hidden="true" className={`${reviewStyles.resizeGuide} ${reviewStyles.rightGuide}`} />
-<output aria-live="polite" aria-label="Resize measurement" className={reviewStyles.measurementBadge}>
-<span>Max width</span><strong>{liveWidth || dim.w}px</strong><span>{dimensionTooltip || 'Drag to snap'}</span>
-</output>
-</>
-)}
-</>
-)}
-</>}
+      {usesDrafts && (!selection.instance || definitionStyleKey === layerKey) && !isInlineEditing && <div className={reviewStyles.moveAnchor}>{renderMoveControl()}</div>}
+      {!isInlineEditing && !isDraggingMove && (
+        <>
+          {ALL_8_HANDLES.map(h => (
+            <button
+              key={h.dir}
+              type="button"
+              role="slider"
+              aria-label={h.label}
+              title={h.title}
+              aria-pressed={isResizing && resizeHandle === h.dir}
+              className={`${reviewStyles.resizeHandle} ${h.styleClass}`}
+              onPointerDown={e => startResize(h.dir, e)}
+              onKeyDown={resizeWithKeyboard}
+              onClick={e => e.stopPropagation()}
+            >
+              <span className={reviewStyles.handleDot} />
+            </button>
+          ))}
+        </>
+      )}
     </div>;
   };
 
@@ -2214,11 +2658,33 @@ title="Drag corner to resize width"
     showRedo={usesDrafts} onHistory={() => setHistoryOpen(true)} onUndo={handleUndo} onRedo={() => navigateDraft(1)}
   />;
   const draftStatus = isApplying ? 'Saving…' : uncertainApplyId ? 'Check save status' : draftReplaying ? 'Restoring draft…' : busy ? 'Updating draft…' : selectedLayer && typeof activeElement.text === 'string' && draftText !== activeElement.text ? 'Editing text…' : draft ? (draftStored ? `Draft saved · ${draft.cursor} ${draft.cursor === 1 ? 'change' : 'changes'}${Object.keys(draftHeads(pendingEdit)).length > 1 ? ' · ' + Object.keys(draftHeads(pendingEdit)).length + ' files' : ''}` : 'Draft in memory') : 'All changes saved';
-  const renderDraftControls = () => usesDrafts && <EditorDraftControls
-    saveLabel={uncertainApplyId ? pendingEdit?.groupTransactionId ? 'Resume Save' : 'Check save' : 'Save changes'}
-    disabled={(!pendingEdit && draftText === activeElement.text) || busy || isApplying || moveArmed || isResizing || destinationMode}
-    onSave={requestSave}
-  />;
+  const renderDraftControls = () => (
+    <div className="flex items-center gap-2">
+      {saveQueueState.status === 'saving' && (
+        <span className={reviewStyles.saveBadgeSaving} aria-live="polite">
+          <LoaderCircle size={12} className="animate-spin text-emerald-500" />
+          <span>Saving…</span>
+        </span>
+      )}
+      {saveQueueState.status === 'saved' && (
+        <span className={reviewStyles.saveBadgeSaved} aria-live="polite">
+          <Check size={12} />
+          <span>Saved</span>
+        </span>
+      )}
+      {saveQueueState.status === 'error' && (
+        <span className={reviewStyles.saveBadgeError} role="alert">
+          <CircleAlert size={12} />
+          <span>{saveQueueState.message || 'Save error'}</span>
+        </span>
+      )}
+      {usesDrafts && <EditorDraftControls
+        saveLabel={uncertainApplyId ? pendingEdit?.groupTransactionId ? 'Resume Save' : 'Check save' : 'Save changes'}
+        disabled={(!pendingEdit && draftText === activeElement.text) || busy || isApplying || moveArmed || isResizing || destinationMode}
+        onSave={requestSave}
+      />}
+    </div>
+  );
   const renderCanvasControls = () => <EditorViewportControls
     viewport={breakpoint} requestedWidth={viewportWidth}
     disabled={busy || isApplying || isInlineEditing || isResizing || moveArmed || Boolean(liveMove)}
@@ -2514,6 +2980,16 @@ title="Drag corner to resize width"
                 <span>{repositoryId && !selectedLayer ? 'Waiting for live selection' : `${activeElement.filePath}:${activeElement.line}`}</span>
               </div>
             </div>
+
+            {/* Transparent event shield during active drag */}
+            <div ref={eventShieldRef} className={reviewStyles.eventShield} style={{ display: 'none' }} />
+
+            {/* Smart snapping guides */}
+            <div ref={guideVRef} className={reviewStyles.smartGuideV} style={{ display: 'none' }} />
+            <div ref={guideHRef} className={reviewStyles.smartGuideH} style={{ display: 'none' }} />
+
+            {/* Live W x H dimension tag next to cursor */}
+            <div ref={cursorTagRef} className={reviewStyles.cursorTag} style={{ display: 'none' }} />
 
           </main>
           {!windowMode && <div className={reviewStyles.canvasFooter} role="region" aria-label="Canvas controls">

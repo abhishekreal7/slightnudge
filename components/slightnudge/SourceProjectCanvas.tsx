@@ -22,6 +22,8 @@ export interface SourceCanvasHandle {
   openWindow(): void;
   command(operation: 'preview' | 'check' | 'discard' | 'verify' | 'verify-document' | 'restore' | 'select' | 'catalog' | 'gesture' | 'cancel-gesture' | 'begin-text' | 'cancel-text' | 'finish-text' | 'verify-batch' | 'set-mode', selection?: SourceSelection | null, extra?: Record<string, unknown>): Promise<SourceSelection | undefined>;
   reload(selection?: SourceSelection, expectedClass?: string, expectedText?: string, expectedBatch?: CanvasRenderPatch[]): Promise<void>;
+  getFrame?(): HTMLIFrameElement | null;
+  getDocument?(): Document | null;
 }
 
 export const SourceProjectCanvas = forwardRef<SourceCanvasHandle, {
@@ -177,6 +179,14 @@ export const SourceProjectCanvas = forwardRef<SourceCanvasHandle, {
   useImperativeHandle(ref, () => ({
     command,
     openWindow,
+    getFrame: () => frame.current,
+    getDocument: () => {
+      try {
+        return frame.current?.contentDocument || null;
+      } catch {
+        return null;
+      }
+    },
     async reload(selection, expectedClass, expectedText, expectedBatch) {
       // Recovery can finish before this newly mounted window has connected.
       // There is no document to reload yet; release the operation so the

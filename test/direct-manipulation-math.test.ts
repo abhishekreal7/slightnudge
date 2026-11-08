@@ -212,7 +212,7 @@ console.log('PASS: Smart snapping accuracy, guide production, and <1ms performan
 {
   const estimate = estimateTailwindClasses(384, 16);
   assert.equal(typeof estimate.widthClass, 'string');
-  assert.ok(estimate.widthClass.startsWith('w-') || estimate.widthClass.startsWith('max-w-'));
+  assert.ok(estimate.widthClass && (estimate.widthClass.startsWith('w-') || estimate.widthClass.startsWith('max-w-')));
 }
 console.log('PASS: Client-side Tailwind class lookup table');
 
