@@ -1,0 +1,40 @@
+[
+  {
+    "mode": "dev",
+    "canvas": "sample",
+    "zoom": 1,
+    "pageComplexity": "small",
+    "gesture": "resize",
+    "runs": 2,
+    "medianFrameMs": 16.7,
+    "p95FrameMs": 166.6,
+    "shareOver33MsPct": 19.5,
+    "longtasksOver50Count": 51,
+    "maxLongtaskMs": 710,
+    "reactCommitsPerSec": 16.8,
+    "requestsPerSec": 0.3,
+    "bridgeMessagesPerSec": 7.5,
+    "layoutReadsPerFrame": 0.09,
+    "pointerToVisualLatencyMs": 1,
+    "pointerUpToAcceptedMs": 1615
+  },
+  {
+    "mode": "dev",
+    "canvas": "sample",
+    "zoom": 1,
+    "pageComplexity": "small",
+    "gesture": "move",
+    "runs": 2,
+    "medianFrameMs": 16.7,
+    "p95FrameMs": 200,
+    "shareOver33MsPct": 37.5,
+    "longtasksOver50Count": 243,
+    "maxLongtaskMs": 300,
+    "reactCommitsPerSec": 126.5,
+    "requestsPerSec": 0,
+    "bridgeMessagesPerSec": 120,
+    "layoutReadsPerFrame": 0.46,
+    "pointerToVisualLatencyMs": 1,
+    "pointerUpToAcceptedMs": 522
+  }
+]
