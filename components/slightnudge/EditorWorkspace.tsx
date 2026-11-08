@@ -72,7 +72,21 @@ import {
   Copy,
   Palette,
   SquareDashed,
+  Lock,
+  Unlock,
 } from 'lucide-react';
+import {
+  selectionStyleFor,
+  buildRoundedRectPath,
+  buildCornerArcPath,
+  buildCircleArcPath,
+  parseBorderRadius,
+  RADIUS_SCALE_STEPS,
+  findNearestRadiusStep,
+  type SelectionVariant,
+  type SelectionChromeStyle,
+  type NamedRadiusStep,
+} from '@/components/slightnudge/selection-style';
 import {
   changeSetAPI,
   previewEditAPI,
@@ -816,8 +830,13 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
   const cursorTagRef = useRef<HTMLDivElement | null>(null);
   const guideVRef = useRef<HTMLDivElement | null>(null);
   const guideHRef = useRef<HTMLDivElement | null>(null);
+  const previousVariantRef = useRef<Record<string, SelectionVariant>>({});
+  const aspectLockOverrides = useRef<Record<string, boolean>>({});
+  const outlineHaloRef = useRef<Record<string, SVGPathElement | null>>({});
+  const outlineAccentRef = useRef<Record<string, SVGPathElement | null>>({});
+
   const directDragRef = useRef<{
-    type: 'resize' | 'move';
+    type: 'resize' | 'move' | 'radius';
     handle?: HandleDirection;
     pointerId: number;
     capture: HTMLElement;
@@ -836,6 +855,10 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
     targetEl: HTMLElement | null;
     initialTargetStyle: string | null;
     outlineOnly?: boolean;
+    lockedAspect?: boolean;
+    initialRadius?: number;
+    maxRadius?: number;
+    nextRadiusStep?: NamedRadiusStep;
     latestPointer: { x: number; y: number; shiftKey: boolean; altKey: boolean; ctrlKey: boolean; metaKey?: boolean };
     rafPending: boolean;
     moved: boolean;
@@ -1154,6 +1177,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
       targetEl,
       initialTargetStyle,
       outlineOnly: outlineDrag,
+      lockedAspect: aspectLockOverrides.current[key] ?? /^(img|video|svg|canvas)$/i.test(renderedElement.tag || actualSelection?.tagName || ''),
       latestPointer: { x: e.clientX, y: e.clientY, shiftKey: e.shiftKey, altKey: e.altKey, ctrlKey: e.ctrlKey || e.metaKey, metaKey: e.metaKey },
       rafPending: false,
       moved: false,
@@ -1165,6 +1189,110 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
       token: '',
       lastClassEstimateTime: 0,
     };
+  };
+
+  // Direct 60fps Corner Radius Dragging
+  const startRadiusDrag = (e: React.PointerEvent) => {
+    e.stopPropagation();
+    e.preventDefault();
+    if (blocksReview() || undoRecoveryRef.current || directDragRef.current) return;
+    if (e.button !== 0) return;
+
+    const key = selectedLayer || 'text';
+    const renderedElement = elements[key] || activeElement;
+    const targetElem = renderedElement;
+    const actualSelection = sourceSelections.current[key] || sourceSelection.current;
+
+    const zoom = typeof canvasZoom === 'number' ? canvasZoom : 1;
+    const currentW = elementRefs.current[key]?.offsetWidth || actualSelection?.rect?.width || 200;
+    const currentH = elementRefs.current[key]?.offsetHeight || actualSelection?.rect?.height || 100;
+    const startLeft = actualSelection?.rect?.left || 0;
+    const startTop = actualSelection?.rect?.top || 0;
+
+    let targetEl: HTMLElement | null = null;
+    const frameEl = sourceCanvas.current?.getFrame?.();
+    if (frameEl && frameEl.contentDocument) {
+      try {
+        const doc = frameEl.contentDocument;
+        if (actualSelection?.elementId) {
+          targetEl = doc.querySelector(`[data-nudge-id="${actualSelection.elementId}"]`) || doc.getElementById(actualSelection.elementId);
+        }
+        if (!targetEl && actualSelection?.tagName) {
+          targetEl = doc.querySelector(actualSelection.tagName);
+        }
+      } catch {}
+    }
+
+    const initialTargetStyle = targetEl?.getAttribute('style') || null;
+    const parsedRadii = parseBorderRadius(renderedElement.borderRadius || actualSelection?.computed?.borderRadius, currentW, currentH);
+    const initialR = Math.max(parsedRadii.tl, parsedRadii.tr, parsedRadii.br, parsedRadii.bl);
+    const maxRadius = Math.min(currentW, currentH) / 2;
+
+    try {
+      e.currentTarget.setPointerCapture(e.pointerId);
+    } catch {}
+
+    if (eventShieldRef.current) {
+      eventShieldRef.current.style.display = 'block';
+      eventShieldRef.current.style.cursor = 'crosshair';
+    }
+
+    directDragRef.current = {
+      type: 'radius',
+      pointerId: e.pointerId,
+      capture: e.currentTarget as HTMLElement,
+      key,
+      filePath: targetElem.filePath,
+      startX: e.clientX,
+      startY: e.clientY,
+      startLeft,
+      startTop,
+      startWidth: currentW,
+      startHeight: currentH,
+      baseTranslation: { x: 0, y: 0 },
+      zoom,
+      siblings: [],
+      targetEl,
+      initialTargetStyle,
+      outlineOnly: outlineDrag,
+      initialRadius: initialR,
+      maxRadius,
+      nextRadiusStep: findNearestRadiusStep(initialR, maxRadius),
+      latestPointer: { x: e.clientX, y: e.clientY, shiftKey: e.shiftKey, altKey: e.altKey, ctrlKey: e.ctrlKey || e.metaKey, metaKey: e.metaKey },
+      rafPending: false,
+      moved: false,
+      nextWidth: currentW,
+      nextHeight: currentH,
+      nextLeft: startLeft,
+      nextTop: startTop,
+      nextTranslation: { x: 0, y: 0 },
+      token: '',
+      lastClassEstimateTime: 0,
+    };
+  };
+
+  const handleRadiusKeyDown = (e: React.KeyboardEvent) => {
+    if (!['ArrowUp', 'ArrowRight', 'ArrowDown', 'ArrowLeft', 'Home', 'End'].includes(e.key)) return;
+    e.preventDefault();
+    e.stopPropagation();
+    if (e.repeat || directDragRef.current || blocksReview() || !selectedLayer) return;
+
+    const key = selectedLayer;
+    const currentToken = elements[key]?.borderRadius || 'rounded-none';
+    const currentIndex = RADIUS_SCALE_STEPS.findIndex(s => s.token === currentToken);
+    const idx = currentIndex >= 0 ? currentIndex : 0;
+
+    let nextIdx = idx;
+    if (e.key === 'Home') nextIdx = 0;
+    else if (e.key === 'End') nextIdx = RADIUS_SCALE_STEPS.length - 1;
+    else if (e.key === 'ArrowUp' || e.key === 'ArrowRight') {
+      nextIdx = Math.min(RADIUS_SCALE_STEPS.length - 1, idx + 1);
+    } else if (e.key === 'ArrowDown' || e.key === 'ArrowLeft') {
+      nextIdx = Math.max(0, idx - 1);
+    }
+
+    const nextStep = RADIUS_SCALE_STEPS[nextIdx];
+    updateStyle('borderRadius', nextStep.token);
   };
 
   // Backend Integration: Trigger Preview on Style/Text/Nudge/Reorder
@@ -1350,6 +1478,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
           gesture.moved = true;
         }
 
+        const effectiveShift = gesture.lockedAspect ? !p.shiftKey : p.shiftKey;
         const res = compute8HandleResize({
           handle: gesture.handle,
           startRect: {
@@ -1361,7 +1490,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
           zoom: gesture.zoom,
           grabOffset: { x: 0, y: 0 },
           pointerDeltaScreen: deltaScreen,
-          shiftKey: p.shiftKey,
+          shiftKey: effectiveShift,
           altKey: p.altKey,
           minSize: 1,
         });
@@ -1407,6 +1536,22 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
           } else {
             overlayNode.style.transform = '';
           }
+        }
+
+        // Direct SVG outline update
+        const haloEl = outlineHaloRef.current[gesture.key];
+        const accentEl = outlineAccentRef.current[gesture.key];
+        if (haloEl && accentEl) {
+          const renderedElem = elements[gesture.key] || activeElement;
+          const radii = parseBorderRadius(renderedElem.borderRadius, gesture.nextWidth, gesture.nextHeight);
+          const d = buildRoundedRectPath(-2, -2, gesture.nextWidth + 4, gesture.nextHeight + 4, {
+            tl: radii.tl + (radii.tl > 0 ? 2 : 0),
+            tr: radii.tr + (radii.tr > 0 ? 2 : 0),
+            br: radii.br + (radii.br > 0 ? 2 : 0),
+            bl: radii.bl + (radii.bl > 0 ? 2 : 0),
+          });
+          haloEl.setAttribute('d', d);
+          accentEl.setAttribute('d', d);
         }
 
         // 2. Direct style write on canvas element (same-origin direct or bridge gesture)
@@ -1515,6 +1660,50 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
         if (cursorTagRef.current && gesture.moved) {
           cursorTagRef.current.style.display = 'block';
           cursorTagRef.current.textContent = `X: ${snappedX}px  Y: ${snappedY}px Snapped`;
+          cursorTagRef.current.style.transform = `translate3d(${p.x + 14}px, ${p.y + 14}px, 0)`;
+        }
+      } else if (gesture.type === 'radius') {
+        const deltaScreenX = p.x - gesture.startX;
+        const deltaScreenY = p.y - gesture.startY;
+        if (Math.hypot(deltaScreenX, deltaScreenY) >= 2) {
+          gesture.moved = true;
+        }
+
+        const z = Math.max(0.01, gesture.zoom);
+        const dx = deltaScreenX / z;
+        const dy = deltaScreenY / z;
+
+        const deltaR = (dx + dy) / 2;
+        const rawRadius = Math.max(0, Math.min(gesture.maxRadius || 50, (gesture.initialRadius || 0) + deltaR));
+        const snapped = findNearestRadiusStep(rawRadius, gesture.maxRadius || 50);
+        gesture.nextRadiusStep = snapped;
+
+        const targetRadiusPx = snapped.token === 'rounded-full' ? (gesture.maxRadius || 50) : snapped.px;
+
+        if (gesture.targetEl && !gesture.outlineOnly) {
+          gesture.targetEl.style.borderRadius = `${targetRadiusPx}px`;
+        }
+
+        const haloEl = outlineHaloRef.current[gesture.key];
+        const accentEl = outlineAccentRef.current[gesture.key];
+        if (haloEl && accentEl) {
+          const r = targetRadiusPx;
+          const d = buildRoundedRectPath(-2, -2, gesture.startWidth + 4, gesture.startHeight + 4, {
+            tl: r + (r > 0 ? 2 : 0),
+            tr: r + (r > 0 ? 2 : 0),
+            br: r + (r > 0 ? 2 : 0),
+            bl: r + (r > 0 ? 2 : 0),
+          });
+          haloEl.setAttribute('d', d);
+          accentEl.setAttribute('d', d);
+        }
+
+        if (cursorTagRef.current && gesture.moved) {
+          cursorTagRef.current.style.display = 'block';
+          const tagText = p.altKey
+            ? `Radius: ${snapped.name} (${targetRadiusPx}px) [Alt per-corner not supported]`
+            : `Radius: ${snapped.name} (${targetRadiusPx}px)`;
+          cursorTagRef.current.textContent = tagText;
           cursorTagRef.current.style.transform = `translate3d(${p.x + 14}px, ${p.y + 14}px, 0)`;
         }
       }
@@ -1637,6 +1826,20 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
             }
           );
         }
+      } else if (gesture.type === 'radius') {
+        if (gesture.moved && gesture.nextRadiusStep) {
+          const step = gesture.nextRadiusStep;
+          if (gesture.targetEl) {
+            if (gesture.initialTargetStyle === null) gesture.targetEl.removeAttribute('style');
+            else gesture.targetEl.setAttribute('style', gesture.initialTargetStyle);
+          }
+          updateStyle('borderRadius', step.token);
+        } else {
+          if (gesture.targetEl) {
+            if (gesture.initialTargetStyle === null) gesture.targetEl.removeAttribute('style');
+            else gesture.targetEl.setAttribute('style', gesture.initialTargetStyle);
+          }
+        }
       }
     };
 
@@ -1670,7 +1873,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
       if (gesture.type === 'resize') {
         setIsResizing(false);
         setResizeHandle(null);
-      } else {
+      } else if (gesture.type === 'move') {
         setIsDraggingMove(false);
         setMoveArmed(false);
       }
@@ -2659,31 +2862,205 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
   const renderSourceSelection = (selection: SourceSelection) => {
     const layerKey = sourceKey(selection);
     if (selectedLayer !== layerKey || !elements[layerKey]) return null;
-    return <div ref={element => { elementRefs.current[layerKey] = element; }}
-      className={`${reviewStyles.sourceSelection} ${outlineDrag ? reviewStyles.sourceSelectionOutline : ''}`} aria-label="Selected source element"
-      style={{ width: '100%', height: '100%', fontSize: selection.computed.fontSize, textAlign: selection.computed.textAlign as React.CSSProperties['textAlign'] }}>
-      {usesDrafts && (!selection.instance || definitionStyleKey === layerKey) && !isInlineEditing && <div className={reviewStyles.moveAnchor}>{renderMoveControl()}</div>}
-      {!isInlineEditing && !isDraggingMove && (
-        <>
-          {ALL_8_HANDLES.map(h => (
-            <button
-              key={h.dir}
-              type="button"
-              role="slider"
-              aria-label={h.label}
-              title={h.title}
-              aria-pressed={isResizing && resizeHandle === h.dir}
-              className={`${reviewStyles.resizeHandle} ${h.styleClass}`}
-              onPointerDown={e => startResize(h.dir, e)}
-              onKeyDown={resizeWithKeyboard}
-              onClick={e => e.stopPropagation()}
-            >
-              <span className={reviewStyles.handleDot} />
-            </button>
-          ))}
-        </>
-      )}
-    </div>;
+    const zoomVal = typeof canvasZoom === 'number' ? canvasZoom : 1;
+    const renderedElem = elements[layerKey] || activeElement;
+    const currentW = elementRefs.current[layerKey]?.offsetWidth || selection.rect.width;
+    const currentH = elementRefs.current[layerKey]?.offsetHeight || selection.rect.height;
+    const currentRadius = renderedElem.borderRadius || selection.computed.borderRadius || '0px';
+
+    const isMediaEl = /^(img|video|svg|canvas|picture)$/i.test(renderedElem.tag || selection.tagName);
+    const aspectLocked = aspectLockOverrides.current[layerKey] ?? isMediaEl;
+
+    const chrome = selectionStyleFor({
+      tag: renderedElem.tag || selection.tagName,
+      role: undefined,
+      display: undefined,
+      width: currentW,
+      height: currentH,
+      borderRadius: currentRadius,
+      isText: /^(h[1-6]|p|span|a|label|strong|em|b|i|small)$/i.test(renderedElem.tag || selection.tagName),
+      isMedia: isMediaEl,
+      isControl: /^(button|input|select)$/i.test(renderedElem.tag || selection.tagName),
+      zoom: zoomVal,
+      lockedAspect: aspectLocked,
+      currentVariant: previousVariantRef.current[layerKey],
+    });
+    previousVariantRef.current[layerKey] = chrome.variant;
+
+    // SVG outline path offset 2px outside
+    const outlinePath = buildRoundedRectPath(
+      -2,
+      -2,
+      currentW + 4,
+      currentH + 4,
+      {
+        tl: chrome.outlineRadii.tl + (chrome.outlineRadii.tl > 0 ? 2 : 0),
+        tr: chrome.outlineRadii.tr + (chrome.outlineRadii.tr > 0 ? 2 : 0),
+        br: chrome.outlineRadii.br + (chrome.outlineRadii.br > 0 ? 2 : 0),
+        bl: chrome.outlineRadii.bl + (chrome.outlineRadii.bl > 0 ? 2 : 0),
+      }
+    );
+
+    const toggleAspectLock = (e: React.MouseEvent) => {
+      e.stopPropagation();
+      aspectLockOverrides.current[layerKey] = !aspectLocked;
+      setElements(prev => ({ ...prev }));
+    };
+
+    return (
+      <div
+        ref={element => { elementRefs.current[layerKey] = element; }}
+        className={`${reviewStyles.sourceSelection} ${outlineDrag ? reviewStyles.sourceSelectionOutline : ''}`}
+        aria-label="Selected source element"
+        data-selection-variant={chrome.variant}
+        style={{
+          width: '100%',
+          height: '100%',
+          fontSize: selection.computed.fontSize,
+          textAlign: selection.computed.textAlign as React.CSSProperties['textAlign'],
+        }}
+      >
+        {/* SVG Overlay layer with dual-stroke 1.5px accent over 1px white halo */}
+        <svg
+          className={reviewStyles.selectionSvg}
+          style={{ width: `${currentW + 4}px`, height: `${currentH + 4}px` }}
+        >
+          {/* 1. Halo outline */}
+          <path
+            ref={el => { outlineHaloRef.current[layerKey] = el; }}
+            d={outlinePath}
+            className={reviewStyles.outlineHalo}
+          />
+          {/* 2. Accent outline */}
+          <path
+            ref={el => { outlineAccentRef.current[layerKey] = el; }}
+            d={outlinePath}
+            className={`${reviewStyles.outlineAccent} ${outlineDrag ? reviewStyles.outlineDashed : ''}`}
+          />
+
+          {/* Corner arcs for arc or circle variant */}
+          {(chrome.variant === 'arc' || chrome.variant === 'circle') &&
+            (['nw', 'ne', 'se', 'sw'] as const).map(corner => {
+              if (!chrome.visibleHandles.includes(corner)) return null;
+              const arc = chrome.variant === 'circle'
+                ? buildCircleArcPath(corner, currentW, zoomVal)
+                : buildCornerArcPath(corner, currentW, currentH, chrome.outlineRadii, zoomVal);
+              return (
+                <g key={`arc-group-${corner}`}>
+                  <path d={arc.path} className={reviewStyles.handleArcHalo} />
+                  <path
+                    d={arc.path}
+                    className={`${reviewStyles.handleArc} ${isResizing && resizeHandle === corner ? reviewStyles.handleArcActive : ''}`}
+                  />
+                </g>
+              );
+            })}
+        </svg>
+
+        {/* Move anchor */}
+        {usesDrafts && (!selection.instance || definitionStyleKey === layerKey) && !isInlineEditing && (
+          <div className={reviewStyles.moveAnchor}>{renderMoveControl()}</div>
+        )}
+
+        {/* Media Aspect Lock Toggle Badge */}
+        {chrome.variant === 'media' && !isInlineEditing && !isDraggingMove && (
+          <button
+            type="button"
+            role="button"
+            aria-label={aspectLocked ? 'Aspect ratio locked' : 'Aspect ratio free'}
+            title={aspectLocked ? 'Aspect ratio locked (Click to unlock, or hold Shift while dragging)' : 'Aspect ratio free (Click to lock)'}
+            className={reviewStyles.aspectLockBadge}
+            onClick={toggleAspectLock}
+          >
+            {aspectLocked ? <Lock size={10} strokeWidth={2} /> : <Unlock size={10} strokeWidth={2} />}
+            <span>{aspectLocked ? 'Locked' : 'Free'}</span>
+          </button>
+        )}
+
+        {/* Radius Grip */}
+        {chrome.radiusGrip.visible && !isInlineEditing && !isDraggingMove && (
+          <button
+            type="button"
+            role="slider"
+            aria-label="Adjust corner radius"
+            title="Drag to adjust corner radius (Arrow keys to change step)"
+            aria-valuemin={0}
+            aria-valuemax={Math.round(Math.min(currentW, currentH) / 2)}
+            aria-valuenow={Math.round(chrome.effectiveRadius)}
+            aria-valuetext={`${Math.round(chrome.effectiveRadius)}px radius`}
+            className={reviewStyles.radiusGrip}
+            style={{
+              left: `${chrome.radiusGrip.inset}px`,
+              top: `${chrome.radiusGrip.inset}px`,
+            }}
+            onPointerDown={startRadiusDrag}
+            onKeyDown={handleRadiusKeyDown}
+            onClick={e => e.stopPropagation()}
+          >
+            <span className={reviewStyles.radiusGripDot} />
+          </button>
+        )}
+
+        {/* Interactive Resize Handles */}
+        {!isInlineEditing && !isDraggingMove && (
+          <>
+            {ALL_8_HANDLES.map(h => {
+              if (!chrome.visibleHandles.includes(h.dir)) return null;
+              const isCorner = ['nw', 'ne', 'se', 'sw'].includes(h.dir);
+              const isArc = (chrome.variant === 'arc' || chrome.variant === 'circle') && isCorner;
+
+              let customStyle: React.CSSProperties | undefined = undefined;
+              if (isArc) {
+                const corner = h.dir as 'nw' | 'ne' | 'se' | 'sw';
+                const arc = chrome.variant === 'circle'
+                  ? buildCircleArcPath(corner, currentW, zoomVal)
+                  : buildCornerArcPath(corner, currentW, currentH, chrome.outlineRadii, zoomVal);
+                customStyle = {
+                  left: `${arc.center.x}px`,
+                  top: `${arc.center.y}px`,
+                  transform: 'translate(-50%, -50%)',
+                };
+              }
+
+              const cursorClass =
+                h.dir === 'ne' || h.dir === 'sw'
+                  ? reviewStyles.westCorner
+                  : h.dir === 'nw' || h.dir === 'se'
+                  ? reviewStyles.eastCorner
+                  : '';
+
+              return (
+                <button
+                  key={h.dir}
+                  type="button"
+                  role="slider"
+                  aria-label={h.label}
+                  title={h.title}
+                  aria-pressed={isResizing && resizeHandle === h.dir}
+                  className={`${reviewStyles.resizeHandle} ${h.styleClass} ${cursorClass}`}
+                  style={customStyle}
+                  onPointerDown={e => startResize(h.dir, e)}
+                  onKeyDown={resizeWithKeyboard}
+                  onClick={e => e.stopPropagation()}
+                >
+                  {isArc ? (
+                    <span className={reviewStyles.handleHitArea} />
+                  ) : !isCorner && (chrome.variant === 'arc' || chrome.variant === 'capsule') ? (
+                    <span
+                      className={`${reviewStyles.handleBar} ${
+                        h.dir === 'n' || h.dir === 's' ? reviewStyles.handleBarH : reviewStyles.handleBarV
+                      }`}
+                    />
+                  ) : (
+                    <span className={reviewStyles.handleDot} />
+                  )}
+                </button>
+              );
+            })}
+          </>
+        )}
+      </div>
+    );
   };
 
 

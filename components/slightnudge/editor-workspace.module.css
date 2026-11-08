@@ -267,8 +267,8 @@
   user-select: none;
 }
 .floatingFormatting { z-index: 70; display: flex; flex-direction: column; align-items: center; min-width: max-content; user-select: none; }
-.sourceSelection { position: relative; border: 1px solid #0ccb8b; border-radius: 2px; pointer-events: none; }
-.sourceSelectionOutline { border-style: dashed !important; }
+.sourceSelection { position: relative; border: 0; pointer-events: none; }
+.sourceSelectionOutline { border-style: none !important; }
 .sourceLayer:disabled { cursor: default; opacity: .55; }
 .sourceSelection .moveAnchor, .sourceSelection .edgeResizeHandle, .sourceSelection .cornerResizeHandle, .sourceSelection .resizeHandle { pointer-events: auto; }
 .sourceLayer { display: flex; align-items: center; gap: 8px; width: 100%; min-height: 30px; padding: 5px 8px; border: 0; border-radius: 5px; background: transparent; text-align: left; cursor: pointer; }
@@ -596,6 +596,200 @@
   z-index: 100;
   pointer-events: none;
   box-shadow: 0 0 2px rgba(12, 203, 139, 0.8);
+}
+
+/* Selection Chrome v2 SVG and Element-Aware Chrome */
+.selectionSvg {
+  position: absolute;
+  inset: -2px;
+  width: calc(100% + 4px);
+  height: calc(100% + 4px);
+  overflow: visible;
+  pointer-events: none;
+  z-index: 20;
+}
+
+.outlineHalo {
+  fill: none;
+  stroke: #ffffff;
+  stroke-width: 3.5px;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: d 140ms ease-out;
+}
+
+.outlineAccent {
+  fill: none;
+  stroke: #0ccb8b;
+  stroke-width: 1.5px;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: d 140ms ease-out;
+}
+
+.outlineDashed {
+  stroke-dasharray: 4 4;
+}
+
+.handleArcHalo {
+  fill: none;
+  stroke: #ffffff;
+  stroke-width: 5px;
+  stroke-linecap: round;
+  pointer-events: none;
+  transition: d 140ms ease-out;
+}
+
+.handleArc {
+  fill: none;
+  stroke: #0ccb8b;
+  stroke-width: 3px;
+  stroke-linecap: round;
+  pointer-events: none;
+  transition: stroke 80ms ease, stroke-width 80ms ease, d 140ms ease-out;
+}
+
+.handleArcActive {
+  stroke: #089c69;
+  stroke-width: 4px;
+}
+
+.handleHitArea {
+  width: 22px;
+  height: 22px;
+  pointer-events: auto;
+}
+
+.handleBar {
+  position: absolute;
+  background: #ffffff;
+  border: 1.5px solid #0ccb8b;
+  border-radius: 9999px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+  pointer-events: none;
+  transform: scale(calc(1 / var(--canvas-zoom, 1)));
+  transform-origin: center center;
+  transition: background 80ms ease, border-color 80ms ease, box-shadow 80ms ease;
+}
+
+.handleBarH {
+  width: 18px;
+  height: 5px;
+}
+
+.handleBarV {
+  width: 5px;
+  height: 18px;
+}
+
+.resizeHandle:hover .handleBar {
+  background: #0ccb8b;
+  border-color: #0ccb8b;
+  box-shadow: 0 0 0 3px rgba(12, 203, 139, 0.25);
+}
+
+.resizeHandle[aria-pressed='true'] .handleBar {
+  background: #089c69;
+  border-color: #089c69;
+  box-shadow: 0 0 0 4px rgba(12, 203, 139, 0.35);
+}
+
+.radiusGrip {
+  position: absolute;
+  z-index: 60;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  touch-action: none;
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  transform: translate(-50%, -50%);
+  cursor: crosshair;
+}
+
+.radiusGripDot {
+  width: 10px;
+  height: 10px;
+  background: #ffffff;
+  border: 1.5px solid #0ccb8b;
+  border-radius: 50%;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: scale(calc(1 / var(--canvas-zoom, 1)));
+  transform-origin: center center;
+  transition: transform 80ms ease, box-shadow 80ms ease, background 80ms ease;
+  pointer-events: none;
+}
+
+.radiusGripDot::after {
+  content: '';
+  width: 4px;
+  height: 4px;
+  background: #0ccb8b;
+  border-radius: 50%;
+  transition: background 80ms ease;
+}
+
+.radiusGrip:hover .radiusGripDot {
+  background: #0ccb8b;
+  border-color: #089c69;
+  box-shadow: 0 0 0 3px rgba(12, 203, 139, 0.25);
+}
+
+.radiusGrip:hover .radiusGripDot::after {
+  background: #ffffff;
+}
+
+.radiusGrip[aria-pressed='true'] .radiusGripDot {
+  background: #089c69;
+  border-color: #089c69;
+  box-shadow: 0 0 0 4px rgba(12, 203, 139, 0.35);
+}
+
+.radiusGrip:focus-visible {
+  outline: 2px solid #0ccb8b;
+  outline-offset: 2px;
+  border-radius: 50%;
+}
+
+.aspectLockBadge {
+  position: absolute;
+  top: -24px;
+  right: 0;
+  z-index: 55;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 6px;
+  border: 1px solid #d6e5d9;
+  border-radius: 6px;
+  background: #ffffff;
+  font-size: 10px;
+  color: #52665a;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.aspectLockBadge:hover {
+  background: #f5f8f4;
+  color: #1e293b;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .outlineHalo,
+  .outlineAccent,
+  .handleArcHalo,
+  .handleArc,
+  .handleBar,
+  .radiusGripDot {
+    transition: none !important;
+  }
 }
 
 /* Live cursor tag */
