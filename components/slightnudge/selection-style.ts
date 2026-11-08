@@ -188,6 +188,162 @@ export function parseBorderRadius(
   return { tl: 0, tr: 0, br: 0, bl: 0 };
 }
 
+export interface NamedRadiusStep {
+  token: string;
+  name: string;
+  px: number;
+}
+
+export const RADIUS_SCALE_STEPS: NamedRadiusStep[] = [
+  { token: 'rounded-none', name: 'none', px: 0 },
+  { token: 'rounded-sm', name: 'sm', px: 2 },
+  { token: 'rounded', name: 'base', px: 4 },
+  { token: 'rounded-md', name: 'md', px: 6 },
+  { token: 'rounded-lg', name: 'lg', px: 8 },
+  { token: 'rounded-xl', name: 'xl', px: 12 },
+  { token: 'rounded-2xl', name: '2xl', px: 16 },
+  { token: 'rounded-3xl', name: '3xl', px: 24 },
+  { token: 'rounded-full', name: 'full', px: 9999 },
+];
+
+export function findNearestRadiusStep(px: number, maxRadius: number): NamedRadiusStep {
+  if (px <= 1) return RADIUS_SCALE_STEPS[0];
+  if (px >= maxRadius - 2) return RADIUS_SCALE_STEPS[RADIUS_SCALE_STEPS.length - 1];
+
+  let closest = RADIUS_SCALE_STEPS[0];
+  let minDiff = Infinity;
+  for (const step of RADIUS_SCALE_STEPS) {
+    const targetPx = step.token === 'rounded-full' ? maxRadius : step.px;
+    const diff = Math.abs(px - targetPx);
+    if (diff < minDiff) {
+      minDiff = diff;
+      closest = step;
+    }
+  }
+  return closest;
+}
+
+/**
+ * Build SVG path for rounded rectangle offset 2px outside element.
+ */
+export function buildRoundedRectPath(
+  x: number,
+  y: number,
+  w: number,
+  h: number,
+  radii: CornerRadii
+): string {
+  const maxR = Math.min(w, h) / 2;
+  const tl = Math.max(0, Math.min(radii.tl, maxR));
+  const tr = Math.max(0, Math.min(radii.tr, maxR));
+  const br = Math.max(0, Math.min(radii.br, maxR));
+  const bl = Math.max(0, Math.min(radii.bl, maxR));
+
+  return (
+    `M ${x + tl} ${y} ` +
+    `H ${x + w - tr} ` +
+    (tr > 0 ? `A ${tr} ${tr} 0 0 1 ${x + w} ${y + tr} ` : `L ${x + w} ${y} `) +
+    `V ${y + h - br} ` +
+    (br > 0 ? `A ${br} ${br} 0 0 1 ${x + w - br} ${y + h} ` : `L ${x + w} ${y + h} `) +
+    `H ${x + bl} ` +
+    (bl > 0 ? `A ${bl} ${bl} 0 0 1 ${x} ${y + h - bl} ` : `L ${x} ${y + h} `) +
+    `V ${y + tl} ` +
+    (tl > 0 ? `A ${tl} ${tl} 0 0 1 ${x + tl} ${y} ` : `L ${x} ${y} `) +
+    `Z`
+  );
+}
+
+/**
+ * Build curved corner arc path hugging corner curve within 1px.
+ * Arc length is clamped between 14 and 28 screen px.
+ */
+export function buildCornerArcPath(
+  corner: 'nw' | 'ne' | 'se' | 'sw',
+  width: number,
+  height: number,
+  cornerRadii: CornerRadii,
+  zoom: number = 1
+): { path: string; length: number; center: { x: number; y: number } } {
+  const z = Math.max(0.01, zoom);
+  const rBase =
+    corner === 'nw'
+      ? cornerRadii.tl
+      : corner === 'ne'
+      ? cornerRadii.tr
+      : corner === 'se'
+      ? cornerRadii.br
+      : cornerRadii.bl;
+
+  const maxR = Math.min(width, height) / 2;
+  const r = Math.min(rBase, maxR);
+  const R = r + 2;
+
+  let xc = 0;
+  let yc = 0;
+  let diagAngle = 0;
+
+  if (corner === 'nw') {
+    xc = r;
+    yc = r;
+    diagAngle = 1.25 * Math.PI;
+  } else if (corner === 'ne') {
+    xc = width - r;
+    yc = r;
+    diagAngle = 1.75 * Math.PI;
+  } else if (corner === 'se') {
+    xc = width - r;
+    yc = height - r;
+    diagAngle = 0.25 * Math.PI;
+  } else {
+    // sw
+    xc = r;
+    yc = height - r;
+    diagAngle = 0.75 * Math.PI;
+  }
+
+  // Desired arc length clamped to 14 - 28 screen px
+  const maxArcLength = R * z * (Math.PI / 2);
+  const Lscreen = Math.max(14, Math.min(28, maxArcLength));
+  const delta = Math.min(Math.PI / 2, Lscreen / (R * z));
+
+  const a1 = diagAngle - delta / 2;
+  const a2 = diagAngle + delta / 2;
+
+  const p1x = xc + R * Math.cos(a1);
+  const p1y = yc + R * Math.sin(a1);
+  const p2x = xc + R * Math.cos(a2);
+  const p2y = yc + R * Math.sin(a2);
+
+  const path = `M ${p1x.toFixed(2)} ${p1y.toFixed(2)} A ${R.toFixed(2)} ${R.toFixed(2)} 0 0 1 ${p2x.toFixed(2)} ${p2y.toFixed(2)}`;
+
+  // Handle position for keyboard/hit center
+  const centerDiagX = xc + R * Math.cos(diagAngle);
+  const centerDiagY = yc + R * Math.sin(diagAngle);
+
+  return {
+    path,
+    length: Lscreen,
+    center: { x: centerDiagX, y: centerDiagY },
+  };
+}
+
+/**
+ * Build diagonal circle arc path for circle variant.
+ */
+export function buildCircleArcPath(
+  corner: 'nw' | 'ne' | 'se' | 'sw',
+  diameter: number,
+  zoom: number = 1
+): { path: string; length: number; center: { x: number; y: number } } {
+  const radii: CornerRadii = {
+    tl: diameter / 2,
+    tr: diameter / 2,
+    br: diameter / 2,
+    bl: diameter / 2,
+  };
+  return buildCornerArcPath(corner, diameter, diameter, radii, zoom);
+}
+
 /**
  * Pure function: Given an element's geometry and styles, resolve selection variant,
  * outline radii, visible handles, aspect lock, and radius grip configuration.

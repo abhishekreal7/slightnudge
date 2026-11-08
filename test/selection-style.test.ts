@@ -3,6 +3,10 @@ import assert from 'node:assert/strict';
 import {
   selectionStyleFor,
   parseBorderRadius,
+  buildRoundedRectPath,
+  buildCornerArcPath,
+  RADIUS_SCALE_STEPS,
+  findNearestRadiusStep,
   type SelectionInfo,
   type SelectionChromeStyle,
 } from '../components/slightnudge/selection-style';
@@ -345,5 +349,44 @@ describe('selectionStyleFor decision engine', () => {
 
     const resZero = selectionStyleFor({ width: 0, height: 0, tag: 'div' });
     assert.equal(resZero.radiusGrip.visible, false);
+  });
+
+  // 49-53: Geometry and arc tests
+  describe('Geometry calculations', () => {
+    it('49. buildRoundedRectPath outputs valid closed SVG path', () => {
+      const p = buildRoundedRectPath(-2, -2, 104, 104, { tl: 10, tr: 10, br: 10, bl: 10 });
+      assert.equal(p.startsWith('M 8 -2'), true);
+      assert.equal(p.endsWith('Z'), true);
+      assert.equal(p.includes('A 10 10'), true);
+    });
+
+    it('50. buildCornerArcPath stays within 1px of corner radius curve', () => {
+      const W = 120, H = 80;
+      const r = 16;
+      const radii = { tl: r, tr: r, br: r, bl: r };
+      for (const corner of ['nw', 'ne', 'se', 'sw'] as const) {
+        const arc = buildCornerArcPath(corner, W, H, radii, 1.0);
+        assert.equal(arc.length >= 14 && arc.length <= 28, true);
+        // Verify center point distance to corner center equals R = r + 2 within 0.1px
+        const xc = corner.includes('w') ? r : W - r;
+        const yc = corner.includes('n') ? r : H - r;
+        const dist = Math.hypot(arc.center.x - xc, arc.center.y - yc);
+        assert.ok(Math.abs(dist - (r + 2)) < 0.1, `Corner ${corner} arc drifted: ${dist} vs ${r + 2}`);
+      }
+    });
+
+    it('51. radius scale steps contain Tailwind presets from none to full', () => {
+      assert.equal(RADIUS_SCALE_STEPS.length, 9);
+      assert.equal(RADIUS_SCALE_STEPS[0].token, 'rounded-none');
+      assert.equal(RADIUS_SCALE_STEPS[RADIUS_SCALE_STEPS.length - 1].token, 'rounded-full');
+    });
+
+    it('52. findNearestRadiusStep snaps accurately to nearest step', () => {
+      assert.equal(findNearestRadiusStep(0, 50).token, 'rounded-none');
+      assert.equal(findNearestRadiusStep(3.2, 50).token, 'rounded'); // 3.2 is closer to 4 than 2
+      assert.equal(findNearestRadiusStep(7.8, 50).token, 'rounded-lg'); // 7.8 is close to 8
+      assert.equal(findNearestRadiusStep(15, 50).token, 'rounded-2xl'); // 15 is close to 16
+      assert.equal(findNearestRadiusStep(49, 50).token, 'rounded-full'); // 49 of 50 is full
+    });
   });
 });
