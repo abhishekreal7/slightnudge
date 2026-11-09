@@ -90,7 +90,7 @@ async function runOutlineDragBrowserTests() {
 
     // 3. Test outline drag behavior (zero DOM style mutation during drag)
     console.log('3. Testing drag: target style must NOT mutate during drag...');
-    const handle = page.locator('button[aria-label="Resize width from bottom right"]').first();
+    const handle = page.locator('button[aria-label="Resize width from right"], button[aria-label="Resize width from bottom right"]').first();
     await handle.waitFor({ state: 'visible', timeout: 5000 });
     const box = await handle.boundingBox();
     assert.ok(box, 'Resize handle bounding box must exist');

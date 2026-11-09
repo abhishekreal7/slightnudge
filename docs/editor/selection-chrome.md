@@ -107,3 +107,4 @@ An audit of recent commits reveals existing prototypes and explorations:
   - Calls existing client preview/save on release; `Escape` restores original.
 - **Morphing Transitions**:
   - 120–160ms ease-out transitions between variants with 2px hysteresis to prevent edge jitter.
+

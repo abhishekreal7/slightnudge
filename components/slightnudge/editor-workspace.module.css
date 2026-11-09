@@ -267,8 +267,8 @@
   user-select: none;
 }
 .floatingFormatting { z-index: 70; display: flex; flex-direction: column; align-items: center; min-width: max-content; user-select: none; }
-.sourceSelection { position: relative; border: 0; pointer-events: none; }
-.sourceSelectionOutline { border-style: none !important; }
+.sourceSelection { position: relative; border-style: solid; border-width: 0; border-color: #0ccb8b; pointer-events: none; }
+.sourceSelectionOutline { border-style: dashed !important; }
 .sourceLayer:disabled { cursor: default; opacity: .55; }
 .sourceSelection .moveAnchor, .sourceSelection .edgeResizeHandle, .sourceSelection .cornerResizeHandle, .sourceSelection .resizeHandle { pointer-events: auto; }
 .sourceLayer { display: flex; align-items: center; gap: 8px; width: 100%; min-height: 30px; padding: 5px 8px; border: 0; border-radius: 5px; background: transparent; text-align: left; cursor: pointer; }
@@ -532,8 +532,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 20px;
-  height: 20px;
+  width: calc(22px / var(--canvas-zoom, 1));
+  height: calc(22px / var(--canvas-zoom, 1));
+  min-width: 20px;
+  min-height: 20px;
   transform: translate(-50%, -50%);
   transform-origin: center center;
 }
@@ -655,8 +657,10 @@
 }
 
 .handleHitArea {
-  width: 22px;
-  height: 22px;
+  width: calc(22px / var(--canvas-zoom, 1));
+  height: calc(22px / var(--canvas-zoom, 1));
+  min-width: 20px;
+  min-height: 20px;
   pointer-events: auto;
 }
 
@@ -705,8 +709,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 24px;
-  height: 24px;
+  width: calc(22px / var(--canvas-zoom, 1));
+  height: calc(22px / var(--canvas-zoom, 1));
+  min-width: 20px;
+  min-height: 20px;
   transform: translate(-50%, -50%);
   cursor: crosshair;
 }

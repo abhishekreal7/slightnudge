@@ -82,8 +82,14 @@ export function parseBorderRadius(
     if (!str || str === '0') return 0;
 
     // 9999px or full pill
-    if (str.includes('9999') || str === 'full') {
+    if (str.includes('9999') || str === 'full' || str === 'rounded-full') {
       return maxAllowed;
+    }
+
+    // Tailwind class names support (rounded-lg, rounded-md, rounded-sm, etc.)
+    const step = RADIUS_SCALE_STEPS.find(s => s.token === str || s.name === str);
+    if (step) {
+      return step.token === 'rounded-full' ? maxAllowed : Math.min(step.px, maxAllowed);
     }
 
     // Percentage: relative to min dimension

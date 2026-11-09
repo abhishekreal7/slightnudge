@@ -139,6 +139,8 @@ export async function startServer(wsDir: string, port: number, mode: 'dev' | 'pr
     windowsHide: true,
     stdio: ['ignore', 'pipe', 'pipe'],
   });
+  serverProc.stdout?.resume();
+  serverProc.stderr?.resume();
 
   let stopped = false;
   const stop = async () => {
