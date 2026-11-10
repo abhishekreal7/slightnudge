@@ -1,6 +1,6 @@
 # SlightNudge Editor State: Geometry Core & UI Integration Sprint
 
-Built atop `design/editor-geometry` (`ef46aac`) on branch `design/editor-geometry-integration`. Connects UI manipulation, selection chrome, canvas zoom anchoring, dock avoidance, and overlay flow reorder directly to `lib/editor/geometry`, eliminating duplicated inline geometry math and fixing real multi-zoom coordinate/snapping/reflow bugs while keeping `lib/slightnudge/**` and `app/api/**` untouched.
+Built atop `design/editor-geometry` (`ef46aac`) on branch `design/editor-geometry-integration`. Connects UI manipulation, selection chrome, canvas zoom anchoring, dock avoidance, overlay flow reorder, and cross-origin preview transform chains directly to `lib/editor/geometry`, eliminating duplicated inline geometry math and fixing real multi-zoom/cross-origin/snapping/reflow bugs while keeping `app/api/**` untouched and preserving `SOURCE_CANVAS_PROTOCOL = 19`.
 
 ---
 
@@ -28,16 +28,25 @@ Built atop `design/editor-geometry` (`ef46aac`) on branch `design/editor-geometr
    - **Iframe Focus `Escape` Race & Stale Overlay Size (`EditorWorkspace.tsx`)**: Added `focus({ preventScroll: true })` to `startResize`/`startRadiusDrag`, guarded `receiveSourceText`'s `'Escape'` handler with `cancelActiveDragRef` so pressing `Escape` cancels drag without unmounting captured handles, cleared inline `width`/`height` on `onPointerUp`/`cancelDrag`, and keyed `<div key={layerKey}>` using `selection.rect`.
    - **Rotated Element AABB Selection & Handle Cursor Misalignment (`EditorWorkspace.tsx`, `selection-style.ts`)**: Replaced axis-aligned `selection.rect` dimension assumptions on rotated elements with local border-box dimensions from `extractElementTransformChain`, drew oriented SVG quad chrome inset `0` in wrapper space, suppressed unrotated AABB corner arcs when transformed, rotated handle cursors dynamically via `cursorForHandleAngle`, and positioned the `radiusGrip` cleanly inside rotated `nw` corners (`cornerArcRefs` + `radiusGripRef` tracked live on `rAF`).
    - **Dynamic Corner Arc Lag & Studio Window Chrome Polish (`EditorWorkspace.tsx`, CSS modules)**: Synchronized `variant === 'arc'` / `'circle'` corner `<path>` trajectories (`cornerArcRefs`) and zero-transition drag locks (`cleanupVisuals`) during live resize (`<= 3 px` behind outline); framed artboards on a studio dot-matrix canvas (`canvas-stage.module.css`, `source-window.module.css`); refined frosted floating command dock (`30px` unified controls, emerald gradient primary CTA, status pill, `bottom: 78px` panel clearance, `z-index: 95` drawer stacking).
+3. **Cross-Origin Bridge Serialization (Option 2)**:
+   - [`source-canvas-contract.ts`](file:///C:/dev/vibecheck/scratch/editor-safety-port-20261108/lib/slightnudge/source-canvas-contract.ts) & [`SourceProjectCanvas.tsx`](file:///C:/dev/vibecheck/scratch/editor-safety-port-20261108/components/slightnudge/SourceProjectCanvas.tsx): Added optional `SerializedTransformFrame` / `transformChain` on `CanvasLayer` and `SourceSelection` (keeping `SOURCE_CANVAS_PROTOCOL = 19`), with bounded validation/sanitization (`<= 64` frames, finite numbers, `<= 512`-char CSS strings) on incoming `postMessage` selection/geometry/edit payloads.
+   - [`source-canvas-bridge.ts`](file:///C:/dev/vibecheck/scratch/editor-safety-port-20261108/lib/slightnudge/source-canvas-bridge.ts): Added self-contained `readTransformChain(element)` inside serialized `sourceCanvasRuntime`, emitted `transformChain` from `describe(element)` (`false` in `catalog()`), and relaxed `gesture` `maxWidth` lower bound from `24` to `1` px (`<= 2048`).
+   - [`direct-manipulation-engine.ts`](file:///C:/dev/vibecheck/scratch/editor-safety-port-20261108/components/slightnudge/direct-manipulation-engine.ts) & [`EditorWorkspace.tsx`](file:///C:/dev/vibecheck/scratch/editor-safety-port-20261108/components/slightnudge/EditorWorkspace.tsx): Added `hydrateSerializedTransformChain(frames)` and wired cross-origin fallback (`targetEl === null`) across `renderSourceSelection`, `captureGestureMatrices`, `startDragMove`, and `startResize` (including unrotated local border-box width/height from the hydrated tail frame).
 4. **Tests & Verification**:
-   - `test/geometry-ui-integration.test.ts` (`11/11` unit & contract tests), `test/geometry-ui-integration.browser.test.ts` (`6/6` live Playwright scenarios on `/editor?view=fit`: wheel zoom, `0.5x` snap guide `diff=0.00px`, dynamic corner arc tracking, `gbcrCalls=0`, `apiCalls=0`, zoomed handle suppression, live `Shift` aspect ratio `246x120`, `#geom-rotated` oriented SVG quad `topEdgeSlopeY=82.0px`, `cursor=nwse-resize`, rotated `radiusGrip`, local `+40px` resize `W: 200px × H: 80px`, and panel/dock vertical clearance).
-   - `npm run build` (`next build --webpack`) verified cleanly (`exit 0`, zero tracked/untracked workspace diffs).
-   - `test/outline-drag.browser.test.ts`, `test/geometry/*.test.ts`, `test/selection-style.test.ts` (`52/52`), `test/direct-manipulation-math.test.ts`, `test/outline-drag.test.ts`, `test/direct-manipulation.test.ts`, `test/selection-coordinates.test.ts`, `test/drag-move.test.ts`, and `npm test` verified after final commits.
+   - `test/geometry-ui-integration.test.ts` (`12/12` unit & contract tests), `test/geometry-ui-integration.browser.test.ts` (`8/8` Playwright checks: wheel zoom, `0.5x` snap guide `diff=0.00px`, `gbcrCalls=0`, `apiCalls=0`, zoomed handle suppression, live `Shift` aspect ratio `246x120`, oriented SVG quad `topEdgeSlopeY=82.0px`, `cursor=nwse-resize`, rotated `radiusGrip`, local `+40px` resize `W: 200px × H: 80px`, panel/dock vertical clearance, `iframe.contentDocument === null` rotated chrome & resize fallback, and live cross-origin `127.0.0.1` vs `localhost` bridge oracle `err=0.000px` with `maxWidth=12px`).
+   - `test/geometry/*.test.ts` + regression suites (`107/107` including `browser-oracle.test.ts` 1050 cases `<= 0.5px` and `mutations.test.ts` 8/8 killed mutants), geometry coverage (`100.00%` lines, `96.60%` branches, `100/100` unit/property tests), sequential bridge & UI tests (`76/76` including `bridge-ready-handshake.browser.test.ts`), `test/outline-drag.browser.test.ts` (`5/5`), `npx tsc --noEmit` (`exit 0`), `npm run build` (`46/46` pages, `exit 0`), and `npm test` (`72/72` platform tests).
+   - **Pre-Merge Qualification (`test/run-baseline-benchmark.ts` 2000-node heavy benchmark + `test/unified-editor.browser.ts --round=1`)**:
+     - Heavy 2000-node DOM gesture benchmark (`os.tmpdir()/sn-heavy-bench-*`): `resize` `medianFrameMs=16.7ms`, `p95FrameMs=16.7ms`, `shareOver33MsPct=0.4%`, `longtasksOver50Count=1` (`maxLongtaskMs=68ms`), `layoutReadsPerFrame=1.94`, `pointerToVisualLatencyMs=1ms`; `move` `medianFrameMs=16.7ms`, `p95FrameMs=16.7ms`, `shareOver33MsPct=0.4%`, `longtasksOver50Count=1` (`maxLongtaskMs=75ms`), `layoutReadsPerFrame=1.03`, `pointerToVisualLatencyMs=1ms`.
+     - `test/unified-editor.browser.ts --round=1`: Passed `4/4` HTTP redirects, `4/4` migrations (`local full`, `imported full`, `local fit`, `imported fit`), and `4/4` shared-instance `view=fit` workflows (`local Studio`, `local window`, `imported Studio`, `imported window`).
 
-### Not Proven / Out of Scope for this Sprint
-1. **Engine / AST Write Execution & Cross-Origin Bridge Chains (`lib/slightnudge/**`, `app/api/**`)**:
-   - Off-limits boundary preserved: backend preview/apply/reorder routes and `source-canvas-bridge.ts` remain untouched. Cross-origin iframes (where `sourceCanvas.current?.getDocument?.()` returns `null`) fall back gracefully to axis-aligned `selection.rect` chrome.
-2. **2000-Node Heavy Production Latency Benchmark & Documented 2D Affine Limits**:
-   - `npm run build` (`next build --webpack`) passed after code edits; 2000-node heavy production runtime frame benchmark (`STATE.md` from `design/editor-selection`) was not re-benchmarked; CSS 3D transforms (`rotateX`/`rotateY`) and CSS `zoom` remain documented limits per [`docs/editor/geometry.md`](file:///C:/dev/vibecheck/scratch/editor-safety-port-20261108/docs/editor/geometry.md).
+### Not Proven / Pre-Existing Failures & Documented Limits
+1. **Pre-Existing Upstream Harness Failures (`ef46aac`)**:
+   - `test/move-css-compatibility.test.ts`: Fails at line 16 (`preview` returns `false`) with `'This part of the page is still loading. Let it finish before editing again.'` because `waitForTargets` in `source-canvas-bridge.ts` (already present in `ef46aac`) requires React `__reactFiber$` properties absent on that synthetic HTML page.
+   - `test/unified-editor.browser.ts --round=1`: Completed `4/8` shared-instance workflows (`view=fit` passed `4/4`); `view=full` failed waiting for `Canvas zoom` combobox (which upstream `ef46aac` already renders only when `view === 'fit'`), and `test/step1-selection.test.ts` failed waiting for non-iframe `#target` after `unified-navigation-preload.cjs` rewrote `/fixtures/1` -> `/editor?fixture=1`.
+2. **Merge Target Conflict Blocker (`C:\dev\vibecheck`)**:
+   - Main checkout `C:\dev\vibecheck` (`feat/visual-studio-framer` at `18c0f04`) currently has `48` dirty/untracked paths (`git status --short`) and an active Next.js daemon (`task-6782`) on port `3000`; branch not auto-merged to avoid clobbering uncommitted local state.
+3. **Documented 2D Affine Limits**:
+   - CSS 3D transforms (`rotateX`/`rotateY`) and CSS `zoom` remain documented limits per [`docs/editor/geometry.md`](file:///C:/dev/vibecheck/scratch/editor-safety-port-20261108/docs/editor/geometry.md).
 
 ---
 
@@ -55,13 +64,16 @@ Base tip: `ef46aac` (`docs(editor): update STATE with geometry core sprint proof
 - `3ff0be9`: `docs(editor): update STATE with oriented Quad chrome integration proof`
 - `25a4b81`: `fix(editor): sync live resize corner arcs, oriented radius grip, and elevate studio window layout`
 - `0653961`: `test(editor): assert live dynamic arc tracking, oriented radius grip, and panel/dock clearance`
-- `[Current Commit]`: `docs(editor): update STATE with production build and visual polish proof`
+- `b83e614`: `docs(editor): update STATE with production build and visual polish proof`
+- `92ce3d1`: `feat(editor): serialize transformChain across preview bridge for cross-origin geometry`
+- `aeb872c`: `test(geometry): verify cross-origin transformChain bridge and UI chrome fallback`
+- `[Current Commit]`: `docs(editor): update STATE with Option 2 cross-origin proof and pre-merge qualification`
 
 *(Foundation commits on `design/editor-geometry`: `111b54a`, `6624f9f`, `5b79406`, `e5f04e9`, `a42f6b2`, `ef46aac`.)*
 
 ---
 
-## 3. Off-Limits Path Verification Check
+## 3. Path & Scope Verification Check
 
 Verification command:
 ```bash
@@ -73,6 +85,7 @@ Modified/added paths:
 components/slightnudge/CanvasStage.tsx
 components/slightnudge/EditorWorkspace.tsx
 components/slightnudge/SlightNudgeOverlay.tsx
+components/slightnudge/SourceProjectCanvas.tsx
 components/slightnudge/canvas-stage.module.css
 components/slightnudge/direct-manipulation-engine.ts
 components/slightnudge/editor-workspace.module.css
@@ -81,27 +94,30 @@ components/slightnudge/selection-style.ts
 components/slightnudge/source-window.module.css
 components/slightnudge/useWindowDock.ts
 docs/editor/STATE.md
+lib/slightnudge/source-canvas-bridge.ts
+lib/slightnudge/source-canvas-contract.ts
 test/geometry-ui-integration.browser.test.ts
 test/geometry-ui-integration.test.ts
 ```
 
-Audit against off-limits list:
-- `lib/slightnudge/**`: **UNTOUCHED**
+Audit against scope rules:
+- `lib/slightnudge/source-canvas-contract.ts` & `lib/slightnudge/source-canvas-bridge.ts`: **AUTHORIZED under Option 2** (`SOURCE_CANVAS_PROTOCOL = 19` unchanged)
+- All other `lib/slightnudge/**` files: **UNTOUCHED**
 - `app/api/**`: **UNTOUCHED**
 - `lib/editor/geometry/**`, `docs/editor/geometry.md`, `docs/THIRD_PARTY.md`: **UNCHANGED** (`ef46aac` intact)
 - `next-env.d.ts` / scratch artifacts: **UNTOUCHED / UNCOMMITTED**
 
-**Result**: **ZERO** off-limits paths modified.
+**Result**: **ZERO** unauthorized paths modified.
 
 ---
 
 ## 4. Temporary Environments and Cleanup Confirmation
 
-- Browser test servers launched exclusively on free ephemeral ports (`findFreePort`, `3860+`, `3910+`) inside `os.tmpdir()` workspaces (`sn-outline-test-*`, `sn-geom-ui-test-*`) and cleaned up (junction unlinked + `rmSync` + server stopped + browser closed) in `finally` blocks.
-- Port `3000` dev server in main workspace was never contacted or stopped.
+- Browser test and qualification servers launched exclusively on free ephemeral ports (`findFreePort`, `3860+`, `3910+`, `3940+`) inside disposable `os.tmpdir()` workspaces (`sn-outline-test-*`, `sn-geom-ui-test-*`, `sn-heavy-bench-*`, `sn-review-consent-*`) and removed afterward; temporary `docs/unified-editor-evidence` outputs were deleted so `git status --short` is empty.
+- Port `3000` dev server (`task-6782`) in `C:\dev\vibecheck` was never contacted or stopped.
 
 ---
 
 ## 5. Recommended Next Step
 
-Review and merge `design/editor-geometry-integration` (and/or, once `lib/slightnudge/**` is in scope, emit `ElementTransformFrame[]` ancestor chains over `source-canvas-bridge.ts` for cross-origin sandboxes where `getDocument()` is unavailable).
+Cleanly commit, stash, or discard the 48 uncommitted/untracked entries in `C:\dev\vibecheck` (`feat/visual-studio-framer`, `18c0f04`), then fast-forward/merge `design/editor-geometry-integration` into `feat/visual-studio-framer`.
