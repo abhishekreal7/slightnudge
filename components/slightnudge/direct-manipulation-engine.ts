@@ -49,6 +49,7 @@ import {
   type ElementTransformFrame,
   type Quad,
 } from '../../lib/editor/geometry';
+import type { SerializedTransformFrame } from '../../lib/slightnudge/source-canvas-contract';
 
 export type HandleDirection = 'nw' | 'n' | 'ne' | 'e' | 'se' | 's' | 'sw' | 'w';
 
@@ -1033,6 +1034,57 @@ function parseTransformOriginPx(raw: string | null | undefined, width: number, h
     x: Number.isFinite(ox) ? ox : width / 2,
     y: Number.isFinite(oy) ? oy : height / 2,
   };
+}
+
+/**
+ * Hydrates a bridge-serialized `SerializedTransformFrame[]` ancestor chain (from cross-origin
+ * postMessage payloads) into pure `ElementTransformFrame[]` for `lib/editor/geometry`, applying
+ * finite-number guards and a 64-frame cap.
+ */
+export function hydrateSerializedTransformChain(
+  serialized: readonly SerializedTransformFrame[] | null | undefined
+): ElementTransformFrame[] {
+  if (!Array.isArray(serialized) || serialized.length === 0) return [];
+  const cap = Math.min(serialized.length, 64);
+  const finiteOrZero = (value: unknown): number =>
+    typeof value === 'number' && Number.isFinite(value) ? value : 0;
+  const nonNegOrZero = (value: unknown): number =>
+    typeof value === 'number' && Number.isFinite(value) && value >= 0 ? value : 0;
+  const boundedCssStr = (value: unknown): string | undefined =>
+    typeof value === 'string' && value.length <= 512 ? value : undefined;
+
+  const frames: ElementTransformFrame[] = [];
+  for (let i = 0; i < cap; i++) {
+    const raw = serialized[i];
+    if (!raw || typeof raw !== 'object') continue;
+    const width = nonNegOrZero(raw.width);
+    const height = nonNegOrZero(raw.height);
+    const transform = composeCssTransformMatrix({
+      translate: boundedCssStr(raw.translate),
+      rotate: boundedCssStr(raw.rotate),
+      scale: boundedCssStr(raw.scale),
+      transform: boundedCssStr(raw.transform),
+    });
+    const ox =
+      typeof raw.transformOriginX === 'number' && Number.isFinite(raw.transformOriginX)
+        ? raw.transformOriginX
+        : width / 2;
+    const oy =
+      typeof raw.transformOriginY === 'number' && Number.isFinite(raw.transformOriginY)
+        ? raw.transformOriginY
+        : height / 2;
+    frames.push({
+      offsetX: finiteOrZero(raw.offsetX),
+      offsetY: finiteOrZero(raw.offsetY),
+      width,
+      height,
+      scrollLeft: finiteOrZero(raw.scrollLeft),
+      scrollTop: finiteOrZero(raw.scrollTop),
+      transform,
+      transformOrigin: { x: ox, y: oy },
+    });
+  }
+  return frames;
 }
 
 /**

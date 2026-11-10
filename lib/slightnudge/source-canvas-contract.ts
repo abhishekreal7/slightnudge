@@ -20,9 +20,25 @@ export function resolveResponsiveScopes(scopes: { name: string; media: string; m
 }
 export interface CanvasLocator { path: string; line: number; column: number; elementId?: string; instance?: string }
 export interface CanvasRenderPatch { icon?: { before: import('./icon-shape-values').IconShape; after: import('./icon-shape-values').IconShape; beforeClassName: string; afterClassName: string }; nextImage?: boolean; before: CanvasLocator; after: CanvasLocator; className?: string; text?: string; attributes?: Record<string, string | null>; beforeAttributes?: Record<string, string | null>; beforeClassName?: string; beforeText?: string; css?: string; computed?: Record<string, string>; viewportWidth?: number; order?: CanvasLocator[]; orderAfter?: CanvasLocator[]; beforeOrder?: CanvasLocator[] }
+export interface SerializedTransformFrame {
+  offsetX: number;
+  offsetY: number;
+  width: number;
+  height: number;
+  scrollLeft: number;
+  scrollTop: number;
+  translate?: string;
+  rotate?: string;
+  scale?: string;
+  transform?: string;
+  transformOriginX?: number;
+  transformOriginY?: number;
+}
+
 export interface CanvasLayer {
   key: string; parentKey?: string; name: string; tagName: string; instances?: number;
   path: string; line: number; column: number; elementId?: string; instance?: string;
   className: string; textContent: string; attributes?: Record<string, string | null>; computed: Record<string, string>;
   rect: { top: number; left: number; width: number; height: number };
+  transformChain?: SerializedTransformFrame[];
 }

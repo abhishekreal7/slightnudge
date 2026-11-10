@@ -78,7 +78,80 @@ function sourceCanvasRuntime(continuous: boolean, repositoryId = '', protocol = 
     const button = target.closest<HTMLElement>('a[data-source-file],button[data-source-file]');
     return button && (editing === button || labelNode(button)) && !target.closest('img') ? button : target.closest<HTMLElement>('[data-source-file]');
   };
-  const describe = (element: HTMLElement) => {
+  const isIdentityCssTransform = (value: string) => !value || value === 'none' || value === 'matrix(1, 0, 0, 1, 0, 0)';
+  const readTransformChain = (targetEl: HTMLElement) => {
+    const domNodes: HTMLElement[] = [];
+    let cursor: HTMLElement | null = targetEl;
+    let steps = 0;
+    while (cursor && steps++ < 128) { domNodes.push(cursor); cursor = cursor.parentElement; }
+    domNodes.reverse();
+    const docEl = document.documentElement, body = document.body;
+    const bodyStyle = body ? getComputedStyle(body) : null;
+    const isBodyPlainStatic = !body || !bodyStyle ? true : (
+      bodyStyle.position === 'static' &&
+      isIdentityCssTransform(bodyStyle.translate || '') &&
+      isIdentityCssTransform(bodyStyle.rotate || '') &&
+      isIdentityCssTransform(bodyStyle.scale || '') &&
+      isIdentityCssTransform(bodyStyle.transform || '') &&
+      body.clientLeft === 0 && body.clientTop === 0 && body.scrollLeft === 0 && body.scrollTop === 0
+    );
+    const frames: any[] = [];
+    for (let i = 0; i < domNodes.length; i++) {
+      const el = domNodes[i], st = getComputedStyle(el);
+      const width = el.offsetWidth || 0, height = el.offsetHeight || 0;
+      const originParts = (st.transformOrigin || '').trim().split(/\s+/);
+      const ox = Number.parseFloat(originParts[0] || ''), oy = Number.parseFloat(originParts[1] || '');
+      let offsetX = 0, offsetY = 0;
+      if (i === 0) {
+        offsetX = el === docEl ? 0 : el.offsetLeft || 0;
+        offsetY = el === docEl ? 0 : el.offsetTop || 0;
+      } else {
+        const parent = domNodes[i - 1];
+        if (el === body && parent === docEl) {
+          if (!isBodyPlainStatic || el === targetEl) {
+            offsetX = Number.parseFloat(st.marginLeft) || 0;
+            offsetY = Number.parseFloat(st.marginTop) || 0;
+          }
+        } else {
+          const op = el.offsetParent as HTMLElement | null;
+          if (op === parent) {
+            offsetX = parent === body ? el.offsetLeft : el.offsetLeft + parent.clientLeft;
+            offsetY = parent === body ? el.offsetTop : el.offsetTop + parent.clientTop;
+          } else if (op === parent.offsetParent) {
+            offsetX = el.offsetLeft - parent.offsetLeft;
+            offsetY = el.offsetTop - parent.offsetTop;
+          } else if (op === null && st.position === 'fixed') {
+            offsetX = el.offsetLeft;
+            offsetY = el.offsetTop;
+          } else {
+            const opIdx = op ? domNodes.indexOf(op) : -1;
+            if (opIdx >= 0 && opIdx < i) {
+              let sumPrevX = 0, sumPrevY = 0;
+              for (let k = opIdx + 1; k < i; k++) { sumPrevX += frames[k].offsetX; sumPrevY += frames[k].offsetY; }
+              const opBorderX = op && op !== body ? op.clientLeft : 0, opBorderY = op && op !== body ? op.clientTop : 0;
+              offsetX = el.offsetLeft + opBorderX - sumPrevX;
+              offsetY = el.offsetTop + opBorderY - sumPrevY;
+            } else {
+              offsetX = el.offsetLeft - parent.offsetLeft;
+              offsetY = el.offsetTop - parent.offsetTop;
+            }
+          }
+        }
+      }
+      frames.push({
+        offsetX, offsetY, width, height,
+        scrollLeft: el.scrollLeft || 0, scrollTop: el.scrollTop || 0,
+        translate: st.translate && st.translate !== 'none' ? st.translate : undefined,
+        rotate: st.rotate && st.rotate !== 'none' ? st.rotate : undefined,
+        scale: st.scale && st.scale !== 'none' ? st.scale : undefined,
+        transform: st.transform && st.transform !== 'none' ? st.transform : undefined,
+        transformOriginX: Number.isFinite(ox) ? ox : width / 2,
+        transformOriginY: Number.isFinite(oy) ? oy : height / 2,
+      });
+    }
+    return frames.slice(-64);
+  };
+  const describe = (element: HTMLElement, includeChain = true) => {
     const rect = element.getBoundingClientRect(), style = getComputedStyle(element);
     let parent = element.parentElement;
     while (parent && parent !== root && !parent.hasAttribute('data-source-file')) parent = parent.parentElement;
@@ -87,11 +160,12 @@ function sourceCanvasRuntime(continuous: boolean, repositoryId = '', protocol = 
       tagName, sourceTagName: tagName, className: element.getAttribute('class') || '', textContent: text,
       name: (['h1','h2','h3','h4','h5','h6','p','a','button','label'].includes(tagName) ? text.trim().replace(/\s+/g, ' ').slice(0, 60) : (element.getAttribute('class') || '').split(' ').find(value => value.startsWith('sn-playground-'))?.replace('sn-playground-', '').replaceAll('-', ' ') || tagName),
       attributes: element instanceof SVGSVGElement ? Object.fromEntries(['width', 'height', 'stroke-width', 'stroke'].map(name => [name, element.getAttribute(name)])) : element.tagName === 'IMG' ? { src: element.getAttribute('src'), alt: element.getAttribute('alt'), srcSet: element.getAttribute('srcset'), responsive: element.closest('picture') || element.hasAttribute('srcset') ? 'true' : null } : element instanceof HTMLAnchorElement ? { href: element.getAttribute('href'), target: element.getAttribute('target'), rel: element.getAttribute('rel') } : element instanceof HTMLButtonElement ? { type: element.getAttribute('type'), disabled: element.getAttribute('disabled') } : undefined, computed: { ...Object.fromEntries(properties.map(property => [property, style[property as any]])), parentDisplay: element.parentElement ? getComputedStyle(element.parentElement).display : "" },
-      rect: { top: rect.top, left: rect.left, width: rect.width, height: rect.height } };
+      rect: { top: rect.top, left: rect.left, width: rect.width, height: rect.height },
+      transformChain: includeChain ? readTransformChain(element) : undefined };
   };
   const catalog = () => {
     const layers = new Map<string, ReturnType<typeof describe> & { instances: number }>();
-    for (const element of nodes()) { const value = describe(element), existing = layers.get(value.key); if (existing) existing.instances++; else layers.set(value.key, { ...value, instances: 1 }); }
+    for (const element of nodes()) { const value = describe(element, false), existing = layers.get(value.key); if (existing) existing.instances++; else layers.set(value.key, { ...value, instances: 1 }); }
     send('source-tree', { layers: [...layers.values()] });
   };
   const geometry = () => { if (selected?.isConnected) send('source-rect', { selection: describe(selected) }); };
@@ -511,7 +585,7 @@ function sourceCanvasRuntime(continuous: boolean, repositoryId = '', protocol = 
         if (!gesture && typeof message.x === 'number' && !positionMatches(element, base.x, base.y)) throw new Error('This element has a custom or animated transform. Resolve it before using Move.');
         if (!gesture) gesture = { element, style: element.getAttribute('style'), legacyTranslate: legacyTransform };
         if (typeof message.x === 'number' && typeof message.y === 'number' && Math.abs(message.x) <= 2048 && Math.abs(message.y) <= 2048) element.style.translate = `${message.x - (gesture.legacyTranslate ? base.x : 0)}px ${message.y - (gesture.legacyTranslate ? base.y : 0)}px`;
-        if (typeof message.maxWidth === 'number' && message.maxWidth >= 24 && message.maxWidth <= 2048) element.style.maxWidth = `${message.maxWidth}px`;
+        if (typeof message.maxWidth === 'number' && message.maxWidth >= 1 && message.maxWidth <= 2048) element.style.maxWidth = `${message.maxWidth}px`;
         geometry(); reply(true, '', describe(element)); return;
       }
       if (!continuous && ['preview', 'check', 'discard'].includes(message.operation) && (!selected?.isConnected || selected !== element)) throw new Error('The selected rendered instance changed. Select it again.');

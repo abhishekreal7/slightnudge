@@ -23,7 +23,7 @@ import { ComponentProps } from '@/components/slightnudge/ComponentProps';
 import { ActionControls } from '@/components/slightnudge/ActionControls';
 import { ImageContent } from '@/components/slightnudge/ImageContent';
 import { ImageFraming } from '@/components/slightnudge/ImageFraming';
-import type { CanvasLayer, CanvasRenderPatch } from '@/lib/slightnudge/source-canvas-contract';
+import type { CanvasLayer, CanvasRenderPatch, SerializedTransformFrame } from '@/lib/slightnudge/source-canvas-contract';
 import Image from 'next/image';
 import reviewStyles from './editor-workspace.module.css';
 import type { ChangeSetResult } from '@/lib/slightnudge/client';
@@ -117,6 +117,7 @@ import {
   transformRectToQuad,
   vecAdd,
   type CanvasSpace,
+  type ElementTransformFrame,
   type Matrix2D,
 } from '@/lib/editor/geometry';
 import {
@@ -125,6 +126,7 @@ import {
   createDirectSnapSession,
   extractElementTransformChain,
   findSourceElementInDocument,
+  hydrateSerializedTransformChain,
   isAffineNonTrivial,
   roundMoveTranslation,
   snapRectInSession,
@@ -1077,11 +1079,17 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
     return siblings;
   };
 
-  const captureGestureMatrices = (layerKey: string, targetEl: HTMLElement | null, scale: number): {
+  const captureGestureMatrices = (
+    layerKey: string,
+    targetEl: HTMLElement | null,
+    scale: number,
+    serializedChain?: readonly SerializedTransformFrame[]
+  ): {
     artboardToMain: Matrix2D;
     stageToScreen: Matrix2D;
     elementToScreen: Matrix2D;
     elementToArtboard: Matrix2D;
+    chain: ElementTransformFrame[];
   } => {
     const stageToScreen = canvasToScreenMatrix({ originX: 0, originY: 0, panX: 0, panY: 0, zoom: scale });
     const iframeEl = sourceCanvas.current?.getFrame?.();
@@ -1104,25 +1112,26 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
     }
     let elementToArtboard = IDENTITY_MATRIX;
     let linearLocal = IDENTITY_MATRIX;
-    if (targetEl) {
-      try {
-        const chain = extractElementTransformChain(targetEl);
-        if (chain.length > 0) {
-          const artboardSpace: CanvasSpace = { originX: 0, originY: 0, panX: 0, panY: 0, zoom: 1 };
-          elementToArtboard = buildElementToScreenMatrix(chain, artboardSpace);
-          linearLocal = [
-            elementToArtboard[0],
-            elementToArtboard[1],
-            elementToArtboard[2],
-            elementToArtboard[3],
-            0,
-            0,
-          ];
-        }
-      } catch {}
-    }
+    let chain: ElementTransformFrame[] = [];
+    try {
+      chain = targetEl
+        ? extractElementTransformChain(targetEl)
+        : hydrateSerializedTransformChain(serializedChain);
+      if (chain.length > 0) {
+        const artboardSpace: CanvasSpace = { originX: 0, originY: 0, panX: 0, panY: 0, zoom: 1 };
+        elementToArtboard = buildElementToScreenMatrix(chain, artboardSpace);
+        linearLocal = [
+          elementToArtboard[0],
+          elementToArtboard[1],
+          elementToArtboard[2],
+          elementToArtboard[3],
+          0,
+          0,
+        ];
+      }
+    } catch {}
     const elementToScreen = matMultiply(stageToScreen, linearLocal);
-    return { artboardToMain, stageToScreen, elementToScreen, elementToArtboard };
+    return { artboardToMain, stageToScreen, elementToScreen, elementToArtboard, chain };
   };
 
   // Position movement preserves document flow and never reorders siblings.
@@ -1150,7 +1159,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
 
       const siblings = collectSiblingSnapRects(layerKey);
       const snapSession = createDirectSnapSession(siblings);
-      const { artboardToMain, stageToScreen } = captureGestureMatrices(layerKey, targetEl, zoom);
+      const { artboardToMain, stageToScreen } = captureGestureMatrices(layerKey, targetEl, zoom, actualSelection?.transformChain);
 
       e.preventDefault();
       try {
@@ -1227,14 +1236,28 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
 
     const siblings = collectSiblingSnapRects(key);
     const snapSession = createDirectSnapSession(siblings);
-    const { artboardToMain, elementToScreen, elementToArtboard } = captureGestureMatrices(key, targetEl, zoom);
+    const { artboardToMain, elementToScreen, elementToArtboard, chain } = captureGestureMatrices(
+      key,
+      targetEl,
+      zoom,
+      actualSelection?.transformChain
+    );
+    const localFrame = chain.length > 0 ? chain[chain.length - 1] : null;
     const isNonTrivialTransform = isAffineNonTrivial(elementToArtboard);
     const currentW =
-      (isNonTrivialTransform && targetEl ? targetEl.offsetWidth : elementRefs.current[key]?.offsetWidth) ||
+      (isNonTrivialTransform
+        ? targetEl
+          ? targetEl.offsetWidth
+          : localFrame?.width
+        : elementRefs.current[key]?.offsetWidth) ||
       actualSelection?.rect?.width ||
       672;
     const currentH =
-      (isNonTrivialTransform && targetEl ? targetEl.offsetHeight : elementRefs.current[key]?.offsetHeight) ||
+      (isNonTrivialTransform
+        ? targetEl
+          ? targetEl.offsetHeight
+          : localFrame?.height
+        : elementRefs.current[key]?.offsetHeight) ||
       actualSelection?.rect?.height ||
       114;
     const startLeft = isNonTrivialTransform ? 0 : wrapperLeft;
@@ -3045,7 +3068,9 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
 
     const iframeDoc = sourceCanvas.current?.getDocument?.();
     const targetEl = findSourceElementInDocument(iframeDoc, selection);
-    const transformChain = targetEl ? extractElementTransformChain(targetEl) : [];
+    const transformChain = targetEl
+      ? extractElementTransformChain(targetEl)
+      : hydrateSerializedTransformChain(selection.transformChain);
     const lastFrame = transformChain.length > 0 ? transformChain[transformChain.length - 1] : null;
     const boxW = lastFrame && lastFrame.width > 0 ? lastFrame.width : currentW;
     const boxH = lastFrame && lastFrame.height > 0 ? lastFrame.height : currentH;

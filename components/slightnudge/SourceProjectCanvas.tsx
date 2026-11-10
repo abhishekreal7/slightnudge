@@ -5,7 +5,7 @@ import { readApiJson } from '@/lib/slightnudge/api-response';
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { getClientSessionToken } from '@/lib/slightnudge/client';
-import type { CanvasLayer, CanvasRenderPatch } from '@/lib/slightnudge/source-canvas-contract';
+import type { CanvasLayer, CanvasRenderPatch, SerializedTransformFrame } from '@/lib/slightnudge/source-canvas-contract';
 import { SOURCE_CANVAS_PROTOCOL } from '@/lib/slightnudge/source-canvas-contract';
 import windowStyles from './source-window.module.css';
 import canvasStyles from './imported-canvas.module.css';
@@ -17,6 +17,41 @@ export interface SourceSelection {
   className: string; textContent: string; computed: Record<string, string>;
   attributes?: Record<string, string | null>;
   rect: { top: number; left: number; width: number; height: number };
+  transformChain?: SerializedTransformFrame[];
+}
+
+function sanitizeTransformChain(raw: unknown): SerializedTransformFrame[] | undefined {
+  if (!Array.isArray(raw) || raw.length === 0) return undefined;
+  const result: SerializedTransformFrame[] = [];
+  const cap = Math.min(raw.length, 64);
+  for (let i = 0; i < cap; i++) {
+    const item = raw[i];
+    if (!item || typeof item !== 'object') continue;
+    const f = item as Record<string, unknown>;
+    if (
+      typeof f.offsetX !== 'number' || !Number.isFinite(f.offsetX) ||
+      typeof f.offsetY !== 'number' || !Number.isFinite(f.offsetY) ||
+      typeof f.width !== 'number' || !Number.isFinite(f.width) || f.width < 0 ||
+      typeof f.height !== 'number' || !Number.isFinite(f.height) || f.height < 0 ||
+      typeof f.scrollLeft !== 'number' || !Number.isFinite(f.scrollLeft) ||
+      typeof f.scrollTop !== 'number' || !Number.isFinite(f.scrollTop)
+    ) continue;
+    result.push({
+      offsetX: f.offsetX,
+      offsetY: f.offsetY,
+      width: f.width,
+      height: f.height,
+      scrollLeft: f.scrollLeft,
+      scrollTop: f.scrollTop,
+      translate: typeof f.translate === 'string' && f.translate.length <= 512 ? f.translate : undefined,
+      rotate: typeof f.rotate === 'string' && f.rotate.length <= 512 ? f.rotate : undefined,
+      scale: typeof f.scale === 'string' && f.scale.length <= 512 ? f.scale : undefined,
+      transform: typeof f.transform === 'string' && f.transform.length <= 512 ? f.transform : undefined,
+      transformOriginX: typeof f.transformOriginX === 'number' && Number.isFinite(f.transformOriginX) ? f.transformOriginX : undefined,
+      transformOriginY: typeof f.transformOriginY === 'number' && Number.isFinite(f.transformOriginY) ? f.transformOriginY : undefined,
+    });
+  }
+  return result.length > 0 ? result : undefined;
 }
 export interface SourceCanvasHandle {
   openWindow(): void;
@@ -142,20 +177,27 @@ export const SourceProjectCanvas = forwardRef<SourceCanvasHandle, {
       if (message.type === 'destination-hover' && destinationRef.current) { setDestination(message.selection?.rect ? message.selection : null); return; }
       if (message.type === 'destination-picked' && destinationRef.current && message.selection?.rect && typeof message.selection.path === 'string' && Number.isInteger(message.selection.line) && Number.isInteger(message.selection.column)) { destinationCallback.current?.(message.selection); return; }
       if (message.type === 'selection-refused') { props.current.onNotice(typeof message.reason === 'string' ? message.reason : 'This source element cannot be selected uniquely.'); return; }
-      if (message.type === 'source-rect' && message.selection?.rect) { selected.current = message.selection; setGeometry(message.selection); props.current.onGeometry?.(message.selection); return; }
+      if (message.type === 'source-rect' && message.selection?.rect) {
+        const sanitized = { ...message.selection, transformChain: sanitizeTransformChain(message.selection.transformChain) };
+        selected.current = sanitized; setGeometry(sanitized); props.current.onGeometry?.(sanitized); return;
+      }
       if (['text-draft', 'text-commit', 'text-cancel', 'text-request', 'save-request', 'shortcut'].includes(message.type)) { props.current.onText?.(message.type, message.selection, message.text ?? message.key, message.shift); return; }
       if (message.type === 'edit-result') {
         const request = requests.current.get(message.requestId);
         if (!request) return;
         clearTimeout(request.timer); requests.current.delete(message.requestId);
-        if (message.success === true) request.resolve(message.selection); else request.reject(new Error(message.reason || 'The live page could not verify this preview.'));
+        if (message.success === true) {
+          const sel = message.selection?.rect ? { ...message.selection, transformChain: sanitizeTransformChain(message.selection.transformChain) } : message.selection;
+          request.resolve(sel);
+        } else request.reject(new Error(message.reason || 'The live page could not verify this preview.'));
         return;
       }
       if (message.type !== 'source-selection' || modeRef.current || props.current.blocked && Boolean(repositoryId) && !continuousDraft || !readyRef.current || syncFailed.current) return;
       const value = message.selection;
       if (!value || typeof value.path !== 'string' || value.path.length > 1000 || !Number.isSafeInteger(value.line) || value.line < 1 || !Number.isSafeInteger(value.column) || value.column < 1 || !value.computed || typeof value.className !== 'string' || typeof value.tagName !== 'string') return;
       if (value.tagName !== value.sourceTagName) { selected.current = null; props.current.onClearSelection(); props.current.onNotice('The clicked element has no exact source marker. Nothing was changed.'); return; }
-      selected.current = value; setGeometry(value); props.current.onSelect(value);
+      const sanitized = { ...value, transformChain: sanitizeTransformChain(value.transformChain) };
+      selected.current = sanitized; setGeometry(sanitized); props.current.onSelect(sanitized);
     };
     window.addEventListener('message', receive);
     return () => { window.removeEventListener('message', receive); };
