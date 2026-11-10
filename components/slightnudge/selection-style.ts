@@ -22,6 +22,11 @@ import {
   type Rect,
   type ScreenPrediction,
 } from '../../lib/editor/geometry';
+import {
+  cursorForHandleAngle,
+  isAffineNonTrivial,
+  type ResizeCursor,
+} from './direct-manipulation-engine';
 
 export type SelectionVariant = 'dots' | 'arc' | 'capsule' | 'circle' | 'text' | 'media' | 'tiny';
 
@@ -31,6 +36,9 @@ export interface SelectionChromeGeometry {
   prediction: ScreenPrediction;
   rotationDeg: number;
   handleScreenPoints: Partial<Record<HandleDirection, Point2D>>;
+  isNonTrivialTransform: boolean;
+  edgeCursors: Partial<Record<HandleDirection, ResizeCursor>>;
+  localRect: Rect;
 }
 
 /**
@@ -53,11 +61,21 @@ export function computeSelectionChromeGeometry(
   };
   const decomposed = matDecompose(prediction.matrix);
   const rotationDeg = radToDeg(decomposed.rotateRad);
+  const isNonTrivialTransform = isAffineNonTrivial(prediction.matrix);
   const handleScreenPoints: Partial<Record<HandleDirection, Point2D>> = {};
+  const edgeCursors: Partial<Record<HandleDirection, ResizeCursor>> = {};
   for (const handle of visibleHandles) {
     handleScreenPoints[handle] = getHandleScreenPoint(localRect, handle, prediction.matrix);
+    edgeCursors[handle] = cursorForHandleAngle(prediction.quad, handle);
   }
-  return { prediction, rotationDeg, handleScreenPoints };
+  return {
+    prediction,
+    rotationDeg,
+    handleScreenPoints,
+    isNonTrivialTransform,
+    edgeCursors,
+    localRect,
+  };
 }
 
 export interface CornerRadii {

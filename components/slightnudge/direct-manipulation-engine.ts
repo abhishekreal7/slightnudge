@@ -43,6 +43,11 @@ import {
   type SnapIndex,
   type SnapOptions,
   type SnapScratchBuffer,
+  degToRad,
+  matRotate,
+  radToDeg,
+  type ElementTransformFrame,
+  type Quad,
 } from '../../lib/editor/geometry';
 
 export type HandleDirection = 'nw' | 'n' | 'ne' | 'e' | 'se' | 's' | 'sw' | 'w';
@@ -688,6 +693,484 @@ export function parseCssMatrix2D(transformCss: string | null | undefined): Matri
 /** Delegates overlay reorder / resize intent classification to `lib/editor/geometry`. */
 export function classifyOverlayFlowIntent(input: LayoutIntentInput): LayoutIntent {
   return classifyLayoutIntent(input);
+}
+
+export type ResizeCursor = 'ew-resize' | 'ns-resize' | 'nesw-resize' | 'nwse-resize';
+
+export interface CssTransformInput {
+  translate?: string | null;
+  rotate?: string | null;
+  scale?: string | null;
+  transform?: string | null;
+}
+
+export interface SourceElementLookup {
+  elementId?: string;
+  path?: string;
+  line?: number;
+  column?: number;
+  instance?: string;
+  tagName?: string;
+}
+
+const DEFAULT_HANDLE_CURSORS: Record<HandleDirection, ResizeCursor> = {
+  nw: 'nwse-resize',
+  n: 'ns-resize',
+  ne: 'nesw-resize',
+  e: 'ew-resize',
+  se: 'nwse-resize',
+  s: 'ns-resize',
+  sw: 'nesw-resize',
+  w: 'ew-resize',
+};
+
+/** Returns `true` when the linear 2x2 portion of `m` differs from identity beyond `epsilon`. */
+export function isAffineNonTrivial(m: Matrix2D, epsilon = 1e-4): boolean {
+  return (
+    Math.abs(m[0] - 1) > epsilon ||
+    Math.abs(m[1]) > epsilon ||
+    Math.abs(m[2]) > epsilon ||
+    Math.abs(m[3] - 1) > epsilon
+  );
+}
+
+/** Resolves the visual resize cursor for `handle` along the edges of a transformed `Quad`. */
+export function cursorForHandleAngle(quad: Quad, handle: HandleDirection): ResizeCursor {
+  const ex = quad.ne.x - quad.nw.x;
+  const ey = quad.ne.y - quad.nw.y;
+  const sx = quad.sw.x - quad.nw.x;
+  const sy = quad.sw.y - quad.nw.y;
+  const eLen = Math.hypot(ex, ey);
+  const sLen = Math.hypot(sx, sy);
+  if (!Number.isFinite(eLen) || !Number.isFinite(sLen) || eLen < 1e-6 || sLen < 1e-6) {
+    return DEFAULT_HANDLE_CURSORS[handle];
+  }
+  const ux = ex / eLen;
+  const uy = ey / eLen;
+  const vx = sx / sLen;
+  const vy = sy / sLen;
+
+  let dx = 0;
+  let dy = 0;
+  switch (handle) {
+    case 'e':
+      dx = ux;
+      dy = uy;
+      break;
+    case 'w':
+      dx = -ux;
+      dy = -uy;
+      break;
+    case 's':
+      dx = vx;
+      dy = vy;
+      break;
+    case 'n':
+      dx = -vx;
+      dy = -vy;
+      break;
+    case 'ne':
+      dx = ux - vx;
+      dy = uy - vy;
+      break;
+    case 'se':
+      dx = ux + vx;
+      dy = uy + vy;
+      break;
+    case 'sw':
+      dx = -ux + vx;
+      dy = -uy + vy;
+      break;
+    case 'nw':
+      dx = -ux - vx;
+      dy = -uy - vy;
+      break;
+  }
+
+  if (Math.hypot(dx, dy) < 1e-6) {
+    return DEFAULT_HANDLE_CURSORS[handle];
+  }
+  const deg = ((radToDeg(Math.atan2(dy, dx)) % 180) + 180) % 180;
+  if (deg < 22.5 || deg >= 157.5) return 'ew-resize';
+  if (deg < 67.5) return 'nwse-resize';
+  if (deg < 112.5) return 'ns-resize';
+  return 'nesw-resize';
+}
+
+/** Shifts every corner of `quad` by `(offsetX, offsetY)`. */
+export function transformQuadByOffset(quad: Quad, offsetX: number, offsetY: number): Quad {
+  return {
+    nw: { x: quad.nw.x + offsetX, y: quad.nw.y + offsetY },
+    ne: { x: quad.ne.x + offsetX, y: quad.ne.y + offsetY },
+    se: { x: quad.se.x + offsetX, y: quad.se.y + offsetY },
+    sw: { x: quad.sw.x + offsetX, y: quad.sw.y + offsetY },
+  };
+}
+
+/** Builds a closed SVG path tracing `quad` pushed strictly outward by `outsetPx` using edge normals. */
+export function buildQuadOutlinePath(quad: Quad, outsetPx = 2): string {
+  const pts: Point2D[] = [quad.nw, quad.ne, quad.se, quad.sw];
+  if (outsetPx === 0) {
+    const r = (v: number) => roundValue(v, 'nearest', 0.01);
+    return `M ${r(pts[0].x)} ${r(pts[0].y)} L ${r(pts[1].x)} ${r(pts[1].y)} L ${r(pts[2].x)} ${r(pts[2].y)} L ${r(pts[3].x)} ${r(pts[3].y)} Z`;
+  }
+
+  const cx = (pts[0].x + pts[1].x + pts[2].x + pts[3].x) / 4;
+  const cy = (pts[0].y + pts[1].y + pts[2].y + pts[3].y) / 4;
+
+  const dirs: Point2D[] = [];
+  const normals: Point2D[] = [];
+  for (let i = 0; i < 4; i++) {
+    const a = pts[i];
+    const b = pts[(i + 1) % 4];
+    const dx = b.x - a.x;
+    const dy = b.y - a.y;
+    const len = Math.hypot(dx, dy);
+    if (!Number.isFinite(len) || len < 1e-6) {
+      dirs.push({ x: 1, y: 0 });
+      normals.push({ x: 0, y: 0 });
+      continue;
+    }
+    const ux = dx / len;
+    const uy = dy / len;
+    dirs.push({ x: ux, y: uy });
+    let nx = -uy;
+    let ny = ux;
+    const mx = (a.x + b.x) / 2;
+    const my = (a.y + b.y) / 2;
+    if (nx * (mx - cx) + ny * (my - cy) < 0) {
+      nx = -nx;
+      ny = -ny;
+    }
+    normals.push({ x: nx, y: ny });
+  }
+
+  const expanded: Point2D[] = [];
+  const maxMiter = Math.abs(outsetPx) * 6;
+  for (let i = 0; i < 4; i++) {
+    const prevIdx = (i + 3) % 4;
+    const p = pts[i];
+    const nPrev = normals[prevIdx];
+    const nCurr = normals[i];
+    const u1 = dirs[prevIdx];
+    const u2 = dirs[i];
+    const a1x = p.x + nPrev.x * outsetPx;
+    const a1y = p.y + nPrev.y * outsetPx;
+    const a2x = p.x + nCurr.x * outsetPx;
+    const a2y = p.y + nCurr.y * outsetPx;
+    const denom = u1.x * u2.y - u1.y * u2.x;
+    if (Math.abs(denom) > 1e-6) {
+      const diffX = a2x - a1x;
+      const diffY = a2y - a1y;
+      const tRaw = (diffX * u2.y - diffY * u2.x) / denom;
+      const t = Math.max(-maxMiter, Math.min(maxMiter, tRaw));
+      expanded.push({ x: a1x + t * u1.x, y: a1y + t * u1.y });
+    } else {
+      const sx = nPrev.x + nCurr.x;
+      const sy = nPrev.y + nCurr.y;
+      const sLen = Math.hypot(sx, sy);
+      if (sLen > 1e-6) {
+        expanded.push({
+          x: p.x + (sx / sLen) * outsetPx,
+          y: p.y + (sy / sLen) * outsetPx,
+        });
+      } else {
+        expanded.push({ x: p.x, y: p.y });
+      }
+    }
+  }
+
+  const fmt = (v: number) => roundValue(v, 'nearest', 0.01);
+  return (
+    `M ${fmt(expanded[0].x)} ${fmt(expanded[0].y)} ` +
+    `L ${fmt(expanded[1].x)} ${fmt(expanded[1].y)} ` +
+    `L ${fmt(expanded[2].x)} ${fmt(expanded[2].y)} ` +
+    `L ${fmt(expanded[3].x)} ${fmt(expanded[3].y)} Z`
+  );
+}
+
+function parseCssAngleRad(token: string | undefined): number | null {
+  if (!token) return null;
+  const match = token.trim().match(/^(-?(?:\d+\.?\d*|\.\d+)(?:e[+-]?\d+)?)(deg|rad|grad|turn)?$/i);
+  if (!match) return null;
+  const value = Number.parseFloat(match[1]);
+  if (!Number.isFinite(value)) return null;
+  const unit = (match[2] || 'deg').toLowerCase();
+  if (unit === 'rad') return value;
+  if (unit === 'turn') return value * 2 * Math.PI;
+  if (unit === 'grad') return (value * Math.PI) / 200;
+  return degToRad(value);
+}
+
+function parseCssScaleToken(token: string | undefined): number | null {
+  if (!token) return null;
+  const trimmed = token.trim();
+  if (trimmed.endsWith('%')) {
+    const pct = Number.parseFloat(trimmed.slice(0, -1));
+    return Number.isFinite(pct) ? pct / 100 : null;
+  }
+  const value = Number.parseFloat(trimmed);
+  return Number.isFinite(value) ? value : null;
+}
+
+function parseCssTranslatePx(token: string | undefined): number {
+  if (!token) return 0;
+  const trimmed = token.trim();
+  if (trimmed === '0') return 0;
+  if (/^-?(?:\d+\.?\d*|\.\d+)(?:e[+-]?\d+)?px$/i.test(trimmed)) {
+    const value = Number.parseFloat(trimmed);
+    return Number.isFinite(value) ? value : 0;
+  }
+  return 0;
+}
+
+/** Composes CSS Transforms Level 2 individual `translate`, `rotate`, `scale` and `transform` matrix in CSS spec order. */
+export function composeCssTransformMatrix(input: CssTransformInput): Matrix2D {
+  let result: Matrix2D = IDENTITY_MATRIX;
+
+  const translateRaw = input.translate?.trim();
+  if (translateRaw && translateRaw !== 'none') {
+    const parts = translateRaw.split(/\s+/);
+    const tx = parseCssTranslatePx(parts[0]);
+    const ty = parseCssTranslatePx(parts[1]);
+    if (tx !== 0 || ty !== 0) {
+      result = matMultiply(result, matTranslate(tx, ty));
+    }
+  }
+
+  const rotateRaw = input.rotate?.trim();
+  if (rotateRaw && rotateRaw !== 'none') {
+    const parts = rotateRaw.split(/\s+/);
+    let rad: number | null = null;
+    if (parts.length === 1) {
+      rad = parseCssAngleRad(parts[0]);
+    } else if (parts.length === 2 && parts[0].toLowerCase() === 'z') {
+      rad = parseCssAngleRad(parts[1]);
+    } else if (parts.length === 4) {
+      const nx = Number.parseFloat(parts[0]);
+      const ny = Number.parseFloat(parts[1]);
+      const nz = Number.parseFloat(parts[2]);
+      const angle = parseCssAngleRad(parts[3]);
+      if (angle !== null && Math.abs(nx) < 1e-6 && Math.abs(ny) < 1e-6 && Math.abs(nz) > 1e-6) {
+        rad = nz < 0 ? -angle : angle;
+      }
+    }
+    if (rad !== null && Math.abs(rad) > 1e-9) {
+      result = matMultiply(result, matRotate(rad));
+    }
+  }
+
+  const scaleRaw = input.scale?.trim();
+  if (scaleRaw && scaleRaw !== 'none') {
+    const parts = scaleRaw.split(/\s+/);
+    const sx = parseCssScaleToken(parts[0]);
+    const sy = parts.length >= 2 ? parseCssScaleToken(parts[1]) : sx;
+    if (sx !== null && sy !== null && (sx !== 1 || sy !== 1)) {
+      result = matMultiply(result, matScale(sx, sy));
+    }
+  }
+
+  const transformMat = parseCssMatrix2D(input.transform);
+  if (
+    transformMat[0] !== 1 ||
+    transformMat[1] !== 0 ||
+    transformMat[2] !== 0 ||
+    transformMat[3] !== 1 ||
+    transformMat[4] !== 0 ||
+    transformMat[5] !== 0
+  ) {
+    result = matMultiply(result, transformMat);
+  }
+
+  return result;
+}
+
+/** Resolves a selected element in a same-origin iframe/document by `elementId` or `data-source-*` locator. */
+export function findSourceElementInDocument(
+  doc: Document | null | undefined,
+  selection: SourceElementLookup | null | undefined
+): HTMLElement | null {
+  if (!doc || !selection) return null;
+  if (selection.elementId) {
+    const byId = doc.getElementById(selection.elementId);
+    if (byId) return byId;
+  }
+  if (selection.path && typeof selection.line === 'number' && selection.line > 0) {
+    const candidates = Array.from(doc.querySelectorAll<HTMLElement>('[data-source-file]')).filter((el) => {
+      if (el.getAttribute('data-source-file') !== selection.path) return false;
+      if (Number(el.getAttribute('data-source-line')) !== selection.line) return false;
+      if (typeof selection.column === 'number' && selection.column > 0) {
+        const rawCol = el.getAttribute('data-source-column');
+        const col = rawCol ? Number(rawCol) : selection.elementId || el.id ? 1 : 0;
+        if (col !== selection.column) return false;
+      }
+      return true;
+    });
+    if (candidates.length === 1) return candidates[0];
+    if (candidates.length > 1) {
+      if (selection.instance) {
+        const byCallsite = candidates.find(
+          (el) => el.getAttribute('data-slightnudge-callsite') === selection.instance
+        );
+        if (byCallsite) return byCallsite;
+      }
+      if (selection.elementId) {
+        const byId = candidates.find((el) => el.id === selection.elementId);
+        if (byId) return byId;
+      }
+      return candidates[0];
+    }
+  }
+  return null;
+}
+
+function parseTransformOriginPx(raw: string | null | undefined, width: number, height: number): Point2D {
+  if (!raw) return { x: width / 2, y: height / 2 };
+  const parts = raw.trim().split(/\s+/);
+  const ox = Number.parseFloat(parts[0] || '');
+  const oy = Number.parseFloat(parts[1] || '');
+  return {
+    x: Number.isFinite(ox) ? ox : width / 2,
+    y: Number.isFinite(oy) ? oy : height / 2,
+  };
+}
+
+/**
+ * Extracts the ancestor-to-target `ElementTransformFrame[]` chain for a same-origin DOM element
+ * so `lib/editor/geometry` predicts its screen Quad accurately under nested transforms and scroll offsets.
+ */
+export function extractElementTransformChain(targetEl: HTMLElement): ElementTransformFrame[] {
+  const doc = targetEl.ownerDocument;
+  const win = doc?.defaultView || (typeof window !== 'undefined' ? window : null);
+  const readStyle = win && typeof win.getComputedStyle === 'function' ? win.getComputedStyle.bind(win) : null;
+
+  if (!readStyle) {
+    const w = targetEl.offsetWidth || 0;
+    const h = targetEl.offsetHeight || 0;
+    return [
+      {
+        offsetX: targetEl.offsetLeft || 0,
+        offsetY: targetEl.offsetTop || 0,
+        width: w,
+        height: h,
+        scrollLeft: 0,
+        scrollTop: 0,
+        transform: IDENTITY_MATRIX,
+        transformOrigin: { x: w / 2, y: h / 2 },
+      },
+    ];
+  }
+
+  const domNodes: HTMLElement[] = [];
+  let cursor: HTMLElement | null = targetEl;
+  while (cursor) {
+    domNodes.push(cursor);
+    cursor = cursor.parentElement;
+  }
+  domNodes.reverse();
+
+  const docEl = doc?.documentElement || null;
+  const body = doc?.body || null;
+
+  const isBodyPlainStatic = (() => {
+    if (!body) return true;
+    const bs = readStyle(body);
+    const bodyMatrix = composeCssTransformMatrix({
+      translate: bs.translate,
+      rotate: bs.rotate,
+      scale: bs.scale,
+      transform: bs.transform,
+    });
+    return (
+      bs.position === 'static' &&
+      !isAffineNonTrivial(bodyMatrix) &&
+      bodyMatrix[4] === 0 &&
+      bodyMatrix[5] === 0 &&
+      body.clientLeft === 0 &&
+      body.clientTop === 0 &&
+      body.scrollLeft === 0 &&
+      body.scrollTop === 0
+    );
+  })();
+
+  const frames: ElementTransformFrame[] = [];
+  for (let i = 0; i < domNodes.length; i++) {
+    const el = domNodes[i];
+    const style = readStyle(el);
+    const width = el.offsetWidth || 0;
+    const height = el.offsetHeight || 0;
+    const transform = composeCssTransformMatrix({
+      translate: style.translate,
+      rotate: style.rotate,
+      scale: style.scale,
+      transform: style.transform,
+    });
+    const transformOrigin = parseTransformOriginPx(style.transformOrigin, width, height);
+    const scrollLeft = el.scrollLeft || 0;
+    const scrollTop = el.scrollTop || 0;
+
+    let offsetX = 0;
+    let offsetY = 0;
+    if (i === 0) {
+      offsetX = el === docEl ? 0 : el.offsetLeft || 0;
+      offsetY = el === docEl ? 0 : el.offsetTop || 0;
+    } else {
+      const parent = domNodes[i - 1];
+      if (el === body && parent === docEl) {
+        if (!isBodyPlainStatic || el === targetEl) {
+          offsetX = Number.parseFloat(style.marginLeft) || 0;
+          offsetY = Number.parseFloat(style.marginTop) || 0;
+        }
+      } else {
+        const op = el.offsetParent as HTMLElement | null;
+        if (op === parent) {
+          if (parent === body) {
+            offsetX = el.offsetLeft;
+            offsetY = el.offsetTop;
+          } else {
+            offsetX = el.offsetLeft + parent.clientLeft;
+            offsetY = el.offsetTop + parent.clientTop;
+          }
+        } else if (op === parent.offsetParent) {
+          offsetX = el.offsetLeft - parent.offsetLeft;
+          offsetY = el.offsetTop - parent.offsetTop;
+        } else if (op === null && style.position === 'fixed') {
+          offsetX = el.offsetLeft;
+          offsetY = el.offsetTop;
+        } else {
+          const opIdx = op ? domNodes.indexOf(op) : -1;
+          if (opIdx >= 0 && opIdx < i) {
+            let sumPrevX = 0;
+            let sumPrevY = 0;
+            for (let k = opIdx + 1; k < i; k++) {
+              sumPrevX += frames[k].offsetX;
+              sumPrevY += frames[k].offsetY;
+            }
+            const opBorderX = op && op !== body ? op.clientLeft : 0;
+            const opBorderY = op && op !== body ? op.clientTop : 0;
+            offsetX = el.offsetLeft + opBorderX - sumPrevX;
+            offsetY = el.offsetTop + opBorderY - sumPrevY;
+          } else {
+            offsetX = el.offsetLeft - parent.offsetLeft;
+            offsetY = el.offsetTop - parent.offsetTop;
+          }
+        }
+      }
+    }
+
+    frames.push({
+      offsetX,
+      offsetY,
+      width,
+      height,
+      scrollLeft,
+      scrollTop,
+      transform,
+      transformOrigin,
+    });
+  }
+
+  return frames;
 }
 
 /**

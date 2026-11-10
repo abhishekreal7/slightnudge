@@ -77,6 +77,7 @@ import {
 } from 'lucide-react';
 import {
   selectionStyleFor,
+  computeSelectionChromeGeometry,
   buildRoundedRectPath,
   buildCornerArcPath,
   buildCircleArcPath,
@@ -85,6 +86,7 @@ import {
   findNearestRadiusStep,
   type SelectionVariant,
   type SelectionChromeStyle,
+  type SelectionChromeGeometry,
   type NamedRadiusStep,
 } from '@/components/slightnudge/selection-style';
 import {
@@ -105,21 +107,30 @@ import {
 } from '@/lib/slightnudge/client';
 import {
   IDENTITY_MATRIX,
+  buildElementToScreenMatrix,
   canvasToScreenMatrix,
+  getHandleLocalPoint,
   matMultiply,
   roundValue,
   screenDeltaToElementLocalDelta,
+  transformPoint,
+  transformRectToQuad,
   vecAdd,
+  type CanvasSpace,
   type Matrix2D,
 } from '@/lib/editor/geometry';
 import {
   buildArtboardToContainerMatrix,
+  buildQuadOutlinePath,
   createDirectSnapSession,
-  parseCssMatrix2D,
+  extractElementTransformChain,
+  findSourceElementInDocument,
+  isAffineNonTrivial,
   roundMoveTranslation,
   snapRectInSession,
   snapResizeInSession,
   transformGuideLineToContainer,
+  transformQuadByOffset,
   type ContainerRect,
   type DirectSnapSession,
   type GuideLine,
@@ -847,6 +858,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
   const aspectLockOverrides = useRef<Record<string, boolean>>({});
   const outlineHaloRef = useRef<Record<string, SVGPathElement | null>>({});
   const outlineAccentRef = useRef<Record<string, SVGPathElement | null>>({});
+  const handleButtonRefs = useRef<Record<string, Partial<Record<HandleDirection, HTMLButtonElement | null>>>>({});
 
   const directDragRef = useRef<{
     type: 'resize' | 'move' | 'radius';
@@ -868,6 +880,10 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
     snapSession?: DirectSnapSession;
     artboardToMain: Matrix2D;
     elementToScreen: Matrix2D;
+    elementToArtboard?: Matrix2D;
+    wrapperLeft?: number;
+    wrapperTop?: number;
+    isNonTrivialTransform?: boolean;
     targetEl: HTMLElement | null;
     initialTargetStyle: string | null;
     outlineOnly?: boolean;
@@ -1058,6 +1074,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
     artboardToMain: Matrix2D;
     stageToScreen: Matrix2D;
     elementToScreen: Matrix2D;
+    elementToArtboard: Matrix2D;
   } => {
     const stageToScreen = canvasToScreenMatrix({ originX: 0, originY: 0, panX: 0, panY: 0, zoom: scale });
     const iframeEl = sourceCanvas.current?.getFrame?.();
@@ -1078,16 +1095,27 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
         scale
       );
     }
+    let elementToArtboard = IDENTITY_MATRIX;
     let linearLocal = IDENTITY_MATRIX;
     if (targetEl) {
       try {
-        const computedTransform = getComputedStyle(targetEl).transform;
-        const m = parseCssMatrix2D(computedTransform);
-        linearLocal = [m[0], m[1], m[2], m[3], 0, 0];
+        const chain = extractElementTransformChain(targetEl);
+        if (chain.length > 0) {
+          const artboardSpace: CanvasSpace = { originX: 0, originY: 0, panX: 0, panY: 0, zoom: 1 };
+          elementToArtboard = buildElementToScreenMatrix(chain, artboardSpace);
+          linearLocal = [
+            elementToArtboard[0],
+            elementToArtboard[1],
+            elementToArtboard[2],
+            elementToArtboard[3],
+            0,
+            0,
+          ];
+        }
       } catch {}
     }
     const elementToScreen = matMultiply(stageToScreen, linearLocal);
-    return { artboardToMain, stageToScreen, elementToScreen };
+    return { artboardToMain, stageToScreen, elementToScreen, elementToArtboard };
   };
 
   // Position movement preserves document flow and never reorders siblings.
@@ -1110,11 +1138,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
 
       // Check same-origin iframe target element
       const iframeDoc = sourceCanvas.current?.getDocument?.();
-      let targetEl: HTMLElement | null = null;
-      if (iframeDoc && actualSelection) {
-        if (actualSelection.elementId) targetEl = iframeDoc.getElementById(actualSelection.elementId);
-        if (!targetEl && actualSelection.tagName) targetEl = iframeDoc.querySelector(actualSelection.tagName) as HTMLElement | null;
-      }
+      const targetEl = findSourceElementInDocument(iframeDoc, actualSelection);
       const initialTargetStyle = targetEl?.getAttribute('style') || null;
 
       const siblings = collectSiblingSnapRects(layerKey);
@@ -1186,23 +1210,28 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
     const actualSelection = sourceSelections.current[key] || sourceSelection.current;
 
     const zoom = resolveStageScale(key);
-    const currentW = elementRefs.current[key]?.offsetWidth || actualSelection?.rect?.width || 672;
-    const currentH = elementRefs.current[key]?.offsetHeight || actualSelection?.rect?.height || 114;
-    const startLeft = actualSelection?.rect?.left || 0;
-    const startTop = actualSelection?.rect?.top || 0;
+    const wrapperLeft = actualSelection?.rect?.left || 0;
+    const wrapperTop = actualSelection?.rect?.top || 0;
 
     // Check same-origin iframe target element
     const iframeDoc = sourceCanvas.current?.getDocument?.();
-    let targetEl: HTMLElement | null = null;
-    if (iframeDoc && actualSelection) {
-      if (actualSelection.elementId) targetEl = iframeDoc.getElementById(actualSelection.elementId);
-      if (!targetEl && actualSelection.tagName) targetEl = iframeDoc.querySelector(actualSelection.tagName) as HTMLElement | null;
-    }
+    const targetEl = findSourceElementInDocument(iframeDoc, actualSelection);
     const initialTargetStyle = targetEl?.getAttribute('style') || null;
 
     const siblings = collectSiblingSnapRects(key);
     const snapSession = createDirectSnapSession(siblings);
-    const { artboardToMain, elementToScreen } = captureGestureMatrices(key, targetEl, zoom);
+    const { artboardToMain, elementToScreen, elementToArtboard } = captureGestureMatrices(key, targetEl, zoom);
+    const isNonTrivialTransform = isAffineNonTrivial(elementToArtboard);
+    const currentW =
+      (isNonTrivialTransform && targetEl ? targetEl.offsetWidth : elementRefs.current[key]?.offsetWidth) ||
+      actualSelection?.rect?.width ||
+      672;
+    const currentH =
+      (isNonTrivialTransform && targetEl ? targetEl.offsetHeight : elementRefs.current[key]?.offsetHeight) ||
+      actualSelection?.rect?.height ||
+      114;
+    const startLeft = isNonTrivialTransform ? 0 : wrapperLeft;
+    const startTop = isNonTrivialTransform ? 0 : wrapperTop;
 
     try {
       e.currentTarget.focus({ preventScroll: true });
@@ -1240,6 +1269,10 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
       snapSession,
       artboardToMain,
       elementToScreen,
+      elementToArtboard,
+      wrapperLeft,
+      wrapperTop,
+      isNonTrivialTransform,
       targetEl,
       initialTargetStyle,
       outlineOnly: outlineDrag,
@@ -1275,19 +1308,8 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
     const startLeft = actualSelection?.rect?.left || 0;
     const startTop = actualSelection?.rect?.top || 0;
 
-    let targetEl: HTMLElement | null = null;
-    const frameEl = sourceCanvas.current?.getFrame?.();
-    if (frameEl && frameEl.contentDocument) {
-      try {
-        const doc = frameEl.contentDocument;
-        if (actualSelection?.elementId) {
-          targetEl = doc.querySelector(`[data-nudge-id="${actualSelection.elementId}"]`) || doc.getElementById(actualSelection.elementId);
-        }
-        if (!targetEl && actualSelection?.tagName) {
-          targetEl = doc.querySelector(actualSelection.tagName);
-        }
-      } catch {}
-    }
+    const iframeDoc = sourceCanvas.current?.getDocument?.();
+    const targetEl = findSourceElementInDocument(iframeDoc, actualSelection);
 
     const initialTargetStyle = targetEl?.getAttribute('style') || null;
     const parsedRadii = parseBorderRadius(renderedElement.borderRadius || actualSelection?.computed?.borderRadius, currentW, currentH);
@@ -1590,7 +1612,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
           {
             thresholdScreenPx: 4,
             zoom: gesture.zoom,
-            disabled: p.ctrlKey,
+            disabled: p.ctrlKey || Boolean(gesture.isNonTrivialTransform),
             fromCenter: p.altKey,
             aspectRatio: effectiveShift,
             minWidth: 1,
@@ -1604,33 +1626,59 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
         gesture.nextLeft = res.left;
         gesture.nextTop = res.top;
 
-        // 1. Direct overlay write (transform + width/height)
-        if (overlayNode) {
-          overlayNode.style.width = `${roundValue(gesture.nextWidth, 'nearest', 1)}px`;
-          overlayNode.style.height = `${roundValue(gesture.nextHeight, 'nearest', 1)}px`;
-          const dx = gesture.nextLeft - gesture.startLeft;
-          const dy = gesture.nextTop - gesture.startTop;
-          if (Math.abs(dx) > 0.1 || Math.abs(dy) > 0.1) {
-            overlayNode.style.transform = `translate3d(${roundValue(dx, 'nearest', 1)}px, ${roundValue(dy, 'nearest', 1)}px, 0)`;
-          } else {
-            overlayNode.style.transform = '';
-          }
-        }
-
-        // Direct SVG outline update
+        // 1. Direct overlay write (transform + width/height for axis-aligned; oriented Quad for rotated/flipped/skewed)
         const haloEl = outlineHaloRef.current[gesture.key];
         const accentEl = outlineAccentRef.current[gesture.key];
-        if (haloEl && accentEl) {
-          const renderedElem = elements[gesture.key] || activeElement;
-          const radii = parseBorderRadius(renderedElem.borderRadius, gesture.nextWidth, gesture.nextHeight);
-          const d = buildRoundedRectPath(-2, -2, gesture.nextWidth + 4, gesture.nextHeight + 4, {
-            tl: radii.tl + (radii.tl > 0 ? 2 : 0),
-            tr: radii.tr + (radii.tr > 0 ? 2 : 0),
-            br: radii.br + (radii.br > 0 ? 2 : 0),
-            bl: radii.bl + (radii.bl > 0 ? 2 : 0),
-          });
-          haloEl.setAttribute('d', d);
-          accentEl.setAttribute('d', d);
+        if (gesture.isNonTrivialTransform && gesture.elementToArtboard) {
+          const wrapperOffX = -(gesture.wrapperLeft ?? 0);
+          const wrapperOffY = -(gesture.wrapperTop ?? 0);
+          if (haloEl && accentEl) {
+            const artboardQuad = transformRectToQuad(gesture.elementToArtboard, res);
+            const wrapperQuad = transformQuadByOffset(artboardQuad, wrapperOffX, wrapperOffY);
+            const d = buildQuadOutlinePath(wrapperQuad, 2);
+            haloEl.setAttribute('d', d);
+            accentEl.setAttribute('d', d);
+          }
+          const keyRefs = handleButtonRefs.current[gesture.key];
+          if (keyRefs) {
+            const dirs: HandleDirection[] = ['nw', 'n', 'ne', 'e', 'se', 's', 'sw', 'w'];
+            for (const dir of dirs) {
+              const btn = keyRefs[dir];
+              if (!btn) continue;
+              const ptArtboard = transformPoint(
+                gesture.elementToArtboard,
+                getHandleLocalPoint(res, dir)
+              );
+              btn.style.left = `${ptArtboard.x + wrapperOffX}px`;
+              btn.style.top = `${ptArtboard.y + wrapperOffY}px`;
+            }
+          }
+        } else {
+          if (overlayNode) {
+            overlayNode.style.width = `${roundValue(gesture.nextWidth, 'nearest', 1)}px`;
+            overlayNode.style.height = `${roundValue(gesture.nextHeight, 'nearest', 1)}px`;
+            const dx = gesture.nextLeft - gesture.startLeft;
+            const dy = gesture.nextTop - gesture.startTop;
+            if (Math.abs(dx) > 0.1 || Math.abs(dy) > 0.1) {
+              overlayNode.style.transform = `translate3d(${roundValue(dx, 'nearest', 1)}px, ${roundValue(dy, 'nearest', 1)}px, 0)`;
+            } else {
+              overlayNode.style.transform = '';
+            }
+          }
+
+          // Direct SVG outline update
+          if (haloEl && accentEl) {
+            const renderedElem = elements[gesture.key] || activeElement;
+            const radii = parseBorderRadius(renderedElem.borderRadius, gesture.nextWidth, gesture.nextHeight);
+            const d = buildRoundedRectPath(-2, -2, gesture.nextWidth + 4, gesture.nextHeight + 4, {
+              tl: radii.tl + (radii.tl > 0 ? 2 : 0),
+              tr: radii.tr + (radii.tr > 0 ? 2 : 0),
+              br: radii.br + (radii.br > 0 ? 2 : 0),
+              bl: radii.bl + (radii.bl > 0 ? 2 : 0),
+            });
+            haloEl.setAttribute('d', d);
+            accentEl.setAttribute('d', d);
+          }
         }
 
         // 2. Direct style write on canvas element (same-origin direct or bridge gesture)
@@ -2929,6 +2977,13 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
     const currentH = selection.rect.height;
     const currentRadius = renderedElem.borderRadius || selection.computed.borderRadius || '0px';
 
+    const iframeDoc = sourceCanvas.current?.getDocument?.();
+    const targetEl = findSourceElementInDocument(iframeDoc, selection);
+    const transformChain = targetEl ? extractElementTransformChain(targetEl) : [];
+    const lastFrame = transformChain.length > 0 ? transformChain[transformChain.length - 1] : null;
+    const boxW = lastFrame && lastFrame.width > 0 ? lastFrame.width : currentW;
+    const boxH = lastFrame && lastFrame.height > 0 ? lastFrame.height : currentH;
+
     const isMediaEl = /^(img|video|svg|canvas|picture)$/i.test(renderedElem.tag || selection.tagName);
     const aspectLocked = aspectLockOverrides.current[layerKey] ?? isMediaEl;
 
@@ -2936,8 +2991,8 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
       tag: renderedElem.tag || selection.tagName,
       role: undefined,
       display: undefined,
-      width: currentW,
-      height: currentH,
+      width: boxW,
+      height: boxH,
       borderRadius: currentRadius,
       isText: /^(h[1-6]|p|span|a|label|strong|em|b|i|small)$/i.test(renderedElem.tag || selection.tagName),
       isMedia: isMediaEl,
@@ -2948,19 +3003,35 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
     });
     previousVariantRef.current[layerKey] = chrome.variant;
 
+    const chromeGeom: SelectionChromeGeometry | null =
+      transformChain.length > 0
+        ? computeSelectionChromeGeometry(
+            transformChain,
+            { originX: 0, originY: 0, panX: 0, panY: 0, zoom: 1 },
+            chrome.visibleHandles
+          )
+        : null;
+    const isOriented = Boolean(chromeGeom?.isNonTrivialTransform);
+
     // SVG outline path offset 2px outside
-    const outlinePath = buildRoundedRectPath(
-      -2,
-      -2,
-      currentW + 4,
-      currentH + 4,
-      {
-        tl: chrome.outlineRadii.tl + (chrome.outlineRadii.tl > 0 ? 2 : 0),
-        tr: chrome.outlineRadii.tr + (chrome.outlineRadii.tr > 0 ? 2 : 0),
-        br: chrome.outlineRadii.br + (chrome.outlineRadii.br > 0 ? 2 : 0),
-        bl: chrome.outlineRadii.bl + (chrome.outlineRadii.bl > 0 ? 2 : 0),
-      }
-    );
+    const outlinePath =
+      chromeGeom && isOriented
+        ? buildQuadOutlinePath(
+            transformQuadByOffset(chromeGeom.prediction.quad, -selection.rect.left, -selection.rect.top),
+            2
+          )
+        : buildRoundedRectPath(
+            -2,
+            -2,
+            currentW + 4,
+            currentH + 4,
+            {
+              tl: chrome.outlineRadii.tl + (chrome.outlineRadii.tl > 0 ? 2 : 0),
+              tr: chrome.outlineRadii.tr + (chrome.outlineRadii.tr > 0 ? 2 : 0),
+              br: chrome.outlineRadii.br + (chrome.outlineRadii.br > 0 ? 2 : 0),
+              bl: chrome.outlineRadii.bl + (chrome.outlineRadii.bl > 0 ? 2 : 0),
+            }
+          );
 
     const toggleAspectLock = (e: React.MouseEvent) => {
       e.stopPropagation();
@@ -2975,6 +3046,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
         className={`${reviewStyles.sourceSelection} ${outlineDrag ? reviewStyles.sourceSelectionOutline : ''}`}
         aria-label="Selected source element"
         data-selection-variant={chrome.variant}
+        data-selection-oriented={isOriented ? 'true' : undefined}
         style={{
           width: '100%',
           height: '100%',
@@ -2985,7 +3057,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
         {/* SVG Overlay layer with dual-stroke 1.5px accent over 1px white halo */}
         <svg
           className={reviewStyles.selectionSvg}
-          style={{ width: `${currentW + 4}px`, height: `${currentH + 4}px` }}
+          style={isOriented ? { inset: 0, width: '100%', height: '100%' } : { width: `${currentW + 4}px`, height: `${currentH + 4}px` }}
         >
           {/* 1. Halo outline */}
           <path
@@ -3001,7 +3073,8 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
           />
 
           {/* Corner arcs for arc or circle variant */}
-          {(chrome.variant === 'arc' || chrome.variant === 'circle') &&
+          {!isOriented &&
+            (chrome.variant === 'arc' || chrome.variant === 'circle') &&
             (['nw', 'ne', 'se', 'sw'] as const).map(corner => {
               if (!chrome.visibleHandles.includes(corner)) return null;
               const arc = chrome.variant === 'circle'
@@ -3069,10 +3142,18 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
             {ALL_8_HANDLES.map(h => {
               if (!chrome.visibleHandles.includes(h.dir)) return null;
               const isCorner = ['nw', 'ne', 'se', 'sw'].includes(h.dir);
-              const isArc = (chrome.variant === 'arc' || chrome.variant === 'circle') && isCorner;
+              const isArc = !isOriented && (chrome.variant === 'arc' || chrome.variant === 'circle') && isCorner;
 
               let customStyle: React.CSSProperties | undefined = undefined;
-              if (isArc) {
+              const orientedPt = isOriented ? chromeGeom?.handleScreenPoints[h.dir] : undefined;
+              if (orientedPt) {
+                customStyle = {
+                  left: `${orientedPt.x - selection.rect.left}px`,
+                  top: `${orientedPt.y - selection.rect.top}px`,
+                  transform: 'translate(-50%, -50%)',
+                  cursor: chromeGeom?.edgeCursors[h.dir],
+                };
+              } else if (isArc) {
                 const corner = h.dir as 'nw' | 'ne' | 'se' | 'sw';
                 const arc = chrome.variant === 'circle'
                   ? buildCircleArcPath(corner, currentW, zoomVal)
@@ -3084,16 +3165,21 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
                 };
               }
 
-              const cursorClass =
-                h.dir === 'ne' || h.dir === 'sw'
-                  ? reviewStyles.westCorner
-                  : h.dir === 'nw' || h.dir === 'se'
-                  ? reviewStyles.eastCorner
-                  : '';
+              const cursorClass = isOriented
+                ? ''
+                : h.dir === 'ne' || h.dir === 'sw'
+                ? reviewStyles.westCorner
+                : h.dir === 'nw' || h.dir === 'se'
+                ? reviewStyles.eastCorner
+                : '';
 
               return (
                 <button
                   key={h.dir}
+                  ref={el => {
+                    if (!handleButtonRefs.current[layerKey]) handleButtonRefs.current[layerKey] = {};
+                    handleButtonRefs.current[layerKey][h.dir] = el;
+                  }}
                   type="button"
                   role="slider"
                   aria-label={h.label}
@@ -3107,7 +3193,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
                 >
                   {isArc ? (
                     <span className={reviewStyles.handleHitArea} />
-                  ) : !isCorner && (chrome.variant === 'arc' || chrome.variant === 'capsule') ? (
+                  ) : !isOriented && !isCorner && (chrome.variant === 'arc' || chrome.variant === 'capsule') ? (
                     <span
                       className={`${reviewStyles.handleBar} ${
                         h.dir === 'n' || h.dir === 's' ? reviewStyles.handleBarH : reviewStyles.handleBarV
