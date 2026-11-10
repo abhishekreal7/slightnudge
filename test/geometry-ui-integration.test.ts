@@ -10,7 +10,9 @@ import {
   matScale,
   matTranslate,
   nearEqual,
+  predictElementScreenRect,
 } from '../lib/editor/geometry';
+import type { SerializedTransformFrame } from '../lib/slightnudge/source-canvas-contract';
 import {
   buildArtboardToContainerMatrix,
   buildQuadOutlinePath,
@@ -20,6 +22,7 @@ import {
   computeZoomAnchorScroll,
   createDirectSnapSession,
   cursorForHandleAngle,
+  hydrateSerializedTransformChain,
   isAffineNonTrivial,
   parseCssMatrix2D,
   roundMoveTranslation,
@@ -330,6 +333,64 @@ describe('UI geometry integration contracts', () => {
     assert.equal(geom90.isNonTrivialTransform, true);
     assert.equal(geom90.edgeCursors.n, 'ew-resize');
     assert.equal(geom90.edgeCursors.e, 'ns-resize');
+  });
+
+  it('hydrateSerializedTransformChain reconstructs cross-origin frames accurately and guards malformed input', () => {
+    const serialized: SerializedTransformFrame[] = [
+      {
+        offsetX: 0,
+        offsetY: 0,
+        width: 800,
+        height: 600,
+        scrollLeft: 10,
+        scrollTop: 25,
+        translate: 'none',
+        rotate: 'none',
+        scale: 'none',
+        transform: 'matrix(1.5, 0, 0, 1.5, 40, 20)',
+        transformOriginX: 0,
+        transformOriginY: 0,
+      },
+      {
+        offsetX: 120,
+        offsetY: 80,
+        width: 160,
+        height: 80,
+        scrollLeft: 0,
+        scrollTop: 0,
+        translate: '15px -5px',
+        rotate: '30deg',
+        scale: '1',
+        transform: 'none',
+        transformOriginX: 80,
+        transformOriginY: 40,
+      },
+    ];
+
+    const chain = hydrateSerializedTransformChain(serialized);
+    assert.equal(chain.length, 2);
+    const screenPred = predictElementScreenRect(chain, { originX: 0, originY: 0, panX: 0, panY: 0, zoom: 1 });
+    const quad = screenPred.quad;
+    const xs = [quad.nw.x, quad.ne.x, quad.se.x, quad.sw.x];
+    assert.ok(nearEqual(screenPred.bounds.width, Math.max(...xs) - Math.min(...xs), 1e-3));
+    const expectedWidth = 1.5 * (160 * Math.cos(degToRad(30)) + 80 * Math.sin(degToRad(30)));
+    assert.ok(Math.abs(screenPred.bounds.width - expectedWidth) < 0.05, `Expected width ${expectedWidth}, got ${screenPred.bounds.width}`);
+
+    // Guards against malformed/non-finite/oversized payloads from untrusted bridge frames
+    assert.deepEqual(hydrateSerializedTransformChain(undefined), []);
+    const noisy = Array.from({ length: 80 }, () => ({
+      offsetX: Number.NaN,
+      offsetY: Number.POSITIVE_INFINITY,
+      width: -10,
+      height: Number.NaN,
+      scrollLeft: Number.NaN,
+      scrollTop: 0,
+      transform: 'matrix(1, 0, 0, 1, 0, 0)',
+    })) as SerializedTransformFrame[];
+    const hydratedNoisy = hydrateSerializedTransformChain(noisy);
+    assert.equal(hydratedNoisy.length, 64);
+    assert.equal(hydratedNoisy[0].offsetX, 0);
+    assert.equal(hydratedNoisy[0].width, 0);
   });
 
   it('integrated UI files delegate geometry math to lib/editor/geometry rather than duplicating it', () => {

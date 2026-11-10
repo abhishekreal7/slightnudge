@@ -3,6 +3,9 @@ import fs from 'node:fs';
 import http from 'node:http';
 import path from 'node:path';
 import { chromium, type Browser, type Page } from 'playwright';
+import { getSourceCanvasBridge } from '../lib/slightnudge/source-canvas-bridge';
+import { predictElementScreenRect } from '../lib/editor/geometry';
+import { hydrateSerializedTransformChain } from '../components/slightnudge/direct-manipulation-engine';
 import {
   createTempWorkspace,
   findFreePort,
@@ -303,6 +306,145 @@ async function runGeometryUiIntegrationBrowserTests() {
     assert.ok(panelBox.y + panelBox.height <= dockBox.y - 4, `Layers panel must clear bottom dock without overlap (${panelBox.y + panelBox.height} vs ${dockBox.y})`);
     await page.locator('button[aria-label="Close layers"]').click();
     console.log(`   ✅ [PASS] Floating panel top=${panelBox.y.toFixed(0)}px bottom=${(panelBox.y + panelBox.height).toFixed(0)}px clears dock=${dockBox.y.toFixed(0)}px`);
+
+    // 7. Verify cross-origin fallback when iframe contentDocument is inaccessible (returns null)
+    console.log('7. Testing cross-origin selection.transformChain fallback when iframe.contentDocument returns null...');
+    await page.evaluate(() => {
+      const iframeEl = document.querySelector('iframe[title="Actual project"]') as HTMLIFrameElement | null;
+      if (!iframeEl) throw new Error('Missing preview iframe');
+      Object.defineProperty(iframeEl, 'contentDocument', {
+        get: Function('return null') as () => null,
+        configurable: true,
+      });
+    });
+    await iframe.locator('#geom-short').first().click({ force: true });
+    await page.waitForTimeout(200);
+    await iframe.locator('#geom-rotated').first().click({ force: true });
+    await page.waitForTimeout(350);
+
+    const xoQuadInfo = await page.evaluate(() => {
+      const iframeEl = document.querySelector('iframe[title="Actual project"]') as HTMLIFrameElement | null;
+      const docBlocked = iframeEl?.contentDocument === null;
+      const box = document.querySelector('[aria-label="Selected source element"]') as HTMLElement | null;
+      const path = box?.querySelector('svg path') as SVGPathElement | null;
+      const d = path?.getAttribute('d') || '';
+      const nums = (d.match(/-?\d+(?:\.\d+)?/g) || []).map(Number);
+      const topEdgeSlopeY = nums.length >= 4 ? Math.abs(nums[3] - nums[1]) : 0;
+      const eBtn = box?.querySelector('button[aria-label="Resize width from right"]') as HTMLElement | null;
+      const eCursor = eBtn ? getComputedStyle(eBtn).cursor : '';
+      return { docBlocked, d, coordCount: nums.length, topEdgeSlopeY, eCursor };
+    });
+    assert.equal(xoQuadInfo.docBlocked, true, 'Expected iframe.contentDocument to simulate cross-origin null');
+    assert.ok(xoQuadInfo.coordCount >= 8, `Cross-origin oriented SVG outline must emit 4-corner quad path, got "${xoQuadInfo.d}"`);
+    assert.ok(xoQuadInfo.topEdgeSlopeY > 30, `Cross-origin rotated quad top edge must drop >30px, got ${xoQuadInfo.topEdgeSlopeY}`);
+    assert.equal(xoQuadInfo.eCursor, 'nwse-resize', `Cross-origin rotated East handle must keep nwse-resize cursor, got "${xoQuadInfo.eCursor}"`);
+
+    const xoEBox = await page.locator('button[aria-label="Resize width from right"]').boundingBox();
+    assert.ok(xoEBox, 'Expected visible East handle under cross-origin fallback');
+    const xoX = xoEBox.x + xoEBox.width / 2;
+    const xoY = xoEBox.y + xoEBox.height / 2;
+    await page.mouse.move(xoX, xoY);
+    await page.mouse.down();
+    await page.mouse.move(xoX + 40 * Math.cos((30 * Math.PI) / 180), xoY + 40 * Math.sin((30 * Math.PI) / 180), { steps: 4 });
+    await page.waitForTimeout(100);
+    const xoCursorText = (await page.locator('[class*="cursorTag"]').textContent()) || '';
+    await page.keyboard.press('Escape');
+    await page.mouse.up();
+    await page.waitForTimeout(150);
+    assert.ok(xoCursorText.includes('W: 200px') && xoCursorText.includes('H: 80px'), `Expected cross-origin rotated local resize ~W: 200px x H: 80px, got "${xoCursorText}"`);
+    console.log(`   ✅ [PASS] Cross-origin fallback rendered oriented quad (slope=${xoQuadInfo.topEdgeSlopeY.toFixed(1)}px) & rotated resize "${xoCursorText}"`);
+
+    // 8. True cross-origin postMessage bridge test (http://127.0.0.1 vs http://localhost): transformChain + maxWidth >= 1
+    console.log('8. Verifying live cross-origin bridge transformChain oracle & small maxWidth gesture...');
+    const xoPage = await context.newPage();
+    const xoParentOrigin = 'http://127.0.0.1:46141';
+    const xoFrameOrigin = 'http://localhost:46141';
+    const frameHtml = `<!doctype html><html><body style="margin:0;padding:0;">
+      <div id="wrap" style="transform:translate(40px,24px) scale(1.25);transform-origin:0 0;overflow:auto;width:300px;height:180px;">
+        <div style="height:250px;padding-top:20px;">
+          <div id="xo-rot" data-source-file="xo.tsx" data-source-line="10" data-source-column="3" style="width:140px;height:60px;margin-left:30px;margin-top:35px;transform:rotate(30deg);">Rotated XO</div>
+          <div id="xo-tiny" data-source-file="xo.tsx" data-source-line="11" data-source-column="3" style="width:10px;height:10px;max-width:40px;">Tiny</div>
+        </div>
+      </div>
+      <script>window.__slightnudge_hydrated = true; document.getElementById('wrap').scrollTop = 25;</script>
+      <script>${getSourceCanvasBridge(true, 'repo-xo')}</script>
+    </body></html>`;
+    await xoPage.route(`${xoParentOrigin}/**`, (route) =>
+      route.fulfill({
+        contentType: 'text/html',
+        body: `<!doctype html><html><body style="margin:0;">
+          <script>
+            window.__msgs = [];
+            window.addEventListener('message', (e) => { if (e.data?.channel === 'slightnudge') window.__msgs.push(e.data); });
+          </script>
+          <iframe src="${xoFrameOrigin}/frame?__slightnudge_session=xo&__slightnudge_parent=${encodeURIComponent(xoParentOrigin)}" style="width:600px;height:400px;border:0;"></iframe>
+        </body></html>`,
+      })
+    );
+    await xoPage.route(`${xoFrameOrigin}/**`, (route) => route.fulfill({ contentType: 'text/html', body: frameHtml }));
+    await xoPage.goto(xoParentOrigin, { waitUntil: 'domcontentloaded' });
+    await xoPage.waitForFunction(() => (window as any).__msgs.some((m: any) => m.type === 'bridge-ready'), undefined, { timeout: 5000 });
+    await xoPage.evaluate(() => {
+      const f = document.querySelector('iframe')!;
+      f.contentWindow!.postMessage({ channel: 'slightnudge', session: 'xo', type: 'bridge-ack' }, 'http://localhost:46141');
+    });
+
+    const xoIsBlocked = await xoPage.evaluate(() => {
+      try {
+        return document.querySelector('iframe')!.contentDocument === null;
+      } catch {
+        return true;
+      }
+    });
+    assert.equal(xoIsBlocked, true, 'Cross-origin iframe must block parent contentDocument access');
+
+    const xoFrame = xoPage.frameLocator('iframe');
+    await xoFrame.locator('#xo-rot').click({ force: true });
+    await xoPage.waitForFunction(() => (window as any).__msgs.some((m: any) => m.type === 'source-selection' && m.selection?.transformChain?.length), undefined, { timeout: 5000 });
+
+    const { selectionChain, actualRect } = await xoPage.evaluate(async () => {
+      const selMsg = [...(window as any).__msgs].reverse().find((m: any) => m.type === 'source-selection' && m.selection);
+      const iframeRect = document.querySelector('iframe')!.getBoundingClientRect();
+      return {
+        selectionChain: selMsg.selection.transformChain,
+        actualRect: {
+          left: selMsg.selection.rect.left + iframeRect.left,
+          top: selMsg.selection.rect.top + iframeRect.top,
+          width: selMsg.selection.rect.width,
+          height: selMsg.selection.rect.height,
+        },
+        relRect: selMsg.selection.rect,
+      };
+    });
+    assert.ok(Array.isArray(selectionChain) && selectionChain.length >= 3, 'Expected full ancestor transformChain from cross-origin iframe');
+    const hydrated = hydrateSerializedTransformChain(selectionChain);
+    const predicted = predictElementScreenRect(hydrated, { originX: 0, originY: 0, panX: 0, panY: 0, zoom: 1 }).bounds;
+    const bridgeRel = await xoPage.evaluate(() => {
+      const selMsg = [...(window as any).__msgs].reverse().find((m: any) => m.type === 'source-selection' && m.selection);
+      return selMsg.selection.rect;
+    });
+    const maxErr = Math.max(
+      Math.abs(predicted.left - bridgeRel.left),
+      Math.abs(predicted.top - bridgeRel.top),
+      Math.abs(predicted.width - bridgeRel.width),
+      Math.abs(predicted.height - bridgeRel.height)
+    );
+    assert.ok(maxErr <= 0.5, `Cross-origin transformChain prediction must match DOM rect within 0.5px, got err=${maxErr}px (pred=${JSON.stringify(predicted)}, actual=${JSON.stringify(bridgeRel)})`);
+
+    // Verify small maxWidth gesture (< 24px legacy floor) succeeds cleanly over cross-origin bridge
+    await xoFrame.locator('#xo-tiny').click({ force: true });
+    await xoPage.waitForFunction(() => (window as any).__msgs.filter((m: any) => m.type === 'source-selection').length >= 2, undefined, { timeout: 5000 });
+    await xoPage.evaluate(() => {
+      const tinySel = [...(window as any).__msgs].reverse().find((m: any) => m.type === 'source-selection')?.selection;
+      const f = document.querySelector('iframe')!;
+      f.contentWindow!.postMessage({ channel: 'slightnudge', session: 'xo', requestId: 'g-small', type: 'source-edit', operation: 'gesture', selection: tinySel, maxWidth: 12 }, 'http://localhost:46141');
+    });
+    await xoPage.waitForFunction(() => (window as any).__msgs.some((m: any) => m.type === 'edit-result' && m.requestId === 'g-small'), undefined, { timeout: 5000 });
+    const tinyResult = await xoPage.evaluate(() => (window as any).__msgs.find((m: any) => m.type === 'edit-result' && m.requestId === 'g-small'));
+    assert.equal(tinyResult.success, true, `Small-element gesture command failed: ${tinyResult.reason}`);
+    assert.equal(tinyResult.selection.computed.maxWidth, '12px', `Expected maxWidth updated to 12px (<24px), got ${tinyResult.selection.computed.maxWidth}`);
+    await xoPage.close();
+    console.log(`   ✅ [PASS] Live cross-origin bridge transformChain err=${maxErr.toFixed(3)}px & tiny maxWidth=12px`);
 
     await context.close();
     console.log('\n====================================================');
