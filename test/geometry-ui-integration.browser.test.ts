@@ -40,7 +40,7 @@ async function runGeometryUiIntegrationBrowserTests() {
   let fixtureCode = fs.readFileSync(fixturePath, 'utf8');
   const geomFixture = `
       <article id="geom-sib" data-source-file="fixtures/1-plain-static.tsx" data-source-line="19" data-source-column="1" style={{ width: '220px', height: '80px', marginLeft: '80px', marginTop: '16px' }} className="bg-slate-200">Sibling Anchor</article>
-      <article id="geom-box" data-source-file="fixtures/1-plain-static.tsx" data-source-line="20" data-source-column="1" style={{ width: '205px', height: '100px', marginLeft: '80px', marginTop: '16px' }} className="bg-emerald-100">Resizable Box</article>
+      <article id="geom-box" data-source-file="fixtures/1-plain-static.tsx" data-source-line="20" data-source-column="1" style={{ width: '205px', height: '100px', marginLeft: '80px', marginTop: '16px' }} className="bg-emerald-100 rounded-lg">Resizable Box</article>
       <article id="geom-short" data-source-file="fixtures/1-plain-static.tsx" data-source-line="21" data-source-column="1" style={{ width: '200px', height: '70px', marginLeft: '80px', marginTop: '16px' }} className="bg-amber-100">Short Box</article>
       <article id="geom-rotated" data-source-file="fixtures/1-plain-static.tsx" data-source-line="22" data-source-column="1" style={{ width: '160px', height: '80px', marginLeft: '140px', marginTop: '48px', transform: 'rotate(30deg)' }} className="bg-indigo-100">Rotated Box</article>
   `;
@@ -145,11 +145,17 @@ async function runGeometryUiIntegrationBrowserTests() {
       const guideVisible = Boolean(vGuide && vGuide.style.display !== 'none');
       const guideRect = guideVisible && vGuide ? vGuide.getBoundingClientRect() : null;
       const cursorText = document.querySelector('[class*="cursorTag"]')?.textContent || '';
+      const accentEl = document.querySelector('[aria-label="Selected source element"] path[class*="outlineAccent"]') as SVGPathElement | null;
+      const accentRight = accentEl ? accentEl.getBoundingClientRect().right : 0;
+      const arcPaths = Array.from(document.querySelectorAll('[aria-label="Selected source element"] path[class*="handleArc"]'));
+      const arcMaxRight = arcPaths.reduce((maxR, el) => Math.max(maxR, el.getBoundingClientRect().right), 0);
       return {
         gbcrCalls: (window as any).__gBcrCallsDuringDrag as number,
         guideVisible,
         guideScreenLeft: guideRect?.left ?? null,
         cursorText,
+        arcCount: arcPaths.length,
+        arcGapPx: accentRight > 0 ? Math.abs(accentRight - arcMaxRight) : 999,
       };
     });
 
@@ -161,6 +167,7 @@ async function runGeometryUiIntegrationBrowserTests() {
     assert.equal(apiCallsDuringDrag, 0, `Expected 0 API POST calls during drag, got ${apiCallsDuringDrag}`);
     assert.equal(dragMetrics.gbcrCalls, 0, `Expected 0 getBoundingClientRect calls inside drag rAF, got ${dragMetrics.gbcrCalls}`);
     assert.equal(dragMetrics.guideVisible, true, `Expected vertical snap guide to appear (stationary left edge must not hijack E snap!)`);
+    assert.ok(dragMetrics.arcCount >= 4 && dragMetrics.arcGapPx <= 3, `Expected dynamic arc paths to track resized outline within 3px, got count=${dragMetrics.arcCount} gap=${dragMetrics.arcGapPx.toFixed(2)}px`);
     assert.ok(dragMetrics.guideScreenLeft !== null);
     const guideDiff = Math.abs(dragMetrics.guideScreenLeft - sibRightScreen);
     assert.ok(
@@ -231,6 +238,8 @@ async function runGeometryUiIntegrationBrowserTests() {
       const frameBox = frameEl.getBoundingClientRect();
       const nwRect = nwBtn?.getBoundingClientRect();
       const seRect = seBtn?.getBoundingClientRect();
+      const gripBtn = document.querySelector('button[aria-label="Adjust corner radius"]') as HTMLElement | null;
+      const gripRect = gripBtn?.getBoundingClientRect();
       return {
         d,
         coordCount: nums.length,
@@ -241,12 +250,24 @@ async function runGeometryUiIntegrationBrowserTests() {
         expectedTopLeftScreenY: frameBox.top + rotAabb.top,
         aabbWidth: rotAabb.width,
         aabbHeight: rotAabb.height,
+        nwCenterX: nwRect ? nwRect.left + nwRect.width / 2 : 0,
+        nwCenterY: nwRect ? nwRect.top + nwRect.height / 2 : 0,
+        gripCenterX: gripRect ? gripRect.left + gripRect.width / 2 : 0,
+        gripCenterY: gripRect ? gripRect.top + gripRect.height / 2 : 0,
+        gripPresent: Boolean(gripRect),
       };
     });
     assert.ok(quadInfo.coordCount >= 8, `Oriented SVG outline must emit 4-corner polygon path, got "${quadInfo.d}"`);
     assert.ok(quadInfo.topEdgeSlopeY > 30, `30deg rotated 160px top edge must drop >30px in Y across quad, got ${quadInfo.topEdgeSlopeY}`);
     assert.equal(quadInfo.eCursor, 'nwse-resize', `East handle rotated +30deg must use nwse-resize cursor, got "${quadInfo.eCursor}"`);
     assert.ok(quadInfo.aabbWidth > 170 && quadInfo.aabbHeight > 140, `Expected expanded rotated AABB >170x140, got ${quadInfo.aabbWidth}x${quadInfo.aabbHeight}`);
+    assert.ok(quadInfo.gripPresent, 'Expected corner radius grip on rotated card');
+    assert.ok(
+      quadInfo.gripCenterX > quadInfo.nwCenterX &&
+        quadInfo.gripCenterY > quadInfo.nwCenterY &&
+        Math.hypot(quadInfo.gripCenterX - quadInfo.nwCenterX, quadInfo.gripCenterY - quadInfo.nwCenterY) <= 26,
+      `Rotated radius grip must sit inside rotated nw corner, got grip=(${quadInfo.gripCenterX.toFixed(1)}, ${quadInfo.gripCenterY.toFixed(1)}) vs nw=(${quadInfo.nwCenterX.toFixed(1)}, ${quadInfo.nwCenterY.toFixed(1)})`
+    );
 
     // Drag rotated East handle +40px along its +30deg local X axis -> W becomes 200px, H remains 80px
     const rotEBox = await page.locator('button[aria-label="Resize width from right"]').boundingBox();
@@ -263,6 +284,25 @@ async function runGeometryUiIntegrationBrowserTests() {
     await page.waitForTimeout(200);
     assert.ok(rotCursorText.includes('W: 200px') && rotCursorText.includes('H: 80px'), `Expected rotated local resize ~W: 200px x H: 80px, got "${rotCursorText}"`);
     console.log(`   ✅ [PASS] Oriented quad topEdgeSlopeY=${quadInfo.topEdgeSlopeY.toFixed(1)}px, cursor=${quadInfo.eCursor}, localResize="${rotCursorText}"`);
+
+    // 6. Verify editing window panel clearance against resting bottom dock
+    console.log('6. Checking floating slide-over panel clearance against bottom command dock...');
+    await iframe.locator('main').click({ position: { x: 10, y: 10 } }).catch(() => {});
+    await page.locator('[data-editor-canvas]').click({ position: { x: 20, y: 20 } }).catch(() => {});
+    await page.locator('button[aria-label="Move editing toolbar"]').focus();
+    await page.keyboard.press('Home');
+    await page.waitForTimeout(200);
+    await page.locator('button[aria-label="Toggle layers"]').click();
+    const layersPanel = page.locator('[data-editor-panel="layers"]');
+    await layersPanel.waitFor({ state: 'visible', timeout: 5000 });
+    await page.waitForTimeout(220);
+    const panelBox = await layersPanel.boundingBox();
+    const dockBox = await page.locator('header[aria-label="Editor toolbar"]').boundingBox();
+    assert.ok(panelBox && dockBox, 'Expected visible layers panel and editor toolbar dock');
+    assert.ok(panelBox.y >= 12 && panelBox.y <= 32, `Expected clean top studio margin (12..32px), got y=${panelBox.y}`);
+    assert.ok(panelBox.y + panelBox.height <= dockBox.y - 4, `Layers panel must clear bottom dock without overlap (${panelBox.y + panelBox.height} vs ${dockBox.y})`);
+    await page.locator('button[aria-label="Close layers"]').click();
+    console.log(`   ✅ [PASS] Floating panel top=${panelBox.y.toFixed(0)}px bottom=${(panelBox.y + panelBox.height).toFixed(0)}px clears dock=${dockBox.y.toFixed(0)}px`);
 
     await context.close();
     console.log('\n====================================================');
