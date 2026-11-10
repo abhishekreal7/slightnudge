@@ -13,15 +13,20 @@ import {
 } from '../lib/editor/geometry';
 import {
   buildArtboardToContainerMatrix,
+  buildQuadOutlinePath,
   classifyOverlayFlowIntent,
+  composeCssTransformMatrix,
   compute8HandleResize,
   computeZoomAnchorScroll,
   createDirectSnapSession,
+  cursorForHandleAngle,
+  isAffineNonTrivial,
   parseCssMatrix2D,
   roundMoveTranslation,
   snapRectInSession,
   snapResizeInSession,
   transformGuideLineToContainer,
+  transformQuadByOffset,
 } from '../components/slightnudge/direct-manipulation-engine';
 import {
   computeSelectionChromeGeometry,
@@ -251,6 +256,80 @@ describe('UI geometry integration contracts', () => {
       gesture: { kind: 'move', from: { x: 200, y: 30 }, to: { x: 200, y: 180 } },
     });
     assert.equal(stickyIntent.kind, 'ambiguous');
+  });
+
+  it('oriented Quad chrome helpers handle rotation, negative flip, outward offset, and rotated cursors', () => {
+    assert.equal(isAffineNonTrivial(IDENTITY_MATRIX), false);
+    assert.equal(isAffineNonTrivial(matTranslate(40, 20)), false);
+    assert.equal(isAffineNonTrivial(matRotate(degToRad(30))), true);
+    assert.equal(isAffineNonTrivial(matScale(-1, 1)), true);
+
+    // 90 deg rotated quad: 'n' points right (ew-resize), 'e' points down (ns-resize)
+    const rot90Quad = {
+      nw: { x: 80, y: 0 },
+      ne: { x: 80, y: 120 },
+      se: { x: 0, y: 120 },
+      sw: { x: 0, y: 0 },
+    };
+    assert.equal(cursorForHandleAngle(rot90Quad, 'n'), 'ew-resize');
+    assert.equal(cursorForHandleAngle(rot90Quad, 'e'), 'ns-resize');
+
+    // 30 deg rotated quad: 'e' points (+cos 30, +sin 30) -> nwse-resize
+    const c = Math.cos(degToRad(30));
+    const s = Math.sin(degToRad(30));
+    const rot30Quad = {
+      nw: { x: 0, y: 0 },
+      ne: { x: 100 * c, y: 100 * s },
+      se: { x: 100 * c - 50 * s, y: 100 * s + 50 * c },
+      sw: { x: -50 * s, y: 50 * c },
+    };
+    assert.equal(cursorForHandleAngle(rot30Quad, 'e'), 'nwse-resize');
+
+    // Negatively flipped counter-clockwise quad outset=2 must still expand strictly outward from centroid
+    const flippedQuad = {
+      nw: { x: 100, y: 20 },
+      ne: { x: 0, y: 20 },
+      se: { x: 0, y: 80 },
+      sw: { x: 100, y: 80 },
+    };
+    const pathStr = buildQuadOutlinePath(flippedQuad, 2);
+    const nums = [...pathStr.matchAll(/-?\d+(?:\.\d+)?/g)].map((m) => Number(m[0]));
+    assert.equal(nums.length, 8);
+    // Outset corners around [0..100] x [20..80] must cover [-2..102] x [18..82]
+    assert.ok(nearEqual(nums[0], 102, 1e-4) && nearEqual(nums[1], 18, 1e-4));
+    assert.ok(nearEqual(nums[2], -2, 1e-4) && nearEqual(nums[3], 18, 1e-4));
+    assert.ok(nearEqual(nums[4], -2, 1e-4) && nearEqual(nums[5], 82, 1e-4));
+    assert.ok(nearEqual(nums[6], 102, 1e-4) && nearEqual(nums[7], 82, 1e-4));
+
+    const shifted = transformQuadByOffset(rot90Quad, -10, -20);
+    assert.deepEqual(shifted.nw, { x: 70, y: -20 });
+
+    // CSS Transforms L2 individual rotate/scale composition + ChromeGeometry rotated flags
+    const composed = composeCssTransformMatrix({
+      rotate: '45deg',
+      scale: '-1 1',
+      transform: 'none',
+    });
+    assert.equal(isAffineNonTrivial(composed), true);
+
+    const rotChrome = selectionStyleFor({ width: 100, height: 50, zoom: 1, tag: 'div' });
+    const geom90 = computeSelectionChromeGeometry(
+      [
+        {
+          offsetX: 0,
+          offsetY: 0,
+          width: 100,
+          height: 50,
+          transform: matRotate(degToRad(90)),
+          transformOrigin: { x: 0, y: 0 },
+        },
+      ],
+      { originX: 0, originY: 0, panX: 0, panY: 0, zoom: 1 },
+      rotChrome.visibleHandles
+    );
+    assert.equal(geom90.isNonTrivialTransform, true);
+    assert.equal(geom90.edgeCursors.n, 'ew-resize');
+    assert.equal(geom90.edgeCursors.e, 'ns-resize');
   });
 
   it('integrated UI files delegate geometry math to lib/editor/geometry rather than duplicating it', () => {

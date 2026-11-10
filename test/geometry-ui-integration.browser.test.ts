@@ -42,6 +42,7 @@ async function runGeometryUiIntegrationBrowserTests() {
       <article id="geom-sib" data-source-file="fixtures/1-plain-static.tsx" data-source-line="19" data-source-column="1" style={{ width: '220px', height: '80px', marginLeft: '80px', marginTop: '16px' }} className="bg-slate-200">Sibling Anchor</article>
       <article id="geom-box" data-source-file="fixtures/1-plain-static.tsx" data-source-line="20" data-source-column="1" style={{ width: '205px', height: '100px', marginLeft: '80px', marginTop: '16px' }} className="bg-emerald-100">Resizable Box</article>
       <article id="geom-short" data-source-file="fixtures/1-plain-static.tsx" data-source-line="21" data-source-column="1" style={{ width: '200px', height: '70px', marginLeft: '80px', marginTop: '16px' }} className="bg-amber-100">Short Box</article>
+      <article id="geom-rotated" data-source-file="fixtures/1-plain-static.tsx" data-source-line="22" data-source-column="1" style={{ width: '160px', height: '80px', marginLeft: '140px', marginTop: '48px', transform: 'rotate(30deg)' }} className="bg-indigo-100">Rotated Box</article>
   `;
   fixtureCode = fixtureCode.replace('</main>', `${geomFixture}</main>`);
   fs.writeFileSync(fixturePath, fixtureCode, 'utf8');
@@ -208,6 +209,60 @@ async function runGeometryUiIntegrationBrowserTests() {
     const shiftRatio = Number(m[1]) / Number(m[2]);
     assert.ok(Math.abs(shiftRatio - 2.05) < 0.1, `Shift aspect ratio ~2.05 expected, got ${shiftRatio.toFixed(3)} (${shiftTag})`);
     console.log(`   ✅ [PASS] Live Shift aspect lock preserved (${shiftTag})`);
+
+    // 5. Verify oriented Quad SVG chrome & local-axis resize on 30deg rotated element
+    console.log('5. Checking oriented Quad SVG chrome and rotated local-axis resize...');
+    const rotatedBox = iframe.locator('#geom-rotated').first();
+    await rotatedBox.scrollIntoViewIfNeeded();
+    await rotatedBox.dispatchEvent('click');
+    const orientedSel = page.locator('[aria-label="Selected source element"][data-selection-oriented="true"]');
+    await orientedSel.waitFor({ state: 'visible', timeout: 5000 });
+
+    const quadInfo = await page.evaluate(() => {
+      const pathEl = document.querySelector('[aria-label="Selected source element"] path[class*="outlineAccent"]');
+      const d = pathEl?.getAttribute('d') || '';
+      const nums = [...d.matchAll(/-?\d+(?:\.\d+)?/g)].map((m) => Number(m[0]));
+      const nwBtn = document.querySelector('button[aria-label="Resize width from top left"]') as HTMLElement | null;
+      const seBtn = document.querySelector('button[aria-label="Resize width from bottom right"]') as HTMLElement | null;
+      const eBtn = document.querySelector('button[aria-label="Resize width from right"]') as HTMLElement | null;
+      const frameEl = document.querySelector('iframe[title="Actual project"]') as HTMLIFrameElement;
+      const rotEl = frameEl.contentDocument!.getElementById('geom-rotated')!;
+      const rotAabb = rotEl.getBoundingClientRect();
+      const frameBox = frameEl.getBoundingClientRect();
+      const nwRect = nwBtn?.getBoundingClientRect();
+      const seRect = seBtn?.getBoundingClientRect();
+      return {
+        d,
+        coordCount: nums.length,
+        topEdgeSlopeY: nums.length >= 4 ? Math.abs(nums[3] - nums[1]) : 0,
+        eCursor: eBtn?.style.cursor || '',
+        actualScreenSpanX: seRect && nwRect ? Math.abs(seRect.left - nwRect.left) : 0,
+        expectedTopLeftScreenX: frameBox.left + rotAabb.left,
+        expectedTopLeftScreenY: frameBox.top + rotAabb.top,
+        aabbWidth: rotAabb.width,
+        aabbHeight: rotAabb.height,
+      };
+    });
+    assert.ok(quadInfo.coordCount >= 8, `Oriented SVG outline must emit 4-corner polygon path, got "${quadInfo.d}"`);
+    assert.ok(quadInfo.topEdgeSlopeY > 30, `30deg rotated 160px top edge must drop >30px in Y across quad, got ${quadInfo.topEdgeSlopeY}`);
+    assert.equal(quadInfo.eCursor, 'nwse-resize', `East handle rotated +30deg must use nwse-resize cursor, got "${quadInfo.eCursor}"`);
+    assert.ok(quadInfo.aabbWidth > 170 && quadInfo.aabbHeight > 140, `Expected expanded rotated AABB >170x140, got ${quadInfo.aabbWidth}x${quadInfo.aabbHeight}`);
+
+    // Drag rotated East handle +40px along its +30deg local X axis -> W becomes 200px, H remains 80px
+    const rotEBox = await page.locator('button[aria-label="Resize width from right"]').boundingBox();
+    assert.ok(rotEBox);
+    const reX = rotEBox.x + rotEBox.width / 2;
+    const reY = rotEBox.y + rotEBox.height / 2;
+    await page.mouse.move(reX, reY);
+    await page.mouse.down();
+    await page.mouse.move(reX + 40 * Math.cos((30 * Math.PI) / 180), reY + 40 * Math.sin((30 * Math.PI) / 180), { steps: 4 });
+    await page.waitForTimeout(100);
+    const rotCursorText = (await page.locator('[class*="cursorTag"]').textContent()) || '';
+    await page.keyboard.press('Escape');
+    await page.mouse.up();
+    await page.waitForTimeout(200);
+    assert.ok(rotCursorText.includes('W: 200px') && rotCursorText.includes('H: 80px'), `Expected rotated local resize ~W: 200px x H: 80px, got "${rotCursorText}"`);
+    console.log(`   ✅ [PASS] Oriented quad topEdgeSlopeY=${quadInfo.topEdgeSlopeY.toFixed(1)}px, cursor=${quadInfo.eCursor}, localResize="${rotCursorText}"`);
 
     await context.close();
     console.log('\n====================================================');
