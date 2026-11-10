@@ -2,6 +2,7 @@
 
 import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react';
 import styles from './canvas-stage.module.css';
+import { computeZoomAnchorScroll, resolveScrollForZoomAnchor } from './direct-manipulation-engine';
 
 export type CanvasZoom = 'fit' | number;
 export function CanvasStage({ width, zoom, reset, pan, disabled, onZoom, children }: { width: number; zoom: CanvasZoom; reset: number; pan: boolean; disabled: boolean; onZoom(value: CanvasZoom): void; children: ReactNode }) {
@@ -26,7 +27,11 @@ export function CanvasStage({ width, zoom, reset, pan, disabled, onZoom, childre
   useLayoutEffect(() => {
     const host = viewport.current; if (!host) return;
     if (zoom === 'fit') { host.scrollLeft = (sceneWidth - host.clientWidth) / 2; host.scrollTop = (sceneHeight - host.clientHeight) / 2; }
-    else if (anchor.current) { const a = anchor.current; host.scrollLeft = left + a.worldX * scale - a.x; host.scrollTop = top + a.worldY * scale - a.y; }
+    else if (anchor.current) {
+      const scroll = resolveScrollForZoomAnchor(anchor.current, left, top, scale);
+      host.scrollLeft = scroll.scrollLeft;
+      host.scrollTop = scroll.scrollTop;
+    }
     anchor.current = null;
     window.dispatchEvent(new Event('resize'));
   }, [scale, left, top, sceneWidth, sceneHeight, zoom, reset]);
@@ -39,11 +44,25 @@ export function CanvasStage({ width, zoom, reset, pan, disabled, onZoom, childre
       if (data.ctrlKey || data.metaKey) {
         event.preventDefault(); if (latest.current.disabled) return;
         const box = host.getBoundingClientRect();
-        const x = Math.max(0, Math.min(host.clientWidth, (Number(data.clientX) || box.left + host.clientWidth / 2) - box.left));
-        const y = Math.max(0, Math.min(host.clientHeight, (Number(data.clientY) || box.top + host.clientHeight / 2) - box.top));
         const current = latest.current;
-        anchor.current = { x, y, worldX: (host.scrollLeft + x - current.left) / current.scale, worldY: (host.scrollTop + y - current.top) / current.scale };
-        current.onZoom(Math.max(.1, Math.min(2, Math.round(current.scale * Math.exp(-dy * .003) * 100) / 100)));
+        const zoomStep = computeZoomAnchorScroll({
+          cursorScreenX: Number(data.clientX) || box.left + host.clientWidth / 2,
+          cursorScreenY: Number(data.clientY) || box.top + host.clientHeight / 2,
+          containerBoxLeft: box.left,
+          containerBoxTop: box.top,
+          containerClientWidth: host.clientWidth,
+          containerClientHeight: host.clientHeight,
+          scrollLeft: host.scrollLeft,
+          scrollTop: host.scrollTop,
+          currentLeft: current.left,
+          currentTop: current.top,
+          currentScale: current.scale,
+          scaleMultiplier: Math.exp(-dy * .003),
+          minScale: .1,
+          maxScale: 2,
+        });
+        anchor.current = zoomStep.anchor;
+        current.onZoom(zoomStep.nextScale);
       } else if (forwarded) {
         const unit = data.deltaMode === 1 ? 16 : data.deltaMode === 2 ? host.clientHeight : 1;
         host.scrollBy(dx * unit, dy * unit);

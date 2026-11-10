@@ -1,18 +1,64 @@
 /**
  * SlightNudge Selection Chrome v2 - Variant Decision Engine
- * Pure function selectionStyleFor(info) and corner radius parser.
+ * Pure function selectionStyleFor(info), corner radius parser, and affine screen geometry adapter.
  * 
  * Rules:
  * - Deterministic, table-driven variant mapping
  * - Per-corner radii parsing (px, rem, em, %, 9999px, elliptical, calc)
  * - 2px hysteresis for variant boundary stability
  * - Semantic handle suppression (dots only where resizing is physically actionable)
- * - Constant on-screen handle sizing & hit testing
+ * - Constant on-screen handle sizing & hit testing backed by lib/editor/geometry
  */
+
+import {
+  getHandleScreenPoint,
+  matDecompose,
+  predictElementScreenRect,
+  radToDeg,
+  roundValue,
+  type CanvasSpace,
+  type ElementTransformFrame,
+  type Point2D,
+  type Rect,
+  type ScreenPrediction,
+} from '../../lib/editor/geometry';
 
 export type SelectionVariant = 'dots' | 'arc' | 'capsule' | 'circle' | 'text' | 'media' | 'tiny';
 
 export type HandleDirection = 'nw' | 'n' | 'ne' | 'e' | 'se' | 's' | 'sw' | 'w';
+
+export interface SelectionChromeGeometry {
+  prediction: ScreenPrediction;
+  rotationDeg: number;
+  handleScreenPoints: Partial<Record<HandleDirection, Point2D>>;
+}
+
+/**
+ * Computes screen-space quad, AABB bounds, decomposed rotation angle, and visible handle positions
+ * across nested ancestor transforms & scroll offsets using `lib/editor/geometry`.
+ */
+export function computeSelectionChromeGeometry(
+  chain: readonly ElementTransformFrame[],
+  space: CanvasSpace,
+  visibleHandles: readonly HandleDirection[],
+  viewportScroll: Point2D = { x: 0, y: 0 }
+): SelectionChromeGeometry {
+  const prediction = predictElementScreenRect(chain, space, viewportScroll);
+  const target = chain[chain.length - 1];
+  const localRect: Rect = {
+    left: 0,
+    top: 0,
+    width: target ? target.width : 0,
+    height: target ? target.height : 0,
+  };
+  const decomposed = matDecompose(prediction.matrix);
+  const rotationDeg = radToDeg(decomposed.rotateRad);
+  const handleScreenPoints: Partial<Record<HandleDirection, Point2D>> = {};
+  for (const handle of visibleHandles) {
+    handleScreenPoints[handle] = getHandleScreenPoint(localRect, handle, prediction.matrix);
+  }
+  return { prediction, rotationDeg, handleScreenPoints };
+}
 
 export interface CornerRadii {
   tl: number;
@@ -450,7 +496,7 @@ export function selectionStyleFor(info: SelectionInfo): SelectionChromeStyle {
       minimumSizes: defaultMinSizes,
       radiusGrip: {
         visible: effectiveRadius > 0,
-        inset: Math.max(12, Math.min(24, Math.round(effectiveRadius + 6))),
+        inset: Math.max(12, Math.min(24, roundValue(effectiveRadius + 6, 'nearest', 1))),
         currentRadius: effectiveRadius,
       },
     };
@@ -484,7 +530,7 @@ export function selectionStyleFor(info: SelectionInfo): SelectionChromeStyle {
       minimumSizes: defaultMinSizes,
       radiusGrip: {
         visible: true,
-        inset: Math.max(12, Math.min(24, Math.round(effectiveRadius * 0.35 + 8))),
+        inset: Math.max(12, Math.min(24, roundValue(effectiveRadius * 0.35 + 8, 'nearest', 1))),
         currentRadius: effectiveRadius,
       },
     };
@@ -501,7 +547,7 @@ export function selectionStyleFor(info: SelectionInfo): SelectionChromeStyle {
       minimumSizes: defaultMinSizes,
       radiusGrip: {
         visible: true,
-        inset: Math.max(12, Math.min(24, Math.round(effectiveRadius + 6))),
+        inset: Math.max(12, Math.min(24, roundValue(effectiveRadius + 6, 'nearest', 1))),
         currentRadius: effectiveRadius,
       },
     };
@@ -523,7 +569,7 @@ export function selectionStyleFor(info: SelectionInfo): SelectionChromeStyle {
       minimumSizes: defaultMinSizes,
       radiusGrip: {
         visible: true,
-        inset: Math.max(12, Math.min(24, Math.round(effectiveRadius + 6))),
+        inset: Math.max(12, Math.min(24, roundValue(effectiveRadius + 6, 'nearest', 1))),
         currentRadius: effectiveRadius,
       },
     };
@@ -544,7 +590,7 @@ export function selectionStyleFor(info: SelectionInfo): SelectionChromeStyle {
     minimumSizes: defaultMinSizes,
     radiusGrip: {
       visible: true,
-      inset: Math.max(12, Math.min(20, Math.round(effectiveRadius + 6))),
+      inset: Math.max(12, Math.min(20, roundValue(effectiveRadius + 6, 'nearest', 1))),
       currentRadius: effectiveRadius,
     },
   };

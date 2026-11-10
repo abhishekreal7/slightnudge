@@ -5,6 +5,18 @@ import { readApiJson } from '@/lib/slightnudge/api-response';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { AlignCenter, AlignLeft, AlignRight, ArrowDown, ArrowUp, ArrowUpDown, Check, ChevronDown, ChevronsDown, ChevronsUp, CircleAlert, Code2, Columns2, GripVertical, Laptop2, LayoutGrid, Layers, LoaderCircle, MoreHorizontal, MousePointer2, Pencil, Play, RotateCcw, Sparkles, Trash2, Type, Undo2, X } from 'lucide-react';
 import { getClientSessionToken, undoEditAPI, type UndoContext } from '@/lib/slightnudge/client';
+import { classifyOverlayFlowIntent } from './direct-manipulation-engine';
+import type {
+  ChildLayoutDescriptor,
+  CssDisplay,
+  CssPosition,
+  FlexDirection,
+  FlexWrap,
+  FlowSiblingDescriptor,
+  ParentLayoutDescriptor,
+  WritingDirection,
+  WritingMode,
+} from '@/lib/editor/geometry';
 
 interface SelectedElementInfo {
   tagName: string;
@@ -1203,14 +1215,78 @@ export function SlightNudgeOverlay({
     const parentRect = parent.getBoundingClientRect();
     const siblingRects = allSiblings.map((s) => s.getBoundingClientRect());
 
-    // Detect layout orientation and 2D layouts:
-    let isHorizontal = false;
+    // Classify flow axis, reverse/RTL semantics, and unsupported layout constraints via lib/editor/geometry
     const pStyle = window.getComputedStyle(parent);
-    const isGrid = pStyle.display.includes('grid') || pStyle.display === 'inline-grid';
-    const isFlexWrap = pStyle.display.includes('flex') && pStyle.flexWrap !== 'nowrap';
+    const cStyle = window.getComputedStyle(el);
+    const normalizeDisplay = (d: string): CssDisplay => {
+      if (d === 'inline-grid') return 'inline-grid';
+      if (d.includes('grid')) return 'grid';
+      if (d === 'inline-flex') return 'inline-flex';
+      if (d.includes('flex')) return 'flex';
+      if (d === 'inline-block') return 'inline-block';
+      if (d === 'inline') return 'inline';
+      if (d === 'contents') return 'contents';
+      if (d === 'none') return 'none';
+      return 'block';
+    };
+    const normalizePosition = (p: string): CssPosition =>
+      p === 'relative' || p === 'absolute' || p === 'fixed' || p === 'sticky' ? p : 'static';
 
-    if (pStyle.display.includes('flex') && !pStyle.flexDirection.startsWith('column')) {
+    const parentDesc: ParentLayoutDescriptor = {
+      display: normalizeDisplay(pStyle.display),
+      position: normalizePosition(pStyle.position),
+      rect: { left: parentRect.left, top: parentRect.top, width: parentRect.width, height: parentRect.height },
+      flexDirection: (['row', 'row-reverse', 'column', 'column-reverse'].includes(pStyle.flexDirection)
+        ? pStyle.flexDirection
+        : 'row') as FlexDirection,
+      flexWrap: (['nowrap', 'wrap', 'wrap-reverse'].includes(pStyle.flexWrap)
+        ? pStyle.flexWrap
+        : 'nowrap') as FlexWrap,
+      direction: (pStyle.direction === 'rtl' ? 'rtl' : 'ltr') as WritingDirection,
+      writingMode: (['vertical-rl', 'vertical-lr'].includes(pStyle.writingMode)
+        ? pStyle.writingMode
+        : 'horizontal-tb') as WritingMode,
+    };
+    const childDesc: ChildLayoutDescriptor = {
+      index: currentIndex,
+      display: normalizeDisplay(cStyle.display),
+      position: normalizePosition(cStyle.position),
+      rect: { left: elRect.left, top: elRect.top, width: elRect.width, height: elRect.height },
+    };
+    const sibDescs: FlowSiblingDescriptor[] = siblingRects.map((sr, idx) => ({
+      index: idx,
+      display: normalizeDisplay(window.getComputedStyle(allSiblings[idx]).display),
+      position: normalizePosition(window.getComputedStyle(allSiblings[idx]).position),
+      rect: { left: sr.left, top: sr.top, width: sr.width, height: sr.height },
+    }));
+
+    const isGrid = parentDesc.display === 'grid' || parentDesc.display === 'inline-grid';
+    const isFlexWrap = (parentDesc.display === 'flex' || parentDesc.display === 'inline-flex') && parentDesc.flexWrap !== 'nowrap';
+    const elCenter = { x: elRect.left + elRect.width / 2, y: elRect.top + elRect.height / 2 };
+    const probeHoriz = classifyOverlayFlowIntent({
+      parent: parentDesc,
+      child: childDesc,
+      siblings: sibDescs,
+      gesture: { kind: 'move', from: elCenter, to: { x: elCenter.x + 120, y: elCenter.y } },
+    });
+    const probeVert = classifyOverlayFlowIntent({
+      parent: parentDesc,
+      child: childDesc,
+      siblings: sibDescs,
+      gesture: { kind: 'move', from: elCenter, to: { x: elCenter.x, y: elCenter.y + 120 } },
+    });
+
+    let isHorizontal = false;
+    let isReverseVisual = false;
+    if (probeHoriz.kind === 'reorder-in-flow' && probeHoriz.axis === 'horizontal') {
       isHorizontal = true;
+      isReverseVisual = probeHoriz.visualDirection === 'reverse';
+    } else if (probeVert.kind === 'reorder-in-flow' && probeVert.axis === 'vertical') {
+      isHorizontal = false;
+      isReverseVisual = probeVert.visualDirection === 'reverse';
+    } else if (parentDesc.display.includes('flex') && !parentDesc.flexDirection?.startsWith('column')) {
+      isHorizontal = true;
+      isReverseVisual = parentDesc.flexDirection === 'row-reverse' ? parentDesc.direction !== 'rtl' : parentDesc.direction === 'rtl';
     } else if (allSiblings.length >= 2) {
       const s0 = siblingRects[0];
       const s1 = siblingRects[1];
@@ -1445,23 +1521,16 @@ export function SlightNudgeOverlay({
       // STEP 1b: Boundary thresholding: <25px leaves unchanged, >=25px swaps by 1 place
       let targetSlot = currentIndex;
       const stepThreshold = 25;
+      const signedDisp = isHorizontal ? rawDx : rawDy;
+      const logicalDisp = isReverseVisual ? -signedDisp : signedDisp;
+      const stepSize = isHorizontal ? 220 : 120;
 
-      if (!isHorizontal) {
-        if (rawDy >= stepThreshold) {
-          const steps = Math.min(allSiblings.length - 1 - currentIndex, Math.floor((rawDy - stepThreshold) / 120) + 1);
-          targetSlot = currentIndex + steps;
-        } else if (rawDy <= -stepThreshold) {
-          const steps = Math.min(currentIndex, Math.floor((-rawDy - stepThreshold) / 120) + 1);
-          targetSlot = currentIndex - steps;
-        }
-      } else {
-        if (rawDx >= stepThreshold) {
-          const steps = Math.min(allSiblings.length - 1 - currentIndex, Math.floor((rawDx - stepThreshold) / 220) + 1);
-          targetSlot = currentIndex + steps;
-        } else if (rawDx <= -stepThreshold) {
-          const steps = Math.min(currentIndex, Math.floor((-rawDx - stepThreshold) / 220) + 1);
-          targetSlot = currentIndex - steps;
-        }
+      if (logicalDisp >= stepThreshold) {
+        const steps = Math.min(allSiblings.length - 1 - currentIndex, Math.floor((logicalDisp - stepThreshold) / stepSize) + 1);
+        targetSlot = currentIndex + steps;
+      } else if (logicalDisp <= -stepThreshold) {
+        const steps = Math.min(currentIndex, Math.floor((-logicalDisp - stepThreshold) / stepSize) + 1);
+        targetSlot = currentIndex - steps;
       }
 
       if (targetSlot === currentIndex) {

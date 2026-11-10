@@ -104,13 +104,27 @@ import {
   type QueueNotification,
 } from '@/lib/slightnudge/client';
 import {
-  compute8HandleResize,
-  computeSmartSnapping,
-  computeArrowNudge,
-  estimateTailwindClasses,
+  IDENTITY_MATRIX,
+  canvasToScreenMatrix,
+  matMultiply,
+  roundValue,
+  screenDeltaToElementLocalDelta,
+  vecAdd,
+  type Matrix2D,
+} from '@/lib/editor/geometry';
+import {
+  buildArtboardToContainerMatrix,
+  createDirectSnapSession,
+  parseCssMatrix2D,
+  roundMoveTranslation,
+  snapRectInSession,
+  snapResizeInSession,
+  transformGuideLineToContainer,
+  type ContainerRect,
+  type DirectSnapSession,
+  type GuideLine,
   type HandleDirection,
   type SiblingRect,
-  type ContainerRect,
 } from '@/components/slightnudge/direct-manipulation-engine';
 
 interface ElementMeta {
@@ -481,7 +495,6 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
   const sourceWindowMode = unified ? view === 'full' : windowMode;
   const router = useRouter();
   const changeView = (next:EditorView) => {const url=new URL(location.href);url.searchParams.set('view',next);router.replace(url.pathname+url.search,{scroll:false});};
-  const windowDock = useWindowDock(windowMode);
   const routeParams = useParams<{ repoId?: string }>();
   const repositoryId = projectId ?? routeParams?.repoId;
   const usesDrafts = true;
@@ -852,6 +865,9 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
     zoom: number;
     siblings: SiblingRect[];
     containerRect?: ContainerRect;
+    snapSession?: DirectSnapSession;
+    artboardToMain: Matrix2D;
+    elementToScreen: Matrix2D;
     targetEl: HTMLElement | null;
     initialTargetStyle: string | null;
     outlineOnly?: boolean;
@@ -870,6 +886,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
     token: string;
     lastClassEstimateTime: number;
   } | null>(null);
+  const windowDock = useWindowDock(windowMode, () => Boolean(directDragRef.current), isResizing || isDraggingMove);
 
   // Dynamic DOM refs & element bounding dimensions
   const elementRefs = useRef<Record<string, HTMLElement | null>>({});
@@ -1002,7 +1019,76 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
     return () => { observer.disconnect(); cancelAnimationFrame(animation); window.removeEventListener('scroll', schedule, true); window.removeEventListener('resize', schedule); };
   }, [selectedLayer, repositoryId, elements, breakpoint, showQuickActions, liveMove, isResizing, childOrder, elementDimensions, sourceLayers, windowMode, windowPanel, windowDock.position, definitionStyleKey]);
 
-  // Position movement preserves document flow and never reorders siblings.
+  const resolveStageScale = (layerKey?: string): number => {
+    if (typeof canvasZoom === 'number' && Number.isFinite(canvasZoom) && canvasZoom > 0) {
+      return canvasZoom;
+    }
+    const iframeEl = sourceCanvas.current?.getFrame?.();
+    if (iframeEl && iframeEl.clientWidth > 0) {
+      const boxW = iframeEl.getBoundingClientRect().width;
+      if (boxW > 0 && Number.isFinite(boxW)) return boxW / iframeEl.clientWidth;
+    }
+    const host = layerKey ? elementRefs.current[layerKey]?.closest('[data-zoom]') : null;
+    const attrZoom = host ? Number(host.getAttribute('data-zoom')) : NaN;
+    return Number.isFinite(attrZoom) && attrZoom > 0 ? attrZoom : 1;
+  };
+
+  const collectSiblingSnapRects = (excludeKey: string): SiblingRect[] => {
+    const siblings: SiblingRect[] = [];
+    if (!sourceLayers || sourceLayers.length === 0) return siblings;
+    for (const layer of sourceLayers) {
+      if (layer.key !== excludeKey && layer.rect) {
+        siblings.push({
+          left: layer.rect.left,
+          top: layer.rect.top,
+          right: layer.rect.left + layer.rect.width,
+          bottom: layer.rect.top + layer.rect.height,
+          width: layer.rect.width,
+          height: layer.rect.height,
+          centerX: layer.rect.left + layer.rect.width / 2,
+          centerY: layer.rect.top + layer.rect.height / 2,
+        });
+      }
+    }
+    return siblings;
+  };
+
+  const captureGestureMatrices = (layerKey: string, targetEl: HTMLElement | null, scale: number): {
+    artboardToMain: Matrix2D;
+    stageToScreen: Matrix2D;
+    elementToScreen: Matrix2D;
+  } => {
+    const stageToScreen = canvasToScreenMatrix({ originX: 0, originY: 0, panX: 0, panY: 0, zoom: scale });
+    const iframeEl = sourceCanvas.current?.getFrame?.();
+    const mainEl = elementRefs.current[layerKey]?.closest('[data-editor-canvas]') as HTMLElement | null;
+    let artboardToMain = IDENTITY_MATRIX;
+    if (iframeEl && mainEl) {
+      const iframeBox = iframeEl.getBoundingClientRect();
+      const mainBox = mainEl.getBoundingClientRect();
+      artboardToMain = buildArtboardToContainerMatrix(
+        iframeBox.left,
+        iframeBox.top,
+        mainBox.left,
+        mainBox.top,
+        mainEl.clientLeft,
+        mainEl.clientTop,
+        mainEl.scrollLeft,
+        mainEl.scrollTop,
+        scale
+      );
+    }
+    let linearLocal = IDENTITY_MATRIX;
+    if (targetEl) {
+      try {
+        const computedTransform = getComputedStyle(targetEl).transform;
+        const m = parseCssMatrix2D(computedTransform);
+        linearLocal = [m[0], m[1], m[2], m[3], 0, 0];
+      } catch {}
+    }
+    const elementToScreen = matMultiply(stageToScreen, linearLocal);
+    return { artboardToMain, stageToScreen, elementToScreen };
+  };
+
   // Position movement preserves document flow and never reorders siblings.
   const startDragMove = (layerKey: string, e: React.PointerEvent<HTMLElement>) => {
     e.stopPropagation();
@@ -1019,7 +1105,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
       const base = readTranslation(elements[layerKey].classes);
       const targetElem = elements[layerKey] || activeElement;
       const actualSelection = sourceSelections.current[layerKey] || sourceSelection.current;
-      const zoom = typeof canvasZoom === 'number' ? canvasZoom : 1;
+      const zoom = resolveStageScale(layerKey);
 
       // Check same-origin iframe target element
       const iframeDoc = sourceCanvas.current?.getDocument?.();
@@ -1030,23 +1116,9 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
       }
       const initialTargetStyle = targetEl?.getAttribute('style') || null;
 
-      const siblings: SiblingRect[] = [];
-      if (sourceLayers && sourceLayers.length > 0) {
-        for (const layer of sourceLayers) {
-          if (layer.key !== layerKey && layer.rect) {
-            siblings.push({
-              left: layer.rect.left,
-              top: layer.rect.top,
-              right: layer.rect.left + layer.rect.width,
-              bottom: layer.rect.top + layer.rect.height,
-              width: layer.rect.width,
-              height: layer.rect.height,
-              centerX: layer.rect.left + layer.rect.width / 2,
-              centerY: layer.rect.top + layer.rect.height / 2,
-            });
-          }
-        }
-      }
+      const siblings = collectSiblingSnapRects(layerKey);
+      const snapSession = createDirectSnapSession(siblings);
+      const { artboardToMain, stageToScreen } = captureGestureMatrices(layerKey, targetEl, zoom);
 
       e.preventDefault();
       try {
@@ -1078,6 +1150,9 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
         baseTranslation: base,
         zoom,
         siblings,
+        snapSession,
+        artboardToMain,
+        elementToScreen: stageToScreen,
         targetEl,
         initialTargetStyle,
         outlineOnly: outlineDrag,
@@ -1109,7 +1184,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
     const targetElem = renderedElement;
     const actualSelection = sourceSelections.current[key] || sourceSelection.current;
 
-    const zoom = typeof canvasZoom === 'number' ? canvasZoom : 1;
+    const zoom = resolveStageScale(key);
     const currentW = elementRefs.current[key]?.offsetWidth || actualSelection?.rect?.width || 672;
     const currentH = elementRefs.current[key]?.offsetHeight || actualSelection?.rect?.height || 114;
     const startLeft = actualSelection?.rect?.left || 0;
@@ -1124,23 +1199,9 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
     }
     const initialTargetStyle = targetEl?.getAttribute('style') || null;
 
-    const siblings: SiblingRect[] = [];
-    if (sourceLayers && sourceLayers.length > 0) {
-      for (const layer of sourceLayers) {
-        if (layer.key !== key && layer.rect) {
-          siblings.push({
-            left: layer.rect.left,
-            top: layer.rect.top,
-            right: layer.rect.left + layer.rect.width,
-            bottom: layer.rect.top + layer.rect.height,
-            width: layer.rect.width,
-            height: layer.rect.height,
-            centerX: layer.rect.left + layer.rect.width / 2,
-            centerY: layer.rect.top + layer.rect.height / 2,
-          });
-        }
-      }
-    }
+    const siblings = collectSiblingSnapRects(key);
+    const snapSession = createDirectSnapSession(siblings);
+    const { artboardToMain, elementToScreen } = captureGestureMatrices(key, targetEl, zoom);
 
     try {
       e.currentTarget.setPointerCapture(e.pointerId);
@@ -1174,6 +1235,9 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
       baseTranslation: { x: 0, y: 0 },
       zoom,
       siblings,
+      snapSession,
+      artboardToMain,
+      elementToScreen,
       targetEl,
       initialTargetStyle,
       outlineOnly: outlineDrag,
@@ -1203,7 +1267,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
     const targetElem = renderedElement;
     const actualSelection = sourceSelections.current[key] || sourceSelection.current;
 
-    const zoom = typeof canvasZoom === 'number' ? canvasZoom : 1;
+    const zoom = resolveStageScale(key);
     const currentW = elementRefs.current[key]?.offsetWidth || actualSelection?.rect?.width || 200;
     const currentH = elementRefs.current[key]?.offsetHeight || actualSelection?.rect?.height || 100;
     const startLeft = actualSelection?.rect?.left || 0;
@@ -1252,6 +1316,8 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
       baseTranslation: { x: 0, y: 0 },
       zoom,
       siblings: [],
+      artboardToMain: IDENTITY_MATRIX,
+      elementToScreen: IDENTITY_MATRIX,
       targetEl,
       initialTargetStyle,
       outlineOnly: outlineDrag,
@@ -1464,6 +1530,31 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
   useEffect(() => {
     let animationId = 0;
 
+    const applyGuidesToOverlay = (guides: readonly GuideLine[], artboardToMain: Matrix2D, moved: boolean) => {
+      let showedV = false;
+      let showedH = false;
+      if (moved && guides.length > 0) {
+        for (const rawGuide of guides) {
+          const g = transformGuideLineToContainer(rawGuide, artboardToMain);
+          if (g.type === 'vertical' && !showedV && guideVRef.current) {
+            showedV = true;
+            guideVRef.current.style.display = 'block';
+            guideVRef.current.style.left = `${g.position}px`;
+            guideVRef.current.style.top = `${g.start}px`;
+            guideVRef.current.style.height = `${Math.max(10, g.end - g.start)}px`;
+          } else if (g.type === 'horizontal' && !showedH && guideHRef.current) {
+            showedH = true;
+            guideHRef.current.style.display = 'block';
+            guideHRef.current.style.top = `${g.position}px`;
+            guideHRef.current.style.left = `${g.start}px`;
+            guideHRef.current.style.width = `${Math.max(10, g.end - g.start)}px`;
+          }
+        }
+      }
+      if (!showedV && guideVRef.current) guideVRef.current.style.display = 'none';
+      if (!showedH && guideHRef.current) guideHRef.current.style.display = 'none';
+    };
+
     const onTick = () => {
       const gesture = directDragRef.current;
       if (!gesture) return;
@@ -1479,47 +1570,32 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
         }
 
         const effectiveShift = gesture.lockedAspect ? !p.shiftKey : p.shiftKey;
-        const res = compute8HandleResize({
-          handle: gesture.handle,
-          startRect: {
+        const session = gesture.snapSession ?? createDirectSnapSession(gesture.siblings);
+        gesture.snapSession = session;
+
+        const solved = snapResizeInSession(
+          session,
+          {
             left: gesture.startLeft,
             top: gesture.startTop,
             width: gesture.startWidth,
             height: gesture.startHeight,
           },
-          zoom: gesture.zoom,
-          grabOffset: { x: 0, y: 0 },
-          pointerDeltaScreen: deltaScreen,
-          shiftKey: effectiveShift,
-          altKey: p.altKey,
-          minSize: 1,
-        });
+          gesture.handle,
+          deltaScreen,
+          gesture.elementToScreen,
+          {
+            thresholdScreenPx: 4,
+            zoom: gesture.zoom,
+            disabled: p.ctrlKey,
+            fromCenter: p.altKey,
+            aspectRatio: effectiveShift,
+            minWidth: 1,
+            minHeight: 1,
+          }
+        );
 
-        // Smart snapping (< 1ms for 50 siblings)
-        const snap = computeSmartSnapping({
-          box: {
-            left: res.left,
-            top: res.top,
-            right: res.right,
-            bottom: res.bottom,
-            width: res.width,
-            height: res.height,
-          },
-          siblings: gesture.siblings,
-          thresholdScreenPx: 4,
-          zoom: gesture.zoom,
-          disabled: p.ctrlKey,
-        });
-
-        if (snap.snappedX) {
-          res.width += snap.dx;
-          res.right += snap.dx;
-        }
-        if (snap.snappedY) {
-          res.height += snap.dy;
-          res.bottom += snap.dy;
-        }
-
+        const res = solved.resize.rect;
         gesture.nextWidth = Math.max(1, res.width);
         gesture.nextHeight = Math.max(1, res.height);
         gesture.nextLeft = res.left;
@@ -1527,12 +1603,12 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
 
         // 1. Direct overlay write (transform + width/height)
         if (overlayNode) {
-          overlayNode.style.width = `${Math.round(gesture.nextWidth)}px`;
-          overlayNode.style.height = `${Math.round(gesture.nextHeight)}px`;
+          overlayNode.style.width = `${roundValue(gesture.nextWidth, 'nearest', 1)}px`;
+          overlayNode.style.height = `${roundValue(gesture.nextHeight, 'nearest', 1)}px`;
           const dx = gesture.nextLeft - gesture.startLeft;
           const dy = gesture.nextTop - gesture.startTop;
           if (Math.abs(dx) > 0.1 || Math.abs(dy) > 0.1) {
-            overlayNode.style.transform = `translate3d(${Math.round(dx)}px, ${Math.round(dy)}px, 0)`;
+            overlayNode.style.transform = `translate3d(${roundValue(dx, 'nearest', 1)}px, ${roundValue(dy, 'nearest', 1)}px, 0)`;
           } else {
             overlayNode.style.transform = '';
           }
@@ -1556,73 +1632,62 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
 
         // 2. Direct style write on canvas element (same-origin direct or bridge gesture)
         if (gesture.targetEl && !gesture.outlineOnly) {
-          gesture.targetEl.style.maxWidth = `${Math.round(gesture.nextWidth)}px`;
+          gesture.targetEl.style.maxWidth = `${roundValue(gesture.nextWidth, 'nearest', 1)}px`;
         } else if (sourceCanvas.current && gesture.moved && !gesture.outlineOnly) {
           const selection = sourceSelections.current[gesture.key];
           if (selection) {
-            void sourceCanvas.current.command('gesture', selection, { maxWidth: Math.round(gesture.nextWidth) });
+            void sourceCanvas.current.command('gesture', selection, { maxWidth: roundValue(gesture.nextWidth, 'nearest', 1) });
           }
         }
 
-        // 3. Smart 1px guides
-        if (snap.guides.length > 0 && gesture.moved) {
-          for (const g of snap.guides) {
-            if (g.type === 'vertical' && guideVRef.current) {
-              guideVRef.current.style.display = 'block';
-              guideVRef.current.style.left = `${g.position}px`;
-              guideVRef.current.style.top = `${g.start}px`;
-              guideVRef.current.style.height = `${Math.max(10, g.end - g.start)}px`;
-            } else if (g.type === 'horizontal' && guideHRef.current) {
-              guideHRef.current.style.display = 'block';
-              guideHRef.current.style.top = `${g.position}px`;
-              guideHRef.current.style.left = `${g.start}px`;
-              guideHRef.current.style.width = `${Math.max(10, g.end - g.start)}px`;
-            }
-          }
-        } else {
-          if (guideVRef.current) guideVRef.current.style.display = 'none';
-          if (guideHRef.current) guideHRef.current.style.display = 'none';
-        }
+        // 3. Smart 1px guides transformed into <main> coordinate space
+        applyGuidesToOverlay(solved.guides, gesture.artboardToMain, gesture.moved);
 
         // 4. Live cursor W x H tag
         if (cursorTagRef.current && gesture.moved) {
           cursorTagRef.current.style.display = 'block';
-          cursorTagRef.current.textContent = `W: ${Math.round(gesture.nextWidth)}px × H: ${Math.round(gesture.nextHeight)}px`;
+          cursorTagRef.current.textContent = `W: ${roundValue(gesture.nextWidth, 'nearest', 1)}px × H: ${roundValue(gesture.nextHeight, 'nearest', 1)}px`;
           cursorTagRef.current.style.transform = `translate3d(${p.x + 14}px, ${p.y + 14}px, 0)`;
         }
       } else if (gesture.type === 'move') {
-        const deltaScreenX = p.x - gesture.startX;
-        const deltaScreenY = p.y - gesture.startY;
-        if (Math.hypot(deltaScreenX, deltaScreenY) >= 3) {
+        const deltaScreen = { x: p.x - gesture.startX, y: p.y - gesture.startY };
+        if (Math.hypot(deltaScreen.x, deltaScreen.y) >= 3) {
           gesture.moved = true;
         }
 
-        const deltaX = deltaScreenX / gesture.zoom;
-        const deltaY = deltaScreenY / gesture.zoom;
+        const localDelta =
+          screenDeltaToElementLocalDelta(deltaScreen, gesture.elementToScreen) ?? {
+            x: deltaScreen.x / gesture.zoom,
+            y: deltaScreen.y / gesture.zoom,
+          };
 
-        let nextX = gesture.baseTranslation.x + deltaX;
-        let nextY = gesture.baseTranslation.y + deltaY;
+        let nextX = gesture.baseTranslation.x + localDelta.x;
+        let nextY = gesture.baseTranslation.y + localDelta.y;
 
-        const snap = computeSmartSnapping({
-          box: {
+        const session = gesture.snapSession ?? createDirectSnapSession(gesture.siblings);
+        gesture.snapSession = session;
+
+        const snap = snapRectInSession(
+          session,
+          {
             left: gesture.startLeft + nextX - gesture.baseTranslation.x,
             top: gesture.startTop + nextY - gesture.baseTranslation.y,
-            right: gesture.startLeft + nextX - gesture.baseTranslation.x + gesture.startWidth,
-            bottom: gesture.startTop + nextY - gesture.baseTranslation.y + gesture.startHeight,
             width: gesture.startWidth,
             height: gesture.startHeight,
           },
-          siblings: gesture.siblings,
-          thresholdScreenPx: 4,
-          zoom: gesture.zoom,
-          disabled: p.ctrlKey,
-        });
+          {
+            thresholdScreenPx: 4,
+            zoom: gesture.zoom,
+            disabled: p.ctrlKey,
+          }
+        );
 
         if (snap.snappedX) nextX += snap.dx;
         if (snap.snappedY) nextY += snap.dy;
 
-        const snappedX = Math.round(nextX / 4) * 4;
-        const snappedY = Math.round(nextY / 4) * 4;
+        const roundedPos = roundMoveTranslation(nextX, nextY, snap.snappedX && !p.ctrlKey, snap.snappedY && !p.ctrlKey);
+        const snappedX = roundedPos.x;
+        const snappedY = roundedPos.y;
         gesture.nextTranslation = { x: snappedX, y: snappedY };
 
         if (overlayNode) {
@@ -1638,24 +1703,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
           }
         }
 
-        if (snap.guides.length > 0 && gesture.moved) {
-          for (const g of snap.guides) {
-            if (g.type === 'vertical' && guideVRef.current) {
-              guideVRef.current.style.display = 'block';
-              guideVRef.current.style.left = `${g.position}px`;
-              guideVRef.current.style.top = `${g.start}px`;
-              guideVRef.current.style.height = `${Math.max(10, g.end - g.start)}px`;
-            } else if (g.type === 'horizontal' && guideHRef.current) {
-              guideHRef.current.style.display = 'block';
-              guideHRef.current.style.top = `${g.position}px`;
-              guideHRef.current.style.left = `${g.start}px`;
-              guideHRef.current.style.width = `${Math.max(10, g.end - g.start)}px`;
-            }
-          }
-        } else {
-          if (guideVRef.current) guideVRef.current.style.display = 'none';
-          if (guideHRef.current) guideHRef.current.style.display = 'none';
-        }
+        applyGuidesToOverlay(snap.guides, gesture.artboardToMain, gesture.moved);
 
         if (cursorTagRef.current && gesture.moved) {
           cursorTagRef.current.style.display = 'block';
@@ -1669,11 +1717,12 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
           gesture.moved = true;
         }
 
-        const z = Math.max(0.01, gesture.zoom);
-        const dx = deltaScreenX / z;
-        const dy = deltaScreenY / z;
-
-        const deltaR = (dx + dy) / 2;
+        const localDelta =
+          screenDeltaToElementLocalDelta({ x: deltaScreenX, y: deltaScreenY }, canvasToScreenMatrix({ originX: 0, originY: 0, panX: 0, panY: 0, zoom: gesture.zoom })) ?? {
+            x: deltaScreenX / gesture.zoom,
+            y: deltaScreenY / gesture.zoom,
+          };
+        const deltaR = (localDelta.x + localDelta.y) / 2;
         const rawRadius = Math.max(0, Math.min(gesture.maxRadius || 50, (gesture.initialRadius || 0) + deltaR));
         const snapped = findNearestRadiusStep(rawRadius, gesture.maxRadius || 50);
         gesture.nextRadiusStep = snapped;
@@ -2588,7 +2637,10 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
     if (!usesDrafts || !/^(h[1-6]|p|section|div|article|aside|header|footer|nav|main|a|button|img)$/.test(activeElement.tag) || activeVariant || activeBreakpoint) { showToast('To move an element, choose All sizes and the Default state.'); return; }
     try {
       const base = readTranslation(activeElement.classes);
-      const next = { x: base.x + (direction === 'left' ? -4 : direction === 'right' ? 4 : 0), y: base.y + (direction === 'up' ? -4 : direction === 'down' ? 4 : 0) };
+      const next = vecAdd(base, {
+        x: direction === 'left' ? -4 : direction === 'right' ? 4 : 0,
+        y: direction === 'up' ? -4 : direction === 'down' ? 4 : 0,
+      });
       void triggerBackendPreview('move', next);
     } catch (error) { showToast(error instanceof Error ? error.message : 'This element cannot be moved safely.'); }
   };
@@ -2862,7 +2914,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
   const renderSourceSelection = (selection: SourceSelection) => {
     const layerKey = sourceKey(selection);
     if (selectedLayer !== layerKey || !elements[layerKey]) return null;
-    const zoomVal = typeof canvasZoom === 'number' ? canvasZoom : 1;
+    const zoomVal = resolveStageScale(layerKey);
     const renderedElem = elements[layerKey] || activeElement;
     const currentW = elementRefs.current[layerKey]?.offsetWidth || selection.rect.width;
     const currentH = elementRefs.current[layerKey]?.offsetHeight || selection.rect.height;

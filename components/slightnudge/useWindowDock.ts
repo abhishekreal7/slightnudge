@@ -1,13 +1,19 @@
 'use client';
 import { useEffect, useRef, useState, type PointerEvent, type KeyboardEvent, type CSSProperties } from 'react';
+import { rectIntersects, roundValue } from '../../lib/editor/geometry';
 
-export function useWindowDock(enabled: boolean) {
+export function useWindowDock(enabled: boolean, isSuspended?: () => boolean, resumeSignal = false) {
   const ref = useRef<HTMLElement>(null);
   const [position, setPosition] = useState<{ x: number; y: number } | null>(null);
   const [occluded, setOccluded] = useState(false);
-  const scheduleAvoidance = useRef(() => {});
+  const scheduleAvoidance = useRef(() => { });
+  const isSuspendedRef = useRef(isSuspended);
+  isSuspendedRef.current = isSuspended;
   const drag = useRef<{ pointer: number; x: number; y: number; left: number; top: number; previous: typeof position } | null>(null);
-  const clamp = (x: number, y: number) => ({ x: Math.round(Math.max(8, Math.min(x, innerWidth - (ref.current?.offsetWidth || 0) - 8))), y: Math.round(Math.max(8, Math.min(y, innerHeight - (ref.current?.offsetHeight || 48) - 8))) });
+  const clamp = (x: number, y: number) => ({
+    x: roundValue(Math.max(8, Math.min(x, innerWidth - (ref.current?.offsetWidth || 0) - 8)), 'nearest', 1),
+    y: roundValue(Math.max(8, Math.min(y, innerHeight - (ref.current?.offsetHeight || 48) - 8)), 'nearest', 1),
+  });
   useEffect(() => {
     if (!enabled) return;
     const resize = () => setPosition(previous => previous ? clamp(previous.x, previous.y) : previous);
@@ -17,12 +23,13 @@ export function useWindowDock(enabled: boolean) {
     if (!enabled) return;
     let animation = 0;
     const avoidSelection = () => {
-      if (!ref.current || drag.current) return;
+      if (!ref.current || drag.current || isSuspendedRef.current?.()) return;
       const selection = document.querySelector<HTMLElement>('[aria-label="Selected source element"]');
       if (!selection) { setOccluded(false); return; }
       const target = selection.getBoundingClientRect(), dock = ref.current.getBoundingClientRect();
       if (!target.width || !target.height) { setOccluded(false); return; }
-      const clear = (x: number, y: number) => x + dock.width <= target.left || x >= target.right || y + dock.height <= target.top || y >= target.bottom;
+      const targetBox = { left: target.left, top: target.top, width: target.width, height: target.height };
+      const clear = (x: number, y: number) => !rectIntersects({ left: x, top: y, width: dock.width, height: dock.height }, targetBox);
       if (clear(dock.left, dock.top)) { setOccluded(false); return; }
       const gap = 8;
       const candidates = [
@@ -37,14 +44,21 @@ export function useWindowDock(enabled: boolean) {
       setOccluded(!next);
       if (next) setPosition(previous => previous?.x === next.x && previous?.y === next.y ? previous : next);
     };
-    const schedule = () => { cancelAnimationFrame(animation); animation = requestAnimationFrame(avoidSelection); };
+    const schedule = () => {
+      if (isSuspendedRef.current?.()) return;
+      cancelAnimationFrame(animation);
+      animation = requestAnimationFrame(avoidSelection);
+    };
     scheduleAvoidance.current = schedule;
     const changes = new MutationObserver(schedule);
     changes.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['style', 'class'] });
     const sizes = new ResizeObserver(schedule); if (ref.current) sizes.observe(ref.current);
     window.addEventListener('scroll', schedule, true); window.addEventListener('resize', schedule); schedule();
-    return () => { cancelAnimationFrame(animation); changes.disconnect(); sizes.disconnect(); window.removeEventListener('scroll', schedule, true); window.removeEventListener('resize', schedule); scheduleAvoidance.current = () => {}; };
+    return () => { cancelAnimationFrame(animation); changes.disconnect(); sizes.disconnect(); window.removeEventListener('scroll', schedule, true); window.removeEventListener('resize', schedule); scheduleAvoidance.current = () => { }; };
   }, [enabled]);
+  useEffect(() => {
+    if (enabled && !resumeSignal) scheduleAvoidance.current();
+  }, [enabled, resumeSignal]);
   const release = (event: PointerEvent<HTMLButtonElement>) => { if (event.currentTarget.hasPointerCapture(event.pointerId)) event.currentTarget.releasePointerCapture(event.pointerId); drag.current = null; scheduleAvoidance.current(); };
   const grip = {
     onPointerDown(event: PointerEvent<HTMLButtonElement>) {

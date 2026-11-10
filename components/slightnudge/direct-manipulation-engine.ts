@@ -1,17 +1,49 @@
 /**
  * SlightNudge Direct Manipulation Engine
- * Frontend-only 60fps direct manipulation for resize and drag.
- * 
+ * Frontend-only 60fps direct manipulation adapter powered by `lib/editor/geometry`.
+ *
  * Rules:
  * - No React state updates during drag
  * - Single rAF loop per frame
  * - Cached geometry at pointerdown (zero getBoundingClientRect inside pointermove)
- * - 8 handles (nw, n, ne, e, se, s, sw, w)
- * - Zoom-invariant handles and cursor grab accuracy
- * - Shift (aspect ratio), Alt (center resize), min-size (1px), Ctrl/Cmd (disable snapping)
- * - Smart snapping (<1ms for 50 siblings) with 1px accent guides
- * - Client-side Tailwind class lookup table (no server request during drag)
+ * - Delegates matrix transforms, space conversions, resize solving, snapping, and layout intent to lib/editor/geometry
  */
+
+import {
+  IDENTITY_MATRIX,
+  canvasToScreenMatrix,
+  canvasToScreenPoint,
+  classifyLayoutIntent,
+  createMutableSnapOutput,
+  createSnapIndex,
+  createSnapScratchBuffer,
+  extractGuideDescriptors,
+  matMultiply,
+  matScale,
+  matTranslate,
+  nearEqual,
+  rebuildSnapIndex,
+  roundValue,
+  screenToCanvasPoint,
+  snapRectInto,
+  solveResize,
+  transformPoint,
+  vecAdd,
+  type Bounds,
+  type CanvasSpace,
+  type LayoutIntent,
+  type LayoutIntentInput,
+  type Matrix2D,
+  type MutableGuideDescriptor,
+  type MutableSnapOutput,
+  type Point2D,
+  type Rect,
+  type ResizeOutput,
+  type SnapCandidateRect,
+  type SnapIndex,
+  type SnapOptions,
+  type SnapScratchBuffer,
+} from '../../lib/editor/geometry';
 
 export type HandleDirection = 'nw' | 'n' | 'ne' | 'e' | 'se' | 's' | 'sw' | 'w';
 
@@ -56,6 +88,9 @@ export interface ResizeParams {
   snapX?: number | null;
   snapY?: number | null;
   minSize?: number;
+  maxWidth?: number;
+  maxHeight?: number;
+  elementToScreen?: Matrix2D;
 }
 
 export interface ResizeResult {
@@ -68,165 +103,40 @@ export interface ResizeResult {
 }
 
 /**
- * Compute 8-handle resize geometry with sub-pixel precision.
- * Preserves anchor offset, zoom scaling, aspect ratio (Shift), center-resize (Alt), and minimum 1px bounds.
+ * Compute 8-handle resize geometry with sub-pixel precision via `solveResize`.
+ * Preserves affine transforms, zoom scaling, aspect ratio, center-resize, and >= 1px bounds.
  */
 export function compute8HandleResize(params: ResizeParams): ResizeResult {
-  const {
-    handle,
-    startRect,
-    zoom,
-    pointerDeltaScreen,
-    shiftKey = false,
-    altKey = false,
-    snapX = null,
-    snapY = null,
-    minSize = 1,
-  } = params;
+  const safeZoom = Number.isFinite(params.zoom) && params.zoom > 0 ? params.zoom : 0.01;
+  const elementToScreen =
+    params.elementToScreen ??
+    canvasToScreenMatrix({ originX: 0, originY: 0, panX: 0, panY: 0, zoom: safeZoom });
+  const minBound = Math.max(1, Number.isFinite(params.minSize) ? (params.minSize as number) : 1);
 
-  // Screen delta scaled by canvas zoom
-  const z = Math.max(0.01, zoom);
-  let dx = pointerDeltaScreen.x / z;
-  let dy = pointerDeltaScreen.y / z;
-
-  // Apply snap override if provided
-  if (snapX !== null) {
-    if (handle.includes('e')) {
-      dx = snapX - (startRect.left + startRect.width);
-    } else if (handle.includes('w')) {
-      dx = snapX - startRect.left;
-    }
-  }
-  if (snapY !== null) {
-    if (handle.includes('s')) {
-      dy = snapY - (startRect.top + startRect.height);
-    } else if (handle.includes('n')) {
-      dy = snapY - startRect.top;
-    }
-  }
-
-  const aspectRatio = startRect.width / Math.max(1, startRect.height);
-
-  let newLeft = startRect.left;
-  let newTop = startRect.top;
-  let newWidth = startRect.width;
-  let newHeight = startRect.height;
-
-  // Calculate unconstrained deltas based on handle direction
-  const changesEast = handle.includes('e');
-  const changesWest = handle.includes('w');
-  const changesSouth = handle.includes('s');
-  const changesNorth = handle.includes('n');
-
-  if (altKey) {
-    // Alt: Resize symmetrically from center
-    if (changesEast) {
-      newWidth = startRect.width + 2 * dx;
-      newLeft = startRect.left - dx;
-    } else if (changesWest) {
-      newWidth = startRect.width - 2 * dx;
-      newLeft = startRect.left + dx;
-    }
-
-    if (changesSouth) {
-      newHeight = startRect.height + 2 * dy;
-      newTop = startRect.top - dy;
-    } else if (changesNorth) {
-      newHeight = startRect.height - 2 * dy;
-      newTop = startRect.top + dy;
-    }
-  } else {
-    // Standard edge/corner manipulation
-    if (changesEast) {
-      newWidth = startRect.width + dx;
-    } else if (changesWest) {
-      newWidth = startRect.width - dx;
-      newLeft = startRect.left + dx;
-    }
-
-    if (changesSouth) {
-      newHeight = startRect.height + dy;
-    } else if (changesNorth) {
-      newHeight = startRect.height - dy;
-      newTop = startRect.top + dy;
-    }
-  }
-
-  // Shift: Maintain aspect ratio
-  if (shiftKey) {
-    const isCorner = (changesEast || changesWest) && (changesSouth || changesNorth);
-    if (isCorner) {
-      // Determine dominant dimension change
-      const dw = newWidth - startRect.width;
-      const dh = newHeight - startRect.height;
-
-      if (Math.abs(dw) >= Math.abs(dh * aspectRatio)) {
-        // Width drives height
-        const targetHeight = Math.max(minSize, newWidth / aspectRatio);
-        const heightDelta = targetHeight - startRect.height;
-        if (altKey) {
-          newHeight = targetHeight;
-          newTop = startRect.top - heightDelta / 2;
-        } else if (changesNorth) {
-          newTop = startRect.top - (targetHeight - startRect.height);
-          newHeight = targetHeight;
-        } else {
-          newHeight = targetHeight;
-        }
-      } else {
-        // Height drives width
-        const targetWidth = Math.max(minSize, newHeight * aspectRatio);
-        const widthDelta = targetWidth - startRect.width;
-        if (altKey) {
-          newWidth = targetWidth;
-          newLeft = startRect.left - widthDelta / 2;
-        } else if (changesWest) {
-          newLeft = startRect.left - (targetWidth - startRect.width);
-          newWidth = targetWidth;
-        } else {
-          newWidth = targetWidth;
-        }
-      }
-    } else if (changesEast || changesWest) {
-      // Edge drag with Shift scales both dimensions
-      const targetHeight = Math.max(minSize, newWidth / aspectRatio);
-      const heightDelta = targetHeight - startRect.height;
-      newHeight = targetHeight;
-      newTop = startRect.top - heightDelta / 2;
-    } else if (changesNorth || changesSouth) {
-      const targetWidth = Math.max(minSize, newHeight * aspectRatio);
-      const widthDelta = targetWidth - startRect.width;
-      newWidth = targetWidth;
-      newLeft = startRect.left - widthDelta / 2;
-    }
-  }
-
-  // Minimum size clamping (min 1px)
-  if (newWidth < minSize) {
-    if (altKey) {
-      newLeft = startRect.left + (startRect.width - minSize) / 2;
-    } else if (changesWest) {
-      newLeft = startRect.left + startRect.width - minSize;
-    }
-    newWidth = minSize;
-  }
-
-  if (newHeight < minSize) {
-    if (altKey) {
-      newTop = startRect.top + (startRect.height - minSize) / 2;
-    } else if (changesNorth) {
-      newTop = startRect.top + startRect.height - minSize;
-    }
-    newHeight = minSize;
-  }
+  const solved = solveResize({
+    startRect: params.startRect,
+    handle: params.handle,
+    pointerDeltaScreen: params.pointerDeltaScreen,
+    elementToScreen,
+    constraints: {
+      minWidth: minBound,
+      minHeight: minBound,
+      maxWidth: params.maxWidth,
+      maxHeight: params.maxHeight,
+      aspectRatio: params.shiftKey,
+      fromCenter: params.altKey,
+      snapLocalX: params.snapX,
+      snapLocalY: params.snapY,
+    },
+  });
 
   return {
-    left: newLeft,
-    top: newTop,
-    width: newWidth,
-    height: newHeight,
-    right: newLeft + newWidth,
-    bottom: newTop + newHeight,
+    left: solved.rect.left,
+    top: solved.rect.top,
+    width: solved.rect.width,
+    height: solved.rect.height,
+    right: solved.rect.right,
+    bottom: solved.rect.bottom,
   };
 }
 
@@ -235,6 +145,10 @@ export interface GuideLine {
   position: number;
   start: number;
   end: number;
+  kind?: 'edge' | 'center' | 'spacing';
+  gap?: number;
+  gapSegments?: readonly { readonly start: number; readonly end: number; readonly cross: number }[];
+  sourceId?: string;
 }
 
 export interface SnapParams {
@@ -254,148 +168,341 @@ export interface SnapResult {
   guides: GuideLine[];
 }
 
+export interface DirectSnapSession {
+  readonly index: SnapIndex;
+  readonly scratch: SnapScratchBuffer;
+  readonly out: MutableSnapOutput;
+  readonly outX: MutableSnapOutput;
+  readonly outY: MutableSnapOutput;
+}
+
+export function createDirectSnapSession(
+  siblings: readonly SiblingRect[],
+  containerRect?: ContainerRect,
+  maxCandidates = Math.max(32, siblings.length + 8)
+): DirectSnapSession {
+  const cap = Math.max(8, maxCandidates, siblings.length + 4);
+  const index = createSnapIndex(cap);
+  const candidates: SnapCandidateRect[] = siblings.map((s, idx) => ({
+    id: `sib-${idx}`,
+    left: s.left,
+    top: s.top,
+    width: s.width,
+    height: s.height,
+  }));
+  const container: SnapCandidateRect | undefined = containerRect
+    ? {
+        id: 'container',
+        left: containerRect.left,
+        top: containerRect.top,
+        width: containerRect.width,
+        height: containerRect.height,
+      }
+    : undefined;
+  rebuildSnapIndex(index, candidates, container);
+  return {
+    index,
+    scratch: createSnapScratchBuffer(cap),
+    out: createMutableSnapOutput(4),
+    outX: createMutableSnapOutput(2),
+    outY: createMutableSnapOutput(2),
+  };
+}
+
+function guideDescriptorToGuideLine(g: MutableGuideDescriptor): GuideLine {
+  const base: GuideLine = {
+    type: g.axis === 'x' ? 'vertical' : 'horizontal',
+    position: g.position,
+    start: g.spanStart,
+    end: g.spanEnd,
+    kind: g.kind,
+    sourceId: g.sourceId,
+  };
+  if (g.kind === 'spacing') {
+    base.gap = g.gap;
+    base.gapSegments = Array.from({ length: g.gapSegCount }, (_, i) => ({
+      start: g.gapSegments[i].start,
+      end: g.gapSegments[i].end,
+      cross: g.gapSegments[i].cross,
+    }));
+  }
+  return base;
+}
+
+export function extractSessionGuideLines(out: MutableSnapOutput): GuideLine[] {
+  if (out.guideCount === 0) return [];
+  const guides: GuideLine[] = [];
+  for (let i = 0; i < out.guideCount; i++) {
+    guides.push(guideDescriptorToGuideLine(out.guides[i]));
+  }
+  return guides;
+}
+
+export function snapRectInSession(
+  session: DirectSnapSession,
+  box: Rect,
+  options: SnapOptions
+): SnapResult {
+  snapRectInto(box, session.index, options, session.scratch, session.out);
+  return {
+    snappedX: session.out.snappedX,
+    snappedY: session.out.snappedY,
+    dx: session.out.dx,
+    dy: session.out.dy,
+    guides: extractSessionGuideLines(session.out),
+  };
+}
+
+function rectMatchesGuidePosition(rect: Bounds, g: MutableGuideDescriptor): boolean {
+  const eps = 0.25;
+  if (g.axis === 'x') {
+    const cx = rect.left + rect.width / 2;
+    return (
+      nearEqual(rect.left, g.position, eps) ||
+      nearEqual(rect.right, g.position, eps) ||
+      nearEqual(cx, g.position, eps)
+    );
+  }
+  const cy = rect.top + rect.height / 2;
+  return (
+    nearEqual(rect.top, g.position, eps) ||
+    nearEqual(rect.bottom, g.position, eps) ||
+    nearEqual(cy, g.position, eps)
+  );
+}
+
 /**
- * Smart snapping: Snaps edges & centers to siblings and container.
- * Must run in < 1 ms for 50 siblings.
+ * Resize + active-edge snap in one coherent pass using `solveResize` and `snapRectInto`.
+ * Probes only the dragged edges unless `fromCenter` is active so stationary aligned edges
+ * cannot hijack active handle snapping, then feeds `snapLocalX`/`snapLocalY` into `solveResize`
+ * to guarantee aspect lock, opposite-edge anchoring, and >= 1px minimums stay intact.
+ */
+export function snapResizeInSession(
+  session: DirectSnapSession,
+  startRect: Rect,
+  handle: HandleDirection,
+  pointerDeltaScreen: Point2D,
+  elementToScreen: Matrix2D,
+  options: {
+    thresholdScreenPx: number;
+    zoom: number;
+    disabled?: boolean;
+    fromCenter?: boolean;
+    aspectRatio?: boolean | number;
+    minWidth?: number;
+    minHeight?: number;
+    maxWidth?: number;
+    maxHeight?: number;
+  }
+): { resize: ResizeOutput; guides: GuideLine[] } {
+  const baseConstraints = {
+    minWidth: options.minWidth ?? 1,
+    minHeight: options.minHeight ?? 1,
+    maxWidth: options.maxWidth,
+    maxHeight: options.maxHeight,
+    aspectRatio: options.aspectRatio,
+    fromCenter: options.fromCenter,
+  };
+
+  const unconstrained = solveResize({
+    startRect,
+    handle,
+    pointerDeltaScreen,
+    elementToScreen,
+    constraints: baseConstraints,
+  });
+
+  if (options.disabled || options.thresholdScreenPx <= 0 || options.zoom <= 0) {
+    return { resize: unconstrained, guides: [] };
+  }
+
+  const hasW = handle === 'nw' || handle === 'w' || handle === 'sw';
+  const hasE = handle === 'ne' || handle === 'e' || handle === 'se';
+  const hasN = handle === 'nw' || handle === 'n' || handle === 'ne';
+  const hasS = handle === 'sw' || handle === 's' || handle === 'se';
+  const hasAspect =
+    options.aspectRatio === true ||
+    (typeof options.aspectRatio === 'number' && Number.isFinite(options.aspectRatio) && options.aspectRatio > 0);
+  const cand = unconstrained.rect;
+  const fromCenter = Boolean(options.fromCenter);
+
+  let snapLocalX: number | null = null;
+  let snapLocalY: number | null = null;
+  let xDeltaAbs = Infinity;
+  let yDeltaAbs = Infinity;
+
+  if (hasW || hasE) {
+    const probeX: Rect = fromCenter
+      ? cand
+      : {
+          left: hasE ? cand.right : cand.left,
+          top: cand.top,
+          width: 0,
+          height: cand.height,
+        };
+    snapRectInto(
+      probeX,
+      session.index,
+      {
+        thresholdScreenPx: options.thresholdScreenPx,
+        zoom: options.zoom,
+        includeEqualSpacing: false,
+      },
+      session.scratch,
+      session.outX
+    );
+    if (session.outX.snappedX) {
+      xDeltaAbs = Math.abs(session.outX.dx);
+      snapLocalX = fromCenter
+        ? hasE
+          ? session.outX.rect.right
+          : session.outX.rect.left
+        : session.outX.rect.left;
+    }
+  } else {
+    session.outX.guideCount = 0;
+  }
+
+  if (hasN || hasS) {
+    const probeY: Rect = fromCenter
+      ? cand
+      : {
+          left: cand.left,
+          top: hasS ? cand.bottom : cand.top,
+          width: cand.width,
+          height: 0,
+        };
+    snapRectInto(
+      probeY,
+      session.index,
+      {
+        thresholdScreenPx: options.thresholdScreenPx,
+        zoom: options.zoom,
+        includeEqualSpacing: false,
+      },
+      session.scratch,
+      session.outY
+    );
+    if (session.outY.snappedY) {
+      yDeltaAbs = Math.abs(session.outY.dy);
+      snapLocalY = fromCenter
+        ? hasS
+          ? session.outY.rect.bottom
+          : session.outY.rect.top
+        : session.outY.rect.top;
+    }
+  } else {
+    session.outY.guideCount = 0;
+  }
+
+  // With locked aspect ratio only 1 degree of freedom exists; pick closer snap axis
+  if (hasAspect && snapLocalX !== null && snapLocalY !== null) {
+    if (xDeltaAbs <= yDeltaAbs) {
+      snapLocalY = null;
+    } else {
+      snapLocalX = null;
+    }
+  }
+
+  if (snapLocalX === null && snapLocalY === null) {
+    return { resize: unconstrained, guides: [] };
+  }
+
+  const finalResize = solveResize({
+    startRect,
+    handle,
+    pointerDeltaScreen,
+    elementToScreen,
+    constraints: {
+      ...baseConstraints,
+      snapLocalX,
+      snapLocalY,
+    },
+  });
+
+  const guides: GuideLine[] = [];
+  if (snapLocalX !== null) {
+    for (let i = 0; i < session.outX.guideCount; i++) {
+      const g = session.outX.guides[i];
+      if (g.axis === 'x' && rectMatchesGuidePosition(finalResize.rect, g)) {
+        guides.push(guideDescriptorToGuideLine(g));
+      }
+    }
+  }
+  if (snapLocalY !== null) {
+    for (let i = 0; i < session.outY.guideCount; i++) {
+      const g = session.outY.guides[i];
+      if (g.axis === 'y' && rectMatchesGuidePosition(finalResize.rect, g)) {
+        guides.push(guideDescriptorToGuideLine(g));
+      }
+    }
+  }
+
+  return { resize: finalResize, guides };
+}
+
+let cachedSessionSiblings: readonly SiblingRect[] | null = null;
+let cachedSessionLength = -1;
+let cachedSessionContainer: ContainerRect | undefined = undefined;
+let cachedSession: DirectSnapSession | null = null;
+
+function sameContainerRect(a?: ContainerRect, b?: ContainerRect): boolean {
+  if (a === b) return true;
+  if (!a || !b) return false;
+  return a.left === b.left && a.top === b.top && a.width === b.width && a.height === b.height;
+}
+
+/**
+ * Smart snapping powered by `lib/editor/geometry`'s O(log N) spatial index.
+ * Caches index across repeated calls on the same sibling set and supports equal-spacing guides.
  */
 export function computeSmartSnapping(params: SnapParams): SnapResult {
   const { box, siblings, containerRect, thresholdScreenPx, zoom, disabled = false } = params;
-
   if (disabled) {
     return { snappedX: false, snappedY: false, dx: 0, dy: 0, guides: [] };
   }
 
-  const threshold = Math.max(0.5, thresholdScreenPx / Math.max(0.01, zoom));
-  const boxCenterX = box.left + box.width / 2;
-  const boxCenterY = box.top + box.height / 2;
-
-  let bestDeltaX = 0;
-  let minDiffX = threshold + 1;
-  let snappedX = false;
-  let guideLineX: GuideLine | null = null;
-
-  let bestDeltaY = 0;
-  let minDiffY = threshold + 1;
-  let snappedY = false;
-  let guideLineY: GuideLine | null = null;
-
-  const boxXEdges = [
-    { pos: box.left, type: 'left' as const },
-    { pos: boxCenterX, type: 'center' as const },
-    { pos: box.right, type: 'right' as const },
-  ];
-
-  const boxYEdges = [
-    { pos: box.top, type: 'top' as const },
-    { pos: boxCenterY, type: 'center' as const },
-    { pos: box.bottom, type: 'bottom' as const },
-  ];
-
-  // Candidates list: container edges + sibling edges
-  // Container:
-  if (containerRect) {
-    const cTargetsX = [containerRect.left, containerRect.left + containerRect.width / 2, containerRect.right];
-    for (const edge of boxXEdges) {
-      for (const target of cTargetsX) {
-        const diff = target - edge.pos;
-        const absDiff = Math.abs(diff);
-        if (absDiff <= threshold && absDiff < minDiffX) {
-          minDiffX = absDiff;
-          bestDeltaX = diff;
-          snappedX = true;
-          guideLineX = {
-            type: 'vertical',
-            position: target,
-            start: Math.min(box.top, containerRect.top),
-            end: Math.max(box.bottom, containerRect.bottom),
-          };
-        }
-      }
-    }
-
-    const cTargetsY = [containerRect.top, containerRect.top + containerRect.height / 2, containerRect.bottom];
-    for (const edge of boxYEdges) {
-      for (const target of cTargetsY) {
-        const diff = target - edge.pos;
-        const absDiff = Math.abs(diff);
-        if (absDiff <= threshold && absDiff < minDiffY) {
-          minDiffY = absDiff;
-          bestDeltaY = diff;
-          snappedY = true;
-          guideLineY = {
-            type: 'horizontal',
-            position: target,
-            start: Math.min(box.left, containerRect.left),
-            end: Math.max(box.right, containerRect.right),
-          };
-        }
-      }
-    }
+  if (
+    !cachedSession ||
+    cachedSessionSiblings !== siblings ||
+    cachedSessionLength !== siblings.length ||
+    !sameContainerRect(cachedSessionContainer, containerRect)
+  ) {
+    cachedSession = createDirectSnapSession(siblings, containerRect);
+    cachedSessionSiblings = siblings;
+    cachedSessionLength = siblings.length;
+    cachedSessionContainer = containerRect;
   }
 
-  // Siblings:
-  const siblingCount = siblings.length;
-  for (let i = 0; i < siblingCount; i++) {
-    const sib = siblings[i];
-    const sibXTargets = [sib.left, sib.centerX, sib.right];
-    for (let e = 0; e < 3; e++) {
-      const edge = boxXEdges[e];
-      for (let s = 0; s < 3; s++) {
-        const target = sibXTargets[s];
-        const diff = target - edge.pos;
-        const absDiff = Math.abs(diff);
-        if (absDiff <= threshold && absDiff < minDiffX) {
-          minDiffX = absDiff;
-          bestDeltaX = diff;
-          snappedX = true;
-          guideLineX = {
-            type: 'vertical',
-            position: target,
-            start: Math.min(box.top, sib.top) - 10,
-            end: Math.max(box.bottom, sib.bottom) + 10,
-          };
-        }
-      }
-    }
+  snapRectInto(
+    box,
+    cachedSession.index,
+    { thresholdScreenPx, zoom, disabled: false },
+    cachedSession.scratch,
+    cachedSession.out
+  );
 
-    const sibYTargets = [sib.top, sib.centerY, sib.bottom];
-    for (let e = 0; e < 3; e++) {
-      const edge = boxYEdges[e];
-      for (let s = 0; s < 3; s++) {
-        const target = sibYTargets[s];
-        const diff = target - edge.pos;
-        const absDiff = Math.abs(diff);
-        if (absDiff <= threshold && absDiff < minDiffY) {
-          minDiffY = absDiff;
-          bestDeltaY = diff;
-          snappedY = true;
-          guideLineY = {
-            type: 'horizontal',
-            position: target,
-            start: Math.min(box.left, sib.left) - 10,
-            end: Math.max(box.right, sib.right) + 10,
-          };
-        }
-      }
-    }
-  }
-
-  const guides: GuideLine[] = [];
-  if (guideLineX) guides.push(guideLineX);
-  if (guideLineY) guides.push(guideLineY);
+  const guides = extractGuideDescriptors(cachedSession.out).map((g) => ({
+    type: (g.axis === 'x' ? 'vertical' : 'horizontal') as 'vertical' | 'horizontal',
+    position: g.position,
+    start: g.spanStart,
+    end: g.spanEnd,
+    kind: g.kind,
+    gap: g.gap,
+    gapSegments: g.gapSegments,
+    sourceId: g.sourceId,
+  }));
 
   return {
-    snappedX,
-    snappedY,
-    dx: bestDeltaX,
-    dy: bestDeltaY,
+    snappedX: cachedSession.out.snappedX,
+    snappedY: cachedSession.out.snappedY,
+    dx: cachedSession.out.dx,
+    dy: cachedSession.out.dy,
     guides,
   };
 }
 
-/**
- * Arrow key nudge computation: 1px default, 10px with Shift.
- */
+/** Arrow key nudge computation via `vecAdd`: 1px default, 10px with Shift. */
 export function computeArrowNudge(
   pos: { x: number; y: number },
   key: string,
@@ -404,16 +511,183 @@ export function computeArrowNudge(
   const step = shiftKey ? 10 : 1;
   switch (key) {
     case 'ArrowRight':
-      return { x: pos.x + step, y: pos.y };
+      return vecAdd(pos, { x: step, y: 0 });
     case 'ArrowLeft':
-      return { x: pos.x - step, y: pos.y };
+      return vecAdd(pos, { x: -step, y: 0 });
     case 'ArrowDown':
-      return { x: pos.x, y: pos.y + step };
+      return vecAdd(pos, { x: 0, y: step });
     case 'ArrowUp':
-      return { x: pos.x, y: pos.y - step };
+      return vecAdd(pos, { x: 0, y: -step });
     default:
       return { ...pos };
   }
+}
+
+/**
+ * Rounding policy for live move translation: preserves exact 1px sibling alignment
+ * when snapped, otherwise rounds to the 4px Tailwind grid via `roundValue`.
+ */
+export function roundMoveTranslation(
+  nextX: number,
+  nextY: number,
+  snappedX: boolean,
+  snappedY: boolean
+): Point2D {
+  return {
+    x: snappedX ? roundValue(nextX, 'nearest', 1) : roundValue(nextX, 'nearest', 4),
+    y: snappedY ? roundValue(nextY, 'nearest', 1) : roundValue(nextY, 'nearest', 4),
+  };
+}
+
+/**
+ * Builds the 2D affine matrix from artboard/iframe-local CSS px to an overlay container's
+ * scrollable padding-box coordinates (`matTranslate(...) * matScale(scale, scale)`).
+ */
+export function buildArtboardToContainerMatrix(
+  artboardScreenLeft: number,
+  artboardScreenTop: number,
+  containerScreenLeft: number,
+  containerScreenTop: number,
+  containerClientLeft: number,
+  containerClientTop: number,
+  containerScrollLeft: number,
+  containerScrollTop: number,
+  scale: number
+): Matrix2D {
+  const safeScale = Number.isFinite(scale) && scale > 0 ? scale : 1;
+  const tx =
+    artboardScreenLeft - containerScreenLeft - containerClientLeft + containerScrollLeft;
+  const ty =
+    artboardScreenTop - containerScreenTop - containerClientTop + containerScrollTop;
+  return matMultiply(matTranslate(tx, ty), matScale(safeScale, safeScale));
+}
+
+/** Transforms a guide descriptor from artboard/iframe coordinates into host container space. */
+export function transformGuideLineToContainer(guide: GuideLine, matrix: Matrix2D): GuideLine {
+  if (guide.type === 'vertical') {
+    const pStart = transformPoint(matrix, { x: guide.position, y: guide.start });
+    const pEnd = transformPoint(matrix, { x: guide.position, y: guide.end });
+    return {
+      ...guide,
+      position: pStart.x,
+      start: Math.min(pStart.y, pEnd.y),
+      end: Math.max(pStart.y, pEnd.y),
+    };
+  }
+  const pStart = transformPoint(matrix, { x: guide.start, y: guide.position });
+  const pEnd = transformPoint(matrix, { x: guide.end, y: guide.position });
+  return {
+    ...guide,
+    position: pStart.y,
+    start: Math.min(pStart.x, pEnd.x),
+    end: Math.max(pStart.x, pEnd.x),
+  };
+}
+
+/** Computes wheel zoom-to-cursor scale and pinned world anchor using `screenToCanvasPoint`. */
+export function computeZoomAnchorScroll(params: {
+  cursorScreenX: number;
+  cursorScreenY: number;
+  containerBoxLeft: number;
+  containerBoxTop: number;
+  containerClientWidth: number;
+  containerClientHeight: number;
+  scrollLeft: number;
+  scrollTop: number;
+  currentLeft: number;
+  currentTop: number;
+  currentScale: number;
+  scaleMultiplier: number;
+  minScale?: number;
+  maxScale?: number;
+}): {
+  nextScale: number;
+  anchor: { x: number; y: number; worldX: number; worldY: number };
+} {
+  const minScale = params.minScale ?? 0.1;
+  const maxScale = params.maxScale ?? 2;
+  const nextScale = Math.max(
+    minScale,
+    Math.min(maxScale, roundValue(params.currentScale * params.scaleMultiplier, 'nearest', 0.01))
+  );
+  const localX = Math.max(
+    0,
+    Math.min(params.containerClientWidth, params.cursorScreenX - params.containerBoxLeft)
+  );
+  const localY = Math.max(
+    0,
+    Math.min(params.containerClientHeight, params.cursorScreenY - params.containerBoxTop)
+  );
+  const space: CanvasSpace = {
+    originX: params.containerBoxLeft + params.currentLeft - params.scrollLeft,
+    originY: params.containerBoxTop + params.currentTop - params.scrollTop,
+    panX: 0,
+    panY: 0,
+    zoom: params.currentScale,
+  };
+  const world = screenToCanvasPoint(
+    { x: params.containerBoxLeft + localX, y: params.containerBoxTop + localY },
+    space
+  ) ?? { x: 0, y: 0 };
+
+  return {
+    nextScale,
+    anchor: { x: localX, y: localY, worldX: world.x, worldY: world.y },
+  };
+}
+
+/** Maps a pinned world anchor to container scrollLeft/scrollTop after scale update via `canvasToScreenPoint`. */
+export function resolveScrollForZoomAnchor(
+  anchor: { x: number; y: number; worldX: number; worldY: number },
+  nextLeft: number,
+  nextTop: number,
+  nextScale: number
+): { scrollLeft: number; scrollTop: number } {
+  const stagePt = canvasToScreenPoint(
+    { x: anchor.worldX, y: anchor.worldY },
+    { originX: nextLeft, originY: nextTop, panX: 0, panY: 0, zoom: nextScale }
+  );
+  return {
+    scrollLeft: stagePt.x - anchor.x,
+    scrollTop: stagePt.y - anchor.y,
+  };
+}
+
+/** Parses CSS `getComputedStyle(...).transform` 2D matrix strings into `Matrix2D`. */
+export function parseCssMatrix2D(transformCss: string | null | undefined): Matrix2D {
+  if (!transformCss || transformCss === 'none') return IDENTITY_MATRIX;
+  const match2d = transformCss.match(/^matrix\(\s*([^)]+)\)$/);
+  if (match2d) {
+    const parts = match2d[1].split(',').map((s) => Number(s.trim()));
+    if (parts.length === 6 && parts.every(Number.isFinite)) {
+      return [parts[0], parts[1], parts[2], parts[3], parts[4], parts[5]];
+    }
+    return IDENTITY_MATRIX;
+  }
+  const match3d = transformCss.match(/^matrix3d\(\s*([^)]+)\)$/);
+  if (match3d) {
+    const m = match3d[1].split(',').map((s) => Number(s.trim()));
+    if (
+      m.length === 16 &&
+      m.every(Number.isFinite) &&
+      m[2] === 0 &&
+      m[3] === 0 &&
+      m[6] === 0 &&
+      m[7] === 0 &&
+      m[10] === 1 &&
+      m[11] === 0 &&
+      m[14] === 0 &&
+      m[15] === 1
+    ) {
+      return [m[0], m[1], m[4], m[5], m[12], m[13]];
+    }
+  }
+  return IDENTITY_MATRIX;
+}
+
+/** Delegates overlay reorder / resize intent classification to `lib/editor/geometry`. */
+export function classifyOverlayFlowIntent(input: LayoutIntentInput): LayoutIntent {
+  return classifyLayoutIntent(input);
 }
 
 /**
@@ -476,23 +750,22 @@ export function estimateTailwindClasses(
   const result: { widthClass?: string; heightClass?: string; translateClass?: string } = {};
 
   if (typeof widthPx === 'number') {
-    const rounded = Math.round(widthPx);
+    const rounded = roundValue(widthPx, 'nearest', 1);
     const tw = PX_TO_CLASS.get(rounded);
     result.widthClass = tw ? `w-${tw}` : `w-[${rounded}px]`;
   }
 
   if (typeof heightPx === 'number') {
-    const rounded = Math.round(heightPx);
+    const rounded = roundValue(heightPx, 'nearest', 1);
     const tw = PX_TO_CLASS.get(rounded);
     result.heightClass = tw ? `h-${tw}` : `h-[${rounded}px]`;
   }
 
   if (typeof translateX === 'number' || typeof translateY === 'number') {
-    const tx = Math.round(translateX || 0);
-    const ty = Math.round(translateY || 0);
+    const tx = roundValue(translateX || 0, 'nearest', 1);
+    const ty = roundValue(translateY || 0, 'nearest', 1);
     result.translateClass = `translate-x-[${tx}px] translate-y-[${ty}px]`;
   }
 
   return result;
 }
-
