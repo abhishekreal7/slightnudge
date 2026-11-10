@@ -24,6 +24,7 @@ Built atop `design/editor-geometry` (`ef46aac`) on branch `design/editor-geometr
    - **Fit-Mode Zoom Stuck at `1` (`EditorWorkspace.tsx`)**: `'fit'` mode previously defaulted zoom to `1`, breaking handle sizing and pointer deltas; fixed via `resolveStageScale` (verified zoomed edge-handle suppression `35px < 40px` at `0.5x` vs visible at `1.0x`).
    - **Stationary Edge Hijack & Post-Snap Resize Clobbering**: Probing active handle edges first and solving via `solveResize(..., snapLocalX/Y)` fixed aspect-ratio/anchor corruption and aligned sibling snaps.
    - **Move Sibling Snap Clobbered by 4 px Grid Rounding**: `roundMoveTranslation` keeps exact 1 px sibling snap when `snappedX/Y` is true.
+   - **Iframe Focus `Escape` Race & Stale Overlay Size (`EditorWorkspace.tsx`)**: Added `focus({ preventScroll: true })` to `startResize`/`startRadiusDrag`, guarded `receiveSourceText`'s `'Escape'` handler with `cancelActiveDragRef` so pressing `Escape` cancels drag without unmounting captured handles, cleared inline `width`/`height` on `onPointerUp`/`cancelDrag`, and keyed `<div key={layerKey}>` using `selection.rect`.
 4. **Tests & Verification**:
    - `test/geometry-ui-integration.test.ts` (`10/10` unit & contract tests), `test/geometry-ui-integration.browser.test.ts` (Playwright live `/editor?view=fit`: wheel zoom `0.93 -> 1.34`, `0.5x` snap guide `diff=0.00px`, `gbcrCalls=0`, `apiCalls=0`, zoomed handle suppression, live `Shift` aspect ratio `246x120`).
    - `test/outline-drag.browser.test.ts` passing against disposable Next dev server.
@@ -45,7 +46,9 @@ Base tip: `ef46aac` (`docs(editor): update STATE with geometry core sprint proof
 
 - `4d05e60`: `refactor(editor): delegate UI resize, snapping, zoom, dock, and flow math to lib/editor/geometry`
 - `5956716`: `test(editor): add geometry UI integration unit and Playwright browser tests`
-- `[Current Commit]`: `docs(editor): update STATE with geometry UI integration proof`
+- `1fda116`: `docs(editor): update STATE with geometry UI integration proof`
+- `932bf34`: `fix(editor): fix Escape focus capture and overlay dimension persistence after resize`
+- `[Current Commit]`: `docs(editor): update STATE with final integration proof`
 
 *(Foundation commits on `design/editor-geometry`: `111b54a`, `6624f9f`, `5b79406`, `e5f04e9`, `a42f6b2`, `ef46aac`.)*
 
