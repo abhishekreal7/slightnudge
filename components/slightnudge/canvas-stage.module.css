@@ -1,9 +1,28 @@
-.viewport { position: absolute; inset: 0; overflow: auto; outline: none; scrollbar-width: none; overscroll-behavior: contain; background: #f4f5f4; }
+.viewport {
+  position: absolute;
+  inset: 0;
+  overflow: auto;
+  outline: none;
+  scrollbar-width: none;
+  overscroll-behavior: contain;
+  background-color: #f2f4f3;
+  background-image: radial-gradient(rgba(38, 52, 44, 0.085) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
 .viewport::-webkit-scrollbar { display: none; }
 .scene { position: relative; min-width: 100%; min-height: 100%; }
-.page { position: absolute; transform-origin: top left; }
+.page {
+  position: absolute;
+  transform-origin: top left;
+  border-radius: 10px;
+  box-shadow:
+    0 0 0 1px rgba(22, 42, 32, 0.08),
+    0 24px 64px -16px rgba(18, 36, 26, 0.14),
+    0 6px 20px -4px rgba(18, 36, 26, 0.06);
+}
 .page > section { gap: 0; }
-.page [data-selection-artboard], .page iframe { border: 0; border-radius: 0; box-shadow: none; }
+.page [data-selection-artboard] { border: 0; border-radius: 10px; box-shadow: none; }
+.page iframe { border: 0; border-radius: 10px; box-shadow: none; }
 .viewport[data-hand='true'] { cursor: grab; }
 .viewport[data-hand='true']:active { cursor: grabbing; }
 .viewport[data-hand='true'] .page { pointer-events: none; }

@@ -859,6 +859,11 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
   const outlineHaloRef = useRef<Record<string, SVGPathElement | null>>({});
   const outlineAccentRef = useRef<Record<string, SVGPathElement | null>>({});
   const handleButtonRefs = useRef<Record<string, Partial<Record<HandleDirection, HTMLButtonElement | null>>>>({});
+  const cornerArcRefs = useRef<
+    Record<string, Partial<Record<'nw' | 'ne' | 'se' | 'sw', { halo: SVGPathElement | null; accent: SVGPathElement | null }>>>
+  >({});
+  const radiusGripRef = useRef<Record<string, HTMLButtonElement | null>>({});
+  const radiusGripInsetRef = useRef<Record<string, number>>({});
 
   const directDragRef = useRef<{
     type: 'resize' | 'move' | 'radius';
@@ -884,6 +889,8 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
     wrapperLeft?: number;
     wrapperTop?: number;
     isNonTrivialTransform?: boolean;
+    isCircleVariant?: boolean;
+    radiusGripInset?: number;
     targetEl: HTMLElement | null;
     initialTargetStyle: string | null;
     outlineOnly?: boolean;
@@ -1273,6 +1280,8 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
       wrapperLeft,
       wrapperTop,
       isNonTrivialTransform,
+      isCircleVariant: previousVariantRef.current[key] === 'circle',
+      radiusGripInset: radiusGripInsetRef.current[key],
       targetEl,
       initialTargetStyle,
       outlineOnly: outlineDrag,
@@ -1629,6 +1638,10 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
         // 1. Direct overlay write (transform + width/height for axis-aligned; oriented Quad for rotated/flipped/skewed)
         const haloEl = outlineHaloRef.current[gesture.key];
         const accentEl = outlineAccentRef.current[gesture.key];
+        if (haloEl && accentEl) {
+          haloEl.style.transition = 'none';
+          accentEl.style.transition = 'none';
+        }
         if (gesture.isNonTrivialTransform && gesture.elementToArtboard) {
           const wrapperOffX = -(gesture.wrapperLeft ?? 0);
           const wrapperOffY = -(gesture.wrapperTop ?? 0);
@@ -1653,6 +1666,16 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
               btn.style.top = `${ptArtboard.y + wrapperOffY}px`;
             }
           }
+          const gripBtn = radiusGripRef.current[gesture.key];
+          if (gripBtn) {
+            const gripInset = gesture.radiusGripInset ?? Math.max(14 / Math.max(0.25, gesture.zoom), 14);
+            const gripPt = transformPoint(gesture.elementToArtboard, {
+              x: res.left + gripInset,
+              y: res.top + gripInset,
+            });
+            gripBtn.style.left = `${gripPt.x + wrapperOffX}px`;
+            gripBtn.style.top = `${gripPt.y + wrapperOffY}px`;
+          }
         } else {
           if (overlayNode) {
             overlayNode.style.width = `${roundValue(gesture.nextWidth, 'nearest', 1)}px`;
@@ -1666,10 +1689,10 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
             }
           }
 
-          // Direct SVG outline update
+          // Direct SVG outline & corner arc update
+          const renderedElem = elements[gesture.key] || activeElement;
+          const radii = parseBorderRadius(renderedElem.borderRadius, gesture.nextWidth, gesture.nextHeight);
           if (haloEl && accentEl) {
-            const renderedElem = elements[gesture.key] || activeElement;
-            const radii = parseBorderRadius(renderedElem.borderRadius, gesture.nextWidth, gesture.nextHeight);
             const d = buildRoundedRectPath(-2, -2, gesture.nextWidth + 4, gesture.nextHeight + 4, {
               tl: radii.tl + (radii.tl > 0 ? 2 : 0),
               tr: radii.tr + (radii.tr > 0 ? 2 : 0),
@@ -1678,6 +1701,37 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
             });
             haloEl.setAttribute('d', d);
             accentEl.setAttribute('d', d);
+          }
+          const arcMap = cornerArcRefs.current[gesture.key];
+          if (arcMap) {
+            const maxR = Math.min(gesture.nextWidth, gesture.nextHeight) / 2;
+            const clampedRadii = {
+              tl: Math.min(radii.tl, maxR),
+              tr: Math.min(radii.tr, maxR),
+              br: Math.min(radii.br, maxR),
+              bl: Math.min(radii.bl, maxR),
+            };
+            const corners: readonly ('nw' | 'ne' | 'se' | 'sw')[] = ['nw', 'ne', 'se', 'sw'];
+            for (const corner of corners) {
+              const pair = arcMap[corner];
+              if (!pair || (!pair.halo && !pair.accent)) continue;
+              const arc = gesture.isCircleVariant
+                ? buildCircleArcPath(corner, gesture.nextWidth, gesture.zoom)
+                : buildCornerArcPath(corner, gesture.nextWidth, gesture.nextHeight, clampedRadii, gesture.zoom);
+              if (pair.halo) {
+                pair.halo.style.transition = 'none';
+                pair.halo.setAttribute('d', arc.path);
+              }
+              if (pair.accent) {
+                pair.accent.style.transition = 'none';
+                pair.accent.setAttribute('d', arc.path);
+              }
+              const btn = handleButtonRefs.current[gesture.key]?.[corner];
+              if (btn) {
+                btn.style.left = `${arc.center.x}px`;
+                btn.style.top = `${arc.center.y}px`;
+              }
+            }
           }
         }
 
@@ -1815,6 +1869,18 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
       if (guideVRef.current) guideVRef.current.style.display = 'none';
       if (guideHRef.current) guideHRef.current.style.display = 'none';
       if (cursorTagRef.current) cursorTagRef.current.style.display = 'none';
+      for (const el of Object.values(outlineHaloRef.current)) {
+        if (el) el.style.transition = '';
+      }
+      for (const el of Object.values(outlineAccentRef.current)) {
+        if (el) el.style.transition = '';
+      }
+      for (const map of Object.values(cornerArcRefs.current)) {
+        for (const pair of Object.values(map)) {
+          if (pair?.halo) pair.halo.style.transition = '';
+          if (pair?.accent) pair.accent.style.transition = '';
+        }
+      }
     };
 
     const onPointerMove = (e: PointerEvent) => {
@@ -3002,6 +3068,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
       currentVariant: previousVariantRef.current[layerKey],
     });
     previousVariantRef.current[layerKey] = chrome.variant;
+    radiusGripInsetRef.current[layerKey] = chrome.radiusGrip.inset;
 
     const chromeGeom: SelectionChromeGeometry | null =
       transformChain.length > 0
@@ -3082,8 +3149,25 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
                 : buildCornerArcPath(corner, currentW, currentH, chrome.outlineRadii, zoomVal);
               return (
                 <g key={`arc-group-${corner}`}>
-                  <path d={arc.path} className={reviewStyles.handleArcHalo} />
                   <path
+                    ref={el => {
+                      if (!cornerArcRefs.current[layerKey]) cornerArcRefs.current[layerKey] = {};
+                      cornerArcRefs.current[layerKey][corner] = {
+                        halo: el,
+                        accent: cornerArcRefs.current[layerKey][corner]?.accent ?? null,
+                      };
+                    }}
+                    d={arc.path}
+                    className={reviewStyles.handleArcHalo}
+                  />
+                  <path
+                    ref={el => {
+                      if (!cornerArcRefs.current[layerKey]) cornerArcRefs.current[layerKey] = {};
+                      cornerArcRefs.current[layerKey][corner] = {
+                        halo: cornerArcRefs.current[layerKey][corner]?.halo ?? null,
+                        accent: el,
+                      };
+                    }}
                     d={arc.path}
                     className={`${reviewStyles.handleArc} ${isResizing && resizeHandle === corner ? reviewStyles.handleArcActive : ''}`}
                   />
@@ -3113,20 +3197,32 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
         )}
 
         {/* Radius Grip */}
-        {chrome.radiusGrip.visible && !isInlineEditing && !isDraggingMove && (
+        {chrome.radiusGrip.visible && !isInlineEditing && !isDraggingMove && (() => {
+          let gripLeft = chrome.radiusGrip.inset;
+          let gripTop = chrome.radiusGrip.inset;
+          if (isOriented && chromeGeom) {
+            const gripPt = transformPoint(chromeGeom.prediction.matrix, {
+              x: chrome.radiusGrip.inset,
+              y: chrome.radiusGrip.inset,
+            });
+            gripLeft = gripPt.x - selection.rect.left;
+            gripTop = gripPt.y - selection.rect.top;
+          }
+          return (
           <button
+            ref={el => { radiusGripRef.current[layerKey] = el; }}
             type="button"
             role="slider"
             aria-label="Adjust corner radius"
             title="Drag to adjust corner radius (Arrow keys to change step)"
             aria-valuemin={0}
-            aria-valuemax={Math.round(Math.min(currentW, currentH) / 2)}
+            aria-valuemax={Math.round(Math.min(boxW, boxH) / 2)}
             aria-valuenow={Math.round(chrome.effectiveRadius)}
             aria-valuetext={`${Math.round(chrome.effectiveRadius)}px radius`}
             className={reviewStyles.radiusGrip}
             style={{
-              left: `${chrome.radiusGrip.inset}px`,
-              top: `${chrome.radiusGrip.inset}px`,
+              left: `${gripLeft}px`,
+              top: `${gripTop}px`,
             }}
             onPointerDown={startRadiusDrag}
             onKeyDown={handleRadiusKeyDown}
@@ -3134,7 +3230,8 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
           >
             <span className={reviewStyles.radiusGripDot} />
           </button>
-        )}
+          );
+        })()}
 
         {/* Interactive Resize Handles */}
         {!isInlineEditing && !isDraggingMove && (
@@ -3314,7 +3411,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
         
         {/* Toast Notification */}
         {toastMessage && (
-          <div role="status" aria-label="Editor notice" className="fixed top-4 left-1/2 -translate-x-1/2 z-50 bg-slate-900 text-white text-xs font-semibold px-4 py-2.5 rounded-lg shadow-xl flex items-center space-x-2 border border-slate-700 animate-fade-in">
+          <div role="status" aria-label="Editor notice" className="fixed top-4 left-1/2 -translate-x-1/2 z-[115] bg-[#14221c]/95 backdrop-blur-md text-slate-50 text-xs font-medium px-4 py-2 rounded-full shadow-2xl flex items-center space-x-2 border border-white/10 animate-fade-in">
             <span>{toastMessage}</span>
           </div>
         )}
@@ -3491,7 +3588,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
                   aria-pressed={outlineDrag}
                   disabled={busy || isApplying || isInlineEditing || isResizing || Boolean(liveMove)}
                   onClick={() => setOutlineDrag(v => !v)}
-                  className={`inline-flex items-center gap-1 px-2 py-1 text-xs rounded border transition-colors ${outlineDrag ? 'bg-emerald-50 text-emerald-700 border-emerald-300 font-medium' : 'text-slate-600 border-slate-200 hover:bg-slate-50'}`}
+                  className={reviewStyles.outlineToggle}
                 >
                   <SquareDashed size={13} />
                   <span>Outline</span>
