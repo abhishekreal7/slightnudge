@@ -26,17 +26,18 @@ Built atop `design/editor-geometry` (`ef46aac`) on branch `design/editor-geometr
    - **Stationary Edge Hijack & Post-Snap Resize Clobbering**: Probing active handle edges first and solving via `solveResize(..., snapLocalX/Y)` fixed aspect-ratio/anchor corruption and aligned sibling snaps.
    - **Move Sibling Snap Clobbered by 4 px Grid Rounding**: `roundMoveTranslation` keeps exact 1 px sibling snap when `snappedX/Y` is true.
    - **Iframe Focus `Escape` Race & Stale Overlay Size (`EditorWorkspace.tsx`)**: Added `focus({ preventScroll: true })` to `startResize`/`startRadiusDrag`, guarded `receiveSourceText`'s `'Escape'` handler with `cancelActiveDragRef` so pressing `Escape` cancels drag without unmounting captured handles, cleared inline `width`/`height` on `onPointerUp`/`cancelDrag`, and keyed `<div key={layerKey}>` using `selection.rect`.
-   - **Rotated Element AABB Selection & Handle Cursor Misalignment (`EditorWorkspace.tsx`, `selection-style.ts`)**: Replaced axis-aligned `selection.rect` dimension assumptions on rotated elements with local border-box dimensions from `extractElementTransformChain`, drew oriented SVG quad chrome inset `0` in wrapper space, suppressed unrotated AABB corner arcs when transformed, and rotated handle cursors dynamically via `cursorForHandleAngle`.
+   - **Rotated Element AABB Selection & Handle Cursor Misalignment (`EditorWorkspace.tsx`, `selection-style.ts`)**: Replaced axis-aligned `selection.rect` dimension assumptions on rotated elements with local border-box dimensions from `extractElementTransformChain`, drew oriented SVG quad chrome inset `0` in wrapper space, suppressed unrotated AABB corner arcs when transformed, rotated handle cursors dynamically via `cursorForHandleAngle`, and positioned the `radiusGrip` cleanly inside rotated `nw` corners (`cornerArcRefs` + `radiusGripRef` tracked live on `rAF`).
+   - **Dynamic Corner Arc Lag & Studio Window Chrome Polish (`EditorWorkspace.tsx`, CSS modules)**: Synchronized `variant === 'arc'` / `'circle'` corner `<path>` trajectories (`cornerArcRefs`) and zero-transition drag locks (`cleanupVisuals`) during live resize (`<= 3 px` behind outline); framed artboards on a studio dot-matrix canvas (`canvas-stage.module.css`, `source-window.module.css`); refined frosted floating command dock (`30px` unified controls, emerald gradient primary CTA, status pill, `bottom: 78px` panel clearance, `z-index: 95` drawer stacking).
 4. **Tests & Verification**:
-   - `test/geometry-ui-integration.test.ts` (`11/11` unit & contract tests), `test/geometry-ui-integration.browser.test.ts` (`5/5` live Playwright scenarios on `/editor?view=fit`: wheel zoom, `0.5x` snap guide `diff=0.00px`, `gbcrCalls=0`, `apiCalls=0`, zoomed handle suppression, live `Shift` aspect ratio `246x120`, and `#geom-rotated` oriented SVG quad `topEdgeSlopeY=82.0px`, `cursor=nwse-resize`, local `+40px` resize `W: 200px × H: 80px`).
-   - `test/outline-drag.browser.test.ts` passing against disposable Next dev server.
-   - `test/geometry/*.test.ts`, `test/selection-style.test.ts` (`52/52`), `test/direct-manipulation-math.test.ts`, `test/outline-drag.test.ts`, `test/direct-manipulation.test.ts`, `test/selection-coordinates.test.ts`, `test/drag-move.test.ts`, and `npm test` verified after final commits.
+   - `test/geometry-ui-integration.test.ts` (`11/11` unit & contract tests), `test/geometry-ui-integration.browser.test.ts` (`6/6` live Playwright scenarios on `/editor?view=fit`: wheel zoom, `0.5x` snap guide `diff=0.00px`, dynamic corner arc tracking, `gbcrCalls=0`, `apiCalls=0`, zoomed handle suppression, live `Shift` aspect ratio `246x120`, `#geom-rotated` oriented SVG quad `topEdgeSlopeY=82.0px`, `cursor=nwse-resize`, rotated `radiusGrip`, local `+40px` resize `W: 200px × H: 80px`, and panel/dock vertical clearance).
+   - `npm run build` (`next build --webpack`) verified cleanly (`exit 0`, zero tracked/untracked workspace diffs).
+   - `test/outline-drag.browser.test.ts`, `test/geometry/*.test.ts`, `test/selection-style.test.ts` (`52/52`), `test/direct-manipulation-math.test.ts`, `test/outline-drag.test.ts`, `test/direct-manipulation.test.ts`, `test/selection-coordinates.test.ts`, `test/drag-move.test.ts`, and `npm test` verified after final commits.
 
 ### Not Proven / Out of Scope for this Sprint
 1. **Engine / AST Write Execution & Cross-Origin Bridge Chains (`lib/slightnudge/**`, `app/api/**`)**:
    - Off-limits boundary preserved: backend preview/apply/reorder routes and `source-canvas-bridge.ts` remain untouched. Cross-origin iframes (where `sourceCanvas.current?.getDocument?.()` returns `null`) fall back gracefully to axis-aligned `selection.rect` chrome.
-2. **Production Build Benchmark Re-Run & Documented 2D Affine Limits**:
-   - Heavy 2000-node production `next build` latency numbers (`STATE.md` from `design/editor-selection`) were not re-benchmarked in this integration pass; CSS 3D transforms (`rotateX`/`rotateY`) and CSS `zoom` remain documented limits per [`docs/editor/geometry.md`](file:///C:/dev/vibecheck/scratch/editor-safety-port-20261108/docs/editor/geometry.md).
+2. **2000-Node Heavy Production Latency Benchmark & Documented 2D Affine Limits**:
+   - `npm run build` (`next build --webpack`) passed after code edits; 2000-node heavy production runtime frame benchmark (`STATE.md` from `design/editor-selection`) was not re-benchmarked; CSS 3D transforms (`rotateX`/`rotateY`) and CSS `zoom` remain documented limits per [`docs/editor/geometry.md`](file:///C:/dev/vibecheck/scratch/editor-safety-port-20261108/docs/editor/geometry.md).
 
 ---
 
@@ -51,7 +52,10 @@ Base tip: `ef46aac` (`docs(editor): update STATE with geometry core sprint proof
 - `d63118c`: `docs(editor): update STATE with final integration proof`
 - `4e7133d`: `feat(editor): render oriented Quad SVG chrome and ancestor-aware rotated resize`
 - `c9010be`: `test(editor): verify oriented Quad SVG selection chrome and rotated local resize`
-- `[Current Commit]`: `docs(editor): update STATE with oriented Quad chrome integration proof`
+- `3ff0be9`: `docs(editor): update STATE with oriented Quad chrome integration proof`
+- `25a4b81`: `fix(editor): sync live resize corner arcs, oriented radius grip, and elevate studio window layout`
+- `0653961`: `test(editor): assert live dynamic arc tracking, oriented radius grip, and panel/dock clearance`
+- `[Current Commit]`: `docs(editor): update STATE with production build and visual polish proof`
 
 *(Foundation commits on `design/editor-geometry`: `111b54a`, `6624f9f`, `5b79406`, `e5f04e9`, `a42f6b2`, `ef46aac`.)*
 
@@ -69,8 +73,12 @@ Modified/added paths:
 components/slightnudge/CanvasStage.tsx
 components/slightnudge/EditorWorkspace.tsx
 components/slightnudge/SlightNudgeOverlay.tsx
+components/slightnudge/canvas-stage.module.css
 components/slightnudge/direct-manipulation-engine.ts
+components/slightnudge/editor-workspace.module.css
+components/slightnudge/responsive-controls.module.css
 components/slightnudge/selection-style.ts
+components/slightnudge/source-window.module.css
 components/slightnudge/useWindowDock.ts
 docs/editor/STATE.md
 test/geometry-ui-integration.browser.test.ts
