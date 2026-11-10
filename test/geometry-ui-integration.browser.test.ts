@@ -173,20 +173,21 @@ async function runGeometryUiIntegrationBrowserTests() {
     console.log('3. Checking selection-style zoom-aware handle suppression at 0.5x vs 1.0x...');
     const shortBox = iframe.locator('#geom-short').first();
     await shortBox.scrollIntoViewIfNeeded();
-    await shortBox.click({ force: true });
-    await page.waitForTimeout(300);
-    assert.equal(await page.locator('button[aria-label="Resize width from right"]').count(), 0, 'E handle must be hidden when zoomed screenHeight=35px < 40px');
+    await shortBox.dispatchEvent('click');
+    const eastHandleLoc = page.locator('button[aria-label="Resize width from right"]');
+    await eastHandleLoc.waitFor({ state: 'detached', timeout: 5000 });
+    assert.equal(await eastHandleLoc.count(), 0, 'E handle must be hidden when zoomed screenHeight=35px < 40px');
     assert.equal(await page.locator('button[aria-label="Resize width from bottom right"]').count(), 1, 'SE corner handle must still be visible');
     await zoomSelect.selectOption('1');
-    await page.waitForTimeout(300);
-    assert.equal(await page.locator('button[aria-label="Resize width from right"]').count(), 1, 'E handle must reappear at 1.0x zoom (100px >= 40px)');
+    await eastHandleLoc.waitFor({ state: 'visible', timeout: 5000 });
+    assert.equal(await eastHandleLoc.count(), 1, 'E handle must reappear at 1.0x zoom (70px >= 40px)');
     console.log('   ✅ [PASS] Zoom-dependent handle suppression verified at 0.5x vs 1.0x');
 
     // 4. Verify Shift aspect ratio & Alt center resize on #geom-box at 1.0x zoom
     console.log('4. Checking Shift aspect lock + Alt center symmetry in live editor...');
     await targetBox.scrollIntoViewIfNeeded();
-    await targetBox.click({ force: true });
-    await page.waitForTimeout(300);
+    await targetBox.dispatchEvent('click');
+    await eastHandleLoc.waitFor({ state: 'visible', timeout: 5000 });
     const seHandle = page.locator('button[aria-label="Resize width from bottom right"]');
     const seBox = await seHandle.boundingBox();
     assert.ok(seBox);

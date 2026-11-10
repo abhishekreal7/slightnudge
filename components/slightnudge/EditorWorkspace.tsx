@@ -886,6 +886,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
     token: string;
     lastClassEstimateTime: number;
   } | null>(null);
+  const cancelActiveDragRef = useRef<(() => void) | null>(null);
   const windowDock = useWindowDock(windowMode, () => Boolean(directDragRef.current), isResizing || isDraggingMove);
 
   // Dynamic DOM refs & element bounding dimensions
@@ -1173,7 +1174,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
   };
 
   // Direct 60fps 8-Handle Resize
-  const startResize = (handle: HandleDirection, e: React.PointerEvent) => {
+  const startResize = (handle: HandleDirection, e: React.PointerEvent<HTMLElement>) => {
     e.stopPropagation();
     e.preventDefault();
     if (blocksReview() || undoRecoveryRef.current || directDragRef.current) return;
@@ -1204,6 +1205,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
     const { artboardToMain, elementToScreen } = captureGestureMatrices(key, targetEl, zoom);
 
     try {
+      e.currentTarget.focus({ preventScroll: true });
       e.currentTarget.setPointerCapture(e.pointerId);
     } catch {}
 
@@ -1256,7 +1258,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
   };
 
   // Direct 60fps Corner Radius Dragging
-  const startRadiusDrag = (e: React.PointerEvent) => {
+  const startRadiusDrag = (e: React.PointerEvent<HTMLElement>) => {
     e.stopPropagation();
     e.preventDefault();
     if (blocksReview() || undoRecoveryRef.current || directDragRef.current) return;
@@ -1293,6 +1295,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
     const maxRadius = Math.min(currentW, currentH) / 2;
 
     try {
+      e.currentTarget.focus({ preventScroll: true });
       e.currentTarget.setPointerCapture(e.pointerId);
     } catch {}
 
@@ -1799,7 +1802,11 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
       } catch {}
 
       const overlayNode = elementRefs.current[gesture.key];
-      if (overlayNode) overlayNode.style.transform = '';
+      if (overlayNode) {
+        overlayNode.style.width = '';
+        overlayNode.style.height = '';
+        overlayNode.style.transform = '';
+      }
 
       if (gesture.type === 'resize') {
         setIsResizing(false);
@@ -1914,8 +1921,8 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
 
       const overlayNode = elementRefs.current[gesture.key];
       if (overlayNode) {
-        overlayNode.style.width = `${Math.round(gesture.startWidth)}px`;
-        overlayNode.style.height = `${Math.round(gesture.startHeight)}px`;
+        overlayNode.style.width = '';
+        overlayNode.style.height = '';
         overlayNode.style.transform = '';
       }
 
@@ -1941,8 +1948,10 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
     window.addEventListener('pointercancel', cancelDrag);
     window.addEventListener('blur', cancelDrag);
     window.addEventListener('keydown', onKeyDown, true);
+    cancelActiveDragRef.current = cancelDrag;
 
     return () => {
+      cancelActiveDragRef.current = null;
       window.removeEventListener('pointermove', onPointerMove);
       window.removeEventListener('pointerup', onPointerUp);
       window.removeEventListener('pointercancel', cancelDrag);
@@ -2619,7 +2628,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
     if (type === 'text-cancel' && selection) { cancelInlineText(sourceKey(selection)); return; }
     if (type === 'text-request' && selection) { sourceSelections.current[sourceKey(selection)] = selection; receiveSourceSelection(selection); beginInlineText(sourceKey(selection)); return; }
     if (type === 'save-request') { saveTextRef.current = null; setSaveRequested(true); return; }
-    if (type === 'shortcut') { if (text === 'Escape') { if (destinationSource.current) cancelDestination(); else if (windowMode && windowPanel) setWindowPanel(null); else setSelectedLayer(null); } else if (text?.toLowerCase() === 's') requestSave(); else if (text?.toLowerCase() === 'y' || shift) navigateDraft(1); else void handleUndo(); }
+    if (type === 'shortcut') { if (text === 'Escape') { if (directDragRef.current) { cancelActiveDragRef.current?.(); return; } if (destinationSource.current) cancelDestination(); else if (windowMode && windowPanel) setWindowPanel(null); else setSelectedLayer(null); } else if (text?.toLowerCase() === 's') requestSave(); else if (text?.toLowerCase() === 'y' || shift) navigateDraft(1); else void handleUndo(); }
   };
 
   const reorderSibling = (direction: 'earlier' | 'later') => {
@@ -2916,8 +2925,8 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
     if (selectedLayer !== layerKey || !elements[layerKey]) return null;
     const zoomVal = resolveStageScale(layerKey);
     const renderedElem = elements[layerKey] || activeElement;
-    const currentW = elementRefs.current[layerKey]?.offsetWidth || selection.rect.width;
-    const currentH = elementRefs.current[layerKey]?.offsetHeight || selection.rect.height;
+    const currentW = selection.rect.width;
+    const currentH = selection.rect.height;
     const currentRadius = renderedElem.borderRadius || selection.computed.borderRadius || '0px';
 
     const isMediaEl = /^(img|video|svg|canvas|picture)$/i.test(renderedElem.tag || selection.tagName);
@@ -2961,6 +2970,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
 
     return (
       <div
+        key={layerKey}
         ref={element => { elementRefs.current[layerKey] = element; }}
         className={`${reviewStyles.sourceSelection} ${outlineDrag ? reviewStyles.sourceSelectionOutline : ''}`}
         aria-label="Selected source element"
