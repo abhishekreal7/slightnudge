@@ -3,6 +3,8 @@ import { readApiJson } from '@/lib/slightnudge/api-response';
 
 import { AppearanceControls } from './AppearanceControls';
 import { ConstraintControls } from './ConstraintControls';
+import { LeftToolDock, type LeftTool } from './LeftToolDock';
+import { RightToolDock, type DockTool } from './RightToolDock';
 
 
 import React, { useState, useEffect, useLayoutEffect, useCallback, useRef } from 'react';
@@ -513,6 +515,10 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
   const usesDrafts = true;
   const projectDraftStorageKey = repositoryId ? `${draftStorageKey}:${repositoryId}` : draftStorageKey;
   const [windowPanel, setWindowPanel] = useState<'layers' | 'inspector' | null>(initialPanel);
+  const [leftDockTool, setLeftDockTool] = useState<LeftTool>('layers');
+  const [leftDockVisible, setLeftDockVisible] = useState<boolean>(initialPanel === 'layers');
+  const [rightDockTool, setRightDockTool] = useState<DockTool>(initialPanel === 'inspector' ? 'layout' : null);
+  const [rightDockVisible, setRightDockVisible] = useState<boolean>(true);
   const [browseMode, setBrowseMode] = useState(false);
   const [canvasZoom, setCanvasZoom] = useState<CanvasZoom>(unified && view === 'full' ? 1 : 'fit');
   useEffect(()=>{if(unified)setCanvasZoom(view==='fit'?'fit':1);},[unified,view]);
@@ -2274,7 +2280,12 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
       if (e.target instanceof HTMLElement && e.target.closest('input, textarea, select, [contenteditable="true"]')) return;
       if (e.key === 'Escape') {
         if (destinationSource.current) { cancelDestination(); return; }
-        if (windowMode && windowPanel && !isDraggingMove && !isResizing) { setWindowPanel(null); return; }
+        if (windowMode && (windowPanel || (leftDockVisible && leftDockTool !== null) || (rightDockVisible && rightDockTool !== null)) && !isDraggingMove && !isResizing) {
+          setWindowPanel(null);
+          if (leftDockVisible) setLeftDockVisible(false);
+          if (rightDockVisible) setRightDockTool(null);
+          return;
+        }
         if (isDraggingMove) {
           setIsDraggingMove(false);
           setDragLayerKey(null);
@@ -2292,7 +2303,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isDraggingMove, isResizing, windowMode, windowPanel]);
+  }, [isDraggingMove, isResizing, windowMode, windowPanel, leftDockVisible, leftDockTool, rightDockVisible, rightDockTool]);
 
   const restoreSnapshot = (edit: PendingEdit) => {
     inlineSessionRef.current = null;
@@ -3043,7 +3054,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
     const locked = busy || isApplying || reviewBlocking || Boolean(uncertainUndoId) || destinationMode || viewportChanging || Boolean(activeBreakpoint) && scopeLoading;
     if(activeElement.instance && !editingDefinitionStyles)return createPortal(<div ref={formattingRef} role="toolbar" aria-label="Selection formatting" className={reviewStyles.floatingFormatting} style={{position:'fixed',left:formattingPosition?.left||0,top:formattingPosition?.top||0,visibility:formattingPosition?.visible?'visible':'hidden'}} onClick={event=>event.stopPropagation()}><div className={reviewStyles.formattingBar}>
       {isTextElement&&<button type="button" className={reviewStyles.editTextControl} disabled={locked} onClick={()=>beginInlineText(selectedLayer)}><Pencil size={13}/><span>{preparingInlineText ? 'Checking text…' : 'Edit text'}</span></button>}
-      <button type="button" className={reviewStyles.editTextControl} disabled={locked} onClick={()=>{setWindowPanel('inspector');requestAnimationFrame(()=>document.querySelector<HTMLElement>('[aria-label="Component properties"] textarea, [aria-label="Component properties"] select')?.focus())}}><SlidersHorizontal size={13}/><span>Instance props</span></button>
+      <button type="button" className={reviewStyles.editTextControl} disabled={locked} onClick={()=>{setWindowPanel('inspector');setRightDockVisible(true);setRightDockTool('inspect');requestAnimationFrame(()=>document.querySelector<HTMLElement>('[aria-label="Component properties"] textarea, [aria-label="Component properties"] select')?.focus())}}><SlidersHorizontal size={13}/><span>Instance props</span></button>
     </div></div>,document.body);
     const parentKey = sourceSelections.current[selectedLayer]?.parentKey;
     const siblings = parentKey ? sourceLayers.filter(layer => layer.parentKey === parentKey && layer.path === activeElement.filePath && (layer.computed.order || '0') === (sourceSelections.current[selectedLayer]?.computed.order || '0')) : [];
@@ -3579,8 +3590,45 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
         <div data-editor-workspace className="min-h-0 flex-1 flex overflow-hidden">
 
           {/* ======================================================== */}
-          {/* LEFT SIDEBAR: Layers & Pages (SaaS Theme)                */}
+          {/* LEFT SIDEBAR / FLOATING LIGHT DOCK                       */}
           {/* ======================================================== */}
+          {windowMode ? (
+            <LeftToolDock
+              visible={leftDockVisible}
+              activeTool={leftDockTool}
+              onToggleTool={(tool) => {
+                setLeftDockVisible(true);
+                setLeftDockTool(tool);
+              }}
+              onClose={() => {
+                setLeftDockVisible(false);
+              }}
+              sourceLayers={sourceLayers}
+              selectedLayer={selectedLayer}
+              onSelectLayer={setSelectedLayer}
+              pages={pages.filter(page => /^fixture-[1-5]$/.test(page.id))}
+              selectedPage={selectedPage}
+              onSelectPage={(page) => {
+                if (operationRef.current || blocksReview() || undoRecoveryRef.current) {
+                  showToast(undoRecoveryRef.current ? 'Check Undo status before making another change.' : reviewNotice);
+                  return;
+                }
+                if (draftRef.current && page.id !== selectedPage.id) {
+                  showToast('Save or discard this page’s draft before switching source files.');
+                  return;
+                }
+                setSelectedLayerState(null);
+                setSourceReady(false);
+                setSourceLayers([]);
+                setSelectedPage(page);
+                showToast(`Opened ${page.title}`);
+              }}
+              activeElement={activeElement}
+              repositoryId={repositoryId}
+              uncertainUndoId={uncertainUndoId}
+              onUndo={handleUndo}
+            />
+          ) : (
           <aside data-editor-panel="layers" className="w-60 bg-white border-r border-[#E5E7EB] flex flex-col shrink-0 z-20">
             {windowMode && <div className={reviewStyles.windowPanelHeader}><strong>Layers</strong><button type="button" aria-label="Close layers" onClick={() => setWindowPanel(null)}><X size={14}/></button></div>}
             {/* Brand header aligns with the editor toolbar. */}
@@ -3708,6 +3756,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
               </div>
             </div>
           </aside>
+          )}
 
           {/* ======================================================== */}
           {/* CENTER CANVAS COLUMN                                     */}
@@ -3725,8 +3774,8 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
                   <button type="button" aria-pressed={!browseMode} onClick={() => setBrowseMode(false)}>Edit</button>
                   <button type="button" aria-pressed={browseMode} disabled={busy || isApplying} onClick={() => { if (reviewRef.current || inlineSessionRef.current) { showToast('Save or discard your draft before browsing the page.'); return; } setSelectedLayerState(null); setBrowseMode(true); }}>Browse</button>
                 </div>
-                <button type="button" aria-label="Toggle layers" title="Layers" aria-expanded={windowPanel === 'layers'} onClick={() => setWindowPanel(previous => previous === 'layers' ? null : 'layers')}><Columns2 size={15}/></button>
-                <button type="button" aria-label="Toggle design panel" title="Design" aria-expanded={windowPanel === 'inspector'} onClick={() => setWindowPanel(previous => previous === 'inspector' ? null : 'inspector')}><Pencil size={15}/></button>
+                <button type="button" aria-label="Toggle layers" title="Layers" aria-expanded={leftDockVisible} onClick={() => { if (leftDockVisible) { setLeftDockVisible(false); } else { if (leftDockTool === null) setLeftDockTool('layers'); setLeftDockVisible(true); } }}><Columns2 size={15}/></button>
+                <button type="button" aria-label="Toggle design panel" title="Design" aria-expanded={rightDockVisible && rightDockTool !== null} onClick={() => { setRightDockVisible(true); setRightDockTool(previous => previous === null ? 'layout' : null); }}><Pencil size={15}/></button>
               </div>}
               <div className={reviewStyles.projectContext}>
                 <span className={reviewStyles.sourceDot} role="img" aria-label="Local source connected" />
@@ -3852,8 +3901,138 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
         </div>
 
           {/* ======================================================== */}
-          {/* RIGHT INSPECTOR PANEL: SlightNudge Visual Editor         */}
+          {/* RIGHT INSPECTOR / FLOATING LIGHT DOCK                    */}
           {/* ======================================================== */}
+          {windowMode ? (
+            <RightToolDock
+              visible={rightDockVisible}
+              selectedLayer={selectedLayer}
+              activeElement={activeElement}
+              computed={selectedLayer ? sourceSelections.current[selectedLayer]?.computed || {} : {}}
+              draft={draft}
+              usesDrafts={usesDrafts}
+              busy={busy}
+              isApplying={isApplying}
+              reviewBlocking={reviewBlocking}
+              destinationMode={destinationMode}
+              viewportChanging={viewportChanging}
+              activeVariant={activeVariant}
+              activeBreakpoint={activeBreakpoint}
+              repositoryId={repositoryId}
+              pendingEdit={pendingEdit}
+              sourceSelections={sourceSelections.current}
+              sourceLayers={sourceLayers}
+              activeToolOverride={rightDockTool}
+              onActiveToolChange={setRightDockTool}
+              onUpdateStyle={updateStyle}
+              onRequestSave={requestSave}
+              onDiscardDraft={() => void discardPendingEdit()}
+              onDeselect={() => setSelectedLayerState(null)}
+              onSetActiveVariant={setActiveVariant}
+              onUndo={handleUndo}
+              onRedo={() => navigateDraft(1)}
+              onTriggerBackendPreview={triggerBackendPreview}
+              specializedControls={selectedLayer ? (
+                <div className="space-y-2.5 pt-2 border-t border-[#E7ECE9]">
+                  {(activeElement.instance || !['svg', 'img', 'source'].includes(activeElement.tag)) && (
+                    <ComponentProps
+                      key={`props:${selectedLayer}`}
+                      drafts={draftIds(pendingEdit)}
+                      source={{ filePath: activeElement.filePath, line: activeElement.line, column: activeElement.column, elementId: activeElement.id, instance: activeElement.instance, tagName: activeElement.tag, repositoryId }}
+                      parentPreviewId={draftHeads(pendingEdit)[activeElement.filePath]?.id}
+                      disabled={busy || isApplying || reviewBlocking || destinationMode || Boolean(activeBreakpoint || activeVariant) || (sourceLayers.find(layer => layer.key === selectedLayer)?.instances || 1) > 1}
+                      onChange={(property, value, owner) => triggerBackendPreview('component', { property, value, owner, ...(owner ? { definition: { filePath: activeElement.filePath, line: activeElement.line, column: activeElement.column, instance: activeElement.instance } } : {}) })}
+                    />
+                  )}
+                  {!activeElement.instance && activeElement.tag === 'svg' && (
+                    <IconControls
+                      key={selectedLayer}
+                      selectionKey={selectedLayer}
+                      source={{ filePath: activeElement.filePath, line: activeElement.line, column: activeElement.column, elementId: activeElement.id, tagName: 'svg', repositoryId }}
+                      parentPreviewId={draftHeads(pendingEdit)[activeElement.filePath]?.id}
+                      instances={sourceLayers.find(layer => layer.key === selectedLayer)?.instances || 1}
+                      scoped={Boolean(activeBreakpoint || activeVariant)}
+                      disabled={busy || isApplying || reviewBlocking || destinationMode}
+                      onChange={(property, value) => triggerBackendPreview('icon', { property, value })}
+                    />
+                  )}
+                  {!activeElement.instance && ['a', 'button'].includes(activeElement.tag) && (
+                    <ActionControls
+                      key={selectedLayer}
+                      selectionKey={selectedLayer}
+                      attributes={sourceSelections.current[selectedLayer]?.attributes}
+                      source={{ filePath: activeElement.filePath, line: activeElement.line, column: activeElement.column, elementId: activeElement.id, tagName: activeElement.tag, repositoryId }}
+                      parentPreviewId={draftHeads(pendingEdit)[activeElement.filePath]?.id}
+                      instances={sourceLayers.find(layer => layer.key === selectedLayer)?.instances || 1}
+                      scoped={Boolean(activeBreakpoint || activeVariant)}
+                      disabled={busy || isApplying || reviewBlocking || destinationMode}
+                      onChange={(property, value) => triggerBackendPreview('action', { property, value })}
+                    />
+                  )}
+                  {activeElement.tag === 'img' && !activeElement.instance && (
+                    <>
+                      <ImageContent
+                        key={selectedLayer}
+                        selectionKey={selectedLayer}
+                        attributes={sourceSelections.current[selectedLayer]?.attributes}
+                        repositoryId={repositoryId}
+                        scoped={Boolean(activeBreakpoint || activeVariant)}
+                        disabled={busy || isApplying || reviewBlocking || destinationMode}
+                        onChange={(property, value) => triggerBackendPreview('image', { property, value })}
+                      />
+                      <ImageFraming
+                        classes={activeElement.classes}
+                        computed={selectedLayer ? sourceSelections.current[selectedLayer]?.computed || {} : {}}
+                        scope={activeBreakpoint || activeVariant}
+                        disabled={busy || isApplying || reviewBlocking || destinationMode || viewportChanging || Boolean(activeBreakpoint) && scopeLoading}
+                        onChange={updateStyle}
+                      />
+                    </>
+                  )}
+                  {!repositoryId && (
+                    <div className={reviewStyles.resizeBar}>
+                      <button
+                        type="button"
+                        aria-label="Drag to resize width"
+                        aria-pressed={isResizing}
+                        aria-describedby="selection-width-hint"
+                        aria-keyshortcuts="ArrowLeft ArrowRight Home End"
+                        onKeyDown={resizeWithKeyboard}
+                        disabled={busy || isApplying || reviewBlocking || Boolean(uncertainUndoId) || Boolean(liveMove) || moveArmed}
+                        onPointerDown={event => startResize('ne', event)}
+                      >
+                        <ArrowUpDown size={12} style={{ transform: 'rotate(90deg)' }} />
+                        <span>Resize</span>
+                        <span className={reviewStyles.resizeValue}>{liveWidth || elementDimensions[selectedLayer]?.w || 0}px</span>
+                      </button>
+                      <select
+                        aria-label="Maximum width"
+                        disabled={isResizing || busy || isApplying || reviewBlocking || Boolean(uncertainUndoId) || Boolean(liveMove) || moveArmed}
+                        value={scopeTokens(activeElement.classes).find(token => token.startsWith('max-w-')) || ''}
+                        onChange={event => {
+                          const value = event.target.value;
+                          const key = selectedLayer;
+                          void triggerBackendPreview('style', { property: 'maxWidth', value }, key, () => setElements(previous => ({ ...previous, [key]: { ...previous[key], maxWidth: value } })));
+                        }}
+                      >
+                        <option value="" disabled>Set max width</option>
+                        {['sm', 'md', 'lg', 'xl', '2xl', '3xl', '4xl', '5xl', '6xl'].map(size => (
+                          <option key={size} value={`max-w-${size}`}>Max {size}</option>
+                        ))}
+                      </select>
+                    </div>
+                  )}
+                  <ConstraintControls
+                    classes={activeElement.classes}
+                    computed={selectedLayer ? sourceSelections.current[selectedLayer]?.computed || {} : {}}
+                    scope={activeBreakpoint || activeVariant}
+                    disabled={busy || isApplying || reviewBlocking || destinationMode || viewportChanging}
+                    onChange={updateStyle}
+                  />
+                </div>
+              ) : undefined}
+            />
+          ) : (
           <aside data-editor-panel="inspector" style={windowMode ? undefined : { width: inspectorWidth }} className="w-[288px] bg-white border-l border-[#E5E7EB] flex flex-col shrink-0 z-20 overflow-hidden shadow-xs">
             {!windowMode && <div role="separator" aria-label="Resize design panel" aria-orientation="vertical" aria-valuemin={272} aria-valuemax={360} aria-valuenow={inspectorWidth} tabIndex={0} className={reviewStyles.inspectorDivider}
               onPointerDown={event => { if (event.button !== 0) return; event.preventDefault(); inspectorResize.current = { x: event.clientX, width: inspectorWidth }; event.currentTarget.setPointerCapture(event.pointerId); }}
@@ -4483,6 +4662,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
               {renderHistoryControls()}{renderDraftControls()}
             </footer>}
           </aside>
+          )}
 
         </div>
         </div>
