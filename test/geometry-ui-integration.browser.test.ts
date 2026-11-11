@@ -446,6 +446,81 @@ async function runGeometryUiIntegrationBrowserTests() {
     await xoPage.close();
     console.log(`   ✅ [PASS] Live cross-origin bridge transformChain err=${maxErr.toFixed(3)}px & tiny maxWidth=12px`);
 
+    // 9. Repeated same-origin Move drag persistence: no custom-transform error, no height=0 collapse, no overlay/element desync
+    console.log('9. Checking consecutive same-origin Move drags keep overlay synced & persist cleanly...');
+    const movePage = await context.newPage();
+    await movePage.goto(`${baseUrl}/editor?view=fit`, { waitUntil: 'domcontentloaded', timeout: 60000 });
+    await movePage.locator('[data-source-ready="true"]').waitFor({ state: 'attached', timeout: 60000 });
+    await movePage.locator('select[aria-label="Canvas zoom"]').first().selectOption('1');
+    await movePage.waitForTimeout(400);
+
+    const moveIframe = movePage.frameLocator('iframe[title="Actual project"]');
+    const heading = moveIframe.locator('#target').first();
+    await heading.scrollIntoViewIfNeeded();
+    await heading.click({ force: true });
+    await movePage.locator('[aria-label="Selected source element"]').waitFor({ state: 'visible', timeout: 15000 });
+    await movePage.waitForTimeout(250);
+
+    const moveBtn1 = await movePage.locator('button[aria-label="Move element"]').boundingBox();
+    assert.ok(moveBtn1, 'Expected Move handle for heading');
+    const preview1Promise = movePage.waitForResponse(
+      (res) => res.url().includes('/api/slightnudge/preview') && res.request().method() === 'POST' && Boolean(res.request().postData()?.includes('"kind":"move"')),
+      { timeout: 15000 }
+    );
+    await movePage.mouse.move(moveBtn1.x + moveBtn1.width / 2, moveBtn1.y + moveBtn1.height / 2);
+    await movePage.mouse.down();
+    await movePage.mouse.move(moveBtn1.x + moveBtn1.width / 2 - 20, moveBtn1.y + moveBtn1.height / 2 - 48, { steps: 8 });
+    await movePage.waitForTimeout(150);
+    await movePage.mouse.up();
+    const preview1Res = await preview1Promise;
+    assert.equal(preview1Res.status(), 200);
+    await movePage.waitForTimeout(1000);
+
+    const afterDrag1Toast = await movePage.locator('[role="status"][aria-label="Editor notice"]').textContent().catch(() => null);
+    assert.ok(
+      !afterDrag1Toast || !afterDrag1Toast.includes('custom or animated transform'),
+      `Move drop must not trigger custom-transform error toast, got "${afterDrag1Toast}"`
+    );
+    const h1Box1 = await heading.boundingBox();
+    const selBox1 = await movePage.locator('[aria-label="Selected source element"]').boundingBox();
+    assert.ok(h1Box1 && selBox1, 'Expected visible heading and selection chrome after Move 1');
+    assert.ok(selBox1.height >= 16, `Selection overlay height must not collapse after drop, got ${selBox1.height}`);
+    const err1 = Math.max(Math.abs(h1Box1.x - selBox1.x), Math.abs(h1Box1.y - selBox1.y));
+    assert.ok(err1 <= 2.5, `Heading and green box must stay synced after Move 1 drop (err=${err1.toFixed(1)}px, h1=${JSON.stringify(h1Box1)}, sel=${JSON.stringify(selBox1)})`);
+    const classesAfter1 = (await heading.getAttribute('class')) || '';
+    const styleAfter1 = (await heading.getAttribute('style')) || '';
+    assert.ok(classesAfter1.includes('translate-y-[-48px]'), `Expected persisted translate-y-[-48px] class, got "${classesAfter1}"`);
+    assert.ok(!styleAfter1.includes('translate'), `Expected no orphaned inline style.translate, got "${styleAfter1}"`);
+
+    // Second Move drag from the new position (+24px down, +12px right -> Y=-24px)
+    const moveBtn2 = await movePage.locator('button[aria-label="Move element"]').boundingBox();
+    assert.ok(moveBtn2, 'Expected Move handle before Move 2');
+    const preview2Promise = movePage.waitForResponse(
+      (res) => res.url().includes('/api/slightnudge/preview') && res.request().method() === 'POST' && Boolean(res.request().postData()?.includes('"kind":"move"')),
+      { timeout: 15000 }
+    );
+    await movePage.mouse.move(moveBtn2.x + moveBtn2.width / 2, moveBtn2.y + moveBtn2.height / 2);
+    await movePage.mouse.down();
+    await movePage.mouse.move(moveBtn2.x + moveBtn2.width / 2 + 12, moveBtn2.y + moveBtn2.height / 2 + 24, { steps: 8 });
+    await movePage.waitForTimeout(150);
+    const midH1 = await heading.boundingBox();
+    const midSel = await movePage.locator('[aria-label="Selected source element"]').boundingBox();
+    assert.ok(midH1 && midSel);
+    const midErr = Math.max(Math.abs(midH1.x - midSel.x), Math.abs(midH1.y - midSel.y));
+    assert.ok(midErr <= 2.5, `Heading and green box must move together during Move 2 (err=${midErr.toFixed(1)}px, h1=${JSON.stringify(midH1)}, sel=${JSON.stringify(midSel)})`);
+    await movePage.mouse.up();
+    await preview2Promise;
+    await movePage.waitForTimeout(800);
+
+    const h1Box2 = await heading.boundingBox();
+    const selBox2 = await movePage.locator('[aria-label="Selected source element"]').boundingBox();
+    assert.ok(h1Box2 && selBox2);
+    assert.ok(selBox2.height >= 16, `Selection overlay height collapsed after Move 2: ${selBox2.height}`);
+    const err2 = Math.max(Math.abs(h1Box2.x - selBox2.x), Math.abs(h1Box2.y - selBox2.y));
+    assert.ok(err2 <= 2.5, `Heading and green box drifted after Move 2 release (err=${err2.toFixed(1)}px)`);
+    await movePage.close();
+    console.log(`   ✅ [PASS] Consecutive Move drags synced cleanly (err1=${err1.toFixed(1)}px, midErr=${midErr.toFixed(1)}px, err2=${err2.toFixed(1)}px)`);
+
     await context.close();
     console.log('\n====================================================');
     console.log('🎉 ALL GEOMETRY UI INTEGRATION BROWSER TESTS PASSED!');
