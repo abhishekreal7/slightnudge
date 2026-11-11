@@ -296,6 +296,7 @@ async function runGeometryUiIntegrationBrowserTests() {
     await page.keyboard.press('Home');
     await page.waitForTimeout(200);
     await page.locator('button[aria-label="Toggle layers"]').click();
+    await page.locator('[data-editor-rail="left"] button[aria-label="Layers"]').click();
     const layersPanel = page.locator('[data-editor-panel="layers"]');
     await layersPanel.waitFor({ state: 'visible', timeout: 5000 });
     await page.waitForTimeout(220);

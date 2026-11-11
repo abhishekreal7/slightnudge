@@ -7,7 +7,7 @@ import styles from './appearance-controls.module.css';
 const initialGradient: Gradient = { angle:135, stops:[{color:'#176b55',position:0},{color:'#5ba5c8',position:100}] };
 const initialShadow: Shadow = {x:0,y:8,blur:24,spread:0,color:'#00000026'};
 const presets: Record<string,Shadow> = {soft:{x:0,y:2,blur:8,spread:0,color:'#00000014'},medium:initialShadow,strong:{x:0,y:16,blur:48,spread:-8,color:'#00000040'}};
-export function AppearanceControls({classes,computed,scope,disabled,onChange}:{classes:string;computed:Record<string,string>;scope:string;disabled:boolean;onChange(property:string,value:string):void}){
+export function AppearanceControls({classes,computed,scope,disabled,defaultOpen=false,onChange}:{classes:string;computed:Record<string,string>;scope:string;disabled:boolean;defaultOpen?:boolean;onChange(property:string,value:string):void}){
   const interaction=['hover','focus','focus-visible','active'].includes(scope),locked=disabled||interaction;
   const tokens=scopedUtilities(classes,scope),gradientToken=tokens.find(token=>!!parseGradient(token)),shadowToken=tokens.find(token=>!!parseShadow(token));
   const [gradient,setGradient]=useState<Gradient>(initialGradient),[shadow,setShadow]=useState<Shadow>(initialShadow),[error,setError]=useState('');
@@ -16,7 +16,7 @@ export function AppearanceControls({classes,computed,scope,disabled,onChange}:{c
   let swatch='none';try{swatch=gradientUtility(gradient).slice(4,-1).replaceAll('_',' ');}catch{}
   const apply=(property:string,value:()=>string)=>{try{const token=value();setError('');onChange(property,token);}catch(error){setError(error instanceof Error?error.message:'Check these values.');}};
   const field=(label:string,value:number,min:number,max:number,onValue:(value:number)=>void)=><label className={styles.field}><span>{label.replace(/^(Shadow|Gradient) /,'').replace(/^./,character=>character.toUpperCase())}</span><input aria-label={label} type="number" step={1} min={min} max={max} value={Number.isNaN(value)?'':value} disabled={locked} onChange={event=>onValue(event.target.value===''?NaN:Number(event.target.value))}/></label>;
-  return <details className={styles.section}>
+  return <details open={defaultOpen} className={styles.section} style={defaultOpen ? { borderTop: 0, paddingTop: 0 } : undefined}>
     <summary><ChevronRight size={13} className={styles.chevron}/>Fill & effects</summary>
     <div className={styles.content}>
       <p className={styles.note}>{interaction?'Choose Default state or a responsive breakpoint to edit these effects.':`${scope?`${scope} override`:'All sizes'} · Preview now, Save to source when ready.`}</p>

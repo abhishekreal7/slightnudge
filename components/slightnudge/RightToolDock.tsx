@@ -57,7 +57,8 @@ export interface RightToolDockProps {
   pendingEdit?: any;
   sourceSelections?: Record<string, any>;
   sourceLayers?: any[];
-  specializedControls?: React.ReactNode;
+  overviewControls?: React.ReactNode;
+  layoutExtraControls?: React.ReactNode;
   activeToolOverride?: DockTool | undefined;
   onActiveToolChange?: (tool: DockTool) => void;
   onUpdateStyle: (property: string, value: string) => void;
@@ -84,7 +85,8 @@ export function RightToolDock({
   viewportChanging = false,
   activeVariant,
   activeBreakpoint,
-  specializedControls,
+  overviewControls,
+  layoutExtraControls,
   activeToolOverride,
   onActiveToolChange,
   onUpdateStyle,
@@ -149,13 +151,13 @@ export function RightToolDock({
 
   return (
     <>
-      {/* 1. LIGHT FROSTED GLASS DESIGN RAIL (Smooth 340ms Slide-In) */}
+      {/* 1. LIGHT FROSTED GLASS DESIGN RAIL (Smooth 340ms Slide-In, 28px margin from border) */}
       <aside
         data-editor-rail="right"
         data-dock-visible={visible ? 'true' : 'false'}
         aria-hidden={!visible}
         aria-label="Design tools dock"
-        className="fixed right-[16px] top-1/2 z-50 select-none flex flex-col items-center pointer-events-auto"
+        className="fixed right-[28px] top-1/2 z-50 select-none flex flex-col items-center pointer-events-auto"
       >
         <div
           role="toolbar"
@@ -415,15 +417,16 @@ export function RightToolDock({
         </div>
       </aside>
 
-      {/* 2. CONTEXTUAL LIGHT FLYOUT CARD (Positioned left of right rail, clears bottom dock) */}
-      {visible && activeTool !== null && (
+      {/* 2. CONTEXTUAL LIGHT FLYOUT CARD (Vertically centered beside rail at right: 96px) */}
+      {activeTool !== null && (
         <div
           data-editor-panel="inspector"
-          data-dock-visible="true"
+          data-dock-visible={visible ? 'true' : 'false'}
+          aria-hidden={!visible}
           role="dialog"
           aria-label={`${activeTool} controls`}
           style={appleTypographyStyle}
-          className="fixed right-[80px] top-[16px] z-50 w-[308px] max-h-[calc(100vh-100px)] flex flex-col overflow-y-auto bg-white/96 backdrop-blur-2xl border border-[#DCE3DF] rounded-[18px] shadow-[0_24px_56px_-12px_rgba(15,23,42,0.15),0_8px_20px_rgba(15,23,42,0.06)] p-4 text-xs text-[#1D2B24] antialiased"
+          className="fixed right-[96px] top-1/2 z-50 w-[308px] max-h-[calc(100vh-150px)] flex flex-col overflow-y-auto bg-white/96 backdrop-blur-2xl border border-[#DCE3DF] rounded-[18px] shadow-[0_24px_56px_-12px_rgba(15,23,42,0.15),0_8px_20px_rgba(15,23,42,0.06)] p-4 text-xs text-[#1D2B24] antialiased"
         >
           {/* Header */}
           <div className="flex items-center justify-between pb-3 mb-3 border-b border-[#E7ECE9]">
@@ -474,24 +477,22 @@ export function RightToolDock({
                       <span className="text-[#627168]">Tag</span>
                       <span className="font-mono font-medium text-[#14221B]">{activeElement.tag}</span>
                     </div>
+                    {activeElement.id && (
+                      <div className="flex justify-between py-1 border-b border-[#EFF3F0]">
+                        <span className="text-[#627168]">ID</span>
+                        <span className="font-mono text-[#16845B]">#{activeElement.id}</span>
+                      </div>
+                    )}
                     {activeElement.filePath && (
                       <div className="flex justify-between py-1 border-b border-[#EFF3F0]">
                         <span className="text-[#627168]">Source</span>
-                        <span className="font-mono text-[#35443C] truncate max-w-[140px]" title={activeElement.filePath}>
-                          {activeElement.filePath.split(/[\\/]/).pop()}
+                        <span className="font-mono text-[#35443C] truncate max-w-[165px]" title={`${activeElement.filePath}:${activeElement.line || ''}`}>
+                          {activeElement.filePath.split(/[\\/]/).pop()}{activeElement.line ? `:${activeElement.line}` : ''}
                         </span>
                       </div>
                     )}
-                    {activeElement.classes && (
-                      <div className="py-1 border-b border-[#EFF3F0]">
-                        <span className="text-[#627168] block mb-1">Classes</span>
-                        <p className="font-mono text-[10px] text-[#495850] break-words line-clamp-3">
-                          {activeElement.classes}
-                        </p>
-                      </div>
-                    )}
-                    {specializedControls}
-                    <div className="pt-2 flex items-center justify-between">
+                    {overviewControls}
+                    <div className="pt-1 flex items-center justify-between">
                       <button
                         type="button"
                         onClick={onDeselect}
@@ -530,30 +531,32 @@ export function RightToolDock({
                       </div>
                     </div>
 
-                    <div className="space-y-1">
-                      <div className="flex items-center justify-between">
-                        <label className="text-[11.5px] text-[#627168] font-medium tracking-[-0.01em]">Layout columns</label>
-                        <span className="font-mono text-[10px] text-[#495850] bg-[#F3F6F4] px-1.5 py-0.5 rounded-[4px] border border-[#E1E7E3] tracking-tight tabular-nums">
-                          {colsVal}
-                        </span>
+                    {(/\bgrid\b|\binline-grid\b/.test(activeElement.classes) || computed?.display?.includes('grid')) && (
+                      <div className="space-y-1">
+                        <div className="flex items-center justify-between">
+                          <label className="text-[11.5px] text-[#627168] font-medium tracking-[-0.01em]">Layout columns</label>
+                          <span className="font-mono text-[10px] text-[#495850] bg-[#F3F6F4] px-1.5 py-0.5 rounded-[4px] border border-[#E1E7E3] tracking-tight tabular-nums">
+                            {colsVal}
+                          </span>
+                        </div>
+                        <div className="relative">
+                          <select
+                            aria-label="Layout columns"
+                            disabled={disabled}
+                            value={colsVal}
+                            onChange={(e) => onUpdateStyle('gridColumns', e.target.value)}
+                            className="w-full h-[30px] bg-[#F7F9F8] hover:bg-[#EFF3F0] border border-[#DCE3DF] rounded-[8px] px-2.5 text-[11.5px] font-medium tracking-[-0.015em] text-[#1D2B24] appearance-none focus:outline-none focus:border-[#16845B] cursor-pointer transition"
+                          >
+                            <option value="" disabled className="bg-white text-slate-900">Columns</option>
+                            <option value="grid-cols-1" className="bg-white text-slate-900">1 Col</option>
+                            <option value="grid-cols-2" className="bg-white text-slate-900">2 Cols</option>
+                            <option value="grid-cols-3" className="bg-white text-slate-900">3 Cols</option>
+                            <option value="grid-cols-4" className="bg-white text-slate-900">4 Cols</option>
+                          </select>
+                          <ChevronDown size={12} className="text-[#64746C] absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                        </div>
                       </div>
-                      <div className="relative">
-                        <select
-                          aria-label="Layout columns"
-                          disabled={disabled}
-                          value={colsVal}
-                          onChange={(e) => onUpdateStyle('gridColumns', e.target.value)}
-                          className="w-full h-[30px] bg-[#F7F9F8] hover:bg-[#EFF3F0] border border-[#DCE3DF] rounded-[8px] px-2.5 text-[11.5px] font-medium tracking-[-0.015em] text-[#1D2B24] appearance-none focus:outline-none focus:border-[#16845B] cursor-pointer transition"
-                        >
-                          <option value="" disabled className="bg-white text-slate-900">Columns</option>
-                          <option value="grid-cols-1" className="bg-white text-slate-900">1 Col</option>
-                          <option value="grid-cols-2" className="bg-white text-slate-900">2 Cols</option>
-                          <option value="grid-cols-3" className="bg-white text-slate-900">3 Cols</option>
-                          <option value="grid-cols-4" className="bg-white text-slate-900">4 Cols</option>
-                        </select>
-                        <ChevronDown size={12} className="text-[#64746C] absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
-                      </div>
-                    </div>
+                    )}
 
                     <LayoutMatrix
                       classes={activeElement.classes}
@@ -562,7 +565,7 @@ export function RightToolDock({
                       disabled={disabled}
                       onChange={onUpdateStyle}
                     />
-                    {specializedControls}
+                    {layoutExtraControls}
                   </div>
                 )}
 
@@ -587,8 +590,8 @@ export function RightToolDock({
                 {activeTool === 'colors' && (
                   <div className="space-y-3">
                     <div>
-                      <label className="text-[11px] text-[#627168] font-medium mb-1.5 block">Quick Background Fill</label>
-                      <div className="grid grid-cols-4 gap-1.5">
+                      <label className="text-[11px] text-[#627168] font-medium mb-1.5 block">Background Fill</label>
+                      <div className="grid grid-cols-2 gap-1.5">
                         {[
                           { label: 'Slate 900', class: 'bg-slate-900', ring: 'ring-black/15' },
                           { label: 'Emerald 600', class: 'bg-emerald-600', ring: 'ring-emerald-600/25' },
@@ -596,7 +599,7 @@ export function RightToolDock({
                           { label: 'Purple 600', class: 'bg-purple-600', ring: 'ring-purple-600/25' },
                           { label: 'Rose 500', class: 'bg-rose-500', ring: 'ring-rose-500/25' },
                           { label: 'Amber 500', class: 'bg-amber-500', ring: 'ring-amber-500/25' },
-                          { label: 'White', class: 'bg-white', ring: 'ring-black/15' },
+                          { label: 'Pure White', class: 'bg-white', ring: 'ring-black/15' },
                           { label: 'Transparent', class: 'bg-transparent', ring: 'ring-black/15' },
                         ].map((c) => (
                           <button
@@ -605,10 +608,10 @@ export function RightToolDock({
                             disabled={disabled}
                             title={c.label}
                             onClick={() => onUpdateStyle('backgroundColor', c.class)}
-                            className="h-[30px] rounded-[8px] flex items-center justify-center gap-1.5 bg-[#F5F7F6] hover:bg-[#EAEFEB] border border-[#E2E7E4] text-[11px] font-medium tracking-[-0.015em] text-[#2E3C35] hover:text-[#14221B] transition cursor-pointer px-1.5"
+                            className="h-[30px] rounded-[8px] flex items-center gap-2 px-2.5 bg-[#F5F7F6] hover:bg-[#EAEFEB] border border-[#E2E7E4] text-[11px] font-medium tracking-[-0.015em] text-[#2E3C35] hover:text-[#14221B] transition cursor-pointer"
                           >
                             <span className={`w-3.5 h-3.5 rounded-full shrink-0 ${c.class} ${c.ring} ring-1`} />
-                            <span className="truncate">{c.label.split(' ')[0]}</span>
+                            <span className="truncate">{c.label}</span>
                           </button>
                         ))}
                       </div>
@@ -616,16 +619,16 @@ export function RightToolDock({
 
                     <div>
                       <label className="text-[11px] text-[#627168] font-medium tracking-[-0.01em] mb-1.5 block">Text Color</label>
-                      <div className="grid grid-cols-4 gap-1.5">
+                      <div className="grid grid-cols-2 gap-1.5">
                         {[
-                          { label: 'Dark', class: 'text-slate-900', bg: 'bg-slate-900' },
-                          { label: 'Muted', class: 'text-slate-500', bg: 'bg-slate-500' },
-                          { label: 'White', class: 'text-white', bg: 'bg-white' },
-                          { label: 'Emerald', class: 'text-emerald-600', bg: 'bg-emerald-600' },
-                          { label: 'Blue', class: 'text-blue-600', bg: 'bg-blue-600' },
-                          { label: 'Purple', class: 'text-purple-600', bg: 'bg-purple-600' },
-                          { label: 'Rose', class: 'text-rose-500', bg: 'bg-rose-500' },
-                          { label: 'Amber', class: 'text-amber-500', bg: 'bg-amber-500' },
+                          { label: 'Dark Slate', class: 'text-slate-900', bg: 'bg-slate-900' },
+                          { label: 'Muted Slate', class: 'text-slate-500', bg: 'bg-slate-500' },
+                          { label: 'Pure White', class: 'text-white', bg: 'bg-white' },
+                          { label: 'Emerald 600', class: 'text-emerald-600', bg: 'bg-emerald-600' },
+                          { label: 'Royal Blue', class: 'text-blue-600', bg: 'bg-blue-600' },
+                          { label: 'Purple 600', class: 'text-purple-600', bg: 'bg-purple-600' },
+                          { label: 'Rose 500', class: 'text-rose-500', bg: 'bg-rose-500' },
+                          { label: 'Amber 500', class: 'text-amber-500', bg: 'bg-amber-500' },
                         ].map((tc) => (
                           <button
                             key={tc.class}
@@ -633,7 +636,7 @@ export function RightToolDock({
                             disabled={disabled}
                             title={tc.label}
                             onClick={() => onUpdateStyle('textColor', tc.class)}
-                            className="h-[30px] rounded-[8px] flex items-center justify-center gap-1.5 bg-[#F5F7F6] hover:bg-[#EAEFEB] border border-[#E2E7E4] text-[11px] font-medium tracking-[-0.015em] text-[#2E3C35] hover:text-[#14221B] transition cursor-pointer px-1.5"
+                            className="h-[30px] rounded-[8px] flex items-center gap-2 px-2.5 bg-[#F5F7F6] hover:bg-[#EAEFEB] border border-[#E2E7E4] text-[11px] font-medium tracking-[-0.015em] text-[#2E3C35] hover:text-[#14221B] transition cursor-pointer"
                           >
                             <span className={`w-3.5 h-3.5 rounded-full shrink-0 ${tc.bg} ring-1 ring-black/15`} />
                             <span className="truncate">{tc.label}</span>
@@ -655,6 +658,7 @@ export function RightToolDock({
 
                 {activeTool === 'effects' && (
                   <AppearanceControls
+                    defaultOpen
                     classes={activeElement.classes}
                     computed={computed}
                     scope={scope}
@@ -698,20 +702,26 @@ export function RightToolDock({
                   <div className="space-y-2.5 text-[11px]">
                     <div className="flex justify-between py-1 border-b border-[#EFF3F0]">
                       <span className="text-[#627168]">Element Tag</span>
-                      <span className="font-mono font-medium text-[#16845B]">{activeElement.tag}</span>
+                      <span className="font-mono font-medium text-[#16845B]">&lt;{activeElement.tag}&gt;</span>
                     </div>
                     {activeElement.filePath && (
                       <div className="flex justify-between py-1 border-b border-[#EFF3F0]">
-                        <span className="text-[#627168]">File Path</span>
-                        <span className="font-mono text-[#35443C] truncate max-w-[150px]" title={activeElement.filePath}>
-                          {activeElement.filePath.split(/[\\/]/).pop()}
+                        <span className="text-[#627168]">Source</span>
+                        <span className="font-mono text-[#35443C] truncate max-w-[165px]" title={`${activeElement.filePath}:${activeElement.line || ''}`}>
+                          {activeElement.filePath.split(/[\\/]/).pop()}{activeElement.line ? `:${activeElement.line}` : ''}
                         </span>
                       </div>
                     )}
                     <div className="py-1">
                       <span className="text-[#627168] block mb-1.5">Tailwind Classes</span>
-                      <div className="p-2.5 rounded-lg bg-[#F5F7F6] border border-[#E2E7E5] font-mono text-[10px] text-[#176849] break-words leading-relaxed max-h-36 overflow-y-auto">
-                        {activeElement.classes || 'No classes'}
+                      <div className="p-2.5 rounded-lg bg-[#F5F7F6] border border-[#E2E7E5] font-mono text-[10px] text-[#176849] leading-relaxed max-h-[260px] overflow-y-auto flex flex-wrap gap-1">
+                        {activeElement.classes.trim()
+                          ? activeElement.classes.trim().split(/\s+/).map((cls, i) => (
+                              <span key={`${cls}-${i}`} className="px-1.5 py-0.5 rounded bg-white border border-[#DCE3DF] text-[#156948]">
+                                {cls}
+                              </span>
+                            ))
+                          : <span className="text-[#8A978F]">No utility classes</span>}
                       </div>
                     </div>
                   </div>
@@ -726,8 +736,8 @@ export function RightToolDock({
                       <button
                         type="button"
                         onClick={onDiscardDraft}
-                        disabled={disabled}
-                        className="text-[#627168] hover:text-rose-600 transition cursor-pointer text-[11px]"
+                        disabled={disabled || draftCount === 0}
+                        className="text-[#627168] hover:text-rose-600 transition cursor-pointer text-[11px] disabled:opacity-40 disabled:cursor-default disabled:hover:text-[#627168]"
                       >
                         Discard all
                       </button>

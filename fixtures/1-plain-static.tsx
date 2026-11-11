@@ -81,8 +81,7 @@ export default function PlainStaticPage() {
               data-source-column="13"
               className="inline-flex items-center gap-1.5 bg-slate-950 hover:bg-slate-800 !text-white dark:bg-white dark:hover:bg-slate-100 dark:!text-slate-950 text-xs font-semibold px-4 py-2 rounded-xl transition shadow-sm cursor-pointer"
             >
-              <span>Get Started</span>
-              <ArrowRight size={13} />
+              Get Started <ArrowRight size={13} />
             </a>
           </div>
         </nav>
@@ -127,8 +126,7 @@ export default function PlainStaticPage() {
             data-source-column="11"
             className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 dark:bg-emerald-500 dark:hover:bg-emerald-400 !text-white dark:!text-slate-950 font-semibold text-sm transition shadow-lg shadow-emerald-500/20 cursor-pointer"
           >
-            <span>Start Building for Free</span>
-            <ArrowRight size={15} />
+            Start Building for Free <ArrowRight size={15} />
           </a>
           <a
             href="#demo"

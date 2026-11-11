@@ -395,7 +395,7 @@ export function LayoutMatrix({
   const gapTok = tokens.find((t) => /^gap-\d+$/.test(t));
   const gapVal = gapTok ? gapTok.slice(4) : '0';
 
-  const gapOptions = ['0', '1', '2', '3', '4', '6', '8', '12', '16'];
+  const gapOptions = ['0', '1', '2', '3', '4', '6', '8', '12'];
 
   return (
     <div className="space-y-2.5 text-xs antialiased" style={appleTypographyStyle}>
@@ -472,7 +472,7 @@ export function LayoutMatrix({
                 gap-{gapVal} ({Number(gapVal) * 4}px)
               </span>
             </div>
-            <div className="grid grid-cols-5 gap-1.5">
+            <div className="grid grid-cols-4 gap-1.5">
               {gapOptions.map((g) => (
                 <button
                   key={g}
@@ -513,6 +513,7 @@ export function AppearanceStudio({
   const tokens = unscopedTokens(classes, scope);
   const currentRadius = tokens.find((t) => /^rounded(-none|-sm|-md|-lg|-xl|-2xl|-3xl|-full)?$/.test(t)) || 'rounded-none';
   const currentBorderWidth = tokens.find((t) => /^border(-[0248])?$/.test(t)) || 'border-0';
+  const currentBorderColor = tokens.find((t) => /^border-(transparent|slate-200|slate-900|emerald-500)$/.test(t)) || 'border-transparent';
 
   const radiusPresets = [
     { id: 'rounded-none', label: '0' },
@@ -531,19 +532,15 @@ export function AppearanceStudio({
     { id: 'border-4', label: '4px' },
   ];
 
-  const fillPresets = [
-    { label: 'Dark Slate', class: 'bg-slate-900', ring: 'ring-black/15' },
-    { label: 'Emerald 600', class: 'bg-emerald-600', ring: 'ring-emerald-600/25' },
-    { label: 'Royal Blue', class: 'bg-blue-600', ring: 'ring-blue-600/25' },
-    { label: 'Purple 600', class: 'bg-purple-600', ring: 'ring-purple-600/25' },
-    { label: 'Rose 500', class: 'bg-rose-500', ring: 'ring-rose-500/25' },
-    { label: 'Amber 500', class: 'bg-amber-500', ring: 'ring-amber-500/25' },
-    { label: 'Ceramic White', class: 'bg-white', ring: 'ring-black/15' },
-    { label: 'Transparent', class: 'bg-transparent', ring: 'ring-black/15' },
+  const borderColors = [
+    { label: 'None', class: 'border-transparent', bg: 'bg-transparent' },
+    { label: 'Slate 200', class: 'border-slate-200', bg: 'bg-slate-200' },
+    { label: 'Slate 900', class: 'border-slate-900', bg: 'bg-slate-900' },
+    { label: 'Emerald', class: 'border-emerald-500', bg: 'bg-emerald-500' },
   ];
 
   return (
-    <div className="space-y-2.5 text-xs antialiased" style={appleTypographyStyle}>
+    <div className="space-y-3 text-xs antialiased" style={appleTypographyStyle}>
       {/* Corner Radius */}
       <div>
         <div className="flex justify-between items-center mb-1">
@@ -571,7 +568,7 @@ export function AppearanceStudio({
 
       {/* Border Width */}
       <div>
-        <label className="text-[11px] text-[#627168] font-medium tracking-[-0.01em] mb-1 block">Border</label>
+        <label className="text-[11px] text-[#627168] font-medium tracking-[-0.01em] mb-1 block">Border Stroke</label>
         <SegmentedControl
           value={currentBorderWidth}
           disabled={disabled}
@@ -580,19 +577,26 @@ export function AppearanceStudio({
         />
       </div>
 
-      {/* Quick Fill Swatches */}
-      <div className="pt-1">
-        <label className="text-[11px] text-[#627168] font-medium tracking-[-0.01em] mb-1.5 block">Quick Background Fill</label>
-        <div className="flex items-center gap-1.5 flex-wrap">
-          {fillPresets.map((f) => (
+      {/* Border Color */}
+      <div>
+        <label className="text-[11px] text-[#627168] font-medium tracking-[-0.01em] mb-1.5 block">Border Color</label>
+        <div className="grid grid-cols-2 gap-1.5">
+          {borderColors.map((bc) => (
             <button
-              key={f.class}
+              key={bc.class}
               type="button"
               disabled={disabled}
-              title={f.label}
-              onClick={() => onChange('backgroundColor', f.class)}
-              className={`w-6 h-6 rounded-full ${f.class} ${f.ring} ring-1 hover:scale-120 active:scale-95 transition-all cursor-pointer shadow-xs`}
-            />
+              title={bc.label}
+              onClick={() => onChange('borderColor', bc.class)}
+              className={`h-[30px] rounded-[8px] flex items-center gap-2 px-2.5 text-[11px] font-medium transition cursor-pointer ${
+                currentBorderColor === bc.class
+                  ? 'bg-[#ECFDF5] border border-[#16845B] text-[#156948] font-semibold'
+                  : 'bg-[#F5F7F6] hover:bg-[#EAEFEB] border border-[#E2E7E4] text-[#35443C]'
+              }`}
+            >
+              <span className={`w-3.5 h-3.5 rounded-full shrink-0 ${bc.bg} ring-1 ring-black/15`} />
+              <span className="truncate">{bc.label}</span>
+            </button>
           ))}
         </div>
       </div>

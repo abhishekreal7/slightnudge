@@ -515,7 +515,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
   const usesDrafts = true;
   const projectDraftStorageKey = repositoryId ? `${draftStorageKey}:${repositoryId}` : draftStorageKey;
   const [windowPanel, setWindowPanel] = useState<'layers' | 'inspector' | null>(initialPanel);
-  const [leftDockTool, setLeftDockTool] = useState<LeftTool>('layers');
+  const [leftDockTool, setLeftDockTool] = useState<LeftTool>(initialPanel === 'layers' ? 'layers' : null);
   const [leftDockVisible, setLeftDockVisible] = useState<boolean>(initialPanel === 'layers');
   const [rightDockTool, setRightDockTool] = useState<DockTool>(initialPanel === 'inspector' ? 'layout' : null);
   const [rightDockVisible, setRightDockVisible] = useState<boolean>(true);
@@ -3774,8 +3774,8 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
                   <button type="button" aria-pressed={!browseMode} onClick={() => setBrowseMode(false)}>Edit</button>
                   <button type="button" aria-pressed={browseMode} disabled={busy || isApplying} onClick={() => { if (reviewRef.current || inlineSessionRef.current) { showToast('Save or discard your draft before browsing the page.'); return; } setSelectedLayerState(null); setBrowseMode(true); }}>Browse</button>
                 </div>
-                <button type="button" aria-label="Toggle layers" title="Layers" aria-expanded={leftDockVisible} onClick={() => { if (leftDockVisible) { setLeftDockVisible(false); } else { if (leftDockTool === null) setLeftDockTool('layers'); setLeftDockVisible(true); } }}><Columns2 size={15}/></button>
-                <button type="button" aria-label="Toggle design panel" title="Design" aria-expanded={rightDockVisible && rightDockTool !== null} onClick={() => { setRightDockVisible(true); setRightDockTool(previous => previous === null ? 'layout' : null); }}><Pencil size={15}/></button>
+                <button type="button" aria-label="Toggle layers" title="Layers" aria-expanded={leftDockVisible} onClick={() => setLeftDockVisible(v => !v)}><Columns2 size={15}/></button>
+                <button type="button" aria-label="Toggle design panel" title="Design" aria-expanded={rightDockVisible} onClick={() => setRightDockVisible(v => !v)}><Pencil size={15}/></button>
               </div>}
               <div className={reviewStyles.projectContext}>
                 <span className={reviewStyles.sourceDot} role="img" aria-label="Local source connected" />
@@ -3932,8 +3932,8 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
               onUndo={handleUndo}
               onRedo={() => navigateDraft(1)}
               onTriggerBackendPreview={triggerBackendPreview}
-              specializedControls={selectedLayer ? (
-                <div className="space-y-2.5 pt-2 border-t border-[#E7ECE9]">
+              overviewControls={selectedLayer ? (
+                <div className="space-y-2.5">
                   {(activeElement.instance || !['svg', 'img', 'source'].includes(activeElement.tag)) && (
                     <ComponentProps
                       key={`props:${selectedLayer}`}
@@ -3989,6 +3989,10 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
                       />
                     </>
                   )}
+                </div>
+              ) : undefined}
+              layoutExtraControls={selectedLayer ? (
+                <div className="space-y-2.5 pt-2 border-t border-[#E7ECE9]">
                   {!repositoryId && (
                     <div className={reviewStyles.resizeBar}>
                       <button

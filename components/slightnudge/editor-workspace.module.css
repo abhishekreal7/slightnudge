@@ -81,22 +81,30 @@
   transition: transform 340ms cubic-bezier(0.16, 1, 0.3, 1), opacity 340ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 .windowShell [data-editor-panel='inspector'][data-dock-visible='true'] {
-  transform: translateX(0);
+  transform: translateY(-50%) translateX(0);
   opacity: 1;
   pointer-events: auto;
 }
 .windowShell [data-editor-panel='inspector'][data-dock-visible='false'] {
-  transform: translateX(160%);
+  transform: translateY(-50%) translateX(160%);
   opacity: 0;
   pointer-events: none;
 }
 @starting-style {
+  .windowShell [data-editor-rail='left'][data-dock-visible='true'] {
+    transform: translateY(-50%) translateX(-180%);
+    opacity: 0;
+  }
   .windowShell [data-editor-panel='layers'][data-dock-visible='true'] {
     transform: translateX(-180%);
     opacity: 0;
   }
+  .windowShell [data-editor-rail='right'][data-dock-visible='true'] {
+    transform: translateY(-50%) translateX(180%);
+    opacity: 0;
+  }
   .windowShell [data-editor-panel='inspector'][data-dock-visible='true'] {
-    transform: translateX(160%);
+    transform: translateY(-50%) translateX(160%);
     opacity: 0;
   }
 }
@@ -981,6 +989,7 @@
 .windowShell .viewportControl button.activeViewport span { display: none; }
 .windowShell .viewportControl button { padding: 0 7px; }
 .windowShell .draftControls .draftSave { border-radius: 9999px; padding: 0 14px; }
+@container editor-column (max-width: 1560px) { .windowShell .topbarActions .saveBadgeSaving, .windowShell .topbarActions .saveBadgeSaved { display: none; } }
 .windowShell .canvasTools, .windowShell .draftControls { gap: 6px; }
 .windowShell .interactionMode { margin-inline: 0; }
 .windowShell .historyTools { padding-left: 8px; }

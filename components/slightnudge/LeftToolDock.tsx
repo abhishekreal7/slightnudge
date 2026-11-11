@@ -82,7 +82,7 @@ export function LeftToolDock<TPage extends LeftDockPageItem>({
           data-dock-visible={visible ? 'true' : 'false'}
           aria-hidden={!visible}
           aria-label="Navigation tools dock"
-          className="fixed left-[16px] top-1/2 z-50 select-none flex flex-col items-center pointer-events-auto"
+          className="fixed left-[24px] top-1/2 z-50 select-none flex flex-col items-center pointer-events-auto"
         >
           <div
             role="toolbar"
@@ -134,7 +134,7 @@ export function LeftToolDock<TPage extends LeftDockPageItem>({
           role="dialog"
           aria-label={activeTool === 'layers' ? 'Layers' : activeTool === 'pages' ? 'Pages' : 'Assets'}
           style={appleTypographyStyle}
-          className="fixed left-[16px] top-[16px] z-50 w-[252px] h-[min(560px,calc(100vh-100px))] flex flex-col bg-white/96 backdrop-blur-2xl border border-[#DCE3DF] rounded-[16px] shadow-[0_20px_50px_-10px_rgba(15,23,42,0.14),0_6px_16px_rgba(15,23,42,0.06)] p-2.5 text-xs text-[#1D2B24] antialiased"
+          className="fixed left-[24px] top-[20px] z-50 w-[252px] h-[min(560px,calc(100vh-110px))] flex flex-col bg-white/96 backdrop-blur-2xl border border-[#DCE3DF] rounded-[16px] shadow-[0_20px_50px_-10px_rgba(15,23,42,0.14),0_6px_16px_rgba(15,23,42,0.06)] p-2.5 text-xs text-[#1D2B24] antialiased"
         >
           {/* Header tabs + Collapse/Close */}
           <div className="flex items-center justify-between pb-2 mb-1.5 border-b border-[#E7ECE9]">
