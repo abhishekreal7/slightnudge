@@ -1,0 +1,30 @@
+Observed UTC: 2026-11-07T13:24:10.8467734Z
+exists: True
+size: 477499
+mtime UTC: 2026-11-03T19:53:12.8131000Z
+sha256: cbd243197fa766dae2553e1b6d63dc8088b3d71a7f0132cd70f79b73474ac97a
+JSON parses: yes
+record count: 100
+Histogram
+fixtures/ 99
+scratch/ 1
+other temp-looking paths 0
+other 0
+Paths and counts
+fixtures/1-plain-static.tsx 99
+scratch/test-s5-debug.tsx 1
+Any record outside fixtures/ and scratch/: False
+Node/Next processes (read-only inventory)
+name=node.exe PID=11576 start UTC=2026-11-07T13:21:04.4722340Z command="C:\Program Files\WindowsApps\OpenAI.CodexPrimaryRuntime.v26-1105-1297-0_26.1105.1297.0_x64__3k8sg7r9htsxt\dependencies\node\bin\node.exe" "C:\Program Files\WindowsApps\OpenAI.CodexPrimaryRuntime.v26-1105-1297-0_26.1105.1297.0_x64__3k8sg7r9htsxt\dependencies\node\node_modules\@oai\artifact-tool\dist\artifact-session\host-daemon.mjs"
+name=node.exe PID=12544 start UTC=2026-11-07T13:21:08.6255020Z command="C:\Program Files\WindowsApps\OpenAI.Codex_26.1103.4239.0_x64__2p2nqsd0c76g0\app\resources\cua_node\bin\node.exe"  ./server.mjs
+name=node.exe PID=22824 start UTC=2026-11-07T13:22:53.8576260Z command="C:\Program Files\Adobe\Adobe Creative Cloud Experience\libs\node.exe" "C:\Program Files\Adobe\Adobe Creative Cloud Experience\js\main.js"
+name=node.exe PID=31232 start UTC=2026-11-07T13:21:08.5722460Z command="C:\Program Files\WindowsApps\OpenAI.Codex_26.1103.4239.0_x64__2p2nqsd0c76g0\app\resources\cua_node\bin\node.exe" --import file:///C:/Users/abhis/.codex/plugins/cache/openai-bundled/unified-computer-use/26.1103.32239/require-browser-access.mjs "C:\Program Files\WindowsApps\OpenAI.Codex_26.1103.4239.0_x64__2p2nqsd0c76g0\app\resources\cua_node\bin\node_modules\@oai\cua-repl\bin\cua-repl.mjs"
+Port 3000 listener: absent
+Most likely cause, UNVERIFIED: normal editor activity changed mutable history after the older fixed hash was recorded. The prior sprint snapshots establish that the difference predated its tests. The responsible write cannot be attributed from these observations.
+
+Second observation UTC: 2026-11-07T13:26:33.2572450Z
+Elapsed seconds: 142.4074115
+exists: True
+size: 477499
+mtime UTC: 2026-11-03T19:53:12.8131000Z
+sha256: cbd243197fa766dae2553e1b6d63dc8088b3d71a7f0132cd70f79b73474ac97a

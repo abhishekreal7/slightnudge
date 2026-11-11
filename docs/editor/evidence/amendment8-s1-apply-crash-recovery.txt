@@ -1,0 +1,49 @@
+> C:\nvm4w\nodejs\node.exe --import tsx scratch/editor-s1-group.ts amendment8-s1-apply-crash-recovery apply-crash-recovery test/helpers/real-state.ts
+{"temporaryRoot":"C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-apply-crash-recovery-GUzrxf","baseline":"7a4c44a9b8a1c1b08d0c8d15541dabb1900636df","suite":"apply-crash-recovery","overlays":["test/helpers/real-state.ts"],"omitted":".env.example"}
+Isolated seed staged paths: .env.example, test/helpers/real-state.ts
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: node:fs:2786
+      const stats = binding.lstat(base, true, undefined, true /* throwIfNoEntry */);
+                            ^
+
+Error: ENOENT: no such file or directory, lstat 'C:\Users\abhis\AppData\Local\Temp\sn-sprint1-apply-crash-recovery-GUzrxf\temp\sn-apply-crash-J3tykE\project-scope\.slightnudge\repositories.json'
+    at realpathSync (node:fs:2786:29)
+    at canonicalFile (C:\Users\abhis\AppData\Local\Temp\sn-sprint1-apply-crash-recovery-GUzrxf\source\lib\slightnudge\source-paths.ts:11:16)
+    at registeredProjectRoot (C:\Users\abhis\AppData\Local\Temp\sn-sprint1-apply-crash-recovery-GUzrxf\source\lib\slightnudge\source-paths.ts:18:44)
+    at assertSourceScope (C:\Users\abhis\AppData\Local\Temp\sn-sprint1-apply-crash-recovery-GUzrxf\source\lib\slightnudge\source-paths.ts:39:14)
+    at validatePending (C:\Users\abhis\AppData\Local\Temp\sn-sprint1-apply-crash-recovery-GUzrxf\source\lib\slightnudge\edit-history.ts:622:3)
+    at readPendingSourceEdit (C:\Users\abhis\AppData\Local\Temp\sn-sprint1-apply-crash-recovery-GUzrxf\source\lib\slightnudge\edit-history.ts:602:3)
+    at <anonymous> (C:\Users\abhis\AppData\Local\Temp\sn-sprint1-apply-crash-recovery-GUzrxf\source\lib\slightnudge\edit-history.ts:740:21)
+    at withSourceOperationLock (C:\Users\abhis\AppData\Local\Temp\sn-sprint1-apply-crash-recovery-GUzrxf\source\lib\slightnudge\source-operation-lock.ts:94:18)
+    at withHistoryMutation (C:\Users\abhis\AppData\Local\Temp\sn-sprint1-apply-crash-recovery-GUzrxf\source\lib\slightnudge\edit-history.ts:127:10)
+    at getSourceApplyOutcome (C:\Users\abhis\AppData\Local\Temp\sn-sprint1-apply-crash-recovery-GUzrxf\source\lib\slightnudge\edit-history.ts:732:36) {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'lstat',
+  path: 'C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-apply-crash-recovery-GUzrxf\\temp\\sn-apply-crash-J3tykE\\project-scope\\.slightnudge\\repositories.json'
+}
+
+Node.js v22.19.0
+
+
+1 !== 73
+
+    at crash (C:\Users\abhis\AppData\Local\Temp\sn-sprint1-apply-crash-recovery-GUzrxf\source\test\apply-crash-recovery.test.ts:43:12)
+    at <anonymous> (C:\Users\abhis\AppData\Local\Temp\sn-sprint1-apply-crash-recovery-GUzrxf\source\test\apply-crash-recovery.test.ts:113:97) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 1,
+  expected: 73,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v22.19.0
+Owned temporary entries before cleanup: ["tsx-abhis"]
+Confirmed cleanup: C:\Users\abhis\AppData\Local\Temp\sn-sprint1-apply-crash-recovery-GUzrxf
+CONFIRMED: integration checkout protected files and status unchanged.
+exit 1
+CONFIRMED: protected files and Git status unchanged.

@@ -1,0 +1,9 @@
+> C:\nvm4w\nodejs\node.exe --import tsx scratch/editor-s1-group.ts amendment9-engine-api-response-helper-v2 api-response-helper.v2 test/helpers/real-state.ts
+{"temporaryRoot":"C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-api-response-helper.v2-hv6goM","baseline":"8c613619b4ce051027689fd3d782d4ee029e7052","suite":"api-response-helper.v2","overlays":["test/helpers/real-state.ts"],"omitted":".env.example"}
+Isolated seed staged paths: .env.example, test/helpers/real-state.ts
+[{"bodyLength":0,"message":"Invalid JSON response from http://127.0.0.1:3000/api/example (HTTP 503): <empty body>","pass":true},{"bodyLength":7,"message":"Invalid JSON response from http://127.0.0.1:3000/api/example (HTTP 503): {\"bad\":","pass":true},{"bodyLength":16,"message":"Invalid JSON response from http://127.0.0.1:3000/api/example (HTTP 503): <html>bad</html>","pass":true},{"bodyLength":215,"message":"Invalid JSON response from http://127.0.0.1:3000/api/example (HTTP 503): xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx","pass":true},{"name":"valid JSON preserved","pass":true},{"name":"legacy bridge helper is self-contained","pass":true}]
+Owned temporary entries before cleanup: ["tsx-abhis"]
+Confirmed cleanup: C:\Users\abhis\AppData\Local\Temp\sn-sprint1-api-response-helper.v2-hv6goM
+CONFIRMED: integration checkout protected files and status unchanged.
+exit 0
+CONFIRMED: protected files and Git status unchanged.

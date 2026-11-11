@@ -1,0 +1,26 @@
+> C:\nvm4w\nodejs\node.exe --import tsx scratch/editor-s1-group.ts amendment9-engine-preview-connection-retry preview-connection test/helpers/real-state.ts
+{"temporaryRoot":"C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-preview-connection-KzSFcy","baseline":"8c613619b4ce051027689fd3d782d4ee029e7052","suite":"preview-connection","overlays":["test/helpers/real-state.ts"],"omitted":".env.example"}
+Isolated seed staged paths: .env.example, test/helpers/real-state.ts
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: {"error":"Access denied."}
+
+403 !== 200
+
+    at <anonymous> (C:\Users\abhis\AppData\Local\Temp\sn-sprint1-preview-connection-KzSFcy\source\test\preview-connection.test.ts:30:10) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 403,
+  expected: 200,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v22.19.0
+Owned temporary entries before cleanup: ["tsx-abhis"]
+Confirmed cleanup: C:\Users\abhis\AppData\Local\Temp\sn-sprint1-preview-connection-KzSFcy
+CONFIRMED: integration checkout protected files and status unchanged.
+exit 1
+CONFIRMED: protected files and Git status unchanged.

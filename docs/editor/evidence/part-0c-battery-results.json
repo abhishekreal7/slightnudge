@@ -1,0 +1,116 @@
+[
+  {
+    "suite": "adapter",
+    "status": "CONFIRMED: passed",
+    "evidence": "part-0c-adapter"
+  },
+  {
+    "suite": "history-resilience",
+    "status": "CONFIRMED: passed",
+    "evidence": "part-0c-history-resilience"
+  },
+  {
+    "suite": "s1-auth-origin",
+    "status": "CONFIRMED: passed",
+    "evidence": "part-0c-s1-auth-origin"
+  },
+  {
+    "suite": "s1-auth-bypass",
+    "status": "CONFIRMED: passed",
+    "evidence": "part-0c-s1-auth-bypass"
+  },
+  {
+    "suite": "s2-path-traversal",
+    "status": "CONFIRMED: passed",
+    "evidence": "part-0c-s2-path-traversal"
+  },
+  {
+    "suite": "s3-atomic-write",
+    "status": "CONFIRMED: passed",
+    "evidence": "part-0c-s3-atomic-write"
+  },
+  {
+    "suite": "s5-tailwind-compile",
+    "status": "CONFIRMED: passed",
+    "evidence": "part-0c-s5-tailwind-compile"
+  },
+  {
+    "suite": "s5-theme-support",
+    "status": "CONFIRMED: passed",
+    "evidence": "part-0c-s5-theme-support"
+  },
+  {
+    "suite": "s5-v3-support",
+    "status": "CONFIRMED: passed",
+    "evidence": "part-0c-s5-v3-support"
+  },
+  {
+    "suite": "test-override-guard",
+    "status": "CONFIRMED: passed",
+    "evidence": "part-0c-test-override-guard"
+  },
+  {
+    "suite": "prewrite-hook-guard",
+    "status": "CONFIRMED: passed",
+    "evidence": "part-0c-prewrite-hook-guard"
+  },
+  {
+    "suite": "m5-containment-helper",
+    "status": "CONFIRMED: passed",
+    "evidence": "part-0c-m5-containment-helper"
+  },
+  {
+    "suite": "token-undo",
+    "status": "CONFIRMED: passed",
+    "evidence": "part-0c-token-undo"
+  },
+  {
+    "suite": "token-html-host",
+    "status": "CONFIRMED: passed; P0 in suite title initially misclassified by orchestration",
+    "evidence": "part-0c-token-html-host"
+  },
+  {
+    "suite": "undo-refusals",
+    "status": "CONFIRMED: passed",
+    "evidence": "part-0c-undo-refusals"
+  },
+  {
+    "suite": "undo-m3-restored-token",
+    "status": "CONFIRMED: passed",
+    "evidence": "part-0c-undo-m3-restored-token"
+  },
+  {
+    "suite": "undo-m5-parent-junction",
+    "status": "CONFIRMED: passed",
+    "evidence": "part-0c-undo-m5-parent-junction"
+  },
+  {
+    "suite": "fixtures",
+    "status": "CONFIRMED: passed",
+    "evidence": "part-0c-fixtures"
+  },
+  {
+    "suite": "m0-regression",
+    "status": "CONFIRMED: passed",
+    "evidence": "part-0c-m0-regression"
+  },
+  {
+    "suite": "m0-overfit",
+    "status": "CONFIRMED: passed",
+    "evidence": "part-0c-m0-overfit"
+  },
+  {
+    "suite": "real-state-guard-v2",
+    "status": "CONFIRMED: passed",
+    "evidence": "part-0c-real-state-guard-v2"
+  },
+  {
+    "suite": "undo-stacked-edits",
+    "status": "CONFIRMED: passed all 300 seeded cases; earlier wrapper cap removed",
+    "evidence": [
+      "part-0c-undo-stacked-edits",
+      "part-0c-undo-stacked-edits-retry",
+      "part-0c-undo-stacked-edits-resumed"
+    ]
+  }
+]

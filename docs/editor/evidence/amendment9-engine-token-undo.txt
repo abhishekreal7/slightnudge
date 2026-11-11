@@ -1,0 +1,34 @@
+> C:\nvm4w\nodejs\node.exe --import tsx scratch/editor-s1-group.ts amendment9-engine-token-undo token-undo test/helpers/real-state.ts
+{"temporaryRoot":"C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-token-undo-1Y5f9V","baseline":"8c613619b4ce051027689fd3d782d4ee029e7052","suite":"token-undo","overlays":["test/helpers/real-state.ts"],"omitted":".env.example"}
+Isolated seed staged paths: .env.example, test/helpers/real-state.ts
+🧪 RUNNING TOKEN-LEVEL UNDO TEST SUITE
+--- Test (j): Exact-match restores byte-for-byte ---
+  ✅ [PASS] (j) Exact match restores byte for byte
+--- Test (a): Prettier reformat preserved on undo ---
+  ✅ [PASS] (a) Prettier reformat preserved on undo
+--- Test (b): Unrelated file edit preserved ---
+  ✅ [PASS] (b) Unrelated file edit preserved
+--- Test (c): Other classes on same element preserved ---
+  ✅ [PASS] (c) Other classes on same element preserved
+--- Test (d): User changed same token -> refuse with manual instructions ---
+  ✅ [PASS] (d) User changed same token refused with instructions
+--- Test (e): Element deleted -> refuse ---
+  ✅ [PASS] (e) Element deleted refused
+--- Test (f): Two identical elements ambiguous -> refuse ---
+  ✅ [PASS] (f) Two identical elements ambiguous refused
+--- Test (g): File deleted -> clear error ---
+  ✅ [PASS] (g) File deleted returned clear error
+--- Test (h): Stacked edits on one element ---
+  ✅ [PASS] (h) Stacked edits on one element verified
+--- Test (i): Path escaping project root refused ---
+  ✅ [PASS] (i) Path escaping project root refused
+--- Test (k): Atomic write failure leaves file unchanged and clean ---
+  ✅ [PASS] (k) Atomic write failure leaves file unchanged and clean
+
+🎉 ALL 12 TOKEN-LEVEL UNDO TESTS PASSED!
+
+Owned temporary entries before cleanup: ["tsx-abhis"]
+Confirmed cleanup: C:\Users\abhis\AppData\Local\Temp\sn-sprint1-token-undo-1Y5f9V
+CONFIRMED: integration checkout protected files and status unchanged.
+exit 0
+CONFIRMED: protected files and Git status unchanged.

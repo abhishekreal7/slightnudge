@@ -1,0 +1,8 @@
+git diff --cached --name-only
+docs/editor-sprint1-report.md
+docs/editor/BRIEF.md
+docs/editor/STATE.md
+docs/editor/perf/s1-baseline.md
+CONFIRMED: next-env.d.ts absent; only the four explicit documentation paths staged.
+[feat/editor-sprint1 1b58699] docs: record Amendment 9 engine and typing checkpoint
+ 4 files changed, 227 insertions(+), 39 deletions(-)

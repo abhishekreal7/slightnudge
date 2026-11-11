@@ -1,0 +1,9 @@
+> node --import tsx scratch/editor-sprint1-isolate.ts typecheck test/perf-fixtures.test.ts test/perf/fixtures.ts test/perf/history-baseline.ts
+{"temporaryRoot":"C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-typecheck-vfQeih","baseline":"f2ed60161d4f0381573cc3e50f2628210292afe9","suite":"typecheck","overlays":["test/perf-fixtures.test.ts","test/perf/fixtures.ts","test/perf/history-baseline.ts"],"omitted":".env.example"}
+Isolated seed staged paths: .env.example, test/perf-fixtures.test.ts, test/perf/fixtures.ts, test/perf/history-baseline.ts
+Generating route types...
+✓ Types generated successfully
+Owned temporary entries before cleanup: []
+Confirmed cleanup: C:\Users\abhis\AppData\Local\Temp\sn-sprint1-typecheck-vfQeih
+exit 0
+CONFIRMED: protected files and Git status unchanged.

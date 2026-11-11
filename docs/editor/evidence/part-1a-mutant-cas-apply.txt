@@ -1,0 +1,67 @@
+> node --import tsx scratch/editor-sprint1-isolate.ts prewrite-cas test/prewrite-cas.test.ts lib/slightnudge/edit-history.ts
+{"temporaryRoot":"C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-prewrite-cas-bMJKtz","baseline":"3e924ad9702e5548d4f42874451fc82c8d2acb1d","suite":"prewrite-cas","overlays":["test/prewrite-cas.test.ts","lib/slightnudge/edit-history.ts"],"omitted":".env.example"}
+Seeded mutant: cas-apply
+Isolated seed staged paths: .env.example, lib/slightnudge/edit-history.ts, test/prewrite-cas.test.ts
+TAP version 13
+# Subtest: Write-time compare-and-swap
+    # Subtest: Apply preserves an external edit inserted after verification, without history or temporary source files
+    not ok 1 - Apply preserves an external edit inserted after verification, without history or temporary source files
+      ---
+      duration_ms: 433.4493
+      type: 'test'
+      location: 'C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-prewrite-cas-bMJKtz\\source\\test\\prewrite-cas.test.ts:1:1847'
+      failureType: 'testCodeFailure'
+      error: |-
+        Apply must refuse the concurrent edit
+        
+        true !== false
+        
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: false
+      actual: true
+      operator: 'strictEqual'
+      stack: |-
+        <anonymous> (C:\Users\abhis\AppData\Local\Temp\sn-sprint1-prewrite-cas-bMJKtz\source\test\prewrite-cas.test.ts:51:14)
+        async withWorkspace (C:\Users\abhis\AppData\Local\Temp\sn-sprint1-prewrite-cas-bMJKtz\source\test\prewrite-cas.test.ts:23:5)
+        async TestContext.<anonymous> (C:\Users\abhis\AppData\Local\Temp\sn-sprint1-prewrite-cas-bMJKtz\source\test\prewrite-cas.test.ts:44:5)
+        async Test.run (node:internal/test_runner/test:1054:7)
+        async Promise.all (index 0)
+        async Suite.run (node:internal/test_runner/test:1442:7)
+        async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+      ...
+    # Subtest: Exact undo preserves a concurrent edit and remains retryable
+    ok 2 - Exact undo preserves a concurrent edit and remains retryable
+      ---
+      duration_ms: 352.4709
+      type: 'test'
+      ...
+    # Subtest: Token undo preserves a concurrent edit and remains retryable
+    ok 3 - Token undo preserves a concurrent edit and remains retryable
+      ---
+      duration_ms: 465.4983
+      type: 'test'
+      ...
+    1..3
+not ok 1 - Write-time compare-and-swap
+  ---
+  duration_ms: 1252.3666
+  type: 'suite'
+  location: 'C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-prewrite-cas-bMJKtz\\source\\test\\prewrite-cas.test.ts:1:1803'
+  failureType: 'subtestsFailed'
+  error: '1 subtest failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+1..1
+# tests 3
+# suites 1
+# pass 2
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1256.5513
+Owned temporary entries before cleanup: ["tsx-abhis"]
+Confirmed cleanup: C:\Users\abhis\AppData\Local\Temp\sn-sprint1-prewrite-cas-bMJKtz
+exit 1
+CONFIRMED: protected files and Git status unchanged.

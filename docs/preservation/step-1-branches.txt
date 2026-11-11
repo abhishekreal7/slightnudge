@@ -1,0 +1,35 @@
+  backup-move-fix                 b4cdb85474705b85d906f37b3a6f04ac2d958a97 fix(move): smooth drag reorder feel, hairline drop line, and Option A
+  codex/editor-review-foundation  955007d231d7da7783c6d3222ea2942be03eafb4 chore(deps): upgrade Next.js from 16.4.0 to 16.4.3 for security advisory
+  codex/fix-canvas-move-scale     f95411a96a6fa369c4de0d4ea84e275e03aea5bb fix(dev): exclude generated worktrees from application source scans
+* codex/fix-resize-pointer-anchor 893c2bbe9994da18c424a2e743b8b8d8270ba22d wip: checkpoint resize/cursor/draft-recovery work (unverified)
+  codex/m0                        048664da2947905fd2de8b7df3cd79bb53edad11 slightnudge: ml-2 -> ml-2.5 in 1-plain-static.tsx
+  codex/m1-interactions           955007d231d7da7783c6d3222ea2942be03eafb4 chore(deps): upgrade Next.js from 16.4.0 to 16.4.3 for security advisory
+  codex/source-rendered-studio    955007d231d7da7783c6d3222ea2942be03eafb4 chore(deps): upgrade Next.js from 16.4.0 to 16.4.3 for security advisory
+  codex/source-sync-recovery      955007d231d7da7783c6d3222ea2942be03eafb4 chore(deps): upgrade Next.js from 16.4.0 to 16.4.3 for security advisory
+  codex/studio-review-polish      955007d231d7da7783c6d3222ea2942be03eafb4 chore(deps): upgrade Next.js from 16.4.0 to 16.4.3 for security advisory
+  codex/studio-safe-review        955007d231d7da7783c6d3222ea2942be03eafb4 chore(deps): upgrade Next.js from 16.4.0 to 16.4.3 for security advisory
+  codex/workspace-redesign        955007d231d7da7783c6d3222ea2942be03eafb4 chore(deps): upgrade Next.js from 16.4.0 to 16.4.3 for security advisory
+  diag/move-feel                  ba489484f60794d2ac2efbb16365d5b7d0a18d5d fix(slightnudge): support negative margins and micro-moves to delete space between button and text
+  docs/canvas-interactions        22e17ec84597ea832ffbaaeca142bb6ea26454e6 test: reuse owned warm preview for history qualification
+  docs/component-focus            5a141b2b9652d50824cde988c3040857fde146ea docs: specify component focus and variants
+  feat/phase2c-studio-polish      a555a839d27386ef2bad1f7e6da37a48cafd0edf feat(studio): polish overlay states, streamline drop indicator, and consolidate apply button in inspector
+  feat/studio-full-controls       955007d231d7da7783c6d3222ea2942be03eafb4 chore(deps): upgrade Next.js from 16.4.0 to 16.4.3 for security advisory
+  fix/editor-load-and-toolbar     7f1b9cd58d491fa117dcc59b5a859f2bda612c2d fix(editor): prevent toolbar from covering selected content
+  fix/history-resilience          c4de01dc29fd75e019f538ea8ef791eb9958575a fix(slightnudge): make readHistory resilient to missing files and corrupt records
+  fix/phase2a-safety              41b5442d419accbe41fd68e885ca25d65e7d7c52 fix(test): resolve typescript nullability check in s5-theme-support test
+  fix/phase2b-foundation          75c13bab99b3fed35c885375cc93892ab7eef337 fix(slightnudge): ignore test overrides when NODE_ENV=production
+  fix/phase2c-review-fixes        0d6a2e682a7db948cb5ad7c05ca6d66b3282eeba fix(undo): close safety gaps M3, M5, M6 and cover 16 refusal branches
+  fix/phase2c-undo-closeout       f83c5967b17b57e6936becfb9c7921dd71fb311c test(types): add non-null assertions on pending.id to satisfy TypeScript strict mode
+  fix/phase2c-undo-tests          9d5f1aa1a8509bf7e6318a0ff5fdf4d450ac9004 feat(test): make m0 and overfit labs reproducible with dynamic server harness
+  m0-fix                          ba489484f60794d2ac2efbb16365d5b7d0a18d5d fix(slightnudge): support negative margins and micro-moves to delete space between button and text
+  move-fix                        70472214f6e59a77a3365f2b26cd59b568cc5538 fix(move): smooth drag reorder feel, hairline drop line, same-line AST resolution, and multi-slot safety
+  program/integration             dc49a02392f287aee1781a31cc53bd8ceb393bd8 docs: record program preflight and preserved work
+  restore/backend-wiring          18f2187509e6968462b68db7ee4f890febfba944 fix(studio): remove misleading dropdown chevron from Edit text button
+  security/hardening              22e17ec84597ea832ffbaaeca142bb6ea26454e6 test: reuse owned warm preview for history qualification
+  slightnudge                     048664da2947905fd2de8b7df3cd79bb53edad11 slightnudge: ml-2 -> ml-2.5 in 1-plain-static.tsx
++ stage/S1                        7a4c44a9b8a1c1b08d0c8d15541dabb1900636df fix(editor): keep the resize triangle upright at both corners
+  tools/coverage                  23fc56c3062702717aa96a8e73162c525eb15f94 feat(audit): add reproducible coverage study audit suite and seed 42
+  ui-extras                       4dbfb3ecc6729f607e5bc2f52e24887072e1f226 feat(ui): studio layout focus mode, zoom controls, and style polish
+  ui/layout-focus-mode            ba489484f60794d2ac2efbb16365d5b7d0a18d5d fix(slightnudge): support negative margins and micro-moves to delete space between button and text
+  ui/unified-editor               7f1b9cd58d491fa117dcc59b5a859f2bda612c2d fix(editor): prevent toolbar from covering selected content
+  upgrade/next-16.4.3             955007d231d7da7783c6d3222ea2942be03eafb4 chore(deps): upgrade Next.js from 16.4.0 to 16.4.3 for security advisory

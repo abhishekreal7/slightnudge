@@ -1,0 +1,45 @@
+> node --import tsx scratch/editor-sprint1-isolate.ts overlay-apply test/overlay-apply.test.ts app/studio/page.tsx components/slightnudge/SlightNudgeOverlay.tsx
+{"temporaryRoot":"C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-overlay-apply-YyAidp","baseline":"ac69d7d0d8f342c2e0628096640ff572fcb049fb","suite":"overlay-apply","overlays":["test/overlay-apply.test.ts","app/studio/page.tsx","components/slightnudge/SlightNudgeOverlay.tsx"],"omitted":".env.example"}
+Isolated seed staged paths: .env.example, app/studio/page.tsx, components/slightnudge/SlightNudgeOverlay.tsx, test/overlay-apply.test.ts
+TAP version 13
+studio Control: prepare draft
+studio Meta: prepare draft
+# Subtest: studio: one Apply, both platform shortcuts, Escape discard and guarded Undo
+ok 1 - studio: one Apply, both platform shortcuts, Escape discard and guarded Undo
+  ---
+  duration_ms: 59831.0631
+  type: 'test'
+  ...
+source Control: prepare draft
+source Meta: prepare draft
+# Subtest: source: one Apply, both platform shortcuts, Escape discard and guarded Undo
+not ok 2 - source: one Apply, both platform shortcuts, Escape discard and guarded Undo
+  ---
+  duration_ms: 18914.9807
+  type: 'test'
+  location: 'C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-overlay-apply-YyAidp\\source\\test\\overlay-apply.test.ts:1:3405'
+  failureType: 'testCodeFailure'
+  error: |-
+    locator.waitFor: Timeout 5000ms exceeded.
+    Call log:
+    [2m  - waiting for locator('[data-testid=editor-toolbar]') to be visible[22m
+    
+  code: 'ERR_TEST_FAILURE'
+  name: 'TimeoutError'
+  stack: |-
+    open (C:\Users\abhis\AppData\Local\Temp\sn-sprint1-overlay-apply-YyAidp\source\test\overlay-apply.test.ts:31:54)
+    async TestContext.<anonymous> (C:\Users\abhis\AppData\Local\Temp\sn-sprint1-overlay-apply-YyAidp\source\test\overlay-apply.test.ts:90:18)
+  ...
+1..2
+# tests 2
+# suites 0
+# pass 1
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 82299.4119
+Owned temporary entries before cleanup: ["node-compile-cache","npm-cache","tsx-abhis"]
+Confirmed cleanup: C:\Users\abhis\AppData\Local\Temp\sn-sprint1-overlay-apply-YyAidp
+exit 1
+CONFIRMED: protected files and Git status unchanged.

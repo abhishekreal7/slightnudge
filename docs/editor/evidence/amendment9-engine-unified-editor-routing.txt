@@ -1,0 +1,9 @@
+> C:\nvm4w\nodejs\node.exe --import tsx scratch/editor-s1-group.ts amendment9-engine-unified-editor-routing unified-editor-routing test/helpers/real-state.ts
+{"temporaryRoot":"C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-unified-editor-routing-z50iE1","baseline":"8c613619b4ce051027689fd3d782d4ee029e7052","suite":"unified-editor-routing","overlays":["test/helpers/real-state.ts"],"omitted":".env.example"}
+Isolated seed staged paths: .env.example, test/helpers/real-state.ts
+PASS canonical route: default/full/fit, project paths, repeated/empty/encoded query values, legacy flag off by default and explicit opt-in
+Owned temporary entries before cleanup: ["tsx-abhis"]
+Confirmed cleanup: C:\Users\abhis\AppData\Local\Temp\sn-sprint1-unified-editor-routing-z50iE1
+CONFIRMED: integration checkout protected files and status unchanged.
+exit 0
+CONFIRMED: protected files and Git status unchanged.

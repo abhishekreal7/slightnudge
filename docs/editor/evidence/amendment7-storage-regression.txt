@@ -1,0 +1,106 @@
+> node --import tsx --test test/history-store-blobs.test.ts test/history-store-pages.test.ts test/history-store-mode.test.ts
+TAP version 13
+# Subtest: shares identical byte snapshots and verifies exact bytes
+ok 1 - shares identical byte snapshots and verifies exact bytes
+  ---
+  duration_ms: 10.3002
+  type: 'test'
+  ...
+# Subtest: rejects wrong hashes, missing blobs and bad sizes without private diagnostics
+ok 2 - rejects wrong hashes, missing blobs and bad sizes without private diagnostics
+  ---
+  duration_ms: 7.0866
+  type: 'test'
+  ...
+# Subtest: rejects path escapes and junction reads before reading outside bytes
+ok 3 - rejects path escapes and junction reads before reading outside bytes
+  ---
+  duration_ms: 3.4994
+  type: 'test'
+  ...
+# Subtest: a fault before rename leaves the old value intact and removes temporary files
+ok 4 - a fault before rename leaves the old value intact and removes temporary files
+  ---
+  duration_ms: 5.0977
+  type: 'test'
+  ...
+# Subtest: privacy: every primitive failure emits only fixed reason codes and no log lines
+ok 5 - privacy: every primitive failure emits only fixed reason codes and no log lines
+  ---
+  duration_ms: 9.2634
+  type: 'test'
+  ...
+# Subtest: activates an empty store with a marker and refuses cooperating legacy writers
+ok 6 - activates an empty store with a marker and refuses cooperating legacy writers
+  ---
+  duration_ms: 46.4053
+  type: 'test'
+  ...
+# Subtest: never steals busy or abandoned locks and checks migrating mode while locked
+ok 7 - never steals busy or abandoned locks and checks migrating mode while locked
+  ---
+  duration_ms: 32.3837
+  type: 'test'
+  ...
+# Subtest: legacy content is never activated or overwritten implicitly; corrupt metadata refuses unchanged
+ok 8 - legacy content is never activated or overwritten implicitly; corrupt metadata refuses unchanged
+  ---
+  duration_ms: 39.5866
+  type: 'test'
+  ...
+# Subtest: two processes appending concurrently lose no committed records
+ok 9 - two processes appending concurrently lose no committed records
+  ---
+  duration_ms: 613.5134
+  type: 'test'
+  ...
+# {"existingRecords":10,"appendBytes":3241,"appendMs":0.09640000000001692}
+# {"existingRecords":2000,"appendBytes":395,"appendMs":0.02489999999994552}
+# {"existingRecords":1999,"appendBytes":14507,"appendMs":0.08510000000001128}
+# Subtest: append bytes stay bounded at 10 and 2000 records; listing reads only a bounded metadata page
+ok 10 - append bytes stay bounded at 10 and 2000 records; listing reads only a bounded metadata page
+  ---
+  duration_ms: 301.426
+  type: 'test'
+  ...
+# Subtest: replaces a different uncommitted tail and ignores its obsolete locator
+ok 11 - replaces a different uncommitted tail and ignores its obsolete locator
+  ---
+  duration_ms: 1.0462
+  type: 'test'
+  ...
+# Subtest: publishes blobs before pages, locators and head
+ok 12 - publishes blobs before pages, locators and head
+  ---
+  duration_ms: 0.2721
+  type: 'test'
+  ...
+# Subtest: cursor revisions restart after append/status change, and status rewrites only one bounded page
+ok 13 - cursor revisions restart after append/status change, and status rewrites only one bounded page
+  ---
+  duration_ms: 3.8237
+  type: 'test'
+  ...
+# Subtest: every before/after blob, page, locator and head crash boundary reopens without missing blobs or duplicate tails
+ok 14 - every before/after blob, page, locator and head crash boundary reopens without missing blobs or duplicate tails
+  ---
+  duration_ms: 1.6438
+  type: 'test'
+  ...
+# Subtest: a corrupt head or page refuses without writing and a tampered record is skipped with aggregate reasons
+ok 15 - a corrupt head or page refuses without writing and a tampered record is skipped with aggregate reasons
+  ---
+  duration_ms: 0.5751
+  type: 'test'
+  ...
+1..15
+# tests 15
+# suites 0
+# pass 15
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 931.4201
+exit 0
+CONFIRMED: protected files and Git status unchanged.

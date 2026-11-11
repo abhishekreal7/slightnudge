@@ -1,0 +1,539 @@
+> node --import tsx scratch/editor-sprint1-isolate.ts real-state-guard-v2 test/real-state-guard-v2.test.ts
+{"temporaryRoot":"C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-real-state-guard-v2-LXfVwV","baseline":"b96f47c21fcb4e55dfdfd3db1ab30c06e6a09e7c","suite":"real-state-guard-v2","overlays":["test/real-state-guard-v2.test.ts"],"omitted":".env.example"}
+Isolated seed staged paths: .env.example, test/real-state-guard-v2.test.ts
+TAP version 13
+# Subtest: Real state integrity guard v2
+    # Subtest: matches every fixture to its Git HEAD blob after CRLF normalization and reports fixtures clean
+    not ok 1 - matches every fixture to its Git HEAD blob after CRLF normalization and reports fixtures clean
+      ---
+      duration_ms: 392.1001
+      type: 'test'
+      location: 'C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-real-state-guard-v2-LXfVwV\\source\\test\\real-state-guard-v2.test.ts:1:337'
+      failureType: 'testCodeFailure'
+      error: |-
+        Git must report fixtures clean
+        + actual - expected
+        
+        + 'M fixtures/1-plain-static.tsx\n' +
+        +   ' M fixtures/2-several-utilities.tsx\n' +
+        +   ' M fixtures/3-conditional-cn.tsx\n' +
+        +   ' M fixtures/4-shared-component.tsx\n' +
+        +   ' M fixtures/5-responsive-classes.tsx'
+        - ''
+        
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: ''
+      actual: |-
+        M fixtures/1-plain-static.tsx
+         M fixtures/2-several-utilities.tsx
+         M fixtures/3-conditional-cn.tsx
+         M fixtures/4-shared-component.tsx
+         M fixtures/5-responsive-classes.tsx
+      operator: 'strictEqual'
+      stack: |-
+        TestContext.<anonymous> (C:\Users\abhis\AppData\Local\Temp\sn-sprint1-real-state-guard-v2-LXfVwV\source\test\real-state-guard-v2.test.ts:25:12)
+        Test.runInAsyncScope (node:async_hooks:214:14)
+        Test.run (node:internal/test_runner/test:1047:25)
+        Test.start (node:internal/test_runner/test:944:17)
+        node:internal/test_runner/test:1440:71
+        node:internal/per_context/primordials:483:82
+        new Promise (<anonymous>)
+        new SafePromise (node:internal/per_context/primordials:451:29)
+        node:internal/per_context/primordials:483:9
+        Array.map (<anonymous>)
+      ...
+    # Subtest: has no tracked modification beyond the allowed generated imports
+    not ok 2 - has no tracked modification beyond the allowed generated imports
+      ---
+      duration_ms: 119.8404
+      type: 'test'
+      location: 'C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-real-state-guard-v2-LXfVwV\\source\\test\\real-state-guard-v2.test.ts:1:1379'
+      failureType: 'testCodeFailure'
+      error: |-
+        Expected values to be strictly deep-equal:
+        + actual - expected
+        
+        + [
+        +   ' M .gitignore',
+        +   ' M AGENTS.md',
+        +   ' M README.md',
+        +   ' M app/admin/page.tsx',
+        +   ' M app/api/admin/metrics/route.ts',
+        +   ' M app/api/checkout/route.ts',
+        +   ' M app/api/checkout/simulate/route.ts',
+        +   ' M app/api/runs/[id]/report.pdf/route.ts',
+        +   ' M app/api/runs/[id]/route.ts',
+        +   ' M app/api/runs/route.ts',
+        +   ' M app/api/sites/[id]/verify/route.ts',
+        +   ' M app/api/sites/route.ts',
+        +   ' M app/api/slightnudge/apply/route.ts',
+        +   ' M app/api/slightnudge/assets/route.ts',
+        +   ' M app/api/slightnudge/inspect/route.ts',
+        +   ' M app/api/slightnudge/nudge/route.ts',
+        +   ' M app/api/slightnudge/pages/route.ts',
+        +   ' M app/api/slightnudge/preview/route.ts',
+        +   ' M app/api/slightnudge/repositories/[id]/adapter/route.ts',
+        +   ' M app/api/slightnudge/repositories/[id]/docker-preview/route.ts',
+        +   ' M app/api/slightnudge/repositories/[id]/inspect/route.ts',
+        +   ' M app/api/slightnudge/repositories/[id]/preview-check/route.ts',
+        +   ' M app/api/slightnudge/repositories/[id]/route.ts',
+        +   ' M app/api/slightnudge/repositories/[id]/source/route.ts',
+        +   ' M app/api/slightnudge/repositories/route.ts',
+        +   ' M app/api/slightnudge/style/route.ts',
+        +   ' M app/api/slightnudge/token/route.ts',
+        +   ' M app/api/slightnudge/undo/route.ts',
+        +   ' M app/api/webhooks/dodo/route.ts',
+        +   ' M app/dashboard/page.tsx',
+        +   ' M app/design/page.tsx',
+        +   ' M app/fixtures/1/page.tsx',
+        +   ' M app/fixtures/2/page.tsx',
+        +   ' M app/fixtures/3/page.tsx',
+        +   ' M app/fixtures/4/page.tsx',
+        +   ' M app/fixtures/5/page.tsx',
+        +   ' M app/fixtures/layout.tsx',
+        +   ' M app/fixtures/page.tsx',
+        +   ' M app/globals.css',
+        +   ' M app/how-it-works/page.tsx',
+        +   ' M app/icon.svg',
+        +   ' M app/layout.tsx',
+        +   ' M app/new/page.tsx',
+        +   ' M app/not-found.tsx',
+        +   ' M app/opengraph-image.tsx',
+        +   ' M app/page.tsx',
+        +   ' M app/pricing/page.tsx',
+        +   ' M app/privacy/page.tsx',
+        +   ' M app/r/[token]/page.tsx',
+        +   ' M app/refunds/page.tsx',
+        +   ' M app/runs/[id]/page.tsx',
+        +   ' M app/studio/[repoId]/page.tsx',
+        +   ' M app/studio/page.tsx',
+        +   ' M app/terms/page.tsx',
+        +   ' M app/workspace/page.tsx',
+        +   ' M components/FindingCard.tsx',
+        +   ' M components/FindingWorkbench.tsx',
+        +   ' M components/Footer.tsx',
+        +   ' M components/Header.tsx',
+        +   ' M components/LayoutShell.tsx',
+        +   ' M components/LiveProgress.tsx',
+        +   ' M components/MarketingFooter.tsx',
+        +   ' M components/marketing/ProductWindow.tsx',
+        +   ' M components/slightnudge/SlightNudgeOverlay.tsx',
+        +   ' M components/slightnudge/StudioLayout.tsx',
+        +   ' M components/ui/CodeBlock.tsx',
+        +   ' M components/ui/SeverityBadge.tsx',
+        +   ' M demo-app/server.ts',
+        +   ' M docs/controls-spec.md',
+        +   ' M docs/editor-sprint1-report.md',
+        +   ' M docs/editor/BRIEF.md',
+        +   ' M docs/editor/STATE.md',
+        +   ' M fixtures/1-plain-static.tsx',
+        +   ' M fixtures/2-several-utilities.tsx',
+        +   ' M fixtures/3-conditional-cn.tsx',
+        +   ' M fixtures/4-shared-component.tsx',
+        +   ' M fixtures/5-responsive-classes.tsx',
+        +   ' M lib/analytics/events.ts',
+        +   ' M lib/browser/browser-provider.ts',
+        +   ' M lib/browser/hyperbrowser-provider.ts',
+        +   ' M lib/browser/index.ts',
+        +   ' M lib/browser/local-provider.ts',
+        +   ' M lib/db/client.ts',
+        +   ' M lib/db/types.ts',
+        +   ' M lib/llm/client.ts',
+        +   ' M lib/llm/generator.ts',
+        +   ' M lib/llm/schemas.ts',
+        +   ' M lib/payments/dodo.ts',
+        +   ' M lib/pipeline/runner.ts',
+        +   ' M lib/pipeline/stage-a-preflight.ts',
+        +   ' M lib/pipeline/stage-b-discovery.ts',
+        +   ' M lib/pipeline/stage-c-planning.ts',
+        +   ' M lib/pipeline/stage-d-execution.ts',
+        +   ' M lib/pipeline/stage-e-analysis.ts',
+        +   ' M lib/pipeline/stage-f-report.ts',
+        +   ' M lib/pipeline/types.ts',
+        +   ' M lib/security/encryption.ts',
+        +   ' M lib/security/monitoring.ts',
+        +   ' M lib/security/ownership.ts',
+        +   ' M lib/security/rate-limit.ts',
+        +   ' M lib/security/ssrf.ts',
+        +   ' M lib/slightnudge/ast-nudger.ts',
+        +   ' M lib/slightnudge/auth.ts',
+        +   ' M lib/slightnudge/client.ts',
+        +   ' M lib/slightnudge/cors.ts',
+        +   ' M lib/slightnudge/docker-preview.ts',
+        +   ' M lib/slightnudge/edit-history.ts',
+        +   ' M lib/slightnudge/next-source-adapter.ts',
+        +   ' M lib/slightnudge/next-source-loader.cjs',
+        +   ' M lib/slightnudge/nudge-calculator.ts',
+        +   ' M lib/slightnudge/repository-store.ts',
+        +   ' M lib/slightnudge/tailwind-verifier.ts',
+        +   ' M next.config.mjs',
+        +   ' M package-lock.json',
+        +   ' M package.json',
+        +   ' M postcss.config.js',
+        +   ' M public/icon.svg',
+        +   ' M public/previews/ramp-hq-board.html',
+        +   ' M scratch/diagnose-flex-120.ts',
+        +   ' M scratch/diagnose-flex-150.ts',
+        +   ' M scratch/replace_inspector.py',
+        +   ' M scratch_inspector.txt',
+        +   ' M spikes/phase1-spike.ts',
+        +   ' M supabase/migrations/20261010_initial_schema.sql',
+        +   ' M tailwind.config.js',
+        +   ' M test/adapter.test.ts',
+        +   ' M test/analytics-funnel.test.ts',
+        +   ' M test/baselines/1-plain-static.tsx',
+        +   ' M test/drag-diagnosis.test.ts',
+        +   ' M test/drag-resize-move.test.ts',
+        +   ' M test/fixtures.test.ts',
+        +   ' M test/helpers/real-state.ts',
+        +   ' M test/helpers/test-server.ts',
+        +   ' M test/history-resilience.test.ts',
+        +   ' M test/in-situ-focus.test.ts',
+        +   ' M test/inspect-rects.ts',
+        +   ' M test/labs/m0-control-lab/.gitignore',
+        +   ' M test/labs/m0-control-lab/.slightnudge-source-adapter/bridge-client.mjs',
+        +   ' M test/labs/m0-control-lab/.slightnudge-source-adapter/next-source-loader.cjs',
+        +   ' M test/labs/m0-control-lab/.slightnudge-source-adapter/state.json',
+        +   ' M test/labs/m0-control-lab/AGENTS.md',
+        +   ' M test/labs/m0-control-lab/M0-SELECTION-PLAN.md',
+        +   ' M test/labs/m0-control-lab/README.md',
+        +   ' M test/labs/m0-control-lab/eslint.config.mjs',
+        +   ' M test/labs/m0-control-lab/next.config.mjs',
+        +   ' M test/labs/m0-control-lab/next.config.slightnudge-original.mjs',
+        +   ' M test/labs/m0-control-lab/package.json',
+        +   ' M test/labs/m0-control-lab/postcss.config.mjs',
+        +   ' M test/labs/m0-control-lab/src/app/globals.css',
+        +   ' M test/labs/m0-control-lab/src/app/layout.tsx',
+        +   ' M test/labs/m0-control-lab/src/app/page.tsx',
+        +   ' M test/labs/m0-control-lab/src/components/sections/FAQ.tsx',
+        +   ' M test/labs/m0-control-lab/src/components/sections/Features.tsx',
+        +   ' M test/labs/m0-control-lab/src/components/sections/Footer.tsx',
+        +   ' M test/labs/m0-control-lab/src/components/sections/Hero.tsx',
+        +   ' M test/labs/m0-control-lab/src/components/sections/Pricing.tsx',
+        +   ' M test/labs/m0-control-lab/src/components/sections/Testimonials.tsx',
+        +   ' M test/labs/m0-control-lab/src/lib/cn.ts',
+        +   ' M test/labs/m0-control-lab/tsconfig.json',
+        +   ' M test/labs/m0-overfit-lab/.slightnudge-source-adapter/bridge-client.mjs',
+        +   ' M test/labs/m0-overfit-lab/.slightnudge-source-adapter/next-source-loader.cjs',
+        +   ' M test/labs/m0-overfit-lab/.slightnudge-source-adapter/state.json',
+        +   ' M test/labs/m0-overfit-lab/AGENTS.md',
+        +   ' M test/labs/m0-overfit-lab/eslint.config.mjs',
+        +   ' M test/labs/m0-overfit-lab/next-env.d.ts',
+        +   ' M test/labs/m0-overfit-lab/next.config.mjs',
+        +   ' M test/labs/m0-overfit-lab/next.config.slightnudge-original.mjs',
+        +   ' M test/labs/m0-overfit-lab/package.json',
+        +   ' M test/labs/m0-overfit-lab/postcss.config.mjs',
+        +   ' M test/labs/m0-overfit-lab/src/app/globals.css',
+        +   ' M test/labs/m0-overfit-lab/src/app/layout.tsx',
+        +   ' M test/labs/m0-overfit-lab/src/app/page.tsx',
+        +   ' M test/labs/m0-overfit-lab/src/components/Banner.tsx',
+        +   ' M test/labs/m0-overfit-lab/src/components/CardListSection.tsx',
+        +   ' M test/labs/m0-overfit-lab/src/components/DynamicWidget.tsx',
+        +   ' M test/labs/m0-overfit-lab/src/components/FooterSection.tsx',
+        +   ' M test/labs/m0-overfit-lab/src/components/NestedGridSection.tsx',
+        +   ' M test/labs/m0-overfit-lab/src/components/ShellLayout.tsx',
+        +   ' M test/labs/m0-overfit-lab/src/lib/cn.ts',
+        +   ' M test/labs/m0-overfit-lab/tsconfig.json',
+        +   ' M test/m0-overfit.test.ts',
+        +   ' M test/m0-regression.test.ts',
+        +   ' M test/m5-containment-helper.test.ts',
+        +   ' M test/move-expectations.test.ts',
+        +   ' M test/payments.test.ts',
+        +   ' M test/pipeline-integration.test.ts',
+        +   ' M test/prewrite-hook-guard.test.ts',
+        +   ' M test/real-state-guard.test.ts',
+        +   ' M test/reorder-safety.test.ts',
+        +   ' M test/repro-glitch.ts',
+        +   ' M test/s1-auth-bypass.test.ts',
+        +   ' M test/s1-auth-origin.test.ts',
+        +   ' M test/s2-path-traversal.test.ts',
+        +   ' M test/s3-atomic-write.test.ts',
+        +   ' M test/s5-tailwind-compile.test.ts',
+        +   ' M test/s5-theme-support.test.ts',
+        +   ' M test/s5-v3-support.test.ts',
+        +   ' M test/security-hardening.test.ts',
+        +   ' M test/step1-selection.test.ts',
+        +   ' M test/step2-nudging.test.ts',
+        +   ' M test/step3-file-git.test.ts',
+        +   ' M test/studio-benchmark.test.ts',
+        +   ' M test/studio-restore.test.ts',
+        +   ' M test/take-screenshot.ts',
+        +   ' M test/test-full-flow.ts',
+        +   ' M test/test-override-guard.test.ts',
+        +   ' M test/token-html-host.test.ts',
+        +   ' M test/token-undo.test.ts',
+        +   ' M test/undo-m3-restored-token.test.ts',
+        +   ' M test/undo-m5-parent-junction.test.ts',
+        +   ' M test/undo-refusals.test.ts',
+        +   ' M test/undo-stacked-edits.test.ts',
+        +   ' M test/unit.test.ts',
+        +   ' M test/verify-fix.ts',
+        +   ' M test/verify-live-move.ts',
+        +   ' M tsconfig.json',
+        +   ' M worker/index.ts'
+        + ]
+        - []
+        
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected:
+      actual:
+        0: ' M .gitignore'
+        1: ' M AGENTS.md'
+        2: ' M README.md'
+        3: ' M app/admin/page.tsx'
+        4: ' M app/api/admin/metrics/route.ts'
+        5: ' M app/api/checkout/route.ts'
+        6: ' M app/api/checkout/simulate/route.ts'
+        7: ' M app/api/runs/[id]/report.pdf/route.ts'
+        8: ' M app/api/runs/[id]/route.ts'
+        9: ' M app/api/runs/route.ts'
+        10: ' M app/api/sites/[id]/verify/route.ts'
+        11: ' M app/api/sites/route.ts'
+        12: ' M app/api/slightnudge/apply/route.ts'
+        13: ' M app/api/slightnudge/assets/route.ts'
+        14: ' M app/api/slightnudge/inspect/route.ts'
+        15: ' M app/api/slightnudge/nudge/route.ts'
+        16: ' M app/api/slightnudge/pages/route.ts'
+        17: ' M app/api/slightnudge/preview/route.ts'
+        18: ' M app/api/slightnudge/repositories/[id]/adapter/route.ts'
+        19: ' M app/api/slightnudge/repositories/[id]/docker-preview/route.ts'
+        20: ' M app/api/slightnudge/repositories/[id]/inspect/route.ts'
+        21: ' M app/api/slightnudge/repositories/[id]/preview-check/route.ts'
+        22: ' M app/api/slightnudge/repositories/[id]/route.ts'
+        23: ' M app/api/slightnudge/repositories/[id]/source/route.ts'
+        24: ' M app/api/slightnudge/repositories/route.ts'
+        25: ' M app/api/slightnudge/style/route.ts'
+        26: ' M app/api/slightnudge/token/route.ts'
+        27: ' M app/api/slightnudge/undo/route.ts'
+        28: ' M app/api/webhooks/dodo/route.ts'
+        29: ' M app/dashboard/page.tsx'
+        30: ' M app/design/page.tsx'
+        31: ' M app/fixtures/1/page.tsx'
+        32: ' M app/fixtures/2/page.tsx'
+        33: ' M app/fixtures/3/page.tsx'
+        34: ' M app/fixtures/4/page.tsx'
+        35: ' M app/fixtures/5/page.tsx'
+        36: ' M app/fixtures/layout.tsx'
+        37: ' M app/fixtures/page.tsx'
+        38: ' M app/globals.css'
+        39: ' M app/how-it-works/page.tsx'
+        40: ' M app/icon.svg'
+        41: ' M app/layout.tsx'
+        42: ' M app/new/page.tsx'
+        43: ' M app/not-found.tsx'
+        44: ' M app/opengraph-image.tsx'
+        45: ' M app/page.tsx'
+        46: ' M app/pricing/page.tsx'
+        47: ' M app/privacy/page.tsx'
+        48: ' M app/r/[token]/page.tsx'
+        49: ' M app/refunds/page.tsx'
+        50: ' M app/runs/[id]/page.tsx'
+        51: ' M app/studio/[repoId]/page.tsx'
+        52: ' M app/studio/page.tsx'
+        53: ' M app/terms/page.tsx'
+        54: ' M app/workspace/page.tsx'
+        55: ' M components/FindingCard.tsx'
+        56: ' M components/FindingWorkbench.tsx'
+        57: ' M components/Footer.tsx'
+        58: ' M components/Header.tsx'
+        59: ' M components/LayoutShell.tsx'
+        60: ' M components/LiveProgress.tsx'
+        61: ' M components/MarketingFooter.tsx'
+        62: ' M components/marketing/ProductWindow.tsx'
+        63: ' M components/slightnudge/SlightNudgeOverlay.tsx'
+        64: ' M components/slightnudge/StudioLayout.tsx'
+        65: ' M components/ui/CodeBlock.tsx'
+        66: ' M components/ui/SeverityBadge.tsx'
+        67: ' M demo-app/server.ts'
+        68: ' M docs/controls-spec.md'
+        69: ' M docs/editor-sprint1-report.md'
+        70: ' M docs/editor/BRIEF.md'
+        71: ' M docs/editor/STATE.md'
+        72: ' M fixtures/1-plain-static.tsx'
+        73: ' M fixtures/2-several-utilities.tsx'
+        74: ' M fixtures/3-conditional-cn.tsx'
+        75: ' M fixtures/4-shared-component.tsx'
+        76: ' M fixtures/5-responsive-classes.tsx'
+        77: ' M lib/analytics/events.ts'
+        78: ' M lib/browser/browser-provider.ts'
+        79: ' M lib/browser/hyperbrowser-provider.ts'
+        80: ' M lib/browser/index.ts'
+        81: ' M lib/browser/local-provider.ts'
+        82: ' M lib/db/client.ts'
+        83: ' M lib/db/types.ts'
+        84: ' M lib/llm/client.ts'
+        85: ' M lib/llm/generator.ts'
+        86: ' M lib/llm/schemas.ts'
+        87: ' M lib/payments/dodo.ts'
+        88: ' M lib/pipeline/runner.ts'
+        89: ' M lib/pipeline/stage-a-preflight.ts'
+        90: ' M lib/pipeline/stage-b-discovery.ts'
+        91: ' M lib/pipeline/stage-c-planning.ts'
+        92: ' M lib/pipeline/stage-d-execution.ts'
+        93: ' M lib/pipeline/stage-e-analysis.ts'
+        94: ' M lib/pipeline/stage-f-report.ts'
+        95: ' M lib/pipeline/types.ts'
+        96: ' M lib/security/encryption.ts'
+        97: ' M lib/security/monitoring.ts'
+        98: ' M lib/security/ownership.ts'
+        99: ' M lib/security/rate-limit.ts'
+        100: ' M lib/security/ssrf.ts'
+        101: ' M lib/slightnudge/ast-nudger.ts'
+        102: ' M lib/slightnudge/auth.ts'
+        103: ' M lib/slightnudge/client.ts'
+        104: ' M lib/slightnudge/cors.ts'
+        105: ' M lib/slightnudge/docker-preview.ts'
+        106: ' M lib/slightnudge/edit-history.ts'
+        107: ' M lib/slightnudge/next-source-adapter.ts'
+        108: ' M lib/slightnudge/next-source-loader.cjs'
+        109: ' M lib/slightnudge/nudge-calculator.ts'
+        110: ' M lib/slightnudge/repository-store.ts'
+        111: ' M lib/slightnudge/tailwind-verifier.ts'
+        112: ' M next.config.mjs'
+        113: ' M package-lock.json'
+        114: ' M package.json'
+        115: ' M postcss.config.js'
+        116: ' M public/icon.svg'
+        117: ' M public/previews/ramp-hq-board.html'
+        118: ' M scratch/diagnose-flex-120.ts'
+        119: ' M scratch/diagnose-flex-150.ts'
+        120: ' M scratch/replace_inspector.py'
+        121: ' M scratch_inspector.txt'
+        122: ' M spikes/phase1-spike.ts'
+        123: ' M supabase/migrations/20261010_initial_schema.sql'
+        124: ' M tailwind.config.js'
+        125: ' M test/adapter.test.ts'
+        126: ' M test/analytics-funnel.test.ts'
+        127: ' M test/baselines/1-plain-static.tsx'
+        128: ' M test/drag-diagnosis.test.ts'
+        129: ' M test/drag-resize-move.test.ts'
+        130: ' M test/fixtures.test.ts'
+        131: ' M test/helpers/real-state.ts'
+        132: ' M test/helpers/test-server.ts'
+        133: ' M test/history-resilience.test.ts'
+        134: ' M test/in-situ-focus.test.ts'
+        135: ' M test/inspect-rects.ts'
+        136: ' M test/labs/m0-control-lab/.gitignore'
+        137: ' M test/labs/m0-control-lab/.slightnudge-source-adapter/bridge-client.mjs'
+        138: ' M test/labs/m0-control-lab/.slightnudge-source-adapter/next-source-loader.cjs'
+        139: ' M test/labs/m0-control-lab/.slightnudge-source-adapter/state.json'
+        140: ' M test/labs/m0-control-lab/AGENTS.md'
+        141: ' M test/labs/m0-control-lab/M0-SELECTION-PLAN.md'
+        142: ' M test/labs/m0-control-lab/README.md'
+        143: ' M test/labs/m0-control-lab/eslint.config.mjs'
+        144: ' M test/labs/m0-control-lab/next.config.mjs'
+        145: ' M test/labs/m0-control-lab/next.config.slightnudge-original.mjs'
+        146: ' M test/labs/m0-control-lab/package.json'
+        147: ' M test/labs/m0-control-lab/postcss.config.mjs'
+        148: ' M test/labs/m0-control-lab/src/app/globals.css'
+        149: ' M test/labs/m0-control-lab/src/app/layout.tsx'
+        150: ' M test/labs/m0-control-lab/src/app/page.tsx'
+        151: ' M test/labs/m0-control-lab/src/components/sections/FAQ.tsx'
+        152: ' M test/labs/m0-control-lab/src/components/sections/Features.tsx'
+        153: ' M test/labs/m0-control-lab/src/components/sections/Footer.tsx'
+        154: ' M test/labs/m0-control-lab/src/components/sections/Hero.tsx'
+        155: ' M test/labs/m0-control-lab/src/components/sections/Pricing.tsx'
+        156: ' M test/labs/m0-control-lab/src/components/sections/Testimonials.tsx'
+        157: ' M test/labs/m0-control-lab/src/lib/cn.ts'
+        158: ' M test/labs/m0-control-lab/tsconfig.json'
+        159: ' M test/labs/m0-overfit-lab/.slightnudge-source-adapter/bridge-client.mjs'
+        160: ' M test/labs/m0-overfit-lab/.slightnudge-source-adapter/next-source-loader.cjs'
+        161: ' M test/labs/m0-overfit-lab/.slightnudge-source-adapter/state.json'
+        162: ' M test/labs/m0-overfit-lab/AGENTS.md'
+        163: ' M test/labs/m0-overfit-lab/eslint.config.mjs'
+        164: ' M test/labs/m0-overfit-lab/next-env.d.ts'
+        165: ' M test/labs/m0-overfit-lab/next.config.mjs'
+        166: ' M test/labs/m0-overfit-lab/next.config.slightnudge-original.mjs'
+        167: ' M test/labs/m0-overfit-lab/package.json'
+        168: ' M test/labs/m0-overfit-lab/postcss.config.mjs'
+        169: ' M test/labs/m0-overfit-lab/src/app/globals.css'
+        170: ' M test/labs/m0-overfit-lab/src/app/layout.tsx'
+        171: ' M test/labs/m0-overfit-lab/src/app/page.tsx'
+        172: ' M test/labs/m0-overfit-lab/src/components/Banner.tsx'
+        173: ' M test/labs/m0-overfit-lab/src/components/CardListSection.tsx'
+        174: ' M test/labs/m0-overfit-lab/src/components/DynamicWidget.tsx'
+        175: ' M test/labs/m0-overfit-lab/src/components/FooterSection.tsx'
+        176: ' M test/labs/m0-overfit-lab/src/components/NestedGridSection.tsx'
+        177: ' M test/labs/m0-overfit-lab/src/components/ShellLayout.tsx'
+        178: ' M test/labs/m0-overfit-lab/src/lib/cn.ts'
+        179: ' M test/labs/m0-overfit-lab/tsconfig.json'
+        180: ' M test/m0-overfit.test.ts'
+        181: ' M test/m0-regression.test.ts'
+        182: ' M test/m5-containment-helper.test.ts'
+        183: ' M test/move-expectations.test.ts'
+        184: ' M test/payments.test.ts'
+        185: ' M test/pipeline-integration.test.ts'
+        186: ' M test/prewrite-hook-guard.test.ts'
+        187: ' M test/real-state-guard.test.ts'
+        188: ' M test/reorder-safety.test.ts'
+        189: ' M test/repro-glitch.ts'
+        190: ' M test/s1-auth-bypass.test.ts'
+        191: ' M test/s1-auth-origin.test.ts'
+        192: ' M test/s2-path-traversal.test.ts'
+        193: ' M test/s3-atomic-write.test.ts'
+        194: ' M test/s5-tailwind-compile.test.ts'
+        195: ' M test/s5-theme-support.test.ts'
+        196: ' M test/s5-v3-support.test.ts'
+        197: ' M test/security-hardening.test.ts'
+        198: ' M test/step1-selection.test.ts'
+        199: ' M test/step2-nudging.test.ts'
+        200: ' M test/step3-file-git.test.ts'
+        201: ' M test/studio-benchmark.test.ts'
+        202: ' M test/studio-restore.test.ts'
+        203: ' M test/take-screenshot.ts'
+        204: ' M test/test-full-flow.ts'
+        205: ' M test/test-override-guard.test.ts'
+        206: ' M test/token-html-host.test.ts'
+        207: ' M test/token-undo.test.ts'
+        208: ' M test/undo-m3-restored-token.test.ts'
+        209: ' M test/undo-m5-parent-junction.test.ts'
+        210: ' M test/undo-refusals.test.ts'
+        211: ' M test/undo-stacked-edits.test.ts'
+        212: ' M test/unit.test.ts'
+        213: ' M test/verify-fix.ts'
+        214: ' M test/verify-live-move.ts'
+        215: ' M tsconfig.json'
+        216: ' M worker/index.ts'
+      operator: 'deepStrictEqual'
+      stack: |-
+        TestContext.<anonymous> (C:\Users\abhis\AppData\Local\Temp\sn-sprint1-real-state-guard-v2-LXfVwV\source\test\real-state-guard-v2.test.ts:29:12)
+        Test.runInAsyncScope (node:async_hooks:214:14)
+        Test.run (node:internal/test_runner/test:1047:25)
+        Suite.processPendingSubtests (node:internal/test_runner/test:744:18)
+        Test.postRun (node:internal/test_runner/test:1173:19)
+        Test.run (node:internal/test_runner/test:1101:12)
+        async Promise.all (index 0)
+        async Suite.run (node:internal/test_runner/test:1442:7)
+        async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+      ...
+    # Subtest: detects modification, deletion, creation, history changes and metadata changes in a temporary directory
+    ok 3 - detects modification, deletion, creation, history changes and metadata changes in a temporary directory
+      ---
+      duration_ms: 21.3255
+      type: 'test'
+      ...
+    1..3
+not ok 1 - Real state integrity guard v2
+  ---
+  duration_ms: 534.4639
+  type: 'suite'
+  location: 'C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-real-state-guard-v2-LXfVwV\\source\\test\\real-state-guard-v2.test.ts:1:291'
+  failureType: 'subtestsFailed'
+  error: '2 subtests failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+1..1
+# tests 3
+# suites 1
+# pass 1
+# fail 2
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 544.9814
+Owned temporary entries before cleanup: ["tsx-abhis"]
+Confirmed cleanup: C:\Users\abhis\AppData\Local\Temp\sn-sprint1-real-state-guard-v2-LXfVwV
+exit 1
+CONFIRMED: protected files and Git status unchanged.

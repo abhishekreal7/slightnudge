@@ -1,0 +1,9 @@
+> node --import tsx scratch/editor-sprint1-isolate.ts typecheck
+{"temporaryRoot":"C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-typecheck-D00VJb","baseline":"6cadd06eb1dbbf55032354db2817add1c52e3ac3","suite":"typecheck","overlays":[],"omitted":".env.example"}
+Isolated seed staged paths: .env.example
+Generating route types...
+✓ Types generated successfully
+Owned temporary entries before cleanup: []
+Confirmed cleanup: C:\Users\abhis\AppData\Local\Temp\sn-sprint1-typecheck-D00VJb
+exit 0
+CONFIRMED: protected files and Git status unchanged.

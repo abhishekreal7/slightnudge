@@ -1,0 +1,38 @@
+> C:\nvm4w\nodejs\node.exe --import tsx scratch/editor-sprint1-isolate.ts undo-m3-restored-token
+{"temporaryRoot":"C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-undo-m3-restored-token-QerbF8","baseline":"6cadd06eb1dbbf55032354db2817add1c52e3ac3","suite":"undo-m3-restored-token","overlays":[],"omitted":".env.example"}
+Isolated seed staged paths: .env.example
+TAP version 13
+Case 1 refusal message: This file changed after the visual edit: the token was modified by the user. Open fixtures\test-m3-case1.tsx near line 3 and change the className to remove "font-bold" and restore "font-normal". Nothing was changed.
+Case 2 fallback refusal message: This file changed after the visual edit: element could not be found. Open fixtures\test-m3-case2.tsx near line 3 and change the className to remove "font-bold" and restore "font-normal". Nothing was changed.
+# Subtest: Mutant M3 Closeout: Restored Token Refusal Battery
+    # Subtest: case 1 (elementId recorded): user restores removed token by hand -> only token check refuses with specific restored-token error
+    ok 1 - case 1 (elementId recorded): user restores removed token by hand -> only token check refuses with specific restored-token error
+      ---
+      duration_ms: 621.991
+      type: 'test'
+      ...
+    # Subtest: case 2 (candidate scanning fallback): without elementId, restored token causes candidate scanning to miss target element
+    ok 2 - case 2 (candidate scanning fallback): without elementId, restored token causes candidate scanning to miss target element
+      ---
+      duration_ms: 343.6701
+      type: 'test'
+      ...
+    1..2
+ok 1 - Mutant M3 Closeout: Restored Token Refusal Battery
+  ---
+  duration_ms: 966.4084
+  type: 'suite'
+  ...
+1..1
+# tests 2
+# suites 1
+# pass 2
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 971.467
+Owned temporary entries before cleanup: ["tsx-abhis"]
+Confirmed cleanup: C:\Users\abhis\AppData\Local\Temp\sn-sprint1-undo-m3-restored-token-QerbF8
+exit 0
+CONFIRMED: protected files and Git status unchanged.

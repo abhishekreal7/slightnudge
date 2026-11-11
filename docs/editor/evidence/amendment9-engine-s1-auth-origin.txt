@@ -1,0 +1,101 @@
+> C:\nvm4w\nodejs\node.exe --import tsx scratch/editor-s1-group.ts amendment9-engine-s1-auth-origin s1-auth-origin test/helpers/real-state.ts
+{"temporaryRoot":"C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-s1-auth-origin-waVTPf","baseline":"8c613619b4ce051027689fd3d782d4ee029e7052","suite":"s1-auth-origin","overlays":["test/helpers/real-state.ts"],"omitted":".env.example"}
+Isolated seed staged paths: .env.example, test/helpers/real-state.ts
+TAP version 13
+# Subtest: S1: Authenticated, local-only mutating requests
+    # Subtest: rejects mutating request with no Origin and no token with 403 (not 404)
+    ok 1 - rejects mutating request with no Origin and no token with 403 (not 404)
+      ---
+      duration_ms: 3163.9076
+      type: 'test'
+      ...
+    # Subtest: rejects mutating request with wrong Host with 403
+    ok 2 - rejects mutating request with wrong Host with 403
+      ---
+      duration_ms: 63.6815
+      type: 'test'
+      ...
+    # Subtest: rejects mutating request with valid Origin but missing token with 403
+    ok 3 - rejects mutating request with valid Origin but missing token with 403
+      ---
+      duration_ms: 13.5901
+      type: 'test'
+      ...
+    # Subtest: rejects mutating request with valid Origin but invalid token with 403
+    ok 4 - rejects mutating request with valid Origin but invalid token with 403
+      ---
+      duration_ms: 11.2879
+      type: 'test'
+      ...
+    # Subtest: returns normal not-found error for fake previewId with valid token and valid Origin
+    ok 5 - returns normal not-found error for fake previewId with valid token and valid Origin
+      ---
+      duration_ms: 39.0293
+      type: 'test'
+      ...
+    # Subtest: allows missing Origin when valid token is present and proceeds to normal handling
+    not ok 6 - allows missing Origin when valid token is present and proceeds to normal handling
+      ---
+      duration_ms: 22.3866
+      type: 'test'
+      location: 'C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-s1-auth-origin-waVTPf\\source\\test\\s1-auth-origin.test.ts:1:3263'
+      failureType: 'testCodeFailure'
+      error: 'Missing Origin must be allowed when token is valid'
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: 403
+      actual: 403
+      operator: 'notStrictEqual'
+      stack: |-
+        TestContext.<anonymous> (C:\Users\abhis\AppData\Local\Temp\sn-sprint1-s1-auth-origin-waVTPf\source\test\s1-auth-origin.test.ts:119:12)
+        process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+        async Test.run (node:internal/test_runner/test:1054:7)
+        async Suite.processPendingSubtests (node:internal/test_runner/test:744:7)
+      ...
+    # Subtest: completes preview, apply, and undo flow in a temp copy with valid token and Origin
+    not ok 7 - completes preview, apply, and undo flow in a temp copy with valid token and Origin
+      ---
+      duration_ms: 2356.6386
+      type: 'test'
+      location: 'C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-s1-auth-origin-waVTPf\\source\\test\\s1-auth-origin.test.ts:1:3806'
+      failureType: 'testCodeFailure'
+      error: |-
+        Undo failed with status 400
+        
+        400 !== 200
+        
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: 200
+      actual: 400
+      operator: 'strictEqual'
+      stack: |-
+        TestContext.<anonymous> (C:\Users\abhis\AppData\Local\Temp\sn-sprint1-s1-auth-origin-waVTPf\source\test\s1-auth-origin.test.ts:178:14)
+        process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+        async Test.run (node:internal/test_runner/test:1054:7)
+        async Suite.processPendingSubtests (node:internal/test_runner/test:744:7)
+      ...
+    1..7
+not ok 1 - S1: Authenticated, local-only mutating requests
+  ---
+  duration_ms: 27924.1751
+  type: 'suite'
+  location: 'C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-s1-auth-origin-waVTPf\\source\\test\\s1-auth-origin.test.ts:1:362'
+  failureType: 'subtestsFailed'
+  error: '2 subtests failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+1..1
+# tests 7
+# suites 1
+# pass 5
+# fail 2
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 27932.1451
+Owned temporary entries before cleanup: ["node-compile-cache","npm-cache","tsx-abhis"]
+Confirmed cleanup: C:\Users\abhis\AppData\Local\Temp\sn-sprint1-s1-auth-origin-waVTPf
+CONFIRMED: integration checkout protected files and status unchanged.
+exit 1
+CONFIRMED: protected files and Git status unchanged.

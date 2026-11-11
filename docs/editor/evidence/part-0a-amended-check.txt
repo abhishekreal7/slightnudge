@@ -1,0 +1,9 @@
+Amended Part 0a programmatic check
+Line counts: worktree=7, HEAD=7
+CONFIRMED line 3: import "./.next/dev/types/routes.d.ts"; -> import "./.next/types/routes.d.ts"; (matches normalized HEAD)
+CONFIRMED line 4: import "./.next/dev/types/root-params.d.ts"; -> import "./.next/types/root-params.d.ts"; (matches normalized HEAD)
+Tracked changes: next-env.d.ts
+Staged changes: 
+Disallowed tracked changes: 
+Disallowed untracked paths: 
+Result: CONFIRMED

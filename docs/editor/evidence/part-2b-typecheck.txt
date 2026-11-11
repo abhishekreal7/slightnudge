@@ -1,0 +1,9 @@
+> node --import tsx scratch/editor-sprint1-isolate.ts typecheck test/overlay-apply.test.ts app/studio/page.tsx components/slightnudge/SlightNudgeOverlay.tsx
+{"temporaryRoot":"C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-typecheck-i2MxiB","baseline":"ac69d7d0d8f342c2e0628096640ff572fcb049fb","suite":"typecheck","overlays":["test/overlay-apply.test.ts","app/studio/page.tsx","components/slightnudge/SlightNudgeOverlay.tsx"],"omitted":".env.example"}
+Isolated seed staged paths: .env.example, app/studio/page.tsx, components/slightnudge/SlightNudgeOverlay.tsx, test/overlay-apply.test.ts
+Generating route types...
+✓ Types generated successfully
+Owned temporary entries before cleanup: []
+Confirmed cleanup: C:\Users\abhis\AppData\Local\Temp\sn-sprint1-typecheck-i2MxiB
+exit 0
+CONFIRMED: protected files and Git status unchanged.

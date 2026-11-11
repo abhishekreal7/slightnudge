@@ -1,0 +1,36 @@
+> C:\nvm4w\nodejs\node.exe --import tsx scratch/editor-sprint1-isolate.ts s2-path-traversal
+{"temporaryRoot":"C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-s2-path-traversal-UTusDp","baseline":"6cadd06eb1dbbf55032354db2817add1c52e3ac3","suite":"s2-path-traversal","overlays":[],"omitted":".env.example"}
+Isolated seed staged paths: .env.example
+TAP version 13
+# Subtest: S2: Path traversal refusal regression test
+    # Subtest: refuses pending-preview with ..\\ traversing outside project root, leaving target file unchanged
+    ok 1 - refuses pending-preview with ..\\ traversing outside project root, leaving target file unchanged
+      ---
+      duration_ms: 5.9483
+      type: 'test'
+      ...
+    # Subtest: refuses pending-preview using symlink/junction pointing outside project root, leaving target file unchanged
+    ok 2 - refuses pending-preview using symlink/junction pointing outside project root, leaving target file unchanged
+      ---
+      duration_ms: 5.0752
+      type: 'test'
+      ...
+    1..2
+ok 1 - S2: Path traversal refusal regression test
+  ---
+  duration_ms: 15.4512
+  type: 'suite'
+  ...
+1..1
+# tests 2
+# suites 1
+# pass 2
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 33.158
+Owned temporary entries before cleanup: ["tsx-abhis"]
+Confirmed cleanup: C:\Users\abhis\AppData\Local\Temp\sn-sprint1-s2-path-traversal-UTusDp
+exit 0
+CONFIRMED: protected files and Git status unchanged.

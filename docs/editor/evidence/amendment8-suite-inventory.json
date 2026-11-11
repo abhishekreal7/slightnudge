@@ -1,0 +1,452 @@
+[
+  {
+    "suite": "adapter",
+    "browser": false,
+    "status": "ready"
+  },
+  {
+    "suite": "advanced-image-bridge",
+    "browser": true,
+    "status": "ready"
+  },
+  {
+    "suite": "advanced-image-source",
+    "browser": false,
+    "status": "ready"
+  },
+  {
+    "suite": "api-response-diagnostics.v2",
+    "browser": false,
+    "status": "ready"
+  },
+  {
+    "suite": "api-response-helper.v2",
+    "browser": false,
+    "status": "ready"
+  },
+  {
+    "suite": "appearance-layout",
+    "browser": false,
+    "status": "ready"
+  },
+  {
+    "suite": "apply-client-recovery",
+    "browser": false,
+    "status": "ready"
+  },
+  {
+    "suite": "apply-crash-recovery",
+    "browser": false,
+    "status": "ready"
+  },
+  {
+    "suite": "apply-denial",
+    "browser": false,
+    "status": "ready"
+  },
+  {
+    "suite": "apply-outcome",
+    "browser": false,
+    "status": "ready"
+  },
+  {
+    "suite": "apply-review-race",
+    "browser": false,
+    "status": "ready"
+  },
+  {
+    "suite": "bridge-ready-handshake.browser",
+    "browser": true,
+    "status": "ready"
+  },
+  {
+    "suite": "button-editing",
+    "browser": false,
+    "status": "ready"
+  },
+  {
+    "suite": "component-actions-bridge",
+    "browser": true,
+    "status": "ready"
+  },
+  {
+    "suite": "component-actions",
+    "browser": false,
+    "status": "ready"
+  },
+  {
+    "suite": "component-inline-bridge",
+    "browser": true,
+    "status": "ready"
+  },
+  {
+    "suite": "component-ownership",
+    "browser": false,
+    "status": "ready"
+  },
+  {
+    "suite": "component-props",
+    "browser": false,
+    "status": "ready"
+  },
+  {
+    "suite": "container-move",
+    "browser": false,
+    "status": "ready"
+  },
+  {
+    "suite": "continuous-draft",
+    "browser": false,
+    "status": "ready"
+  },
+  {
+    "suite": "direct-manipulation",
+    "browser": false,
+    "status": "ready"
+  },
+  {
+    "suite": "drag-move",
+    "browser": false,
+    "status": "ready"
+  },
+  {
+    "suite": "fixtures",
+    "browser": false,
+    "status": "ready"
+  },
+  {
+    "suite": "history-resilience",
+    "browser": false,
+    "status": "ready"
+  },
+  {
+    "suite": "history-summary",
+    "browser": false,
+    "status": "ready"
+  },
+  {
+    "suite": "hmr-sync",
+    "browser": false,
+    "status": "ready"
+  },
+  {
+    "suite": "icon-properties-bridge",
+    "browser": true,
+    "status": "ready"
+  },
+  {
+    "suite": "icon-properties",
+    "browser": false,
+    "status": "ready"
+  },
+  {
+    "suite": "icon-replacement-bridge",
+    "browser": true,
+    "status": "ready"
+  },
+  {
+    "suite": "icon-replacement",
+    "browser": false,
+    "status": "ready"
+  },
+  {
+    "suite": "image-assets",
+    "browser": false,
+    "status": "ready"
+  },
+  {
+    "suite": "image-attributes-bridge",
+    "browser": true,
+    "status": "ready"
+  },
+  {
+    "suite": "image-content",
+    "browser": false,
+    "status": "ready"
+  },
+  {
+    "suite": "image-framing",
+    "browser": false,
+    "status": "ready"
+  },
+  {
+    "suite": "imported-canvas-runtime",
+    "browser": true,
+    "status": "ready"
+  },
+  {
+    "suite": "imported-draft",
+    "browser": false,
+    "status": "ready"
+  },
+  {
+    "suite": "in-situ-controls",
+    "browser": true,
+    "status": "ready"
+  },
+  {
+    "suite": "in-situ-focus",
+    "browser": false,
+    "status": "ready"
+  },
+  {
+    "suite": "inspection-client",
+    "browser": false,
+    "status": "ready"
+  },
+  {
+    "suite": "jsx-text",
+    "browser": false,
+    "status": "ready"
+  },
+  {
+    "suite": "m0-overfit.iframe-v3",
+    "browser": true,
+    "status": "lab harness required"
+  },
+  {
+    "suite": "m0-overfit.reliability",
+    "browser": true,
+    "status": "lab harness required"
+  },
+  {
+    "suite": "m0-overfit.reliability.v3",
+    "browser": true,
+    "status": "lab harness required"
+  },
+  {
+    "suite": "m0-overfit.security-v2",
+    "browser": true,
+    "status": "lab harness required"
+  },
+  {
+    "suite": "m0-overfit",
+    "browser": true,
+    "status": "lab harness required"
+  },
+  {
+    "suite": "m0-regression.iframe-v3",
+    "browser": true,
+    "status": "lab harness required"
+  },
+  {
+    "suite": "m0-regression.reliability",
+    "browser": true,
+    "status": "lab harness required"
+  },
+  {
+    "suite": "m0-regression.reliability.v3",
+    "browser": true,
+    "status": "lab harness required"
+  },
+  {
+    "suite": "m0-regression.security-v2",
+    "browser": true,
+    "status": "lab harness required"
+  },
+  {
+    "suite": "m0-regression",
+    "browser": true,
+    "status": "lab harness required"
+  },
+  {
+    "suite": "m1-interactions",
+    "browser": false,
+    "status": "ready"
+  },
+  {
+    "suite": "m5-containment-helper",
+    "browser": false,
+    "status": "ready"
+  },
+  {
+    "suite": "move-controls",
+    "browser": false,
+    "status": "ready"
+  },
+  {
+    "suite": "move-css-compatibility",
+    "browser": true,
+    "status": "ready"
+  },
+  {
+    "suite": "multi-file-crash",
+    "browser": false,
+    "status": "ready"
+  },
+  {
+    "suite": "multi-file-group",
+    "browser": false,
+    "status": "ready"
+  },
+  {
+    "suite": "preview-connection",
+    "browser": false,
+    "status": "ready"
+  },
+  {
+    "suite": "prewrite-hook-guard",
+    "browser": false,
+    "status": "ready"
+  },
+  {
+    "suite": "project-compatibility",
+    "browser": false,
+    "status": "ready"
+  },
+  {
+    "suite": "reorder-safety",
+    "browser": false,
+    "status": "ready"
+  },
+  {
+    "suite": "responsive-scopes",
+    "browser": true,
+    "status": "ready"
+  },
+  {
+    "suite": "responsive-tailwind3",
+    "browser": true,
+    "status": "ready"
+  },
+  {
+    "suite": "runtime-class-ownership",
+    "browser": true,
+    "status": "ready"
+  },
+  {
+    "suite": "s1-auth-bypass",
+    "browser": false,
+    "status": "ready"
+  },
+  {
+    "suite": "s1-auth-origin",
+    "browser": false,
+    "status": "ready"
+  },
+  {
+    "suite": "s2-path-traversal",
+    "browser": false,
+    "status": "ready"
+  },
+  {
+    "suite": "s3-atomic-write",
+    "browser": false,
+    "status": "ready"
+  },
+  {
+    "suite": "s5-tailwind-compile",
+    "browser": false,
+    "status": "ready"
+  },
+  {
+    "suite": "s5-theme-support",
+    "browser": false,
+    "status": "ready"
+  },
+  {
+    "suite": "s5-v3-support",
+    "browser": false,
+    "status": "ready"
+  },
+  {
+    "suite": "section-order-bridge",
+    "browser": true,
+    "status": "ready"
+  },
+  {
+    "suite": "section-order",
+    "browser": false,
+    "status": "ready"
+  },
+  {
+    "suite": "shared-instance-bridge",
+    "browser": true,
+    "status": "ready"
+  },
+  {
+    "suite": "shared-instance",
+    "browser": false,
+    "status": "ready"
+  },
+  {
+    "suite": "source-document-fence.browser",
+    "browser": true,
+    "status": "ready"
+  },
+  {
+    "suite": "source-operation-lock",
+    "browser": false,
+    "status": "ready"
+  },
+  {
+    "suite": "source-rendered-bridge",
+    "browser": true,
+    "status": "ready"
+  },
+  {
+    "suite": "step2-nudging",
+    "browser": true,
+    "status": "deferred: hard-coded live port; requires disposable URL harness"
+  },
+  {
+    "suite": "studio-recovery",
+    "browser": false,
+    "status": "ready"
+  },
+  {
+    "suite": "style-isolation",
+    "browser": false,
+    "status": "ready"
+  },
+  {
+    "suite": "test-override-guard",
+    "browser": false,
+    "status": "ready"
+  },
+  {
+    "suite": "token-html-host",
+    "browser": false,
+    "status": "ready"
+  },
+  {
+    "suite": "token-undo",
+    "browser": false,
+    "status": "ready"
+  },
+  {
+    "suite": "undo-client-recovery",
+    "browser": false,
+    "status": "ready"
+  },
+  {
+    "suite": "undo-m3-restored-token",
+    "browser": false,
+    "status": "ready"
+  },
+  {
+    "suite": "undo-m5-parent-junction",
+    "browser": false,
+    "status": "ready"
+  },
+  {
+    "suite": "undo-recovery",
+    "browser": false,
+    "status": "ready"
+  },
+  {
+    "suite": "undo-refusals",
+    "browser": false,
+    "status": "ready"
+  },
+  {
+    "suite": "undo-stacked-edits",
+    "browser": false,
+    "status": "ready"
+  },
+  {
+    "suite": "unified-editor-routing",
+    "browser": false,
+    "status": "ready"
+  }
+]

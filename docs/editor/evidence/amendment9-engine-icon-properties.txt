@@ -1,0 +1,9 @@
+> C:\nvm4w\nodejs\node.exe --import tsx scratch/editor-s1-group.ts amendment9-engine-icon-properties icon-properties test/helpers/real-state.ts
+{"temporaryRoot":"C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-icon-properties-ANEUEH","baseline":"8c613619b4ce051027689fd3d782d4ee029e7052","suite":"icon-properties","overlays":["test/helpers/real-state.ts"],"omitted":".env.example"}
+Isolated seed staged paths: .env.example, test/helpers/real-state.ts
+PASS icon properties: aliased Lucide/native SVG, combined draft attributes, no early writes, preserved shape/handlers/other instance, exact Save/Undo, dynamic/class/shared/scope/value refusals, shadow-safe mapping
+Owned temporary entries before cleanup: ["sn-icon-properties-3Mml7k","tsx-abhis"]
+Confirmed cleanup: C:\Users\abhis\AppData\Local\Temp\sn-sprint1-icon-properties-ANEUEH
+CONFIRMED: integration checkout protected files and status unchanged.
+exit 0
+CONFIRMED: protected files and Git status unchanged.

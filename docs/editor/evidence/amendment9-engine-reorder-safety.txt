@@ -1,0 +1,38 @@
+> C:\nvm4w\nodejs\node.exe --import tsx scratch/editor-s1-group.ts amendment9-engine-reorder-safety reorder-safety test/helpers/real-state.ts
+{"temporaryRoot":"C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-reorder-safety-cs6fHi","baseline":"8c613619b4ce051027689fd3d782d4ee029e7052","suite":"reorder-safety","overlays":["test/helpers/real-state.ts"],"omitted":".env.example"}
+Isolated seed staged paths: .env.example, test/helpers/real-state.ts
+====================================================
+🧪 RUNNING REORDER SAFETY & SAME-LINE RESOLUTION TESTS
+====================================================
+
+--- 1. Same-line Element Resolution (Column + Tag Name) ---
+  ✅ [PASS] Same-line without column does not succeed
+  ✅ [PASS] Same-line without column refuses safely
+  ✅ [PASS] Refusal exact message: "I can't tell which element on this line you mean. Nothing was changed."
+  ✅ [PASS] Targets First button using col 7 + tagName
+  ✅ [PASS] First button correctly swapped later
+  ✅ [PASS] Targets Second button using col 52 + tagName
+  ✅ [PASS] Second button correctly swapped earlier
+  ✅ [PASS] Non-matching column refuses
+  ✅ [PASS] Non-matching column returns exact refusal message
+
+--- 2. Multi-slot Reorder Safety (Loops, Conditionals, Permutation) ---
+  ✅ [PASS] Reorder across map() list refused
+  ✅ [PASS] map() list refused safely
+  ✅ [PASS] Reorder across conditional element refused
+  ✅ [PASS] Conditional element refused safely
+  ✅ [PASS] Permutation swap succeeded
+  ✅ [PASS] Unchanged sibling item-c has identical bytes
+  ✅ [PASS] Whitespace and all comments are preserved byte-for-byte
+  ✅ [PASS] Order is pure permutation (item-b before item-a)
+
+--- 3. Preview Route targetIndex Validation ---
+  ❌ [FAIL] targetIndex NaN returns status 400
+Test failure: Error: Test failed: targetIndex NaN returns status 400
+    at test (C:\Users\abhis\AppData\Local\Temp\sn-sprint1-reorder-safety-cs6fHi\source\test\reorder-safety.test.ts:30:13)
+    at <anonymous> (C:\Users\abhis\AppData\Local\Temp\sn-sprint1-reorder-safety-cs6fHi\source\test\reorder-safety.test.ts:243:5)
+Owned temporary entries before cleanup: ["reorder-safety-64c72310-e215-4eda-ae93-15906521a543","tsx-abhis"]
+Confirmed cleanup: C:\Users\abhis\AppData\Local\Temp\sn-sprint1-reorder-safety-cs6fHi
+CONFIRMED: integration checkout protected files and status unchanged.
+exit 1
+CONFIRMED: protected files and Git status unchanged.

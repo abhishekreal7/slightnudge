@@ -1,0 +1,102 @@
+> node --import tsx scratch/editor-sprint1-isolate.ts overlay-contract app/studio/page.tsx app/globals.css components/slightnudge/SlightNudgeOverlay.tsx components/slightnudge/useOverlayPresentation.ts test/overlay-contract.test.ts test/helpers/overlay-screenshots.ts test/helpers/test-server.ts test/regenerate-overlay-baselines.ts test/visual-baselines
+{"temporaryRoot":"C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-overlay-contract-VRC0dS","baseline":"c182943f79b5fda6f9873ff54ca25c08ead0fc89","suite":"overlay-contract","overlays":["app/studio/page.tsx","app/globals.css","components/slightnudge/SlightNudgeOverlay.tsx","components/slightnudge/useOverlayPresentation.ts","test/overlay-contract.test.ts","test/helpers/overlay-screenshots.ts","test/helpers/test-server.ts","test/regenerate-overlay-baselines.ts","test/visual-baselines"],"omitted":".env.example"}
+Isolated seed staged paths: .env.example, app/globals.css, app/studio/page.tsx, components/slightnudge/SlightNudgeOverlay.tsx, components/slightnudge/useOverlayPresentation.ts, test/helpers/overlay-screenshots.ts, test/helpers/test-server.ts, test/overlay-contract.test.ts, test/regenerate-overlay-baselines.ts, test/visual-baselines/README.md, test/visual-baselines/source-applying.png, test/visual-baselines/source-dragging.png, test/visual-baselines/source-error.png, test/visual-baselines/source-hover.png, test/visual-baselines/source-idle.png, test/visual-baselines/source-previewing.png, test/visual-baselines/source-resizing.png, test/visual-baselines/source-selected.png, test/visual-baselines/source-textediting.png, test/visual-baselines/studio-applying.png, test/visual-baselines/studio-dragging.png, test/visual-baselines/studio-error.png, test/visual-baselines/studio-hover.png, test/visual-baselines/studio-idle.png, test/visual-baselines/studio-previewing.png, test/visual-baselines/studio-resizing.png, test/visual-baselines/studio-selected.png, test/visual-baselines/studio-textediting.png
+TAP version 13
+# Subtest: studio overlay contract
+    # Subtest: places above, flips below, clamps at both horizontal edges and never covers the target
+    ok 1 - places above, flips below, clamps at both horizontal edges and never covers the target
+      ---
+      duration_ms: 2471.758
+      type: 'test'
+      ...
+    # Subtest: shows only a 2px undecorated parent-width destination and a ghosted target during drag
+    ok 2 - shows only a 2px undecorated parent-width destination and a ghosted target during drag
+      ---
+      duration_ms: 1724.3054
+      type: 'test'
+      ...
+    # Subtest: cleans successful, refused and cancelled drops, Escape, pointercancel and blur
+    ok 3 - cleans successful, refused and cancelled drops, Escape, pointercancel and blur
+      ---
+      duration_ms: 8547.0695
+      type: 'test'
+      ...
+    # Subtest: hides the toolbar throughout resize and scrolling
+    ok 4 - hides the toolbar throughout resize and scrolling
+      ---
+      duration_ms: 1656.5411
+      type: 'test'
+      ...
+    # Subtest: matches deliberate screenshots for all nine overlay states
+    ok 5 - matches deliberate screenshots for all nine overlay states
+      ---
+      duration_ms: 10844.9056
+      type: 'test'
+      ...
+    1..5
+ok 1 - studio overlay contract
+  ---
+  duration_ms: 36798.5677
+  type: 'suite'
+  ...
+# Subtest: source overlay contract
+    # Subtest: places above, flips below, clamps at both horizontal edges and never covers the target
+    ok 1 - places above, flips below, clamps at both horizontal edges and never covers the target
+      ---
+      duration_ms: 1333.6662
+      type: 'test'
+      ...
+    # Subtest: shows only a 2px undecorated parent-width destination and a ghosted target during drag
+    ok 2 - shows only a 2px undecorated parent-width destination and a ghosted target during drag
+      ---
+      duration_ms: 1515.8316
+      type: 'test'
+      ...
+    # Subtest: cleans successful, refused and cancelled drops, Escape, pointercancel and blur
+    ok 3 - cleans successful, refused and cancelled drops, Escape, pointercancel and blur
+      ---
+      duration_ms: 8272.1442
+      type: 'test'
+      ...
+    # Subtest: hides the toolbar throughout resize and scrolling
+    ok 4 - hides the toolbar throughout resize and scrolling
+      ---
+      duration_ms: 2841.5023
+      type: 'test'
+      ...
+    # Subtest: matches deliberate screenshots for all nine overlay states
+    not ok 5 - matches deliberate screenshots for all nine overlay states
+      ---
+      duration_ms: 26396.046
+      type: 'test'
+      location: 'C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-overlay-contract-VRC0dS\\source\\test\\overlay-contract.test.ts:1:8579'
+      failureType: 'testCodeFailure'
+      error: 'page.waitForResponse: Timeout 5000ms exceeded while waiting for event "response"'
+      code: 'ERR_TEST_FAILURE'
+      name: 'TimeoutError'
+      stack: |-
+        TestContext.<anonymous> (C:\Users\abhis\AppData\Local\Temp\sn-sprint1-overlay-contract-VRC0dS\source\test\overlay-contract.test.ts:183:35)
+      ...
+    1..5
+not ok 2 - source overlay contract
+  ---
+  duration_ms: 40361.7834
+  type: 'suite'
+  location: 'C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-overlay-contract-VRC0dS\\source\\test\\overlay-contract.test.ts:1:3678'
+  failureType: 'subtestsFailed'
+  error: '1 subtest failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+1..2
+# tests 10
+# suites 2
+# pass 9
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 81331.8814
+Owned temporary entries before cleanup: ["node-compile-cache","npm-cache","tsx-abhis"]
+Confirmed cleanup: C:\Users\abhis\AppData\Local\Temp\sn-sprint1-overlay-contract-VRC0dS
+exit 1
+CONFIRMED: protected files and Git status unchanged.

@@ -17,8 +17,21 @@ export function LocalSourcePreview({ pageId }: { pageId: string }) {
   const [mounted, setMounted] = useState(false);
   const Page = pages[pageId as keyof typeof pages];
   useLayoutEffect(() => {
-    const canvasPage = new URL(location.href).searchParams.get('__slightnudge_canvas') === '1';
+    const params = new URL(location.href).searchParams;
+    const canvasPage = params.get('__slightnudge_canvas') === '1';
+    const initTheme = params.get('__slightnudge_theme');
     document.documentElement.toggleAttribute('data-editor-canvas-page', canvasPage);
+    if (initTheme === 'dark') {
+      document.documentElement.classList.add('dark');
+      document.documentElement.setAttribute('data-theme', 'dark');
+      document.documentElement.setAttribute('data-slightnudge-theme', 'dark');
+      document.documentElement.style.colorScheme = 'dark';
+    } else if (initTheme === 'light') {
+      document.documentElement.classList.remove('dark');
+      document.documentElement.setAttribute('data-theme', 'light');
+      document.documentElement.setAttribute('data-slightnudge-theme', 'light');
+      document.documentElement.style.colorScheme = 'light';
+    }
     return () => document.documentElement.removeAttribute('data-editor-canvas-page');
   }, []);
   useEffect(() => { setMounted(true); }, []);

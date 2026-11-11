@@ -1,0 +1,9 @@
+> C:\nvm4w\nodejs\node.exe --import tsx scratch/editor-s1-group.ts amendment9-engine-component-props component-props test/helpers/real-state.ts
+{"temporaryRoot":"C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-component-props-bvV0h3","baseline":"8c613619b4ce051027689fd3d782d4ee029e7052","suite":"component-props","overlays":["test/helpers/real-state.ts"],"omitted":".env.example"}
+Isolated seed staged paths: .env.example, test/helpers/real-state.ts
+PASS component text props: local ownership, aliased binding, escaped text, unsafe/provider/shared refusal, composed drafts, no early writes, exact Save/Undo
+Owned temporary entries before cleanup: ["sn-component-props-aAVHht","tsx-abhis"]
+Confirmed cleanup: C:\Users\abhis\AppData\Local\Temp\sn-sprint1-component-props-bvV0h3
+CONFIRMED: integration checkout protected files and status unchanged.
+exit 0
+CONFIRMED: protected files and Git status unchanged.

@@ -1,0 +1,9 @@
+> C:\nvm4w\nodejs\node.exe --import tsx scratch/editor-sprint1-isolate.ts s1-auth-bypass
+{"temporaryRoot":"C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-s1-auth-bypass-S4WcZt","baseline":"6cadd06eb1dbbf55032354db2817add1c52e3ac3","suite":"s1-auth-bypass","overlays":[],"omitted":".env.example"}
+Isolated seed staged paths: .env.example
+🧪 RUNNING AUTH BYPASS UNIT TEST
+  ✅ [PASS] All auth-bypass guard assertions held
+Owned temporary entries before cleanup: ["tsx-abhis"]
+Confirmed cleanup: C:\Users\abhis\AppData\Local\Temp\sn-sprint1-s1-auth-bypass-S4WcZt
+exit 0
+CONFIRMED: protected files and Git status unchanged.

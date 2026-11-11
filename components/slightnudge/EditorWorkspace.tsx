@@ -3,6 +3,9 @@ import { readApiJson } from '@/lib/slightnudge/api-response';
 
 import { AppearanceControls } from './AppearanceControls';
 import { ConstraintControls } from './ConstraintControls';
+import { BoxModelControl, TypographyStudio, AppearanceStudio } from './FramerControls';
+import { RightToolDock } from './RightToolDock';
+import { LeftToolDock } from './LeftToolDock';
 
 
 import React, { useState, useEffect, useLayoutEffect, useCallback, useRef } from 'react';
@@ -71,7 +74,24 @@ import {
   Sparkles,
   Copy,
   Palette,
+  SquareDashed,
+  Lock,
+  Unlock,
+  Sun,
+  Moon,
 } from 'lucide-react';
+import {
+  selectionStyleFor,
+  buildRoundedRectPath,
+  buildCornerArcPath,
+  buildCircleArcPath,
+  parseBorderRadius,
+  RADIUS_SCALE_STEPS,
+  findNearestRadiusStep,
+  type SelectionVariant,
+  type SelectionChromeStyle,
+  type NamedRadiusStep,
+} from '@/components/slightnudge/selection-style';
 import {
   changeSetAPI,
   previewEditAPI,
@@ -83,7 +103,20 @@ import {
   inspectElementAPI,
   getClientSessionToken,
   inspectComponentPropsAPI,
+  enqueueFileOperation,
+  subscribeQueueState,
+  cancelPendingFileOperations,
+  type QueueNotification,
 } from '@/lib/slightnudge/client';
+import {
+  compute8HandleResize,
+  computeSmartSnapping,
+  computeArrowNudge,
+  estimateTailwindClasses,
+  type HandleDirection,
+  type SiblingRect,
+  type ContainerRect,
+} from '@/components/slightnudge/direct-manipulation-engine';
 
 interface ElementMeta {
   instance?: string;
@@ -458,15 +491,70 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
   const repositoryId = projectId ?? routeParams?.repoId;
   const usesDrafts = true;
   const projectDraftStorageKey = repositoryId ? `${draftStorageKey}:${repositoryId}` : draftStorageKey;
-  const [windowPanel, setWindowPanel] = useState<'layers' | 'inspector' | null>(initialPanel);
+  const [layersVisible, setLayersVisible] = useState<boolean>(() => {
+    if (initialPanel === 'layers') return true;
+    return false;
+  });
+  const [inspectorVisible, setInspectorVisible] = useState<boolean>(() => {
+    if (initialPanel === 'inspector') return true;
+    if (initialPanel === 'layers') return false;
+    return !repositoryId;
+  });
+  const windowPanel = (layersVisible && inspectorVisible) ? 'both' : layersVisible ? 'layers' : inspectorVisible ? 'inspector' : null;
+  const setWindowPanel = useCallback((action: 'layers' | 'inspector' | null | ((prev: 'layers' | 'inspector' | null) => 'layers' | 'inspector' | null)) => {
+    if (typeof action === 'function') {
+      const current = (layersVisible && inspectorVisible) ? 'both' : layersVisible ? 'layers' : inspectorVisible ? 'inspector' : null;
+      const next = action(current as 'layers' | 'inspector' | null);
+      if (next === 'layers') { setLayersVisible(v => !v); }
+      else if (next === 'inspector') { setInspectorVisible(v => !v); }
+      else { setLayersVisible(false); setInspectorVisible(false); }
+    } else if (action === 'layers') {
+      setLayersVisible(true);
+    } else if (action === 'inspector') {
+      setInspectorVisible(true);
+    } else {
+      setLayersVisible(false);
+      setInspectorVisible(false);
+    }
+  }, [layersVisible, inspectorVisible]);
+
   const [browseMode, setBrowseMode] = useState(false);
   const [canvasZoom, setCanvasZoom] = useState<CanvasZoom>(unified && view === 'full' ? 1 : 'fit');
   useEffect(()=>{if(unified)setCanvasZoom(view==='fit'?'fit':1);},[unified,view]);
+  const [outlineDrag, setOutlineDrag] = useState<boolean>(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        return localStorage.getItem('slightnudge:outline-drag') === '1';
+      } catch {}
+    }
+    return false;
+  });
+  useEffect(() => {
+    try {
+      localStorage.setItem('slightnudge:outline-drag', outlineDrag ? '1' : '0');
+    } catch {}
+  }, [outlineDrag]);
   const [canvasReset, setCanvasReset] = useState(0);
   const [canvasPan, setCanvasPan] = useState(false);
   const [inspectorWidth, setInspectorWidth] = useState(288);
   const [inspectorCollapsed, setInspectorCollapsed] = useState(false);
   const [focusMode, setFocusMode] = useState(false);
+  const [canvasTheme, setCanvasTheme] = useState<'light' | 'dark'>(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('slightnudge_canvas_theme');
+      if (saved === 'dark' || saved === 'light') return saved;
+    }
+    return 'light';
+  });
+  const toggleCanvasTheme = useCallback(() => {
+    setCanvasTheme(previous => {
+      const next = previous === 'light' ? 'dark' : 'light';
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('slightnudge_canvas_theme', next);
+      }
+      return next;
+    });
+  }, []);
   const [layoutReady, setLayoutReady] = useState(false);
   const workspaceMenuRef = useRef<HTMLDetailsElement>(null);
   useEffect(() => {
@@ -512,6 +600,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
   const [selectedLayer, setSelectedLayerState] = useState<string | null>(null);
   const [definitionStyleKey, setDefinitionStyleKey] = useState<string | null>(null);
   useEffect(() => { setDefinitionStyleKey(null); }, [selectedLayer]);
+  useEffect(() => { if (selectedLayer) setInspectorVisible(true); }, [selectedLayer]);
   const reviewRef = useRef<PendingEdit | null>(null);
   const operationRef = useRef(true);
   const recoveryRecordRef = useRef<StudioRecoveryRecord | null>(null);
@@ -552,7 +641,13 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
     }
   };
   const inspectorActive = true;
-  useEffect(() => { setMoveOpen(false); }, [selectedLayer]);
+  useEffect(() => {
+    setMoveOpen(false);
+    pendingOverlayResetKeyRef.current = null;
+    if (guideVRef.current) guideVRef.current.style.display = 'none';
+    if (guideHRef.current) guideHRef.current.style.display = 'none';
+    if (cursorTagRef.current) cursorTagRef.current.style.display = 'none';
+  }, [selectedLayer]);
   useEffect(() => {
     if (!moveOpen) return;
     const outside = (event: PointerEvent) => { if (!moveControlRef.current?.contains(event.target as Node)) setMoveOpen(false); };
@@ -565,7 +660,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
     document.addEventListener('keydown', escape, true);
     return () => { document.removeEventListener('pointerdown', outside); document.removeEventListener('keydown', escape, true); };
   }, [moveOpen]);
-  const [sidebarTab, setSidebarTab] = useState<'layers' | 'pages'>('layers');
+  const [sidebarTab, setSidebarTab] = useState<'layers' | 'pages' | 'assets' | null>(null);
   const [pages, setPages] = useState<StudioPageItem[]>(defaultPages);
   const [selectedPage, setSelectedPage] = useState<StudioPageItem>(defaultPages.find(page => page.id === 'fixture-1')!);
   const [breakpoint, setBreakpoint] = useState<'desktop' | 'tablet' | 'mobile'>('desktop');
@@ -773,8 +868,75 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
   const resizeGesture = useRef<{ key: string; handle: string; pointerId: number; capture: HTMLElement; x: number; width: number; scale: number; rem: number; nextWidth: number; token: string; moved: boolean } | null>(null);
   const [dimensionTooltip, setDimensionTooltip] = useState<string | null>(null);
 
+  // Save Queue State
+  const [saveQueueState, setSaveQueueState] = useState<QueueNotification>({
+    status: 'idle',
+    isSaving: false,
+    activeCount: 0,
+    pendingCount: 0,
+  });
+  useEffect(() => {
+    return subscribeQueueState(setSaveQueueState);
+  }, []);
+
+  // Direct Manipulation & Overlay Refs (60fps rAF DOM writes)
+  const eventShieldRef = useRef<HTMLDivElement | null>(null);
+  const cursorTagRef = useRef<HTMLDivElement | null>(null);
+  const guideVRef = useRef<HTMLDivElement | null>(null);
+  const guideHRef = useRef<HTMLDivElement | null>(null);
+  const previousVariantRef = useRef<Record<string, SelectionVariant>>({});
+  const aspectLockOverrides = useRef<Record<string, boolean>>({});
+  const outlineHaloRef = useRef<Record<string, SVGPathElement | null>>({});
+  const outlineAccentRef = useRef<Record<string, SVGPathElement | null>>({});
+
+  const directDragRef = useRef<{
+    type: 'resize' | 'move' | 'radius';
+    handle?: HandleDirection;
+    pointerId: number;
+    capture: HTMLElement;
+    key: string;
+    filePath: string;
+    startX: number;
+    startY: number;
+    startLeft: number;
+    startTop: number;
+    startWidth: number;
+    startHeight: number;
+    baseTranslation: Translation;
+    zoom: number;
+    siblings: SiblingRect[];
+    containerRect?: ContainerRect;
+    targetEl: HTMLElement | null;
+    initialTargetStyle: string | null;
+    outlineOnly?: boolean;
+    lockedAspect?: boolean;
+    initialRadius?: number;
+    maxRadius?: number;
+    nextRadiusStep?: NamedRadiusStep;
+    latestPointer: { x: number; y: number; shiftKey: boolean; altKey: boolean; ctrlKey: boolean; metaKey?: boolean };
+    rafPending: boolean;
+    moved: boolean;
+    nextWidth: number;
+    nextHeight: number;
+    nextLeft: number;
+    nextTop: number;
+    nextTranslation: Translation;
+    token: string;
+    lastClassEstimateTime: number;
+  } | null>(null);
+
   // Dynamic DOM refs & element bounding dimensions
   const elementRefs = useRef<Record<string, HTMLElement | null>>({});
+  const pendingOverlayResetKeyRef = useRef<string | null>(null);
+  const resetOverlayNode = useCallback((key: string | null | undefined) => {
+    if (!key) return;
+    const node = elementRefs.current[key];
+    if (node) {
+      node.style.transform = '';
+      node.style.width = '100%';
+      node.style.height = '100%';
+    }
+  }, []);
   const [formattingPosition, setFormattingPosition] = useState<{ left: number; top: number; visible: boolean; menuSide: 'above' | 'below' } | null>(null);
   const [elementDimensions, setElementDimensions] = useState<Record<string, { w: number; h: number }>>({
     text: { w: 672, h: 114 },
@@ -803,6 +965,12 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
     if (selectedLayer === key) sourceSelection.current = selection;
     setElementDimensions(previous => ({ ...previous, [key]: { w: Math.round(selection.rect.width), h: Math.round(selection.rect.height) } }));
   };
+  useLayoutEffect(() => {
+    if (pendingOverlayResetKeyRef.current && pendingOverlayResetKeyRef.current === selectedLayer) {
+      resetOverlayNode(pendingOverlayResetKeyRef.current);
+      pendingOverlayResetKeyRef.current = null;
+    }
+  }, [elementDimensions, selectedLayer, resetOverlayNode]);
   const replaySourceDraft = (edit: PendingEdit | null): Promise<boolean> => {
     if (!sourceReady) { needsDraftReplay.current = true; return Promise.resolve(false); }
     if (draftReplayPromise.current) return draftReplayPromise.current;
@@ -849,125 +1017,431 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
         };
       }
     }
-    setElementDimensions((prev) => ({ ...prev, ...nextDims }));
-  }, [selectedLayer, liveWidth, elements, childOrder]);
+    setElementDimensions((prev) => {
+      let changed = false;
+      for (const k of Object.keys(nextDims)) {
+        if (!prev[k] || prev[k].w !== nextDims[k].w || prev[k].h !== nextDims[k].h) {
+          changed = true;
+          break;
+        }
+      }
+      return changed ? { ...prev, ...nextDims } : prev;
+    });
+  }, [selectedLayer, elements, childOrder]);
 
   useLayoutEffect(() => {
-    if (!selectedLayer || liveMove || isResizing) return;
+    if (!selectedLayer || liveMove || isResizing || isDraggingMove || Boolean(directDragRef.current)) {
+      setFormattingPosition(null);
+      return;
+    }
     const node = elementRefs.current[selectedLayer];
     const toolbar = formattingRef.current;
-    const canvas = node?.closest('main');
+    const canvas = node?.closest('main') || document.querySelector('[data-editor-canvas]');
     if (!node || !toolbar || !canvas) { setFormattingPosition(null); return; }
     let animation = 0;
     const update = () => {
       const selection = node.getBoundingClientRect(), frame = canvas.getBoundingClientRect();
-      const width = toolbar.offsetWidth, height = toolbar.offsetHeight;
-      const bounds = { left: frame.left + 12, right: frame.right - 12, top: frame.top + 10, bottom: Math.min(frame.bottom, window.innerHeight) - 12 };
+      const width = toolbar.offsetWidth || 180, height = toolbar.offsetHeight || 38;
+      const bounds = { left: frame.left + 16, right: frame.right - 16, top: frame.top + 14, bottom: Math.min(frame.bottom, window.innerHeight) - 16 };
       const visible = selection.bottom > bounds.top && selection.top < bounds.bottom && selection.right > bounds.left && selection.left < bounds.right;
-      const menu = toolbar.querySelector<HTMLElement>('[data-formatting-details]');
-      const minLeft = bounds.left + Math.max(0, (menu?.offsetWidth || 0) - width);
-      const clampLeft = (left: number) => Math.max(minLeft, Math.min(left, bounds.right - width));
-      const clampTop = (top: number) => Math.max(bounds.top, Math.min(top, bounds.bottom - height));
-      const obstacles = [...Object.values(elementRefs.current), node.closest('[data-selection-artboard]')?.querySelector('nav')]
-        .filter((element): element is HTMLElement => !!element && element !== node && !element.contains(node) && !node.contains(element))
-        .map(element => element.getBoundingClientRect());
-      if (windowMode) { for (const panel of document.querySelectorAll('[aria-label="Editor toolbar"], [data-editor-panel]')) { const rect = panel.getBoundingClientRect(); if (rect.width && rect.height) obstacles.push(rect); } }
-      const previewElement = canvas.querySelector('iframe');
-      const previewFrame = previewElement?.getBoundingClientRect();
-      const previewScale = previewElement && previewFrame ? previewFrame.width / previewElement.clientWidth : 1;
-      if (previewFrame) for (const layer of sourceLayers) {
-        if (layer.key === selectedLayer || !/^(nav|header|h[1-6]|p|a|button|label)$/.test(layer.tagName)) continue;
-        obstacles.push(new DOMRect(previewFrame.left + layer.rect.left * previewScale, previewFrame.top + layer.rect.top * previewScale, layer.rect.width * previewScale, layer.rect.height * previewScale));
+      const clampLeft = (left: number) => Math.max(bounds.left, Math.min(left, bounds.right - width));
+
+      // Deterministic, non-overlapping HUD placement:
+      const clearance = 14;
+      const topClearance = 32; // 32px clearance above to cleanly clear 27px move handle (extends 13.5px above top)
+      const spaceAbove = selection.top - bounds.top;
+      const spaceBelow = bounds.bottom - selection.bottom;
+      const isAction = ['button', 'a'].includes(activeElement.tag?.toLowerCase());
+      const isSmallElement = selection.width < 340 || isAction;
+
+      // For wide selections (e.g. headings or banners), align to the left edge of the selection
+      // to avoid colliding with centered badges or the center move handle.
+      const layersEl = document.querySelector<HTMLElement>('[data-editor-panel="layers"]');
+      const layersRight = layersEl && getComputedStyle(layersEl).display !== 'none' ? layersEl.getBoundingClientRect().right : 0;
+      const minLeft = Math.max(bounds.left, layersRight + 12);
+
+      let desiredLeft: number;
+      if (selection.width > width + 48) {
+        desiredLeft = Math.max(minLeft, selection.left);
+      } else {
+        desiredLeft = selection.left + (selection.width - width) / 2;
       }
-      const move = node.querySelector('[aria-label="Move element"]')?.getBoundingClientRect();
-      const overlap = (left: number, top: number, rect: DOMRect) => Math.max(0, Math.min(left + width, rect.right) - Math.max(left, rect.left)) * Math.max(0, Math.min(top + height, rect.bottom) - Math.max(top, rect.top));
-      const candidates = [
-        [selection.left, selection.top - height - 10], [selection.right - width, selection.top - height - 10],
-        [selection.left - 12, selection.bottom + 10], [selection.right - width + 12, selection.bottom + 10],
-        [selection.left + (selection.width - width) / 2, selection.top - height - 24],
-        [selection.left - width / 3, selection.bottom + 10], [selection.right - width * 2 / 3, selection.bottom + 10],
-        [selection.left - width - 12, selection.top], [selection.right + 12, selection.top],
-      ].map(([x, y], index) => {
-        const left = clampLeft(x), top = clampTop(y);
-        const score = overlap(left, top, selection) * 12 + (move ? overlap(left, top, move) * 12 : 0) + obstacles.reduce((sum, rect) => sum + overlap(left, top, rect), 0) * 4 + Math.abs(left - x) + Math.abs(top - y) + index;
-        return { left, top, score };
+      const finalLeft = Math.max(minLeft, Math.min(desiredLeft, bounds.right - width));
+
+      setFormattingPosition(previous => {
+        let finalTop: number;
+        let menuSide: 'above' | 'below';
+
+        // Action elements (buttons/links) or small elements: place cleanly below
+        if (isAction && spaceBelow >= height + clearance) {
+          finalTop = selection.bottom + clearance;
+          menuSide = 'below';
+        } else if (previous?.menuSide === 'below' && spaceBelow >= height + clearance) {
+          finalTop = selection.bottom + clearance;
+          menuSide = 'below';
+        } else if (previous?.menuSide === 'above' && spaceAbove >= height + topClearance + 4) {
+          finalTop = selection.top - height - topClearance;
+          menuSide = 'above';
+        } else if (isSmallElement && spaceBelow >= height + clearance) {
+          finalTop = selection.bottom + clearance;
+          menuSide = 'below';
+        } else if (!isSmallElement && spaceAbove >= height + topClearance + 6) {
+          finalTop = selection.top - height - topClearance;
+          menuSide = 'above';
+        } else if (spaceBelow >= height + clearance) {
+          finalTop = selection.bottom + clearance;
+          menuSide = 'below';
+        } else if (spaceAbove >= height + topClearance) {
+          finalTop = selection.top - height - topClearance;
+          menuSide = 'above';
+        } else {
+          finalTop = Math.max(bounds.top + 8, bounds.bottom - height - 8);
+          menuSide = 'above';
+        }
+
+        // STRICT INVARIANT: finalTop must NEVER intersect [selection.top - height, selection.bottom]
+        if (finalTop + height > selection.top && finalTop < selection.bottom) {
+          if (spaceBelow >= height + clearance) {
+            finalTop = selection.bottom + clearance;
+            menuSide = 'below';
+          } else if (spaceAbove >= height + topClearance) {
+            finalTop = selection.top - height - topClearance;
+            menuSide = 'above';
+          }
+        }
+
+        if (
+          previous &&
+          Math.abs(previous.left - finalLeft) < 1.5 &&
+          Math.abs(previous.top - finalTop) < 1.5 &&
+          previous.visible === visible &&
+          previous.menuSide === menuSide
+        ) {
+          return previous;
+        }
+        return { left: Math.round(finalLeft), top: Math.round(finalTop), visible, menuSide };
       });
-      const best = candidates.reduce((a, b) => a.score <= b.score ? a : b);
-      const menuSide = menu && best.top + height + 8 + menu.offsetHeight > bounds.bottom && best.top - menu.offsetHeight - 8 >= bounds.top ? 'above' : 'below';
-      setFormattingPosition(previous => previous && previous.left === best.left && previous.top === best.top && previous.visible === visible && previous.menuSide === menuSide ? previous : { left: best.left, top: best.top, visible, menuSide });
     };
     const schedule = () => { cancelAnimationFrame(animation); animation = requestAnimationFrame(update); };
     update();
-    const observer = new ResizeObserver(schedule); observer.observe(node); observer.observe(toolbar); observer.observe(canvas);
-    const menu = toolbar.querySelector<HTMLElement>('[data-formatting-details]'); if (menu) observer.observe(menu);
-    window.addEventListener('scroll', schedule, true); window.addEventListener('resize', schedule);
+    const observer = new ResizeObserver(schedule);
+    observer.observe(node);
+    observer.observe(canvas);
+    window.addEventListener('scroll', schedule, true);
+    window.addEventListener('resize', schedule);
     return () => { observer.disconnect(); cancelAnimationFrame(animation); window.removeEventListener('scroll', schedule, true); window.removeEventListener('resize', schedule); };
-  }, [selectedLayer, repositoryId, elements, breakpoint, showQuickActions, liveMove, isResizing, childOrder, elementDimensions, sourceLayers, windowMode, windowPanel, windowDock.position, definitionStyleKey]);
+  }, [selectedLayer, repositoryId, elements, breakpoint, showQuickActions, liveMove, isResizing, isDraggingMove, childOrder, elementDimensions, sourceLayers, windowMode, windowPanel, windowDock.position, definitionStyleKey]);
+
+  const findTargetEl = (doc: Document | null | undefined, sel: SourceSelection | null | undefined): HTMLElement | null => {
+    if (!doc || !sel) return null;
+    if (sel.elementId) {
+      const el = doc.getElementById(sel.elementId);
+      if (el) return el;
+    }
+    if (sel.path && sel.line) {
+      const el = doc.querySelector<HTMLElement>(`[data-source-file="${sel.path}"][data-source-line="${sel.line}"]`);
+      if (el) return el;
+    }
+    return null;
+  };
+
+  const collectDirectSiblings = (layerKey: string, actualSelection: SourceSelection | null): SiblingRect[] => {
+    const parentKey = actualSelection?.parentKey;
+    if (!parentKey || !sourceLayers?.length) return [];
+    const siblings: SiblingRect[] = [];
+    for (const layer of sourceLayers) {
+      if (layer.key !== layerKey && layer.parentKey === parentKey && layer.rect) {
+        siblings.push({
+          left: layer.rect.left,
+          top: layer.rect.top,
+          right: layer.rect.left + layer.rect.width,
+          bottom: layer.rect.top + layer.rect.height,
+          width: layer.rect.width,
+          height: layer.rect.height,
+          centerX: layer.rect.left + layer.rect.width / 2,
+          centerY: layer.rect.top + layer.rect.height / 2,
+        });
+      }
+    }
+    return siblings;
+  };
 
   // Position movement preserves document flow and never reorders siblings.
   const startDragMove = (layerKey: string, e: React.PointerEvent<HTMLElement>) => {
     e.stopPropagation();
-    if (e.button !== 0 || operationRef.current || blocksReview() || undoRecoveryRef.current || resizeGesture.current || moveGesture.current) return;
-    if (!usesDrafts || !/^(h[1-6]|p|section|div|article|aside|header|footer|nav|main|a|button|img)$/.test(elements[layerKey]?.tag || '') || activeVariant || activeBreakpoint) { showToast('To move an element, choose All sizes and the Default state.'); return; }
+    if (e.button !== 0 || blocksReview() || undoRecoveryRef.current || directDragRef.current) return;
+    if (!usesDrafts || !/^(h[1-6]|p|section|div|article|aside|header|footer|nav|main|a|button|img)$/.test(elements[layerKey]?.tag || '') || activeVariant || activeBreakpoint) {
+      showToast('To move an element, choose All sizes and the Default state.');
+      return;
+    }
     const node = elementRefs.current[layerKey];
     const frame = node?.closest('[data-selection-artboard]');
     if (!node || !frame) return;
+
     try {
       const base = readTranslation(elements[layerKey].classes);
-      const rect = node.getBoundingClientRect(); const canvas = frame.getBoundingClientRect();
-      const scale = rect.width / node.offsetWidth;
-      const container = /^(section|div|article|aside|header|footer|nav|main)$/.test(elements[layerKey].tag);
-      // Sections can exceed the viewport. Keep part of their bounds reachable
-      // instead of requiring the entire container to fit on the canvas.
-      const bounds = { minX: Math.max((canvas.left + (container ? 24 - rect.width : 0) - rect.left) / scale, -2048 - base.x), maxX: Math.min((canvas.right - (container ? 24 : rect.width) - rect.left) / scale, 2048 - base.x), minY: Math.max((canvas.top + (container ? 24 - rect.height : 0) - rect.top) / scale, -2048 - base.y), maxY: Math.min((canvas.bottom - (container ? 24 : rect.height) - rect.top) / scale, 2048 - base.y) };
-      snappedMove(0, 0, scale, bounds);
-      e.preventDefault(); e.currentTarget.focus({ preventScroll: true }); e.currentTarget.setPointerCapture(e.pointerId);
-      moveClickSuppressed.current = false; setMoveArmed(true);
-      moveGesture.current = { key: layerKey, pointerId: e.pointerId, capture: e.currentTarget as HTMLElement, x: e.clientX, y: e.clientY, base, scale, bounds, next: base, moved: false };
-    } catch (error) { showToast(error instanceof Error ? error.message : 'This element cannot be moved safely.'); }
+      const targetElem = elements[layerKey] || activeElement;
+      const actualSelection = sourceSelections.current[layerKey] || sourceSelection.current;
+      const zoom = typeof canvasZoom === 'number' ? canvasZoom : 1;
+
+      // Check same-origin iframe target element
+      const iframeDoc = sourceCanvas.current?.getDocument?.();
+      const targetEl: HTMLElement | null = findTargetEl(iframeDoc, actualSelection);
+      const initialTargetStyle = targetEl?.getAttribute('style') || null;
+      const siblings = collectDirectSiblings(layerKey, actualSelection);
+
+      e.preventDefault();
+      try {
+        e.currentTarget.focus({ preventScroll: true });
+        e.currentTarget.setPointerCapture(e.pointerId);
+      } catch {}
+
+      moveClickSuppressed.current = false;
+      setMoveArmed(true);
+      setIsDraggingMove(true);
+      setFormattingPosition(null);
+      if (typeof window !== 'undefined') (window as any).__slightnudge_gesture_active = true;
+
+      if (eventShieldRef.current) {
+        eventShieldRef.current.style.display = 'block';
+        eventShieldRef.current.style.cursor = 'move';
+      }
+
+      directDragRef.current = {
+        type: 'move',
+        pointerId: e.pointerId,
+        capture: e.currentTarget as HTMLElement,
+        key: layerKey,
+        filePath: targetElem.filePath,
+        startX: e.clientX,
+        startY: e.clientY,
+        startLeft: actualSelection?.rect?.left || 0,
+        startTop: actualSelection?.rect?.top || 0,
+        startWidth: node.offsetWidth,
+        startHeight: node.offsetHeight,
+        baseTranslation: base,
+        zoom,
+        siblings,
+        targetEl,
+        initialTargetStyle,
+        outlineOnly: outlineDrag,
+        latestPointer: { x: e.clientX, y: e.clientY, shiftKey: e.shiftKey, altKey: e.altKey, ctrlKey: e.ctrlKey || e.metaKey, metaKey: e.metaKey },
+        rafPending: false,
+        moved: false,
+        nextWidth: node.offsetWidth,
+        nextHeight: node.offsetHeight,
+        nextLeft: actualSelection?.rect?.left || 0,
+        nextTop: actualSelection?.rect?.top || 0,
+        nextTranslation: base,
+        token: '',
+        lastClassEstimateTime: 0,
+      };
+    } catch (error) {
+      showToast(error instanceof Error ? error.message : 'This element cannot be moved safely.');
+    }
   };
 
-  // Handler for Drag to Resize
-  const startResize = (handle: 'e' | 'w' | 's' | 'se' | 'sw' | 'nw' | 'ne', e: React.PointerEvent) => {
+  // Direct 60fps 8-Handle Resize
+  const startResize = (handle: HandleDirection, e: React.PointerEvent) => {
     e.stopPropagation();
     e.preventDefault();
-    if (operationRef.current || blocksReview() || undoRecoveryRef.current) { showToast(undoRecoveryRef.current ? 'Check Undo status before making another change.' : reviewNotice); return; }
+    if (blocksReview() || undoRecoveryRef.current || directDragRef.current) return;
     if (e.button !== 0) return;
-    if (moveGesture.current || liveMove) return;
-    if (resizeGesture.current) return;
-    e.currentTarget.setPointerCapture(e.pointerId);
+
+    const key = selectedLayer || 'text';
+    const renderedElement = elements[key] || activeElement;
+    const targetElem = renderedElement;
+    const actualSelection = sourceSelections.current[key] || sourceSelection.current;
+
+    const zoom = typeof canvasZoom === 'number' ? canvasZoom : 1;
+    const currentW = elementRefs.current[key]?.offsetWidth || actualSelection?.rect?.width || 672;
+    const currentH = elementRefs.current[key]?.offsetHeight || actualSelection?.rect?.height || 114;
+    const startLeft = actualSelection?.rect?.left || 0;
+    const startTop = actualSelection?.rect?.top || 0;
+
+    // Check same-origin iframe target element
+    const iframeDoc = sourceCanvas.current?.getDocument?.();
+    const targetEl: HTMLElement | null = findTargetEl(iframeDoc, actualSelection);
+    const initialTargetStyle = targetEl?.getAttribute('style') || null;
+    const siblings = collectDirectSiblings(key, actualSelection);
+
+    try {
+      e.currentTarget.setPointerCapture(e.pointerId);
+    } catch {}
+
+    if (eventShieldRef.current) {
+      eventShieldRef.current.style.display = 'block';
+      eventShieldRef.current.style.cursor = getComputedStyle(e.currentTarget).cursor;
+    }
+
     setIsResizing(true);
-    setResizeHandle(handle);
+    setFormattingPosition(null);
+    if (typeof window !== 'undefined') (window as any).__slightnudge_gesture_active = true;
+    setResizeHandle(handle as any);
     setResizeStartX(e.clientX);
     setResizeStartY(e.clientY);
-    const key = selectedLayer || 'text';
-    const currentW = elementRefs.current[key]?.offsetWidth || 672;
-    const currentH = elementRefs.current[key]?.offsetHeight || 114;
-    const scale = (elementRefs.current[key]?.getBoundingClientRect().width || currentW) / currentW;
-    const rem = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
-    resizeGesture.current = { key, handle, pointerId: e.pointerId, capture: e.currentTarget as HTMLElement, x: e.clientX, width: currentW, scale, rem, nextWidth: currentW, token: '', moved: false };
     setResizeStartWidth(currentW);
     setResizeStartHeight(currentH);
-    setLiveWidth(currentW);
+
+    directDragRef.current = {
+      type: 'resize',
+      handle,
+      pointerId: e.pointerId,
+      capture: e.currentTarget as HTMLElement,
+      key,
+      filePath: targetElem.filePath,
+      startX: e.clientX,
+      startY: e.clientY,
+      startLeft,
+      startTop,
+      startWidth: currentW,
+      startHeight: currentH,
+      baseTranslation: { x: 0, y: 0 },
+      zoom,
+      siblings,
+      targetEl,
+      initialTargetStyle,
+      outlineOnly: outlineDrag,
+      lockedAspect: aspectLockOverrides.current[key] ?? /^(img|video|svg|canvas)$/i.test(renderedElement.tag || actualSelection?.tagName || ''),
+      latestPointer: { x: e.clientX, y: e.clientY, shiftKey: e.shiftKey, altKey: e.altKey, ctrlKey: e.ctrlKey || e.metaKey, metaKey: e.metaKey },
+      rafPending: false,
+      moved: false,
+      nextWidth: currentW,
+      nextHeight: currentH,
+      nextLeft: startLeft,
+      nextTop: startTop,
+      nextTranslation: { x: 0, y: 0 },
+      token: '',
+      lastClassEstimateTime: 0,
+    };
+  };
+
+  // Direct 60fps Corner Radius Dragging
+  const startRadiusDrag = (e: React.PointerEvent) => {
+    e.stopPropagation();
+    e.preventDefault();
+    if (blocksReview() || undoRecoveryRef.current || directDragRef.current) return;
+    if (e.button !== 0) return;
+
+    const key = selectedLayer || 'text';
+    const renderedElement = elements[key] || activeElement;
+    const targetElem = renderedElement;
+    const actualSelection = sourceSelections.current[key] || sourceSelection.current;
+
+    const zoom = typeof canvasZoom === 'number' ? canvasZoom : 1;
+    const currentW = elementRefs.current[key]?.offsetWidth || actualSelection?.rect?.width || 200;
+    const currentH = elementRefs.current[key]?.offsetHeight || actualSelection?.rect?.height || 100;
+    const startLeft = actualSelection?.rect?.left || 0;
+    const startTop = actualSelection?.rect?.top || 0;
+
+    const frameEl = sourceCanvas.current?.getFrame?.();
+    const targetEl = findTargetEl(frameEl?.contentDocument || sourceCanvas.current?.getDocument?.(), actualSelection);
+
+    const initialTargetStyle = targetEl?.getAttribute('style') || null;
+    const parsedRadii = parseBorderRadius(renderedElement.borderRadius || actualSelection?.computed?.borderRadius, currentW, currentH);
+    const initialR = Math.max(parsedRadii.tl, parsedRadii.tr, parsedRadii.br, parsedRadii.bl);
+    const maxRadius = Math.min(currentW, currentH) / 2;
+
+    try {
+      e.currentTarget.setPointerCapture(e.pointerId);
+    } catch {}
+
+    if (eventShieldRef.current) {
+      eventShieldRef.current.style.display = 'block';
+      eventShieldRef.current.style.cursor = 'crosshair';
+    }
+
+    directDragRef.current = {
+      type: 'radius',
+      pointerId: e.pointerId,
+      capture: e.currentTarget as HTMLElement,
+      key,
+      filePath: targetElem.filePath,
+      startX: e.clientX,
+      startY: e.clientY,
+      startLeft,
+      startTop,
+      startWidth: currentW,
+      startHeight: currentH,
+      baseTranslation: { x: 0, y: 0 },
+      zoom,
+      siblings: [],
+      targetEl,
+      initialTargetStyle,
+      outlineOnly: outlineDrag,
+      initialRadius: initialR,
+      maxRadius,
+      nextRadiusStep: findNearestRadiusStep(initialR, maxRadius),
+      latestPointer: { x: e.clientX, y: e.clientY, shiftKey: e.shiftKey, altKey: e.altKey, ctrlKey: e.ctrlKey || e.metaKey, metaKey: e.metaKey },
+      rafPending: false,
+      moved: false,
+      nextWidth: currentW,
+      nextHeight: currentH,
+      nextLeft: startLeft,
+      nextTop: startTop,
+      nextTranslation: { x: 0, y: 0 },
+      token: '',
+      lastClassEstimateTime: 0,
+    };
+  };
+
+  const handleRadiusKeyDown = (e: React.KeyboardEvent) => {
+    if (!['ArrowUp', 'ArrowRight', 'ArrowDown', 'ArrowLeft', 'Home', 'End'].includes(e.key)) return;
+    e.preventDefault();
+    e.stopPropagation();
+    if (e.repeat || directDragRef.current || blocksReview() || !selectedLayer) return;
+
+    const key = selectedLayer;
+    const currentToken = elements[key]?.borderRadius || 'rounded-none';
+    const currentIndex = RADIUS_SCALE_STEPS.findIndex(s => s.token === currentToken);
+    const idx = currentIndex >= 0 ? currentIndex : 0;
+
+    let nextIdx = idx;
+    if (e.key === 'Home') nextIdx = 0;
+    else if (e.key === 'End') nextIdx = RADIUS_SCALE_STEPS.length - 1;
+    else if (e.key === 'ArrowUp' || e.key === 'ArrowRight') {
+      nextIdx = Math.min(RADIUS_SCALE_STEPS.length - 1, idx + 1);
+    } else if (e.key === 'ArrowDown' || e.key === 'ArrowLeft') {
+      nextIdx = Math.max(0, idx - 1);
+    }
+
+    const nextStep = RADIUS_SCALE_STEPS[nextIdx];
+    updateStyle('borderRadius', nextStep.token);
   };
 
   // Backend Integration: Trigger Preview on Style/Text/Nudge/Reorder
   const triggerBackendPreview = useCallback(
-    async (kind: 'style' | 'text' | 'nudge' | 'reorder' | 'reparent' | 'move' | 'image' | 'action' | 'icon' | 'component', payload: Record<string, any>, layerKeyOverride?: string, commitVisual?: () => void) => {
-      if (moveGesture.current) { showToast('Release the Move handle or press Escape to cancel.'); return; }
-      if (resizeGesture.current) { showToast('Release the width handle or press Escape to cancel resizing.'); return; }
-      if (operationRef.current || draftReplayPromise.current || blocksReview() || undoRecoveryRef.current) { showToast(undoRecoveryRef.current ? 'Check Undo status before making another change.' : reviewNotice); return; }
-      if ((kind === 'reorder' || kind === 'reparent') && !usesDrafts) { showToast('Open the editing window to arrange source elements.'); return; }
+    async (
+      kind: 'style' | 'text' | 'nudge' | 'reorder' | 'reparent' | 'move' | 'image' | 'action' | 'icon' | 'component',
+      payload: Record<string, any>,
+      layerKeyOverride?: string,
+      commitVisual?: () => void,
+      background = false
+    ) => {
+      if (directDragRef.current) return;
+      if (!background && (operationRef.current || draftReplayPromise.current || blocksReview() || undoRecoveryRef.current)) {
+        showToast(undoRecoveryRef.current ? 'Check Undo status before making another change.' : reviewNotice);
+        return;
+      }
+      if ((kind === 'reorder' || kind === 'reparent') && !usesDrafts) {
+        showToast('Open the editing window to arrange source elements.');
+        return;
+      }
       const activeKey = layerKeyOverride || selectedLayer;
       if (!activeKey) return;
       const renderedElement = elements[activeKey] || activeElement;
       const owner = kind==='component' ? payload.owner as import('@/lib/slightnudge/component-ownership').ComponentOwner|undefined : undefined;
       let targetElem = owner ? {...renderedElement,filePath:owner.filePath,line:owner.line,column:owner.column,tag:owner.tagName,id:''} : renderedElement;
       const fileHead = draftHeads(reviewRef.current)[targetElem.filePath];
-      if (usesDrafts && !fileHead && Object.keys(draftHeads(reviewRef.current)).length >= 16) { showToast('This change set already contains 16 files. Save it before editing another source file.'); return; }
+      if (usesDrafts && !fileHead && Object.keys(draftHeads(reviewRef.current)).length >= 16) {
+        showToast('This change set already contains 16 files. Save it before editing another source file.');
+        return;
+      }
       const snapshot = { element: { ...renderedElement }, order: [...childOrder] };
-      operationRef.current = true;
-      setBusy(true);
+      if (!background) {
+        operationRef.current = true;
+        setBusy(true);
+      }
       try {
         const inspection = { found: true, safeToEdit: true, textEditable: true, tagName: targetElem.tag.split('.')[0], line: targetElem.line, column: targetElem.column, reason: undefined, textReason: undefined };
         if (!repositoryId && targetElem.id && inspection.found && inspection.safeToEdit && inspection.tagName === targetElem.tag.split('.')[0]) {
@@ -993,7 +1467,10 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
           return;
         }
         const importedScopeSupported = !state || usesDrafts && responsiveScopes.some(scope => scope.name === state);
-        if (repositoryId && (!importedScopeSupported || kind === 'nudge' || kind === 'move' && !usesDrafts)) { showToast('This live-page operation is not yet visually verified. Nothing was changed.'); return; }
+        if (repositoryId && (!importedScopeSupported || kind === 'nudge' || kind === 'move' && !usesDrafts)) {
+          showToast('This live-page operation is not yet visually verified. Nothing was changed.');
+          return;
+        }
         const result = await previewEditAPI({
           ...(usesDrafts ? { draft: true, parentPreviewId: fileHead?.id } : {}),
           ...(repositoryId ? { repositoryId, sourcePath: targetElem.filePath } : {}),
@@ -1078,14 +1555,15 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
           setReview(usesDrafts ? composeDraft(reviewRef.current, targetElem.filePath, nextHead) : nextHead);
           return true;
         } else {
-          // Backend refusal - never create fake client edits!
           showToast(`⚠️ ${result.refusalReason || result.error || 'Edit refused'}`);
         }
       } catch (err: any) {
         showToast(`⚠️ ${err?.message || 'Could not prepare preview'}`);
       } finally {
-        setBusy(false);
-        operationRef.current = false;
+        if (!background) {
+          setBusy(false);
+          operationRef.current = false;
+        }
         if (queuedSelectionRef.current !== undefined) {
           const key = queuedSelectionRef.current; queuedSelectionRef.current = undefined;
           setSelectedLayerState(key);
@@ -1096,144 +1574,470 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
     [activeBreakpoint, activeVariant, activeElement, elements, selectedLayer, childOrder, repositoryId, usesDrafts, responsiveScopes, definitionStyleKey]
   );
 
+  // 60fps Unified Direct Manipulation Pointer Engine
   useEffect(() => {
-    let animation = 0;
-    const reset = (cancel = true, keepPreview = false) => {
-      const gesture = moveGesture.current;
+    let animationId = 0;
+
+    const onTick = () => {
+      const gesture = directDragRef.current;
       if (!gesture) return;
-      cancelAnimationFrame(animation); moveGesture.current = null;
-      setMoveArmed(false);
-      if (cancel || gesture.moved) { moveClickSuppressed.current = true; suppressResizeClick.current = true; }
-      if (gesture.capture.hasPointerCapture(gesture.pointerId)) gesture.capture.releasePointerCapture(gesture.pointerId);
-      if (!keepPreview) setLiveMove(null);
-    };
-    const update = (event: PointerEvent) => {
-      const gesture = moveGesture.current;
-      if (!gesture || event.pointerId !== gesture.pointerId) return null;
-      const delta = snappedMove(event.clientX - gesture.x, event.clientY - gesture.y, gesture.scale, gesture.bounds, event.shiftKey);
-      gesture.moved = Math.hypot(event.clientX - gesture.x, event.clientY - gesture.y) / gesture.scale >= 4;
-      gesture.next = { x: gesture.base.x + delta.x, y: gesture.base.y + delta.y };
-      return gesture;
-    };
-    const move = (event: PointerEvent) => {
-      const gesture = update(event); if (!gesture) return;
-      if (gesture.moved) setMoveOpen(false);
-      cancelAnimationFrame(animation);
-      animation = requestAnimationFrame(() => { setLiveMove(gesture.moved ? { key: gesture.key, ...gesture.next } : null); });
-    };
-    const up = (event: PointerEvent) => {
-      const gesture = update(event); if (!gesture) return;
-      const changed = gesture.moved && (gesture.next.x !== gesture.base.x || gesture.next.y !== gesture.base.y);
-      reset(false, changed);
-      if (changed) {
-        setLiveMove({ key: gesture.key, ...gesture.next });
-        void triggerBackendPreview('move', gesture.next, gesture.key).finally(() => setLiveMove(null));
+      gesture.rafPending = false;
+
+      const p = gesture.latestPointer;
+      const overlayNode = elementRefs.current[gesture.key];
+
+      if (gesture.type === 'resize' && gesture.handle) {
+        const deltaScreen = { x: p.x - gesture.startX, y: p.y - gesture.startY };
+        if (Math.hypot(deltaScreen.x, deltaScreen.y) >= 3) {
+          gesture.moved = true;
+        }
+
+        const effectiveShift = gesture.lockedAspect ? !p.shiftKey : p.shiftKey;
+        const res = compute8HandleResize({
+          handle: gesture.handle,
+          startRect: {
+            left: gesture.startLeft,
+            top: gesture.startTop,
+            width: gesture.startWidth,
+            height: gesture.startHeight,
+          },
+          zoom: gesture.zoom,
+          grabOffset: { x: 0, y: 0 },
+          pointerDeltaScreen: deltaScreen,
+          shiftKey: effectiveShift,
+          altKey: p.altKey,
+          minSize: 1,
+        });
+
+        // Smart snapping (< 1ms for 50 siblings)
+        const snap = computeSmartSnapping({
+          box: {
+            left: res.left,
+            top: res.top,
+            right: res.right,
+            bottom: res.bottom,
+            width: res.width,
+            height: res.height,
+          },
+          siblings: gesture.siblings,
+          thresholdScreenPx: 4,
+          zoom: gesture.zoom,
+          disabled: p.ctrlKey,
+        });
+
+        if (snap.snappedX) {
+          res.width += snap.dx;
+          res.right += snap.dx;
+        }
+        if (snap.snappedY) {
+          res.height += snap.dy;
+          res.bottom += snap.dy;
+        }
+
+        const isMediaOrLocked = Boolean(gesture.lockedAspect);
+        gesture.nextWidth = Math.max(1, res.width);
+        gesture.nextHeight = isMediaOrLocked ? Math.max(1, res.height) : gesture.startHeight;
+        gesture.nextLeft = res.left;
+        gesture.nextTop = isMediaOrLocked ? res.top : gesture.startTop;
+
+        // 1. Direct overlay write (transform + width/height)
+        if (overlayNode) {
+          overlayNode.style.width = `${Math.round(gesture.nextWidth)}px`;
+          overlayNode.style.height = `${Math.round(gesture.nextHeight)}px`;
+          const dx = gesture.nextLeft - gesture.startLeft;
+          const dy = gesture.nextTop - gesture.startTop;
+          if (Math.abs(dx) > 0.1 || Math.abs(dy) > 0.1) {
+            overlayNode.style.transform = `translate3d(${Math.round(dx)}px, ${Math.round(dy)}px, 0)`;
+          } else {
+            overlayNode.style.transform = '';
+          }
+        }
+
+        // Direct SVG outline update
+        const haloEl = outlineHaloRef.current[gesture.key];
+        const accentEl = outlineAccentRef.current[gesture.key];
+        if (haloEl && accentEl) {
+          const renderedElem = elements[gesture.key] || activeElement;
+          const radii = parseBorderRadius(renderedElem.borderRadius, gesture.nextWidth, gesture.nextHeight);
+          const d = buildRoundedRectPath(-2, -2, gesture.nextWidth + 4, gesture.nextHeight + 4, {
+            tl: radii.tl + (radii.tl > 0 ? 2 : 0),
+            tr: radii.tr + (radii.tr > 0 ? 2 : 0),
+            br: radii.br + (radii.br > 0 ? 2 : 0),
+            bl: radii.bl + (radii.bl > 0 ? 2 : 0),
+          });
+          haloEl.setAttribute('d', d);
+          accentEl.setAttribute('d', d);
+        }
+
+        // 2. Direct style write on canvas element (same-origin direct or bridge gesture)
+        if (gesture.targetEl && !gesture.outlineOnly) {
+          gesture.targetEl.style.maxWidth = `${Math.round(gesture.nextWidth)}px`;
+        } else if (sourceCanvas.current && gesture.moved && !gesture.outlineOnly) {
+          const selection = sourceSelections.current[gesture.key];
+          if (selection) {
+            void sourceCanvas.current.command('gesture', selection, { maxWidth: Math.round(gesture.nextWidth) });
+          }
+        }
+
+        // 3. Smart alignment uses computeSmartSnapping silently without drawing cutting guide lines over elements
+        if (guideVRef.current) guideVRef.current.style.display = 'none';
+        if (guideHRef.current) guideHRef.current.style.display = 'none';
+
+        // 4. Live cursor W x H tag
+        if (cursorTagRef.current && gesture.moved) {
+          cursorTagRef.current.style.display = 'block';
+          cursorTagRef.current.textContent = `W: ${Math.round(gesture.nextWidth)}px × H: ${Math.round(gesture.nextHeight)}px`;
+          cursorTagRef.current.style.transform = `translate3d(${p.x + 14}px, ${p.y + 14}px, 0)`;
+        }
+      } else if (gesture.type === 'move') {
+        const deltaScreenX = p.x - gesture.startX;
+        const deltaScreenY = p.y - gesture.startY;
+        if (Math.hypot(deltaScreenX, deltaScreenY) >= 3) {
+          gesture.moved = true;
+        }
+
+        const deltaX = deltaScreenX / gesture.zoom;
+        const deltaY = deltaScreenY / gesture.zoom;
+
+        let nextX = gesture.baseTranslation.x + deltaX;
+        let nextY = gesture.baseTranslation.y + deltaY;
+
+        const snap = computeSmartSnapping({
+          box: {
+            left: gesture.startLeft + nextX - gesture.baseTranslation.x,
+            top: gesture.startTop + nextY - gesture.baseTranslation.y,
+            right: gesture.startLeft + nextX - gesture.baseTranslation.x + gesture.startWidth,
+            bottom: gesture.startTop + nextY - gesture.baseTranslation.y + gesture.startHeight,
+            width: gesture.startWidth,
+            height: gesture.startHeight,
+          },
+          siblings: gesture.siblings,
+          thresholdScreenPx: 4,
+          zoom: gesture.zoom,
+          disabled: p.ctrlKey,
+        });
+
+        if (snap.snappedX) nextX += snap.dx;
+        if (snap.snappedY) nextY += snap.dy;
+
+        const snappedX = Math.round(nextX / 4) * 4;
+        const snappedY = Math.round(nextY / 4) * 4;
+        gesture.nextTranslation = { x: snappedX, y: snappedY };
+
+        if (overlayNode) {
+          overlayNode.style.transform = `translate3d(${snappedX - gesture.baseTranslation.x}px, ${snappedY - gesture.baseTranslation.y}px, 0)`;
+        }
+
+        if (gesture.targetEl && !gesture.outlineOnly) {
+          gesture.targetEl.style.translate = `${snappedX}px ${snappedY}px`;
+        } else if (sourceCanvas.current && gesture.moved && !gesture.outlineOnly) {
+          const selection = sourceSelections.current[gesture.key];
+          if (selection) {
+            void sourceCanvas.current.command('gesture', selection, { x: snappedX, y: snappedY });
+          }
+        }
+
+        // Keep guide lines hidden so no green lines cut across canvas elements during drag
+        if (guideVRef.current) guideVRef.current.style.display = 'none';
+        if (guideHRef.current) guideHRef.current.style.display = 'none';
+
+        if (cursorTagRef.current && gesture.moved) {
+          cursorTagRef.current.style.display = 'block';
+          cursorTagRef.current.textContent = `X: ${snappedX}px  Y: ${snappedY}px Snapped`;
+          cursorTagRef.current.style.transform = `translate3d(${p.x + 14}px, ${p.y + 14}px, 0)`;
+        }
+      } else if (gesture.type === 'radius') {
+        const deltaScreenX = p.x - gesture.startX;
+        const deltaScreenY = p.y - gesture.startY;
+        if (Math.hypot(deltaScreenX, deltaScreenY) >= 2) {
+          gesture.moved = true;
+        }
+
+        const z = Math.max(0.01, gesture.zoom);
+        const dx = deltaScreenX / z;
+        const dy = deltaScreenY / z;
+
+        const deltaR = (dx + dy) / 2;
+        const rawRadius = Math.max(0, Math.min(gesture.maxRadius || 50, (gesture.initialRadius || 0) + deltaR));
+        const snapped = findNearestRadiusStep(rawRadius, gesture.maxRadius || 50);
+        gesture.nextRadiusStep = snapped;
+
+        const targetRadiusPx = snapped.token === 'rounded-full' ? (gesture.maxRadius || 50) : snapped.px;
+
+        if (gesture.targetEl && !gesture.outlineOnly) {
+          gesture.targetEl.style.borderRadius = `${targetRadiusPx}px`;
+        }
+
+        const haloEl = outlineHaloRef.current[gesture.key];
+        const accentEl = outlineAccentRef.current[gesture.key];
+        if (haloEl && accentEl) {
+          const r = targetRadiusPx;
+          const d = buildRoundedRectPath(-2, -2, gesture.startWidth + 4, gesture.startHeight + 4, {
+            tl: r + (r > 0 ? 2 : 0),
+            tr: r + (r > 0 ? 2 : 0),
+            br: r + (r > 0 ? 2 : 0),
+            bl: r + (r > 0 ? 2 : 0),
+          });
+          haloEl.setAttribute('d', d);
+          accentEl.setAttribute('d', d);
+        }
+
+        if (cursorTagRef.current && gesture.moved) {
+          cursorTagRef.current.style.display = 'block';
+          const tagText = p.altKey
+            ? `Radius: ${snapped.name} (${targetRadiusPx}px) [Alt per-corner not supported]`
+            : `Radius: ${snapped.name} (${targetRadiusPx}px)`;
+          cursorTagRef.current.textContent = tagText;
+          cursorTagRef.current.style.transform = `translate3d(${p.x + 14}px, ${p.y + 14}px, 0)`;
+        }
       }
     };
-    const cancel = () => reset();
-    const lost = (event: PointerEvent) => { if (event.pointerId === moveGesture.current?.pointerId) reset(); };
-    const escape = (event: KeyboardEvent) => {
-      if (event.key === 'Escape' && moveGesture.current) { event.preventDefault(); event.stopImmediatePropagation(); reset(); }
-    };
-    const visibility = () => { if (document.hidden) reset(); };
-    window.addEventListener('pointermove', move); window.addEventListener('pointerup', up);
-    window.addEventListener('pointercancel', cancel); window.addEventListener('lostpointercapture', lost);
-    window.addEventListener('blur', cancel); window.addEventListener('scroll', cancel, true); window.addEventListener('resize', cancel);
-    window.addEventListener('keydown', escape, true); document.addEventListener('visibilitychange', visibility);
-    return () => {
-      window.removeEventListener('pointermove', move); window.removeEventListener('pointerup', up);
-      window.removeEventListener('pointercancel', cancel); window.removeEventListener('lostpointercapture', lost);
-      window.removeEventListener('blur', cancel); window.removeEventListener('scroll', cancel, true); window.removeEventListener('resize', cancel);
-      window.removeEventListener('keydown', escape, true); document.removeEventListener('visibilitychange', visibility);
-      reset();
-    };
-  }, [triggerBackendPreview]);
 
-  useEffect(() => {
-    if (!usesDrafts || !selectedLayer || !sourceReady) return;
-    const selection = sourceSelections.current[selectedLayer]; if (!selection) return;
-    if (liveMove) void sourceCanvas.current?.command('gesture', selection, { x: liveMove.x, y: liveMove.y }).catch(error => showToast(error.message));
-    else if (liveWidth !== null) void sourceCanvas.current?.command('gesture', selection, { maxWidth: liveWidth }).catch(error => showToast(error.message));
-    else void sourceCanvas.current?.command('cancel-gesture', selection).catch(() => {});
-  }, [liveMove, liveWidth, selectedLayer, sourceReady, repositoryId]);
+    const cleanupVisuals = () => {
+      cancelAnimationFrame(animationId);
+      if (typeof window !== 'undefined') (window as any).__slightnudge_gesture_active = false;
+      if (eventShieldRef.current) eventShieldRef.current.style.display = 'none';
+      if (guideVRef.current) guideVRef.current.style.display = 'none';
+      if (guideHRef.current) guideHRef.current.style.display = 'none';
+      if (cursorTagRef.current) cursorTagRef.current.style.display = 'none';
+    };
 
-  // Keep the final pointer position independent of React render timing.
-  useEffect(() => {
-    let animation = 0;
-    const reset = () => {
-      cancelAnimationFrame(animation);
-      const gesture = resizeGesture.current; resizeGesture.current = null;
-      if (gesture) suppressResizeClick.current = true;
-      if (gesture?.capture.hasPointerCapture(gesture.pointerId)) gesture.capture.releasePointerCapture(gesture.pointerId);
-      setIsResizing(false); setResizeHandle(null); setLiveWidth(null); setDimensionTooltip(null);
+    const onPointerMove = (e: PointerEvent) => {
+      const gesture = directDragRef.current;
+      if (!gesture || e.pointerId !== gesture.pointerId) return;
+
+      const events = (e as any).getCoalescedEvents ? (e as any).getCoalescedEvents() : [e];
+      const last = events[events.length - 1];
+      gesture.latestPointer = {
+        x: last.clientX,
+        y: last.clientY,
+        shiftKey: last.shiftKey,
+        altKey: last.altKey,
+        ctrlKey: last.ctrlKey || last.metaKey,
+      };
+
+      if (!gesture.rafPending) {
+        gesture.rafPending = true;
+        animationId = requestAnimationFrame(onTick);
+      }
     };
-    const update = (event: PointerEvent) => {
-      const gesture = resizeGesture.current;
-      if (!gesture || event.pointerId !== gesture.pointerId) return false;
-      const requested = widthFromPointer(gesture.width, gesture.x, event.clientX, gesture.handle, gesture.scale);
-      gesture.moved = Math.abs(event.clientX - gesture.x) / gesture.scale >= 4;
-      const snapped = snapWidth(requested, gesture.rem, gesture.token);
-      gesture.nextWidth = snapped.width; gesture.token = snapped.token;
-      return true;
+
+    const onPointerUp = (e: PointerEvent) => {
+      const gesture = directDragRef.current;
+      if (!gesture || e.pointerId !== gesture.pointerId) return;
+      directDragRef.current = null;
+      cleanupVisuals();
+
+      try {
+        if (gesture.capture.hasPointerCapture(gesture.pointerId)) {
+          gesture.capture.releasePointerCapture(gesture.pointerId);
+        }
+      } catch {}
+
+      const syncFinalGeometry = (key: string, selection: SourceSelection | undefined, extra: Record<string, unknown>) => {
+        if (!sourceCanvas.current || !selection) {
+          resetOverlayNode(key);
+          return;
+        }
+        pendingOverlayResetKeyRef.current = key;
+        const clearIfPending = () => {
+          if (pendingOverlayResetKeyRef.current === key) {
+            pendingOverlayResetKeyRef.current = null;
+            resetOverlayNode(key);
+          }
+        };
+        void sourceCanvas.current.command('gesture', selection, extra).then(
+          () => requestAnimationFrame(clearIfPending),
+          clearIfPending
+        );
+      };
+
+      const rollbackTarget = (
+        g: { key: string; targetEl: HTMLElement | null; initialTargetStyle: string | null },
+        selection: SourceSelection | undefined,
+        toast: string
+      ) => {
+        if (pendingOverlayResetKeyRef.current === g.key) pendingOverlayResetKeyRef.current = null;
+        resetOverlayNode(g.key);
+        if (g.targetEl) {
+          if (g.initialTargetStyle === null) g.targetEl.removeAttribute('style');
+          else g.targetEl.setAttribute('style', g.initialTargetStyle);
+        } else if (sourceCanvas.current && selection) {
+          void sourceCanvas.current.command('cancel-gesture', selection);
+        }
+        showToast(toast);
+      };
+
+      if (gesture.type === 'resize') {
+        setIsResizing(false);
+        setResizeHandle(null);
+
+        const widthChanged = gesture.moved && Math.abs(gesture.nextWidth - gesture.startWidth) > 0.5;
+        const selection = sourceSelections.current[gesture.key];
+        if (widthChanged) {
+          if (gesture.outlineOnly && gesture.targetEl) {
+            gesture.targetEl.style.maxWidth = `${Math.round(gesture.nextWidth)}px`;
+          }
+          syncFinalGeometry(gesture.key, selection, { maxWidth: Math.round(gesture.nextWidth) });
+
+          const rem = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
+          const snapped = snapWidth(gesture.nextWidth, rem);
+          const token = snapped.token;
+
+          // Optimistic update immediately
+          setElements(prev => ({
+            ...prev,
+            [gesture.key]: { ...prev[gesture.key], maxWidth: token },
+          }));
+
+          // Background save via client-side queue (never blocking input)
+          enqueueFileOperation(
+            gesture.filePath,
+            async () => {
+              return triggerBackendPreview('style', { property: 'maxWidth', value: token }, gesture.key, undefined, true);
+            },
+            {
+              onRollback: () => rollbackTarget(gesture, selection, 'Could not save resized width.'),
+            }
+          );
+        } else {
+          resetOverlayNode(gesture.key);
+        }
+      } else if (gesture.type === 'move') {
+        setIsDraggingMove(false);
+        setMoveArmed(false);
+        if (gesture.moved) {
+          moveClickSuppressed.current = true;
+        }
+
+        const changed = gesture.moved && (gesture.nextTranslation.x !== gesture.baseTranslation.x || gesture.nextTranslation.y !== gesture.baseTranslation.y);
+        const selection = sourceSelections.current[gesture.key];
+        if (changed) {
+          if (gesture.outlineOnly && gesture.targetEl) {
+            gesture.targetEl.style.translate = `${gesture.nextTranslation.x}px ${gesture.nextTranslation.y}px`;
+          }
+          syncFinalGeometry(gesture.key, selection, { x: gesture.nextTranslation.x, y: gesture.nextTranslation.y });
+
+          enqueueFileOperation(
+            gesture.filePath,
+            async () => {
+              return triggerBackendPreview('move', gesture.nextTranslation, gesture.key, undefined, true);
+            },
+            {
+              onRollback: () => rollbackTarget(gesture, selection, 'Could not save moved position.'),
+            }
+          );
+        } else {
+          resetOverlayNode(gesture.key);
+        }
+      } else if (gesture.type === 'radius') {
+        resetOverlayNode(gesture.key);
+        if (gesture.moved && gesture.nextRadiusStep) {
+          const step = gesture.nextRadiusStep;
+          if (gesture.targetEl) {
+            if (gesture.initialTargetStyle === null) gesture.targetEl.removeAttribute('style');
+            else gesture.targetEl.setAttribute('style', gesture.initialTargetStyle);
+          }
+          updateStyle('borderRadius', step.token);
+        } else {
+          if (gesture.targetEl) {
+            if (gesture.initialTargetStyle === null) gesture.targetEl.removeAttribute('style');
+            else gesture.targetEl.setAttribute('style', gesture.initialTargetStyle);
+          }
+        }
+      }
     };
-    const move = (event: PointerEvent) => {
-      if (!update(event)) return;
-      const gesture = resizeGesture.current!;
-      cancelAnimationFrame(animation);
-      animation = requestAnimationFrame(() => { setLiveWidth(gesture.moved ? gesture.nextWidth : gesture.width); setDimensionTooltip(gesture.moved ? 'Snapped' : null); });
-    };
-    const up = (event: PointerEvent) => {
-      if (!update(event)) return;
-      const gesture = resizeGesture.current;
+
+    const cancelDrag = () => {
+      const gesture = directDragRef.current;
       if (!gesture) return;
-      reset();
-      if (gesture.moved && gesture.token && Math.abs(gesture.nextWidth - gesture.width) > .5) { setLiveWidth(gesture.nextWidth); void triggerBackendPreview('style', { property: 'maxWidth', value: gesture.token }, gesture.key, () => {
-        setElements(previous => ({ ...previous, [gesture.key]: { ...previous[gesture.key], maxWidth: gesture.token } }));
-      }).finally(() => setLiveWidth(null)); }
+      directDragRef.current = null;
+      cleanupVisuals();
+
+      try {
+        if (gesture.capture.hasPointerCapture(gesture.pointerId)) {
+          gesture.capture.releasePointerCapture(gesture.pointerId);
+        }
+      } catch {}
+
+      if (gesture.targetEl) {
+        if (gesture.initialTargetStyle === null) gesture.targetEl.removeAttribute('style');
+        else gesture.targetEl.setAttribute('style', gesture.initialTargetStyle);
+      } else if (sourceCanvas.current) {
+        const selection = sourceSelections.current[gesture.key];
+        if (selection) void sourceCanvas.current.command('cancel-gesture', selection);
+      }
+
+      if (pendingOverlayResetKeyRef.current === gesture.key) pendingOverlayResetKeyRef.current = null;
+      resetOverlayNode(gesture.key);
+
+      if (gesture.type === 'resize') {
+        setIsResizing(false);
+        setResizeHandle(null);
+      } else if (gesture.type === 'move') {
+        setIsDraggingMove(false);
+        setMoveArmed(false);
+      }
     };
-    const keydown = (event: KeyboardEvent) => {
-      if (event.key !== 'Escape' || !resizeGesture.current) return;
-      event.preventDefault(); event.stopImmediatePropagation(); reset();
+
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && directDragRef.current) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        cancelDrag();
+      }
     };
-    const lostCapture = (event: PointerEvent) => { if (event.pointerId === resizeGesture.current?.pointerId) reset(); };
-    const visibility = () => { if (document.hidden) reset(); };
-    const pointerDown = () => { suppressResizeClick.current = false; };
-    const click = (event: MouseEvent) => {
-      if (!suppressResizeClick.current) return;
-      suppressResizeClick.current = false;
-      // Releasing pointer capture during cancellation can otherwise turn the
-      // old pointer release into a click on whichever layer is now beneath it.
-      if (event.detail > 0) { event.preventDefault(); event.stopPropagation(); }
-    };
-    window.addEventListener('pointermove', move); window.addEventListener('pointerup', up);
-    window.addEventListener('pointercancel', reset); window.addEventListener('blur', reset); window.addEventListener('keydown', keydown, true);
-    window.addEventListener('lostpointercapture', lostCapture); window.addEventListener('scroll', reset, true); window.addEventListener('resize', reset);
-    document.addEventListener('visibilitychange', visibility);
-    window.addEventListener('pointerdown', pointerDown, true); window.addEventListener('click', click, true);
+
+    window.addEventListener('pointermove', onPointerMove, { passive: false });
+    window.addEventListener('pointerup', onPointerUp);
+    window.addEventListener('pointercancel', cancelDrag);
+    window.addEventListener('blur', cancelDrag);
+    window.addEventListener('keydown', onKeyDown, true);
+
     return () => {
-      cancelAnimationFrame(animation);
-      window.removeEventListener('pointermove', move); window.removeEventListener('pointerup', up);
-      window.removeEventListener('pointercancel', reset); window.removeEventListener('blur', reset); window.removeEventListener('keydown', keydown, true);
-      window.removeEventListener('lostpointercapture', lostCapture); window.removeEventListener('scroll', reset, true); window.removeEventListener('resize', reset);
-      document.removeEventListener('visibilitychange', visibility);
-      window.removeEventListener('pointerdown', pointerDown, true); window.removeEventListener('click', click, true);
-      if (resizeGesture.current) reset();
+      window.removeEventListener('pointermove', onPointerMove);
+      window.removeEventListener('pointerup', onPointerUp);
+      window.removeEventListener('pointercancel', cancelDrag);
+      window.removeEventListener('blur', cancelDrag);
+      window.removeEventListener('keydown', onKeyDown, true);
+      cleanupVisuals();
     };
   }, [triggerBackendPreview]);
 
   const resizeWithKeyboard = (event: React.KeyboardEvent) => {
-    if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+    if (!['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home', 'End'].includes(event.key)) return;
     event.preventDefault(); event.stopPropagation();
-    if (event.repeat || resizeGesture.current || operationRef.current || blocksReview() || undoRecoveryRef.current || !selectedLayer) return;
+    if (event.repeat || directDragRef.current || blocksReview() || undoRecoveryRef.current || !selectedLayer) return;
     const current = elementRefs.current[selectedLayer]?.offsetWidth;
     if (!current) return;
     const rem = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
-    const next = event.key === 'Home' ? snapWidth(0, rem) : event.key === 'End' ? snapWidth(Number.MAX_SAFE_INTEGER, rem) : stepWidth(current, event.key === 'ArrowRight' ? 1 : -1, rem);
-    if (Math.abs(next.width - current) < .5) return;
+    const step = event.shiftKey ? 10 : 1;
+    const nextWidth = event.key === 'Home'
+      ? 1
+      : event.key === 'End'
+      ? 2048
+      : event.key === 'ArrowRight' || event.key === 'ArrowDown'
+      ? current + step
+      : Math.max(1, current - step);
+    const next = snapWidth(nextWidth, rem);
     const key = selectedLayer;
-    void triggerBackendPreview('style', { property: 'maxWidth', value: next.token }, key, () => {
-      setElements(previous => ({ ...previous, [key]: { ...previous[key], maxWidth: next.token } }));
-    });
+    const targetElem = elements[key] || activeElement;
+
+    // Optimistic update immediately
+    setElements(previous => ({ ...previous, [key]: { ...previous[key], maxWidth: next.token } }));
+
+    // Non-blocking background save
+    enqueueFileOperation(
+      targetElem.filePath,
+      async () => {
+        return triggerBackendPreview('style', { property: 'maxWidth', value: next.token }, key, undefined, true);
+      },
+      {
+        onRollback: () => {
+          showToast('Could not save keyboard resize.');
+        },
+      }
+    );
   };
 
   // Cancel manipulation or clear selection on Escape key
@@ -1677,6 +2481,9 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
       } else if ((e.metaKey || e.ctrlKey) && e.key === 'z') {
         e.preventDefault();
         handleUndo();
+      } else if ((e.metaKey || e.ctrlKey) && (e.key === '1' || e.key.toLowerCase() === 'b')) {
+        e.preventDefault();
+        setLayersVisible(v => !v);
       } else if (selectedLayer && ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
         // Controls own their arrow keys. The Move handle has its own handler;
         // navigating toolbar buttons or menus must never move source content.
@@ -1770,6 +2577,9 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
       } else if (property === 'maxWidth') {
         updated.maxWidth = value;
         newClasses = newClasses.replace(/\bmax-w-(none|sm|md|lg|xl|2xl|3xl|4xl|5xl|6xl|7xl)\b/, '').trim();
+        newClasses = `${newClasses} ${value}`.trim();
+      } else if (property === 'gridColumns') {
+        newClasses = newClasses.replace(/\bgrid-cols-\d+\b/, '').trim();
         newClasses = `${newClasses} ${value}`.trim();
       }
       updated.classes = newClasses;
@@ -2038,6 +2848,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
       ...(isTextElement ? [{ label: 'Text color', property: 'textColor', colors: textColors }] : []),
       { label: 'Fill', property: 'backgroundColor', colors: fills },
     ];
+    const isActionElement = ['button', 'a'].includes(activeElement.tag.toLowerCase());
     const hud = (
       <div ref={formattingRef} role="toolbar" aria-label="Selection formatting"
         className={reviewStyles.floatingFormatting} data-menu-side={formattingPosition?.menuSide}
@@ -2045,7 +2856,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
         onClick={event => event.stopPropagation()}
         onBlur={event => { if (event.relatedTarget && !event.currentTarget.contains(event.relatedTarget as Node)) setShowQuickActions(false); }}>
         <div className={reviewStyles.formattingBar}>
-          {isTextElement ? <>
+          {isActionElement ? (
             <button type="button" className={reviewStyles.editTextControl} disabled={locked} onClick={() => {
               setShowQuickActions(false);
               if (usesDrafts && selectedLayer) beginInlineText(selectedLayer);
@@ -2056,7 +2867,19 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
                   input?.focus(); input?.select();
                 });
               }
-            }}><Pencil size={13} strokeWidth={1.7} /><span>{preparingInlineText ? 'Checking text…' : 'Edit text'}</span></button>
+            }}><Pencil size={12} strokeWidth={1.7} /><span>{preparingInlineText ? 'Checking…' : 'Edit'}</span></button>
+          ) : isTextElement ? <>
+            <button type="button" className={reviewStyles.editTextControl} disabled={locked} onClick={() => {
+              setShowQuickActions(false);
+              if (usesDrafts && selectedLayer) beginInlineText(selectedLayer);
+              else {
+                setOpenSections(previous => ({ ...previous, text: true }));
+                requestAnimationFrame(() => {
+                  const input = document.querySelector<HTMLInputElement>('input[aria-label="Content"]');
+                  input?.focus(); input?.select();
+                });
+              }
+            }}><Pencil size={12} strokeWidth={1.7} /><span>{preparingInlineText ? 'Checking…' : 'Edit'}</span></button>
             <span className={reviewStyles.formatDivider} aria-hidden="true" />
             <label className={reviewStyles.primaryFormatSelect}>
               <span aria-hidden="true">Aa<ChevronDown size={10} /></span>
@@ -2145,64 +2968,236 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
     return createPortal(hud, document.body);
   };
 
+  const ALL_8_HANDLES: { dir: HandleDirection; label: string; title: string; styleClass: string }[] = [
+    { dir: 'nw', label: 'Resize width from top left', title: 'Drag corner to resize width', styleClass: reviewStyles.handleNw },
+    { dir: 'n', label: 'Resize width from top', title: 'Drag side to resize width', styleClass: reviewStyles.handleN },
+    { dir: 'ne', label: 'Resize width from top right', title: 'Drag corner to resize width', styleClass: reviewStyles.handleNe },
+    { dir: 'e', label: 'Resize width from right', title: 'Drag side to resize width', styleClass: reviewStyles.handleE },
+    { dir: 'se', label: 'Resize width from bottom right', title: 'Drag corner to resize width', styleClass: reviewStyles.handleSe },
+    { dir: 's', label: 'Resize width from bottom', title: 'Drag side to resize width', styleClass: reviewStyles.handleS },
+    { dir: 'sw', label: 'Resize width from bottom left', title: 'Drag corner to resize width', styleClass: reviewStyles.handleSw },
+    { dir: 'w', label: 'Resize width from left', title: 'Drag side to resize width', styleClass: reviewStyles.handleW },
+  ];
+
   const renderSourceSelection = (selection: SourceSelection) => {
     const layerKey = sourceKey(selection);
     if (selectedLayer !== layerKey || !elements[layerKey]) return null;
-    const dim = { w: Math.round(selection.rect.width), h: Math.round(selection.rect.height) };
-    return <div ref={element => { elementRefs.current[layerKey] = element; }}
-      className={reviewStyles.sourceSelection} aria-label="Selected source element"
-      style={{ width: '100%', height: '100%', fontSize: selection.computed.fontSize, textAlign: selection.computed.textAlign as React.CSSProperties['textAlign'] }}>
-{usesDrafts && (!selection.instance || definitionStyleKey === layerKey) && !isInlineEditing && <div className={reviewStyles.moveAnchor}>{renderMoveControl()}</div>}
-{liveMove?.key === layerKey && <output aria-label="Move measurement" aria-live="polite" className={`${reviewStyles.measurementBadge} ${reviewStyles.moveMeasurement}`}><span>X</span><strong>{liveMove.x}px</strong><span>Y</span><strong>{liveMove.y}px</strong><span>Snapped</span></output>}
-      {!repositoryId && <>
-{/* Precision Handles System (Benchmark Match) */}
-{!isInlineEditing && !isDraggingMove && (
-<>
-{/* Matching width handles at the side midpoints and bottom corners. */}
-<button type="button" aria-label="Resize width from left" onKeyDown={resizeWithKeyboard} onClick={event => event.stopPropagation()}
-aria-describedby="selection-width-hint" disabled={busy || isApplying || reviewBlocking || Boolean(uncertainUndoId)}
-onPointerDown={(e) => startResize('w', e)}
-className={`${reviewStyles.edgeResizeHandle} ${reviewStyles.westHandle}`}
-aria-pressed={isResizing && resizeHandle === 'w'}
-title="Drag side to resize width"
-/>
-{/* East midpoint width handle. */}
-<button type="button" aria-label="Resize width from right" onKeyDown={resizeWithKeyboard} onClick={event => event.stopPropagation()}
-aria-describedby="selection-width-hint" disabled={busy || isApplying || reviewBlocking || Boolean(uncertainUndoId)}
-onPointerDown={(e) => startResize('e', e)}
-className={`${reviewStyles.edgeResizeHandle} ${reviewStyles.eastHandle}`}
-aria-pressed={isResizing && resizeHandle === 'e'}
-title="Drag side to resize width"
-/>
-<span id="selection-width-hint" className="sr-only">Drag horizontally to snap to supported maximum widths. Left and Right choose a size; Home and End choose the limits. Escape cancels dragging.</span>
-{/* Southwest width handle. */}
-<button type="button" aria-label="Resize width from bottom left" onKeyDown={resizeWithKeyboard} onClick={event => event.stopPropagation()}
-aria-describedby="selection-width-hint" disabled={busy || isApplying || reviewBlocking || Boolean(uncertainUndoId)}
-onPointerDown={(e) => startResize('sw', e)}
-className={`${reviewStyles.cornerResizeHandle} ${reviewStyles.westCorner}`} aria-pressed={isResizing && resizeHandle === 'sw'}
-title="Drag corner to resize width"
-/>
-{/* Southeast width handle. */}
-<button type="button" aria-label="Resize width from bottom right" onKeyDown={resizeWithKeyboard} onClick={event => event.stopPropagation()}
-aria-describedby="selection-width-hint" disabled={busy || isApplying || reviewBlocking || Boolean(uncertainUndoId)}
-onPointerDown={(e) => startResize('se', e)}
-className={`${reviewStyles.cornerResizeHandle} ${reviewStyles.eastCorner}`} aria-pressed={isResizing && resizeHandle === 'se'}
-title="Drag corner to resize width"
-/>
-{/* Live Dimension Tooltip - Only visible while actively resizing */}
-{isResizing && (
-<>
-<span aria-hidden="true" className={`${reviewStyles.resizeGuide} ${reviewStyles.leftGuide}`} />
-<span aria-hidden="true" className={`${reviewStyles.resizeGuide} ${reviewStyles.rightGuide}`} />
-<output aria-live="polite" aria-label="Resize measurement" className={reviewStyles.measurementBadge}>
-<span>Max width</span><strong>{liveWidth || dim.w}px</strong><span>{dimensionTooltip || 'Drag to snap'}</span>
-</output>
-</>
-)}
-</>
-)}
-</>}
-    </div>;
+    const zoomVal = typeof canvasZoom === 'number' ? canvasZoom : 1;
+    const renderedElem = elements[layerKey] || activeElement;
+    const isAct = ['button', 'input', 'select'].includes((renderedElem.tag || selection.tagName).toLowerCase()) ||
+      ((renderedElem.tag || selection.tagName).toLowerCase() === 'a' &&
+        Boolean(
+          selection.computed.backgroundColor !== 'rgba(0, 0, 0, 0)' &&
+          selection.computed.backgroundColor !== 'transparent' ||
+          selection.attributes?.role === 'button' ||
+          /\b(btn|button|bg-|rounded-)\b/.test(renderedElem.classes || '')
+        ));
+    const isMediaEl = /^(img|video|svg|canvas|picture)$/i.test(renderedElem.tag || selection.tagName);
+    const aspectLocked = aspectLockOverrides.current[layerKey] ?? isMediaEl;
+
+    const currentW = (directDragRef.current?.type === 'resize' && directDragRef.current.key === layerKey)
+      ? directDragRef.current.nextWidth
+      : selection.rect.width;
+    const currentH = (directDragRef.current?.type === 'resize' && directDragRef.current.key === layerKey)
+      ? directDragRef.current.nextHeight
+      : selection.rect.height;
+    const currentRadius = renderedElem.borderRadius || selection.computed.borderRadius || '0px';
+
+    const isTextCenter = renderedElem.classes.includes('text-center') || selection.computed.textAlign === 'center';
+    const isTextRight = renderedElem.classes.includes('text-right') || selection.computed.textAlign === 'right';
+    const resolvedTextAlign = isTextCenter ? 'center' : isTextRight ? 'right' : (selection.computed.textAlign || 'left');
+
+    const chrome = selectionStyleFor({
+      tag: renderedElem.tag || selection.tagName,
+      role: undefined,
+      display: undefined,
+      width: currentW,
+      height: currentH,
+      borderRadius: currentRadius,
+      isText: !isAct && /^(h[1-6]|p|span|label|strong|em|b|i|small)$/i.test(renderedElem.tag || selection.tagName),
+      isMedia: isMediaEl,
+      isControl: isAct,
+      textAlign: resolvedTextAlign,
+      zoom: zoomVal,
+      lockedAspect: aspectLocked,
+      currentVariant: previousVariantRef.current[layerKey],
+    });
+    previousVariantRef.current[layerKey] = chrome.variant;
+
+    // SVG outline path offset 2px outside
+    const outlinePath = buildRoundedRectPath(
+      -2,
+      -2,
+      currentW + 4,
+      currentH + 4,
+      {
+        tl: chrome.outlineRadii.tl + (chrome.outlineRadii.tl > 0 ? 2 : 0),
+        tr: chrome.outlineRadii.tr + (chrome.outlineRadii.tr > 0 ? 2 : 0),
+        br: chrome.outlineRadii.br + (chrome.outlineRadii.br > 0 ? 2 : 0),
+        bl: chrome.outlineRadii.bl + (chrome.outlineRadii.bl > 0 ? 2 : 0),
+      }
+    );
+
+    const toggleAspectLock = (e: React.MouseEvent) => {
+      e.stopPropagation();
+      aspectLockOverrides.current[layerKey] = !aspectLocked;
+      setElements(prev => ({ ...prev }));
+    };
+
+    return (
+      <div
+        ref={element => { elementRefs.current[layerKey] = element; }}
+        className={`${reviewStyles.sourceSelection} ${outlineDrag ? reviewStyles.sourceSelectionOutline : ''}`}
+        aria-label="Selected source element"
+        data-selection-variant={chrome.variant}
+        style={{
+          width: '100%',
+          height: '100%',
+          fontSize: selection.computed.fontSize,
+          textAlign: selection.computed.textAlign as React.CSSProperties['textAlign'],
+        }}
+      >
+        {/* SVG Overlay layer with dual-stroke 1.5px accent over 1px white halo */}
+        <svg
+          className={reviewStyles.selectionSvg}
+          style={{ width: `${currentW + 4}px`, height: `${currentH + 4}px` }}
+        >
+          {/* 1. Halo outline */}
+          <path
+            ref={el => { outlineHaloRef.current[layerKey] = el; }}
+            d={outlinePath}
+            className={reviewStyles.outlineHalo}
+          />
+          {/* 2. Accent outline */}
+          <path
+            ref={el => { outlineAccentRef.current[layerKey] = el; }}
+            d={outlinePath}
+            className={`${reviewStyles.outlineAccent} ${outlineDrag ? reviewStyles.outlineDashed : ''}`}
+          />
+
+          {/* Corner arcs for arc or circle variant (only when all corner handles are active, never a stray lonely arc) */}
+          {(chrome.variant === 'arc' || chrome.variant === 'circle') && chrome.visibleHandles.length >= 4 &&
+            (['nw', 'ne', 'se', 'sw'] as const).map(corner => {
+              if (!chrome.visibleHandles.includes(corner)) return null;
+              const arc = chrome.variant === 'circle'
+                ? buildCircleArcPath(corner, currentW, zoomVal)
+                : buildCornerArcPath(corner, currentW, currentH, chrome.outlineRadii, zoomVal);
+              return (
+                <g key={`arc-group-${corner}`}>
+                  <path d={arc.path} className={reviewStyles.handleArcHalo} />
+                  <path
+                    d={arc.path}
+                    className={`${reviewStyles.handleArc} ${isResizing && resizeHandle === corner ? reviewStyles.handleArcActive : ''}`}
+                  />
+                </g>
+              );
+            })}
+        </svg>
+
+        {/* Move anchor */}
+        {usesDrafts && (!selection.instance || definitionStyleKey === layerKey) && !isInlineEditing && (
+          <div className={reviewStyles.moveAnchor}>{renderMoveControl()}</div>
+        )}
+
+        {/* Media Aspect Lock Toggle Badge */}
+        {chrome.variant === 'media' && !isInlineEditing && !isDraggingMove && (
+          <button
+            type="button"
+            role="button"
+            aria-label={aspectLocked ? 'Aspect ratio locked' : 'Aspect ratio free'}
+            title={aspectLocked ? 'Aspect ratio locked (Click to unlock, or hold Shift while dragging)' : 'Aspect ratio free (Click to lock)'}
+            className={reviewStyles.aspectLockBadge}
+            onClick={toggleAspectLock}
+          >
+            {aspectLocked ? <Lock size={10} strokeWidth={2} /> : <Unlock size={10} strokeWidth={2} />}
+            <span>{aspectLocked ? 'Locked' : 'Free'}</span>
+          </button>
+        )}
+
+        {/* Radius Grip */}
+        {chrome.radiusGrip.visible && !isInlineEditing && !isDraggingMove && (
+          <button
+            type="button"
+            role="slider"
+            aria-label="Adjust corner radius"
+            title="Drag to adjust corner radius (Arrow keys to change step)"
+            aria-valuemin={0}
+            aria-valuemax={Math.round(Math.min(currentW, currentH) / 2)}
+            aria-valuenow={Math.round(chrome.effectiveRadius)}
+            aria-valuetext={`${Math.round(chrome.effectiveRadius)}px radius`}
+            className={reviewStyles.radiusGrip}
+            style={{
+              left: `${chrome.radiusGrip.inset}px`,
+              top: `${chrome.radiusGrip.inset}px`,
+            }}
+            onPointerDown={startRadiusDrag}
+            onKeyDown={handleRadiusKeyDown}
+            onClick={e => e.stopPropagation()}
+          >
+            <span className={reviewStyles.radiusGripDot} />
+          </button>
+        )}
+
+        {/* Interactive Resize Handles */}
+        {!isInlineEditing && !isDraggingMove && (
+          <>
+            {ALL_8_HANDLES.map(h => {
+              if (!chrome.visibleHandles.includes(h.dir)) return null;
+              const isCorner = ['nw', 'ne', 'se', 'sw'].includes(h.dir);
+              const isArc = (chrome.variant === 'arc' || chrome.variant === 'circle') && isCorner && chrome.visibleHandles.length >= 4;
+
+              let customStyle: React.CSSProperties | undefined = undefined;
+              if (isArc) {
+                const corner = h.dir as 'nw' | 'ne' | 'se' | 'sw';
+                const arc = chrome.variant === 'circle'
+                  ? buildCircleArcPath(corner, currentW, zoomVal)
+                  : buildCornerArcPath(corner, currentW, currentH, chrome.outlineRadii, zoomVal);
+                customStyle = {
+                  left: `${arc.center.x}px`,
+                  top: `${arc.center.y}px`,
+                  transform: 'translate(-50%, -50%)',
+                };
+              }
+
+              const cursorClass =
+                h.dir === 'ne' || h.dir === 'sw'
+                  ? reviewStyles.westCorner
+                  : h.dir === 'nw' || h.dir === 'se'
+                  ? reviewStyles.eastCorner
+                  : '';
+
+              return (
+                <button
+                  key={h.dir}
+                  type="button"
+                  role="slider"
+                  aria-label={h.label}
+                  title={h.title}
+                  aria-pressed={isResizing && resizeHandle === h.dir}
+                  className={`${reviewStyles.resizeHandle} ${h.styleClass} ${cursorClass}`}
+                  style={customStyle}
+                  onPointerDown={e => startResize(h.dir, e)}
+                  onKeyDown={resizeWithKeyboard}
+                  onClick={e => e.stopPropagation()}
+                >
+                  {isArc ? (
+                    <span className={reviewStyles.handleHitArea} />
+                  ) : !isCorner && (chrome.variant === 'arc' || chrome.variant === 'capsule') ? (
+                    <span
+                      className={`${reviewStyles.handleBar} ${
+                        h.dir === 'n' || h.dir === 's' ? reviewStyles.handleBarH : reviewStyles.handleBarV
+                      }`}
+                    />
+                  ) : (
+                    <span className={reviewStyles.handleDot} />
+                  )}
+                </button>
+              );
+            })}
+          </>
+        )}
+      </div>
+    );
   };
 
 
@@ -2214,11 +3209,87 @@ title="Drag corner to resize width"
     showRedo={usesDrafts} onHistory={() => setHistoryOpen(true)} onUndo={handleUndo} onRedo={() => navigateDraft(1)}
   />;
   const draftStatus = isApplying ? 'Saving…' : uncertainApplyId ? 'Check save status' : draftReplaying ? 'Restoring draft…' : busy ? 'Updating draft…' : selectedLayer && typeof activeElement.text === 'string' && draftText !== activeElement.text ? 'Editing text…' : draft ? (draftStored ? `Draft saved · ${draft.cursor} ${draft.cursor === 1 ? 'change' : 'changes'}${Object.keys(draftHeads(pendingEdit)).length > 1 ? ' · ' + Object.keys(draftHeads(pendingEdit)).length + ' files' : ''}` : 'Draft in memory') : 'All changes saved';
-  const renderDraftControls = () => usesDrafts && <EditorDraftControls
-    saveLabel={uncertainApplyId ? pendingEdit?.groupTransactionId ? 'Resume Save' : 'Check save' : 'Save changes'}
-    disabled={(!pendingEdit && draftText === activeElement.text) || busy || isApplying || moveArmed || isResizing || destinationMode}
-    onSave={requestSave}
-  />;
+  const renderDraftControls = () => (
+    <div className="flex items-center gap-2">
+      {saveQueueState.status === 'saving' && (
+        <span className={reviewStyles.saveBadgeSaving} aria-live="polite">
+          <LoaderCircle size={12} className="animate-spin text-emerald-500" />
+          <span>Saving…</span>
+        </span>
+      )}
+      {saveQueueState.status === 'saved' && (
+        <span className={reviewStyles.saveBadgeSaved} aria-live="polite">
+          <Check size={12} />
+          <span>Saved</span>
+        </span>
+      )}
+      {saveQueueState.status === 'error' && (
+        <span className={reviewStyles.saveBadgeError} role="alert">
+          <CircleAlert size={12} />
+          <span>{saveQueueState.message || 'Save error'}</span>
+        </span>
+      )}
+      {usesDrafts && draft && windowMode && (
+        <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-100/90 border border-slate-200/80 text-[11px] shadow-xs">
+          <button
+            type="button"
+            aria-label={reviewOpen ? 'Hide changes' : 'Review changes'}
+            onClick={() => {
+              if (!selectedLayer && pendingEdit) setSelectedLayerState(pendingEdit.layerKey);
+              setReviewOpen(value => !value);
+            }}
+            aria-expanded={reviewOpen}
+            className="flex items-center gap-1 text-slate-700 hover:text-slate-900 font-medium cursor-pointer"
+          >
+            <span>{reviewOpen ? 'Hide changes' : 'Review changes'}</span>
+            <span className="px-1.5 py-0.2 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-bold">
+              {draft.cursor}
+            </span>
+          </button>
+          <span className="text-slate-300">|</span>
+          <button
+            type="button"
+            onClick={() => void discardPendingEdit()}
+            disabled={busy || isApplying || Boolean(uncertainApplyId)}
+            className="text-slate-500 hover:text-rose-600 transition cursor-pointer disabled:opacity-40"
+          >
+            Discard draft
+          </button>
+        </div>
+      )}
+      {usesDrafts && <EditorDraftControls
+        saveLabel={uncertainApplyId ? pendingEdit?.groupTransactionId ? 'Resume Save' : 'Check save' : 'Save changes'}
+        disabled={(!pendingEdit && draftText === activeElement.text) || busy || isApplying || moveArmed || isResizing || destinationMode}
+        onSave={requestSave}
+      />}
+      {reviewOpen && windowMode && (
+        <div className="absolute bottom-16 right-4 w-80 max-h-72 bg-white/95 backdrop-blur-xl border border-slate-200/90 rounded-2xl shadow-2xl p-3.5 z-50 overflow-hidden flex flex-col text-xs animate-in fade-in slide-in-from-bottom-2">
+          <div className="flex items-center justify-between pb-2 border-b border-slate-100 font-semibold text-slate-800 shrink-0">
+            <span className="flex items-center gap-1.5">
+              <span>Draft change history</span>
+              <span className="px-1.5 py-0.2 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-bold">{draft?.cursor || 0}</span>
+            </span>
+            <button type="button" onClick={() => setReviewOpen(false)} className="text-slate-400 hover:text-slate-600 p-0.5 cursor-pointer"><X size={13}/></button>
+          </div>
+          {pendingEdit && Object.keys(draftHeads(pendingEdit)).length > 1 && (
+            <ul aria-label="Change-set files" className="py-2 border-b border-slate-100 space-y-1 shrink-0">
+              {Object.values(draftHeads(pendingEdit)).map(head => (
+                <li key={head.id} className="flex items-center gap-1.5 text-slate-600 truncate font-mono text-[10px]">
+                  <Code2 size={12} className="text-slate-400 shrink-0" />
+                  <span title={editPath(head)} className="truncate">{editPath(head)}</span>
+                </li>
+              ))}
+            </ul>
+          )}
+          <ol aria-label="Draft change history" className="overflow-y-auto py-2 space-y-1.5 text-slate-600 pl-4 list-decimal text-[11px] leading-relaxed flex-1">
+            {draft?.frames.slice(1, (draft.cursor || 0) + 1).map((frame, index) => (
+              <li key={index}>{frame.edit?.summary || 'Restored original value'}</li>
+            ))}
+          </ol>
+        </div>
+      )}
+    </div>
+  );
   const renderCanvasControls = () => <EditorViewportControls
     viewport={breakpoint} requestedWidth={viewportWidth}
     disabled={busy || isApplying || isInlineEditing || isResizing || moveArmed || Boolean(liveMove)}
@@ -2265,7 +3336,7 @@ title="Drag corner to resize width"
       `}</style>
 
       {/* Main Studio Shell: Fullscreen SlightNudge SaaS Environment */}
-      <div aria-label="Visual editing workspace" aria-busy={busy || isApplying || recoveryBooting || recoveryChecking} data-editor-view={unified ? view : undefined} data-editor-legacy={!unified || undefined} data-window-panel={windowPanel || ''} data-focus-mode={!windowMode && focusMode || undefined} data-inspector-collapsed={!windowMode && inspectorCollapsed || undefined} data-selected-source={repositoryId && selectedLayer ? `${activeElement.filePath}:${activeElement.line}:${activeElement.column}:${activeElement.tag}` : undefined} className={`${reviewStyles.studioShell} ${windowMode ? reviewStyles.windowShell : reviewStyles.classicShell} fixed inset-0 z-50 flex flex-col h-screen w-screen bg-[#F8F9FA] select-none text-slate-800 text-xs overflow-hidden`}>
+      <div aria-label="Visual editing workspace" aria-busy={busy || isApplying || recoveryBooting || recoveryChecking} data-editor-view={unified ? view : undefined} data-editor-legacy={!unified || undefined} data-window-panel={layersVisible && inspectorVisible ? 'both' : layersVisible ? 'layers' : inspectorVisible ? 'inspector' : ''} data-panel-layers={layersVisible ? 'open' : 'closed'} data-panel-inspector={inspectorVisible ? 'open' : 'closed'} data-focus-mode={!windowMode && focusMode || undefined} data-inspector-collapsed={!windowMode && inspectorCollapsed || undefined} data-selected-source={repositoryId && selectedLayer ? `${activeElement.filePath}:${activeElement.line}:${activeElement.column}:${activeElement.tag}` : undefined} className={`${reviewStyles.studioShell} ${windowMode ? reviewStyles.windowShell : reviewStyles.classicShell} fixed inset-0 z-50 flex flex-col h-screen w-screen bg-[#F8F9FA] select-none text-slate-800 text-xs overflow-hidden`}>
         {historyOpen && createPortal(<ChangeHistory repositoryId={repositoryId} draft={draft?.frames.slice(1).map((frame, index) => ({ summary: frame.edit?.summary || 'Restored original value', state: index < draft.cursor ? 'draft' as const : 'redo' as const })) || []} recovery={Boolean(uncertainApplyId || uncertainUndoId || restoredOperation || recoveryError)} onClose={() => setHistoryOpen(false)}/>, document.body)}
         {recoveryBooting && <p role="status" className={reviewStyles.recoveryBootStatus}>Checking your saved draft…</p>}
         {(restoredOperation || recoveryError) && <div className={reviewStyles.recoveryOverlay}>
@@ -2297,133 +3368,163 @@ title="Drag corner to resize width"
           {/* ======================================================== */}
           {/* LEFT SIDEBAR: Layers & Pages (SaaS Theme)                */}
           {/* ======================================================== */}
-          <aside data-editor-panel="layers" className="w-60 bg-white border-r border-[#E5E7EB] flex flex-col shrink-0 z-20">
-            {windowMode && <div className={reviewStyles.windowPanelHeader}><strong>Layers</strong><button type="button" aria-label="Close layers" onClick={() => setWindowPanel(null)}><X size={14}/></button></div>}
-            {/* Brand header aligns with the editor toolbar. */}
-            <div data-editor-brand className="h-12 px-3 border-b border-[#E5E7EB] flex items-center justify-between shrink-0 bg-white select-none">
-              <Link href="/workspace" className="flex items-center space-x-2 text-slate-900 hover:opacity-85 transition" title="Back to workspace">
-                <Image
-                  src="/icon.svg"
-                  alt="SlightNudge"
-                  width={20}
-                  height={20}
-                  className="w-5 h-5 rounded-md shadow-2xs object-contain"
-                  unoptimized
-                />
-                <span className="font-semibold text-xs tracking-tight text-[#26342C]">SlightNudge</span>
-              </Link>
+          {windowMode ? (
+            <LeftToolDock
+              visible={layersVisible}
+              activeTool={sidebarTab}
+              onToggleTool={(tool) => {
+                setSidebarTab(tool);
+              }}
+              onClose={() => {
+                setLayersVisible(false);
+                setSidebarTab(null);
+              }}
+              sourceLayers={sourceLayers}
+              selectedLayer={selectedLayer}
+              onSelectLayer={setSelectedLayer}
+              pages={pages.filter(page => /^fixture-[1-5]$/.test(page.id))}
+              selectedPage={selectedPage}
+              onSelectPage={(page) => {
+                if (operationRef.current || blocksReview() || undoRecoveryRef.current) {
+                  showToast(undoRecoveryRef.current ? 'Check Undo status before making another change.' : reviewNotice);
+                  return;
+                }
+                if (draftRef.current && page.id !== selectedPage.id) {
+                  showToast('Save or discard this page’s draft before switching source files.');
+                  return;
+                }
+                setSelectedLayerState(null);
+                setSourceReady(false);
+                setSourceLayers([]);
+                setSelectedPage(page as any);
+                showToast(`Opened ${page.title}`);
+              }}
+              activeElement={activeElement}
+              repositoryId={repositoryId}
+              uncertainUndoId={uncertainUndoId}
+              onUndo={handleUndo}
+            />
+          ) : (
+            <aside data-editor-panel="layers" className="w-60 flex flex-col shrink-0 z-20 bg-white border-r border-[#E5E7EB]">
+              {/* Brand header aligns with the editor toolbar. */}
+              <div data-editor-brand className="h-12 px-3 border-b border-[#E5E7EB] flex items-center justify-between shrink-0 select-none bg-white">
+                <Link href="/workspace" className="flex items-center space-x-2 text-slate-900 hover:opacity-85 transition" title="Back to workspace">
+                  <Image
+                    src="/icon.svg"
+                    alt="SlightNudge"
+                    width={20}
+                    height={20}
+                    className="w-5 h-5 rounded-md shadow-2xs object-contain"
+                    unoptimized
+                  />
+                  <span className="font-semibold text-xs tracking-tight text-[#26342C]">SlightNudge</span>
+                </Link>
 
-              {!windowMode && <details ref={workspaceMenuRef} className={reviewStyles.workspaceMenu}>
-                <summary aria-label="Workspace options" title="Workspace options"><MoreHorizontal size={16}/></summary>
-                <div>
-                  <strong title={repositoryId || selectedPage.title}>{repositoryId || selectedPage.title}</strong>
-                  <Link href="/workspace">Projects <ArrowUpRight size={13}/></Link>
-                  <button type="button" disabled={!sourceReady || busy || isApplying || recoveryBooting || recoveryChecking || reviewBlocking || Boolean(uncertainUndoId)} onClick={event => { sourceCanvas.current?.openWindow(); event.currentTarget.closest('details')?.removeAttribute('open'); }}>Open editing window <ArrowUpRight size={13}/></button>
-                  <button type="button" onClick={event => { setFocusMode(true); event.currentTarget.closest('details')?.removeAttribute('open'); }}>Focus canvas</button>
+                <details ref={workspaceMenuRef} className={reviewStyles.workspaceMenu}>
+                  <summary aria-label="Workspace options" title="Workspace options"><MoreHorizontal size={16}/></summary>
+                  <div>
+                    <strong title={repositoryId || selectedPage.title}>{repositoryId || selectedPage.title}</strong>
+                    <Link href="/workspace">Projects <ArrowUpRight size={13}/></Link>
+                    <button type="button" disabled={!sourceReady || busy || isApplying || recoveryBooting || recoveryChecking || reviewBlocking || Boolean(uncertainUndoId)} onClick={event => { sourceCanvas.current?.openWindow(); event.currentTarget.closest('details')?.removeAttribute('open'); }}>Open editing window <ArrowUpRight size={13}/></button>
+                    <button type="button" onClick={event => { setFocusMode(true); event.currentTarget.closest('details')?.removeAttribute('open'); }}>Focus canvas</button>
+                  </div>
+                </details>
+              </div>
+
+              {/* 2. Sidebar Tabs: Layers & Pages */}
+              <div data-editor-tabs className="h-11 px-3 border-b border-[#F1F5F9] flex items-center justify-between text-xs shrink-0 bg-white" role="group" aria-label="Workspace panels">
+                <div className="flex items-center space-x-3 h-full">
+                  <button
+                    aria-pressed={(sidebarTab || 'layers') === 'layers'} onClick={() => setSidebarTab('layers')}
+                    className={`h-full flex items-center space-x-1.5 font-medium border-b-2 transition ${
+                      (sidebarTab || 'layers') === 'layers'
+                        ? 'border-[#059669] text-slate-900 font-semibold'
+                        : 'border-transparent text-slate-500 hover:text-slate-700'
+                    }`}
+                  >
+                    <Layers2 size={15} strokeWidth={1.7} aria-hidden="true"/>
+                    <span>Layers</span>
+                  </button>
+
+                  {!repositoryId && <button
+                    aria-pressed={sidebarTab === 'pages'} onClick={() => setSidebarTab('pages')}
+                    className={`h-full flex items-center space-x-1.5 font-medium border-b-2 transition ${
+                      sidebarTab === 'pages'
+                        ? 'border-[#059669] text-slate-900 font-semibold'
+                        : 'border-transparent text-slate-500 hover:text-slate-700'
+                    }`}
+                  >
+                    <FileText size={15} strokeWidth={1.7} aria-hidden="true"/>
+                    <span>Pages</span>
+                  </button>}
                 </div>
-              </details>}
-            </div>
-
-            {/* 2. Sidebar Tabs: Layers & Pages */}
-            <div data-editor-tabs className="h-11 px-3 border-b border-[#F1F5F9] flex items-center justify-between text-xs shrink-0 bg-white" role="group" aria-label="Workspace panels">
-              <div className="flex items-center space-x-3 h-full">
-                <button
-                  aria-pressed={sidebarTab === 'layers'} onClick={() => setSidebarTab('layers')}
-                  className={`h-full flex items-center space-x-1.5 font-medium border-b-2 transition ${
-                    sidebarTab === 'layers'
-                      ? 'border-[#059669] text-slate-900 font-semibold'
-                      : 'border-transparent text-slate-500 hover:text-slate-700'
-                  }`}
-                >
-                  <Layers2 size={15} strokeWidth={1.7} aria-hidden="true"/>
-                  <span>Layers</span>
-                </button>
-
-                {!repositoryId && <button
-                  aria-pressed={sidebarTab === 'pages'} onClick={() => setSidebarTab('pages')}
-                  className={`h-full flex items-center space-x-1.5 font-medium border-b-2 transition ${
-                    sidebarTab === 'pages'
-                      ? 'border-[#059669] text-slate-900 font-semibold'
-                      : 'border-transparent text-slate-500 hover:text-slate-700'
-                  }`}
-                >
-                  <FileText size={15} strokeWidth={1.7} aria-hidden="true"/>
-                  <span>Pages</span>
-                </button>}
               </div>
 
-            </div>
+              {/* Sidebar Content: Layers Tree OR Pages List */}
+              {repositoryId || (sidebarTab || 'layers') === 'layers' ? (
+                <SourceLayers layers={sourceLayers} selected={selectedLayer} onSelect={setSelectedLayer} />
+              ) : (
+                /* Pages Selection Panel: Pure Native List */
+                <div className="flex-1 overflow-y-auto px-2 py-2 space-y-0.5 text-xs text-slate-700">
+                  {pages.filter(page => /^fixture-[1-5]$/.test(page.id)).map((page) => {
+                    const isSelected = selectedPage.id === page.id;
+                    return (
+                      <div
+                        key={page.id}
+                        onClick={() => {
+                          if (operationRef.current || blocksReview() || undoRecoveryRef.current) { showToast(undoRecoveryRef.current ? 'Check Undo status before making another change.' : reviewNotice); return; }
+                          if (draftRef.current && page.id !== selectedPage.id) {
+                            showToast('Save or discard this page’s draft before switching source files.');
+                            return;
+                          }
+                          setSelectedLayerState(null); setSourceReady(false); setSourceLayers([]); setSelectedPage(page);
+                          showToast(`Opened ${page.title}`);
+                        }}
+                        className={`flex items-center justify-between px-2 py-1.5 rounded-lg cursor-pointer transition ${
+                          isSelected
+                            ? 'bg-emerald-50 text-emerald-800 font-medium'
+                            : 'hover:bg-black/[0.04] text-slate-600'
+                        }`}
+                      >
+                        <div className="flex items-center space-x-1.5 truncate">
+                          <FileText
+                            size={13}
+                            className={`shrink-0 ${isSelected ? 'text-emerald-600' : 'text-slate-400'}`}
+                          />
+                          <span className="text-[11px] truncate">{page.title}</span>
+                        </div>
 
-            {/* Sidebar Content: Layers Tree OR Pages List */}
-            {repositoryId || sidebarTab === 'layers' ? (
-              <SourceLayers layers={sourceLayers} selected={selectedLayer} onSelect={setSelectedLayer} />
-            ) : (
-              /* Pages Selection Panel: Pure Native List */
-              <div className="flex-1 overflow-y-auto px-2 py-3 space-y-0.5 text-xs text-slate-700">
-                {pages.filter(page => /^fixture-[1-5]$/.test(page.id)).map((page) => {
-                  const isSelected = selectedPage.id === page.id;
-                  return (
-                    <div
-                      key={page.id}
-                      onClick={() => {
-                        if (operationRef.current || blocksReview() || undoRecoveryRef.current) { showToast(undoRecoveryRef.current ? 'Check Undo status before making another change.' : reviewNotice); return; }
-                        if (draftRef.current && page.id !== selectedPage.id) {
-                          showToast('Save or discard this page’s draft before switching source files.');
-                          return;
-                        }
-                        setSelectedLayerState(null); setSourceReady(false); setSourceLayers([]); setSelectedPage(page);
-                        showToast(`Opened ${page.title}`);
-                      }}
-                      className={`flex items-center justify-between px-2 py-1.5 rounded cursor-pointer transition ${
-                        isSelected
-                          ? 'bg-[#EFF5F0] text-[#1B5E3B] font-medium'
-                          : 'hover:bg-slate-50 text-slate-700'
-                      }`}
-                    >
-                      <div className="flex items-center space-x-2 truncate">
-                        <svg
-                          className={`w-3.5 h-3.5 shrink-0 ${isSelected ? 'text-[#059669]' : 'text-slate-400'}`}
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                        >
-                          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                          <polyline points="14 2 14 8 20 8" />
-                        </svg>
-                        <span className="text-[11.5px] truncate">{page.title}</span>
+                        <span className={`text-[9.5px] font-mono shrink-0 ml-2 ${isSelected ? 'text-emerald-700' : 'text-slate-400'}`}>
+                          {page.route}
+                        </span>
                       </div>
+                    );
+                  })}
+                </div>
+              )}
 
-                      <span className={`text-[10px] font-mono shrink-0 ml-2 ${isSelected ? 'text-[#059669]' : 'text-slate-400'}`}>
-                        {page.route}
-                      </span>
-                    </div>
-                  );
-                })}
+              {/* Bottom Actions: Undo & Source Location */}
+              <div className="border-t border-slate-200/50 p-2 shrink-0 space-y-1.5 bg-white/30">
+                {uncertainUndoId && <p role="status" className="px-2 text-[10.5px] text-amber-800">Undo status unconfirmed. Editing is paused until it is checked.</p>}
+                {uncertainUndoId && <button
+                  onClick={handleUndo}
+                  className="w-full flex items-center justify-between px-2 py-1 rounded bg-slate-100/70 hover:bg-slate-200/70 text-slate-700 font-medium text-[10.5px] transition"
+                  title="Undo last source edit (Ctrl+Z)"
+                >
+                  <span className="flex items-center space-x-1.5">
+                    <Undo2 size={12} className="text-slate-500" />
+                    <span>{uncertainUndoId ? undoRecoveryRef.current?.groupTransactionId ? 'Resume Undo' : 'Check Undo status' : 'Undo edit'}</span>
+                  </span>
+                  <span className="text-[9px] font-mono text-slate-400">Ctrl+Z</span>
+                </button>}
+
+                <div className="flex items-center gap-1.5 px-1 py-0.5 text-[10.5px] text-slate-400" title={activeElement.filePath}>
+                  <Code2 size={12} className="shrink-0 text-slate-400" />
+                  <span className="truncate font-mono text-[10px]">{repositoryId && !selectedLayer ? 'Select an element' : (selectedLayer ? activeElement.filePath : selectedPage.file).split(/[\\/]/).pop()}</span>
+                </div>
               </div>
-            )}
-
-            {/* Bottom Actions: Undo & Source Location */}
-            <div className="border-t border-[#F1F5F9] p-2.5 shrink-0 space-y-2">
-              {uncertainUndoId && <p role="status" className="px-2 text-[11px] text-amber-800">Undo status unconfirmed. Editing is paused until it is checked.</p>}
-              {uncertainUndoId && <button
-                onClick={handleUndo}
-                className="w-full flex items-center justify-between px-2.5 py-1.5 rounded bg-slate-50 hover:bg-slate-100 text-slate-700 font-medium text-[11px] transition"
-                title="Undo last source edit (Ctrl+Z)"
-              >
-                <span className="flex items-center space-x-1.5">
-                  <Undo2 size={13} className="text-slate-500" />
-                  <span>{uncertainUndoId ? undoRecoveryRef.current?.groupTransactionId ? 'Resume Undo' : 'Check Undo status' : 'Undo edit'}</span>
-                </span>
-                <span className="text-[9px] font-mono text-slate-400">Ctrl+Z</span>
-              </button>}
-
-              <div className="flex items-center gap-2 px-2 py-1.5 text-[11px] text-slate-400" title={activeElement.filePath}>
-                <Code2 size={13} className="shrink-0" />
-                <span className="truncate">{repositoryId && !selectedLayer ? 'Select an element' : (selectedLayer ? activeElement.filePath : selectedPage.file).split(/[\\/]/).pop()}</span>
-              </div>
-            </div>
-          </aside>
+            </aside>
+          )}
 
           {/* ======================================================== */}
           {/* CENTER CANVAS COLUMN                                     */}
@@ -2441,8 +3542,8 @@ title="Drag corner to resize width"
                   <button type="button" aria-pressed={!browseMode} onClick={() => setBrowseMode(false)}>Edit</button>
                   <button type="button" aria-pressed={browseMode} disabled={busy || isApplying} onClick={() => { if (reviewRef.current || inlineSessionRef.current) { showToast('Save or discard your draft before browsing the page.'); return; } setSelectedLayerState(null); setBrowseMode(true); }}>Browse</button>
                 </div>
-                <button type="button" aria-label="Toggle layers" title="Layers" aria-expanded={windowPanel === 'layers'} onClick={() => setWindowPanel(previous => previous === 'layers' ? null : 'layers')}><Columns2 size={15}/></button>
-                <button type="button" aria-label="Toggle design panel" title="Design" aria-expanded={windowPanel === 'inspector'} onClick={() => setWindowPanel(previous => previous === 'inspector' ? null : 'inspector')}><Pencil size={15}/></button>
+                <button type="button" aria-label="Toggle layers" title="Layers" aria-expanded={layersVisible} onClick={() => setLayersVisible(v => !v)}><Columns2 size={15}/></button>
+                <button type="button" aria-label="Toggle design panel" title="Design" aria-expanded={inspectorVisible} onClick={() => setInspectorVisible(v => !v)}><Pencil size={15}/></button>
               </div>}
               <div className={reviewStyles.projectContext}>
                 <span className={reviewStyles.sourceDot} role="img" aria-label="Local source connected" />
@@ -2456,6 +3557,27 @@ title="Drag corner to resize width"
                 {view === 'fit' && <select aria-label="Canvas zoom" title="Fit starts with automatic scaling; zoom can also be adjusted manually." value={canvasZoom} disabled={busy || isApplying || isInlineEditing || isResizing || Boolean(liveMove)} onChange={event => setCanvasZoom(event.target.value === 'fit' ? 'fit' : Number(event.target.value))}>
                   <option value="fit">Fit page</option>{[.1,.25,.5,.75,1,1.5,2].map(value=><option key={value} value={value}>{Math.round(value*100)}%</option>)}{typeof canvasZoom==='number'&&![.1,.25,.5,.75,1,1.5,2].includes(canvasZoom)&&<option value={canvasZoom}>{Math.round(canvasZoom*100)}%</option>}
                 </select>}
+                <button
+                  type="button"
+                  aria-label="Toggle lightweight outline drag"
+                  title={outlineDrag ? "Outline-only drag active (wireframe preview for zero reflow)" : "Enable lightweight outline drag"}
+                  aria-pressed={outlineDrag}
+                  disabled={busy || isApplying || isInlineEditing || isResizing || Boolean(liveMove)}
+                  onClick={() => setOutlineDrag(v => !v)}
+                  className={`inline-flex items-center gap-1 px-2 py-0.5 text-[11px] rounded border transition-colors ${outlineDrag ? 'bg-emerald-50 text-emerald-700 border-emerald-300 font-medium' : 'text-slate-600 border-slate-200 hover:bg-slate-50'}`}
+                >
+                  <SquareDashed size={12} />
+                  <span>Outline</span>
+                </button>
+                <button
+                  type="button"
+                  aria-label={canvasTheme === 'dark' ? 'Switch to light canvas' : 'Switch to dark canvas'}
+                  title={canvasTheme === 'dark' ? 'Canvas theme: Dark' : 'Canvas theme: Light'}
+                  onClick={toggleCanvasTheme}
+                  className="inline-flex items-center justify-center w-6 h-6 rounded-full text-slate-600 hover:text-slate-900 hover:bg-black/5 transition cursor-pointer"
+                >
+                  {canvasTheme === 'dark' ? <Moon size={12} className="text-indigo-400" /> : <Sun size={12} className="text-amber-500" />}
+                </button>
               </div>}
               {renderCanvasControls()}
               <div className={reviewStyles.topbarActions}>{renderDraftControls()}</div>
@@ -2470,16 +3592,17 @@ title="Drag corner to resize width"
               onClick={() => setSelectedLayer(null)}
               className="flex-1 overflow-auto bg-[#F8F9FA] relative flex flex-col justify-between p-6 md:p-12 items-center"
             >
-            {selectedLayer && !browseMode && inspectorActive && !liveMove && !isResizing && renderHUDBar()}
+            {selectedLayer && !browseMode && inspectorActive && !liveMove && !isResizing && !isDraggingMove && !directDragRef.current && renderHUDBar()}
             {destinationMode && <div className={reviewStyles.destinationBanner} role="status" aria-label="Choose move destination" onClick={event => event.stopPropagation()}><span>Choose a container · Insert at end</span><button type="button" onClick={cancelDestination}>Cancel <kbd>Esc</kbd></button></div>}
             <EditorSurface mode={mode} view={unified ? view : undefined} width={viewportWidth || (breakpoint === 'mobile' ? 375 : breakpoint === 'tablet' ? 768 : 1200)} zoom={canvasZoom} reset={canvasReset} pan={canvasPan} disabled={busy || isApplying || isInlineEditing || isResizing || moveArmed || Boolean(liveMove)} onZoom={setCanvasZoom}>
             <SourceProjectCanvas ref={sourceCanvas} repositoryId={repositoryId} localPageId={selectedPage.id} width={artboardWidth} windowMode={sourceWindowMode} continuousDraft={Boolean(repositoryId)} browseMode={browseMode} destinationMode={destinationMode}
+              theme={canvasTheme}
               onViewport={(width, fontSize) => { setActualViewportWidth(width); if (fontSize) setInitialMediaFontSize(fontSize); }}
               onDestination={selection => { const key = destinationSource.current; if (!key) return; cancelDestination(); void triggerBackendPreview('reparent', { destination: { path: selection.path, line: selection.line, column: selection.column, tagName: selection.tagName, elementId: selection.elementId } }, key); }}
               blocked={busy || isApplying || recoveryBooting || recoveryChecking || reviewBlocking || Boolean(uncertainUndoId)}
               onNotice={showToast} onSelect={receiveSourceSelection} onLayers={receiveSourceLayers} onGeometry={receiveSourceGeometry}
               onReady={() => { setSourceReady(true); needsDraftReplay.current = Boolean(draftRef.current); if (draftRef.current && !operationRef.current && !recoveryBooting && !recoveryChecking && !isApplying) void replaySourceDraft(reviewRef.current); }}
-              onClearSelection={() => { if (!operationRef.current && !blocksReview()) { cancelDestination(); sourceSelection.current = null; setSelectedLayerState(null); } }}
+              onClearSelection={() => { if (!operationRef.current && !blocksReview()) { cancelDestination(); sourceSelection.current = null; setSelectedLayerState(null); if (guideVRef.current) guideVRef.current.style.display = 'none'; if (guideHRef.current) guideHRef.current.style.display = 'none'; } }}
               onText={receiveSourceText} renderSelection={renderSourceSelection}
             />
             </EditorSurface>
@@ -2515,6 +3638,16 @@ title="Drag corner to resize width"
               </div>
             </div>
 
+            {/* Transparent event shield during active drag */}
+            <div ref={eventShieldRef} className={reviewStyles.eventShield} style={{ display: 'none' }} />
+
+            {/* Smart snapping guides */}
+            <div ref={guideVRef} className={reviewStyles.smartGuideV} style={{ display: 'none' }} />
+            <div ref={guideHRef} className={reviewStyles.smartGuideH} style={{ display: 'none' }} />
+
+            {/* Live W x H dimension tag next to cursor */}
+            <div ref={cursorTagRef} className={reviewStyles.cursorTag} style={{ display: 'none' }} />
+
           </main>
           {!windowMode && <div className={reviewStyles.canvasFooter} role="region" aria-label="Canvas controls">
             <button type="button" className={reviewStyles.panelToggle} aria-label={focusMode ? 'Restore sidebars' : 'Focus canvas'} aria-pressed={focusMode} title={focusMode ? 'Restore sidebars' : 'Focus canvas'} onClick={() => setFocusMode(value => !value)}><Columns2 size={15}/></button>
@@ -2527,6 +3660,17 @@ title="Drag corner to resize width"
                 {typeof canvasZoom === 'number' && ![.1,.25,.5,.75,1,1.5,2].includes(canvasZoom) && <option value={canvasZoom}>{Math.round(canvasZoom * 100)}%</option>}
               </select>
               <button type="button" aria-label="Fit page to canvas" title="Fit page to canvas" disabled={busy || isApplying || isInlineEditing || isResizing || moveArmed || Boolean(liveMove)} onClick={() => { setCanvasZoom('fit'); setCanvasReset(value => value + 1); }}><Scan size={15}/></button>
+              <button
+                type="button"
+                aria-label="Toggle lightweight outline drag"
+                title={outlineDrag ? "Outline-only drag active (wireframe preview for zero reflow)" : "Enable lightweight outline drag"}
+                aria-pressed={outlineDrag}
+                disabled={busy || isApplying || isInlineEditing || isResizing || moveArmed || Boolean(liveMove)}
+                onClick={() => setOutlineDrag(v => !v)}
+                className={`p-1.5 text-xs rounded border transition-colors ${outlineDrag ? 'bg-emerald-50 text-emerald-700 border-emerald-300 font-medium' : 'text-slate-600 border-transparent hover:bg-slate-100'}`}
+              >
+                <SquareDashed size={14} />
+              </button>
             </div>}
             {renderCanvasControls()}
             <button type="button" className={reviewStyles.panelToggle} aria-label={inspectorCollapsed || focusMode ? 'Show design panel' : 'Hide design panel'} aria-expanded={!inspectorCollapsed && !focusMode} title={inspectorCollapsed || focusMode ? 'Show design panel' : 'Hide design panel'} onClick={() => { if (focusMode) { setFocusMode(false); setInspectorCollapsed(false); } else setInspectorCollapsed(value => !value); }}><Pencil size={14}/></button>
@@ -2537,13 +3681,42 @@ title="Drag corner to resize width"
           {/* ======================================================== */}
           {/* RIGHT INSPECTOR PANEL: SlightNudge Visual Editor         */}
           {/* ======================================================== */}
-          <aside data-editor-panel="inspector" style={windowMode ? undefined : { width: inspectorWidth }} className="w-[288px] bg-white border-l border-[#E5E7EB] flex flex-col shrink-0 z-20 overflow-hidden shadow-xs">
+          {windowMode ? (
+            <RightToolDock
+              visible={inspectorVisible}
+              selectedLayer={selectedLayer}
+              activeElement={activeElement}
+              computed={selectedLayer ? sourceSelections.current[selectedLayer]?.computed || {} : {}}
+              draft={draft}
+              usesDrafts={usesDrafts}
+              busy={busy}
+              isApplying={isApplying}
+              reviewBlocking={reviewBlocking}
+                destinationMode={destinationMode}
+                viewportChanging={viewportChanging}
+                activeVariant={activeVariant}
+                activeBreakpoint={activeBreakpoint}
+                repositoryId={repositoryId}
+                pendingEdit={pendingEdit}
+                sourceSelections={sourceSelections.current}
+                sourceLayers={sourceLayers}
+                onUpdateStyle={updateStyle}
+                onRequestSave={requestSave}
+                onDiscardDraft={() => void discardPendingEdit()}
+                onDeselect={() => setSelectedLayerState(null)}
+                onSetActiveVariant={setActiveVariant}
+                onUndo={handleUndo}
+                onRedo={() => navigateDraft(1)}
+                onTriggerBackendPreview={triggerBackendPreview}
+              />
+          ) : (
+            <aside data-editor-panel="inspector" style={{ width: inspectorWidth }} className="w-60 flex flex-col shrink-0 z-20 overflow-hidden bg-white border-l border-[#E5E7EB] shadow-xs">
             {!windowMode && <div role="separator" aria-label="Resize design panel" aria-orientation="vertical" aria-valuemin={272} aria-valuemax={360} aria-valuenow={inspectorWidth} tabIndex={0} className={reviewStyles.inspectorDivider}
               onPointerDown={event => { if (event.button !== 0) return; event.preventDefault(); inspectorResize.current = { x: event.clientX, width: inspectorWidth }; event.currentTarget.setPointerCapture(event.pointerId); }}
               onPointerMove={event => resizeInspector(event.clientX)} onPointerUp={event => { if (!inspectorResize.current) return; resizeInspector(event.clientX); inspectorResize.current = null; event.currentTarget.releasePointerCapture(event.pointerId); }} onPointerCancel={() => { inspectorResize.current = null; }} onLostPointerCapture={() => { inspectorResize.current = null; }}
               onDoubleClick={() => setInspectorWidth(288)} onKeyDown={event => { if (['ArrowLeft', 'ArrowRight', 'Home'].includes(event.key)) { event.preventDefault(); event.stopPropagation(); setInspectorWidth(value => event.key === 'Home' ? 288 : Math.max(272, Math.min(360, value + (event.key === 'ArrowLeft' ? 8 : -8)))); } }} />}
             {/* Visual Editor Header */}
-            <div className="h-12 px-3.5 border-b border-[#E5E7EB] flex items-center justify-between shrink-0 bg-white">
+            <div className={`h-12 px-3.5 border-b border-[#E5E7EB] flex items-center justify-between shrink-0 ${windowMode ? 'bg-transparent' : 'bg-white'}`}>
               <div className="flex items-center space-x-2">
                 <div className="w-5 h-5 rounded-md bg-[#EFF5F0] text-[#247253] border border-[#E1EBE4] flex items-center justify-center shrink-0">
                   <MousePointer2 size={12} className="text-[#247253]" />
@@ -2558,12 +3731,12 @@ title="Drag corner to resize width"
                 )}
               </div>
               {!windowMode && <button type="button" aria-label="Hide design panel" title="Hide design panel" onClick={() => setInspectorCollapsed(true)} className={reviewStyles.panelToggle}><ChevronRight size={14}/></button>}
-              {windowMode && <button type="button" aria-label="Close design panel" onClick={() => setWindowPanel(null)} className={reviewStyles.windowLaunch}><X size={14}/></button>}
+              {windowMode && <button type="button" aria-label="Close design panel" onClick={() => setInspectorVisible(false)} className={reviewStyles.windowLaunch}><X size={14}/></button>}
             </div>
 
             {/* Inspector Content */}
             {!restoredOperation && renderGroupProgress()}
-            {usesDrafts && draft && <div className={reviewStyles.draftSummary}>
+            {usesDrafts && draft && !windowMode && <div className={reviewStyles.draftSummary}>
               <button type="button" aria-label={reviewOpen ? 'Hide changes' : 'Review changes'} onClick={() => { if (!selectedLayer && pendingEdit) setSelectedLayerState(pendingEdit.layerKey); setReviewOpen(value => !value); }} aria-expanded={reviewOpen}>{reviewOpen ? 'Hide changes' : 'Review changes'}<span>{draft.cursor}</span></button>
               <button type="button" onClick={() => void discardPendingEdit()} disabled={busy || isApplying || Boolean(uncertainApplyId)}>Discard draft</button>
               {reviewOpen && Object.keys(draftHeads(pendingEdit)).length > 1 && <ul aria-label="Change-set files" className={reviewStyles.changeSetFiles}>{Object.values(draftHeads(pendingEdit)).map(head => <li key={head.id}><Code2 size={12}/><span title={editPath(head)}>{editPath(head)}</span></li>)}</ul>}
@@ -2811,15 +3984,12 @@ title="Drag corner to resize width"
                         </button>
 
                         {openSections.spacing && (
-                          <div className={reviewStyles.controlRows}>
-                            <label>
-                              <span>Padding</span>
-                              <select aria-label="Padding" disabled={busy || isApplying || reviewBlocking || destinationMode} value={scopeTokens(activeElement.classes).find(token => /^p-\d+$/.test(token)) || ''} onChange={e => updateStyle('padding', e.target.value)}>
-                                <option value="" disabled>Not set in source</option>
-                                {['p-0','p-1','p-2','p-3','p-4','p-6','p-8','p-10','p-12'].map(value => <option key={value} value={value}>{value.slice(2)} units</option>)}
-                              </select>
-                            </label>
-                            <p>Applies equally to all four sides.</p>
+                          <div className="pt-1">
+                            <BoxModelControl
+                              classes={activeElement.classes}
+                              disabled={busy || isApplying || reviewBlocking || destinationMode}
+                              onChange={updateStyle}
+                            />
                           </div>
                         )}
                       </div>
@@ -2846,106 +4016,12 @@ title="Drag corner to resize width"
                         </button>
 
                         {openSections.text && (
-                          <div className="space-y-2.5 pt-0.5 text-xs">
-                            {/* Typeface */}
-                            <div className="flex items-center justify-between">
-                              <span className={reviewStyles.propertyLabel}>Typeface</span>
-                              <div className="relative w-36">
-                                <select
-                                  value={scopeTokens(activeElement.classes).find(token => ['font-sans','font-serif','font-mono'].includes(token)) || ''}
-                                  onChange={e => updateStyle('fontFamily', e.target.value)}
-                                  className="w-full bg-white border border-[#E2E8F0] rounded-md px-2.5 py-1.5 text-xs text-slate-800 appearance-none focus:outline-none focus:border-[#059669]"
-                                >
-                                  <option value="" disabled>Inherited</option>
-                                  <option value="font-sans">Project sans</option>
-                                  <option value="font-serif">Project serif</option>
-                                  <option value="font-mono">Project mono</option>
-                                </select>
-                                <ChevronDown size={12} className="text-slate-400 absolute right-2.5 top-2.5 pointer-events-none" />
-                              </div>
-                            </div>
-
-                            {/* Weight - Protected: Needed by test/studio-restore.test.ts */}
-                            <div className="flex items-center justify-between">
-                              <span className={reviewStyles.propertyLabel}>Weight</span>
-                              <div className="relative w-36">
-                                <select
-                                  value={scopeTokens(activeElement.classes).find(token => /^font-(normal|medium|semibold|bold|extrabold)$/.test(token)) || ''}
-                                  onChange={e => updateStyle('fontWeight', e.target.value)}
-                                  className="w-full bg-white border border-[#E2E8F0] rounded-md px-2.5 py-1.5 text-xs text-slate-800 appearance-none focus:outline-none focus:border-[#059669]"
-                                >
-                                  <option value="" disabled>Inherited</option>
-                                  <option value="font-normal">Regular</option>
-                                  <option value="font-medium">Medium</option>
-                                  <option value="font-semibold">Semibold</option>
-                                  <option value="font-bold">Bold</option>
-                                  <option value="font-extrabold">Extra bold</option>
-                                </select>
-                                <ChevronDown size={12} className="text-slate-400 absolute right-2.5 top-2.5 pointer-events-none" />
-                              </div>
-                            </div>
-
-                            {/* Size */}
-                            <div className="flex items-center justify-between">
-                              <span className={reviewStyles.propertyLabel}>Size</span>
-                              <div className="relative w-36">
-                                <select
-                                  value={scopeTokens(activeElement.classes).find(token => /^text-(xs|sm|base|lg|xl|[2-7]xl)$/.test(token)) || ''}
-                                  onChange={(e) => updateStyle('fontSize', e.target.value)}
-                                  className="w-full bg-white border border-[#E2E8F0] rounded-md px-2.5 py-1.5 text-xs text-slate-800 appearance-none focus:outline-none focus:border-[#059669]"
-                                >
-                                  <option value="" disabled>Inherited</option>
-                                  <option value="text-xs">Extra small</option>
-                                  <option value="text-sm">SM</option>
-                                  <option value="text-base">Base</option>
-                                  <option value="text-lg">LG</option>
-                                  <option value="text-xl">XL</option>
-                                  <option value="text-2xl">2XL</option>
-                                  <option value="text-3xl">3XL</option>
-                                  <option value="text-4xl">4XL</option>
-                                  <option value="text-5xl">5XL</option>
-                                  <option value="text-6xl">6XL</option>
-                                </select>
-                                <ChevronDown size={12} className="text-slate-400 absolute right-2.5 top-2.5 pointer-events-none" />
-                              </div>
-                            </div>
-
-                            {/* Alignment */}
-                            <div className="flex items-center justify-between">
-                              <span className={reviewStyles.propertyLabel}>Align</span>
-                              <div className="flex items-center space-x-1 w-36 bg-slate-50 p-0.5 rounded-md border border-slate-200">
-                                {[
-                                  { id: 'text-left', label: 'Left', icon: <AlignLeft size={12} /> },
-                                  { id: 'text-center', label: 'Center', icon: <AlignCenter size={12} /> },
-                                  { id: 'text-right', label: 'Right', icon: <AlignRight size={12} /> },
-                                ].map((al) => (
-                                  <button
-                                    key={al.id}
-                                    type="button"
-                                    onClick={() => updateStyle('textAlign', al.id)}
-                                    className={`flex-1 py-1 flex items-center justify-center rounded text-xs transition cursor-pointer ${
-                                      activeElement.classes.includes(al.id) || (al.id === 'text-left' && !activeElement.classes.includes('text-center') && !activeElement.classes.includes('text-right'))
-                                        ? 'bg-white text-emerald-700 shadow-2xs font-semibold'
-                                        : 'text-slate-400 hover:text-slate-700'
-                                    }`}
-                                    title={al.label}
-                                  >
-                                    {al.icon}
-                                  </button>
-                                ))}
-                              </div>
-                            </div>
-
-                            {/* Color */}
-                            <div className="flex items-center justify-between">
-                              <span className={reviewStyles.propertyLabel}>Color</span>
-                              <select aria-label="Text color" value={scopeTokens(activeElement.classes).find(token => ['text-slate-900','text-slate-600','text-emerald-600','text-blue-600','text-rose-600','text-white','text-black'].includes(token)) || ''} onChange={e => updateStyle('textColor',e.target.value)} className="w-36 rounded-md border border-slate-200 bg-white px-2 py-1.5 text-xs">
-                                <option value="" disabled>Inherited / custom</option>
-                                <option value="text-slate-900">Charcoal</option><option value="text-slate-600">Gray</option>
-                                <option value="text-emerald-600">Green</option><option value="text-blue-600">Blue</option>
-                                <option value="text-rose-600">Rose</option><option value="text-white">White</option><option value="text-black">Black</option>
-                              </select>
-                            </div>
+                          <div className="space-y-3 pt-1 text-xs">
+                            <TypographyStudio
+                              classes={activeElement.classes}
+                              disabled={busy || isApplying || reviewBlocking || destinationMode}
+                              onChange={updateStyle}
+                            />
 
                             {/* Content */}
                             <div className="flex items-center justify-between">
@@ -3036,60 +4112,12 @@ title="Drag corner to resize width"
                           </span>
                         </button>
                         {openSections.borders && (
-                          <div className="pt-2 text-xs text-slate-500 space-y-2">
-                            <div className="flex items-center justify-between">
-                              <span className="text-[11px]">Radius</span>
-                              <div className="relative w-36">
-                                <select
-                                  aria-label="Corner radius" value={activeElement.borderRadius || '__computed'}
-                                  onChange={(e) => updateStyle('borderRadius', e.target.value)}
-                                  className="w-full bg-white border border-[#E2E8F0] rounded-md px-2.5 py-1.5 text-xs text-slate-800 appearance-none focus:outline-none focus:border-[#059669]"
-                                >
-                                  {!activeElement.borderRadius && <option value="__computed" disabled>Custom · {activeElement.previewStyle?.borderRadius || 'inherited'}</option>}
-                                  <option value="rounded-none">Square</option>
-                                  <option value="rounded-sm">Small</option>
-                                  <option value="rounded-md">Medium</option>
-                                  <option value="rounded-lg">Large</option>
-                                  <option value="rounded-xl">Extra Large</option>
-                                  <option value="rounded-full">Pill</option>
-                                </select>
-                                <ChevronDown size={11} className="text-slate-400 absolute right-2.5 top-2.5 pointer-events-none" />
-                              </div>
-                            </div>
-
-                            <div className="flex items-center justify-between">
-                              <span className="text-[11px]">Width</span>
-                              <div className="relative w-36">
-                                <select
-                                  value={activeElement.classes.match(/\bborder(-[0248])?\b/)?.[0] || 'border-0'}
-                                  onChange={(e) => updateStyle('borderWidth', e.target.value)}
-                                  className="w-full bg-white border border-[#E2E8F0] rounded-md px-2.5 py-1.5 text-xs text-slate-800 appearance-none focus:outline-none focus:border-[#059669]"
-                                >
-                                  <option value="border-0">None (0px)</option>
-                                  <option value="border">Thin (1px)</option>
-                                  <option value="border-2">Medium (2px)</option>
-                                  <option value="border-4">Thick (4px)</option>
-                                </select>
-                                <ChevronDown size={11} className="text-slate-400 absolute right-2.5 top-2.5 pointer-events-none" />
-                              </div>
-                            </div>
-
-                            <div className="flex items-center justify-between">
-                              <span className="text-[11px]">Color</span>
-                              <div className="relative w-36">
-                                <select
-                                  value={activeElement.classes.match(/\bborder-(slate|emerald|blue|rose|transparent)-\d+\b|\bborder-(transparent|white|black)\b/)?.[0] || 'border-transparent'}
-                                  onChange={(e) => updateStyle('borderColor', e.target.value)}
-                                  className="w-full bg-white border border-[#E2E8F0] rounded-md px-2.5 py-1.5 text-xs text-slate-800 appearance-none focus:outline-none focus:border-[#059669]"
-                                >
-                                  <option value="border-transparent">Transparent</option>
-                                  <option value="border-slate-200">Slate 200</option>
-                                  <option value="border-slate-900">Slate 900</option>
-                                  <option value="border-emerald-500">Emerald 500</option>
-                                </select>
-                                <ChevronDown size={11} className="text-slate-400 absolute right-2.5 top-2.5 pointer-events-none" />
-                              </div>
-                            </div>
+                          <div className="pt-2 text-xs text-slate-500">
+                            <AppearanceStudio
+                              classes={activeElement.classes}
+                              disabled={busy || isApplying || reviewBlocking || destinationMode}
+                              onChange={updateStyle}
+                            />
                           </div>
                         )}
                       </div>
@@ -3162,10 +4190,11 @@ title="Drag corner to resize width"
                 </div>
               </div>
             )}
-            {!windowMode && <footer className={reviewStyles.inspectorFooter} aria-label="Save and history">
-              {renderHistoryControls()}{renderDraftControls()}
-            </footer>}
-          </aside>
+              <footer className={reviewStyles.inspectorFooter} aria-label="Save and history">
+                {renderHistoryControls()}{renderDraftControls()}
+              </footer>
+            </aside>
+          )}
 
         </div>
         </div>

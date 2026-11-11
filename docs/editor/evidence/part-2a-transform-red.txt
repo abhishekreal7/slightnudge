@@ -1,0 +1,61 @@
+> node --import tsx scratch/editor-sprint1-isolate.ts overlay-transform-cleanup app/studio/page.tsx app/globals.css components/slightnudge/SlightNudgeOverlay.tsx components/slightnudge/useOverlayPresentation.ts test/overlay-transform-cleanup.test.ts test/helpers/test-server.ts
+{"temporaryRoot":"C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-overlay-transform-cleanup-nZCPuU","baseline":"c182943f79b5fda6f9873ff54ca25c08ead0fc89","suite":"overlay-transform-cleanup","overlays":["app/studio/page.tsx","app/globals.css","components/slightnudge/SlightNudgeOverlay.tsx","components/slightnudge/useOverlayPresentation.ts","test/overlay-transform-cleanup.test.ts","test/helpers/test-server.ts"],"omitted":".env.example"}
+Isolated seed staged paths: .env.example, app/globals.css, app/studio/page.tsx, components/slightnudge/SlightNudgeOverlay.tsx, components/slightnudge/useOverlayPresentation.ts, test/helpers/test-server.ts, test/overlay-transform-cleanup.test.ts
+TAP version 13
+# Subtest: a refused source-editor drop restores movement transforms on the target and siblings
+not ok 1 - a refused source-editor drop restores movement transforms on the target and siblings
+  ---
+  duration_ms: 36174.04
+  type: 'test'
+  location: 'C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-overlay-transform-cleanup-nZCPuU\\source\\test\\overlay-transform-cleanup.test.ts:1:150'
+  failureType: 'testCodeFailure'
+  error: |-
+    A refused drop must restore every movement transform
+    + actual - expected
+    
+      [
+    +   'translate3d(0px, 0px, 0px)',
+    +   'translate3d(0px, 0px, 0px)',
+    +   'translate3d(0px, 0px, 0px)',
+    +   'translate3d(0px, 105px, 0px)',
+    +   'translate3d(0px, -145.188px, 0px)'
+    -   '',
+    -   '',
+    -   '',
+    -   '',
+    -   ''
+      ]
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    0: ''
+    1: ''
+    2: ''
+    3: ''
+    4: ''
+  actual:
+    0: 'translate3d(0px, 0px, 0px)'
+    1: 'translate3d(0px, 0px, 0px)'
+    2: 'translate3d(0px, 0px, 0px)'
+    3: 'translate3d(0px, 105px, 0px)'
+    4: 'translate3d(0px, -145.188px, 0px)'
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (C:\Users\abhis\AppData\Local\Temp\sn-sprint1-overlay-transform-cleanup-nZCPuU\source\test\overlay-transform-cleanup.test.ts:32:12)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 0
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 36181.3867
+Owned temporary entries before cleanup: ["node-compile-cache","npm-cache","tsx-abhis"]
+Confirmed cleanup: C:\Users\abhis\AppData\Local\Temp\sn-sprint1-overlay-transform-cleanup-nZCPuU
+exit 1
+CONFIRMED: protected files and Git status unchanged.

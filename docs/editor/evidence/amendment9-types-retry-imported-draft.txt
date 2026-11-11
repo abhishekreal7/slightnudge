@@ -1,0 +1,41 @@
+> node --import tsx scratch/editor-s1-group.ts amendment9-types-retry-imported-draft imported-draft test/helpers/real-state.ts components/slightnudge/EditorWorkspace.tsx test/account-isolation.test.ts test/appearance-layout.test.ts test/button-editing.test.ts test/component-ownership.test.ts test/container-move.test.ts test/format-and-tailwind-report.v2.ts test/image-content.test.ts test/image-framing.test.ts test/imported-draft.test.ts test/production-boundaries.test.ts test/section-order.test.ts test/security-hardening-v2.proofs.ts test/shared-instance.test.ts
+{"temporaryRoot":"C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-imported-draft-UYtARp","baseline":"8c613619b4ce051027689fd3d782d4ee029e7052","suite":"imported-draft","overlays":["test/helpers/real-state.ts","components/slightnudge/EditorWorkspace.tsx","test/account-isolation.test.ts","test/appearance-layout.test.ts","test/button-editing.test.ts","test/component-ownership.test.ts","test/container-move.test.ts","test/format-and-tailwind-report.v2.ts","test/image-content.test.ts","test/image-framing.test.ts","test/imported-draft.test.ts","test/production-boundaries.test.ts","test/section-order.test.ts","test/security-hardening-v2.proofs.ts","test/shared-instance.test.ts"],"omitted":".env.example"}
+Isolated seed staged paths: .env.example, components/slightnudge/EditorWorkspace.tsx, test/account-isolation.test.ts, test/appearance-layout.test.ts, test/button-editing.test.ts, test/component-ownership.test.ts, test/container-move.test.ts, test/format-and-tailwind-report.v2.ts, test/helpers/real-state.ts, test/image-content.test.ts, test/image-framing.test.ts, test/imported-draft.test.ts, test/production-boundaries.test.ts, test/section-order.test.ts, test/security-hardening-v2.proofs.ts, test/shared-instance.test.ts
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: The input did not match the regular expression /different source file or project/. Input:
+
+"Error: ENOENT: no such file or directory, lstat 'C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-imported-draft-UYtARp\\temp\\sn-imported-draft-FGifKD\\.slightnudge\\repositories.json'"
+
+    at <anonymous> (C:\Users\abhis\AppData\Local\Temp\sn-sprint1-imported-draft-UYtARp\source\test\imported-draft.test.ts:23:10) {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: Error: ENOENT: no such file or directory, lstat 'C:\Users\abhis\AppData\Local\Temp\sn-sprint1-imported-draft-UYtARp\temp\sn-imported-draft-FGifKD\.slightnudge\repositories.json'
+      at realpathSync (node:fs:2786:29)
+      at canonicalFile (C:\Users\abhis\AppData\Local\Temp\sn-sprint1-imported-draft-UYtARp\source\lib\slightnudge\source-paths.ts:11:16)
+      at registeredProjectRoot (C:\Users\abhis\AppData\Local\Temp\sn-sprint1-imported-draft-UYtARp\source\lib\slightnudge\source-paths.ts:18:44)
+      at assertSourceScope (C:\Users\abhis\AppData\Local\Temp\sn-sprint1-imported-draft-UYtARp\source\lib\slightnudge\source-paths.ts:39:14)
+      at validatePending (C:\Users\abhis\AppData\Local\Temp\sn-sprint1-imported-draft-UYtARp\source\lib\slightnudge\edit-history.ts:622:3)
+      at readPendingSourceEdit (C:\Users\abhis\AppData\Local\Temp\sn-sprint1-imported-draft-UYtARp\source\lib\slightnudge\edit-history.ts:602:3)
+      at readDraftSource (C:\Users\abhis\AppData\Local\Temp\sn-sprint1-imported-draft-UYtARp\source\lib\slightnudge\edit-history.ts:608:19)
+      at <anonymous> (C:\Users\abhis\AppData\Local\Temp\sn-sprint1-imported-draft-UYtARp\source\test\imported-draft.test.ts:23:23)
+      at getActual (node:assert:609:5)
+      at Function.throws (node:assert:757:24) {
+    errno: -4058,
+    code: 'ENOENT',
+    syscall: 'lstat',
+    path: 'C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-imported-draft-UYtARp\\temp\\sn-imported-draft-FGifKD\\.slightnudge\\repositories.json'
+  },
+  expected: /different source file or project/,
+  operator: 'throws',
+  diff: 'simple'
+}
+
+Node.js v22.19.0
+Owned temporary entries before cleanup: ["tsx-abhis"]
+Confirmed cleanup: C:\Users\abhis\AppData\Local\Temp\sn-sprint1-imported-draft-UYtARp
+CONFIRMED: integration checkout protected files and status unchanged.
+exit 1
+CONFIRMED: protected files and Git status unchanged.

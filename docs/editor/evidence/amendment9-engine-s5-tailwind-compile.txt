@@ -1,0 +1,43 @@
+> C:\nvm4w\nodejs\node.exe --import tsx scratch/editor-s1-group.ts amendment9-engine-s5-tailwind-compile s5-tailwind-compile test/helpers/real-state.ts
+{"temporaryRoot":"C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-s5-tailwind-compile-ImxTfJ","baseline":"8c613619b4ce051027689fd3d782d4ee029e7052","suite":"s5-tailwind-compile","overlays":["test/helpers/real-state.ts"],"omitted":".env.example"}
+Isolated seed staged paths: .env.example, test/helpers/real-state.ts
+TAP version 13
+# Subtest: S5: Verify Tailwind compilation and AST parse before write
+    # Subtest: refuses applying an edit with a bogus non-compiling class and leaves file unchanged
+    ok 1 - refuses applying an edit with a bogus non-compiling class and leaves file unchanged
+      ---
+      duration_ms: 280.906
+      type: 'test'
+      ...
+    # Subtest: accepts valid classes, stacked variant (dark:hover:bg-blue-500), and arbitrary value (w-[37px])
+    ok 2 - accepts valid classes, stacked variant (dark:hover:bg-blue-500), and arbitrary value (w-[37px])
+      ---
+      duration_ms: 322.3613
+      type: 'test'
+      ...
+    # Subtest: refuses content that would break the AST parse and leaves file unchanged
+    ok 3 - refuses content that would break the AST parse and leaves file unchanged
+      ---
+      duration_ms: 127.1059
+      type: 'test'
+      ...
+    1..3
+ok 1 - S5: Verify Tailwind compilation and AST parse before write
+  ---
+  duration_ms: 735.7701
+  type: 'suite'
+  ...
+1..1
+# tests 3
+# suites 1
+# pass 3
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 743.3001
+Owned temporary entries before cleanup: ["tsx-abhis"]
+Confirmed cleanup: C:\Users\abhis\AppData\Local\Temp\sn-sprint1-s5-tailwind-compile-ImxTfJ
+CONFIRMED: integration checkout protected files and status unchanged.
+exit 0
+CONFIRMED: protected files and Git status unchanged.

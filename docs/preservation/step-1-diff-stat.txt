@@ -1,0 +1,20 @@
+ app/globals.css                                    |   8 +-
+ app/layout.tsx                                     |   5 +-
+ components/slightnudge/CanvasStage.tsx             |  25 ++++-
+ components/slightnudge/EditorWorkspace.tsx         | 115 +++++++++++++++------
+ components/slightnudge/ResponsiveControls.tsx      |  11 +-
+ components/slightnudge/SourceLayers.tsx            |  19 +++-
+ components/slightnudge/SourceProjectCanvas.tsx     |  21 ++--
+ components/slightnudge/canvas-stage.module.css     |   6 +-
+ components/slightnudge/editor-workspace.module.css | 104 ++++++++++++++++---
+ .../slightnudge/responsive-controls.module.css     |   4 +-
+ components/slightnudge/useWindowDock.ts            |  30 ++++--
+ fixtures/1-plain-static.tsx                        |   8 +-
+ lib/slightnudge/client.ts                          |   1 +
+ lib/slightnudge/imported-canvas-runtime.ts         |   6 ++
+ lib/slightnudge/source-canvas-bridge.ts            |  19 +++-
+ next-env.d.ts                                      |   4 +-
+ test/helpers/core-editing-browser.ts               |   6 +-
+ test/helpers/imported-canvas-browser.ts            |   4 +-
+ test/review-consent.browser.ts                     |  12 +++
+ 19 files changed, 320 insertions(+), 88 deletions(-)

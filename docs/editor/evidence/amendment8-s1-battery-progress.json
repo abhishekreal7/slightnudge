@@ -1,0 +1,23 @@
+[
+  {
+    "suite": "apply-review-race",
+    "label": "amendment8-s1-apply-review-race",
+    "code": 0,
+    "assertion": false,
+    "protectedFailure": false
+  },
+  {
+    "suite": "apply-crash-recovery",
+    "label": "amendment8-s1-apply-crash-recovery",
+    "code": 1,
+    "assertion": true,
+    "protectedFailure": false
+  },
+  {
+    "suite": "apply-crash-recovery",
+    "label": "amendment8-s1-apply-crash-recovery-retry",
+    "code": 1,
+    "assertion": true,
+    "protectedFailure": false
+  }
+]

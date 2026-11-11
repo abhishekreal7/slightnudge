@@ -1,0 +1,9 @@
+> C:\nvm4w\nodejs\node.exe --import tsx scratch/editor-sprint1-isolate.ts prewrite-hook-guard
+{"temporaryRoot":"C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-prewrite-hook-guard-4luSlK","baseline":"6cadd06eb1dbbf55032354db2817add1c52e3ac3","suite":"prewrite-hook-guard","overlays":[],"omitted":".env.example"}
+Isolated seed staged paths: .env.example
+🧪 RUNNING PRE-WRITE HOOK GUARD SUITE
+✅ ALL PRE-WRITE HOOK GUARD TESTS PASSED
+Owned temporary entries before cleanup: ["tsx-abhis"]
+Confirmed cleanup: C:\Users\abhis\AppData\Local\Temp\sn-sprint1-prewrite-hook-guard-4luSlK
+exit 0
+CONFIRMED: protected files and Git status unchanged.

@@ -1,0 +1,37 @@
+> C:\nvm4w\nodejs\node.exe --import tsx scratch/editor-s1-group.ts amendment9-engine-s2-path-traversal s2-path-traversal test/helpers/real-state.ts
+{"temporaryRoot":"C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-s2-path-traversal-EOePPL","baseline":"8c613619b4ce051027689fd3d782d4ee029e7052","suite":"s2-path-traversal","overlays":["test/helpers/real-state.ts"],"omitted":".env.example"}
+Isolated seed staged paths: .env.example, test/helpers/real-state.ts
+TAP version 13
+# Subtest: S2: Path traversal refusal regression test
+    # Subtest: refuses pending-preview with ..\\ traversing outside project root, leaving target file unchanged
+    ok 1 - refuses pending-preview with ..\\ traversing outside project root, leaving target file unchanged
+      ---
+      duration_ms: 19.3654
+      type: 'test'
+      ...
+    # Subtest: refuses pending-preview using symlink/junction pointing outside project root, leaving target file unchanged
+    ok 2 - refuses pending-preview using symlink/junction pointing outside project root, leaving target file unchanged
+      ---
+      duration_ms: 10.3259
+      type: 'test'
+      ...
+    1..2
+ok 1 - S2: Path traversal refusal regression test
+  ---
+  duration_ms: 36.1393
+  type: 'suite'
+  ...
+1..1
+# tests 2
+# suites 1
+# pass 2
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 44.2158
+Owned temporary entries before cleanup: ["tsx-abhis"]
+Confirmed cleanup: C:\Users\abhis\AppData\Local\Temp\sn-sprint1-s2-path-traversal-EOePPL
+CONFIRMED: integration checkout protected files and status unchanged.
+exit 0
+CONFIRMED: protected files and Git status unchanged.

@@ -1,0 +1,36 @@
+> git diff --cached --name-only
+app/globals.css
+app/studio/page.tsx
+components/slightnudge/SlightNudgeOverlay.tsx
+components/slightnudge/useOverlayPresentation.ts
+docs/THIRD_PARTY.md
+docs/editor-sprint1-report.md
+docs/editor/STATE.md
+docs/editor/overlay-contract.md
+docs/editor/testids.md
+test/helpers/overlay-screenshots.ts
+test/helpers/test-server.ts
+test/overlay-contract.test.ts
+test/overlay-transform-cleanup.test.ts
+test/regenerate-overlay-baselines.ts
+test/visual-baselines/README.md
+test/visual-baselines/source-applying.png
+test/visual-baselines/source-dragging.png
+test/visual-baselines/source-error.png
+test/visual-baselines/source-hover.png
+test/visual-baselines/source-idle.png
+test/visual-baselines/source-previewing.png
+test/visual-baselines/source-resizing.png
+test/visual-baselines/source-selected.png
+test/visual-baselines/source-textediting.png
+test/visual-baselines/studio-applying.png
+test/visual-baselines/studio-dragging.png
+test/visual-baselines/studio-error.png
+test/visual-baselines/studio-hover.png
+test/visual-baselines/studio-idle.png
+test/visual-baselines/studio-previewing.png
+test/visual-baselines/studio-resizing.png
+test/visual-baselines/studio-selected.png
+test/visual-baselines/studio-textediting.png
+CONFIRMED: next-env.d.ts, docs evidence and scratch are absent from the index.
+Commit: 50e2d699fc8efada9de3443631f803be13ec9cc1

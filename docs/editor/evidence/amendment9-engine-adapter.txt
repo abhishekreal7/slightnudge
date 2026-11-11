@@ -1,0 +1,34 @@
+> C:\nvm4w\nodejs\node.exe --import tsx scratch/editor-s1-group.ts amendment9-engine-adapter adapter test/helpers/real-state.ts
+{"temporaryRoot":"C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-adapter-USCfRL","baseline":"8c613619b4ce051027689fd3d782d4ee029e7052","suite":"adapter","overlays":["test/helpers/real-state.ts"],"omitted":".env.example"}
+Isolated seed staged paths: .env.example, test/helpers/real-state.ts
+====================================================
+🧪 SLIGHTNUDGE ADAPTER & ASSET REGEX TESTS
+====================================================
+
+✅ [PASS] next-source-loader.cjs starts with /* eslint-disable */
+✅ [PASS] bridgeClient script is generated as a string
+✅ [PASS] bridgeClient does NOT contain malformed /^/slightnudge-assets/ regex
+✅ [PASS] Found asset-path regex pattern in bridgeClient script
+✅ [PASS] Regex matches valid PNG asset path
+✅ [PASS] Regex matches valid JPG asset path
+✅ [PASS] Regex matches valid JPEG asset path
+✅ [PASS] Regex matches valid WEBP asset path
+✅ [PASS] Regex matches valid GIF asset path
+✅ [PASS] Regex is case-insensitive for UUID and extension
+✅ [PASS] Regex rejects unsupported SVG extension
+✅ [PASS] Regex rejects executable extension
+✅ [PASS] Regex rejects invalid UUID
+✅ [PASS] Regex rejects non-slightnudge path
+✅ [PASS] Regex rejects absolute URL
+✅ [PASS] Regex rejects path with trailing segment
+✅ [PASS] bridgeClient script parses cleanly as valid JavaScript in Function()
+
+====================================================
+🎉 ALL ADAPTER TESTS PASSED!
+====================================================
+
+Owned temporary entries before cleanup: ["tsx-abhis"]
+Confirmed cleanup: C:\Users\abhis\AppData\Local\Temp\sn-sprint1-adapter-USCfRL
+CONFIRMED: integration checkout protected files and status unchanged.
+exit 0
+CONFIRMED: protected files and Git status unchanged.

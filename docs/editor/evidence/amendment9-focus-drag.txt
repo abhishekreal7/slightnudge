@@ -1,0 +1,9 @@
+> node --import tsx scratch/editor-s1-group.ts amendment9-focus-drag drag-move test/helpers/real-state.ts components/slightnudge/EditorWorkspace.tsx
+{"temporaryRoot":"C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-drag-move-l7emGU","baseline":"8c613619b4ce051027689fd3d782d4ee029e7052","suite":"drag-move","overlays":["test/helpers/real-state.ts","components/slightnudge/EditorWorkspace.tsx"],"omitted":".env.example"}
+Isolated seed staged paths: .env.example, components/slightnudge/EditorWorkspace.tsx, test/helpers/real-state.ts
+PASS: snapping, axis lock, scale, bounds, transform refusals, authorized API, unchanged preview, repeated moves, whole-section child preservation and exact Undo
+Owned temporary entries before cleanup: ["tsx-abhis"]
+Confirmed cleanup: C:\Users\abhis\AppData\Local\Temp\sn-sprint1-drag-move-l7emGU
+CONFIRMED: integration checkout protected files and status unchanged.
+exit 0
+CONFIRMED: protected files and Git status unchanged.

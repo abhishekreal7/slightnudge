@@ -67,6 +67,9 @@ function LayerRows({ nodes, selectedKey, onSelect, depth = 0 }: { nodes: LayerNo
 
 export function StudioLayout({ children, projectName = 'SlightNudge Playground', activeFile, activePageId, inspectorEnabled = true, previewConnected = false }: { children: React.ReactNode; projectName?: string; activeFile?: string; activePageId?: string; inspectorEnabled?: boolean; previewConnected?: boolean }) {
   const pathname = usePathname();
+  const [inIframe, setInIframe] = useState(() => {
+    return typeof window !== 'undefined' && window.parent !== window;
+  });
   const [viewport, setViewport] = useState<Viewport>('desktop');
   const [zoom, setZoom] = useState<number>(100);
   const [sidebarTab, setSidebarTab] = useState<'pages' | 'layers'>('pages');
@@ -74,13 +77,19 @@ export function StudioLayout({ children, projectName = 'SlightNudge Playground',
   const [selectedLayer, setSelectedLayer] = useState('');
   const currentPage = demoPages.find((item) => activePageId ? item.id === activePageId : item.path === pathname) || demoPages[0];
   const width = viewport === 'mobile' ? 390 : viewport === 'tablet' ? 768 : 1120;
+
+  useEffect(() => {
+    setInIframe(typeof window !== 'undefined' && window.parent !== window);
+  }, []);
   const selectViewport = (value: Viewport) => {
     setViewport(value);
     window.dispatchEvent(new CustomEvent('slightnudge:viewport', { detail: { viewport: value } }));
   };
 
+  const isEmbedded = typeof window !== 'undefined' ? window.parent !== window : inIframe;
+
   useEffect(() => {
-    if (!inspectorEnabled) return;
+    if (!inspectorEnabled || isEmbedded) return;
     const root = document.querySelector<HTMLElement>('.sn-preview-content');
     if (!root) return;
     const updateLayers = () => setLayers(readPreviewLayers(root));
@@ -94,11 +103,15 @@ export function StudioLayout({ children, projectName = 'SlightNudge Playground',
     observer.observe(root, { childList: true, subtree: true, characterData: true });
     window.addEventListener('slightnudge:selection', updateSelection);
     return () => { observer.disconnect(); window.removeEventListener('slightnudge:selection', updateSelection); };
-  }, [inspectorEnabled, pathname, activePageId]);
+  }, [inspectorEnabled, pathname, activePageId, isEmbedded]);
 
   const selectLayer = (layer: LayerNode) => {
     window.dispatchEvent(new CustomEvent('slightnudge:select-source', { detail: { filePath: layer.file, line: layer.line, column: layer.column, tagName: layer.tag } }));
   };
+
+  if (isEmbedded) {
+    return <div className="sn-preview-content">{children}</div>;
+  }
 
   return <div className="sn-editor-shell">
     {inspectorEnabled && <SlightNudgeOverlay key={currentPage.id} defaultFilePath={activeFile || currentPage?.file} zoom={zoom} />}

@@ -1,0 +1,223 @@
+> node --import tsx scratch/editor-sprint1-isolate.ts overlay-contract test/overlay-contract.test.ts test/helpers/overlay-screenshots.ts test/regenerate-overlay-baselines.ts
+{"temporaryRoot":"C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-overlay-contract-IeDxUi","baseline":"c182943f79b5fda6f9873ff54ca25c08ead0fc89","suite":"overlay-contract","overlays":["test/overlay-contract.test.ts","test/helpers/overlay-screenshots.ts","test/regenerate-overlay-baselines.ts"],"omitted":".env.example"}
+Isolated seed staged paths: .env.example, test/helpers/overlay-screenshots.ts, test/overlay-contract.test.ts, test/regenerate-overlay-baselines.ts
+TAP version 13
+# Subtest: studio overlay contract
+    # Subtest: places above, flips below, clamps at both horizontal edges and never covers the target
+    not ok 1 - places above, flips below, clamps at both horizontal edges and never covers the target
+      ---
+      duration_ms: 2293.2799
+      type: 'test'
+      location: 'C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-overlay-contract-IeDxUi\\source\\test\\overlay-contract.test.ts:1:3581'
+      failureType: 'testCodeFailure'
+      error: |-
+        Surface must expose its current overlay state
+        
+        0 !== 1
+        
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: 1
+      actual: 0
+      operator: 'strictEqual'
+      stack: |-
+        TestContext.<anonymous> (C:\Users\abhis\AppData\Local\Temp\sn-sprint1-overlay-contract-IeDxUi\source\test\overlay-contract.test.ts:80:18)
+        async Test.run (node:internal/test_runner/test:1054:7)
+        async Promise.all (index 0)
+        async Suite.run (node:internal/test_runner/test:1442:7)
+        async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+      ...
+    # Subtest: shows only a 2px undecorated parent-width destination and a ghosted target during drag
+    not ok 2 - shows only a 2px undecorated parent-width destination and a ghosted target during drag
+      ---
+      duration_ms: 7899.0301
+      type: 'test'
+      location: 'C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-overlay-contract-IeDxUi\\source\\test\\overlay-contract.test.ts:1:4761'
+      failureType: 'testCodeFailure'
+      error: |-
+        locator.waitFor: Timeout 5000ms exceeded.
+        Call log:
+        [2m  - waiting for getByTitle('Edit text directly on canvas').locator('../..') to be visible[22m
+        
+      code: 'ERR_TEST_FAILURE'
+      name: 'TimeoutError'
+      stack: |-
+        select (C:\Users\abhis\AppData\Local\Temp\sn-sprint1-overlay-contract-IeDxUi\source\test\overlay-contract.test.ts:45:32)
+        async TestContext.<anonymous> (C:\Users\abhis\AppData\Local\Temp\sn-sprint1-overlay-contract-IeDxUi\source\test\overlay-contract.test.ts:95:9)
+      ...
+    # Subtest: cleans successful, refused and cancelled drops, Escape, pointercancel and blur
+    not ok 3 - cleans successful, refused and cancelled drops, Escape, pointercancel and blur
+      ---
+      duration_ms: 5678.2739
+      type: 'test'
+      location: 'C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-overlay-contract-IeDxUi\\source\\test\\overlay-contract.test.ts:1:6204'
+      failureType: 'testCodeFailure'
+      error: |-
+        locator.waitFor: Timeout 5000ms exceeded.
+        Call log:
+        [2m  - waiting for getByTitle('Edit text directly on canvas').locator('../..') to be visible[22m
+        
+      code: 'ERR_TEST_FAILURE'
+      name: 'TimeoutError'
+      stack: |-
+        select (C:\Users\abhis\AppData\Local\Temp\sn-sprint1-overlay-contract-IeDxUi\source\test\overlay-contract.test.ts:45:32)
+        async TestContext.<anonymous> (C:\Users\abhis\AppData\Local\Temp\sn-sprint1-overlay-contract-IeDxUi\source\test\overlay-contract.test.ts:121:11)
+      ...
+    # Subtest: hides the toolbar throughout resize and scrolling
+    not ok 4 - hides the toolbar throughout resize and scrolling
+      ---
+      duration_ms: 5668.07
+      type: 'test'
+      location: 'C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-overlay-contract-IeDxUi\\source\\test\\overlay-contract.test.ts:1:7035'
+      failureType: 'testCodeFailure'
+      error: |-
+        locator.waitFor: Timeout 5000ms exceeded.
+        Call log:
+        [2m  - waiting for getByTitle('Edit text directly on canvas').locator('../..') to be visible[22m
+        
+      code: 'ERR_TEST_FAILURE'
+      name: 'TimeoutError'
+      stack: |-
+        select (C:\Users\abhis\AppData\Local\Temp\sn-sprint1-overlay-contract-IeDxUi\source\test\overlay-contract.test.ts:45:32)
+        async TestContext.<anonymous> (C:\Users\abhis\AppData\Local\Temp\sn-sprint1-overlay-contract-IeDxUi\source\test\overlay-contract.test.ts:139:9)
+      ...
+    # Subtest: matches deliberate screenshots for all nine overlay states
+    not ok 5 - matches deliberate screenshots for all nine overlay states
+      ---
+      duration_ms: 5696.4745
+      type: 'test'
+      location: 'C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-overlay-contract-IeDxUi\\source\\test\\overlay-contract.test.ts:1:7809'
+      failureType: 'testCodeFailure'
+      error: |-
+        locator.getAttribute: Timeout 5000ms exceeded.
+        Call log:
+        [2m  - waiting for locator('[data-editor-state]').first()[22m
+        
+      code: 'ERR_TEST_FAILURE'
+      name: 'TimeoutError'
+      stack: |-
+        TestContext.<anonymous> (C:\Users\abhis\AppData\Local\Temp\sn-sprint1-overlay-contract-IeDxUi\source\test\overlay-contract.test.ts:186:74)
+      ...
+    1..5
+not ok 1 - studio overlay contract
+  ---
+  duration_ms: 66184.0603
+  type: 'suite'
+  location: 'C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-overlay-contract-IeDxUi\\source\\test\\overlay-contract.test.ts:1:3539'
+  failureType: 'subtestsFailed'
+  error: '5 subtests failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+# Subtest: source overlay contract
+    # Subtest: places above, flips below, clamps at both horizontal edges and never covers the target
+    not ok 1 - places above, flips below, clamps at both horizontal edges and never covers the target
+      ---
+      duration_ms: 5819.1526
+      type: 'test'
+      location: 'C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-overlay-contract-IeDxUi\\source\\test\\overlay-contract.test.ts:1:3581'
+      failureType: 'testCodeFailure'
+      error: |-
+        locator.waitFor: Timeout 5000ms exceeded.
+        Call log:
+        [2m  - waiting for locator('.sn-canvas-hud') to be visible[22m
+        
+      code: 'ERR_TEST_FAILURE'
+      name: 'TimeoutError'
+      stack: |-
+        select (C:\Users\abhis\AppData\Local\Temp\sn-sprint1-overlay-contract-IeDxUi\source\test\overlay-contract.test.ts:45:32)
+        async TestContext.<anonymous> (C:\Users\abhis\AppData\Local\Temp\sn-sprint1-overlay-contract-IeDxUi\source\test\overlay-contract.test.ts:75:9)
+      ...
+    # Subtest: shows only a 2px undecorated parent-width destination and a ghosted target during drag
+    not ok 2 - shows only a 2px undecorated parent-width destination and a ghosted target during drag
+      ---
+      duration_ms: 5743.3517
+      type: 'test'
+      location: 'C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-overlay-contract-IeDxUi\\source\\test\\overlay-contract.test.ts:1:4761'
+      failureType: 'testCodeFailure'
+      error: |-
+        locator.waitFor: Timeout 5000ms exceeded.
+        Call log:
+        [2m  - waiting for locator('.sn-canvas-hud') to be visible[22m
+        
+      code: 'ERR_TEST_FAILURE'
+      name: 'TimeoutError'
+      stack: |-
+        select (C:\Users\abhis\AppData\Local\Temp\sn-sprint1-overlay-contract-IeDxUi\source\test\overlay-contract.test.ts:45:32)
+        async TestContext.<anonymous> (C:\Users\abhis\AppData\Local\Temp\sn-sprint1-overlay-contract-IeDxUi\source\test\overlay-contract.test.ts:95:9)
+      ...
+    # Subtest: cleans successful, refused and cancelled drops, Escape, pointercancel and blur
+    not ok 3 - cleans successful, refused and cancelled drops, Escape, pointercancel and blur
+      ---
+      duration_ms: 5744.5499
+      type: 'test'
+      location: 'C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-overlay-contract-IeDxUi\\source\\test\\overlay-contract.test.ts:1:6204'
+      failureType: 'testCodeFailure'
+      error: |-
+        locator.waitFor: Timeout 5000ms exceeded.
+        Call log:
+        [2m  - waiting for locator('.sn-canvas-hud') to be visible[22m
+        
+      code: 'ERR_TEST_FAILURE'
+      name: 'TimeoutError'
+      stack: |-
+        select (C:\Users\abhis\AppData\Local\Temp\sn-sprint1-overlay-contract-IeDxUi\source\test\overlay-contract.test.ts:45:32)
+        async TestContext.<anonymous> (C:\Users\abhis\AppData\Local\Temp\sn-sprint1-overlay-contract-IeDxUi\source\test\overlay-contract.test.ts:121:11)
+      ...
+    # Subtest: hides the toolbar throughout resize and scrolling
+    not ok 4 - hides the toolbar throughout resize and scrolling
+      ---
+      duration_ms: 5708.6421
+      type: 'test'
+      location: 'C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-overlay-contract-IeDxUi\\source\\test\\overlay-contract.test.ts:1:7035'
+      failureType: 'testCodeFailure'
+      error: |-
+        locator.waitFor: Timeout 5000ms exceeded.
+        Call log:
+        [2m  - waiting for locator('.sn-canvas-hud') to be visible[22m
+        
+      code: 'ERR_TEST_FAILURE'
+      name: 'TimeoutError'
+      stack: |-
+        select (C:\Users\abhis\AppData\Local\Temp\sn-sprint1-overlay-contract-IeDxUi\source\test\overlay-contract.test.ts:45:32)
+        async TestContext.<anonymous> (C:\Users\abhis\AppData\Local\Temp\sn-sprint1-overlay-contract-IeDxUi\source\test\overlay-contract.test.ts:139:9)
+      ...
+    # Subtest: matches deliberate screenshots for all nine overlay states
+    not ok 5 - matches deliberate screenshots for all nine overlay states
+      ---
+      duration_ms: 5793.1407
+      type: 'test'
+      location: 'C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-overlay-contract-IeDxUi\\source\\test\\overlay-contract.test.ts:1:7809'
+      failureType: 'testCodeFailure'
+      error: |-
+        locator.getAttribute: Timeout 5000ms exceeded.
+        Call log:
+        [2m  - waiting for locator('[data-editor-state]').first()[22m
+        
+      code: 'ERR_TEST_FAILURE'
+      name: 'TimeoutError'
+      stack: |-
+        TestContext.<anonymous> (C:\Users\abhis\AppData\Local\Temp\sn-sprint1-overlay-contract-IeDxUi\source\test\overlay-contract.test.ts:186:74)
+      ...
+    1..5
+not ok 2 - source overlay contract
+  ---
+  duration_ms: 28811.935
+  type: 'suite'
+  location: 'C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-overlay-contract-IeDxUi\\source\\test\\overlay-contract.test.ts:1:3539'
+  failureType: 'subtestsFailed'
+  error: '5 subtests failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+1..2
+# tests 10
+# suites 2
+# pass 0
+# fail 10
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 99025.7403
+Owned temporary entries before cleanup: ["node-compile-cache","npm-cache","tsx-abhis"]
+Confirmed cleanup: C:\Users\abhis\AppData\Local\Temp\sn-sprint1-overlay-contract-IeDxUi
+exit 1
+CONFIRMED: protected files and Git status unchanged.

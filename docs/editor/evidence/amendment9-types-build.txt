@@ -1,0 +1,173 @@
+> node --import tsx scratch/editor-s1-group.ts amendment9-types-build build test/helpers/real-state.ts components/slightnudge/EditorWorkspace.tsx test/account-isolation.test.ts test/appearance-layout.test.ts test/button-editing.test.ts test/component-actions-bridge.test.ts test/component-ownership.test.ts test/container-move.test.ts test/format-and-tailwind-report.v2.ts test/icon-properties-bridge.test.ts test/icon-replacement-bridge.test.ts test/image-attributes-bridge.test.ts test/image-content.test.ts test/image-framing.test.ts test/imported-draft.test.ts test/production-boundaries.test.ts test/runtime-class-ownership.test.ts test/section-order.test.ts test/security-hardening-v2.proofs.ts test/shared-instance.test.ts test/source-rendered-bridge.test.ts test/step1-selection.iframe-v3.test.ts test/unified-editor.browser.ts test/helpers/editor-reliability-selection.ts test/helpers/editor-reliability-selection.v3.ts test/helpers/security-selection.v2.ts test/helpers/selection-gate-v3-coordinates.ts test/helpers/selection-gate-v3.ts
+{"temporaryRoot":"C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-build-zvUmAs","baseline":"8c613619b4ce051027689fd3d782d4ee029e7052","suite":"build","overlays":["test/helpers/real-state.ts","components/slightnudge/EditorWorkspace.tsx","test/account-isolation.test.ts","test/appearance-layout.test.ts","test/button-editing.test.ts","test/component-actions-bridge.test.ts","test/component-ownership.test.ts","test/container-move.test.ts","test/format-and-tailwind-report.v2.ts","test/icon-properties-bridge.test.ts","test/icon-replacement-bridge.test.ts","test/image-attributes-bridge.test.ts","test/image-content.test.ts","test/image-framing.test.ts","test/imported-draft.test.ts","test/production-boundaries.test.ts","test/runtime-class-ownership.test.ts","test/section-order.test.ts","test/security-hardening-v2.proofs.ts","test/shared-instance.test.ts","test/source-rendered-bridge.test.ts","test/step1-selection.iframe-v3.test.ts","test/unified-editor.browser.ts","test/helpers/editor-reliability-selection.ts","test/helpers/editor-reliability-selection.v3.ts","test/helpers/security-selection.v2.ts","test/helpers/selection-gate-v3-coordinates.ts","test/helpers/selection-gate-v3.ts"],"omitted":".env.example"}
+Isolated seed staged paths: .env.example, components/slightnudge/EditorWorkspace.tsx, test/account-isolation.test.ts, test/appearance-layout.test.ts, test/button-editing.test.ts, test/component-actions-bridge.test.ts, test/component-ownership.test.ts, test/container-move.test.ts, test/format-and-tailwind-report.v2.ts, test/helpers/editor-reliability-selection.ts, test/helpers/editor-reliability-selection.v3.ts, test/helpers/real-state.ts, test/helpers/security-selection.v2.ts, test/helpers/selection-gate-v3-coordinates.ts, test/helpers/selection-gate-v3.ts, test/icon-properties-bridge.test.ts, test/icon-replacement-bridge.test.ts, test/image-attributes-bridge.test.ts, test/image-content.test.ts, test/image-framing.test.ts, test/imported-draft.test.ts, test/production-boundaries.test.ts, test/runtime-class-ownership.test.ts, test/section-order.test.ts, test/security-hardening-v2.proofs.ts, test/shared-instance.test.ts, test/source-rendered-bridge.test.ts, test/step1-selection.iframe-v3.test.ts, test/unified-editor.browser.ts
+
+> slightnudge@1.0.0 build
+> next build --webpack
+
+▲ Next.js 16.4.3 (webpack)
+✓ Running next.config.mjs took 39ms
+
+  Creating an optimized production build ...
+⚠ Compiled with warnings in 65s
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/preview/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/preview/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/preview/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/preview/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/preview/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/preview/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/preview/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/preview/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/preview/route.ts
+
+./lib/slightnudge/tailwind-verifier.ts
+module.createRequire failed parsing argument.
+
+Import trace for requested module:
+./lib/slightnudge/tailwind-verifier.ts
+./app/api/slightnudge/preview/route.ts
+
+  Running TypeScript ...
+  Finished TypeScript in 3.3s ...
+  Collecting page data using 19 workers ...
+  Generating static pages using 19 workers (0/46) ...
+  Generating static pages using 19 workers (11/46) 
+  Generating static pages using 19 workers (22/46) 
+  Generating static pages using 19 workers (34/46) 
+✓ Generating static pages using 19 workers (46/46) in 5.8s
+  Finalizing page optimization ...
+  Collecting build traces ...
+
+Route (app)
+┌ ƒ /
+├ ƒ /_not-found
+├ ƒ /admin
+├ ƒ /api/admin/metrics
+├ ƒ /api/checkout
+├ ƒ /api/checkout/simulate
+├ ƒ /api/runs
+├ ƒ /api/runs/[id]
+├ ƒ /api/runs/[id]/report.pdf
+├ ƒ /api/sites
+├ ƒ /api/sites/[id]/verify
+├ ƒ /api/slightnudge/apply
+├ ƒ /api/slightnudge/apply/status
+├ ƒ /api/slightnudge/assets
+├ ƒ /api/slightnudge/change-set
+├ ƒ /api/slightnudge/draft-view
+├ ƒ /api/slightnudge/history
+├ ƒ /api/slightnudge/inspect
+├ ƒ /api/slightnudge/nudge
+├ ƒ /api/slightnudge/pages
+├ ƒ /api/slightnudge/preview
+├ ƒ /api/slightnudge/repositories
+├ ƒ /api/slightnudge/repositories/[id]
+├ ƒ /api/slightnudge/repositories/[id]/adapter
+├ ƒ /api/slightnudge/repositories/[id]/docker-preview
+├ ƒ /api/slightnudge/repositories/[id]/inspect
+├ ƒ /api/slightnudge/repositories/[id]/preview-check
+├ ƒ /api/slightnudge/repositories/[id]/source
+├ ƒ /api/slightnudge/responsive
+├ ƒ /api/slightnudge/style
+├ ƒ /api/slightnudge/token
+├ ƒ /api/slightnudge/undo
+├ ƒ /api/slightnudge/undo/status
+├ ƒ /api/webhooks/dodo
+├ ƒ /dashboard
+├ ƒ /design
+├ ƒ /editor/[[...project]]
+├ ƒ /fixtures
+├ ƒ /fixtures/1
+├ ƒ /fixtures/2
+├ ƒ /fixtures/3
+├ ƒ /fixtures/4
+├ ƒ /fixtures/5
+├ ƒ /how-it-works
+├ ○ /icon.svg
+├ ƒ /login
+├ ƒ /new
+├ ○ /opengraph-image
+├ ƒ /pricing
+├ ƒ /privacy
+├ ƒ /r/[token]
+├ ƒ /refunds
+├ ƒ /runs/[id]
+├ ƒ /studio
+├ ƒ /studio/[repoId]
+├ ƒ /studio/[repoId]/edit
+├ ƒ /studio/[repoId]/window
+├ ƒ /studio/preview/[pageId]
+├ ƒ /studio/window
+├ ƒ /terms
+└ ƒ /workspace
+
+
+ƒ Proxy (Middleware)
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+
+npm notice
+npm notice New major version of npm available! 10.9.3 -> 12.2.2
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.2
+npm notice To update run: npm install -g npm@12.2.2
+npm notice
+Owned temporary entries before cleanup: ["node-compile-cache","npm-cache"]
+Confirmed cleanup: C:\Users\abhis\AppData\Local\Temp\sn-sprint1-build-zvUmAs
+CONFIRMED: integration checkout protected files and status unchanged.
+exit 0
+CONFIRMED: protected files and Git status unchanged.

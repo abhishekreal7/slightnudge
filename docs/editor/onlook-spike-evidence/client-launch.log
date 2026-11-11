@@ -1,0 +1,86 @@
+Next 16.0.7 on loopback port 43127. No HTTP request will be sent.
+Next CLI PID 10428
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+❌ Invalid environment variables: [
+  {
+    expected: 'string',
+    code: 'invalid_type',
+    path: [ 'CSB_API_KEY' ],
+    message: 'Invalid input: expected string, received undefined'
+  },
+  {
+    expected: 'string',
+    code: 'invalid_type',
+    path: [ 'SUPABASE_DATABASE_URL' ],
+    message: 'Invalid input: expected string, received undefined'
+  },
+  {
+    expected: 'string',
+    code: 'invalid_type',
+    path: [ 'SUPABASE_SERVICE_ROLE_KEY' ],
+    message: 'Invalid input: expected string, received undefined'
+  },
+  {
+    expected: 'string',
+    code: 'invalid_type',
+    path: [ 'OPENROUTER_API_KEY' ],
+    message: 'Invalid input: expected string, received undefined'
+  },
+  {
+    expected: 'string',
+    code: 'invalid_type',
+    path: [ 'NEXT_PUBLIC_SUPABASE_URL' ],
+    message: 'Invalid input: expected string, received undefined'
+  },
+  {
+    expected: 'string',
+    code: 'invalid_type',
+    path: [ 'NEXT_PUBLIC_SUPABASE_ANON_KEY' ],
+    message: 'Invalid input: expected string, received undefined'
+  }
+]
+ ⨯ Failed to load next.config.ts, see more info here https://nextjs.org/docs/messages/next-config-error
+C:\dev\vibecheck-editor-tools\onlook-spike\runtime\node_modules\next\dist\build\next-config-ts\require-hook.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error: Invalid environment variables
+    at Object.<anonymous> (C:\dev\vibecheck-editor-tools\onlook-spike\upstream\apps\web\client\src\env.ts:13:38)
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+❌ Invalid environment variables: [
+  {
+    expected: 'string',
+    code: 'invalid_type',
+    path: [ 'CSB_API_KEY' ],
+    message: 'Invalid input: expected string, received undefined'
+  },
+  {
+    expected: 'string',
+    code: 'invalid_type',
+    path: [ 'SUPABASE_DATABASE_URL' ],
+    message: 'Invalid input: expected string, received undefined'
+  },
+  {
+    expected: 'string',
+    code: 'invalid_type',
+    path: [ 'SUPABASE_SERVICE_ROLE_KEY' ],
+    message: 'Invalid input: expected string, received undefined'
+  },
+  {
+    expected: 'string',
+    code: 'invalid_type',
+    path: [ 'OPENROUTER_API_KEY' ],
+    message: 'Invalid input: expected string, received undefined'
+  },
+  {
+    expected: 'string',
+    code: 'invalid_type',
+    path: [ 'NEXT_PUBLIC_SUPABASE_URL' ],
+    message: 'Invalid input: expected string, received undefined'
+  },
+  {
+    expected: 'string',
+    code: 'invalid_type',
+    path: [ 'NEXT_PUBLIC_SUPABASE_ANON_KEY' ],
+    message: 'Invalid input: expected string, received undefined'
+  }
+]
+[?25h
+Next CLI exit 1, signal null

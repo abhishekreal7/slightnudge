@@ -1,0 +1,80 @@
+> node --import tsx scratch/editor-sprint1-isolate.ts conditional-undo-characterization test/conditional-undo-characterization.test.ts
+{"temporaryRoot":"C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-conditional-undo-characterization-nvYx9f","baseline":"1b93d2b24c8efce52b2e7482d9303a86c88a1c1a","suite":"conditional-undo-characterization","overlays":["test/conditional-undo-characterization.test.ts"],"omitted":".env.example"}
+Isolated seed staged paths: .env.example, test/conditional-undo-characterization.test.ts
+TAP version 13
+CONFIRMED ternary: exact byte-identical undo
+# Subtest: Conditional ancestor apply and undo characterization
+    # Subtest: ternary: unchanged source undoes byte-identically
+    ok 1 - ternary: unchanged source undoes byte-identically
+      ---
+      duration_ms: 429.0553
+      type: 'test'
+      ...
+CONFIRMED ternary: manual refusal preserved external text and remained retryable
+    # Subtest: ternary: external change permits token undo or manual refusal without a stuck record
+    ok 2 - ternary: external change permits token undo or manual refusal without a stuck record
+      ---
+      duration_ms: 255.6214
+      type: 'test'
+      ...
+CONFIRMED and: exact byte-identical undo
+    # Subtest: and: unchanged source undoes byte-identically
+    ok 3 - and: unchanged source undoes byte-identically
+      ---
+      duration_ms: 142.4552
+      type: 'test'
+      ...
+CONFIRMED and: manual refusal preserved external text and remained retryable
+    # Subtest: and: external change permits token undo or manual refusal without a stuck record
+    ok 4 - and: external change permits token undo or manual refusal without a stuck record
+      ---
+      duration_ms: 247.9652
+      type: 'test'
+      ...
+CONFIRMED if: exact byte-identical undo
+    # Subtest: if: unchanged source undoes byte-identically
+    ok 5 - if: unchanged source undoes byte-identically
+      ---
+      duration_ms: 141.8126
+      type: 'test'
+      ...
+CONFIRMED if: manual refusal preserved external text and remained retryable
+    # Subtest: if: external change permits token undo or manual refusal without a stuck record
+    ok 6 - if: external change permits token undo or manual refusal without a stuck record
+      ---
+      duration_ms: 230.3796
+      type: 'test'
+      ...
+CONFIRMED once: exact byte-identical undo
+    # Subtest: once: unchanged source undoes byte-identically
+    ok 7 - once: unchanged source undoes byte-identically
+      ---
+      duration_ms: 151.5963
+      type: 'test'
+      ...
+CONFIRMED once: token undo preserved external text
+    # Subtest: once: external change permits token undo or manual refusal without a stuck record
+    ok 8 - once: external change permits token undo or manual refusal without a stuck record
+      ---
+      duration_ms: 323.1254
+      type: 'test'
+      ...
+    1..8
+ok 1 - Conditional ancestor apply and undo characterization
+  ---
+  duration_ms: 1923.4974
+  type: 'suite'
+  ...
+1..1
+# tests 8
+# suites 1
+# pass 8
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1929.8703
+Owned temporary entries before cleanup: ["tsx-abhis"]
+Confirmed cleanup: C:\Users\abhis\AppData\Local\Temp\sn-sprint1-conditional-undo-characterization-nvYx9f
+exit 0
+CONFIRMED: protected files and Git status unchanged.

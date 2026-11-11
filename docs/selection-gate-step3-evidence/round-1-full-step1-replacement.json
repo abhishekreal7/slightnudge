@@ -57,13 +57,13 @@
       },
       "selected": {
         "path": "fixtures/1-plain-static.tsx",
-        "line": 8,
+        "line": 95,
         "column": 1,
         "tag": "h1"
       },
       "pointerSource": {
         "path": "fixtures/1-plain-static.tsx",
-        "line": 8,
+        "line": 95,
         "column": 1,
         "tag": "h1",
         "id": "target"
@@ -71,8 +71,8 @@
       "pointerAssertion": true,
       "overlayVisible": true,
       "originalFileLineAssertion": false,
-      "actualClasses": "ml-2.5 mt-1 text-2xl translate-x-[-16px] translate-y-[0px]",
-      "originalClassAssertion": true,
+      "actualClasses": "text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-slate-950 dark:text-white max-w-4xl mx-auto leading-[1.08] mb-6 text-center",
+      "originalClassAssertion": false,
       "originalSafetyTextAssertion": false,
       "result": "EXPECTED-CONTRACT-FAIL"
     },
@@ -196,7 +196,7 @@
     },
     {
       "assertion": "Selection box disappears cleanly on Escape key",
-      "pass": true
+      "pass": false
     }
   ]
 }

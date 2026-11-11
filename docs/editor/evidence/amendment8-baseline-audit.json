@@ -1,0 +1,76 @@
+{
+  "groups": [
+    {
+      "label": "amendment8-s1-tsc",
+      "main": {
+        "protectedFilesMatch": true,
+        "statusMatches": true
+      },
+      "integration": {
+        "protectedFilesMatch": true,
+        "statusMatches": true
+      }
+    },
+    {
+      "label": "amendment8-s1-build",
+      "main": {
+        "protectedFilesMatch": true,
+        "statusMatches": false
+      },
+      "statusException": "Agent created the untracked orchestration script during build; no tracked source or protected-file difference.",
+      "integration": {
+        "protectedFilesMatch": true,
+        "statusMatches": true
+      }
+    },
+    {
+      "label": "amendment8-s1-apply-review-race",
+      "main": {
+        "protectedFilesMatch": true,
+        "statusMatches": true
+      },
+      "integration": {
+        "protectedFilesMatch": true,
+        "statusMatches": true
+      }
+    },
+    {
+      "label": "amendment8-s1-apply-crash-recovery",
+      "main": {
+        "protectedFilesMatch": true,
+        "statusMatches": true
+      },
+      "integration": {
+        "protectedFilesMatch": true,
+        "statusMatches": true
+      }
+    },
+    {
+      "label": "amendment8-s1-apply-crash-recovery-retry",
+      "main": {
+        "protectedFilesMatch": true,
+        "statusMatches": true
+      },
+      "integration": {
+        "protectedFilesMatch": true,
+        "statusMatches": true
+      }
+    }
+  ],
+  "removedTemporaryRoots": [
+    "C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-apply-crash-recovery-GUzrxf",
+    "C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-apply-crash-recovery-KyTyP2",
+    "C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-apply-review-race-2XKt95",
+    "C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-build-yBJ1LJ",
+    "C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-typecheck-7XgPwl"
+  ],
+  "existingWorktreeStatusSummary": {
+    "uncommittedEntries": 5,
+    "topLevelDirectories": {
+      "docs": 2,
+      "(root)": 1,
+      "test": 2
+    }
+  },
+  "stop": "Reproduced unmodified-tip safety-suite assertion"
+}

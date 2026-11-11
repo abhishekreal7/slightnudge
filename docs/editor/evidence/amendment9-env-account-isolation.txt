@@ -1,0 +1,9 @@
+> node --import tsx scratch/editor-s1-group.ts amendment9-env-account-isolation account-isolation test/helpers/real-state.ts components/slightnudge/EditorWorkspace.tsx test/account-isolation.test.ts test/production-boundaries.test.ts test/format-and-tailwind-report.v2.ts test/security-hardening-v2.proofs.ts
+{"temporaryRoot":"C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-account-isolation-6DPnSU","baseline":"8c613619b4ce051027689fd3d782d4ee029e7052","suite":"account-isolation","overlays":["test/helpers/real-state.ts","components/slightnudge/EditorWorkspace.tsx","test/account-isolation.test.ts","test/production-boundaries.test.ts","test/format-and-tailwind-report.v2.ts","test/security-hardening-v2.proofs.ts"],"omitted":".env.example"}
+Isolated seed staged paths: .env.example, components/slightnudge/EditorWorkspace.tsx, test/account-isolation.test.ts, test/format-and-tailwind-report.v2.ts, test/helpers/real-state.ts, test/production-boundaries.test.ts, test/security-hardening-v2.proofs.ts
+PASS account boundaries: production auth required before payment/report access, local filesystem endpoints disabled in production, owner checks, local demo confinement, paid export gate, report escaping and truthful missing-score display
+Owned temporary entries before cleanup: ["tsx-abhis"]
+Confirmed cleanup: C:\Users\abhis\AppData\Local\Temp\sn-sprint1-account-isolation-6DPnSU
+CONFIRMED: integration checkout protected files and status unchanged.
+exit 0
+CONFIRMED: protected files and Git status unchanged.

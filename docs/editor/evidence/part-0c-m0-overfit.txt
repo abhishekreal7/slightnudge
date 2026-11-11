@@ -1,0 +1,52 @@
+> C:\nvm4w\nodejs\node.exe --import tsx scratch/editor-sprint1-isolate.ts m0-overfit
+{"temporaryRoot":"C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-m0-overfit-XnnNuH","baseline":"6cadd06eb1dbbf55032354db2817add1c52e3ac3","suite":"m0-overfit","overlays":[],"omitted":".env.example"}
+Isolated seed staged paths: .env.example
+Isolated lab URL: http://127.0.0.1:3110
+====================================================
+🧪 OVERFITTING CHECK: SECOND TEST APP 30 SELECTIONS
+====================================================
+
+| # | Category | Clicked Element | Expected | Actual | Target File:Line:Tag | Verdict |
+|---|---|---|---|---|---|---|
+| 1 | Layout Wrapper | shell layout container | allowed | allowed | ShellLayout.tsx:9:div | OK |
+| 2 | Layout Wrapper | header boundary | allowed | allowed | ShellLayout.tsx:10:header | OK |
+| 3 | Layout Wrapper | brand title span | allowed | allowed | ShellLayout.tsx:12:span | OK |
+| 4 | Layout Wrapper | header navigation link | allowed | allowed | ShellLayout.tsx:14:a | OK |
+| 5 | Layout Wrapper | main content wrapper | allowed | allowed | ShellLayout.tsx:19:main | OK |
+| 6 | Conditional Component | conditionally rendered banner boundary | allowed | allowed | Banner.tsx:7:aside | OK |
+| 7 | Conditional Component | banner message (prop-fed text) | allowed | allowed | Banner.tsx:9:p | OK |
+| 8 | Conditional Component | banner notice badge | allowed | allowed | Banner.tsx:10:span | OK |
+| 9 | Nested Grid | nested grid section boundary | allowed | allowed | NestedGridSection.tsx:10:section | OK |
+| 10 | Prop-fed Text | badge label (prop badgeLabel) | allowed | allowed | NestedGridSection.tsx:12:span | OK |
+| 11 | Prop-fed Text | section title (prop sectionTitle) | allowed | allowed | NestedGridSection.tsx:13:h2 | OK |
+| 12 | Nested Grid | outer grid container | allowed | allowed | NestedGridSection.tsx:17:div | OK |
+| 13 | Nested Grid | sidebar overview card | allowed | allowed | NestedGridSection.tsx:18:div | OK |
+| 14 | Nested Grid | sidebar overview heading | allowed | allowed | NestedGridSection.tsx:19:h3 | OK |
+| 15 | Nested Grid | inner nested grid container | allowed | allowed | NestedGridSection.tsx:24:div | OK |
+| 16 | Fragment | Cell Alpha card inside fragment | allowed | allowed | NestedGridSection.tsx:27:div | OK |
+| 17 | Fragment | Cell Alpha heading inside fragment | allowed | allowed | NestedGridSection.tsx:28:h4 | OK |
+| 18 | Fragment | Cell Beta card inside fragment | allowed | allowed | NestedGridSection.tsx:31:div | OK |
+| 19 | Fragment | Cell Beta heading inside fragment | allowed | allowed | NestedGridSection.tsx:32:h4 | OK |
+| 20 | Card List | card list section boundary | allowed | allowed | CardListSection.tsx:11:section | OK |
+| 21 | Card List | card list section heading | allowed | allowed | CardListSection.tsx:13:h2 | OK |
+| 22 | Static Card | static standalone card surface | allowed | allowed | CardListSection.tsx:18:div | OK |
+| 23 | Static Card | static card heading | allowed | allowed | CardListSection.tsx:19:h3 | OK |
+| 24 | Static Card | static card tier badge | allowed | allowed | CardListSection.tsx:21:span | OK |
+| 25 | Conditional Class | first mapped card (conditional cn) | refused | refused | CardListSection.tsx:27:article | OK |
+| 26 | Repeated Element | first mapped card title (in map) | refused | refused | CardListSection.tsx:31:h4 | OK |
+| 27 | Dynamic Component | dynamic widget container | allowed | allowed | DynamicWidget.tsx:3:div | OK |
+| 28 | Dynamic Component | dynamic widget heading | allowed | allowed | DynamicWidget.tsx:4:h3 | OK |
+| 29 | Shared Component | shared badge (used twice) | refused | refused | FooterSection.tsx:2:span | OK |
+| 30 | Unstyled Control | button without className | refused | refused | FooterSection.tsx:15:button | OK |
+
+====================================================
+SECOND TEST APP (OVERFITTING CHECK) RESULTS:
+  Allowed: 26
+  Refused: 4
+  Wrong Targets: 0
+====================================================
+
+Owned temporary entries before cleanup: ["node-compile-cache","tsx-abhis"]
+Confirmed cleanup: C:\Users\abhis\AppData\Local\Temp\sn-sprint1-m0-overfit-XnnNuH
+exit 0
+CONFIRMED: protected files and Git status unchanged.

@@ -1,0 +1,13 @@
+Environmental wrapper timeout at 180 seconds; the existing 300-case test has no added timeout.
+Stopping only owned battery/isolation process trees so the wrapper can resume without an artificial duration cap.
+SUCCESS: The process with PID 9780 (child process of PID 14072) has been terminated.
+SUCCESS: The process with PID 24872 (child process of PID 14072) has been terminated.
+SUCCESS: The process with PID 33552 (child process of PID 17548) has been terminated.
+SUCCESS: The process with PID 14072 (child process of PID 17548) has been terminated.
+SUCCESS: The process with PID 13536 (child process of PID 22836) has been terminated.
+SUCCESS: The process with PID 17548 (child process of PID 22836) has been terminated.
+SUCCESS: The process with PID 3152 (child process of PID 19824) has been terminated.
+SUCCESS: The process with PID 22836 (child process of PID 19824) has been terminated.
+SUCCESS: The process with PID 19824 (child process of PID 15284) has been terminated.
+Confirmed recovery cleanup: C:\Users\abhis\AppData\Local\Temp\sn-sprint1-undo-stacked-edits-wqH8X1
+Confirmed recovery cleanup: C:\Users\abhis\AppData\Local\Temp\sn-sprint1-undo-stacked-edits-1uBBTx

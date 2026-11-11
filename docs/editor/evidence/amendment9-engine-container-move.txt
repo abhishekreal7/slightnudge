@@ -1,0 +1,9 @@
+> C:\nvm4w\nodejs\node.exe --import tsx scratch/editor-s1-group.ts amendment9-engine-container-move container-move test/helpers/real-state.ts
+{"temporaryRoot":"C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-container-move-ArrE62","baseline":"8c613619b4ce051027689fd3d782d4ee029e7052","suite":"container-move","overlays":["test/helpers/real-state.ts"],"omitted":".env.example"}
+Isolated seed staged paths: .env.example, test/helpers/real-state.ts
+PASS container move: subtree/attribute/icon preservation, stable identity, edit after moving, refresh reconstruction, no preview writes, grouped Save and exact Undo, cycle/same-parent/dynamic/component refusal
+Owned temporary entries before cleanup: ["tsx-abhis"]
+Confirmed cleanup: C:\Users\abhis\AppData\Local\Temp\sn-sprint1-container-move-ArrE62
+CONFIRMED: integration checkout protected files and status unchanged.
+exit 0
+CONFIRMED: protected files and Git status unchanged.

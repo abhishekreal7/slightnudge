@@ -1,0 +1,9 @@
+> C:\nvm4w\nodejs\node.exe --import tsx scratch/editor-s1-group.ts amendment9-engine-project-compatibility project-compatibility test/helpers/real-state.ts
+{"temporaryRoot":"C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-project-compatibility-WR1gUy","baseline":"8c613619b4ce051027689fd3d782d4ee029e7052","suite":"project-compatibility","overlays":["test/helpers/real-state.ts"],"omitted":".env.example"}
+Isolated seed staged paths: .env.example, test/helpers/real-state.ts
+PASS compatibility metadata matrix: App/Pages/mixed routers, Next 12/14/16, Tailwind 3/4/5, missing dependencies, CSS-only, Vite, monorepo and malformed manifest; no project code executed.
+Owned temporary entries before cleanup: ["tsx-abhis"]
+Confirmed cleanup: C:\Users\abhis\AppData\Local\Temp\sn-sprint1-project-compatibility-WR1gUy
+CONFIRMED: integration checkout protected files and status unchanged.
+exit 0
+CONFIRMED: protected files and Git status unchanged.

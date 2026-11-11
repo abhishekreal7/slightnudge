@@ -1,0 +1,9 @@
+> git branch --show-current
+feat/studio-full-controls
+> git rev-parse HEAD
+955007d231d7da7783c6d3222ea2942be03eafb4
+> git tag -l phase2c1-merged
+phase2c1-merged
+> git merge-base --is-ancestor phase2c1-merged HEAD
+exit 0
+> git diff --cached --name-status

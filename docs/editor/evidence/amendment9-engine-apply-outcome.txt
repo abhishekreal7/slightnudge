@@ -1,0 +1,30 @@
+> C:\nvm4w\nodejs\node.exe --import tsx scratch/editor-s1-group.ts amendment9-engine-apply-outcome apply-outcome test/helpers/real-state.ts
+{"temporaryRoot":"C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-apply-outcome-XZdIMP","baseline":"8c613619b4ce051027689fd3d782d4ee029e7052","suite":"apply-outcome","overlays":["test/helpers/real-state.ts"],"omitted":".env.example"}
+Isolated seed staged paths: .env.example, test/helpers/real-state.ts
+node:fs:2786
+      const stats = binding.lstat(base, true, undefined, true /* throwIfNoEntry */);
+                            ^
+
+Error: ENOENT: no such file or directory, lstat 'C:\Users\abhis\AppData\Local\Temp\sn-sprint1-apply-outcome-XZdIMP\temp\sn-apply-outcome-6hHHNQ\.slightnudge\repositories.json'
+    at realpathSync (node:fs:2786:29)
+    at canonicalFile (C:\Users\abhis\AppData\Local\Temp\sn-sprint1-apply-outcome-XZdIMP\source\lib\slightnudge\source-paths.ts:11:16)
+    at registeredProjectRoot (C:\Users\abhis\AppData\Local\Temp\sn-sprint1-apply-outcome-XZdIMP\source\lib\slightnudge\source-paths.ts:18:44)
+    at assertSourceScope (C:\Users\abhis\AppData\Local\Temp\sn-sprint1-apply-outcome-XZdIMP\source\lib\slightnudge\source-paths.ts:39:14)
+    at validatePending (C:\Users\abhis\AppData\Local\Temp\sn-sprint1-apply-outcome-XZdIMP\source\lib\slightnudge\edit-history.ts:622:3)
+    at readPendingSourceEdit (C:\Users\abhis\AppData\Local\Temp\sn-sprint1-apply-outcome-XZdIMP\source\lib\slightnudge\edit-history.ts:602:3)
+    at <anonymous> (C:\Users\abhis\AppData\Local\Temp\sn-sprint1-apply-outcome-XZdIMP\source\lib\slightnudge\edit-history.ts:740:21)
+    at withSourceOperationLock (C:\Users\abhis\AppData\Local\Temp\sn-sprint1-apply-outcome-XZdIMP\source\lib\slightnudge\source-operation-lock.ts:94:18)
+    at withHistoryMutation (C:\Users\abhis\AppData\Local\Temp\sn-sprint1-apply-outcome-XZdIMP\source\lib\slightnudge\edit-history.ts:127:10)
+    at getSourceApplyOutcome (C:\Users\abhis\AppData\Local\Temp\sn-sprint1-apply-outcome-XZdIMP\source\lib\slightnudge\edit-history.ts:732:36) {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'lstat',
+  path: 'C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-apply-outcome-XZdIMP\\temp\\sn-apply-outcome-6hHHNQ\\.slightnudge\\repositories.json'
+}
+
+Node.js v22.19.0
+Owned temporary entries before cleanup: ["tsx-abhis"]
+Confirmed cleanup: C:\Users\abhis\AppData\Local\Temp\sn-sprint1-apply-outcome-XZdIMP
+CONFIRMED: integration checkout protected files and status unchanged.
+exit 1
+CONFIRMED: protected files and Git status unchanged.

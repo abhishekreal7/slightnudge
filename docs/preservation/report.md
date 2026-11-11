@@ -1,0 +1,5342 @@
+# Workspace preservation before Phase 3A
+
+## Step 0 — Writer check
+
+- Backup and evidence directory: C:\dev\vibecheck-backups\20261106-175508
+- Starting branch: codex/fix-resize-pointer-anchor
+- Starting HEAD: 893c2bbe9994da18c424a2e743b8b8d8270ba22d
+- First snapshot (UTC): 2026-11-06T12:25:08.2162656Z
+- Second snapshot (UTC): 2026-11-06T12:25:55.4107238Z
+- Expanded changed file count: 4790
+- Node and Next process count: 10
+
+Passed. The status lists, file sizes, and last-write timestamps matched after the wait. Every changed file with a timestamp was at least 60 seconds old at the first check.
+
+
+## Step 1 — External backup
+
+- Verified 4790 of 4790 file copies against both the SHA-256 manifest and the live checkout.
+- Copied 279,517,874 bytes under the backup's files directory.
+- Saved the eligible tracked patch, diff stat, status, branch tips, and 20-entry log in both evidence directories.
+- Excluded 0 paths.
+- The preliminary credential screen recorded paths and match types only.
+
+
+## Step 2 — Read-only inventory
+
+- Categories: Config 1, Docs 4,741, Other 1, Product code 16, Test 31.
+- Credential scan matches: 0. The evidence lists paths and pattern names without values.
+- A dash or Binary in the counts identifies a binary file. Untracked text lines are counted as additions.
+
+### Summary of the changes
+
+- The canvas and editor changes adjust zoom anchoring and fit transitions, responsive width entry, docked panels, layer selection scrolling, toolbar placement, and request timeouts. Named functions and handlers include CanvasStage, EditorWorkspace, subscribeStudioWidth, isStudioWidth, isServerStudioWidth, togglePanel, openDesign, ResponsiveControls, commit, SourceLayers, SourceProjectCanvas, useWindowDock, avoidSelection, schedule, and measure.
+- The imported and source canvas changes cache viewport-sensitive CSS declarations and schedule scroll and resize geometry work on animation frames. Functions include importedCanvasRuntime, sourceCanvasRuntime, and changed. The client file adds a change-set response field.
+- New helpers inspect the computed box and anchor for resizing and back up browser drafts when source changes conflict. Functions include readResizeLayout, align, backUpConflictedDraft, and isDraftSourceConflict.
+- RootLayout limits its request-header read to development. Global styles specify Tailwind scan roots. The fixture and generated Next type declarations also change.
+- Tests and browser helpers cover resize layouts and anchors, move and resize continuation, continuous width, canvas performance, draft recovery, and iframe selection. Named harness functions include checkConsecutiveMove, checkContinuousWidth, checkDraftConflictRecovery, checkGestureContinuation, checkResizeInteraction, checkResizePointer, checkResizeReflow, runIframeSelections, and checkImportedCanvas. Other changes adjust editor route and zoom checks and copy the new helpers into a disposable browser test workspace.
+- The untracked docs include reports, logs, screenshots, fixtures or other captured inputs, and prior phase evidence.
+
+<details>
+<summary>Full inventory and flags</summary>
+
+| Path | Status | Bytes | Category | Added | Removed | Flags |
+|---|---|---:|---|---:|---:|---|
+| `app/globals.css` | Modified | 236723 | Product code | 7 | 1 |  |
+| `app/layout.tsx` | Modified | 2926 | Product code | 3 | 2 |  |
+| `components/slightnudge/CanvasStage.tsx` | Modified | 7468 | Product code | 22 | 3 | Slightnudge code |
+| `components/slightnudge/EditorWorkspace.tsx` | Modified | 237771 | Product code | 86 | 29 | Slightnudge code, API client call |
+| `components/slightnudge/ResponsiveControls.tsx` | Modified | 2879 | Product code | 9 | 2 | Slightnudge code |
+| `components/slightnudge/SourceLayers.tsx` | Modified | 8521 | Product code | 15 | 4 | Slightnudge code |
+| `components/slightnudge/SourceProjectCanvas.tsx` | Modified | 26972 | Product code | 14 | 7 | Slightnudge code, API client call |
+| `components/slightnudge/canvas-stage.module.css` | Modified | 854 | Product code | 3 | 3 | Slightnudge code |
+| `components/slightnudge/editor-workspace.module.css` | Modified | 44513 | Product code | 92 | 12 | Slightnudge code |
+| `components/slightnudge/responsive-controls.module.css` | Modified | 1507 | Product code | 2 | 2 | Slightnudge code |
+| `components/slightnudge/useWindowDock.ts` | Modified | 5678 | Product code | 19 | 11 | Slightnudge code |
+| `fixtures/1-plain-static.tsx` | Modified | 2402 | Other | 4 | 4 | Fixture |
+| `lib/slightnudge/client.ts` | Modified | 17910 | Product code | 1 | 0 | Slightnudge code |
+| `lib/slightnudge/imported-canvas-runtime.ts` | Modified | 5354 | Product code | 6 | 0 | Slightnudge code |
+| `lib/slightnudge/source-canvas-bridge.ts` | Modified | 61435 | Product code | 16 | 3 | Slightnudge code |
+| `next-env.d.ts` | Modified | 303 | Config | 2 | 2 | Generated Next type declarations |
+| `test/helpers/core-editing-browser.ts` | Modified | 12597 | Test | 5 | 1 |  |
+| `test/helpers/imported-canvas-browser.ts` | Modified | 11884 | Test | 2 | 2 |  |
+| `test/review-consent.browser.ts` | Modified | 38517 | Test | 12 | 0 |  |
+| `docs/advanced-image-failure.png` | Untracked | 99632 | Docs | Binary | Binary |  |
+| `docs/advanced-image-gates-final.log` | Untracked | 4801 | Docs | 157 | 0 |  |
+| `docs/advanced-image-gates.log` | Untracked | 4797 | Docs | 157 | 0 |  |
+| `docs/advanced-image-imported-final.log` | Untracked | 5827 | Docs | 171 | 0 |  |
+| `docs/advanced-image-imported.log` | Untracked | 15374 | Docs | 418 | 0 |  |
+| `docs/advanced-image-local-final.log` | Untracked | 883 | Docs | 13 | 0 |  |
+| `docs/advanced-image-qualification.log` | Untracked | 7002 | Docs | 125 | 0 |  |
+| `docs/advanced-image-studio.png` | Untracked | 51544 | Docs | Binary | Binary |  |
+| `docs/advanced-image-window.png` | Untracked | 29369 | Docs | Binary | Binary |  |
+| `docs/appearance-controls-live-constraints.png` | Untracked | 159826 | Docs | Binary | Binary |  |
+| `docs/appearance-controls-live-gradient.png` | Untracked | 148920 | Docs | Binary | Binary |  |
+| `docs/appearance-controls-live-shadow.png` | Untracked | 153314 | Docs | Binary | Binary |  |
+| `docs/appearance-imported-studio.png` | Untracked | 128928 | Docs | Binary | Binary |  |
+| `docs/appearance-imported-window.png` | Untracked | 111074 | Docs | Binary | Binary |  |
+| `docs/appearance-local-studio.png` | Untracked | 134360 | Docs | Binary | Binary |  |
+| `docs/appearance-local-window.png` | Untracked | 114489 | Docs | Binary | Binary |  |
+| `docs/attached-toolbar-heading.png` | Untracked | 153627 | Docs | Binary | Binary |  |
+| `docs/attached-toolbar-paragraph.png` | Untracked | 154269 | Docs | Binary | Binary |  |
+| `docs/attached-toolbar-small.png` | Untracked | 134097 | Docs | Binary | Binary |  |
+| `docs/button-editing-qualification.log` | Untracked | 4930 | Docs | 152 | 0 |  |
+| `docs/button-editor-ready.png` | Untracked | 151230 | Docs | Binary | Binary |  |
+| `docs/button-editor-regression.log` | Untracked | 5684 | Docs | 157 | 0 |  |
+| `docs/canvas-clean-page-edge.png` | Untracked | 95329 | Docs | Binary | Binary |  |
+| `docs/canvas-interactions-spec.md` | Untracked | 28721 | Docs | 235 | 0 |  |
+| `docs/canvas-move-diagnostic.png` | Untracked | 112579 | Docs | Binary | Binary |  |
+| `docs/canvas-move-scale/geometry.json` | Untracked | 9402 | Docs | 317 | 0 |  |
+| `docs/canvas-move-scale/zoom-0.5.png` | Untracked | 50266 | Docs | Binary | Binary |  |
+| `docs/canvas-move-scale/zoom-1.5.png` | Untracked | 98474 | Docs | Binary | Binary |  |
+| `docs/canvas-move-scale/zoom-1.png` | Untracked | 74964 | Docs | Binary | Binary |  |
+| `docs/canvas-scrollbar-diagnostic.png` | Untracked | 94606 | Docs | Binary | Binary |  |
+| `docs/canvas-scrollbar-reload-qualification.log` | Untracked | 5689 | Docs | 176 | 0 |  |
+| `docs/center-move-browser.log` | Untracked | 690 | Docs | 12 | 0 |  |
+| `docs/center-move-detail.png` | Untracked | 12908 | Docs | Binary | Binary |  |
+| `docs/center-move-drag.png` | Untracked | 117452 | Docs | Binary | Binary |  |
+| `docs/center-move-engine.log` | Untracked | 159 | Docs | 1 | 0 |  |
+| `docs/center-move-final-gates.log` | Untracked | 379 | Docs | 12 | 0 |  |
+| `docs/center-move-final.log` | Untracked | 3999 | Docs | 105 | 0 |  |
+| `docs/center-move-nudge-regression.log` | Untracked | 121 | Docs | 1 | 0 |  |
+| `docs/center-move-regression-final.log` | Untracked | 6708 | Docs | 203 | 0 |  |
+| `docs/center-move-regression-verified.log` | Untracked | 2107 | Docs | 60 | 0 |  |
+| `docs/center-move-regression.log` | Untracked | 2009 | Docs | 62 | 0 |  |
+| `docs/center-move-release.log` | Untracked | 5586 | Docs | 168 | 0 |  |
+| `docs/center-move-resize-unit.log` | Untracked | 129 | Docs | 1 | 0 |  |
+| `docs/center-move-selection.png` | Untracked | 120693 | Docs | Binary | Binary |  |
+| `docs/center-move-serial.log` | Untracked | 5430 | Docs | 163 | 0 |  |
+| `docs/center-move-undo-regression.log` | Untracked | 1327 | Docs | 26 | 0 |  |
+| `docs/center-move-verified.log` | Untracked | 633 | Docs | 15 | 0 |  |
+| `docs/change-history-final.log` | Untracked | 1065 | Docs | 13 | 0 |  |
+| `docs/change-history-qualification.log` | Untracked | 7316 | Docs | 83 | 0 |  |
+| `docs/change-history-release.log` | Untracked | 5977 | Docs | 175 | 0 |  |
+| `docs/change-history-verified.log` | Untracked | 6013 | Docs | 175 | 0 |  |
+| `docs/change-history.png` | Untracked | 123537 | Docs | Binary | Binary |  |
+| `docs/classless-button-qualification.log` | Untracked | 287 | Docs | 2 | 0 |  |
+| `docs/component-actions-core-regression.log` | Untracked | 6880 | Docs | 196 | 0 |  |
+| `docs/component-actions-failure.png` | Untracked | 59757 | Docs | Binary | Binary |  |
+| `docs/component-actions-gates.log` | Untracked | 4801 | Docs | 157 | 0 |  |
+| `docs/component-actions-imported-final.log` | Untracked | 6114 | Docs | 169 | 0 |  |
+| `docs/component-actions-imported-studio.png` | Untracked | 62294 | Docs | Binary | Binary |  |
+| `docs/component-actions-imported-window.png` | Untracked | 33205 | Docs | Binary | Binary |  |
+| `docs/component-actions-imported.log` | Untracked | 5942 | Docs | 167 | 0 |  |
+| `docs/component-actions-local-final.log` | Untracked | 1265 | Docs | 12 | 0 |  |
+| `docs/component-actions-local.log` | Untracked | 5790 | Docs | 166 | 0 |  |
+| `docs/component-actions-studio.png` | Untracked | 64564 | Docs | Binary | Binary |  |
+| `docs/component-actions-window.png` | Untracked | 36813 | Docs | Binary | Binary |  |
+| `docs/component-ownership-browser.log` | Untracked | 7124 | Docs | 183 | 0 |  |
+| `docs/component-ownership-draft-regression.log` | Untracked | 229 | Docs | 1 | 0 |  |
+| `docs/component-ownership-final.log` | Untracked | 7302 | Docs | 198 | 0 |  |
+| `docs/component-ownership-group-regression.log` | Untracked | 272 | Docs | 1 | 0 |  |
+| `docs/component-ownership-imported-studio.png` | Untracked | 97639 | Docs | Binary | Binary |  |
+| `docs/component-ownership-imported-window.png` | Untracked | 87079 | Docs | Binary | Binary |  |
+| `docs/component-ownership-local-regression.log` | Untracked | 158 | Docs | 1 | 0 |  |
+| `docs/component-ownership-source.log` | Untracked | 202 | Docs | 1 | 0 |  |
+| `docs/component-ownership-studio.png` | Untracked | 102680 | Docs | Binary | Binary |  |
+| `docs/component-ownership-typecheck.log` | Untracked | 0 | Docs | 0 | 0 |  |
+| `docs/component-ownership-window.png` | Untracked | 86518 | Docs | Binary | Binary |  |
+| `docs/component-props-bridge-regression.log` | Untracked | 39 | Docs | 1 | 0 |  |
+| `docs/component-props-failure.png` | Untracked | 102089 | Docs | Binary | Binary |  |
+| `docs/component-props-icon-regression.log` | Untracked | 209 | Docs | 1 | 0 |  |
+| `docs/component-props-imported-studio.png` | Untracked | 98040 | Docs | Binary | Binary |  |
+| `docs/component-props-imported-window.png` | Untracked | 88042 | Docs | Binary | Binary |  |
+| `docs/component-props-qualification.log` | Untracked | 6398 | Docs | 179 | 0 |  |
+| `docs/component-props-source.log` | Untracked | 158 | Docs | 1 | 0 |  |
+| `docs/component-props-studio.png` | Untracked | 100876 | Docs | Binary | Binary |  |
+| `docs/component-props-typecheck.log` | Untracked | 0 | Docs | 0 | 0 |  |
+| `docs/component-props-window.png` | Untracked | 88796 | Docs | Binary | Binary |  |
+| `docs/component-text-actions-regression.log` | Untracked | 231 | Docs | 1 | 0 |  |
+| `docs/component-text-adapter-refresh.log` | Untracked | 782 | Docs | 3 | 0 |  |
+| `docs/component-text-bridge-regression.log` | Untracked | 39 | Docs | 1 | 0 |  |
+| `docs/component-text-final.log` | Untracked | 6852 | Docs | 183 | 0 |  |
+| `docs/component-text-inline-bridge.log` | Untracked | 164 | Docs | 1 | 0 |  |
+| `docs/component-text-qualification.log` | Untracked | 13577 | Docs | 394 | 0 |  |
+| `docs/component-text-source.log` | Untracked | 158 | Docs | 1 | 0 |  |
+| `docs/component-text-typecheck.log` | Untracked | 0 | Docs | 0 | 0 |  |
+| `docs/consecutive-move-after.log` | Untracked | 495 | Docs | 13 | 0 |  |
+| `docs/consecutive-move-before.log` | Untracked | 8218 | Docs | 246 | 0 |  |
+| `docs/consecutive-move-cancel-earlier.log` | Untracked | 249 | Docs | 3 | 0 |  |
+| `docs/consecutive-move-cancel.log` | Untracked | 249 | Docs | 3 | 0 |  |
+| `docs/consecutive-move-fast-paint-pass.log` | Untracked | 483 | Docs | 13 | 0 |  |
+| `docs/consecutive-move-first-frame-before.log` | Untracked | 481 | Docs | 13 | 0 |  |
+| `docs/consecutive-move-fit-before-toolbar-visibility.log` | Untracked | 484 | Docs | 13 | 0 |  |
+| `docs/consecutive-move-fit-earlier.log` | Untracked | 511 | Docs | 13 | 0 |  |
+| `docs/consecutive-move-fit.log` | Untracked | 483 | Docs | 13 | 0 |  |
+| `docs/consecutive-move-full-earlier.log` | Untracked | 511 | Docs | 13 | 0 |  |
+| `docs/consecutive-move-harness-cleanup.log` | Untracked | 287 | Docs | 11 | 0 |  |
+| `docs/consecutive-move-react-before.log` | Untracked | 479 | Docs | 13 | 0 |  |
+| `docs/consecutive-move-refusal-earlier.log` | Untracked | 269 | Docs | 3 | 0 |  |
+| `docs/consecutive-move-refusal.log` | Untracked | 305 | Docs | 3 | 0 |  |
+| `docs/consecutive-move-regression-cold.log` | Untracked | 4167 | Docs | 108 | 0 |  |
+| `docs/consecutive-move-regression-geometry-before.log` | Untracked | 11287 | Docs | 201 | 0 |  |
+| `docs/consecutive-move-regression-measurement.log` | Untracked | 10361 | Docs | 267 | 0 |  |
+| `docs/consecutive-move-regression-prior-pass.log` | Untracked | 19365 | Docs | 177 | 0 |  |
+| `docs/consecutive-move-regression-uninstrumented.log` | Untracked | 10359 | Docs | 267 | 0 |  |
+| `docs/consecutive-move-regression.log` | Untracked | 19365 | Docs | 177 | 0 |  |
+| `docs/consecutive-move-released-pass.log` | Untracked | 283 | Docs | 3 | 0 |  |
+| `docs/consecutive-move-report.md` | Untracked | 7284 | Docs | 55 | 0 |  |
+| `docs/consecutive-move-typecheck.log` | Untracked | 9813 | Docs | 95 | 0 |  |
+| `docs/container-move-destination.png` | Untracked | 37311 | Docs | Binary | Binary |  |
+| `docs/container-move-failure.png` | Untracked | 26787 | Docs | Binary | Binary |  |
+| `docs/container-move-qualification.log` | Untracked | 4943 | Docs | 153 | 0 |  |
+| `docs/contextual-measurement/fit-move.png` | Untracked | 72909 | Docs | Binary | Binary |  |
+| `docs/contextual-measurement/full-move.png` | Untracked | 73731 | Docs | Binary | Binary |  |
+| `docs/continuous-draft.png` | Untracked | 164399 | Docs | Binary | Binary |  |
+| `docs/continuous-width-before.log` | Untracked | 5991 | Docs | 174 | 0 |  |
+| `docs/continuous-width-diff-stat.log` | Untracked | 439 | Docs | 7 | 0 |  |
+| `docs/continuous-width-final-fit.log` | Untracked | 1944 | Docs | 38 | 0 |  |
+| `docs/continuous-width-final-full.log` | Untracked | 770 | Docs | 14 | 0 |  |
+| `docs/continuous-width-final-pointer-race.log` | Untracked | 10678 | Docs | 290 | 0 |  |
+| `docs/continuous-width-final-save.log` | Untracked | 278 | Docs | 3 | 0 |  |
+| `docs/continuous-width-final-typecheck.log` | Untracked | 9813 | Docs | 95 | 0 |  |
+| `docs/continuous-width-fit.log` | Untracked | 1924 | Docs | 38 | 0 |  |
+| `docs/continuous-width-full.log` | Untracked | 750 | Docs | 14 | 0 |  |
+| `docs/continuous-width-git-status.log` | Untracked | 23011 | Docs | 596 | 0 |  |
+| `docs/continuous-width-pickup-diagnostic.log` | Untracked | 9110 | Docs | 275 | 0 |  |
+| `docs/continuous-width-save-regression.log` | Untracked | 278 | Docs | 3 | 0 |  |
+| `docs/continuous-width-typecheck.log` | Untracked | 9900 | Docs | 96 | 0 |  |
+| `docs/core-editing-current.log` | Untracked | 1819 | Docs | 33 | 0 |  |
+| `docs/core-editing-failure.png` | Untracked | 52719 | Docs | Binary | Binary |  |
+| `docs/core-editing-studio.png` | Untracked | 116021 | Docs | Binary | Binary |  |
+| `docs/core-editing-window.png` | Untracked | 93380 | Docs | Binary | Binary |  |
+| `docs/direct-manipulation-browser.log` | Untracked | 370 | Docs | 12 | 0 |  |
+| `docs/direct-manipulation-complete.log` | Untracked | 1228 | Docs | 28 | 0 |  |
+| `docs/direct-manipulation-diagnostic.log` | Untracked | 415 | Docs | 13 | 0 |  |
+| `docs/direct-manipulation-events.log` | Untracked | 415 | Docs | 13 | 0 |  |
+| `docs/direct-manipulation-existing-ui-diagnostic.log` | Untracked | 830 | Docs | 34 | 0 |  |
+| `docs/direct-manipulation-existing-ui.log` | Untracked | 2487 | Docs | 46 | 0 |  |
+| `docs/direct-manipulation-final-qualified.log` | Untracked | 6078 | Docs | 182 | 0 |  |
+| `docs/direct-manipulation-final.log` | Untracked | 415 | Docs | 13 | 0 |  |
+| `docs/direct-manipulation-move-regression.log` | Untracked | 121 | Docs | 1 | 0 |  |
+| `docs/direct-manipulation-release.log` | Untracked | 427 | Docs | 12 | 0 |  |
+| `docs/direct-manipulation-resize.png` | Untracked | 146927 | Docs | Binary | Binary |  |
+| `docs/direct-manipulation-unit.log` | Untracked | 129 | Docs | 1 | 0 |  |
+| `docs/direct-manipulation-verified.log` | Untracked | 1168 | Docs | 25 | 0 |  |
+| `docs/draft-conflict-after.log` | Untracked | 175 | Docs | 2 | 0 |  |
+| `docs/draft-conflict-before.log` | Untracked | 10879 | Docs | 318 | 0 |  |
+| `docs/draft-conflict-harness-draft-wait.log` | Untracked | 8164 | Docs | 244 | 0 |  |
+| `docs/draft-conflict-harness-missing-module.log` | Untracked | 9453 | Docs | 164 | 0 |  |
+| `docs/draft-conflict-recovery.md` | Untracked | 3074 | Docs | 22 | 0 |  |
+| `docs/draft-conflict-storage.log` | Untracked | 95 | Docs | 1 | 0 |  |
+| `docs/draft-conflict-typecheck.log` | Untracked | 9945 | Docs | 96 | 0 |  |
+| `docs/draft-text-diagnostic.png` | Untracked | 159168 | Docs | Binary | Binary |  |
+| `docs/editing-readiness-current.log` | Untracked | 6807 | Docs | 191 | 0 |  |
+| `docs/editor-ergonomics-final-qualification.log` | Untracked | 6292 | Docs | 179 | 0 |  |
+| `docs/editor-ergonomics-live.png` | Untracked | 146019 | Docs | Binary | Binary |  |
+| `docs/editor-ergonomics-qualification.log` | Untracked | 4310 | Docs | 122 | 0 |  |
+| `docs/editor-ergonomics-selected.png` | Untracked | 130638 | Docs | Binary | Binary |  |
+| `docs/editor-review-foundation-run.log` | Untracked | 4834 | Docs | 155 | 0 |  |
+| `docs/editor-toolbar-1024.png` | Untracked | 5432 | Docs | Binary | Binary |  |
+| `docs/editor-toolbar-1200.png` | Untracked | 5327 | Docs | Binary | Binary |  |
+| `docs/editor-toolbar-1366.png` | Untracked | 7568 | Docs | Binary | Binary |  |
+| `docs/editor-toolbar-1600.png` | Untracked | 9163 | Docs | Binary | Binary |  |
+| `docs/editor-toolbar-refined.png` | Untracked | 159040 | Docs | Binary | Binary |  |
+| `docs/empty-container-qualification.log` | Untracked | 287 | Docs | 2 | 0 |  |
+| `docs/feature-inventory.md` | Untracked | 60644 | Docs | 215 | 0 |  |
+| `docs/formatting-compact.png` | Untracked | 2513 | Docs | Binary | Binary |  |
+| `docs/formatting-expanded.png` | Untracked | 158310 | Docs | Binary | Binary |  |
+| `docs/formatting-primary-1200.png` | Untracked | 148322 | Docs | Binary | Binary |  |
+| `docs/formatting-primary-1600.png` | Untracked | 156854 | Docs | Binary | Binary |  |
+| `docs/formatting-primary-controls.png` | Untracked | 2827 | Docs | Binary | Binary |  |
+| `docs/gate-repair/REPORT.md` | Untracked | 4230 | Docs | 35 | 0 |  |
+| `docs/gate-repair/app-paths-after.log` | Untracked | 97 | Docs | 1 | 0 |  |
+| `docs/gate-repair/app-paths-before.log` | Untracked | 1295 | Docs | 18 | 0 |  |
+| `docs/gate-repair/assertion-proof.json` | Untracked | 8092 | Docs | 278 | 0 |  |
+| `docs/gate-repair/ast-proof.json` | Untracked | 10212 | Docs | 370 | 0 |  |
+| `docs/gate-repair/diff-stat.txt` | Untracked | 3261 | Docs | 50 | 0 |  |
+| `docs/gate-repair/git-status.txt` | Untracked | 25254 | Docs | 685 | 0 |  |
+| `docs/gate-repair/handshake-after.log` | Untracked | 106 | Docs | 1 | 0 |  |
+| `docs/gate-repair/handshake-before.log` | Untracked | 273 | Docs | 11 | 0 |  |
+| `docs/gate-repair/imported-manifests.json` | Untracked | 2230 | Docs | 32 | 0 |  |
+| `docs/gate-repair/inventory.json` | Untracked | 247058 | Docs | 5138 | 0 |  |
+| `docs/gate-repair/inventory.md` | Untracked | 194053 | Docs | 1731 | 0 |  |
+| `docs/gate-repair/product-hunks.txt` | Untracked | 0 | Docs | 0 | 0 |  |
+| `docs/gate-repair/proof-warnings.log` | Untracked | 11311 | Docs | 84 | 0 |  |
+| `docs/gate-repair/ready-diagnostic.log` | Untracked | 2833 | Docs | 15 | 0 |  |
+| `docs/gate-repair/ready-diagnostic.png` | Untracked | 68673 | Docs | Binary | Binary |  |
+| `docs/gate-repair/ready-server.log` | Untracked | 3153 | Docs | 86 | 0 |  |
+| `docs/gate-repair/resolution-progress.md` | Untracked | 8107 | Docs | 53 | 0 |  |
+| `docs/gate-repair/results.md` | Untracked | 14275 | Docs | 174 | 0 |  |
+| `docs/gate-repair/routing-after.log` | Untracked | 704 | Docs | 7 | 0 |  |
+| `docs/gate-repair/routing-before.log` | Untracked | 748 | Docs | 20 | 0 |  |
+| `docs/gate-repair/scale-offsets-current.json` | Untracked | 13143 | Docs | 782 | 0 |  |
+| `docs/gate-repair/shared-diagnosis.md` | Untracked | 5859 | Docs | 46 | 0 |  |
+| `docs/gate-repair/source-document-fence-after.log` | Untracked | 118 | Docs | 1 | 0 |  |
+| `docs/gate-repair/source-document-fence-before.log` | Untracked | 459 | Docs | 18 | 0 |  |
+| `docs/gate-repair/v3.diff` | Untracked | 78922 | Docs | 1242 | 0 |  |
+| `docs/gesture-continuation-after.log` | Untracked | 248 | Docs | 2 | 0 |  |
+| `docs/gesture-continuation-before.log` | Untracked | 8245 | Docs | 246 | 0 |  |
+| `docs/gesture-continuation-cancel.log` | Untracked | 280 | Docs | 3 | 0 |  |
+| `docs/gesture-continuation-diff-stat.log` | Untracked | 439 | Docs | 7 | 0 |  |
+| `docs/gesture-continuation-full.log` | Untracked | 278 | Docs | 3 | 0 |  |
+| `docs/gesture-continuation-git-status.log` | Untracked | 22186 | Docs | 575 | 0 |  |
+| `docs/gesture-continuation-harness.diff` | Untracked | 1268 | Docs | 16 | 0 |  |
+| `docs/gesture-continuation-held.png` | Untracked | 44826 | Docs | Binary | Binary |  |
+| `docs/gesture-continuation-move-first.log` | Untracked | 276 | Docs | 3 | 0 |  |
+| `docs/gesture-continuation-move-readiness-before.log` | Untracked | 3823 | Docs | 104 | 0 |  |
+| `docs/gesture-continuation-move-regression.log` | Untracked | 496 | Docs | 13 | 0 |  |
+| `docs/gesture-continuation-refusal.log` | Untracked | 280 | Docs | 3 | 0 |  |
+| `docs/gesture-continuation-report.md` | Untracked | 6212 | Docs | 53 | 0 |  |
+| `docs/gesture-continuation-resize-diagnostic.log` | Untracked | 820 | Docs | 12 | 0 |  |
+| `docs/gesture-continuation-resize-regression.log` | Untracked | 9574 | Docs | 267 | 0 |  |
+| `docs/gesture-continuation-typecheck.log` | Untracked | 9813 | Docs | 95 | 0 |  |
+| `docs/gesture-resize-final-start.png` | Untracked | 100553 | Docs | Binary | Binary |  |
+| `docs/high-fidelity-native-debug.png` | Untracked | 534650 | Docs | Binary | Binary |  |
+| `docs/high-fidelity-open-react-failure.png` | Untracked | 425165 | Docs | Binary | Binary |  |
+| `docs/high-fidelity-open-react-native.png` | Untracked | 644695 | Docs | Binary | Binary |  |
+| `docs/high-fidelity-open-react-studio.png` | Untracked | 183480 | Docs | Binary | Binary |  |
+| `docs/high-fidelity-open-react-window.png` | Untracked | 344266 | Docs | Binary | Binary |  |
+| `docs/high-fidelity-open-react.json` | Untracked | 18094 | Docs | 580 | 0 |  |
+| `docs/high-fidelity-open-react.log` | Untracked | 7254 | Docs | 185 | 0 |  |
+| `docs/icon-properties-bridge.log` | Untracked | 171 | Docs | 1 | 0 |  |
+| `docs/icon-properties-current-typecheck.log` | Untracked | 36 | Docs | 1 | 0 |  |
+| `docs/icon-properties-gates-final.log` | Untracked | 4799 | Docs | 157 | 0 |  |
+| `docs/icon-properties-imported-final.log` | Untracked | 3167 | Docs | 93 | 0 |  |
+| `docs/icon-properties-imported-studio.png` | Untracked | 87127 | Docs | Binary | Binary |  |
+| `docs/icon-properties-imported-window.png` | Untracked | 75236 | Docs | Binary | Binary |  |
+| `docs/icon-properties-local-final.log` | Untracked | 1039 | Docs | 19 | 0 |  |
+| `docs/icon-properties-local.log` | Untracked | 64 | Docs | 2 | 0 |  |
+| `docs/icon-properties-qualification.log` | Untracked | 17697 | Docs | 536 | 0 |  |
+| `docs/icon-properties-source.log` | Untracked | 215 | Docs | 1 | 0 |  |
+| `docs/icon-properties-studio.png` | Untracked | 89093 | Docs | Binary | Binary |  |
+| `docs/icon-properties-window.png` | Untracked | 30944 | Docs | Binary | Binary |  |
+| `docs/icon-replacement-bridge.log` | Untracked | 206 | Docs | 1 | 0 |  |
+| `docs/icon-replacement-current-typecheck.log` | Untracked | 36 | Docs | 1 | 0 |  |
+| `docs/icon-replacement-final.log` | Untracked | 6230 | Docs | 181 | 0 |  |
+| `docs/icon-replacement-imported-studio.png` | Untracked | 91335 | Docs | Binary | Binary |  |
+| `docs/icon-replacement-imported-window.png` | Untracked | 81066 | Docs | Binary | Binary |  |
+| `docs/icon-replacement-qualification.log` | Untracked | 7440 | Docs | 203 | 0 |  |
+| `docs/icon-replacement-source.log` | Untracked | 209 | Docs | 1 | 0 |  |
+| `docs/icon-replacement-studio.png` | Untracked | 88816 | Docs | Binary | Binary |  |
+| `docs/icon-replacement-window.png` | Untracked | 71883 | Docs | Binary | Binary |  |
+| `docs/image-content-controls-studio.png` | Untracked | 88236 | Docs | Binary | Binary |  |
+| `docs/image-content-controls-window.png` | Untracked | 74761 | Docs | Binary | Binary |  |
+| `docs/image-content-current.log` | Untracked | 5222 | Docs | 162 | 0 |  |
+| `docs/image-content-final.log` | Untracked | 5224 | Docs | 162 | 0 |  |
+| `docs/image-content-qualification.log` | Untracked | 5220 | Docs | 162 | 0 |  |
+| `docs/image-content-release.log` | Untracked | 5220 | Docs | 162 | 0 |  |
+| `docs/image-content-studio.png` | Untracked | 42747 | Docs | Binary | Binary |  |
+| `docs/image-content-window.png` | Untracked | 26965 | Docs | Binary | Binary |  |
+| `docs/image-framing-qualification.log` | Untracked | 5166 | Docs | 160 | 0 |  |
+| `docs/image-framing-responsive.log` | Untracked | 5166 | Docs | 160 | 0 |  |
+| `docs/image-framing-studio.png` | Untracked | 42890 | Docs | Binary | Binary |  |
+| `docs/image-framing-window.png` | Untracked | 27071 | Docs | Binary | Binary |  |
+| `docs/imported-canvas-adapter-regression.log` | Untracked | 529 | Docs | 6 | 0 |  |
+| `docs/imported-canvas-bridge-regression.log` | Untracked | 39 | Docs | 1 | 0 |  |
+| `docs/imported-canvas-final.log` | Untracked | 5706 | Docs | 173 | 0 |  |
+| `docs/imported-canvas-local-regression.log` | Untracked | 438 | Docs | 3 | 0 |  |
+| `docs/imported-canvas-qualification.log` | Untracked | 3989 | Docs | 103 | 0 |  |
+| `docs/imported-canvas-qualified.log` | Untracked | 5948 | Docs | 174 | 0 |  |
+| `docs/imported-canvas-runtime-regression.log` | Untracked | 178 | Docs | 1 | 0 |  |
+| `docs/imported-canvas.png` | Untracked | 108316 | Docs | Binary | Binary |  |
+| `docs/imported-live-editing-window.png` | Untracked | 68285 | Docs | Binary | Binary |  |
+| `docs/imported-movement-qualification.log` | Untracked | 5649 | Docs | 160 | 0 |  |
+| `docs/imported-responsive-failure.png` | Untracked | 69486 | Docs | Binary | Binary |  |
+| `docs/inline-text-editing.png` | Untracked | 155370 | Docs | Binary | Binary |  |
+| `docs/launch-boundary-tests.log` | Untracked | 1197 | Docs | 8 | 0 |  |
+| `docs/launch-core-tests.log` | Untracked | 6714 | Docs | 159 | 0 |  |
+| `docs/launch-current-qualification.log` | Untracked | 4922 | Docs | 155 | 0 |  |
+| `docs/launch-production-qualification.log` | Untracked | 4921 | Docs | 155 | 0 |  |
+| `docs/layout-controls-qualification.log` | Untracked | 4900 | Docs | 153 | 0 |  |
+| `docs/layout-grid-ready.png` | Untracked | 74611 | Docs | Binary | Binary |  |
+| `docs/live-editing-window.png` | Untracked | 73529 | Docs | Binary | Binary |  |
+| `docs/live-source-public-2-verified.log` | Untracked | 784 | Docs | 21 | 0 |  |
+| `docs/live-source-public-2.log` | Untracked | 795 | Docs | 21 | 0 |  |
+| `docs/live-source-public-3-verified.log` | Untracked | 165 | Docs | 1 | 0 |  |
+| `docs/live-source-sample-verified.log` | Untracked | 743 | Docs | 21 | 0 |  |
+| `docs/live-source-sample.log` | Untracked | 994 | Docs | 12 | 0 |  |
+| `docs/live-window-failure.png` | Untracked | 68345 | Docs | Binary | Binary |  |
+| `docs/live-window-qualification.log` | Untracked | 3831 | Docs | 94 | 0 |  |
+| `docs/live-window-types.log` | Untracked | 2480 | Docs | 19 | 0 |  |
+| `docs/local-editor-server-error.log` | Untracked | 2086123 | Docs | 70014 | 0 |  |
+| `docs/local-editor-server.log` | Untracked | 487041 | Docs | 3581 | 0 |  |
+| `docs/local-movement-regression.log` | Untracked | 17269 | Docs | 5 | 0 |  |
+| `docs/m0-apply-outcome-after.log` | Untracked | 172 | Docs | 1 | 0 |  |
+| `docs/m0-apply-outcome-before.log` | Untracked | 786 | Docs | 16 | 0 |  |
+| `docs/m0-authorization-denial-after.log` | Untracked | 109 | Docs | 1 | 0 |  |
+| `docs/m0-authorization-denial-before.log` | Untracked | 506 | Docs | 20 | 0 |  |
+| `docs/m0-crash-before-browser.log` | Untracked | 355 | Docs | 3 | 0 |  |
+| `docs/m0-crash-final-gates.log` | Untracked | 4824 | Docs | 156 | 0 |  |
+| `docs/m0-crash-history-browser.log` | Untracked | 2438 | Docs | 35 | 0 |  |
+| `docs/m0-crash-recovery-after.log` | Untracked | 199 | Docs | 1 | 0 |  |
+| `docs/m0-crash-recovery-before.log` | Untracked | 717 | Docs | 23 | 0 |  |
+| `docs/m0-crash-regression-checks.log` | Untracked | 2498 | Docs | 36 | 0 |  |
+| `docs/m0-crash-regression-final.log` | Untracked | 2533 | Docs | 36 | 0 |  |
+| `docs/m0-crash-release-gates.log` | Untracked | 4824 | Docs | 156 | 0 |  |
+| `docs/m0-crash-source-browser.log` | Untracked | 6943 | Docs | 111 | 0 |  |
+| `docs/m0-crash-source-final.log` | Untracked | 1107 | Docs | 24 | 0 |  |
+| `docs/m0-crash-source-traced.log` | Untracked | 2490 | Docs | 36 | 0 |  |
+| `docs/m0-dropped-response-browser.log` | Untracked | 5170 | Docs | 159 | 0 |  |
+| `docs/m0-final-source-and-gates.log` | Untracked | 6955 | Docs | 190 | 0 |  |
+| `docs/m0-final-status-check.log` | Untracked | 5191 | Docs | 159 | 0 |  |
+| `docs/m0-public2-baseline.log` | Untracked | 24819 | Docs | 210 | 0 |  |
+| `docs/m0-public2-candidate21.log` | Untracked | 1872 | Docs | 26 | 0 |  |
+| `docs/m0-public2-qualified.log` | Untracked | 1953 | Docs | 39 | 0 |  |
+| `docs/m0-public2-recovery-qualified.log` | Untracked | 51639 | Docs | 782 | 0 |  |
+| `docs/m0-public2-sequence-trace.log` | Untracked | 48127 | Docs | 682 | 0 |  |
+| `docs/m0-public3-qualified.log` | Untracked | 2359 | Docs | 33 | 0 |  |
+| `docs/m0-qualification-final-gates.log` | Untracked | 5192 | Docs | 160 | 0 |  |
+| `docs/m0-sequence-response-loss-before.log` | Untracked | 1905 | Docs | 35 | 0 |  |
+| `docs/m0-source-lock-checks.log` | Untracked | 136 | Docs | 1 | 0 |  |
+| `docs/m0-tab-checkpoint-final-gates.log` | Untracked | 5101 | Docs | 159 | 0 |  |
+| `docs/m0-tab-recovery-browser.log` | Untracked | 5718 | Docs | 18 | 0 |  |
+| `docs/m0-tab-recovery-checkpoint.log` | Untracked | 5420 | Docs | 163 | 0 |  |
+| `docs/m0-tab-recovery-final.log` | Untracked | 5531 | Docs | 16 | 0 |  |
+| `docs/m0-tab-recovery-gates.log` | Untracked | 1514 | Docs | 53 | 0 |  |
+| `docs/m0-tab-recovery-outcomes.log` | Untracked | 172 | Docs | 1 | 0 |  |
+| `docs/m0-tab-recovery-regression.log` | Untracked | 3144 | Docs | 42 | 0 |  |
+| `docs/m0-tab-recovery-rendered.log` | Untracked | 716 | Docs | 15 | 0 |  |
+| `docs/m0-tab-recovery-storage.log` | Untracked | 146 | Docs | 1 | 0 |  |
+| `docs/m0-tab-recovery.png` | Untracked | 82894 | Docs | Binary | Binary |  |
+| `docs/m0-thread-lock-before.log` | Untracked | 693 | Docs | 21 | 0 |  |
+| `docs/m0-uncertain-save.png` | Untracked | 144212 | Docs | Binary | Binary |  |
+| `docs/m0-undo-browser-final.log` | Untracked | 3678 | Docs | 51 | 0 |  |
+| `docs/m0-undo-browser-verified.log` | Untracked | 1923 | Docs | 39 | 0 |  |
+| `docs/m0-undo-browser.log` | Untracked | 3273 | Docs | 57 | 0 |  |
+| `docs/m0-undo-final-engine.log` | Untracked | 399 | Docs | 5 | 0 |  |
+| `docs/m0-undo-history-regression.log` | Untracked | 2292 | Docs | 54 | 0 |  |
+| `docs/m0-undo-recovery-before.log` | Untracked | 674 | Docs | 20 | 0 |  |
+| `docs/m0-undo-regression.log` | Untracked | 3077 | Docs | 41 | 0 |  |
+| `docs/m0-undo-release-gates.log` | Untracked | 4883 | Docs | 157 | 0 |  |
+| `docs/m1-demo-ready.log` | Untracked | 284 | Docs | 2 | 0 |  |
+| `docs/m1-demo.log` | Untracked | 5104 | Docs | 11 | 0 |  |
+| `docs/m1-final-gates.log` | Untracked | 4830 | Docs | 155 | 0 |  |
+| `docs/m1-final-validation.log` | Untracked | 4931 | Docs | 156 | 0 |  |
+| `docs/m1-interactions-checks.log` | Untracked | 418 | Docs | 12 | 0 |  |
+| `docs/m1-interactions-final.log` | Untracked | 389 | Docs | 12 | 0 |  |
+| `docs/m1-live-regression.log` | Untracked | 73 | Docs | 1 | 0 |  |
+| `docs/m1-release-checks-final.log` | Untracked | 418 | Docs | 12 | 0 |  |
+| `docs/m1-release-checks.log` | Untracked | 4829 | Docs | 155 | 0 |  |
+| `docs/m1-release-evidence.log` | Untracked | 4931 | Docs | 156 | 0 |  |
+| `docs/m1-review-final.log` | Untracked | 76 | Docs | 1 | 0 |  |
+| `docs/m1-review-regression.log` | Untracked | 406 | Docs | 12 | 0 |  |
+| `docs/m1-validated.log` | Untracked | 4852 | Docs | 155 | 0 |  |
+| `docs/multi-file-browser-qualification.log` | Untracked | 5680 | Docs | 173 | 0 |  |
+| `docs/multi-file-crash-final.log` | Untracked | 229 | Docs | 1 | 0 |  |
+| `docs/multi-file-editor.png` | Untracked | 73106 | Docs | Binary | Binary |  |
+| `docs/multi-file-engine-final.log` | Untracked | 272 | Docs | 1 | 0 |  |
+| `docs/multi-file-failure.png` | Untracked | 81074 | Docs | Binary | Binary |  |
+| `docs/multi-file-final-qualification.log` | Untracked | 21636 | Docs | 523 | 0 |  |
+| `docs/multi-file-initial-gates.log` | Untracked | 5184 | Docs | 170 | 0 |  |
+| `docs/multi-file-production-gates.log` | Untracked | 5409 | Docs | 171 | 0 |  |
+| `docs/multi-file-recovery-final.log` | Untracked | 3326 | Docs | 43 | 0 |  |
+| `docs/multi-file-recovery-regression.log` | Untracked | 2666 | Docs | 38 | 0 |  |
+| `docs/multi-file-release-gates.log` | Untracked | 5220 | Docs | 170 | 0 |  |
+| `docs/multi-file-retained-draft-qualification.log` | Untracked | 11205 | Docs | 349 | 0 |  |
+| `docs/multi-file-single-regression.log` | Untracked | 187 | Docs | 1 | 0 |  |
+| `docs/multi-file-verified-qualification.log` | Untracked | 5680 | Docs | 173 | 0 |  |
+| `docs/performance-canvas-baseline.log` | Untracked | 367 | Docs | 4 | 0 |  |
+| `docs/performance-canvas-current.log` | Untracked | 177 | Docs | 2 | 0 |  |
+| `docs/performance-core-baseline.log` | Untracked | 11052 | Docs | 284 | 0 |  |
+| `docs/performance-core-current.log` | Untracked | 20050 | Docs | 553 | 0 |  |
+| `docs/performance-core-final.log` | Untracked | 3665 | Docs | 75 | 0 |  |
+| `docs/performance-core-validation.log` | Untracked | 0 | Docs | 0 | 0 |  |
+| `docs/performance-core-verified.log` | Untracked | 8624 | Docs | 258 | 0 |  |
+| `docs/performance-imported-baseline.log` | Untracked | 4743 | Docs | 118 | 0 |  |
+| `docs/performance-imported-current-baseline.log` | Untracked | 13859 | Docs | 400 | 0 |  |
+| `docs/performance-imported-current.log` | Untracked | 13920 | Docs | 401 | 0 |  |
+| `docs/performance-imported-verified.log` | Untracked | 4706 | Docs | 117 | 0 |  |
+| `docs/performance-pass.md` | Untracked | 4240 | Docs | 36 | 0 |  |
+| `docs/performance-production-validation.log` | Untracked | 692 | Docs | 8 | 0 |  |
+| `docs/performance-production-verified.log` | Untracked | 5104 | Docs | 159 | 0 |  |
+| `docs/phase0-evidence/generate-task1.js` | Untracked | 2539 | Docs | 56 | 0 |  |
+| `docs/phase0-evidence/run-task2-tests.js` | Untracked | 3189 | Docs | 70 | 0 |  |
+| `docs/phase0-evidence/screenshots/01-studio-baseline.png` | Untracked | 119268 | Docs | Binary | Binary |  |
+| `docs/phase0-evidence/screenshots/02-element-selected.png` | Untracked | 159327 | Docs | Binary | Binary |  |
+| `docs/phase0-evidence/screenshots/03-edit-text-active.png` | Untracked | 149286 | Docs | Binary | Binary |  |
+| `docs/phase0-evidence/screenshots/04-bold-toggled.png` | Untracked | 171643 | Docs | Binary | Binary |  |
+| `docs/phase0-evidence/screenshots/05-hud-more-menu.png` | Untracked | 174949 | Docs | Binary | Binary |  |
+| `docs/phase0-evidence/screenshots/06-design-panel.png` | Untracked | 174786 | Docs | Binary | Binary |  |
+| `docs/phase0-evidence/screenshots/07-settings-panel.png` | Untracked | 171582 | Docs | Binary | Binary |  |
+| `docs/phase0-evidence/screenshots/09-s6-fixture3-refusal.png` | Untracked | 92197 | Docs | Binary | Binary |  |
+| `docs/phase0-evidence/screenshots/11-s6-fixture5-refusal.png` | Untracked | 128807 | Docs | Binary | Binary |  |
+| `docs/phase0-evidence/task1-branch-map.txt` | Untracked | 8031 | Docs | 177 | 0 |  |
+| `docs/phase0-evidence/task2-runs/adapter_run1.txt` | Untracked | 1202 | Docs | 26 | 0 |  |
+| `docs/phase0-evidence/task2-runs/adapter_run2.txt` | Untracked | 1202 | Docs | 26 | 0 |  |
+| `docs/phase0-evidence/task2-runs/adapter_run3.txt` | Untracked | 1202 | Docs | 26 | 0 |  |
+| `docs/phase0-evidence/task2-runs/move-expectations_run1.txt` | Untracked | 9827 | Docs | 237 | 0 |  |
+| `docs/phase0-evidence/task2-runs/move-expectations_run2.txt` | Untracked | 9666 | Docs | 227 | 0 |  |
+| `docs/phase0-evidence/task2-runs/move-expectations_run3.txt` | Untracked | 9635 | Docs | 219 | 0 |  |
+| `docs/phase0-evidence/task2-runs/reorder-safety_run1.txt` | Untracked | 2444 | Docs | 48 | 0 |  |
+| `docs/phase0-evidence/task2-runs/reorder-safety_run2.txt` | Untracked | 2444 | Docs | 48 | 0 |  |
+| `docs/phase0-evidence/task2-runs/reorder-safety_run3.txt` | Untracked | 2444 | Docs | 48 | 0 |  |
+| `docs/phase0-evidence/task2-runs/studio-restore_run1.txt` | Untracked | 2315 | Docs | 54 | 0 |  |
+| `docs/phase0-evidence/task2-runs/studio-restore_run2.txt` | Untracked | 2315 | Docs | 54 | 0 |  |
+| `docs/phase0-evidence/task2-runs/studio-restore_run3.txt` | Untracked | 2315 | Docs | 54 | 0 |  |
+| `docs/phase0-evidence/task2-runs/test_fixtures_run1.txt` | Untracked | 1603 | Docs | 28 | 0 |  |
+| `docs/phase0-evidence/task2-runs/test_fixtures_run2.txt` | Untracked | 1603 | Docs | 28 | 0 |  |
+| `docs/phase0-evidence/task2-runs/test_fixtures_run3.txt` | Untracked | 1603 | Docs | 28 | 0 |  |
+| `docs/phase0-evidence/task2-runs/test_m0_run1.txt` | Untracked | 936 | Docs | 27 | 0 |  |
+| `docs/phase0-evidence/task2-runs/test_m0_run2.txt` | Untracked | 936 | Docs | 27 | 0 |  |
+| `docs/phase0-evidence/task2-runs/test_m0_run3.txt` | Untracked | 936 | Docs | 27 | 0 |  |
+| `docs/phase0-evidence/task2-runs/test_overfit_run1.txt` | Untracked | 915 | Docs | 27 | 0 |  |
+| `docs/phase0-evidence/task2-runs/test_overfit_run2.txt` | Untracked | 915 | Docs | 27 | 0 |  |
+| `docs/phase0-evidence/task2-runs/test_overfit_run3.txt` | Untracked | 915 | Docs | 27 | 0 |  |
+| `docs/phase0-evidence/task2-runs/test_step1_run1.txt` | Untracked | 996 | Docs | 29 | 0 |  |
+| `docs/phase0-evidence/task2-runs/test_step1_run2.txt` | Untracked | 996 | Docs | 29 | 0 |  |
+| `docs/phase0-evidence/task2-runs/test_step1_run3.txt` | Untracked | 996 | Docs | 29 | 0 |  |
+| `docs/phase0-evidence/task2-runs/test_step2_run1.txt` | Untracked | 1242 | Docs | 27 | 0 |  |
+| `docs/phase0-evidence/task2-runs/test_step2_run2.txt` | Untracked | 1242 | Docs | 27 | 0 |  |
+| `docs/phase0-evidence/task2-runs/test_step2_run3.txt` | Untracked | 1242 | Docs | 27 | 0 |  |
+| `docs/phase0-evidence/task2-runs/test_step3_run1.txt` | Untracked | 1436 | Docs | 24 | 0 |  |
+| `docs/phase0-evidence/task2-runs/test_step3_run2.txt` | Untracked | 1436 | Docs | 24 | 0 |  |
+| `docs/phase0-evidence/task2-runs/test_step3_run3.txt` | Untracked | 1436 | Docs | 24 | 0 |  |
+| `docs/phase0-evidence/task2-test-inventory-runs.txt` | Untracked | 48921 | Docs | 245 | 0 |  |
+| `docs/phase0-evidence/task3-capability-matrix.ts` | Untracked | 22411 | Docs | 532 | 0 |  |
+| `docs/phase0-evidence/task3-capability-matrix.txt` | Untracked | 7067 | Docs | 39 | 0 |  |
+| `docs/phase0-evidence/task4-findings-s1-s5.txt` | Untracked | 5084 | Docs | 110 | 0 |  |
+| `docs/phase0-evidence/task4-verifier.ts` | Untracked | 16312 | Docs | 341 | 0 |  |
+| `docs/phase0-evidence/task5-open-move-work.txt` | Untracked | 3668 | Docs | 56 | 0 |  |
+| `docs/phase2-evidence/baseline-adapter.txt` | Untracked | 1202 | Docs | 26 | 0 |  |
+| `docs/phase2-evidence/baseline-reorder-safety.txt` | Untracked | 2444 | Docs | 48 | 0 |  |
+| `docs/phase2-evidence/baseline-s1-failing.txt` | Untracked | 4084 | Docs | 115 | 0 |  |
+| `docs/phase2-evidence/baseline-s3-failing.txt` | Untracked | 2617 | Docs | 66 | 0 |  |
+| `docs/phase2-evidence/baseline-s5-failing.txt` | Untracked | 1454 | Docs | 46 | 0 |  |
+| `docs/phase2-evidence/run1-adapter.txt` | Untracked | 1812 | Docs | 42 | 0 |  |
+| `docs/phase2-evidence/run1-git-status.txt` | Untracked | 1850 | Docs | 65 | 0 |  |
+| `docs/phase2-evidence/run1-reorder-safety.txt` | Untracked | 2766 | Docs | 58 | 0 |  |
+| `docs/phase2-evidence/run1-s1-auth-origin.txt` | Untracked | 1960 | Docs | 59 | 0 |  |
+| `docs/phase2-evidence/run1-s2-path-traversal.txt` | Untracked | 872 | Docs | 29 | 0 |  |
+| `docs/phase2-evidence/run1-s3-atomic-write.txt` | Untracked | 797 | Docs | 29 | 0 |  |
+| `docs/phase2-evidence/run1-s5-tailwind-compile.txt` | Untracked | 1101 | Docs | 35 | 0 |  |
+| `docs/phase2-evidence/run2-adapter.txt` | Untracked | 1812 | Docs | 42 | 0 |  |
+| `docs/phase2-evidence/run2-git-status.txt` | Untracked | 1850 | Docs | 65 | 0 |  |
+| `docs/phase2-evidence/run2-reorder-safety.txt` | Untracked | 2766 | Docs | 58 | 0 |  |
+| `docs/phase2-evidence/run2-s1-auth-origin.txt` | Untracked | 1960 | Docs | 59 | 0 |  |
+| `docs/phase2-evidence/run2-s2-path-traversal.txt` | Untracked | 872 | Docs | 29 | 0 |  |
+| `docs/phase2-evidence/run2-s3-atomic-write.txt` | Untracked | 797 | Docs | 29 | 0 |  |
+| `docs/phase2-evidence/run2-s5-tailwind-compile.txt` | Untracked | 1099 | Docs | 35 | 0 |  |
+| `docs/phase2-evidence/run3-adapter.txt` | Untracked | 1812 | Docs | 42 | 0 |  |
+| `docs/phase2-evidence/run3-git-status.txt` | Untracked | 1850 | Docs | 65 | 0 |  |
+| `docs/phase2-evidence/run3-reorder-safety.txt` | Untracked | 2765 | Docs | 58 | 0 |  |
+| `docs/phase2-evidence/run3-s1-auth-origin.txt` | Untracked | 1961 | Docs | 59 | 0 |  |
+| `docs/phase2-evidence/run3-s2-path-traversal.txt` | Untracked | 872 | Docs | 29 | 0 |  |
+| `docs/phase2-evidence/run3-s3-atomic-write.txt` | Untracked | 797 | Docs | 29 | 0 |  |
+| `docs/phase2-evidence/run3-s5-tailwind-compile.txt` | Untracked | 1100 | Docs | 35 | 0 |  |
+| `docs/phase2-review-evidence/task1-diff-studio-page.txt` | Untracked | 11537 | Docs | 210 | 0 |  |
+| `docs/phase2-review-evidence/task1-diff-workspace-page.txt` | Untracked | 965 | Docs | 27 | 0 |  |
+| `docs/phase2-review-evidence/task1-git-diff-stat.txt` | Untracked | 1608 | Docs | 25 | 0 |  |
+| `docs/phase2-review-evidence/task1-git-log.txt` | Untracked | 3847 | Docs | 85 | 0 |  |
+| `docs/phase2-review-evidence/task2-git-status.txt` | Untracked | 1904 | Docs | 67 | 0 |  |
+| `docs/phase2-review-evidence/task3-in-situ-focus.txt` | Untracked | 1812 | Docs | 42 | 0 |  |
+| `docs/phase2-review-evidence/task3-real-adapter.txt` | Untracked | 1202 | Docs | 26 | 0 |  |
+| `docs/phase2-review-evidence/task3-reorder-safety.txt` | Untracked | 2766 | Docs | 58 | 0 |  |
+| `docs/phase2-review-evidence/task3-s1-auth-origin.txt` | Untracked | 1964 | Docs | 59 | 0 |  |
+| `docs/phase2-review-evidence/task3-s2-path-traversal.txt` | Untracked | 870 | Docs | 29 | 0 |  |
+| `docs/phase2-review-evidence/task3-s3-atomic-write.txt` | Untracked | 797 | Docs | 29 | 0 |  |
+| `docs/phase2-review-evidence/task3-s5-tailwind-compile.txt` | Untracked | 1098 | Docs | 35 | 0 |  |
+| `docs/phase2-review-evidence/task3-status-after-real-adapter.txt` | Untracked | 1933 | Docs | 68 | 0 |  |
+| `docs/phase2-review-evidence/task3-status-after-reorder.txt` | Untracked | 1933 | Docs | 68 | 0 |  |
+| `docs/phase2-review-evidence/task5-netstat.txt` | Untracked | 77 | Docs | 1 | 0 |  |
+| `docs/phase2-review-evidence/task5-token-endpoint-security.txt` | Untracked | 4343 | Docs | 67 | 0 |  |
+| `docs/phase2-review-evidence/task6-atomic-write-experiment.txt` | Untracked | 793 | Docs | 21 | 0 |  |
+| `docs/phase2-review-evidence/task7-npm-build.txt` | Untracked | 2311 | Docs | 82 | 0 |  |
+| `docs/phase2-review-evidence/task7-tailwind-verifier-api.txt` | Untracked | 850 | Docs | 30 | 0 |  |
+| `docs/phase2-review-evidence/task8-browser-check.txt` | Untracked | 3152 | Docs | 41 | 0 |  |
+| `docs/phase2-review-evidence/task8-browser-nudge-applied.png` | Untracked | 149349 | Docs | Binary | Binary |  |
+| `docs/phase2-review-evidence/task8-browser-undone.png` | Untracked | 145491 | Docs | Binary | Binary |  |
+| `docs/phase2-review-evidence/task8-token-stripped-error.png` | Untracked | 160516 | Docs | Binary | Binary |  |
+| `docs/phase2b-evidence/foundation/step0-starting-state.txt` | Untracked | 2825 | Docs | 4 | 0 |  |
+| `docs/phase2b-evidence/foundation/step1a-diff-stat.txt` | Untracked | 196 | Docs | 3 | 0 |  |
+| `docs/phase2b-evidence/foundation/step1b-edit-history-diff.txt` | Untracked | 10635 | Docs | 230 | 0 |  |
+| `docs/phase2b-evidence/foundation/step1c-adversarial.txt` | Untracked | 6302 | Docs | 46 | 0 |  |
+| `docs/phase2b-evidence/foundation/step1d-adapter.txt` | Untracked | 2458 | Docs | 26 | 0 |  |
+| `docs/phase2b-evidence/foundation/step1d-history-resilience.txt` | Untracked | 5264 | Docs | 60 | 0 |  |
+| `docs/phase2b-evidence/foundation/step1d-merge.txt` | Untracked | 576 | Docs | 6 | 0 |  |
+| `docs/phase2b-evidence/foundation/step1d-reorder-safety.txt` | Untracked | 4986 | Docs | 48 | 0 |  |
+| `docs/phase2b-evidence/foundation/step2-token-stability.txt` | Untracked | 5454 | Docs | 168 | 0 |  |
+| `docs/phase2b-evidence/foundation/step3a-inventory.md` | Untracked | 4449 | Docs | 55 | 0 |  |
+| `docs/phase2b-evidence/foundation/step3f-3x-runs.txt` | Untracked | 7979 | Docs | 114 | 0 |  |
+| `docs/phase2b-evidence/foundation/step4-v3-verification.txt` | Untracked | 1690 | Docs | 44 | 0 |  |
+| `docs/phase2b-evidence/foundation/step5-final-regression.txt` | Untracked | 49241 | Docs | 1298 | 0 |  |
+| `docs/phase2b-evidence/step0-starting-state.txt` | Untracked | 2699 | Docs | 83 | 0 |  |
+| `docs/phase2b-evidence/step0-state.txt` | Untracked | 2579 | Docs | 79 | 0 |  |
+| `docs/phase2b-evidence/step1-s5-tailwind-compile-run1.txt` | Untracked | 2268 | Docs | 35 | 0 |  |
+| `docs/phase2b-evidence/step1-s5-tailwind-compile-run2.txt` | Untracked | 2270 | Docs | 35 | 0 |  |
+| `docs/phase2b-evidence/step1-s5-tailwind-compile-run3.txt` | Untracked | 2268 | Docs | 35 | 0 |  |
+| `docs/phase2b-evidence/step1-s5-theme-support-initial-failures.txt` | Untracked | 4139 | Docs | 96 | 0 |  |
+| `docs/phase2b-evidence/step1-s5-theme-support-run1.txt` | Untracked | 4986 | Docs | 54 | 0 |  |
+| `docs/phase2b-evidence/step1-s5-theme-support-run2.txt` | Untracked | 4986 | Docs | 54 | 0 |  |
+| `docs/phase2b-evidence/step1-s5-theme-support-run3.txt` | Untracked | 4988 | Docs | 54 | 0 |  |
+| `docs/phase2b-evidence/step1a-history-safety.txt` | Untracked | 1670 | Docs | 35 | 0 |  |
+| `docs/phase2b-evidence/step1b-s5-verifier.txt` | Untracked | 3861 | Docs | 67 | 0 |  |
+| `docs/phase2b-evidence/step1c-readhistory-preexisting.txt` | Untracked | 2404 | Docs | 59 | 0 |  |
+| `docs/phase2b-evidence/step2-adapter.txt` | Untracked | 1292 | Docs | 26 | 0 |  |
+| `docs/phase2b-evidence/step2-reorder-safety.txt` | Untracked | 2601 | Docs | 48 | 0 |  |
+| `docs/phase2b-evidence/step2-s1-auth-origin.txt` | Untracked | 2022 | Docs | 59 | 0 |  |
+| `docs/phase2b-evidence/step2-s2-path-traversal.txt` | Untracked | 904 | Docs | 29 | 0 |  |
+| `docs/phase2b-evidence/step2-s3-atomic-write.txt` | Untracked | 829 | Docs | 29 | 0 |  |
+| `docs/phase2b-evidence/step2-s5-tailwind-compile.txt` | Untracked | 1136 | Docs | 35 | 0 |  |
+| `docs/phase2b-evidence/step2-s5-theme-support.txt` | Untracked | 2495 | Docs | 54 | 0 |  |
+| `docs/phase2b-evidence/step2-temp-server-e2e.txt` | Untracked | 7212 | Docs | 117 | 0 |  |
+| `docs/phase2b-evidence/step3-adapter.txt` | Untracked | 1292 | Docs | 26 | 0 |  |
+| `docs/phase2b-evidence/step3-git-log.txt` | Untracked | 934 | Docs | 10 | 0 |  |
+| `docs/phase2b-evidence/step3-reorder-safety.txt` | Untracked | 2601 | Docs | 48 | 0 |  |
+| `docs/phase2b-evidence/step4-adapter.txt` | Untracked | 1292 | Docs | 26 | 0 |  |
+| `docs/phase2b-evidence/step4-history-resilience-run1.txt` | Untracked | 2218 | Docs | 53 | 0 |  |
+| `docs/phase2b-evidence/step4-history-resilience-run2.txt` | Untracked | 2220 | Docs | 53 | 0 |  |
+| `docs/phase2b-evidence/step4-history-resilience-run3.txt` | Untracked | 2218 | Docs | 53 | 0 |  |
+| `docs/phase2b-evidence/step4-initial-failures.txt` | Untracked | 3 | Docs | 1 | 0 |  |
+| `docs/phase2b-evidence/step4-reorder-safety.txt` | Untracked | 2601 | Docs | 48 | 0 |  |
+| `docs/phase2b-review-evidence/run-step3-isolation.ts` | Untracked | 5225 | Docs | 128 | 0 |  |
+| `docs/phase2b-review-evidence/run-step6b-validation.ts` | Untracked | 5601 | Docs | 131 | 0 |  |
+| `docs/phase2b-review-evidence/step1-diff-stat.txt` | Untracked | 651 | Docs | 12 | 0 |  |
+| `docs/phase2b-review-evidence/step1-git-log.txt` | Untracked | 338 | Docs | 4 | 0 |  |
+| `docs/phase2b-review-evidence/step2-audit.ts` | Untracked | 7966 | Docs | 184 | 0 |  |
+| `docs/phase2b-review-evidence/step2a-grep.txt` | Untracked | 3126 | Docs | 31 | 0 |  |
+| `docs/phase2b-review-evidence/step2b-audit-output.txt` | Untracked | 3072 | Docs | 60 | 0 |  |
+| `docs/phase2b-review-evidence/step2c-auth-and-routes-diff.txt` | Untracked | 635 | Docs | 14 | 0 |  |
+| `docs/phase2b-review-evidence/step3-isolation-raw.txt` | Untracked | 14911 | Docs | 314 | 0 |  |
+| `docs/phase2b-review-evidence/step3-isolation-summary.txt` | Untracked | 10007 | Docs | 101 | 0 |  |
+| `docs/phase2b-review-evidence/step3-leftovers.txt` | Untracked | 873 | Docs | 23 | 0 |  |
+| `docs/phase2b-review-evidence/step4-regression-raw.txt` | Untracked | 3520 | Docs | 64 | 0 |  |
+| `docs/phase2b-review-evidence/step4-regression.ts` | Untracked | 20189 | Docs | 486 | 0 |  |
+| `docs/phase2b-review-evidence/step5a-after-reload.png` | Untracked | 112541 | Docs | Binary | Binary |  |
+| `docs/phase2b-review-evidence/step5a-output.txt` | Untracked | 5160 | Docs | 93 | 0 |  |
+| `docs/phase2b-review-evidence/step5a-restart-apply.png` | Untracked | 112528 | Docs | Binary | Binary |  |
+| `docs/phase2b-review-evidence/step5a-restart-test.ts` | Untracked | 10870 | Docs | 263 | 0 |  |
+| `docs/phase2b-review-evidence/step5a-results.json` | Untracked | 677 | Docs | 15 | 0 |  |
+| `docs/phase2b-review-evidence/step6b-validation-raw.txt` | Untracked | 15315 | Docs | 341 | 0 |  |
+| `docs/phase2c-evidence/final-adapter-run1.txt` | Untracked | 1202 | Docs | 26 | 0 |  |
+| `docs/phase2c-evidence/final-adapter-run2.txt` | Untracked | 1202 | Docs | 26 | 0 |  |
+| `docs/phase2c-evidence/final-adapter-run3.txt` | Untracked | 1202 | Docs | 26 | 0 |  |
+| `docs/phase2c-evidence/final-fixtures-run1.txt` | Untracked | 2242 | Docs | 51 | 0 |  |
+| `docs/phase2c-evidence/final-fixtures-run2.txt` | Untracked | 2242 | Docs | 51 | 0 |  |
+| `docs/phase2c-evidence/final-fixtures-run3.txt` | Untracked | 2242 | Docs | 51 | 0 |  |
+| `docs/phase2c-evidence/final-history-resilience-run1.txt` | Untracked | 1018 | Docs | 16 | 0 |  |
+| `docs/phase2c-evidence/final-history-resilience-run2.txt` | Untracked | 1018 | Docs | 16 | 0 |  |
+| `docs/phase2c-evidence/final-history-resilience-run3.txt` | Untracked | 1019 | Docs | 16 | 0 |  |
+| `docs/phase2c-evidence/final-reorder-safety-run1.txt` | Untracked | 2444 | Docs | 48 | 0 |  |
+| `docs/phase2c-evidence/final-reorder-safety-run2.txt` | Untracked | 2444 | Docs | 48 | 0 |  |
+| `docs/phase2c-evidence/final-reorder-safety-run3.txt` | Untracked | 2444 | Docs | 48 | 0 |  |
+| `docs/phase2c-evidence/final-s1-auth-bypass-run1.txt` | Untracked | 86 | Docs | 2 | 0 |  |
+| `docs/phase2c-evidence/final-s1-auth-bypass-run2.txt` | Untracked | 86 | Docs | 2 | 0 |  |
+| `docs/phase2c-evidence/final-s1-auth-bypass-run3.txt` | Untracked | 86 | Docs | 2 | 0 |  |
+| `docs/phase2c-evidence/final-s1-run1.txt` | Untracked | 875 | Docs | 17 | 0 |  |
+| `docs/phase2c-evidence/final-s1-run2.txt` | Untracked | 875 | Docs | 17 | 0 |  |
+| `docs/phase2c-evidence/final-s1-run3.txt` | Untracked | 874 | Docs | 17 | 0 |  |
+| `docs/phase2c-evidence/final-s2-run1.txt` | Untracked | 456 | Docs | 12 | 0 |  |
+| `docs/phase2c-evidence/final-s2-run2.txt` | Untracked | 458 | Docs | 12 | 0 |  |
+| `docs/phase2c-evidence/final-s2-run3.txt` | Untracked | 457 | Docs | 12 | 0 |  |
+| `docs/phase2c-evidence/final-s3-run1.txt` | Untracked | 417 | Docs | 12 | 0 |  |
+| `docs/phase2c-evidence/final-s3-run2.txt` | Untracked | 417 | Docs | 12 | 0 |  |
+| `docs/phase2c-evidence/final-s3-run3.txt` | Untracked | 417 | Docs | 12 | 0 |  |
+| `docs/phase2c-evidence/final-s5-compile-run1.txt` | Untracked | 561 | Docs | 13 | 0 |  |
+| `docs/phase2c-evidence/final-s5-compile-run2.txt` | Untracked | 561 | Docs | 13 | 0 |  |
+| `docs/phase2c-evidence/final-s5-compile-run3.txt` | Untracked | 561 | Docs | 13 | 0 |  |
+| `docs/phase2c-evidence/final-s5-theme-run1.txt` | Untracked | 1207 | Docs | 17 | 0 |  |
+| `docs/phase2c-evidence/final-s5-theme-run2.txt` | Untracked | 1206 | Docs | 17 | 0 |  |
+| `docs/phase2c-evidence/final-s5-theme-run3.txt` | Untracked | 1206 | Docs | 17 | 0 |  |
+| `docs/phase2c-evidence/final-s5-v3-run1.txt` | Untracked | 492 | Docs | 12 | 0 |  |
+| `docs/phase2c-evidence/final-s5-v3-run2.txt` | Untracked | 492 | Docs | 12 | 0 |  |
+| `docs/phase2c-evidence/final-s5-v3-run3.txt` | Untracked | 492 | Docs | 12 | 0 |  |
+| `docs/phase2c-evidence/final-test-override-guard-run1.txt` | Untracked | 340 | Docs | 6 | 0 |  |
+| `docs/phase2c-evidence/final-test-override-guard-run2.txt` | Untracked | 340 | Docs | 6 | 0 |  |
+| `docs/phase2c-evidence/final-test-override-guard-run3.txt` | Untracked | 340 | Docs | 6 | 0 |  |
+| `docs/phase2c-evidence/final-token-undo-run1.txt` | Untracked | 1301 | Docs | 26 | 0 |  |
+| `docs/phase2c-evidence/final-token-undo-run2.txt` | Untracked | 1301 | Docs | 26 | 0 |  |
+| `docs/phase2c-evidence/final-token-undo-run3.txt` | Untracked | 1301 | Docs | 26 | 0 |  |
+| `docs/phase2c-evidence/stepA-argv-investigation.txt` | Untracked | 1477 | Docs | 30 | 0 |  |
+| `docs/phase2c-evidence/stepA-auth-bypass-3x.txt` | Untracked | 428 | Docs | 17 | 0 |  |
+| `docs/phase2c-evidence/stepA-failing-test.txt` | Untracked | 933 | Docs | 22 | 0 |  |
+| `docs/phase2c-evidence/stepA-passing-test.txt` | Untracked | 99 | Docs | 2 | 0 |  |
+| `docs/phase2c-evidence/stepA-reorder-safety.txt` | Untracked | 2601 | Docs | 48 | 0 |  |
+| `docs/phase2c-evidence/stepA-s1-suite-3x.txt` | Untracked | 3585 | Docs | 68 | 0 |  |
+| `docs/phase2c-evidence/stepB-failing-test.txt` | Untracked | 1031 | Docs | 25 | 0 |  |
+| `docs/phase2c-evidence/stepB-validation-raw.txt` | Untracked | 13831 | Docs | 294 | 0 |  |
+| `docs/phase2c-evidence/stepC-drag-diagnosis-run1.txt` | Untracked | 1062 | Docs | 22 | 0 |  |
+| `docs/phase2c-evidence/stepC-drag-diagnosis-run2.txt` | Untracked | 1062 | Docs | 22 | 0 |  |
+| `docs/phase2c-evidence/stepC-drag-diagnosis-run3.txt` | Untracked | 1062 | Docs | 22 | 0 |  |
+| `docs/phase2c-evidence/stepC-drag-resize-move-run1.txt` | Untracked | 1049 | Docs | 28 | 0 |  |
+| `docs/phase2c-evidence/stepC-drag-resize-move-run2.txt` | Untracked | 1049 | Docs | 28 | 0 |  |
+| `docs/phase2c-evidence/stepC-drag-resize-move-run3.txt` | Untracked | 1049 | Docs | 28 | 0 |  |
+| `docs/phase2c-evidence/stepC-fixtures-run1.txt` | Untracked | 2242 | Docs | 51 | 0 |  |
+| `docs/phase2c-evidence/stepC-fixtures-run2.txt` | Untracked | 2242 | Docs | 51 | 0 |  |
+| `docs/phase2c-evidence/stepC-fixtures-run3.txt` | Untracked | 2242 | Docs | 51 | 0 |  |
+| `docs/phase2c-evidence/stepC-in-situ-focus-run1.txt` | Untracked | 1812 | Docs | 42 | 0 |  |
+| `docs/phase2c-evidence/stepC-in-situ-focus-run2.txt` | Untracked | 1812 | Docs | 42 | 0 |  |
+| `docs/phase2c-evidence/stepC-in-situ-focus-run3.txt` | Untracked | 1812 | Docs | 42 | 0 |  |
+| `docs/phase2c-evidence/stepC-move-expectations-run1.txt` | Untracked | 10559 | Docs | 240 | 0 |  |
+| `docs/phase2c-evidence/stepC-move-expectations-run2.txt` | Untracked | 10559 | Docs | 240 | 0 |  |
+| `docs/phase2c-evidence/stepC-move-expectations-run3.txt` | Untracked | 10559 | Docs | 240 | 0 |  |
+| `docs/phase2c-evidence/stepC-step1-run1.txt` | Untracked | 1012 | Docs | 28 | 0 |  |
+| `docs/phase2c-evidence/stepC-step1-run2.txt` | Untracked | 1012 | Docs | 28 | 0 |  |
+| `docs/phase2c-evidence/stepC-step1-run3.txt` | Untracked | 1012 | Docs | 28 | 0 |  |
+| `docs/phase2c-evidence/stepC-step2-run1.txt` | Untracked | 1242 | Docs | 27 | 0 |  |
+| `docs/phase2c-evidence/stepC-step2-run2.txt` | Untracked | 1242 | Docs | 27 | 0 |  |
+| `docs/phase2c-evidence/stepC-step2-run3.txt` | Untracked | 1242 | Docs | 27 | 0 |  |
+| `docs/phase2c-evidence/stepC-step3-run1.txt` | Untracked | 958 | Docs | 19 | 0 |  |
+| `docs/phase2c-evidence/stepC-step3-run2.txt` | Untracked | 958 | Docs | 19 | 0 |  |
+| `docs/phase2c-evidence/stepC-step3-run3.txt` | Untracked | 958 | Docs | 19 | 0 |  |
+| `docs/phase2c-evidence/stepC-studio-benchmark-run1.txt` | Untracked | 1059 | Docs | 29 | 0 |  |
+| `docs/phase2c-evidence/stepC-studio-benchmark-run2.txt` | Untracked | 1059 | Docs | 29 | 0 |  |
+| `docs/phase2c-evidence/stepC-studio-benchmark-run3.txt` | Untracked | 1059 | Docs | 29 | 0 |  |
+| `docs/phase2c-evidence/stepC-studio-restore-run1.txt` | Untracked | 1010 | Docs | 30 | 0 |  |
+| `docs/phase2c-evidence/stepC-studio-restore-run2.txt` | Untracked | 1010 | Docs | 30 | 0 |  |
+| `docs/phase2c-evidence/stepC-studio-restore-run3.txt` | Untracked | 1010 | Docs | 30 | 0 |  |
+| `docs/phase2c-evidence/stepD-m0-overfit-run1.txt` | Untracked | 3625 | Docs | 44 | 0 |  |
+| `docs/phase2c-evidence/stepD-m0-overfit-run2.txt` | Untracked | 3625 | Docs | 44 | 0 |  |
+| `docs/phase2c-evidence/stepD-m0-overfit-run3.txt` | Untracked | 3625 | Docs | 44 | 0 |  |
+| `docs/phase2c-evidence/stepD-m0-regression-run1.txt` | Untracked | 3219 | Docs | 44 | 0 |  |
+| `docs/phase2c-evidence/stepD-m0-regression-run2.txt` | Untracked | 3219 | Docs | 44 | 0 |  |
+| `docs/phase2c-evidence/stepD-m0-regression-run3.txt` | Untracked | 3219 | Docs | 44 | 0 |  |
+| `docs/phase2c1-review-evidence/step0-starting-state.txt` | Untracked | 6176 | Docs | 180 | 0 |  |
+| `docs/phase2c1-review-evidence/step1a-exploit-results.json` | Untracked | 1603 | Docs | 42 | 0 |  |
+| `docs/phase2c1-review-evidence/step1b-branch-tip-results.json` | Untracked | 471 | Docs | 20 | 0 |  |
+| `docs/phase2c1-review-evidence/step1c-token-html-results.json` | Untracked | 1465 | Docs | 62 | 0 |  |
+| `docs/phase2c1-review-evidence/step1d-browser-attack-results.json` | Untracked | 2748 | Docs | 125 | 0 |  |
+| `docs/phase2c1-review-evidence/step1e-routes-table.json` | Untracked | 5987 | Docs | 289 | 0 |  |
+| `docs/phase2c1-review-evidence/step2-path-results.json` | Untracked | 29216 | Docs | 857 | 0 |  |
+| `docs/phase2c1-review-evidence/step3-property-results.json` | Untracked | 2645 | Docs | 136 | 0 |  |
+| `docs/phase2c1-review-evidence/step4-corpus-results.json` | Untracked | 55035 | Docs | 1999 | 0 |  |
+| `docs/phase2c1-review-evidence/step5-exact-mutants.json` | Untracked | 3380 | Docs | 92 | 0 |  |
+| `docs/phase2c1-review-evidence/step5-mutants-coverage.json` | Untracked | 5424 | Docs | 140 | 0 |  |
+| `docs/phase2c1-review-evidence/step6b-secrets-results.json` | Untracked | 148 | Docs | 9 | 0 |  |
+| `docs/phase2c1-review-evidence/tool-versions.json` | Untracked | 188 | Docs | 9 | 0 |  |
+| `docs/phase2c1b-evidence/step1a-tsc-history.json` | Untracked | 3799 | Docs | 32 | 0 |  |
+| `docs/phase2c1b-evidence/step1b-build-failing.txt` | Untracked | 5433 | Docs | 114 | 0 |  |
+| `docs/phase2c1b-evidence/step1b-build-passing.txt` | Untracked | 4345 | Docs | 157 | 0 |  |
+| `docs/phase2c1b-evidence/step1b-tsc-passing.txt` | Untracked | 1 | Docs | 1 | 0 |  |
+| `docs/phase2c1b-evidence/step1c-production-verification.json` | Untracked | 290 | Docs | 11 | 0 |  |
+| `docs/phase2c1b-evidence/step1c-studio-prod-applied.png` | Untracked | 110051 | Docs | Binary | Binary |  |
+| `docs/phase2c1b-evidence/step1c-studio-prod-loaded.png` | Untracked | 109586 | Docs | Binary | Binary |  |
+| `docs/phase2c1b-evidence/step2-prod-verification.json` | Untracked | 355 | Docs | 12 | 0 |  |
+| `docs/phase2c1b-evidence/step2-token-html-failing.txt` | Untracked | 17848 | Docs | 399 | 0 |  |
+| `docs/phase2c1b-evidence/step2-token-html-passing.txt` | Untracked | 5556 | Docs | 155 | 0 |  |
+| `docs/phase2c1b-evidence/step3-c8-coverage.txt` | Untracked | 9384 | Docs | 245 | 0 |  |
+| `docs/phase2c1b-evidence/step3-m5-containment-passing.txt` | Untracked | 2805 | Docs | 86 | 0 |  |
+| `docs/phase2c1b-evidence/step3-prewrite-hook-passing.txt` | Untracked | 95 | Docs | 2 | 0 |  |
+| `docs/phase2c1b-evidence/step3-undo-refusals-passing.txt` | Untracked | 4287 | Docs | 125 | 0 |  |
+| `docs/phase2c1b-evidence/step4d-adapter.txt` | Untracked | 1202 | Docs | 26 | 0 |  |
+| `docs/phase2c1b-evidence/step4d-fixtures.txt` | Untracked | 2242 | Docs | 51 | 0 |  |
+| `docs/phase2c1b-evidence/step4d-history-resilience.txt` | Untracked | 2163 | Docs | 53 | 0 |  |
+| `docs/phase2c1b-evidence/step4d-m0-overfit.txt` | Untracked | 3625 | Docs | 44 | 0 |  |
+| `docs/phase2c1b-evidence/step4d-m0-regression.txt` | Untracked | 3219 | Docs | 44 | 0 |  |
+| `docs/phase2c1b-evidence/step4d-reorder-safety.txt` | Untracked | 2444 | Docs | 48 | 0 |  |
+| `docs/phase2c1b-evidence/step4d-s1-auth-bypass.txt` | Untracked | 86 | Docs | 2 | 0 |  |
+| `docs/phase2c1b-evidence/step4d-s1-auth-origin.txt` | Untracked | 1965 | Docs | 59 | 0 |  |
+| `docs/phase2c1b-evidence/step4d-s2.txt` | Untracked | 872 | Docs | 29 | 0 |  |
+| `docs/phase2c1b-evidence/step4d-s3.txt` | Untracked | 797 | Docs | 29 | 0 |  |
+| `docs/phase2c1b-evidence/step4d-s5-compile.txt` | Untracked | 1099 | Docs | 35 | 0 |  |
+| `docs/phase2c1b-evidence/step4d-s5-theme.txt` | Untracked | 2439 | Docs | 54 | 0 |  |
+| `docs/phase2c1b-evidence/step4d-s5-v3.txt` | Untracked | 911 | Docs | 29 | 0 |  |
+| `docs/phase2c1b-evidence/step4d-summary.json` | Untracked | 3668 | Docs | 155 | 0 |  |
+| `docs/phase2c1b-evidence/step4d-test-override-guard.txt` | Untracked | 340 | Docs | 6 | 0 |  |
+| `docs/phase2c1b-evidence/step4d-token-html-host.txt` | Untracked | 5555 | Docs | 155 | 0 |  |
+| `docs/phase2c1b-evidence/step4d-token-undo.txt` | Untracked | 1301 | Docs | 26 | 0 |  |
+| `docs/phase2c1b-evidence/step4d-undo-refusals.txt` | Untracked | 4163 | Docs | 125 | 0 |  |
+| `docs/phase2c1b-evidence/step5-secrets-results.json` | Untracked | 142 | Docs | 7 | 0 |  |
+| `docs/phase2c1b-evidence/tooling-manifest-after.txt` | Untracked | 1120 | Docs | 24 | 0 |  |
+| `docs/phase2c1b-evidence/tooling-manifest-before.txt` | Untracked | 1121 | Docs | 24 | 0 |  |
+| `docs/phase2c1c-evidence/mutants/M1.patch` | Untracked | 670 | Docs | 15 | 0 |  |
+| `docs/phase2c1c-evidence/mutants/M10.patch` | Untracked | 716 | Docs | 13 | 0 |  |
+| `docs/phase2c1c-evidence/mutants/M11.patch` | Untracked | 506 | Docs | 13 | 0 |  |
+| `docs/phase2c1c-evidence/mutants/M12.patch` | Untracked | 1162 | Docs | 37 | 0 |  |
+| `docs/phase2c1c-evidence/mutants/M13.patch` | Untracked | 919 | Docs | 24 | 0 |  |
+| `docs/phase2c1c-evidence/mutants/M2.patch` | Untracked | 659 | Docs | 13 | 0 |  |
+| `docs/phase2c1c-evidence/mutants/M3.patch` | Untracked | 692 | Docs | 13 | 0 |  |
+| `docs/phase2c1c-evidence/mutants/M4.patch` | Untracked | 1412 | Docs | 30 | 0 |  |
+| `docs/phase2c1c-evidence/mutants/M5.patch` | Untracked | 1134 | Docs | 29 | 0 |  |
+| `docs/phase2c1c-evidence/mutants/M6.patch` | Untracked | 1944 | Docs | 37 | 0 |  |
+| `docs/phase2c1c-evidence/mutants/M7.patch` | Untracked | 1111 | Docs | 24 | 0 |  |
+| `docs/phase2c1c-evidence/mutants/M8.patch` | Untracked | 727 | Docs | 13 | 0 |  |
+| `docs/phase2c1c-evidence/mutants/M9.patch` | Untracked | 408 | Docs | 13 | 0 |  |
+| `docs/phase2c1c-evidence/pre-registration.json` | Untracked | 3488 | Docs | 88 | 0 |  |
+| `docs/phase2c1c-evidence/step0-starting-state.txt` | Untracked | 7166 | Docs | 27 | 0 |  |
+| `docs/phase2c1c-evidence/step2-build-gate.json` | Untracked | 147 | Docs | 8 | 0 |  |
+| `docs/phase2c1c-evidence/step2-build-output.txt` | Untracked | 2097 | Docs | 75 | 0 |  |
+| `docs/phase2c1c-evidence/step2-studio-applied.png` | Untracked | 117109 | Docs | Binary | Binary |  |
+| `docs/phase2c1c-evidence/step2-studio-loaded.png` | Untracked | 116649 | Docs | Binary | Binary |  |
+| `docs/phase2c1c-evidence/step3-mutants-results.json` | Untracked | 9431 | Docs | 132 | 0 |  |
+| `docs/phase2c1c-evidence/step4-property-results.json` | Untracked | 5486 | Docs | 190 | 0 |  |
+| `docs/phase2c1c-evidence/step5-path-results.json` | Untracked | 7676 | Docs | 246 | 0 |  |
+| `docs/phase2c1c-evidence/step6-corpus-results.json` | Untracked | 1397 | Docs | 43 | 0 |  |
+| `docs/phase2c1c-evidence/step7-host-attacks.json` | Untracked | 13027 | Docs | 464 | 0 |  |
+| `docs/phase2c1c-evidence/step8-secrets-results.json` | Untracked | 180 | Docs | 7 | 0 |  |
+| `docs/phase2c1c-evidence/step8-suite-adapter.txt` | Untracked | 1202 | Docs | 26 | 0 |  |
+| `docs/phase2c1c-evidence/step8-suite-fixtures.txt` | Untracked | 2242 | Docs | 51 | 0 |  |
+| `docs/phase2c1c-evidence/step8-suite-history-resilience.txt` | Untracked | 2162 | Docs | 53 | 0 |  |
+| `docs/phase2c1c-evidence/step8-suite-m0-overfit.txt` | Untracked | 3625 | Docs | 44 | 0 |  |
+| `docs/phase2c1c-evidence/step8-suite-m0-regression.txt` | Untracked | 3219 | Docs | 44 | 0 |  |
+| `docs/phase2c1c-evidence/step8-suite-m5-containment-helper.txt` | Untracked | 2716 | Docs | 86 | 0 |  |
+| `docs/phase2c1c-evidence/step8-suite-prewrite-hook-guard.txt` | Untracked | 82 | Docs | 2 | 0 |  |
+| `docs/phase2c1c-evidence/step8-suite-reorder-safety.txt` | Untracked | 2444 | Docs | 48 | 0 |  |
+| `docs/phase2c1c-evidence/step8-suite-s1-auth-bypass.txt` | Untracked | 86 | Docs | 2 | 0 |  |
+| `docs/phase2c1c-evidence/step8-suite-s1-auth-origin.txt` | Untracked | 1962 | Docs | 59 | 0 |  |
+| `docs/phase2c1c-evidence/step8-suite-s2.txt` | Untracked | 871 | Docs | 29 | 0 |  |
+| `docs/phase2c1c-evidence/step8-suite-s3.txt` | Untracked | 797 | Docs | 29 | 0 |  |
+| `docs/phase2c1c-evidence/step8-suite-s5-compile.txt` | Untracked | 1098 | Docs | 35 | 0 |  |
+| `docs/phase2c1c-evidence/step8-suite-s5-theme.txt` | Untracked | 2437 | Docs | 54 | 0 |  |
+| `docs/phase2c1c-evidence/step8-suite-s5-v3.txt` | Untracked | 910 | Docs | 29 | 0 |  |
+| `docs/phase2c1c-evidence/step8-suite-test-override-guard.txt` | Untracked | 340 | Docs | 6 | 0 |  |
+| `docs/phase2c1c-evidence/step8-suite-token-html-host.txt` | Untracked | 5554 | Docs | 155 | 0 |  |
+| `docs/phase2c1c-evidence/step8-suite-token-undo.txt` | Untracked | 1301 | Docs | 26 | 0 |  |
+| `docs/phase2c1c-evidence/step8-suite-undo-refusals.txt` | Untracked | 4163 | Docs | 125 | 0 |  |
+| `docs/phase2c1c-evidence/step8-suites-summary.json` | Untracked | 4279 | Docs | 154 | 0 |  |
+| `docs/phase2c1c-evidence/tooling-manifest-after.txt` | Untracked | 1331 | Docs | 19 | 0 |  |
+| `docs/phase2c1c-evidence/tooling-manifest-before.txt` | Untracked | 1206 | Docs | 17 | 0 |  |
+| `docs/phase2c1c-evidence/tools/build-gate.js` | Untracked | 5778 | Docs | 160 | 0 |  |
+| `docs/phase2c1c-evidence/tools/corpus-replay.js` | Untracked | 7471 | Docs | 224 | 0 |  |
+| `docs/phase2c1c-evidence/tools/helpers.js` | Untracked | 3009 | Docs | 84 | 0 |  |
+| `docs/phase2c1c-evidence/tools/host-attacks.js` | Untracked | 10759 | Docs | 300 | 0 |  |
+| `docs/phase2c1c-evidence/tools/manifest.js` | Untracked | 1435 | Docs | 43 | 0 |  |
+| `docs/phase2c1c-evidence/tools/mutants.js` | Untracked | 9787 | Docs | 245 | 0 |  |
+| `docs/phase2c1c-evidence/tools/path-battery.js` | Untracked | 9928 | Docs | 241 | 0 |  |
+| `docs/phase2c1c-evidence/tools/property-harness.js` | Untracked | 15498 | Docs | 409 | 0 |  |
+| `docs/phase2c1d-evidence/baseline-hashes.txt` | Untracked | 977 | Docs | 11 | 0 |  |
+| `docs/phase2c1d-evidence/mutants/M1.patch` | Untracked | 670 | Docs | 15 | 0 |  |
+| `docs/phase2c1d-evidence/mutants/M10.patch` | Untracked | 716 | Docs | 13 | 0 |  |
+| `docs/phase2c1d-evidence/mutants/M11.patch` | Untracked | 506 | Docs | 13 | 0 |  |
+| `docs/phase2c1d-evidence/mutants/M12.patch` | Untracked | 1162 | Docs | 37 | 0 |  |
+| `docs/phase2c1d-evidence/mutants/M13.patch` | Untracked | 919 | Docs | 24 | 0 |  |
+| `docs/phase2c1d-evidence/mutants/M14.patch` | Untracked | 598 | Docs | 13 | 0 |  |
+| `docs/phase2c1d-evidence/mutants/M15.patch` | Untracked | 572 | Docs | 13 | 0 |  |
+| `docs/phase2c1d-evidence/mutants/M16.patch` | Untracked | 1189 | Docs | 20 | 0 |  |
+| `docs/phase2c1d-evidence/mutants/M17.patch` | Untracked | 961 | Docs | 18 | 0 |  |
+| `docs/phase2c1d-evidence/mutants/M2.patch` | Untracked | 659 | Docs | 13 | 0 |  |
+| `docs/phase2c1d-evidence/mutants/M3.patch` | Untracked | 692 | Docs | 13 | 0 |  |
+| `docs/phase2c1d-evidence/mutants/M4.patch` | Untracked | 1412 | Docs | 30 | 0 |  |
+| `docs/phase2c1d-evidence/mutants/M5.patch` | Untracked | 1134 | Docs | 29 | 0 |  |
+| `docs/phase2c1d-evidence/mutants/M6.patch` | Untracked | 1944 | Docs | 37 | 0 |  |
+| `docs/phase2c1d-evidence/mutants/M7.patch` | Untracked | 2823 | Docs | 57 | 0 |  |
+| `docs/phase2c1d-evidence/mutants/M8.patch` | Untracked | 727 | Docs | 13 | 0 |  |
+| `docs/phase2c1d-evidence/mutants/M9.patch` | Untracked | 408 | Docs | 13 | 0 |  |
+| `docs/phase2c1d-evidence/pre-registration.json` | Untracked | 3336 | Docs | 88 | 0 |  |
+| `docs/phase2c1d-evidence/step1a-diff-stat.txt` | Untracked | 9878 | Docs | 79 | 0 |  |
+| `docs/phase2c1d-evidence/step1b-ast-nudger-diff.txt` | Untracked | 745 | Docs | 13 | 0 |  |
+| `docs/phase2c1d-evidence/step2-m3-clean-output.txt` | Untracked | 1003 | Docs | 14 | 0 |  |
+| `docs/phase2c1d-evidence/step2-m3-mutated-output.txt` | Untracked | 1661 | Docs | 35 | 0 |  |
+| `docs/phase2c1d-evidence/step3-m5-apply-mutated-output.txt` | Untracked | 2522 | Docs | 33 | 0 |  |
+| `docs/phase2c1d-evidence/step3-m5-clean-output.txt` | Untracked | 1389 | Docs | 20 | 0 |  |
+| `docs/phase2c1d-evidence/step3-m5-mutated-output.txt` | Untracked | 2994 | Docs | 58 | 0 |  |
+| `docs/phase2c1d-evidence/step4-raw-failure.txt` | Untracked | 4122 | Docs | 77 | 0 |  |
+| `docs/phase2c1d-evidence/step4-stacked-output.txt` | Untracked | 1902 | Docs | 26 | 0 |  |
+| `docs/phase2c1d-evidence/step5a-mutants-results.json` | Untracked | 14442 | Docs | 172 | 0 |  |
+| `docs/phase2c1d-evidence/step5b-property-results.json` | Untracked | 5487 | Docs | 190 | 0 |  |
+| `docs/phase2c1d-evidence/step5c-build-gate.json` | Untracked | 147 | Docs | 8 | 0 |  |
+| `docs/phase2c1d-evidence/step5c-corpus-results.json` | Untracked | 1397 | Docs | 43 | 0 |  |
+| `docs/phase2c1d-evidence/step5c-host-attacks.json` | Untracked | 13027 | Docs | 464 | 0 |  |
+| `docs/phase2c1d-evidence/step5c-path-results.json` | Untracked | 7676 | Docs | 246 | 0 |  |
+| `docs/phase2c1d-evidence/step5d-battery.txt` | Untracked | 1134 | Docs | 26 | 0 |  |
+| `docs/phase2c1d-evidence/step6-diff-stat.txt` | Untracked | 364 | Docs | 7 | 0 |  |
+| `docs/phase2c1d-evidence/step6-secrets-scan.json` | Untracked | 180 | Docs | 7 | 0 |  |
+| `docs/phase2c1d-evidence/tooling-manifest-after.txt` | Untracked | 4004 | Docs | 37 | 0 |  |
+| `docs/phase2c1d-evidence/tooling-manifest-before.txt` | Untracked | 3276 | Docs | 30 | 0 |  |
+| `docs/phase2c1e-evidence/post-merge-results.json` | Untracked | 1524 | Docs | 50 | 0 |  |
+| `docs/phase2c1e-evidence/pre-registration.json` | Untracked | 4067 | Docs | 104 | 0 |  |
+| `docs/phase2c1e-evidence/step1/control/control-results.json` | Untracked | 3289 | Docs | 119 | 0 |  |
+| `docs/phase2c1e-evidence/step1/control/test_history-resilience.log` | Untracked | 1111 | Docs | 19 | 0 |  |
+| `docs/phase2c1e-evidence/step1/control/test_m5-containment-helper.log` | Untracked | 1172 | Docs | 24 | 0 |  |
+| `docs/phase2c1e-evidence/step1/control/test_prewrite-hook-guard.log` | Untracked | 82 | Docs | 2 | 0 |  |
+| `docs/phase2c1e-evidence/step1/control/test_real-state-guard.log` | Untracked | 1437 | Docs | 38 | 0 |  |
+| `docs/phase2c1e-evidence/step1/control/test_s1-auth-bypass.log` | Untracked | 86 | Docs | 2 | 0 |  |
+| `docs/phase2c1e-evidence/step1/control/test_s1-auth-origin.log` | Untracked | 3110 | Docs | 61 | 0 |  |
+| `docs/phase2c1e-evidence/step1/control/test_test-override-guard.log` | Untracked | 340 | Docs | 6 | 0 |  |
+| `docs/phase2c1e-evidence/step1/control/test_token-html-host.log` | Untracked | 7037 | Docs | 141 | 0 |  |
+| `docs/phase2c1e-evidence/step1/control/test_token-undo.log` | Untracked | 1301 | Docs | 26 | 0 |  |
+| `docs/phase2c1e-evidence/step1/control/test_undo-m3-restored-token.log` | Untracked | 1004 | Docs | 14 | 0 |  |
+| `docs/phase2c1e-evidence/step1/control/test_undo-m5-parent-junction.log` | Untracked | 1389 | Docs | 20 | 0 |  |
+| `docs/phase2c1e-evidence/step1/control/test_undo-refusals.log` | Untracked | 1655 | Docs | 28 | 0 |  |
+| `docs/phase2c1e-evidence/step1/control/test_undo-stacked-edits.log` | Untracked | 1797 | Docs | 23 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M10_test_history-resilience.log` | Untracked | 1111 | Docs | 19 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M10_test_m5-containment-helper.log` | Untracked | 1179 | Docs | 24 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M10_test_prewrite-hook-guard.log` | Untracked | 82 | Docs | 2 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M10_test_real-state-guard.log` | Untracked | 385 | Docs | 12 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M10_test_s1-auth-bypass.log` | Untracked | 86 | Docs | 2 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M10_test_s1-auth-origin.log` | Untracked | 280 | Docs | 4 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M10_test_test-override-guard.log` | Untracked | 340 | Docs | 6 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M10_test_token-html-host.log` | Untracked | 280 | Docs | 4 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M10_test_token-undo.log` | Untracked | 1301 | Docs | 26 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M10_test_undo-m3-restored-token.log` | Untracked | 1004 | Docs | 14 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M10_test_undo-m5-parent-junction.log` | Untracked | 1391 | Docs | 20 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M10_test_undo-refusals.log` | Untracked | 1660 | Docs | 28 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M10_test_undo-stacked-edits.log` | Untracked | 753 | Docs | 5 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M11_test_history-resilience.log` | Untracked | 1113 | Docs | 19 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M11_test_m5-containment-helper.log` | Untracked | 1174 | Docs | 24 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M11_test_prewrite-hook-guard.log` | Untracked | 82 | Docs | 2 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M11_test_real-state-guard.log` | Untracked | 387 | Docs | 12 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M11_test_s1-auth-bypass.log` | Untracked | 86 | Docs | 2 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M11_test_s1-auth-origin.log` | Untracked | 280 | Docs | 4 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M11_test_test-override-guard.log` | Untracked | 340 | Docs | 6 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M11_test_token-html-host.log` | Untracked | 280 | Docs | 4 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M11_test_token-undo.log` | Untracked | 1301 | Docs | 26 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M11_test_undo-m3-restored-token.log` | Untracked | 1004 | Docs | 14 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M11_test_undo-m5-parent-junction.log` | Untracked | 1390 | Docs | 20 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M11_test_undo-refusals.log` | Untracked | 1660 | Docs | 28 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M11_test_undo-stacked-edits.log` | Untracked | 753 | Docs | 5 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M12_test_history-resilience.log` | Untracked | 1115 | Docs | 19 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M12_test_m5-containment-helper.log` | Untracked | 1177 | Docs | 24 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M12_test_prewrite-hook-guard.log` | Untracked | 82 | Docs | 2 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M12_test_real-state-guard.log` | Untracked | 389 | Docs | 12 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M12_test_s1-auth-bypass.log` | Untracked | 86 | Docs | 2 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M12_test_s1-auth-origin.log` | Untracked | 872 | Docs | 11 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M12_test_test-override-guard.log` | Untracked | 340 | Docs | 6 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M12_test_token-html-host.log` | Untracked | 280 | Docs | 4 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M12_test_token-undo.log` | Untracked | 1301 | Docs | 26 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M12_test_undo-m3-restored-token.log` | Untracked | 1002 | Docs | 14 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M12_test_undo-m5-parent-junction.log` | Untracked | 1389 | Docs | 20 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M12_test_undo-refusals.log` | Untracked | 1660 | Docs | 28 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M12_test_undo-stacked-edits.log` | Untracked | 753 | Docs | 5 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M13_test_history-resilience.log` | Untracked | 1055 | Docs | 22 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M13_test_m5-containment-helper.log` | Untracked | 1055 | Docs | 22 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M13_test_prewrite-hook-guard.log` | Untracked | 1055 | Docs | 22 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M13_test_real-state-guard.log` | Untracked | 385 | Docs | 12 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M13_test_s1-auth-bypass.log` | Untracked | 86 | Docs | 2 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M13_test_s1-auth-origin.log` | Untracked | 280 | Docs | 4 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M13_test_test-override-guard.log` | Untracked | 1055 | Docs | 22 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M13_test_token-html-host.log` | Untracked | 280 | Docs | 4 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M13_test_token-undo.log` | Untracked | 1055 | Docs | 22 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M13_test_undo-m3-restored-token.log` | Untracked | 1055 | Docs | 22 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M13_test_undo-m5-parent-junction.log` | Untracked | 1055 | Docs | 22 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M13_test_undo-refusals.log` | Untracked | 1055 | Docs | 22 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M13_test_undo-stacked-edits.log` | Untracked | 1055 | Docs | 22 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M14_test_history-resilience.log` | Untracked | 1108 | Docs | 19 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M14_test_m5-containment-helper.log` | Untracked | 1176 | Docs | 24 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M14_test_prewrite-hook-guard.log` | Untracked | 82 | Docs | 2 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M14_test_real-state-guard.log` | Untracked | 383 | Docs | 12 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M14_test_s1-auth-bypass.log` | Untracked | 86 | Docs | 2 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M14_test_s1-auth-origin.log` | Untracked | 1155 | Docs | 21 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M14_test_test-override-guard.log` | Untracked | 340 | Docs | 6 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M14_test_token-html-host.log` | Untracked | 1164 | Docs | 15 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M14_test_token-undo.log` | Untracked | 1301 | Docs | 26 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M14_test_undo-m3-restored-token.log` | Untracked | 1006 | Docs | 14 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M14_test_undo-m5-parent-junction.log` | Untracked | 1391 | Docs | 20 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M14_test_undo-refusals.log` | Untracked | 1660 | Docs | 28 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M14_test_undo-stacked-edits.log` | Untracked | 3539 | Docs | 60 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M15_test_history-resilience.log` | Untracked | 1113 | Docs | 19 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M15_test_m5-containment-helper.log` | Untracked | 1177 | Docs | 24 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M15_test_prewrite-hook-guard.log` | Untracked | 82 | Docs | 2 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M15_test_real-state-guard.log` | Untracked | 386 | Docs | 12 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M15_test_s1-auth-bypass.log` | Untracked | 86 | Docs | 2 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M15_test_s1-auth-origin.log` | Untracked | 1155 | Docs | 21 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M15_test_test-override-guard.log` | Untracked | 340 | Docs | 6 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M15_test_token-html-host.log` | Untracked | 1165 | Docs | 15 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M15_test_token-undo.log` | Untracked | 1301 | Docs | 26 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M15_test_undo-m3-restored-token.log` | Untracked | 1003 | Docs | 14 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M15_test_undo-m5-parent-junction.log` | Untracked | 1389 | Docs | 20 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M15_test_undo-refusals.log` | Untracked | 1660 | Docs | 28 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M15_test_undo-stacked-edits.log` | Untracked | 720 | Docs | 5 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M16_test_history-resilience.log` | Untracked | 1110 | Docs | 19 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M16_test_m5-containment-helper.log` | Untracked | 1175 | Docs | 24 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M16_test_prewrite-hook-guard.log` | Untracked | 82 | Docs | 2 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M16_test_real-state-guard.log` | Untracked | 387 | Docs | 12 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M16_test_s1-auth-bypass.log` | Untracked | 86 | Docs | 2 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M16_test_s1-auth-origin.log` | Untracked | 1150 | Docs | 21 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M16_test_test-override-guard.log` | Untracked | 340 | Docs | 6 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M16_test_token-html-host.log` | Untracked | 280 | Docs | 4 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M16_test_token-undo.log` | Untracked | 1301 | Docs | 26 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M16_test_undo-m3-restored-token.log` | Untracked | 1006 | Docs | 14 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M16_test_undo-m5-parent-junction.log` | Untracked | 1390 | Docs | 20 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M16_test_undo-refusals.log` | Untracked | 1662 | Docs | 28 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M16_test_undo-stacked-edits.log` | Untracked | 653 | Docs | 5 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M17_test_history-resilience.log` | Untracked | 1115 | Docs | 19 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M17_test_m5-containment-helper.log` | Untracked | 1176 | Docs | 24 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M17_test_prewrite-hook-guard.log` | Untracked | 82 | Docs | 2 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M17_test_real-state-guard.log` | Untracked | 389 | Docs | 12 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M17_test_s1-auth-bypass.log` | Untracked | 86 | Docs | 2 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M17_test_s1-auth-origin.log` | Untracked | 1154 | Docs | 21 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M17_test_test-override-guard.log` | Untracked | 340 | Docs | 6 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M17_test_token-html-host.log` | Untracked | 280 | Docs | 4 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M17_test_token-undo.log` | Untracked | 1301 | Docs | 26 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M17_test_undo-m3-restored-token.log` | Untracked | 1006 | Docs | 14 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M17_test_undo-m5-parent-junction.log` | Untracked | 1392 | Docs | 20 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M17_test_undo-refusals.log` | Untracked | 1663 | Docs | 28 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M17_test_undo-stacked-edits.log` | Untracked | 723 | Docs | 5 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M1_test_history-resilience.log` | Untracked | 1111 | Docs | 19 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M1_test_m5-containment-helper.log` | Untracked | 1177 | Docs | 24 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M1_test_prewrite-hook-guard.log` | Untracked | 82 | Docs | 2 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M1_test_real-state-guard.log` | Untracked | 385 | Docs | 12 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M1_test_s1-auth-bypass.log` | Untracked | 86 | Docs | 2 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M1_test_s1-auth-origin.log` | Untracked | 872 | Docs | 11 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M1_test_test-override-guard.log` | Untracked | 340 | Docs | 6 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M1_test_token-html-host.log` | Untracked | 280 | Docs | 4 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M1_test_token-undo.log` | Untracked | 1483 | Docs | 37 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M1_test_undo-m3-restored-token.log` | Untracked | 1005 | Docs | 14 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M1_test_undo-m5-parent-junction.log` | Untracked | 1390 | Docs | 20 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M1_test_undo-refusals.log` | Untracked | 2359 | Docs | 47 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M1_test_undo-stacked-edits.log` | Untracked | 753 | Docs | 5 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M2_test_history-resilience.log` | Untracked | 1112 | Docs | 19 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M2_test_m5-containment-helper.log` | Untracked | 1179 | Docs | 24 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M2_test_prewrite-hook-guard.log` | Untracked | 82 | Docs | 2 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M2_test_real-state-guard.log` | Untracked | 389 | Docs | 12 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M2_test_s1-auth-bypass.log` | Untracked | 86 | Docs | 2 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M2_test_s1-auth-origin.log` | Untracked | 280 | Docs | 4 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M2_test_test-override-guard.log` | Untracked | 340 | Docs | 6 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M2_test_token-html-host.log` | Untracked | 280 | Docs | 4 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M2_test_token-undo.log` | Untracked | 1262 | Docs | 33 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M2_test_undo-m3-restored-token.log` | Untracked | 1004 | Docs | 14 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M2_test_undo-m5-parent-junction.log` | Untracked | 1391 | Docs | 20 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M2_test_undo-refusals.log` | Untracked | 1662 | Docs | 28 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M2_test_undo-stacked-edits.log` | Untracked | 753 | Docs | 5 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M3_test_history-resilience.log` | Untracked | 1115 | Docs | 19 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M3_test_m5-containment-helper.log` | Untracked | 1180 | Docs | 24 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M3_test_prewrite-hook-guard.log` | Untracked | 82 | Docs | 2 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M3_test_real-state-guard.log` | Untracked | 388 | Docs | 12 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M3_test_s1-auth-bypass.log` | Untracked | 86 | Docs | 2 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M3_test_s1-auth-origin.log` | Untracked | 1158 | Docs | 21 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M3_test_test-override-guard.log` | Untracked | 340 | Docs | 6 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M3_test_token-html-host.log` | Untracked | 280 | Docs | 4 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M3_test_token-undo.log` | Untracked | 1301 | Docs | 26 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M3_test_undo-m3-restored-token.log` | Untracked | 1655 | Docs | 34 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M3_test_undo-m5-parent-junction.log` | Untracked | 1390 | Docs | 20 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M3_test_undo-refusals.log` | Untracked | 1667 | Docs | 28 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M3_test_undo-stacked-edits.log` | Untracked | 753 | Docs | 5 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M4_test_history-resilience.log` | Untracked | 1114 | Docs | 19 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M4_test_m5-containment-helper.log` | Untracked | 1179 | Docs | 24 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M4_test_prewrite-hook-guard.log` | Untracked | 82 | Docs | 2 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M4_test_real-state-guard.log` | Untracked | 387 | Docs | 12 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M4_test_s1-auth-bypass.log` | Untracked | 86 | Docs | 2 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M4_test_s1-auth-origin.log` | Untracked | 280 | Docs | 4 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M4_test_test-override-guard.log` | Untracked | 340 | Docs | 6 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M4_test_token-html-host.log` | Untracked | 280 | Docs | 4 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M4_test_token-undo.log` | Untracked | 1301 | Docs | 26 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M4_test_undo-m3-restored-token.log` | Untracked | 1004 | Docs | 14 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M4_test_undo-m5-parent-junction.log` | Untracked | 1389 | Docs | 20 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M4_test_undo-refusals.log` | Untracked | 3692 | Docs | 81 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M4_test_undo-stacked-edits.log` | Untracked | 753 | Docs | 5 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M5_test_history-resilience.log` | Untracked | 1111 | Docs | 19 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M5_test_m5-containment-helper.log` | Untracked | 1183 | Docs | 24 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M5_test_prewrite-hook-guard.log` | Untracked | 82 | Docs | 2 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M5_test_real-state-guard.log` | Untracked | 386 | Docs | 12 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M5_test_s1-auth-bypass.log` | Untracked | 86 | Docs | 2 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M5_test_s1-auth-origin.log` | Untracked | 1158 | Docs | 21 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M5_test_test-override-guard.log` | Untracked | 340 | Docs | 6 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M5_test_token-html-host.log` | Untracked | 280 | Docs | 4 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M5_test_token-undo.log` | Untracked | 1301 | Docs | 26 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M5_test_undo-m3-restored-token.log` | Untracked | 1004 | Docs | 14 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M5_test_undo-m5-parent-junction.log` | Untracked | 2986 | Docs | 57 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M5_test_undo-refusals.log` | Untracked | 1663 | Docs | 28 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M5_test_undo-stacked-edits.log` | Untracked | 753 | Docs | 5 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M6_test_history-resilience.log` | Untracked | 1055 | Docs | 22 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M6_test_m5-containment-helper.log` | Untracked | 1055 | Docs | 22 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M6_test_prewrite-hook-guard.log` | Untracked | 1055 | Docs | 22 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M6_test_real-state-guard.log` | Untracked | 385 | Docs | 12 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M6_test_s1-auth-bypass.log` | Untracked | 86 | Docs | 2 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M6_test_s1-auth-origin.log` | Untracked | 973 | Docs | 12 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M6_test_test-override-guard.log` | Untracked | 1055 | Docs | 22 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M6_test_token-html-host.log` | Untracked | 1164 | Docs | 15 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M6_test_token-undo.log` | Untracked | 1055 | Docs | 22 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M6_test_undo-m3-restored-token.log` | Untracked | 1055 | Docs | 22 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M6_test_undo-m5-parent-junction.log` | Untracked | 1055 | Docs | 22 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M6_test_undo-refusals.log` | Untracked | 1055 | Docs | 22 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M6_test_undo-stacked-edits.log` | Untracked | 1055 | Docs | 22 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M7_test_history-resilience.log` | Untracked | 1054 | Docs | 22 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M7_test_m5-containment-helper.log` | Untracked | 1054 | Docs | 22 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M7_test_prewrite-hook-guard.log` | Untracked | 1054 | Docs | 22 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M7_test_real-state-guard.log` | Untracked | 385 | Docs | 12 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M7_test_s1-auth-bypass.log` | Untracked | 86 | Docs | 2 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M7_test_s1-auth-origin.log` | Untracked | 7099 | Docs | 155 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M7_test_test-override-guard.log` | Untracked | 1054 | Docs | 22 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M7_test_token-html-host.log` | Untracked | 1163 | Docs | 15 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M7_test_token-undo.log` | Untracked | 1054 | Docs | 22 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M7_test_undo-m3-restored-token.log` | Untracked | 1054 | Docs | 22 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M7_test_undo-m5-parent-junction.log` | Untracked | 1054 | Docs | 22 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M7_test_undo-refusals.log` | Untracked | 1054 | Docs | 22 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M7_test_undo-stacked-edits.log` | Untracked | 1054 | Docs | 22 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M8_test_history-resilience.log` | Untracked | 1113 | Docs | 19 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M8_test_m5-containment-helper.log` | Untracked | 1174 | Docs | 24 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M8_test_prewrite-hook-guard.log` | Untracked | 82 | Docs | 2 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M8_test_real-state-guard.log` | Untracked | 385 | Docs | 12 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M8_test_s1-auth-bypass.log` | Untracked | 828 | Docs | 24 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M8_test_s1-auth-origin.log` | Untracked | 870 | Docs | 11 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M8_test_test-override-guard.log` | Untracked | 340 | Docs | 6 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M8_test_token-html-host.log` | Untracked | 280 | Docs | 4 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M8_test_token-undo.log` | Untracked | 1301 | Docs | 26 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M8_test_undo-m3-restored-token.log` | Untracked | 1004 | Docs | 14 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M8_test_undo-m5-parent-junction.log` | Untracked | 1390 | Docs | 20 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M8_test_undo-refusals.log` | Untracked | 1657 | Docs | 28 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M8_test_undo-stacked-edits.log` | Untracked | 753 | Docs | 5 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M9_test_history-resilience.log` | Untracked | 1111 | Docs | 19 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M9_test_m5-containment-helper.log` | Untracked | 1179 | Docs | 24 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M9_test_prewrite-hook-guard.log` | Untracked | 82 | Docs | 2 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M9_test_real-state-guard.log` | Untracked | 389 | Docs | 12 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M9_test_s1-auth-bypass.log` | Untracked | 86 | Docs | 2 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M9_test_s1-auth-origin.log` | Untracked | 280 | Docs | 4 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M9_test_test-override-guard.log` | Untracked | 340 | Docs | 6 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M9_test_token-html-host.log` | Untracked | 280 | Docs | 4 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M9_test_token-undo.log` | Untracked | 1301 | Docs | 26 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M9_test_undo-m3-restored-token.log` | Untracked | 1003 | Docs | 14 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M9_test_undo-m5-parent-junction.log` | Untracked | 1390 | Docs | 20 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M9_test_undo-refusals.log` | Untracked | 1660 | Docs | 28 | 0 |  |
+| `docs/phase2c1e-evidence/step1/logs/M9_test_undo-stacked-edits.log` | Untracked | 753 | Docs | 5 | 0 |  |
+| `docs/phase2c1e-evidence/step1/mutants/M1.patch` | Untracked | 670 | Docs | 15 | 0 |  |
+| `docs/phase2c1e-evidence/step1/mutants/M10.patch` | Untracked | 716 | Docs | 13 | 0 |  |
+| `docs/phase2c1e-evidence/step1/mutants/M11.patch` | Untracked | 506 | Docs | 13 | 0 |  |
+| `docs/phase2c1e-evidence/step1/mutants/M12.patch` | Untracked | 1162 | Docs | 37 | 0 |  |
+| `docs/phase2c1e-evidence/step1/mutants/M13.patch` | Untracked | 919 | Docs | 24 | 0 |  |
+| `docs/phase2c1e-evidence/step1/mutants/M14.patch` | Untracked | 598 | Docs | 13 | 0 |  |
+| `docs/phase2c1e-evidence/step1/mutants/M15.patch` | Untracked | 572 | Docs | 13 | 0 |  |
+| `docs/phase2c1e-evidence/step1/mutants/M16.patch` | Untracked | 1189 | Docs | 20 | 0 |  |
+| `docs/phase2c1e-evidence/step1/mutants/M17.patch` | Untracked | 961 | Docs | 18 | 0 |  |
+| `docs/phase2c1e-evidence/step1/mutants/M2.patch` | Untracked | 659 | Docs | 13 | 0 |  |
+| `docs/phase2c1e-evidence/step1/mutants/M3.patch` | Untracked | 692 | Docs | 13 | 0 |  |
+| `docs/phase2c1e-evidence/step1/mutants/M4.patch` | Untracked | 1412 | Docs | 30 | 0 |  |
+| `docs/phase2c1e-evidence/step1/mutants/M5.patch` | Untracked | 1134 | Docs | 29 | 0 |  |
+| `docs/phase2c1e-evidence/step1/mutants/M6.patch` | Untracked | 1944 | Docs | 37 | 0 |  |
+| `docs/phase2c1e-evidence/step1/mutants/M7.patch` | Untracked | 2823 | Docs | 57 | 0 |  |
+| `docs/phase2c1e-evidence/step1/mutants/M8.patch` | Untracked | 727 | Docs | 13 | 0 |  |
+| `docs/phase2c1e-evidence/step1/mutants/M9.patch` | Untracked | 408 | Docs | 13 | 0 |  |
+| `docs/phase2c1e-evidence/step1/mutants/N1.patch` | Untracked | 1046 | Docs | 19 | 0 |  |
+| `docs/phase2c1e-evidence/step1/mutants/N2.patch` | Untracked | 734 | Docs | 19 | 0 |  |
+| `docs/phase2c1e-evidence/step1/mutants/N3.patch` | Untracked | 1207 | Docs | 21 | 0 |  |
+| `docs/phase2c1e-evidence/step1/mutants/N4.patch` | Untracked | 770 | Docs | 17 | 0 |  |
+| `docs/phase2c1e-evidence/step1/mutants/N5.patch` | Untracked | 786 | Docs | 13 | 0 |  |
+| `docs/phase2c1e-evidence/step1/mutants/N6.patch` | Untracked | 768 | Docs | 13 | 0 |  |
+| `docs/phase2c1e-evidence/step1/mutants/N7.patch` | Untracked | 614 | Docs | 13 | 0 |  |
+| `docs/phase2c1e-evidence/step2/step2-attack-results.json` | Untracked | 1468 | Docs | 54 | 0 |  |
+| `docs/phase2c1e-evidence/step3-property-results.json` | Untracked | 5486 | Docs | 190 | 0 |  |
+| `docs/phase2c1e-evidence/step4-build-gate.json` | Untracked | 147 | Docs | 8 | 0 |  |
+| `docs/phase2c1e-evidence/step4-corpus-results.json` | Untracked | 1397 | Docs | 43 | 0 |  |
+| `docs/phase2c1e-evidence/step4-host-attacks.json` | Untracked | 13027 | Docs | 464 | 0 |  |
+| `docs/phase2c1e-evidence/step4-path-results.json` | Untracked | 7676 | Docs | 246 | 0 |  |
+| `docs/phase2c1e-evidence/tooling-manifest-after.txt` | Untracked | 4820 | Docs | 47 | 0 |  |
+| `docs/phase2c1e-evidence/tooling-manifest-before.txt` | Untracked | 3636 | Docs | 37 | 0 |  |
+| `docs/program-state.md` | Untracked | 6682 | Docs | 39 | 0 |  |
+| `docs/program/S1-STOP-REPORT.md` | Untracked | 2749 | Docs | 23 | 0 |  |
+| `docs/program/evidence/S0/branches.txt` | Untracked | 1828 | Docs | 33 | 0 |  |
+| `docs/program/evidence/S0/dirty-tracked-hashes.json` | Untracked | 761 | Docs | 9 | 0 |  |
+| `docs/program/evidence/S0/existing-pre-program-tag.txt` | Untracked | 63 | Docs | 1 | 0 |  |
+| `docs/program/evidence/S0/newer-than-security.txt` | Untracked | 917 | Docs | 14 | 0 |  |
+| `docs/program/evidence/S0/protected-test-hashes.json` | Untracked | 34964 | Docs | 314 | 0 |  |
+| `docs/program/evidence/S0/tracked-paths.txt` | Untracked | 79002 | Docs | 1471 | 0 |  |
+| `docs/program/evidence/S0/uncommitted-start.txt` | Untracked | 518105 | Docs | 4721 | 0 |  |
+| `docs/program/evidence/S1/coordinator-contract-after.log` | Untracked | 170 | Docs | 2 | 0 |  |
+| `docs/program/evidence/S1/coordinator-contract-before.log` | Untracked | 1119 | Docs | 24 | 0 |  |
+| `docs/program/evidence/S1/coordinator-contract-harness-error.log` | Untracked | 691 | Docs | 11 | 0 |  |
+| `docs/program/evidence/S1/hard-stop.json` | Untracked | 222 | Docs | 7 | 0 |  |
+| `docs/program/evidence/S1/helper-assumptions.json` | Untracked | 238717 | Docs | 5466 | 0 |  |
+| `docs/program/evidence/S1/initial-gate-console.log` | Untracked | 8971 | Docs | 41 | 0 |  |
+| `docs/program/evidence/S1/stopped-owned-process-tree.json` | Untracked | 1347 | Docs | 72 | 0 |  |
+| `docs/program/evidence/S1/wrong-working-directory-run/git-status-before.txt` | Untracked | 23162 | Docs | 601 | 0 |  |
+| `docs/program/evidence/S1/wrong-working-directory-run/plan.json` | Untracked | 9596 | Docs | 366 | 0 |  |
+| `docs/program/evidence/S1/wrong-working-directory-run/prepare-lab-adapters.log` | Untracked | 43 | Docs | 1 | 0 |  |
+| `docs/program/evidence/S1/wrong-working-directory-run/raw.log` | Untracked | 8797 | Docs | 36 | 0 |  |
+| `docs/program/evidence/S1/wrong-working-directory-run/selection-full-regression.log` | Untracked | 7479 | Docs | 20 | 0 |  |
+| `docs/program/evidence/S1/wrong-working-directory-run/server-60294.log` | Untracked | 19369 | Docs | 269 | 0 |  |
+| `docs/program/evidence/S1/wrong-working-directory-run/server-60295.log` | Untracked | 7736 | Docs | 32 | 0 |  |
+| `docs/program/evidence/S1/wrong-working-directory-run/server-60296.log` | Untracked | 6907 | Docs | 28 | 0 |  |
+| `docs/program/evidence/S1/wrong-working-directory-run/unchanged-test-hashes.json` | Untracked | 34649 | Docs | 314 | 0 |  |
+| `docs/program/evidence/S1/wrong-working-directory-run/warmup-m0-control-lab-fit-network.jsonl` | Untracked | 7589 | Docs | 49 | 0 |  |
+| `docs/program/evidence/S1/wrong-working-directory-run/warmup-m0-control-lab-full-network.jsonl` | Untracked | 9338 | Docs | 63 | 0 |  |
+| `docs/program/evidence/S1/wrong-working-directory-run/warmup-m0-overfit-lab-fit-network.jsonl` | Untracked | 8225 | Docs | 53 | 0 |  |
+| `docs/program/evidence/S1/wrong-working-directory-run/warmup-m0-overfit-lab-full-network.jsonl` | Untracked | 8243 | Docs | 54 | 0 |  |
+| `docs/project-compatibility-adapter-regression.log` | Untracked | 529 | Docs | 6 | 0 |  |
+| `docs/project-compatibility-final.log` | Untracked | 5446 | Docs | 172 | 0 |  |
+| `docs/project-compatibility-qualification.log` | Untracked | 3467 | Docs | 56 | 0 |  |
+| `docs/project-compatibility.png` | Untracked | 133560 | Docs | Binary | Binary |  |
+| `docs/real-multi-file-next-saas-failure.png` | Untracked | 118593 | Docs | Binary | Binary |  |
+| `docs/real-multi-file-next-saas.json` | Untracked | 2176 | Docs | 54 | 0 |  |
+| `docs/real-multi-file-next-saas.log` | Untracked | 1903 | Docs | 21 | 0 |  |
+| `docs/real-multi-file-next-saas.png` | Untracked | 130104 | Docs | Binary | Binary |  |
+| `docs/real-multi-file-open-react.json` | Untracked | 2091 | Docs | 53 | 0 |  |
+| `docs/real-multi-file-open-react.log` | Untracked | 6617 | Docs | 177 | 0 |  |
+| `docs/real-multi-file-open-react.png` | Untracked | 640498 | Docs | Binary | Binary |  |
+| `docs/real-project-adapter-regression.log` | Untracked | 270 | Docs | 1 | 0 |  |
+| `docs/real-project-current-2-failure.png` | Untracked | 228442 | Docs | Binary | Binary |  |
+| `docs/real-project-current-2.json` | Untracked | 2545 | Docs | 97 | 0 |  |
+| `docs/real-project-current-2.log` | Untracked | 1372 | Docs | 24 | 0 |  |
+| `docs/real-project-current-2.png` | Untracked | 140004 | Docs | Binary | Binary |  |
+| `docs/real-project-current-3-failure.png` | Untracked | 251272 | Docs | Binary | Binary |  |
+| `docs/real-project-current-3.json` | Untracked | 4532 | Docs | 135 | 0 |  |
+| `docs/real-project-current-3.log` | Untracked | 1560 | Docs | 22 | 0 |  |
+| `docs/real-project-current-3.png` | Untracked | 244774 | Docs | Binary | Binary |  |
+| `docs/real-project-current-cruip.log` | Untracked | 1088 | Docs | 23 | 0 |  |
+| `docs/real-project-current-gates.log` | Untracked | 4800 | Docs | 157 | 0 |  |
+| `docs/real-project-current-matrix.log` | Untracked | 11316 | Docs | 289 | 0 |  |
+| `docs/real-project-current-next-saas-failure.png` | Untracked | 6989 | Docs | Binary | Binary |  |
+| `docs/real-project-current-next-saas.json` | Untracked | 2775 | Docs | 98 | 0 |  |
+| `docs/real-project-current-next-saas.log` | Untracked | 2053 | Docs | 29 | 0 |  |
+| `docs/real-project-current-next-saas.png` | Untracked | 117868 | Docs | Binary | Binary |  |
+| `docs/real-project-current-nim.log` | Untracked | 1241 | Docs | 32 | 0 |  |
+| `docs/real-project-current-types.log` | Untracked | 5083 | Docs | 49 | 0 |  |
+| `docs/real-project-local-regression-and-gates.log` | Untracked | 825 | Docs | 6 | 0 |  |
+| `docs/real-project-tailwind3-regression.log` | Untracked | 471 | Docs | 4 | 0 |  |
+| `docs/recovery-current-final-gates.log` | Untracked | 4863 | Docs | 156 | 0 |  |
+| `docs/recovery-current-source-final.log` | Untracked | 2025 | Docs | 33 | 0 |  |
+| `docs/recovery-current-source-results.json` | Untracked | 13970 | Docs | 509 | 0 |  |
+| `docs/recovery-final-gates.log` | Untracked | 4879 | Docs | 156 | 0 |  |
+| `docs/recovery-polling-experiment.log` | Untracked | 107203 | Docs | 1055 | 0 |  |
+| `docs/recovery-public2-final.log` | Untracked | 1683 | Docs | 34 | 0 |  |
+| `docs/recovery-public2-receipt.log` | Untracked | 1336 | Docs | 27 | 0 |  |
+| `docs/recovery-public3-backoff.log` | Untracked | 2459 | Docs | 34 | 0 |  |
+| `docs/recovery-public3-final.log` | Untracked | 2948 | Docs | 63 | 0 |  |
+| `docs/recovery-public3-qualified.log` | Untracked | 1292 | Docs | 28 | 0 |  |
+| `docs/recovery-refresh-confirmed.log` | Untracked | 5015 | Docs | 157 | 0 |  |
+| `docs/recovery-refresh-final.log` | Untracked | 767 | Docs | 20 | 0 |  |
+| `docs/recovery-release-gates.log` | Untracked | 756 | Docs | 20 | 0 |  |
+| `docs/recovery-slow-refresh-after.log` | Untracked | 2169 | Docs | 46 | 0 |  |
+| `docs/recovery-slow-refresh-before.log` | Untracked | 679 | Docs | 18 | 0 |  |
+| `docs/recovery-slow-refresh-trace.log` | Untracked | 641 | Docs | 8 | 0 |  |
+| `docs/recovery-slow-refresh-verified.log` | Untracked | 692 | Docs | 16 | 0 |  |
+| `docs/recovery-source-public3-diagnostic.log` | Untracked | 617 | Docs | 14 | 0 |  |
+| `docs/recovery-source-public3-fixed.log` | Untracked | 2600 | Docs | 53 | 0 |  |
+| `docs/recovery-source-public3-release.log` | Untracked | 19899 | Docs | 199 | 0 |  |
+| `docs/recovery-source-public3-retry.log` | Untracked | 1013 | Docs | 22 | 0 |  |
+| `docs/recovery-source-public3.log` | Untracked | 812 | Docs | 19 | 0 |  |
+| `docs/recovery-source-sample-fixed.log` | Untracked | 2052 | Docs | 39 | 0 |  |
+| `docs/recovery-source-sample-release.log` | Untracked | 50777 | Docs | 635 | 0 |  |
+| `docs/recovery-source-sample-results.json` | Untracked | 13970 | Docs | 509 | 0 |  |
+| `docs/recovery-source-sample.log` | Untracked | 783 | Docs | 19 | 0 |  |
+| `docs/recovery-workspace.log` | Untracked | 75 | Docs | 1 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-07-00-984Z-a4ff43a/git-status-after.txt` | Untracked | 24182 | Docs | 673 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-07-00-984Z-a4ff43a/git-status-before.txt` | Untracked | 24153 | Docs | 672 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-07-00-984Z-a4ff43a/plan.json` | Untracked | 7361 | Docs | 287 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-07-00-984Z-a4ff43a/prepare-lab-adapters.log` | Untracked | 988 | Docs | 17 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-07-00-984Z-a4ff43a/raw.log` | Untracked | 2853 | Docs | 51 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-07-00-984Z-a4ff43a/results.json` | Untracked | 2939 | Docs | 141 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-07-00-984Z-a4ff43a/unchanged-test-hashes.json` | Untracked | 26844 | Docs | 246 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-07-00-984Z-a4ff43a/worktree-status-after.txt` | Untracked | 62179 | Docs | 925 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-08-11-579Z-94a0508/git-status-after.txt` | Untracked | 24182 | Docs | 673 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-08-11-579Z-94a0508/git-status-before.txt` | Untracked | 24182 | Docs | 673 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-08-11-579Z-94a0508/plan.json` | Untracked | 7361 | Docs | 287 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-08-11-579Z-94a0508/prepare-lab-adapters.log` | Untracked | 23 | Docs | 1 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-08-11-579Z-94a0508/raw.log` | Untracked | 140099 | Docs | 144 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-08-11-579Z-94a0508/results.json` | Untracked | 3489 | Docs | 162 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-08-11-579Z-94a0508/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-error.png` | Untracked | 41408 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T16-08-11-579Z-94a0508/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit.json` | Untracked | 7045 | Docs | 24 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-08-11-579Z-94a0508/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-12-blocked.png` | Untracked | 77703 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T16-08-11-579Z-94a0508/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-13-blocked.png` | Untracked | 70434 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T16-08-11-579Z-94a0508/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-19-blocked.png` | Untracked | 72154 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T16-08-11-579Z-94a0508/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-24-blocked.png` | Untracked | 72621 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T16-08-11-579Z-94a0508/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-29-blocked.png` | Untracked | 71950 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T16-08-11-579Z-94a0508/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-6-blocked.png` | Untracked | 71401 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T16-08-11-579Z-94a0508/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-regression.json` | Untracked | 216726 | Docs | 7320 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-08-11-579Z-94a0508/selection-full-overfit.log` | Untracked | 4864 | Docs | 67 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-08-11-579Z-94a0508/selection-full-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-12-blocked.png` | Untracked | 77703 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T16-08-11-579Z-94a0508/selection-full-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-13-blocked.png` | Untracked | 70434 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T16-08-11-579Z-94a0508/selection-full-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-19-blocked.png` | Untracked | 72154 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T16-08-11-579Z-94a0508/selection-full-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-24-blocked.png` | Untracked | 72621 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T16-08-11-579Z-94a0508/selection-full-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-29-blocked.png` | Untracked | 71950 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T16-08-11-579Z-94a0508/selection-full-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-6-blocked.png` | Untracked | 71401 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T16-08-11-579Z-94a0508/selection-full-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-regression.json` | Untracked | 216726 | Docs | 7320 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-08-11-579Z-94a0508/selection-full-regression.log` | Untracked | 132715 | Docs | 32 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-08-11-579Z-94a0508/server-3000.log` | Untracked | 42155 | Docs | 1202 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-08-11-579Z-94a0508/server-3001.log` | Untracked | 1416 | Docs | 18 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-08-11-579Z-94a0508/server-3002.log` | Untracked | 1221 | Docs | 16 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-08-11-579Z-94a0508/unchanged-test-hashes.json` | Untracked | 26844 | Docs | 246 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-08-11-579Z-94a0508/worktree-status-after.txt` | Untracked | 62217 | Docs | 928 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-17-51-145Z-7f1b9cd-selection-full-overfit/git-status-after.txt` | Untracked | 24182 | Docs | 673 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-17-51-145Z-7f1b9cd-selection-full-overfit/git-status-before.txt` | Untracked | 24182 | Docs | 673 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-17-51-145Z-7f1b9cd-selection-full-overfit/plan.json` | Untracked | 6897 | Docs | 267 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-17-51-145Z-7f1b9cd-selection-full-overfit/prepare-lab-adapters.log` | Untracked | 23 | Docs | 1 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-17-51-145Z-7f1b9cd-selection-full-overfit/raw.log` | Untracked | 4484 | Docs | 48 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-17-51-145Z-7f1b9cd-selection-full-overfit/results.json` | Untracked | 943 | Docs | 40 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-17-51-145Z-7f1b9cd-selection-full-overfit/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-error.png` | Untracked | 22303 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T16-17-51-145Z-7f1b9cd-selection-full-overfit/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit.json` | Untracked | 535 | Docs | 19 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-17-51-145Z-7f1b9cd-selection-full-overfit/selection-full-overfit.log` | Untracked | 2786 | Docs | 25 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-17-51-145Z-7f1b9cd-selection-full-overfit/server-3000.log` | Untracked | 12801 | Docs | 341 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-17-51-145Z-7f1b9cd-selection-full-overfit/server-3001.log` | Untracked | 1163 | Docs | 16 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-17-51-145Z-7f1b9cd-selection-full-overfit/server-3002.log` | Untracked | 1269 | Docs | 16 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-17-51-145Z-7f1b9cd-selection-full-overfit/unchanged-test-hashes.json` | Untracked | 26844 | Docs | 246 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-17-51-145Z-7f1b9cd-selection-full-overfit/worktree-status-after.txt` | Untracked | 52793 | Docs | 757 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-22-22-802Z-5f40e10-selection-full-overfit/git-status-after.txt` | Untracked | 24182 | Docs | 673 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-22-22-802Z-5f40e10-selection-full-overfit/git-status-before.txt` | Untracked | 24182 | Docs | 673 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-22-22-802Z-5f40e10-selection-full-overfit/plan.json` | Untracked | 6897 | Docs | 267 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-22-22-802Z-5f40e10-selection-full-overfit/prepare-lab-adapters.log` | Untracked | 23 | Docs | 1 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-22-22-802Z-5f40e10-selection-full-overfit/raw.log` | Untracked | 138766 | Docs | 55 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-22-22-802Z-5f40e10-selection-full-overfit/results.json` | Untracked | 943 | Docs | 40 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-22-22-802Z-5f40e10-selection-full-overfit/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-1-blocked.png` | Untracked | 70201 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T16-22-22-802Z-5f40e10-selection-full-overfit/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-27-blocked.png` | Untracked | 80818 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T16-22-22-802Z-5f40e10-selection-full-overfit/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-5-blocked.png` | Untracked | 71406 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T16-22-22-802Z-5f40e10-selection-full-overfit/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit.json` | Untracked | 227056 | Docs | 7734 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-22-22-802Z-5f40e10-selection-full-overfit/selection-full-overfit.log` | Untracked | 137070 | Docs | 32 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-22-22-802Z-5f40e10-selection-full-overfit/server-3000.log` | Untracked | 24388 | Docs | 655 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-22-22-802Z-5f40e10-selection-full-overfit/server-3001.log` | Untracked | 1164 | Docs | 16 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-22-22-802Z-5f40e10-selection-full-overfit/server-3002.log` | Untracked | 1522 | Docs | 18 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-22-22-802Z-5f40e10-selection-full-overfit/unchanged-test-hashes.json` | Untracked | 26844 | Docs | 246 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-22-22-802Z-5f40e10-selection-full-overfit/worktree-status-after.txt` | Untracked | 53008 | Docs | 762 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-25-59-548Z-7f76c57-selection-full-overfit/git-status-after.txt` | Untracked | 24182 | Docs | 673 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-25-59-548Z-7f76c57-selection-full-overfit/git-status-before.txt` | Untracked | 24182 | Docs | 673 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-25-59-548Z-7f76c57-selection-full-overfit/plan.json` | Untracked | 6897 | Docs | 267 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-25-59-548Z-7f76c57-selection-full-overfit/prepare-lab-adapters.log` | Untracked | 23 | Docs | 1 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-25-59-548Z-7f76c57-selection-full-overfit/raw.log` | Untracked | 138768 | Docs | 55 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-25-59-548Z-7f76c57-selection-full-overfit/results.json` | Untracked | 944 | Docs | 40 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-25-59-548Z-7f76c57-selection-full-overfit/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-1-blocked.png` | Untracked | 70156 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T16-25-59-548Z-7f76c57-selection-full-overfit/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-27-blocked.png` | Untracked | 80818 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T16-25-59-548Z-7f76c57-selection-full-overfit/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-5-blocked.png` | Untracked | 71406 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T16-25-59-548Z-7f76c57-selection-full-overfit/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit.json` | Untracked | 227194 | Docs | 7739 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-25-59-548Z-7f76c57-selection-full-overfit/selection-full-overfit.log` | Untracked | 137070 | Docs | 32 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-25-59-548Z-7f76c57-selection-full-overfit/server-3000.log` | Untracked | 26089 | Docs | 682 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-25-59-548Z-7f76c57-selection-full-overfit/server-3001.log` | Untracked | 1842 | Docs | 44 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-25-59-548Z-7f76c57-selection-full-overfit/server-3002.log` | Untracked | 1516 | Docs | 18 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-25-59-548Z-7f76c57-selection-full-overfit/unchanged-test-hashes.json` | Untracked | 26844 | Docs | 246 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-25-59-548Z-7f76c57-selection-full-overfit/worktree-status-after.txt` | Untracked | 53406 | Docs | 770 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-30-07-702Z-7f9281f-selection-full-overfit/git-status-after.txt` | Untracked | 24182 | Docs | 673 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-30-07-702Z-7f9281f-selection-full-overfit/git-status-before.txt` | Untracked | 24182 | Docs | 673 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-30-07-702Z-7f9281f-selection-full-overfit/plan.json` | Untracked | 6897 | Docs | 267 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-30-07-702Z-7f9281f-selection-full-overfit/prepare-lab-adapters.log` | Untracked | 23 | Docs | 1 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-30-07-702Z-7f9281f-selection-full-overfit/raw.log` | Untracked | 138771 | Docs | 55 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-30-07-702Z-7f9281f-selection-full-overfit/results.json` | Untracked | 946 | Docs | 40 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-30-07-702Z-7f9281f-selection-full-overfit/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-1-blocked.png` | Untracked | 70156 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T16-30-07-702Z-7f9281f-selection-full-overfit/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-27-blocked.png` | Untracked | 80818 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T16-30-07-702Z-7f9281f-selection-full-overfit/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-5-blocked.png` | Untracked | 71406 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T16-30-07-702Z-7f9281f-selection-full-overfit/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit.json` | Untracked | 227056 | Docs | 7734 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-30-07-702Z-7f9281f-selection-full-overfit/selection-full-overfit.log` | Untracked | 137070 | Docs | 32 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-30-07-702Z-7f9281f-selection-full-overfit/server-3000.log` | Untracked | 20687 | Docs | 523 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-30-07-702Z-7f9281f-selection-full-overfit/server-3001.log` | Untracked | 2590 | Docs | 94 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-30-07-702Z-7f9281f-selection-full-overfit/server-3002.log` | Untracked | 1521 | Docs | 18 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-30-07-702Z-7f9281f-selection-full-overfit/unchanged-test-hashes.json` | Untracked | 26844 | Docs | 246 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-30-07-702Z-7f9281f-selection-full-overfit/worktree-status-after.txt` | Untracked | 53631 | Docs | 775 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-35-21-307Z-5a1c06f-selection-full-overfit/git-status-after.txt` | Untracked | 24182 | Docs | 673 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-35-21-307Z-5a1c06f-selection-full-overfit/git-status-before.txt` | Untracked | 24182 | Docs | 673 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-35-21-307Z-5a1c06f-selection-full-overfit/plan.json` | Untracked | 6897 | Docs | 267 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-35-21-307Z-5a1c06f-selection-full-overfit/prepare-lab-adapters.log` | Untracked | 23 | Docs | 1 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-35-21-307Z-5a1c06f-selection-full-overfit/raw.log` | Untracked | 138767 | Docs | 55 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-35-21-307Z-5a1c06f-selection-full-overfit/results.json` | Untracked | 944 | Docs | 40 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-35-21-307Z-5a1c06f-selection-full-overfit/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-1-blocked.png` | Untracked | 70205 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T16-35-21-307Z-5a1c06f-selection-full-overfit/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-27-blocked.png` | Untracked | 80818 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T16-35-21-307Z-5a1c06f-selection-full-overfit/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-5-blocked.png` | Untracked | 71406 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T16-35-21-307Z-5a1c06f-selection-full-overfit/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit.json` | Untracked | 227194 | Docs | 7739 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-35-21-307Z-5a1c06f-selection-full-overfit/selection-full-overfit.log` | Untracked | 137070 | Docs | 32 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-35-21-307Z-5a1c06f-selection-full-overfit/server-3000.log` | Untracked | 27600 | Docs | 702 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-35-21-307Z-5a1c06f-selection-full-overfit/server-3001.log` | Untracked | 1165 | Docs | 16 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-35-21-307Z-5a1c06f-selection-full-overfit/server-3002.log` | Untracked | 1514 | Docs | 18 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-35-21-307Z-5a1c06f-selection-full-overfit/unchanged-test-hashes.json` | Untracked | 26844 | Docs | 246 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-35-21-307Z-5a1c06f-selection-full-overfit/worktree-status-after.txt` | Untracked | 54329 | Docs | 786 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-39-37-995Z-58618d0-selection-full-overfit/git-status-after.txt` | Untracked | 24182 | Docs | 673 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-39-37-995Z-58618d0-selection-full-overfit/git-status-before.txt` | Untracked | 24182 | Docs | 673 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-39-37-995Z-58618d0-selection-full-overfit/plan.json` | Untracked | 6897 | Docs | 267 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-39-37-995Z-58618d0-selection-full-overfit/prepare-lab-adapters.log` | Untracked | 23 | Docs | 1 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-39-37-995Z-58618d0-selection-full-overfit/raw.log` | Untracked | 138767 | Docs | 55 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-39-37-995Z-58618d0-selection-full-overfit/results.json` | Untracked | 944 | Docs | 40 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-39-37-995Z-58618d0-selection-full-overfit/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-1-blocked.png` | Untracked | 70158 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T16-39-37-995Z-58618d0-selection-full-overfit/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-27-blocked.png` | Untracked | 80825 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T16-39-37-995Z-58618d0-selection-full-overfit/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-5-blocked.png` | Untracked | 71408 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T16-39-37-995Z-58618d0-selection-full-overfit/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit.json` | Untracked | 227468 | Docs | 7749 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-39-37-995Z-58618d0-selection-full-overfit/selection-full-overfit.log` | Untracked | 137070 | Docs | 32 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-39-37-995Z-58618d0-selection-full-overfit/server-3000.log` | Untracked | 31911 | Docs | 844 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-39-37-995Z-58618d0-selection-full-overfit/server-3001.log` | Untracked | 1164 | Docs | 16 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-39-37-995Z-58618d0-selection-full-overfit/server-3002.log` | Untracked | 1517 | Docs | 18 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-39-37-995Z-58618d0-selection-full-overfit/unchanged-test-hashes.json` | Untracked | 26844 | Docs | 246 | 0 |  |
+| `docs/reliability-gate/2026-11-01T16-39-37-995Z-58618d0-selection-full-overfit/worktree-status-after.txt` | Untracked | 54549 | Docs | 789 | 0 |  |
+| `docs/reliability-gate/2026-11-01T17-49-59-049Z-94a0508/git-status-after.txt` | Untracked | 24182 | Docs | 673 | 0 |  |
+| `docs/reliability-gate/2026-11-01T17-49-59-049Z-94a0508/git-status-before.txt` | Untracked | 24182 | Docs | 673 | 0 |  |
+| `docs/reliability-gate/2026-11-01T17-49-59-049Z-94a0508/plan.json` | Untracked | 7361 | Docs | 287 | 0 |  |
+| `docs/reliability-gate/2026-11-01T17-49-59-049Z-94a0508/prepare-lab-adapters.log` | Untracked | 23 | Docs | 1 | 0 |  |
+| `docs/reliability-gate/2026-11-01T17-49-59-049Z-94a0508/raw.log` | Untracked | 5215 | Docs | 68 | 0 |  |
+| `docs/reliability-gate/2026-11-01T17-49-59-049Z-94a0508/results.json` | Untracked | 3387 | Docs | 160 | 0 |  |
+| `docs/reliability-gate/2026-11-01T17-49-59-049Z-94a0508/selection-full-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-error.png` | Untracked | 9342 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T17-49-59-049Z-94a0508/selection-full-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-regression.json` | Untracked | 538 | Docs | 19 | 0 |  |
+| `docs/reliability-gate/2026-11-01T17-49-59-049Z-94a0508/selection-full-regression.log` | Untracked | 2786 | Docs | 25 | 0 |  |
+| `docs/reliability-gate/2026-11-01T17-49-59-049Z-94a0508/server-3000.log` | Untracked | 12810 | Docs | 341 | 0 |  |
+| `docs/reliability-gate/2026-11-01T17-49-59-049Z-94a0508/server-3001.log` | Untracked | 1167 | Docs | 16 | 0 |  |
+| `docs/reliability-gate/2026-11-01T17-49-59-049Z-94a0508/server-3002.log` | Untracked | 1224 | Docs | 16 | 0 |  |
+| `docs/reliability-gate/2026-11-01T17-49-59-049Z-94a0508/unchanged-test-hashes.json` | Untracked | 26844 | Docs | 246 | 0 |  |
+| `docs/reliability-gate/2026-11-01T17-49-59-049Z-94a0508/worktree-status-after.txt` | Untracked | 62217 | Docs | 928 | 0 |  |
+| `docs/reliability-gate/2026-11-01T17-53-26-225Z-94a0508-selection-full-overfit/git-status-after.txt` | Untracked | 24182 | Docs | 673 | 0 |  |
+| `docs/reliability-gate/2026-11-01T17-53-26-225Z-94a0508-selection-full-overfit/git-status-before.txt` | Untracked | 24182 | Docs | 673 | 0 |  |
+| `docs/reliability-gate/2026-11-01T17-53-26-225Z-94a0508-selection-full-overfit/plan.json` | Untracked | 6897 | Docs | 267 | 0 |  |
+| `docs/reliability-gate/2026-11-01T17-53-26-225Z-94a0508-selection-full-overfit/prepare-lab-adapters.log` | Untracked | 23 | Docs | 1 | 0 |  |
+| `docs/reliability-gate/2026-11-01T17-53-26-225Z-94a0508-selection-full-overfit/raw.log` | Untracked | 4474 | Docs | 48 | 0 |  |
+| `docs/reliability-gate/2026-11-01T17-53-26-225Z-94a0508-selection-full-overfit/results.json` | Untracked | 938 | Docs | 40 | 0 |  |
+| `docs/reliability-gate/2026-11-01T17-53-26-225Z-94a0508-selection-full-overfit/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-error.png` | Untracked | 9342 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T17-53-26-225Z-94a0508-selection-full-overfit/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit.json` | Untracked | 535 | Docs | 19 | 0 |  |
+| `docs/reliability-gate/2026-11-01T17-53-26-225Z-94a0508-selection-full-overfit/selection-full-overfit.log` | Untracked | 2786 | Docs | 25 | 0 |  |
+| `docs/reliability-gate/2026-11-01T17-53-26-225Z-94a0508-selection-full-overfit/server-3000.log` | Untracked | 12713 | Docs | 339 | 0 |  |
+| `docs/reliability-gate/2026-11-01T17-53-26-225Z-94a0508-selection-full-overfit/server-3001.log` | Untracked | 1169 | Docs | 16 | 0 |  |
+| `docs/reliability-gate/2026-11-01T17-53-26-225Z-94a0508-selection-full-overfit/server-3002.log` | Untracked | 1270 | Docs | 16 | 0 |  |
+| `docs/reliability-gate/2026-11-01T17-53-26-225Z-94a0508-selection-full-overfit/unchanged-test-hashes.json` | Untracked | 26844 | Docs | 246 | 0 |  |
+| `docs/reliability-gate/2026-11-01T17-53-26-225Z-94a0508-selection-full-overfit/worktree-status-after.txt` | Untracked | 62217 | Docs | 928 | 0 |  |
+| `docs/reliability-gate/2026-11-01T17-56-39-365Z-94a0508-selection-full-overfit/git-status-after.txt` | Untracked | 24236 | Docs | 675 | 0 |  |
+| `docs/reliability-gate/2026-11-01T17-56-39-365Z-94a0508-selection-full-overfit/git-status-before.txt` | Untracked | 24236 | Docs | 675 | 0 |  |
+| `docs/reliability-gate/2026-11-01T17-56-39-365Z-94a0508-selection-full-overfit/plan.json` | Untracked | 6897 | Docs | 267 | 0 |  |
+| `docs/reliability-gate/2026-11-01T17-56-39-365Z-94a0508-selection-full-overfit/prepare-lab-adapters.log` | Untracked | 23 | Docs | 1 | 0 |  |
+| `docs/reliability-gate/2026-11-01T17-56-39-365Z-94a0508-selection-full-overfit/raw.log` | Untracked | 138766 | Docs | 55 | 0 |  |
+| `docs/reliability-gate/2026-11-01T17-56-39-365Z-94a0508-selection-full-overfit/results.json` | Untracked | 943 | Docs | 40 | 0 |  |
+| `docs/reliability-gate/2026-11-01T17-56-39-365Z-94a0508-selection-full-overfit/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-1-blocked.png` | Untracked | 70158 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T17-56-39-365Z-94a0508-selection-full-overfit/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-27-blocked.png` | Untracked | 80825 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T17-56-39-365Z-94a0508-selection-full-overfit/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-5-blocked.png` | Untracked | 71408 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T17-56-39-365Z-94a0508-selection-full-overfit/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit.json` | Untracked | 227470 | Docs | 7749 | 0 |  |
+| `docs/reliability-gate/2026-11-01T17-56-39-365Z-94a0508-selection-full-overfit/selection-full-overfit.log` | Untracked | 137070 | Docs | 32 | 0 |  |
+| `docs/reliability-gate/2026-11-01T17-56-39-365Z-94a0508-selection-full-overfit/server-3000.log` | Untracked | 52820 | Docs | 744 | 0 |  |
+| `docs/reliability-gate/2026-11-01T17-56-39-365Z-94a0508-selection-full-overfit/server-3001.log` | Untracked | 1162 | Docs | 16 | 0 |  |
+| `docs/reliability-gate/2026-11-01T17-56-39-365Z-94a0508-selection-full-overfit/server-3002.log` | Untracked | 1524 | Docs | 18 | 0 |  |
+| `docs/reliability-gate/2026-11-01T17-56-39-365Z-94a0508-selection-full-overfit/unchanged-test-hashes.json` | Untracked | 26844 | Docs | 246 | 0 |  |
+| `docs/reliability-gate/2026-11-01T17-56-39-365Z-94a0508-selection-full-overfit/worktree-status-after.txt` | Untracked | 62217 | Docs | 928 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-04-11-020Z-94a0508-selection-full-overfit/git-status-after.txt` | Untracked | 24236 | Docs | 675 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-04-11-020Z-94a0508-selection-full-overfit/git-status-before.txt` | Untracked | 24236 | Docs | 675 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-04-11-020Z-94a0508-selection-full-overfit/plan.json` | Untracked | 6897 | Docs | 267 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-04-11-020Z-94a0508-selection-full-overfit/prepare-lab-adapters.log` | Untracked | 23 | Docs | 1 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-04-11-020Z-94a0508-selection-full-overfit/raw.log` | Untracked | 138766 | Docs | 55 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-04-11-020Z-94a0508-selection-full-overfit/results.json` | Untracked | 943 | Docs | 40 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-04-11-020Z-94a0508-selection-full-overfit/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-1-blocked.png` | Untracked | 70208 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T18-04-11-020Z-94a0508-selection-full-overfit/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-27-blocked.png` | Untracked | 80825 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T18-04-11-020Z-94a0508-selection-full-overfit/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-5-blocked.png` | Untracked | 71408 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T18-04-11-020Z-94a0508-selection-full-overfit/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit.json` | Untracked | 227054 | Docs | 7734 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-04-11-020Z-94a0508-selection-full-overfit/selection-full-overfit.log` | Untracked | 137070 | Docs | 32 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-04-11-020Z-94a0508-selection-full-overfit/server-3000.log` | Untracked | 124741 | Docs | 1151 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-04-11-020Z-94a0508-selection-full-overfit/server-3001.log` | Untracked | 7793 | Docs | 28 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-04-11-020Z-94a0508-selection-full-overfit/server-3002.log` | Untracked | 8589 | Docs | 32 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-04-11-020Z-94a0508-selection-full-overfit/unchanged-test-hashes.json` | Untracked | 26844 | Docs | 246 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-04-11-020Z-94a0508-selection-full-overfit/worktree-status-after.txt` | Untracked | 62217 | Docs | 928 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-09-56-489Z-32c62f8/git-status-after.txt` | Untracked | 24276 | Docs | 676 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-09-56-489Z-32c62f8/git-status-before.txt` | Untracked | 24276 | Docs | 676 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-09-56-489Z-32c62f8/plan.json` | Untracked | 7361 | Docs | 287 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-09-56-489Z-32c62f8/prepare-lab-adapters.log` | Untracked | 23 | Docs | 1 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-09-56-489Z-32c62f8/raw.log` | Untracked | 2701 | Docs | 44 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-09-56-489Z-32c62f8/results.json` | Untracked | 3386 | Docs | 141 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-09-56-489Z-32c62f8/server-3000.log` | Untracked | 2539 | Docs | 22 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-09-56-489Z-32c62f8/server-3001.log` | Untracked | 5387 | Docs | 17 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-09-56-489Z-32c62f8/server-3002.log` | Untracked | 3430 | Docs | 13 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-09-56-489Z-32c62f8/unchanged-test-hashes.json` | Untracked | 26957 | Docs | 247 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-09-56-489Z-32c62f8/warmup-m0-control-lab-full-failure.png` | Untracked | 7628 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T18-09-56-489Z-32c62f8/worktree-status-after.txt` | Untracked | 62208 | Docs | 927 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-25-02-696Z-94a0508-selection-full-overfit/git-status-after.txt` | Untracked | 24315 | Docs | 677 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-25-02-696Z-94a0508-selection-full-overfit/git-status-before.txt` | Untracked | 24276 | Docs | 676 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-25-02-696Z-94a0508-selection-full-overfit/plan.json` | Untracked | 6897 | Docs | 267 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-25-02-696Z-94a0508-selection-full-overfit/prepare-lab-adapters.log` | Untracked | 23 | Docs | 1 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-25-02-696Z-94a0508-selection-full-overfit/raw.log` | Untracked | 4482 | Docs | 48 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-25-02-696Z-94a0508-selection-full-overfit/results.json` | Untracked | 942 | Docs | 40 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-25-02-696Z-94a0508-selection-full-overfit/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-error.png` | Untracked | 9342 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T18-25-02-696Z-94a0508-selection-full-overfit/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit.json` | Untracked | 535 | Docs | 19 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-25-02-696Z-94a0508-selection-full-overfit/selection-full-overfit.log` | Untracked | 2786 | Docs | 25 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-25-02-696Z-94a0508-selection-full-overfit/server-3000.log` | Untracked | 51043 | Docs | 347 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-25-02-696Z-94a0508-selection-full-overfit/server-3001.log` | Untracked | 7558 | Docs | 28 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-25-02-696Z-94a0508-selection-full-overfit/server-3002.log` | Untracked | 7781 | Docs | 28 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-25-02-696Z-94a0508-selection-full-overfit/unchanged-test-hashes.json` | Untracked | 26957 | Docs | 247 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-25-02-696Z-94a0508-selection-full-overfit/warmup-m0-control-lab-fit-network.jsonl` | Untracked | 7514 | Docs | 49 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-25-02-696Z-94a0508-selection-full-overfit/warmup-m0-control-lab-full-network.jsonl` | Untracked | 9254 | Docs | 63 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-25-02-696Z-94a0508-selection-full-overfit/warmup-m0-overfit-lab-fit-network.jsonl` | Untracked | 8274 | Docs | 54 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-25-02-696Z-94a0508-selection-full-overfit/warmup-m0-overfit-lab-full-network.jsonl` | Untracked | 8114 | Docs | 53 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-25-02-696Z-94a0508-selection-full-overfit/worktree-status-after.txt` | Untracked | 62260 | Docs | 929 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-29-49-129Z-32c62f8-selection-full-overfit/git-status-after.txt` | Untracked | 24294 | Docs | 676 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-29-49-129Z-32c62f8-selection-full-overfit/git-status-before.txt` | Untracked | 24387 | Docs | 679 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-29-49-129Z-32c62f8-selection-full-overfit/plan.json` | Untracked | 6897 | Docs | 267 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-29-49-129Z-32c62f8-selection-full-overfit/prepare-lab-adapters.log` | Untracked | 23 | Docs | 1 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-29-49-129Z-32c62f8-selection-full-overfit/raw.log` | Untracked | 138774 | Docs | 55 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-29-49-129Z-32c62f8-selection-full-overfit/results.json` | Untracked | 944 | Docs | 40 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-29-49-129Z-32c62f8-selection-full-overfit/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-1-blocked.png` | Untracked | 70158 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T18-29-49-129Z-32c62f8-selection-full-overfit/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-27-blocked.png` | Untracked | 80598 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T18-29-49-129Z-32c62f8-selection-full-overfit/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-5-blocked.png` | Untracked | 71408 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T18-29-49-129Z-32c62f8-selection-full-overfit/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit.json` | Untracked | 227056 | Docs | 7734 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-29-49-129Z-32c62f8-selection-full-overfit/selection-full-overfit.log` | Untracked | 137076 | Docs | 32 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-29-49-129Z-32c62f8-selection-full-overfit/server-3000.log` | Untracked | 64941 | Docs | 962 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-29-49-129Z-32c62f8-selection-full-overfit/server-3001.log` | Untracked | 7779 | Docs | 28 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-29-49-129Z-32c62f8-selection-full-overfit/server-3002.log` | Untracked | 8589 | Docs | 32 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-29-49-129Z-32c62f8-selection-full-overfit/unchanged-test-hashes.json` | Untracked | 26957 | Docs | 247 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-29-49-129Z-32c62f8-selection-full-overfit/warmup-m0-control-lab-fit-network.jsonl` | Untracked | 7510 | Docs | 49 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-29-49-129Z-32c62f8-selection-full-overfit/warmup-m0-control-lab-full-network.jsonl` | Untracked | 9296 | Docs | 63 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-29-49-129Z-32c62f8-selection-full-overfit/warmup-m0-overfit-lab-fit-network.jsonl` | Untracked | 8168 | Docs | 53 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-29-49-129Z-32c62f8-selection-full-overfit/warmup-m0-overfit-lab-full-network.jsonl` | Untracked | 8181 | Docs | 54 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-29-49-129Z-32c62f8-selection-full-overfit/worktree-status-after.txt` | Untracked | 62217 | Docs | 928 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-34-38-472Z-754fd00/git-status-after.txt` | Untracked | 24342 | Docs | 677 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-34-38-472Z-754fd00/git-status-before.txt` | Untracked | 24294 | Docs | 676 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-34-38-472Z-754fd00/plan.json` | Untracked | 7361 | Docs | 287 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-34-38-472Z-754fd00/prepare-lab-adapters.log` | Untracked | 23 | Docs | 1 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-34-38-472Z-754fd00/raw.log` | Untracked | 411815 | Docs | 170 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-34-38-472Z-754fd00/results.json` | Untracked | 3689 | Docs | 166 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-34-38-472Z-754fd00/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-error.png` | Untracked | 5851 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T18-34-38-472Z-754fd00/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit.json` | Untracked | 532 | Docs | 19 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-34-38-472Z-754fd00/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked.png` | Untracked | 62222 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T18-34-38-472Z-754fd00/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked.png` | Untracked | 70301 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T18-34-38-472Z-754fd00/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-19-blocked.png` | Untracked | 62957 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T18-34-38-472Z-754fd00/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-24-blocked.png` | Untracked | 70164 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T18-34-38-472Z-754fd00/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-6-blocked.png` | Untracked | 62938 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T18-34-38-472Z-754fd00/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression.json` | Untracked | 220718 | Docs | 7286 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-34-38-472Z-754fd00/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-1-blocked.png` | Untracked | 70158 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T18-34-38-472Z-754fd00/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-27-blocked.png` | Untracked | 80545 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T18-34-38-472Z-754fd00/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-5-blocked.png` | Untracked | 71456 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T18-34-38-472Z-754fd00/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit.json` | Untracked | 226498 | Docs | 7739 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-34-38-472Z-754fd00/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-12-blocked.png` | Untracked | 77739 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T18-34-38-472Z-754fd00/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-13-blocked.png` | Untracked | 70434 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T18-34-38-472Z-754fd00/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-19-blocked.png` | Untracked | 72154 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T18-34-38-472Z-754fd00/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-24-blocked.png` | Untracked | 71952 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T18-34-38-472Z-754fd00/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-29-blocked.png` | Untracked | 71996 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T18-34-38-472Z-754fd00/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-6-blocked.png` | Untracked | 71385 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T18-34-38-472Z-754fd00/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-regression.json` | Untracked | 217000 | Docs | 7330 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-34-38-472Z-754fd00/selection-fit-overfit.log` | Untracked | 2784 | Docs | 25 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-34-38-472Z-754fd00/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked.png` | Untracked | 62222 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T18-34-38-472Z-754fd00/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked.png` | Untracked | 70301 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T18-34-38-472Z-754fd00/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-19-blocked.png` | Untracked | 62957 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T18-34-38-472Z-754fd00/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-24-blocked.png` | Untracked | 70164 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T18-34-38-472Z-754fd00/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-6-blocked.png` | Untracked | 62938 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T18-34-38-472Z-754fd00/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression.json` | Untracked | 220718 | Docs | 7286 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-34-38-472Z-754fd00/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-1-blocked.png` | Untracked | 70158 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T18-34-38-472Z-754fd00/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-27-blocked.png` | Untracked | 80545 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T18-34-38-472Z-754fd00/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-5-blocked.png` | Untracked | 71456 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T18-34-38-472Z-754fd00/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit.json` | Untracked | 226498 | Docs | 7739 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-34-38-472Z-754fd00/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-12-blocked.png` | Untracked | 77739 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T18-34-38-472Z-754fd00/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-13-blocked.png` | Untracked | 70434 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T18-34-38-472Z-754fd00/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-19-blocked.png` | Untracked | 72154 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T18-34-38-472Z-754fd00/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-24-blocked.png` | Untracked | 71952 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T18-34-38-472Z-754fd00/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-29-blocked.png` | Untracked | 71996 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T18-34-38-472Z-754fd00/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-6-blocked.png` | Untracked | 71385 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T18-34-38-472Z-754fd00/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-regression.json` | Untracked | 217000 | Docs | 7330 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-34-38-472Z-754fd00/selection-fit-regression.log` | Untracked | 137228 | Docs | 32 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-34-38-472Z-754fd00/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-1-blocked.png` | Untracked | 70158 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T18-34-38-472Z-754fd00/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-27-blocked.png` | Untracked | 80545 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T18-34-38-472Z-754fd00/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-5-blocked.png` | Untracked | 71456 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T18-34-38-472Z-754fd00/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit.json` | Untracked | 226498 | Docs | 7739 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-34-38-472Z-754fd00/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-12-blocked.png` | Untracked | 77739 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T18-34-38-472Z-754fd00/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-13-blocked.png` | Untracked | 70434 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T18-34-38-472Z-754fd00/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-19-blocked.png` | Untracked | 72154 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T18-34-38-472Z-754fd00/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-24-blocked.png` | Untracked | 71952 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T18-34-38-472Z-754fd00/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-29-blocked.png` | Untracked | 71996 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T18-34-38-472Z-754fd00/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-6-blocked.png` | Untracked | 71385 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T18-34-38-472Z-754fd00/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-regression.json` | Untracked | 217000 | Docs | 7330 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-34-38-472Z-754fd00/selection-full-overfit.log` | Untracked | 136386 | Docs | 32 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-34-38-472Z-754fd00/selection-full-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-12-blocked.png` | Untracked | 77739 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T18-34-38-472Z-754fd00/selection-full-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-13-blocked.png` | Untracked | 70434 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T18-34-38-472Z-754fd00/selection-full-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-19-blocked.png` | Untracked | 72154 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T18-34-38-472Z-754fd00/selection-full-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-24-blocked.png` | Untracked | 71952 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T18-34-38-472Z-754fd00/selection-full-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-29-blocked.png` | Untracked | 71996 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T18-34-38-472Z-754fd00/selection-full-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-6-blocked.png` | Untracked | 71385 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T18-34-38-472Z-754fd00/selection-full-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-regression.json` | Untracked | 217000 | Docs | 7330 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-34-38-472Z-754fd00/selection-full-regression.log` | Untracked | 132715 | Docs | 32 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-34-38-472Z-754fd00/server-3000.log` | Untracked | 229191 | Docs | 4277 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-34-38-472Z-754fd00/server-3001.log` | Untracked | 9064 | Docs | 36 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-34-38-472Z-754fd00/server-3002.log` | Untracked | 8222 | Docs | 32 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-34-38-472Z-754fd00/unchanged-test-hashes.json` | Untracked | 27066 | Docs | 248 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-34-38-472Z-754fd00/warmup-m0-control-lab-fit-network.jsonl` | Untracked | 7482 | Docs | 49 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-34-38-472Z-754fd00/warmup-m0-control-lab-full-network.jsonl` | Untracked | 9313 | Docs | 63 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-34-38-472Z-754fd00/warmup-m0-overfit-lab-fit-network.jsonl` | Untracked | 8154 | Docs | 53 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-34-38-472Z-754fd00/warmup-m0-overfit-lab-full-network.jsonl` | Untracked | 8205 | Docs | 54 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-34-38-472Z-754fd00/worktree-status-after.txt` | Untracked | 62253 | Docs | 929 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-43-25-888Z-4653819/git-status-before.txt` | Untracked | 24366 | Docs | 678 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-43-25-888Z-4653819/plan.json` | Untracked | 7361 | Docs | 287 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-43-25-888Z-4653819/prepare-lab-adapters.log` | Untracked | 23 | Docs | 1 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-43-25-888Z-4653819/raw.log` | Untracked | 546851 | Docs | 154 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-43-25-888Z-4653819/results.json` | Untracked | 1620 | Docs | 64 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-43-25-888Z-4653819/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked.png` | Untracked | 61632 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T18-43-25-888Z-4653819/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit.json` | Untracked | 226966 | Docs | 7584 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-43-25-888Z-4653819/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked.png` | Untracked | 62222 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T18-43-25-888Z-4653819/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked.png` | Untracked | 70301 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T18-43-25-888Z-4653819/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-19-blocked.png` | Untracked | 70235 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T18-43-25-888Z-4653819/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-24-blocked.png` | Untracked | 70153 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T18-43-25-888Z-4653819/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-6-blocked.png` | Untracked | 62938 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T18-43-25-888Z-4653819/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression.json` | Untracked | 221414 | Docs | 7311 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-43-25-888Z-4653819/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-1-blocked.png` | Untracked | 70158 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T18-43-25-888Z-4653819/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-27-blocked.png` | Untracked | 80583 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T18-43-25-888Z-4653819/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-5-blocked.png` | Untracked | 71408 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T18-43-25-888Z-4653819/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit.json` | Untracked | 226916 | Docs | 7754 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-43-25-888Z-4653819/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-12-blocked.png` | Untracked | 77701 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T18-43-25-888Z-4653819/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-13-blocked.png` | Untracked | 70434 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T18-43-25-888Z-4653819/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-19-blocked.png` | Untracked | 72154 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T18-43-25-888Z-4653819/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-24-blocked.png` | Untracked | 72621 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T18-43-25-888Z-4653819/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-29-blocked.png` | Untracked | 71957 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T18-43-25-888Z-4653819/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-6-blocked.png` | Untracked | 71428 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T18-43-25-888Z-4653819/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-regression.json` | Untracked | 216726 | Docs | 7320 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-43-25-888Z-4653819/selection-fit-overfit.log` | Untracked | 138749 | Docs | 32 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-43-25-888Z-4653819/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked.png` | Untracked | 62222 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T18-43-25-888Z-4653819/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked.png` | Untracked | 70301 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T18-43-25-888Z-4653819/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-19-blocked.png` | Untracked | 70235 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T18-43-25-888Z-4653819/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-24-blocked.png` | Untracked | 70153 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T18-43-25-888Z-4653819/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-6-blocked.png` | Untracked | 62938 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T18-43-25-888Z-4653819/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression.json` | Untracked | 221414 | Docs | 7311 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-43-25-888Z-4653819/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-1-blocked.png` | Untracked | 70158 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T18-43-25-888Z-4653819/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-27-blocked.png` | Untracked | 80583 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T18-43-25-888Z-4653819/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-5-blocked.png` | Untracked | 71408 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T18-43-25-888Z-4653819/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit.json` | Untracked | 226916 | Docs | 7754 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-43-25-888Z-4653819/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-12-blocked.png` | Untracked | 77701 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T18-43-25-888Z-4653819/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-13-blocked.png` | Untracked | 70434 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T18-43-25-888Z-4653819/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-19-blocked.png` | Untracked | 72154 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T18-43-25-888Z-4653819/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-24-blocked.png` | Untracked | 72621 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T18-43-25-888Z-4653819/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-29-blocked.png` | Untracked | 71957 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T18-43-25-888Z-4653819/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-6-blocked.png` | Untracked | 71428 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T18-43-25-888Z-4653819/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-regression.json` | Untracked | 216726 | Docs | 7320 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-43-25-888Z-4653819/selection-fit-regression.log` | Untracked | 137228 | Docs | 32 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-43-25-888Z-4653819/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-1-blocked.png` | Untracked | 70158 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T18-43-25-888Z-4653819/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-27-blocked.png` | Untracked | 80583 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T18-43-25-888Z-4653819/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-5-blocked.png` | Untracked | 71408 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T18-43-25-888Z-4653819/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit.json` | Untracked | 226916 | Docs | 7754 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-43-25-888Z-4653819/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-12-blocked.png` | Untracked | 77701 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T18-43-25-888Z-4653819/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-13-blocked.png` | Untracked | 70434 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T18-43-25-888Z-4653819/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-19-blocked.png` | Untracked | 72154 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T18-43-25-888Z-4653819/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-24-blocked.png` | Untracked | 72621 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T18-43-25-888Z-4653819/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-29-blocked.png` | Untracked | 71957 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T18-43-25-888Z-4653819/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-6-blocked.png` | Untracked | 71428 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T18-43-25-888Z-4653819/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-regression.json` | Untracked | 216726 | Docs | 7320 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-43-25-888Z-4653819/selection-full-overfit.log` | Untracked | 136386 | Docs | 32 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-43-25-888Z-4653819/selection-full-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-12-blocked.png` | Untracked | 77701 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T18-43-25-888Z-4653819/selection-full-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-13-blocked.png` | Untracked | 70434 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T18-43-25-888Z-4653819/selection-full-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-19-blocked.png` | Untracked | 72154 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T18-43-25-888Z-4653819/selection-full-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-24-blocked.png` | Untracked | 72621 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T18-43-25-888Z-4653819/selection-full-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-29-blocked.png` | Untracked | 71957 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T18-43-25-888Z-4653819/selection-full-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-6-blocked.png` | Untracked | 71428 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T18-43-25-888Z-4653819/selection-full-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-regression.json` | Untracked | 216726 | Docs | 7320 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-43-25-888Z-4653819/selection-full-regression.log` | Untracked | 132715 | Docs | 32 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-43-25-888Z-4653819/server-3000.log` | Untracked | 249039 | Docs | 4599 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-43-25-888Z-4653819/server-3001.log` | Untracked | 9065 | Docs | 36 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-43-25-888Z-4653819/server-3002.log` | Untracked | 9002 | Docs | 36 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-43-25-888Z-4653819/shared-instances-four.log` | Untracked | 186 | Docs | 3 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-43-25-888Z-4653819/unchanged-test-hashes.json` | Untracked | 27184 | Docs | 249 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-43-25-888Z-4653819/warmup-m0-control-lab-fit-network.jsonl` | Untracked | 7556 | Docs | 49 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-43-25-888Z-4653819/warmup-m0-control-lab-full-network.jsonl` | Untracked | 9164 | Docs | 63 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-43-25-888Z-4653819/warmup-m0-overfit-lab-fit-network.jsonl` | Untracked | 8316 | Docs | 54 | 0 |  |
+| `docs/reliability-gate/2026-11-01T18-43-25-888Z-4653819/warmup-m0-overfit-lab-full-network.jsonl` | Untracked | 8108 | Docs | 53 | 0 |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/git-status-before.txt` | Untracked | 24438 | Docs | 680 | 0 |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/movement-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked.png` | Untracked | 61632 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/movement-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit.json` | Untracked | 227518 | Docs | 7604 | 0 |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/movement-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked.png` | Untracked | 62222 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/movement-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked.png` | Untracked | 70301 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/movement-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-19-blocked.png` | Untracked | 62957 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/movement-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-24-blocked.png` | Untracked | 70139 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/movement-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-6-blocked.png` | Untracked | 62933 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/movement-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression.json` | Untracked | 221834 | Docs | 7326 | 0 |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/movement-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-1-blocked.png` | Untracked | 70158 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/movement-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-27-blocked.png` | Untracked | 80598 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/movement-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-5-blocked.png` | Untracked | 71408 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/movement-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit.json` | Untracked | 225944 | Docs | 7719 | 0 |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/movement-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-12-blocked.png` | Untracked | 77146 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/movement-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-13-blocked.png` | Untracked | 70434 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/movement-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-19-blocked.png` | Untracked | 72154 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/movement-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-24-blocked.png` | Untracked | 72004 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/movement-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-29-blocked.png` | Untracked | 71363 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/movement-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-6-blocked.png` | Untracked | 71385 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/movement-artifacts/editor-load-and-toolbar/selection/round-1-full-regression.json` | Untracked | 217268 | Docs | 7340 | 0 |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/movement-artifacts/security-hardening/shared-workflows/shared-instance-failure.png` | Untracked | 38193 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/movement.log` | Untracked | 3772 | Docs | 103 | 0 |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/plan.json` | Untracked | 7361 | Docs | 287 | 0 |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/prepare-lab-adapters.log` | Untracked | 23 | Docs | 1 | 0 |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/raw.log` | Untracked | 571925 | Docs | 870 | 0 |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/responsive.log` | Untracked | 123 | Docs | 1 | 0 |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/results.json` | Untracked | 2212 | Docs | 88 | 0 |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked.png` | Untracked | 61632 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit.json` | Untracked | 227518 | Docs | 7604 | 0 |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked.png` | Untracked | 62222 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked.png` | Untracked | 70301 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-19-blocked.png` | Untracked | 62957 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-24-blocked.png` | Untracked | 70139 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-6-blocked.png` | Untracked | 62933 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression.json` | Untracked | 221834 | Docs | 7326 | 0 |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-1-blocked.png` | Untracked | 70158 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-27-blocked.png` | Untracked | 80598 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-5-blocked.png` | Untracked | 71408 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit.json` | Untracked | 225944 | Docs | 7719 | 0 |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-12-blocked.png` | Untracked | 77146 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-13-blocked.png` | Untracked | 70434 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-19-blocked.png` | Untracked | 72154 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-24-blocked.png` | Untracked | 72004 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-29-blocked.png` | Untracked | 71363 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-6-blocked.png` | Untracked | 71385 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-regression.json` | Untracked | 217268 | Docs | 7340 | 0 |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/selection-fit-overfit.log` | Untracked | 138749 | Docs | 32 | 0 |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked.png` | Untracked | 62222 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked.png` | Untracked | 70301 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-19-blocked.png` | Untracked | 62957 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-24-blocked.png` | Untracked | 70139 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-6-blocked.png` | Untracked | 62933 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression.json` | Untracked | 221834 | Docs | 7326 | 0 |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-1-blocked.png` | Untracked | 70158 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-27-blocked.png` | Untracked | 80598 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-5-blocked.png` | Untracked | 71408 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit.json` | Untracked | 225944 | Docs | 7719 | 0 |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-12-blocked.png` | Untracked | 77146 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-13-blocked.png` | Untracked | 70434 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-19-blocked.png` | Untracked | 72154 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-24-blocked.png` | Untracked | 72004 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-29-blocked.png` | Untracked | 71363 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-6-blocked.png` | Untracked | 71385 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-regression.json` | Untracked | 217268 | Docs | 7340 | 0 |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/selection-fit-regression.log` | Untracked | 137228 | Docs | 32 | 0 |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-1-blocked.png` | Untracked | 70158 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-27-blocked.png` | Untracked | 80598 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-5-blocked.png` | Untracked | 71408 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit.json` | Untracked | 225944 | Docs | 7719 | 0 |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-12-blocked.png` | Untracked | 77146 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-13-blocked.png` | Untracked | 70434 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-19-blocked.png` | Untracked | 72154 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-24-blocked.png` | Untracked | 72004 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-29-blocked.png` | Untracked | 71363 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-6-blocked.png` | Untracked | 71385 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-regression.json` | Untracked | 217268 | Docs | 7340 | 0 |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/selection-full-overfit.log` | Untracked | 136386 | Docs | 32 | 0 |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/selection-full-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-12-blocked.png` | Untracked | 77146 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/selection-full-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-13-blocked.png` | Untracked | 70434 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/selection-full-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-19-blocked.png` | Untracked | 72154 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/selection-full-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-24-blocked.png` | Untracked | 72004 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/selection-full-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-29-blocked.png` | Untracked | 71363 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/selection-full-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-6-blocked.png` | Untracked | 71385 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/selection-full-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-regression.json` | Untracked | 217268 | Docs | 7340 | 0 |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/selection-full-regression.log` | Untracked | 132715 | Docs | 32 | 0 |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/server-3000.log` | Untracked | 283471 | Docs | 6069 | 0 |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/server-3001.log` | Untracked | 9066 | Docs | 36 | 0 |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/server-3002.log` | Untracked | 8997 | Docs | 36 | 0 |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/shared-instances-four-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked.png` | Untracked | 61632 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/shared-instances-four-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit.json` | Untracked | 227518 | Docs | 7604 | 0 |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/shared-instances-four-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked.png` | Untracked | 62222 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/shared-instances-four-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked.png` | Untracked | 70301 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/shared-instances-four-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-19-blocked.png` | Untracked | 62957 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/shared-instances-four-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-24-blocked.png` | Untracked | 70139 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/shared-instances-four-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-6-blocked.png` | Untracked | 62933 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/shared-instances-four-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression.json` | Untracked | 221834 | Docs | 7326 | 0 |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/shared-instances-four-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-1-blocked.png` | Untracked | 70158 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/shared-instances-four-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-27-blocked.png` | Untracked | 80598 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/shared-instances-four-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-5-blocked.png` | Untracked | 71408 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/shared-instances-four-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit.json` | Untracked | 225944 | Docs | 7719 | 0 |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/shared-instances-four-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-12-blocked.png` | Untracked | 77146 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/shared-instances-four-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-13-blocked.png` | Untracked | 70434 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/shared-instances-four-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-19-blocked.png` | Untracked | 72154 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/shared-instances-four-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-24-blocked.png` | Untracked | 72004 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/shared-instances-four-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-29-blocked.png` | Untracked | 71363 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/shared-instances-four-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-6-blocked.png` | Untracked | 71385 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/shared-instances-four-artifacts/editor-load-and-toolbar/selection/round-1-full-regression.json` | Untracked | 217268 | Docs | 7340 | 0 |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/shared-instances-four-artifacts/security-hardening/shared-workflows/shared-instance-failure.png` | Untracked | 38193 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/shared-instances-four.log` | Untracked | 17333 | Docs | 506 | 0 |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/state-and-transitions-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked.png` | Untracked | 61632 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/state-and-transitions-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit.json` | Untracked | 227518 | Docs | 7604 | 0 |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/state-and-transitions-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked.png` | Untracked | 62222 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/state-and-transitions-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked.png` | Untracked | 70301 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/state-and-transitions-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-19-blocked.png` | Untracked | 62957 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/state-and-transitions-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-24-blocked.png` | Untracked | 70139 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/state-and-transitions-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-6-blocked.png` | Untracked | 62933 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/state-and-transitions-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression.json` | Untracked | 221834 | Docs | 7326 | 0 |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/state-and-transitions-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-1-blocked.png` | Untracked | 70158 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/state-and-transitions-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-27-blocked.png` | Untracked | 80598 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/state-and-transitions-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-5-blocked.png` | Untracked | 71408 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/state-and-transitions-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit.json` | Untracked | 225944 | Docs | 7719 | 0 |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/state-and-transitions-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-12-blocked.png` | Untracked | 77146 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/state-and-transitions-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-13-blocked.png` | Untracked | 70434 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/state-and-transitions-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-19-blocked.png` | Untracked | 72154 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/state-and-transitions-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-24-blocked.png` | Untracked | 72004 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/state-and-transitions-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-29-blocked.png` | Untracked | 71363 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/state-and-transitions-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-6-blocked.png` | Untracked | 71385 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/state-and-transitions-artifacts/editor-load-and-toolbar/selection/round-1-full-regression.json` | Untracked | 217268 | Docs | 7340 | 0 |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/state-and-transitions-artifacts/security-hardening/shared-workflows/shared-instance-failure.png` | Untracked | 38193 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/state-and-transitions.log` | Untracked | 3784 | Docs | 103 | 0 |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/unchanged-test-hashes.json` | Untracked | 27298 | Docs | 250 | 0 |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/warmup-m0-control-lab-fit-network.jsonl` | Untracked | 7498 | Docs | 49 | 0 |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/warmup-m0-control-lab-full-network.jsonl` | Untracked | 9258 | Docs | 63 | 0 |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/warmup-m0-overfit-lab-fit-network.jsonl` | Untracked | 8172 | Docs | 53 | 0 |  |
+| `docs/reliability-gate/2026-11-01T19-13-27-120Z-2b26542/warmup-m0-overfit-lab-full-network.jsonl` | Untracked | 8047 | Docs | 53 | 0 |  |
+| `docs/reliability-gate/2026-11-01T20-07-58-765Z-b65e00b-shared-local-studio/git-status-after.txt` | Untracked | 24491 | Docs | 682 | 0 |  |
+| `docs/reliability-gate/2026-11-01T20-07-58-765Z-b65e00b-shared-local-studio/git-status-before.txt` | Untracked | 24459 | Docs | 681 | 0 |  |
+| `docs/reliability-gate/2026-11-01T20-07-58-765Z-b65e00b-shared-local-studio/plan.json` | Untracked | 8944 | Docs | 339 | 0 |  |
+| `docs/reliability-gate/2026-11-01T20-07-58-765Z-b65e00b-shared-local-studio/raw.log` | Untracked | 777 | Docs | 13 | 0 |  |
+| `docs/reliability-gate/2026-11-01T20-07-58-765Z-b65e00b-shared-local-studio/results.json` | Untracked | 489 | Docs | 18 | 0 |  |
+| `docs/reliability-gate/2026-11-01T20-07-58-765Z-b65e00b-shared-local-studio/shared-local-studio.log` | Untracked | 86 | Docs | 2 | 0 |  |
+| `docs/reliability-gate/2026-11-01T20-07-58-765Z-b65e00b-shared-local-studio/unchanged-test-hashes.json` | Untracked | 32509 | Docs | 295 | 0 |  |
+| `docs/reliability-gate/2026-11-01T20-07-58-765Z-b65e00b-shared-local-studio/worktree-status-after.txt` | Untracked | 62253 | Docs | 928 | 0 |  |
+| `docs/reliability-gate/2026-11-01T20-12-09-009Z-837ccdc-shared-imported-studio/git-status-after.txt` | Untracked | 24459 | Docs | 681 | 0 |  |
+| `docs/reliability-gate/2026-11-01T20-12-09-009Z-837ccdc-shared-imported-studio/git-status-before.txt` | Untracked | 24459 | Docs | 681 | 0 |  |
+| `docs/reliability-gate/2026-11-01T20-12-09-009Z-837ccdc-shared-imported-studio/plan.json` | Untracked | 8950 | Docs | 339 | 0 |  |
+| `docs/reliability-gate/2026-11-01T20-12-09-009Z-837ccdc-shared-imported-studio/raw.log` | Untracked | 2556 | Docs | 44 | 0 |  |
+| `docs/reliability-gate/2026-11-01T20-12-09-009Z-837ccdc-shared-imported-studio/results.json` | Untracked | 488 | Docs | 18 | 0 |  |
+| `docs/reliability-gate/2026-11-01T20-12-09-009Z-837ccdc-shared-imported-studio/shared-imported-studio-servers/child-server-1-7008.log` | Untracked | 1009 | Docs | 10 | 0 |  |
+| `docs/reliability-gate/2026-11-01T20-12-09-009Z-837ccdc-shared-imported-studio/shared-imported-studio.log` | Untracked | 1897 | Docs | 34 | 0 |  |
+| `docs/reliability-gate/2026-11-01T20-12-09-009Z-837ccdc-shared-imported-studio/unchanged-test-hashes.json` | Untracked | 32509 | Docs | 295 | 0 |  |
+| `docs/reliability-gate/2026-11-01T20-12-09-009Z-837ccdc-shared-imported-studio/worktree-status-after.txt` | Untracked | 62253 | Docs | 928 | 0 |  |
+| `docs/reliability-gate/2026-11-01T20-14-51-599Z-967465f/git-status-before.txt` | Untracked | 24459 | Docs | 681 | 0 |  |
+| `docs/reliability-gate/2026-11-01T20-14-51-599Z-967465f/plan.json` | Untracked | 9499 | Docs | 362 | 0 |  |
+| `docs/reliability-gate/2026-11-01T20-14-51-599Z-967465f/prepare-lab-adapters.log` | Untracked | 23 | Docs | 1 | 0 |  |
+| `docs/reliability-gate/2026-11-01T20-14-51-599Z-967465f/raw.log` | Untracked | 4339 | Docs | 56 | 0 |  |
+| `docs/reliability-gate/2026-11-01T20-14-51-599Z-967465f/results.json` | Untracked | 788 | Docs | 28 | 0 |  |
+| `docs/reliability-gate/2026-11-01T20-14-51-599Z-967465f/selection-fit-regression.log` | Untracked | 222 | Docs | 2 | 0 |  |
+| `docs/reliability-gate/2026-11-01T20-14-51-599Z-967465f/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-error.png` | Untracked | 43847 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T20-14-51-599Z-967465f/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit.json` | Untracked | 565 | Docs | 15 | 0 |  |
+| `docs/reliability-gate/2026-11-01T20-14-51-599Z-967465f/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-error.png` | Untracked | 37871 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T20-14-51-599Z-967465f/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-regression.json` | Untracked | 568 | Docs | 15 | 0 |  |
+| `docs/reliability-gate/2026-11-01T20-14-51-599Z-967465f/selection-full-overfit.log` | Untracked | 1979 | Docs | 24 | 0 |  |
+| `docs/reliability-gate/2026-11-01T20-14-51-599Z-967465f/selection-full-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-error.png` | Untracked | 37871 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T20-14-51-599Z-967465f/selection-full-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-regression.json` | Untracked | 568 | Docs | 15 | 0 |  |
+| `docs/reliability-gate/2026-11-01T20-14-51-599Z-967465f/selection-full-regression.log` | Untracked | 1110 | Docs | 16 | 0 |  |
+| `docs/reliability-gate/2026-11-01T20-14-51-599Z-967465f/unchanged-test-hashes.json` | Untracked | 32509 | Docs | 295 | 0 |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/appearance-layout-artifacts/appearance-failure.png` | Untracked | 132922 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/appearance-layout-artifacts/imported-responsive-failure.png` | Untracked | 73962 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/appearance-layout-artifacts/responsive-editing-failure.png` | Untracked | 41934 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/appearance-layout-artifacts/source-project-compat-sample.json` | Untracked | 207 | Docs | 12 | 0 |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/appearance-layout-servers/child-server-1-6852.log` | Untracked | 10766 | Docs | 248 | 0 |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/appearance-layout.log` | Untracked | 12644 | Docs | 281 | 0 |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/component-actions-imported-artifacts/advanced-image-failure.png` | Untracked | 32070 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/component-actions-imported-artifacts/appearance-failure.png` | Untracked | 132922 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/component-actions-imported-artifacts/component-actions-failure.png` | Untracked | 39272 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/component-actions-imported-artifacts/imported-responsive-failure.png` | Untracked | 73962 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/component-actions-imported-artifacts/responsive-editing-failure.png` | Untracked | 41934 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/component-actions-imported-artifacts/source-project-compat-sample.json` | Untracked | 207 | Docs | 12 | 0 |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/component-actions-imported-servers/child-server-1-23900.log` | Untracked | 11626 | Docs | 242 | 0 |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/component-actions-imported-servers/child-server-2-32172.log` | Untracked | 11690 | Docs | 31 | 0 |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/component-actions-imported.log` | Untracked | 23893 | Docs | 316 | 0 |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/component-actions-local-artifacts/advanced-image-failure.png` | Untracked | 32070 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/component-actions-local-artifacts/appearance-failure.png` | Untracked | 132922 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/component-actions-local-artifacts/component-actions-failure.png` | Untracked | 42867 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/component-actions-local-artifacts/imported-responsive-failure.png` | Untracked | 73962 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/component-actions-local-artifacts/responsive-editing-failure.png` | Untracked | 41934 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/component-actions-local-artifacts/source-project-compat-sample.json` | Untracked | 207 | Docs | 12 | 0 |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/component-actions-local-servers/child-server-1-6788.log` | Untracked | 11246 | Docs | 240 | 0 |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/component-actions-local.log` | Untracked | 13781 | Docs | 281 | 0 |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/container-move-artifacts/advanced-image-failure.png` | Untracked | 32070 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/container-move-artifacts/appearance-failure.png` | Untracked | 132922 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/container-move-artifacts/component-actions-failure.png` | Untracked | 39272 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/container-move-artifacts/container-move-failure.png` | Untracked | 35265 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/container-move-artifacts/imported-responsive-failure.png` | Untracked | 73962 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/container-move-artifacts/responsive-editing-failure.png` | Untracked | 41934 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/container-move-artifacts/section-order-failure.png` | Untracked | 54014 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/container-move-artifacts/source-project-compat-sample.json` | Untracked | 207 | Docs | 12 | 0 |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/container-move-servers/child-server-1-14520.log` | Untracked | 6060 | Docs | 96 | 0 |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/container-move.log` | Untracked | 8066 | Docs | 156 | 0 |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/git-status-after.txt` | Untracked | 24509 | Docs | 683 | 0 |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/git-status-before.txt` | Untracked | 24459 | Docs | 681 | 0 |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/history-artifacts/advanced-image-failure.png` | Untracked | 32070 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/history-artifacts/appearance-failure.png` | Untracked | 132922 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/history-artifacts/component-actions-failure.png` | Untracked | 39272 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/history-artifacts/container-move-failure.png` | Untracked | 35265 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/history-artifacts/imported-responsive-failure.png` | Untracked | 73962 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/history-artifacts/responsive-editing-failure.png` | Untracked | 41934 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/history-artifacts/section-order-failure.png` | Untracked | 54014 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/history-artifacts/source-project-compat-sample.json` | Untracked | 207 | Docs | 12 | 0 |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/history-servers/child-server-1-31652.log` | Untracked | 6851 | Docs | 101 | 0 |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/history-servers/child-server-2-8964.log` | Untracked | 8102 | Docs | 29 | 0 |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/history.log` | Untracked | 17208 | Docs | 168 | 0 |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/icon-properties-artifacts/advanced-image-failure.png` | Untracked | 32070 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/icon-properties-artifacts/appearance-failure.png` | Untracked | 132922 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/icon-properties-artifacts/component-actions-failure.png` | Untracked | 39272 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/icon-properties-artifacts/imported-responsive-failure.png` | Untracked | 73962 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/icon-properties-artifacts/responsive-editing-failure.png` | Untracked | 41934 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/icon-properties-artifacts/source-project-compat-sample.json` | Untracked | 207 | Docs | 12 | 0 |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/icon-properties-servers/child-server-1-12076.log` | Untracked | 10517 | Docs | 236 | 0 |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/icon-properties.log` | Untracked | 12900 | Docs | 275 | 0 |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/icon-replacement-artifacts/advanced-image-failure.png` | Untracked | 32070 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/icon-replacement-artifacts/appearance-failure.png` | Untracked | 132922 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/icon-replacement-artifacts/component-actions-failure.png` | Untracked | 39272 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/icon-replacement-artifacts/imported-responsive-failure.png` | Untracked | 73962 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/icon-replacement-artifacts/responsive-editing-failure.png` | Untracked | 41934 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/icon-replacement-artifacts/source-project-compat-sample.json` | Untracked | 207 | Docs | 12 | 0 |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/icon-replacement-servers/child-server-1-3464.log` | Untracked | 10513 | Docs | 236 | 0 |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/icon-replacement.log` | Untracked | 13088 | Docs | 276 | 0 |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/images-imported-artifacts/advanced-image-failure.png` | Untracked | 32070 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/images-imported-artifacts/appearance-failure.png` | Untracked | 132922 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/images-imported-artifacts/imported-responsive-failure.png` | Untracked | 73962 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/images-imported-artifacts/responsive-editing-failure.png` | Untracked | 41934 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/images-imported-artifacts/source-project-compat-sample.json` | Untracked | 207 | Docs | 12 | 0 |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/images-imported-servers/child-server-1-296.log` | Untracked | 7142 | Docs | 102 | 0 |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/images-imported-servers/child-server-2-11944.log` | Untracked | 9646 | Docs | 29 | 0 |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/images-imported.log` | Untracked | 19124 | Docs | 174 | 0 |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/images-local-artifacts/advanced-image-failure.png` | Untracked | 30255 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/images-local-artifacts/appearance-failure.png` | Untracked | 132922 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/images-local-artifacts/imported-responsive-failure.png` | Untracked | 73962 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/images-local-artifacts/responsive-editing-failure.png` | Untracked | 41934 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/images-local-artifacts/source-project-compat-sample.json` | Untracked | 207 | Docs | 12 | 0 |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/images-local-servers/child-server-1-19076.log` | Untracked | 6059 | Docs | 96 | 0 |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/images-local.log` | Untracked | 8123 | Docs | 132 | 0 |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/movement-servers/child-server-1-19632.log` | Untracked | 8344 | Docs | 177 | 0 |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/movement.log` | Untracked | 9695 | Docs | 197 | 0 |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/plan.json` | Untracked | 9499 | Docs | 362 | 0 |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/prepare-lab-adapters.log` | Untracked | 23 | Docs | 1 | 0 |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/raw.log` | Untracked | 240781 | Docs | 4284 | 0 |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/recovery-artifacts/advanced-image-failure.png` | Untracked | 32070 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/recovery-artifacts/appearance-failure.png` | Untracked | 132922 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/recovery-artifacts/component-actions-failure.png` | Untracked | 39272 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/recovery-artifacts/container-move-failure.png` | Untracked | 35265 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/recovery-artifacts/imported-responsive-failure.png` | Untracked | 73962 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/recovery-artifacts/responsive-editing-failure.png` | Untracked | 41934 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/recovery-artifacts/section-order-failure.png` | Untracked | 54014 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/recovery-artifacts/source-project-compat-sample.json` | Untracked | 207 | Docs | 12 | 0 |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/recovery-servers/child-server-1-13632.log` | Untracked | 1978 | Docs | 16 | 0 |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/recovery.log` | Untracked | 2507 | Docs | 35 | 0 |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/responsive-artifacts/responsive-editing-failure.png` | Untracked | 41934 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/responsive-imported-artifacts/imported-responsive-failure.png` | Untracked | 73962 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/responsive-imported-artifacts/responsive-editing-failure.png` | Untracked | 41934 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/responsive-imported-artifacts/source-project-compat-sample.json` | Untracked | 207 | Docs | 12 | 0 |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/responsive-imported-servers/child-server-1-30016.log` | Untracked | 11846 | Docs | 242 | 0 |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/responsive-imported-servers/child-server-2-30276.log` | Untracked | 7717 | Docs | 27 | 0 |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/responsive-imported.log` | Untracked | 23138 | Docs | 349 | 0 |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/responsive-servers/child-server-1-31748.log` | Untracked | 10846 | Docs | 237 | 0 |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/responsive.log` | Untracked | 13795 | Docs | 328 | 0 |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/results.json` | Untracked | 6424 | Docs | 236 | 0 |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/section-order-artifacts/advanced-image-failure.png` | Untracked | 32070 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/section-order-artifacts/appearance-failure.png` | Untracked | 132922 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/section-order-artifacts/component-actions-failure.png` | Untracked | 39272 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/section-order-artifacts/imported-responsive-failure.png` | Untracked | 73962 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/section-order-artifacts/responsive-editing-failure.png` | Untracked | 41934 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/section-order-artifacts/section-order-failure.png` | Untracked | 54014 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/section-order-artifacts/source-project-compat-sample.json` | Untracked | 207 | Docs | 12 | 0 |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/section-order-servers/child-server-1-30696.log` | Untracked | 17158 | Docs | 389 | 0 |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/section-order.log` | Untracked | 20037 | Docs | 461 | 0 |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/shared-imported-studio-servers/child-server-1-32692.log` | Untracked | 6829 | Docs | 97 | 0 |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/shared-imported-studio-servers/child-server-2-23660.log` | Untracked | 11783 | Docs | 29 | 0 |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/shared-imported-studio.log` | Untracked | 2735 | Docs | 28 | 0 |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/shared-imported-window-servers/child-server-1-21252.log` | Untracked | 9485 | Docs | 172 | 0 |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/shared-imported-window-servers/child-server-2-14280.log` | Untracked | 11665 | Docs | 29 | 0 |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/shared-imported-window.log` | Untracked | 2905 | Docs | 30 | 0 |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/shared-local-studio-servers/child-server-1-24172.log` | Untracked | 10914 | Docs | 238 | 0 |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/shared-local-studio.log` | Untracked | 1531 | Docs | 18 | 0 |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/shared-local-window-servers/child-server-1-9532.log` | Untracked | 10899 | Docs | 238 | 0 |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/shared-local-window.log` | Untracked | 1531 | Docs | 18 | 0 |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/state-and-transitions-servers/child-server-1-11088.log` | Untracked | 10511 | Docs | 236 | 0 |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/state-and-transitions.log` | Untracked | 12684 | Docs | 271 | 0 |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/text-editing-artifacts/advanced-image-failure.png` | Untracked | 32070 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/text-editing-artifacts/appearance-failure.png` | Untracked | 132922 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/text-editing-artifacts/component-actions-failure.png` | Untracked | 39272 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/text-editing-artifacts/container-move-failure.png` | Untracked | 35265 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/text-editing-artifacts/imported-responsive-failure.png` | Untracked | 73962 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/text-editing-artifacts/responsive-editing-failure.png` | Untracked | 41934 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/text-editing-artifacts/section-order-failure.png` | Untracked | 54014 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/text-editing-artifacts/source-project-compat-sample.json` | Untracked | 207 | Docs | 12 | 0 |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/text-editing-servers/child-server-1-28912.log` | Untracked | 14904 | Docs | 375 | 0 |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/text-editing.log` | Untracked | 17034 | Docs | 410 | 0 |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/unchanged-test-hashes.json` | Untracked | 32509 | Docs | 295 | 0 |  |
+| `docs/reliability-gate/2026-11-01T20-16-41-721Z-fe9b294/worktree-status-after.txt` | Untracked | 62262 | Docs | 929 | 0 |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/appearance-layout-artifacts/appearance-failure.png` | Untracked | 36445 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/appearance-layout-artifacts/responsive-editing-failure.png` | Untracked | 47236 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/appearance-layout-servers/child-server-1-31844.log` | Untracked | 24118 | Docs | 114 | 0 |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/appearance-layout.log` | Untracked | 18052 | Docs | 129 | 0 |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/component-actions-imported-artifacts/advanced-image-failure.png` | Untracked | 30246 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/component-actions-imported-artifacts/appearance-failure.png` | Untracked | 36445 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/component-actions-imported-artifacts/component-actions-failure.png` | Untracked | 42858 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/component-actions-imported-artifacts/responsive-editing-failure.png` | Untracked | 47236 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/component-actions-imported-servers/child-server-1-27516.log` | Untracked | 6470 | Docs | 18 | 0 |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/component-actions-imported.log` | Untracked | 9430 | Docs | 86 | 0 |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/component-actions-local-artifacts/advanced-image-failure.png` | Untracked | 30246 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/component-actions-local-artifacts/appearance-failure.png` | Untracked | 36445 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/component-actions-local-artifacts/component-actions-failure.png` | Untracked | 42858 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/component-actions-local-artifacts/responsive-editing-failure.png` | Untracked | 47236 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/component-actions-local-servers/child-server-1-14164.log` | Untracked | 31286 | Docs | 260 | 0 |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/component-actions-local.log` | Untracked | 18996 | Docs | 273 | 0 |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/container-move-artifacts/advanced-image-failure.png` | Untracked | 30246 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/container-move-artifacts/appearance-failure.png` | Untracked | 36445 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/container-move-artifacts/component-actions-failure.png` | Untracked | 42858 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/container-move-artifacts/container-move-destination.png` | Untracked | 51362 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/container-move-artifacts/container-move-failure.png` | Untracked | 40975 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/container-move-artifacts/responsive-editing-failure.png` | Untracked | 47236 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/container-move-artifacts/section-order-failure.png` | Untracked | 54012 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/container-move-servers/child-server-1-19852.log` | Untracked | 32830 | Docs | 268 | 0 |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/container-move.log` | Untracked | 19937 | Docs | 333 | 0 |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/git-status-after.txt` | Untracked | 24568 | Docs | 685 | 0 |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/git-status-before.txt` | Untracked | 24459 | Docs | 681 | 0 |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/history-artifacts/advanced-image-failure.png` | Untracked | 30246 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/history-artifacts/appearance-failure.png` | Untracked | 36445 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/history-artifacts/component-actions-failure.png` | Untracked | 42858 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/history-artifacts/container-move-destination.png` | Untracked | 51362 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/history-artifacts/container-move-failure.png` | Untracked | 40975 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/history-artifacts/responsive-editing-failure.png` | Untracked | 47236 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/history-artifacts/section-order-failure.png` | Untracked | 54012 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/history-servers/child-server-1-23396.log` | Untracked | 6098 | Docs | 16 | 0 |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/history.log` | Untracked | 9042 | Docs | 84 | 0 |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/icon-properties-artifacts/advanced-image-failure.png` | Untracked | 30246 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/icon-properties-artifacts/appearance-failure.png` | Untracked | 36445 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/icon-properties-artifacts/component-actions-failure.png` | Untracked | 42858 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/icon-properties-artifacts/responsive-editing-failure.png` | Untracked | 47236 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/icon-properties-servers/child-server-1-26596.log` | Untracked | 28991 | Docs | 256 | 0 |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/icon-properties.log` | Untracked | 18844 | Docs | 269 | 0 |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/icon-replacement-artifacts/advanced-image-failure.png` | Untracked | 30246 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/icon-replacement-artifacts/appearance-failure.png` | Untracked | 36445 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/icon-replacement-artifacts/component-actions-failure.png` | Untracked | 42858 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/icon-replacement-artifacts/responsive-editing-failure.png` | Untracked | 47236 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/icon-replacement-servers/child-server-1-26384.log` | Untracked | 28992 | Docs | 256 | 0 |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/icon-replacement.log` | Untracked | 18844 | Docs | 269 | 0 |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/images-imported-artifacts/advanced-image-failure.png` | Untracked | 30246 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/images-imported-artifacts/appearance-failure.png` | Untracked | 36445 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/images-imported-artifacts/responsive-editing-failure.png` | Untracked | 47236 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/images-imported-servers/child-server-1-5104.log` | Untracked | 6099 | Docs | 16 | 0 |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/images-imported.log` | Untracked | 9056 | Docs | 84 | 0 |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/images-local-artifacts/advanced-image-failure.png` | Untracked | 30246 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/images-local-artifacts/appearance-failure.png` | Untracked | 36445 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/images-local-artifacts/responsive-editing-failure.png` | Untracked | 47236 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/images-local-servers/child-server-1-25604.log` | Untracked | 22647 | Docs | 114 | 0 |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/images-local.log` | Untracked | 18504 | Docs | 134 | 0 |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/movement-servers/child-server-1-28056.log` | Untracked | 23042 | Docs | 193 | 0 |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/movement.log` | Untracked | 18028 | Docs | 197 | 0 |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/plan.json` | Untracked | 9517 | Docs | 362 | 0 |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/prepare-lab-adapters.log` | Untracked | 23 | Docs | 1 | 0 |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/raw.log` | Untracked | 274275 | Docs | 3402 | 0 |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/recovery-artifacts/advanced-image-failure.png` | Untracked | 30246 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/recovery-artifacts/appearance-failure.png` | Untracked | 36445 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/recovery-artifacts/component-actions-failure.png` | Untracked | 42858 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/recovery-artifacts/container-move-destination.png` | Untracked | 51362 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/recovery-artifacts/container-move-failure.png` | Untracked | 40975 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/recovery-artifacts/responsive-editing-failure.png` | Untracked | 47236 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/recovery-artifacts/section-order-failure.png` | Untracked | 54012 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/recovery-servers/child-server-1-28104.log` | Untracked | 27440 | Docs | 255 | 0 |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/recovery.log` | Untracked | 18331 | Docs | 265 | 0 |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/responsive-artifacts/responsive-editing-failure.png` | Untracked | 47236 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/responsive-imported-artifacts/responsive-editing-failure.png` | Untracked | 47236 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/responsive-imported-servers/child-server-1-6196.log` | Untracked | 6085 | Docs | 16 | 0 |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/responsive-imported.log` | Untracked | 9035 | Docs | 84 | 0 |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/responsive-servers/child-server-1-6964.log` | Untracked | 28937 | Docs | 255 | 0 |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/responsive.log` | Untracked | 19276 | Docs | 321 | 0 |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/results.json` | Untracked | 6413 | Docs | 236 | 0 |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/section-order-artifacts/advanced-image-failure.png` | Untracked | 30246 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/section-order-artifacts/appearance-failure.png` | Untracked | 36445 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/section-order-artifacts/component-actions-failure.png` | Untracked | 42858 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/section-order-artifacts/responsive-editing-failure.png` | Untracked | 47236 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/section-order-artifacts/section-order-failure.png` | Untracked | 54012 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/section-order-servers/child-server-1-24812.log` | Untracked | 29736 | Docs | 260 | 0 |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/section-order.log` | Untracked | 19233 | Docs | 310 | 0 |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/shared-imported-studio-servers/child-server-1-13152.log` | Untracked | 6472 | Docs | 18 | 0 |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/shared-imported-studio.log` | Untracked | 9446 | Docs | 86 | 0 |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/shared-imported-window-servers/child-server-1-12976.log` | Untracked | 6094 | Docs | 16 | 0 |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/shared-imported-window.log` | Untracked | 9067 | Docs | 84 | 0 |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/shared-local-studio-servers/child-server-1-17712.log` | Untracked | 17144 | Docs | 37 | 0 |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/shared-local-studio.log` | Untracked | 1199 | Docs | 14 | 0 |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/shared-local-window-servers/child-server-1-28468.log` | Untracked | 8383 | Docs | 21 | 0 |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/shared-local-window.log` | Untracked | 212 | Docs | 5 | 0 |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/state-and-transitions-servers/child-server-1-16516.log` | Untracked | 6517 | Docs | 19 | 0 |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/state-and-transitions.log` | Untracked | 6869 | Docs | 34 | 0 |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/text-editing-artifacts/advanced-image-failure.png` | Untracked | 30246 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/text-editing-artifacts/appearance-failure.png` | Untracked | 36445 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/text-editing-artifacts/component-actions-failure.png` | Untracked | 42858 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/text-editing-artifacts/container-move-destination.png` | Untracked | 51362 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/text-editing-artifacts/container-move-failure.png` | Untracked | 40975 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/text-editing-artifacts/responsive-editing-failure.png` | Untracked | 47236 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/text-editing-artifacts/section-order-failure.png` | Untracked | 54012 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/text-editing-servers/child-server-1-18340.log` | Untracked | 29401 | Docs | 258 | 0 |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/text-editing.log` | Untracked | 18571 | Docs | 263 | 0 |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/unchanged-test-hashes.json` | Untracked | 32509 | Docs | 295 | 0 |  |
+| `docs/reliability-gate/2026-11-01T21-11-07-905Z-7f1b9cd-failed-comparison/worktree-status-after.txt` | Untracked | 55011 | Docs | 805 | 0 |  |
+| `docs/reliability-gate/2026-11-02T05-42-58-532Z-f4be219-selection-full-regression/git-status-after.txt` | Untracked | 24473 | Docs | 682 | 0 |  |
+| `docs/reliability-gate/2026-11-02T05-42-58-532Z-f4be219-selection-full-regression/git-status-before.txt` | Untracked | 24459 | Docs | 681 | 0 |  |
+| `docs/reliability-gate/2026-11-02T05-42-58-532Z-f4be219-selection-full-regression/plan.json` | Untracked | 9027 | Docs | 343 | 0 |  |
+| `docs/reliability-gate/2026-11-02T05-42-58-532Z-f4be219-selection-full-regression/prepare-lab-adapters.log` | Untracked | 23 | Docs | 1 | 0 |  |
+| `docs/reliability-gate/2026-11-02T05-42-58-532Z-f4be219-selection-full-regression/raw.log` | Untracked | 143979 | Docs | 172 | 0 |  |
+| `docs/reliability-gate/2026-11-02T05-42-58-532Z-f4be219-selection-full-regression/results.json` | Untracked | 1015 | Docs | 42 | 0 |  |
+| `docs/reliability-gate/2026-11-02T05-42-58-532Z-f4be219-selection-full-regression/selection-full-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-12-blocked.png` | Untracked | 77334 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T05-42-58-532Z-f4be219-selection-full-regression/selection-full-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-13-blocked.png` | Untracked | 70632 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T05-42-58-532Z-f4be219-selection-full-regression/selection-full-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-19-blocked.png` | Untracked | 72357 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T05-42-58-532Z-f4be219-selection-full-regression/selection-full-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-24-blocked.png` | Untracked | 72666 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T05-42-58-532Z-f4be219-selection-full-regression/selection-full-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-29-blocked.png` | Untracked | 71988 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T05-42-58-532Z-f4be219-selection-full-regression/selection-full-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-6-blocked.png` | Untracked | 71430 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T05-42-58-532Z-f4be219-selection-full-regression/selection-full-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-regression.json` | Untracked | 215856 | Docs | 7330 | 0 |  |
+| `docs/reliability-gate/2026-11-02T05-42-58-532Z-f4be219-selection-full-regression/selection-full-regression.log` | Untracked | 142320 | Docs | 147 | 0 |  |
+| `docs/reliability-gate/2026-11-02T05-42-58-532Z-f4be219-selection-full-regression/server-51650.log` | Untracked | 54694 | Docs | 1139 | 0 |  |
+| `docs/reliability-gate/2026-11-02T05-42-58-532Z-f4be219-selection-full-regression/server-51651.log` | Untracked | 7739 | Docs | 32 | 0 |  |
+| `docs/reliability-gate/2026-11-02T05-42-58-532Z-f4be219-selection-full-regression/server-51652.log` | Untracked | 6920 | Docs | 28 | 0 |  |
+| `docs/reliability-gate/2026-11-02T05-42-58-532Z-f4be219-selection-full-regression/unchanged-test-hashes.json` | Untracked | 32857 | Docs | 298 | 0 |  |
+| `docs/reliability-gate/2026-11-02T05-42-58-532Z-f4be219-selection-full-regression/warmup-m0-control-lab-fit-network.jsonl` | Untracked | 7560 | Docs | 49 | 0 |  |
+| `docs/reliability-gate/2026-11-02T05-42-58-532Z-f4be219-selection-full-regression/warmup-m0-control-lab-full-network.jsonl` | Untracked | 9159 | Docs | 63 | 0 |  |
+| `docs/reliability-gate/2026-11-02T05-42-58-532Z-f4be219-selection-full-regression/warmup-m0-overfit-lab-fit-network.jsonl` | Untracked | 8221 | Docs | 53 | 0 |  |
+| `docs/reliability-gate/2026-11-02T05-42-58-532Z-f4be219-selection-full-regression/warmup-m0-overfit-lab-full-network.jsonl` | Untracked | 8272 | Docs | 54 | 0 |  |
+| `docs/reliability-gate/2026-11-02T05-42-58-532Z-f4be219-selection-full-regression/worktree-status-after.txt` | Untracked | 62338 | Docs | 932 | 0 |  |
+| `docs/reliability-gate/2026-11-02T05-47-18-186Z-f11e470-shared-local-studio/git-status-after.txt` | Untracked | 24541 | Docs | 684 | 0 |  |
+| `docs/reliability-gate/2026-11-02T05-47-18-186Z-f11e470-shared-local-studio/git-status-before.txt` | Untracked | 24473 | Docs | 682 | 0 |  |
+| `docs/reliability-gate/2026-11-02T05-47-18-186Z-f11e470-shared-local-studio/plan.json` | Untracked | 9021 | Docs | 343 | 0 |  |
+| `docs/reliability-gate/2026-11-02T05-47-18-186Z-f11e470-shared-local-studio/raw.log` | Untracked | 8250 | Docs | 83 | 0 |  |
+| `docs/reliability-gate/2026-11-02T05-47-18-186Z-f11e470-shared-local-studio/results.json` | Untracked | 489 | Docs | 18 | 0 |  |
+| `docs/reliability-gate/2026-11-02T05-47-18-186Z-f11e470-shared-local-studio/shared-local-studio-servers/child-server-1-11924.log` | Untracked | 20656 | Docs | 410 | 0 |  |
+| `docs/reliability-gate/2026-11-02T05-47-18-186Z-f11e470-shared-local-studio/shared-local-studio.log` | Untracked | 7559 | Docs | 72 | 0 |  |
+| `docs/reliability-gate/2026-11-02T05-47-18-186Z-f11e470-shared-local-studio/unchanged-test-hashes.json` | Untracked | 32857 | Docs | 298 | 0 |  |
+| `docs/reliability-gate/2026-11-02T05-47-18-186Z-f11e470-shared-local-studio/worktree-status-after.txt` | Untracked | 62312 | Docs | 930 | 0 |  |
+| `docs/reliability-gate/2026-11-02T05-52-40-431Z-0be2729-shared/git-status-before.txt` | Untracked | 24504 | Docs | 683 | 0 |  |
+| `docs/reliability-gate/2026-11-02T05-52-40-431Z-0be2729-shared/plan.json` | Untracked | 9108 | Docs | 346 | 0 |  |
+| `docs/reliability-gate/2026-11-02T05-52-40-431Z-0be2729-shared/raw.log` | Untracked | 55588 | Docs | 1203 | 0 |  |
+| `docs/reliability-gate/2026-11-02T05-52-40-431Z-0be2729-shared/shared-compiler-warmup-servers/child-server-1-12136.log` | Untracked | 23906 | Docs | 663 | 0 |  |
+| `docs/reliability-gate/2026-11-02T05-52-40-431Z-0be2729-shared/shared-compiler-warmup.log` | Untracked | 25938 | Docs | 697 | 0 |  |
+| `docs/reliability-gate/2026-11-02T05-52-40-431Z-0be2729-shared/shared-local-studio-servers/child-server-1-35704.log` | Untracked | 20664 | Docs | 418 | 0 |  |
+| `docs/reliability-gate/2026-11-02T05-52-40-431Z-0be2729-shared/shared-local-studio.log` | Untracked | 29081 | Docs | 498 | 0 |  |
+| `docs/reliability-gate/2026-11-02T05-52-40-431Z-0be2729-shared/unchanged-test-hashes.json` | Untracked | 33067 | Docs | 300 | 0 |  |
+| `docs/reliability-gate/2026-11-02T05-56-53-702Z-dcb06d1-shared/git-status-after.txt` | Untracked | 24504 | Docs | 683 | 0 |  |
+| `docs/reliability-gate/2026-11-02T05-56-53-702Z-dcb06d1-shared/git-status-before.txt` | Untracked | 24504 | Docs | 683 | 0 |  |
+| `docs/reliability-gate/2026-11-02T05-56-53-702Z-dcb06d1-shared/plan.json` | Untracked | 9108 | Docs | 346 | 0 |  |
+| `docs/reliability-gate/2026-11-02T05-56-53-702Z-dcb06d1-shared/raw.log` | Untracked | 6031 | Docs | 108 | 0 |  |
+| `docs/reliability-gate/2026-11-02T05-56-53-702Z-dcb06d1-shared/results.json` | Untracked | 1313 | Docs | 47 | 0 |  |
+| `docs/reliability-gate/2026-11-02T05-56-53-702Z-dcb06d1-shared/shared-runtime-setup.log` | Untracked | 5176 | Docs | 94 | 0 |  |
+| `docs/reliability-gate/2026-11-02T05-56-53-702Z-dcb06d1-shared/unchanged-test-hashes.json` | Untracked | 33067 | Docs | 300 | 0 |  |
+| `docs/reliability-gate/2026-11-02T05-56-53-702Z-dcb06d1-shared/worktree-status-after.txt` | Untracked | 62312 | Docs | 930 | 0 |  |
+| `docs/reliability-gate/2026-11-02T05-57-17-851Z-466ae5a-shared/git-status-after.txt` | Untracked | 24504 | Docs | 683 | 0 |  |
+| `docs/reliability-gate/2026-11-02T05-57-17-851Z-466ae5a-shared/git-status-before.txt` | Untracked | 24504 | Docs | 683 | 0 |  |
+| `docs/reliability-gate/2026-11-02T05-57-17-851Z-466ae5a-shared/plan.json` | Untracked | 9108 | Docs | 346 | 0 |  |
+| `docs/reliability-gate/2026-11-02T05-57-17-851Z-466ae5a-shared/raw.log` | Untracked | 3065 | Docs | 50 | 0 |  |
+| `docs/reliability-gate/2026-11-02T05-57-17-851Z-466ae5a-shared/results.json` | Untracked | 1325 | Docs | 47 | 0 |  |
+| `docs/reliability-gate/2026-11-02T05-57-17-851Z-466ae5a-shared/server-59216.log` | Untracked | 700 | Docs | 10 | 0 |  |
+| `docs/reliability-gate/2026-11-02T05-57-17-851Z-466ae5a-shared/server-59217.log` | Untracked | 3420 | Docs | 15 | 0 |  |
+| `docs/reliability-gate/2026-11-02T05-57-17-851Z-466ae5a-shared/shared-compiler-warmup.log` | Untracked | 733 | Docs | 20 | 0 |  |
+| `docs/reliability-gate/2026-11-02T05-57-17-851Z-466ae5a-shared/shared-runtime-setup.log` | Untracked | 1163 | Docs | 12 | 0 |  |
+| `docs/reliability-gate/2026-11-02T05-57-17-851Z-466ae5a-shared/unchanged-test-hashes.json` | Untracked | 33067 | Docs | 300 | 0 |  |
+| `docs/reliability-gate/2026-11-02T05-57-17-851Z-466ae5a-shared/worktree-status-after.txt` | Untracked | 62321 | Docs | 931 | 0 |  |
+| `docs/reliability-gate/2026-11-02T05-58-46-916Z-c72c47b-shared/git-status-after.txt` | Untracked | 24522 | Docs | 684 | 0 |  |
+| `docs/reliability-gate/2026-11-02T05-58-46-916Z-c72c47b-shared/git-status-before.txt` | Untracked | 24504 | Docs | 683 | 0 |  |
+| `docs/reliability-gate/2026-11-02T05-58-46-916Z-c72c47b-shared/plan.json` | Untracked | 9108 | Docs | 346 | 0 |  |
+| `docs/reliability-gate/2026-11-02T05-58-46-916Z-c72c47b-shared/raw.log` | Untracked | 66158 | Docs | 627 | 0 |  |
+| `docs/reliability-gate/2026-11-02T05-58-46-916Z-c72c47b-shared/results.json` | Untracked | 1487 | Docs | 55 | 0 |  |
+| `docs/reliability-gate/2026-11-02T05-58-46-916Z-c72c47b-shared/server-61023.log` | Untracked | 176438 | Docs | 4145 | 0 |  |
+| `docs/reliability-gate/2026-11-02T05-58-46-916Z-c72c47b-shared/server-61024.log` | Untracked | 33819 | Docs | 117 | 0 |  |
+| `docs/reliability-gate/2026-11-02T05-58-46-916Z-c72c47b-shared/shared-compiler-warmup.log` | Untracked | 2847 | Docs | 28 | 0 |  |
+| `docs/reliability-gate/2026-11-02T05-58-46-916Z-c72c47b-shared/shared-imported-studio-artifacts/shared-gate-artifacts/shared-instance-imported-studio.png` | Untracked | 70835 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T05-58-46-916Z-c72c47b-shared/shared-imported-studio-artifacts/shared-gate-artifacts/shared-instance-local-studio.png` | Untracked | 70400 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T05-58-46-916Z-c72c47b-shared/shared-imported-studio-artifacts/shared-gate-artifacts/shared-instance-local-window.png` | Untracked | 70949 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T05-58-46-916Z-c72c47b-shared/shared-imported-studio-artifacts/shared-gate-failure.html` | Untracked | 42032 | Docs | 1 | 0 |  |
+| `docs/reliability-gate/2026-11-02T05-58-46-916Z-c72c47b-shared/shared-imported-studio-artifacts/shared-gate-failure.png` | Untracked | 46231 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T05-58-46-916Z-c72c47b-shared/shared-imported-studio-artifacts/source-project-compat-sample.json` | Untracked | 207 | Docs | 12 | 0 |  |
+| `docs/reliability-gate/2026-11-02T05-58-46-916Z-c72c47b-shared/shared-imported-studio.log` | Untracked | 23571 | Docs | 238 | 0 |  |
+| `docs/reliability-gate/2026-11-02T05-58-46-916Z-c72c47b-shared/shared-imported-window-artifacts/shared-gate-artifacts/shared-instance-imported-studio.png` | Untracked | 70835 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T05-58-46-916Z-c72c47b-shared/shared-imported-window-artifacts/shared-gate-artifacts/shared-instance-local-studio.png` | Untracked | 70400 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T05-58-46-916Z-c72c47b-shared/shared-imported-window-artifacts/shared-gate-artifacts/shared-instance-local-window.png` | Untracked | 70949 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T05-58-46-916Z-c72c47b-shared/shared-imported-window-artifacts/shared-gate-failure.html` | Untracked | 42032 | Docs | 1 | 0 |  |
+| `docs/reliability-gate/2026-11-02T05-58-46-916Z-c72c47b-shared/shared-imported-window-artifacts/shared-gate-failure.png` | Untracked | 46231 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T05-58-46-916Z-c72c47b-shared/shared-imported-window-artifacts/source-project-compat-sample.json` | Untracked | 207 | Docs | 12 | 0 |  |
+| `docs/reliability-gate/2026-11-02T05-58-46-916Z-c72c47b-shared/shared-imported-window.log` | Untracked | 7570 | Docs | 70 | 0 |  |
+| `docs/reliability-gate/2026-11-02T05-58-46-916Z-c72c47b-shared/shared-local-studio-artifacts/shared-gate-artifacts/shared-instance-local-studio.png` | Untracked | 70400 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T05-58-46-916Z-c72c47b-shared/shared-local-studio-artifacts/source-project-compat-sample.json` | Untracked | 207 | Docs | 12 | 0 |  |
+| `docs/reliability-gate/2026-11-02T05-58-46-916Z-c72c47b-shared/shared-local-studio.log` | Untracked | 14786 | Docs | 125 | 0 |  |
+| `docs/reliability-gate/2026-11-02T05-58-46-916Z-c72c47b-shared/shared-local-window-artifacts/shared-gate-artifacts/shared-instance-local-studio.png` | Untracked | 70400 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T05-58-46-916Z-c72c47b-shared/shared-local-window-artifacts/shared-gate-artifacts/shared-instance-local-window.png` | Untracked | 70949 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T05-58-46-916Z-c72c47b-shared/shared-local-window-artifacts/source-project-compat-sample.json` | Untracked | 207 | Docs | 12 | 0 |  |
+| `docs/reliability-gate/2026-11-02T05-58-46-916Z-c72c47b-shared/shared-local-window.log` | Untracked | 14689 | Docs | 127 | 0 |  |
+| `docs/reliability-gate/2026-11-02T05-58-46-916Z-c72c47b-shared/shared-runtime-setup.log` | Untracked | 1164 | Docs | 12 | 0 |  |
+| `docs/reliability-gate/2026-11-02T05-58-46-916Z-c72c47b-shared/unchanged-test-hashes.json` | Untracked | 33067 | Docs | 300 | 0 |  |
+| `docs/reliability-gate/2026-11-02T05-58-46-916Z-c72c47b-shared/worktree-status-after.txt` | Untracked | 62321 | Docs | 931 | 0 |  |
+| `docs/reliability-gate/2026-11-02T06-18-43-399Z-5990617-shared/git-status-after.txt` | Untracked | 24504 | Docs | 683 | 0 |  |
+| `docs/reliability-gate/2026-11-02T06-18-43-399Z-5990617-shared/git-status-before.txt` | Untracked | 24504 | Docs | 683 | 0 |  |
+| `docs/reliability-gate/2026-11-02T06-18-43-399Z-5990617-shared/plan.json` | Untracked | 9108 | Docs | 346 | 0 |  |
+| `docs/reliability-gate/2026-11-02T06-18-43-399Z-5990617-shared/raw.log` | Untracked | 3027 | Docs | 49 | 0 |  |
+| `docs/reliability-gate/2026-11-02T06-18-43-399Z-5990617-shared/results.json` | Untracked | 1324 | Docs | 47 | 0 |  |
+| `docs/reliability-gate/2026-11-02T06-18-43-399Z-5990617-shared/server-56168.log` | Untracked | 166 | Docs | 5 | 0 |  |
+| `docs/reliability-gate/2026-11-02T06-18-43-399Z-5990617-shared/server-56169.log` | Untracked | 3182 | Docs | 13 | 0 |  |
+| `docs/reliability-gate/2026-11-02T06-18-43-399Z-5990617-shared/shared-compiler-warmup.log` | Untracked | 697 | Docs | 19 | 0 |  |
+| `docs/reliability-gate/2026-11-02T06-18-43-399Z-5990617-shared/shared-runtime-setup.log` | Untracked | 1163 | Docs | 12 | 0 |  |
+| `docs/reliability-gate/2026-11-02T06-18-43-399Z-5990617-shared/unchanged-test-hashes.json` | Untracked | 33183 | Docs | 301 | 0 |  |
+| `docs/reliability-gate/2026-11-02T06-18-43-399Z-5990617-shared/worktree-status-after.txt` | Untracked | 62321 | Docs | 931 | 0 |  |
+| `docs/reliability-gate/2026-11-02T06-19-27-766Z-0327623/git-status-before.txt` | Untracked | 24504 | Docs | 683 | 0 |  |
+| `docs/reliability-gate/2026-11-02T06-19-27-766Z-0327623/movement-artifacts/shared-gate-failure.html` | Untracked | 37305 | Docs | 1 | 0 |  |
+| `docs/reliability-gate/2026-11-02T06-19-27-766Z-0327623/movement-artifacts/shared-gate-failure.png` | Untracked | 39764 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T06-19-27-766Z-0327623/movement-artifacts/source-project-compat-sample.json` | Untracked | 207 | Docs | 12 | 0 |  |
+| `docs/reliability-gate/2026-11-02T06-19-27-766Z-0327623/movement-servers/child-server-1-28380.log` | Untracked | 6418 | Docs | 99 | 0 |  |
+| `docs/reliability-gate/2026-11-02T06-19-27-766Z-0327623/movement.log` | Untracked | 8366 | Docs | 134 | 0 |  |
+| `docs/reliability-gate/2026-11-02T06-19-27-766Z-0327623/plan.json` | Untracked | 9596 | Docs | 366 | 0 |  |
+| `docs/reliability-gate/2026-11-02T06-19-27-766Z-0327623/prepare-lab-adapters.log` | Untracked | 23 | Docs | 1 | 0 |  |
+| `docs/reliability-gate/2026-11-02T06-19-27-766Z-0327623/raw.log` | Untracked | 47145 | Docs | 662 | 0 |  |
+| `docs/reliability-gate/2026-11-02T06-19-27-766Z-0327623/responsive-artifacts/responsive-custom-scope.png` | Untracked | 44683 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T06-19-27-766Z-0327623/responsive-artifacts/responsive-mobile-draft.png` | Untracked | 39626 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T06-19-27-766Z-0327623/responsive-artifacts/shared-gate-failure.html` | Untracked | 37305 | Docs | 1 | 0 |  |
+| `docs/reliability-gate/2026-11-02T06-19-27-766Z-0327623/responsive-artifacts/shared-gate-failure.png` | Untracked | 39764 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T06-19-27-766Z-0327623/responsive-artifacts/source-project-compat-sample.json` | Untracked | 207 | Docs | 12 | 0 |  |
+| `docs/reliability-gate/2026-11-02T06-19-27-766Z-0327623/responsive-imported-servers/child-server-1-25852.log` | Untracked | 1074 | Docs | 11 | 0 |  |
+| `docs/reliability-gate/2026-11-02T06-19-27-766Z-0327623/responsive-imported-servers/child-server-2-2556.log` | Untracked | 1003 | Docs | 9 | 0 |  |
+| `docs/reliability-gate/2026-11-02T06-19-27-766Z-0327623/responsive-imported.log` | Untracked | 963 | Docs | 11 | 0 |  |
+| `docs/reliability-gate/2026-11-02T06-19-27-766Z-0327623/responsive-servers/child-server-1-31972.log` | Untracked | 43746 | Docs | 996 | 0 |  |
+| `docs/reliability-gate/2026-11-02T06-19-27-766Z-0327623/responsive.log` | Untracked | 19981 | Docs | 172 | 0 |  |
+| `docs/reliability-gate/2026-11-02T06-19-27-766Z-0327623/results.json` | Untracked | 3675 | Docs | 112 | 0 |  |
+| `docs/reliability-gate/2026-11-02T06-19-27-766Z-0327623/server-53864.log` | Untracked | 7401 | Docs | 168 | 0 |  |
+| `docs/reliability-gate/2026-11-02T06-19-27-766Z-0327623/server-53865.log` | Untracked | 6059 | Docs | 22 | 0 |  |
+| `docs/reliability-gate/2026-11-02T06-19-27-766Z-0327623/server-53866.log` | Untracked | 3194 | Docs | 13 | 0 |  |
+| `docs/reliability-gate/2026-11-02T06-19-27-766Z-0327623/server-61272.log` | Untracked | 5600 | Docs | 98 | 0 |  |
+| `docs/reliability-gate/2026-11-02T06-19-27-766Z-0327623/server-61273.log` | Untracked | 3420 | Docs | 15 | 0 |  |
+| `docs/reliability-gate/2026-11-02T06-19-27-766Z-0327623/shared-compiler-warmup.log` | Untracked | 1612 | Docs | 28 | 0 |  |
+| `docs/reliability-gate/2026-11-02T06-19-27-766Z-0327623/shared-runtime-setup.log` | Untracked | 1163 | Docs | 12 | 0 |  |
+| `docs/reliability-gate/2026-11-02T06-19-27-766Z-0327623/state-and-transitions-artifacts/shared-gate-failure.html` | Untracked | 37305 | Docs | 1 | 0 |  |
+| `docs/reliability-gate/2026-11-02T06-19-27-766Z-0327623/state-and-transitions-artifacts/shared-gate-failure.png` | Untracked | 39764 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T06-19-27-766Z-0327623/state-and-transitions-artifacts/source-project-compat-sample.json` | Untracked | 207 | Docs | 12 | 0 |  |
+| `docs/reliability-gate/2026-11-02T06-19-27-766Z-0327623/state-and-transitions-servers/child-server-1-31652.log` | Untracked | 10777 | Docs | 238 | 0 |  |
+| `docs/reliability-gate/2026-11-02T06-19-27-766Z-0327623/state-and-transitions.log` | Untracked | 13029 | Docs | 276 | 0 |  |
+| `docs/reliability-gate/2026-11-02T06-19-27-766Z-0327623/unchanged-test-hashes.json` | Untracked | 33183 | Docs | 301 | 0 |  |
+| `docs/reliability-gate/2026-11-02T06-19-27-766Z-0327623/warmup-m0-control-lab-full-failure.html` | Untracked | 135139 | Docs | 1 | 0 |  |
+| `docs/reliability-gate/2026-11-02T06-19-27-766Z-0327623/warmup-m0-control-lab-full-failure.png` | Untracked | 99518 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T06-19-27-766Z-0327623/warmup-m0-control-lab-full-network.jsonl` | Untracked | 10559 | Docs | 71 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/appearance-layout-artifacts/appearance-imported-studio.png` | Untracked | 112599 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/appearance-layout-artifacts/appearance-imported-window.png` | Untracked | 112598 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/appearance-layout-artifacts/appearance-local-studio.png` | Untracked | 83909 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/appearance-layout-artifacts/appearance-local-window.png` | Untracked | 116580 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/appearance-layout-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-2-blocked-1.5.png` | Untracked | 70164 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/appearance-layout-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-2-blocked-1.png` | Untracked | 66216 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/appearance-layout-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-3-blocked-1.5.png` | Untracked | 69743 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/appearance-layout-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-3-blocked-1.png` | Untracked | 67687 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/appearance-layout-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked-1.5.png` | Untracked | 46215 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/appearance-layout-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked-1.png` | Untracked | 68467 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/appearance-layout-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked.png` | Untracked | 58578 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/appearance-layout-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-6-blocked-1.5.png` | Untracked | 50335 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/appearance-layout-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-6-blocked-1.png` | Untracked | 68467 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/appearance-layout-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-9-blocked-1.png` | Untracked | 69787 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/appearance-layout-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit.json` | Untracked | 452970 | Docs | 15413 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/appearance-layout-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-0.5.png` | Untracked | 81801 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/appearance-layout-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-1.5.png` | Untracked | 109171 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/appearance-layout-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-1.png` | Untracked | 95939 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/appearance-layout-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked.png` | Untracked | 59147 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/appearance-layout-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-0.5.png` | Untracked | 72153 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/appearance-layout-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-1.5.png` | Untracked | 101784 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/appearance-layout-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-1.png` | Untracked | 65406 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/appearance-layout-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked.png` | Untracked | 65868 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/appearance-layout-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-13-blocked-1.5.png` | Untracked | 101782 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/appearance-layout-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-13-blocked-1.png` | Untracked | 65429 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/appearance-layout-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-19-blocked.png` | Untracked | 59396 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/appearance-layout-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-2-blocked-1.5.png` | Untracked | 109213 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/appearance-layout-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-24-blocked.png` | Untracked | 65819 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/appearance-layout-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-6-blocked-1.5.png` | Untracked | 84951 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/appearance-layout-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-6-blocked.png` | Untracked | 59385 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/appearance-layout-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression.json` | Untracked | 459192 | Docs | 15377 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/appearance-layout-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-1-blocked.png` | Untracked | 67079 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/appearance-layout-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-27-blocked.png` | Untracked | 76252 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/appearance-layout-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-5-blocked.png` | Untracked | 68266 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/appearance-layout-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit.json` | Untracked | 224947 | Docs | 7724 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/appearance-layout-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-12-blocked.png` | Untracked | 72559 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/appearance-layout-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-13-blocked.png` | Untracked | 72943 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/appearance-layout-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-19-blocked.png` | Untracked | 68490 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/appearance-layout-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-24-blocked.png` | Untracked | 67547 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/appearance-layout-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-29-blocked.png` | Untracked | 66922 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/appearance-layout-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-6-blocked.png` | Untracked | 68020 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/appearance-layout-artifacts/editor-load-and-toolbar/selection/round-1-full-regression.json` | Untracked | 215550 | Docs | 7320 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/appearance-layout-artifacts/imported-responsive-failure.png` | Untracked | 74021 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/appearance-layout-artifacts/responsive-custom-scope.png` | Untracked | 40051 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/appearance-layout-artifacts/responsive-mobile-draft.png` | Untracked | 33824 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/appearance-layout-artifacts/shared-gate-artifacts/shared-instance-imported-studio.png` | Untracked | 71020 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/appearance-layout-artifacts/shared-gate-artifacts/shared-instance-imported-window.png` | Untracked | 71020 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/appearance-layout-artifacts/shared-gate-artifacts/shared-instance-local-studio.png` | Untracked | 70400 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/appearance-layout-artifacts/shared-gate-artifacts/shared-instance-local-window.png` | Untracked | 70400 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/appearance-layout-artifacts/source-project-compat-sample.json` | Untracked | 207 | Docs | 12 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/appearance-layout-servers/child-server-1-26900.log` | Untracked | 113700 | Docs | 1859 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/appearance-layout-servers/child-server-2-16856.log` | Untracked | 36727 | Docs | 141 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/appearance-layout.log` | Untracked | 68775 | Docs | 683 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-imported-artifacts/advanced-image-studio.png` | Untracked | 39869 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-imported-artifacts/advanced-image-window.png` | Untracked | 31100 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-imported-artifacts/appearance-imported-studio.png` | Untracked | 112599 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-imported-artifacts/appearance-imported-window.png` | Untracked | 112598 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-imported-artifacts/appearance-local-studio.png` | Untracked | 83909 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-imported-artifacts/appearance-local-window.png` | Untracked | 116580 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-imported-artifacts/component-actions-failure.png` | Untracked | 54956 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-2-blocked-1.5.png` | Untracked | 70164 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-2-blocked-1.png` | Untracked | 66216 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-3-blocked-1.5.png` | Untracked | 69743 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-3-blocked-1.png` | Untracked | 67687 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked-1.5.png` | Untracked | 46215 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked-1.png` | Untracked | 68467 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked.png` | Untracked | 58578 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-6-blocked-1.5.png` | Untracked | 50335 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-6-blocked-1.png` | Untracked | 68467 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-9-blocked-1.png` | Untracked | 69787 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit.json` | Untracked | 452970 | Docs | 15413 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-0.5.png` | Untracked | 81801 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-1.5.png` | Untracked | 109171 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-1.png` | Untracked | 95939 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked.png` | Untracked | 59147 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-0.5.png` | Untracked | 72153 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-1.5.png` | Untracked | 101784 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-1.png` | Untracked | 65406 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked.png` | Untracked | 65868 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-13-blocked-1.5.png` | Untracked | 101782 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-13-blocked-1.png` | Untracked | 65429 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-19-blocked.png` | Untracked | 59396 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-2-blocked-1.5.png` | Untracked | 109213 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-24-blocked.png` | Untracked | 65819 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-6-blocked-1.5.png` | Untracked | 84951 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-6-blocked.png` | Untracked | 59385 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression.json` | Untracked | 459192 | Docs | 15377 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-imported-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-1-blocked.png` | Untracked | 67079 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-imported-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-27-blocked.png` | Untracked | 76252 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-imported-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-5-blocked.png` | Untracked | 68266 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-imported-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit.json` | Untracked | 224947 | Docs | 7724 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-imported-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-12-blocked.png` | Untracked | 72559 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-imported-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-13-blocked.png` | Untracked | 72943 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-imported-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-19-blocked.png` | Untracked | 68490 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-imported-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-24-blocked.png` | Untracked | 67547 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-imported-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-29-blocked.png` | Untracked | 66922 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-imported-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-6-blocked.png` | Untracked | 68020 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-imported-artifacts/editor-load-and-toolbar/selection/round-1-full-regression.json` | Untracked | 215550 | Docs | 7320 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-imported-artifacts/imported-responsive-failure.png` | Untracked | 74021 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-imported-artifacts/responsive-custom-scope.png` | Untracked | 40051 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-imported-artifacts/responsive-mobile-draft.png` | Untracked | 33824 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-imported-artifacts/shared-gate-artifacts/shared-instance-imported-studio.png` | Untracked | 71020 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-imported-artifacts/shared-gate-artifacts/shared-instance-imported-window.png` | Untracked | 71020 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-imported-artifacts/shared-gate-artifacts/shared-instance-local-studio.png` | Untracked | 70400 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-imported-artifacts/shared-gate-artifacts/shared-instance-local-window.png` | Untracked | 70400 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-imported-artifacts/source-project-compat-sample.json` | Untracked | 207 | Docs | 12 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-imported-servers/child-server-1-27196.log` | Untracked | 35523 | Docs | 673 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-imported-servers/child-server-2-33756.log` | Untracked | 12994 | Docs | 33 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-imported.log` | Untracked | 41865 | Docs | 500 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-local-artifacts/advanced-image-studio.png` | Untracked | 39869 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-local-artifacts/advanced-image-window.png` | Untracked | 31100 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-local-artifacts/appearance-imported-studio.png` | Untracked | 112599 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-local-artifacts/appearance-imported-window.png` | Untracked | 112598 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-local-artifacts/appearance-local-studio.png` | Untracked | 83909 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-local-artifacts/appearance-local-window.png` | Untracked | 116580 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-2-blocked-1.5.png` | Untracked | 70164 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-2-blocked-1.png` | Untracked | 66216 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-3-blocked-1.5.png` | Untracked | 69743 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-3-blocked-1.png` | Untracked | 67687 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked-1.5.png` | Untracked | 46215 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked-1.png` | Untracked | 68467 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked.png` | Untracked | 58578 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-6-blocked-1.5.png` | Untracked | 50335 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-6-blocked-1.png` | Untracked | 68467 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-9-blocked-1.png` | Untracked | 69787 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit.json` | Untracked | 452970 | Docs | 15413 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-0.5.png` | Untracked | 81801 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-1.5.png` | Untracked | 109171 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-1.png` | Untracked | 95939 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked.png` | Untracked | 59147 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-0.5.png` | Untracked | 72153 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-1.5.png` | Untracked | 101784 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-1.png` | Untracked | 65406 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked.png` | Untracked | 65868 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-13-blocked-1.5.png` | Untracked | 101782 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-13-blocked-1.png` | Untracked | 65429 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-19-blocked.png` | Untracked | 59396 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-2-blocked-1.5.png` | Untracked | 109213 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-24-blocked.png` | Untracked | 65819 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-6-blocked-1.5.png` | Untracked | 84951 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-6-blocked.png` | Untracked | 59385 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression.json` | Untracked | 459192 | Docs | 15377 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-local-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-1-blocked.png` | Untracked | 67079 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-local-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-27-blocked.png` | Untracked | 76252 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-local-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-5-blocked.png` | Untracked | 68266 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-local-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit.json` | Untracked | 224947 | Docs | 7724 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-local-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-12-blocked.png` | Untracked | 72559 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-local-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-13-blocked.png` | Untracked | 72943 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-local-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-19-blocked.png` | Untracked | 68490 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-local-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-24-blocked.png` | Untracked | 67547 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-local-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-29-blocked.png` | Untracked | 66922 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-local-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-6-blocked.png` | Untracked | 68020 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-local-artifacts/editor-load-and-toolbar/selection/round-1-full-regression.json` | Untracked | 215550 | Docs | 7320 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-local-artifacts/imported-responsive-failure.png` | Untracked | 74021 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-local-artifacts/responsive-custom-scope.png` | Untracked | 40051 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-local-artifacts/responsive-mobile-draft.png` | Untracked | 33824 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-local-artifacts/shared-gate-artifacts/shared-instance-imported-studio.png` | Untracked | 71020 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-local-artifacts/shared-gate-artifacts/shared-instance-imported-window.png` | Untracked | 71020 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-local-artifacts/shared-gate-artifacts/shared-instance-local-studio.png` | Untracked | 70400 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-local-artifacts/shared-gate-artifacts/shared-instance-local-window.png` | Untracked | 70400 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-local-artifacts/source-project-compat-sample.json` | Untracked | 207 | Docs | 12 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-local-servers/child-server-1-33472.log` | Untracked | 2711 | Docs | 24 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/component-actions-local.log` | Untracked | 1066 | Docs | 15 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/container-move-artifacts/advanced-image-studio.png` | Untracked | 39869 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/container-move-artifacts/advanced-image-window.png` | Untracked | 31100 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/container-move-artifacts/appearance-imported-studio.png` | Untracked | 112599 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/container-move-artifacts/appearance-imported-window.png` | Untracked | 112598 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/container-move-artifacts/appearance-local-studio.png` | Untracked | 83909 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/container-move-artifacts/appearance-local-window.png` | Untracked | 116580 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/container-move-artifacts/component-actions-failure.png` | Untracked | 54956 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/container-move-artifacts/container-move-destination.png` | Untracked | 46958 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/container-move-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-2-blocked-1.5.png` | Untracked | 70164 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/container-move-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-2-blocked-1.png` | Untracked | 66216 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/container-move-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-3-blocked-1.5.png` | Untracked | 69743 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/container-move-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-3-blocked-1.png` | Untracked | 67687 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/container-move-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked-1.5.png` | Untracked | 46215 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/container-move-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked-1.png` | Untracked | 68467 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/container-move-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked.png` | Untracked | 58578 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/container-move-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-6-blocked-1.5.png` | Untracked | 50335 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/container-move-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-6-blocked-1.png` | Untracked | 68467 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/container-move-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-9-blocked-1.png` | Untracked | 69787 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/container-move-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit.json` | Untracked | 452970 | Docs | 15413 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/container-move-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-0.5.png` | Untracked | 81801 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/container-move-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-1.5.png` | Untracked | 109171 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/container-move-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-1.png` | Untracked | 95939 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/container-move-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked.png` | Untracked | 59147 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/container-move-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-0.5.png` | Untracked | 72153 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/container-move-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-1.5.png` | Untracked | 101784 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/container-move-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-1.png` | Untracked | 65406 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/container-move-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked.png` | Untracked | 65868 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/container-move-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-13-blocked-1.5.png` | Untracked | 101782 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/container-move-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-13-blocked-1.png` | Untracked | 65429 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/container-move-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-19-blocked.png` | Untracked | 59396 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/container-move-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-2-blocked-1.5.png` | Untracked | 109213 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/container-move-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-24-blocked.png` | Untracked | 65819 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/container-move-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-6-blocked-1.5.png` | Untracked | 84951 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/container-move-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-6-blocked.png` | Untracked | 59385 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/container-move-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression.json` | Untracked | 459192 | Docs | 15377 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/container-move-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-1-blocked.png` | Untracked | 67079 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/container-move-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-27-blocked.png` | Untracked | 76252 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/container-move-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-5-blocked.png` | Untracked | 68266 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/container-move-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit.json` | Untracked | 224947 | Docs | 7724 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/container-move-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-12-blocked.png` | Untracked | 72559 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/container-move-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-13-blocked.png` | Untracked | 72943 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/container-move-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-19-blocked.png` | Untracked | 68490 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/container-move-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-24-blocked.png` | Untracked | 67547 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/container-move-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-29-blocked.png` | Untracked | 66922 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/container-move-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-6-blocked.png` | Untracked | 68020 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/container-move-artifacts/editor-load-and-toolbar/selection/round-1-full-regression.json` | Untracked | 215550 | Docs | 7320 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/container-move-artifacts/icon-properties-imported-studio.png` | Untracked | 63736 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/container-move-artifacts/icon-properties-imported-window.png` | Untracked | 63716 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/container-move-artifacts/icon-properties-studio.png` | Untracked | 62584 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/container-move-artifacts/icon-properties-window.png` | Untracked | 62577 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/container-move-artifacts/icon-replacement-studio.png` | Untracked | 75046 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/container-move-artifacts/icon-replacement-window.png` | Untracked | 75057 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/container-move-artifacts/imported-responsive-failure.png` | Untracked | 74021 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/container-move-artifacts/responsive-custom-scope.png` | Untracked | 40051 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/container-move-artifacts/responsive-mobile-draft.png` | Untracked | 33824 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/container-move-artifacts/section-order-ready.png` | Untracked | 49538 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/container-move-artifacts/shared-gate-artifacts/shared-instance-imported-studio.png` | Untracked | 71020 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/container-move-artifacts/shared-gate-artifacts/shared-instance-imported-window.png` | Untracked | 71020 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/container-move-artifacts/shared-gate-artifacts/shared-instance-local-studio.png` | Untracked | 70400 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/container-move-artifacts/shared-gate-artifacts/shared-instance-local-window.png` | Untracked | 70400 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/container-move-artifacts/source-project-compat-sample.json` | Untracked | 207 | Docs | 12 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/container-move-servers/child-server-1-32124.log` | Untracked | 49029 | Docs | 1192 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/container-move.log` | Untracked | 10326 | Docs | 92 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/git-status-after.txt` | Untracked | 24838 | Docs | 691 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/git-status-before.txt` | Untracked | 24540 | Docs | 684 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/history-artifacts/advanced-image-studio.png` | Untracked | 39869 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/history-artifacts/advanced-image-window.png` | Untracked | 31100 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/history-artifacts/appearance-imported-studio.png` | Untracked | 112599 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/history-artifacts/appearance-imported-window.png` | Untracked | 112598 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/history-artifacts/appearance-local-studio.png` | Untracked | 83909 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/history-artifacts/appearance-local-window.png` | Untracked | 116580 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/history-artifacts/component-actions-failure.png` | Untracked | 54956 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/history-artifacts/container-move-destination.png` | Untracked | 46958 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/history-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-2-blocked-1.5.png` | Untracked | 70164 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/history-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-2-blocked-1.png` | Untracked | 66216 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/history-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-3-blocked-1.5.png` | Untracked | 69743 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/history-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-3-blocked-1.png` | Untracked | 67687 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/history-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked-1.5.png` | Untracked | 46215 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/history-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked-1.png` | Untracked | 68467 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/history-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked.png` | Untracked | 58578 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/history-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-6-blocked-1.5.png` | Untracked | 50335 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/history-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-6-blocked-1.png` | Untracked | 68467 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/history-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-9-blocked-1.png` | Untracked | 69787 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/history-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit.json` | Untracked | 452970 | Docs | 15413 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/history-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-0.5.png` | Untracked | 81801 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/history-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-1.5.png` | Untracked | 109171 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/history-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-1.png` | Untracked | 95939 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/history-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked.png` | Untracked | 59147 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/history-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-0.5.png` | Untracked | 72153 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/history-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-1.5.png` | Untracked | 101784 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/history-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-1.png` | Untracked | 65406 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/history-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked.png` | Untracked | 65868 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/history-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-13-blocked-1.5.png` | Untracked | 101782 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/history-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-13-blocked-1.png` | Untracked | 65429 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/history-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-19-blocked.png` | Untracked | 59396 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/history-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-2-blocked-1.5.png` | Untracked | 109213 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/history-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-24-blocked.png` | Untracked | 65819 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/history-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-6-blocked-1.5.png` | Untracked | 84951 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/history-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-6-blocked.png` | Untracked | 59385 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/history-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression.json` | Untracked | 459192 | Docs | 15377 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/history-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-1-blocked.png` | Untracked | 67079 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/history-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-27-blocked.png` | Untracked | 76252 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/history-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-5-blocked.png` | Untracked | 68266 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/history-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit.json` | Untracked | 224947 | Docs | 7724 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/history-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-12-blocked.png` | Untracked | 72559 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/history-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-13-blocked.png` | Untracked | 72943 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/history-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-19-blocked.png` | Untracked | 68490 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/history-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-24-blocked.png` | Untracked | 67547 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/history-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-29-blocked.png` | Untracked | 66922 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/history-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-6-blocked.png` | Untracked | 68020 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/history-artifacts/editor-load-and-toolbar/selection/round-1-full-regression.json` | Untracked | 215550 | Docs | 7320 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/history-artifacts/icon-properties-imported-studio.png` | Untracked | 63736 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/history-artifacts/icon-properties-imported-window.png` | Untracked | 63716 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/history-artifacts/icon-properties-studio.png` | Untracked | 62584 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/history-artifacts/icon-properties-window.png` | Untracked | 62577 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/history-artifacts/icon-replacement-studio.png` | Untracked | 75046 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/history-artifacts/icon-replacement-window.png` | Untracked | 75057 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/history-artifacts/imported-responsive-failure.png` | Untracked | 74021 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/history-artifacts/responsive-custom-scope.png` | Untracked | 40051 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/history-artifacts/responsive-mobile-draft.png` | Untracked | 33824 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/history-artifacts/section-order-ready.png` | Untracked | 49538 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/history-artifacts/shared-gate-artifacts/shared-instance-imported-studio.png` | Untracked | 71020 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/history-artifacts/shared-gate-artifacts/shared-instance-imported-window.png` | Untracked | 71020 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/history-artifacts/shared-gate-artifacts/shared-instance-local-studio.png` | Untracked | 70400 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/history-artifacts/shared-gate-artifacts/shared-instance-local-window.png` | Untracked | 70400 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/history-artifacts/source-project-compat-sample.json` | Untracked | 207 | Docs | 12 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/history-servers/child-server-1-27732.log` | Untracked | 7286 | Docs | 102 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/history-servers/child-server-2-30552.log` | Untracked | 7198 | Docs | 27 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/history.log` | Untracked | 17295 | Docs | 171 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-properties-artifacts/advanced-image-studio.png` | Untracked | 39869 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-properties-artifacts/advanced-image-window.png` | Untracked | 31100 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-properties-artifacts/appearance-imported-studio.png` | Untracked | 112599 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-properties-artifacts/appearance-imported-window.png` | Untracked | 112598 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-properties-artifacts/appearance-local-studio.png` | Untracked | 83909 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-properties-artifacts/appearance-local-window.png` | Untracked | 116580 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-properties-artifacts/component-actions-failure.png` | Untracked | 54956 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-properties-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-2-blocked-1.5.png` | Untracked | 70164 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-properties-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-2-blocked-1.png` | Untracked | 66216 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-properties-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-3-blocked-1.5.png` | Untracked | 69743 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-properties-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-3-blocked-1.png` | Untracked | 67687 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-properties-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked-1.5.png` | Untracked | 46215 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-properties-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked-1.png` | Untracked | 68467 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-properties-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked.png` | Untracked | 58578 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-properties-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-6-blocked-1.5.png` | Untracked | 50335 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-properties-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-6-blocked-1.png` | Untracked | 68467 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-properties-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-9-blocked-1.png` | Untracked | 69787 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-properties-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit.json` | Untracked | 452970 | Docs | 15413 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-properties-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-0.5.png` | Untracked | 81801 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-properties-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-1.5.png` | Untracked | 109171 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-properties-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-1.png` | Untracked | 95939 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-properties-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked.png` | Untracked | 59147 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-properties-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-0.5.png` | Untracked | 72153 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-properties-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-1.5.png` | Untracked | 101784 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-properties-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-1.png` | Untracked | 65406 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-properties-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked.png` | Untracked | 65868 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-properties-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-13-blocked-1.5.png` | Untracked | 101782 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-properties-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-13-blocked-1.png` | Untracked | 65429 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-properties-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-19-blocked.png` | Untracked | 59396 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-properties-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-2-blocked-1.5.png` | Untracked | 109213 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-properties-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-24-blocked.png` | Untracked | 65819 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-properties-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-6-blocked-1.5.png` | Untracked | 84951 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-properties-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-6-blocked.png` | Untracked | 59385 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-properties-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression.json` | Untracked | 459192 | Docs | 15377 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-properties-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-1-blocked.png` | Untracked | 67079 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-properties-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-27-blocked.png` | Untracked | 76252 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-properties-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-5-blocked.png` | Untracked | 68266 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-properties-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit.json` | Untracked | 224947 | Docs | 7724 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-properties-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-12-blocked.png` | Untracked | 72559 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-properties-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-13-blocked.png` | Untracked | 72943 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-properties-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-19-blocked.png` | Untracked | 68490 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-properties-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-24-blocked.png` | Untracked | 67547 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-properties-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-29-blocked.png` | Untracked | 66922 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-properties-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-6-blocked.png` | Untracked | 68020 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-properties-artifacts/editor-load-and-toolbar/selection/round-1-full-regression.json` | Untracked | 215550 | Docs | 7320 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-properties-artifacts/icon-properties-imported-studio.png` | Untracked | 63736 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-properties-artifacts/icon-properties-imported-window.png` | Untracked | 63716 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-properties-artifacts/icon-properties-studio.png` | Untracked | 62584 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-properties-artifacts/icon-properties-window.png` | Untracked | 62577 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-properties-artifacts/icon-replacement-studio.png` | Untracked | 75046 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-properties-artifacts/icon-replacement-window.png` | Untracked | 75057 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-properties-artifacts/imported-responsive-failure.png` | Untracked | 74021 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-properties-artifacts/responsive-custom-scope.png` | Untracked | 40051 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-properties-artifacts/responsive-mobile-draft.png` | Untracked | 33824 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-properties-artifacts/shared-gate-artifacts/shared-instance-imported-studio.png` | Untracked | 71020 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-properties-artifacts/shared-gate-artifacts/shared-instance-imported-window.png` | Untracked | 71020 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-properties-artifacts/shared-gate-artifacts/shared-instance-local-studio.png` | Untracked | 70400 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-properties-artifacts/shared-gate-artifacts/shared-instance-local-window.png` | Untracked | 70400 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-properties-artifacts/source-project-compat-sample.json` | Untracked | 207 | Docs | 12 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-properties-servers/child-server-1-27128.log` | Untracked | 109145 | Docs | 1869 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-properties-servers/child-server-2-22088.log` | Untracked | 33137 | Docs | 76 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-properties.log` | Untracked | 67127 | Docs | 593 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-replacement-artifacts/advanced-image-studio.png` | Untracked | 39869 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-replacement-artifacts/advanced-image-window.png` | Untracked | 31100 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-replacement-artifacts/appearance-imported-studio.png` | Untracked | 112599 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-replacement-artifacts/appearance-imported-window.png` | Untracked | 112598 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-replacement-artifacts/appearance-local-studio.png` | Untracked | 83909 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-replacement-artifacts/appearance-local-window.png` | Untracked | 116580 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-replacement-artifacts/component-actions-failure.png` | Untracked | 54956 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-replacement-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-2-blocked-1.5.png` | Untracked | 70164 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-replacement-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-2-blocked-1.png` | Untracked | 66216 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-replacement-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-3-blocked-1.5.png` | Untracked | 69743 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-replacement-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-3-blocked-1.png` | Untracked | 67687 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-replacement-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked-1.5.png` | Untracked | 46215 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-replacement-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked-1.png` | Untracked | 68467 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-replacement-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked.png` | Untracked | 58578 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-replacement-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-6-blocked-1.5.png` | Untracked | 50335 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-replacement-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-6-blocked-1.png` | Untracked | 68467 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-replacement-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-9-blocked-1.png` | Untracked | 69787 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-replacement-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit.json` | Untracked | 452970 | Docs | 15413 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-replacement-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-0.5.png` | Untracked | 81801 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-replacement-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-1.5.png` | Untracked | 109171 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-replacement-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-1.png` | Untracked | 95939 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-replacement-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked.png` | Untracked | 59147 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-replacement-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-0.5.png` | Untracked | 72153 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-replacement-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-1.5.png` | Untracked | 101784 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-replacement-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-1.png` | Untracked | 65406 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-replacement-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked.png` | Untracked | 65868 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-replacement-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-13-blocked-1.5.png` | Untracked | 101782 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-replacement-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-13-blocked-1.png` | Untracked | 65429 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-replacement-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-19-blocked.png` | Untracked | 59396 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-replacement-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-2-blocked-1.5.png` | Untracked | 109213 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-replacement-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-24-blocked.png` | Untracked | 65819 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-replacement-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-6-blocked-1.5.png` | Untracked | 84951 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-replacement-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-6-blocked.png` | Untracked | 59385 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-replacement-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression.json` | Untracked | 459192 | Docs | 15377 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-replacement-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-1-blocked.png` | Untracked | 67079 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-replacement-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-27-blocked.png` | Untracked | 76252 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-replacement-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-5-blocked.png` | Untracked | 68266 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-replacement-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit.json` | Untracked | 224947 | Docs | 7724 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-replacement-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-12-blocked.png` | Untracked | 72559 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-replacement-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-13-blocked.png` | Untracked | 72943 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-replacement-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-19-blocked.png` | Untracked | 68490 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-replacement-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-24-blocked.png` | Untracked | 67547 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-replacement-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-29-blocked.png` | Untracked | 66922 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-replacement-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-6-blocked.png` | Untracked | 68020 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-replacement-artifacts/editor-load-and-toolbar/selection/round-1-full-regression.json` | Untracked | 215550 | Docs | 7320 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-replacement-artifacts/icon-replacement-studio.png` | Untracked | 75046 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-replacement-artifacts/icon-replacement-window.png` | Untracked | 75057 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-replacement-artifacts/imported-responsive-failure.png` | Untracked | 74021 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-replacement-artifacts/responsive-custom-scope.png` | Untracked | 40051 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-replacement-artifacts/responsive-mobile-draft.png` | Untracked | 33824 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-replacement-artifacts/shared-gate-artifacts/shared-instance-imported-studio.png` | Untracked | 71020 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-replacement-artifacts/shared-gate-artifacts/shared-instance-imported-window.png` | Untracked | 71020 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-replacement-artifacts/shared-gate-artifacts/shared-instance-local-studio.png` | Untracked | 70400 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-replacement-artifacts/shared-gate-artifacts/shared-instance-local-window.png` | Untracked | 70400 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-replacement-artifacts/source-project-compat-sample.json` | Untracked | 207 | Docs | 12 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-replacement-servers/child-server-1-35616.log` | Untracked | 103112 | Docs | 1792 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-replacement-servers/child-server-2-23728.log` | Untracked | 14698 | Docs | 39 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/icon-replacement.log` | Untracked | 83624 | Docs | 656 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-imported-artifacts/advanced-image-studio.png` | Untracked | 39869 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-imported-artifacts/advanced-image-window.png` | Untracked | 31100 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-imported-artifacts/appearance-imported-studio.png` | Untracked | 112599 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-imported-artifacts/appearance-imported-window.png` | Untracked | 112598 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-imported-artifacts/appearance-local-studio.png` | Untracked | 83909 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-imported-artifacts/appearance-local-window.png` | Untracked | 116580 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-2-blocked-1.5.png` | Untracked | 70164 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-2-blocked-1.png` | Untracked | 66216 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-3-blocked-1.5.png` | Untracked | 69743 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-3-blocked-1.png` | Untracked | 67687 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked-1.5.png` | Untracked | 46215 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked-1.png` | Untracked | 68467 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked.png` | Untracked | 58578 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-6-blocked-1.5.png` | Untracked | 50335 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-6-blocked-1.png` | Untracked | 68467 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-9-blocked-1.png` | Untracked | 69787 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit.json` | Untracked | 452970 | Docs | 15413 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-0.5.png` | Untracked | 81801 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-1.5.png` | Untracked | 109171 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-1.png` | Untracked | 95939 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked.png` | Untracked | 59147 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-0.5.png` | Untracked | 72153 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-1.5.png` | Untracked | 101784 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-1.png` | Untracked | 65406 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked.png` | Untracked | 65868 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-13-blocked-1.5.png` | Untracked | 101782 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-13-blocked-1.png` | Untracked | 65429 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-19-blocked.png` | Untracked | 59396 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-2-blocked-1.5.png` | Untracked | 109213 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-24-blocked.png` | Untracked | 65819 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-6-blocked-1.5.png` | Untracked | 84951 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-6-blocked.png` | Untracked | 59385 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression.json` | Untracked | 459192 | Docs | 15377 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-imported-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-1-blocked.png` | Untracked | 67079 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-imported-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-27-blocked.png` | Untracked | 76252 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-imported-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-5-blocked.png` | Untracked | 68266 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-imported-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit.json` | Untracked | 224947 | Docs | 7724 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-imported-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-12-blocked.png` | Untracked | 72559 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-imported-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-13-blocked.png` | Untracked | 72943 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-imported-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-19-blocked.png` | Untracked | 68490 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-imported-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-24-blocked.png` | Untracked | 67547 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-imported-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-29-blocked.png` | Untracked | 66922 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-imported-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-6-blocked.png` | Untracked | 68020 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-imported-artifacts/editor-load-and-toolbar/selection/round-1-full-regression.json` | Untracked | 215550 | Docs | 7320 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-imported-artifacts/imported-responsive-failure.png` | Untracked | 74021 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-imported-artifacts/responsive-custom-scope.png` | Untracked | 40051 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-imported-artifacts/responsive-mobile-draft.png` | Untracked | 33824 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-imported-artifacts/shared-gate-artifacts/shared-instance-imported-studio.png` | Untracked | 71020 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-imported-artifacts/shared-gate-artifacts/shared-instance-imported-window.png` | Untracked | 71020 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-imported-artifacts/shared-gate-artifacts/shared-instance-local-studio.png` | Untracked | 70400 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-imported-artifacts/shared-gate-artifacts/shared-instance-local-window.png` | Untracked | 70400 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-imported-artifacts/source-project-compat-sample.json` | Untracked | 207 | Docs | 12 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-imported-servers/child-server-1-26176.log` | Untracked | 56874 | Docs | 1072 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-imported-servers/child-server-2-35528.log` | Untracked | 38484 | Docs | 92 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-imported.log` | Untracked | 26844 | Docs | 262 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-local-artifacts/advanced-image-studio.png` | Untracked | 35927 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-local-artifacts/advanced-image-window.png` | Untracked | 28111 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-local-artifacts/appearance-imported-studio.png` | Untracked | 112599 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-local-artifacts/appearance-imported-window.png` | Untracked | 112598 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-local-artifacts/appearance-local-studio.png` | Untracked | 83909 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-local-artifacts/appearance-local-window.png` | Untracked | 116580 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-2-blocked-1.5.png` | Untracked | 70164 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-2-blocked-1.png` | Untracked | 66216 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-3-blocked-1.5.png` | Untracked | 69743 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-3-blocked-1.png` | Untracked | 67687 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked-1.5.png` | Untracked | 46215 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked-1.png` | Untracked | 68467 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked.png` | Untracked | 58578 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-6-blocked-1.5.png` | Untracked | 50335 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-6-blocked-1.png` | Untracked | 68467 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-9-blocked-1.png` | Untracked | 69787 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit.json` | Untracked | 452970 | Docs | 15413 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-0.5.png` | Untracked | 81801 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-1.5.png` | Untracked | 109171 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-1.png` | Untracked | 95939 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked.png` | Untracked | 59147 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-0.5.png` | Untracked | 72153 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-1.5.png` | Untracked | 101784 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-1.png` | Untracked | 65406 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked.png` | Untracked | 65868 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-13-blocked-1.5.png` | Untracked | 101782 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-13-blocked-1.png` | Untracked | 65429 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-19-blocked.png` | Untracked | 59396 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-2-blocked-1.5.png` | Untracked | 109213 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-24-blocked.png` | Untracked | 65819 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-6-blocked-1.5.png` | Untracked | 84951 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-6-blocked.png` | Untracked | 59385 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression.json` | Untracked | 459192 | Docs | 15377 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-local-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-1-blocked.png` | Untracked | 67079 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-local-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-27-blocked.png` | Untracked | 76252 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-local-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-5-blocked.png` | Untracked | 68266 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-local-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit.json` | Untracked | 224947 | Docs | 7724 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-local-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-12-blocked.png` | Untracked | 72559 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-local-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-13-blocked.png` | Untracked | 72943 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-local-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-19-blocked.png` | Untracked | 68490 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-local-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-24-blocked.png` | Untracked | 67547 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-local-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-29-blocked.png` | Untracked | 66922 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-local-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-6-blocked.png` | Untracked | 68020 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-local-artifacts/editor-load-and-toolbar/selection/round-1-full-regression.json` | Untracked | 215550 | Docs | 7320 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-local-artifacts/imported-responsive-failure.png` | Untracked | 74021 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-local-artifacts/responsive-custom-scope.png` | Untracked | 40051 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-local-artifacts/responsive-mobile-draft.png` | Untracked | 33824 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-local-artifacts/shared-gate-artifacts/shared-instance-imported-studio.png` | Untracked | 71020 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-local-artifacts/shared-gate-artifacts/shared-instance-imported-window.png` | Untracked | 71020 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-local-artifacts/shared-gate-artifacts/shared-instance-local-studio.png` | Untracked | 70400 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-local-artifacts/shared-gate-artifacts/shared-instance-local-window.png` | Untracked | 70400 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-local-artifacts/source-project-compat-sample.json` | Untracked | 207 | Docs | 12 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-local-servers/child-server-1-21036.log` | Untracked | 75743 | Docs | 1522 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/images-local.log` | Untracked | 26278 | Docs | 257 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/movement-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-2-blocked-1.5.png` | Untracked | 70164 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/movement-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-2-blocked-1.png` | Untracked | 66216 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/movement-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-3-blocked-1.5.png` | Untracked | 69743 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/movement-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-3-blocked-1.png` | Untracked | 67687 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/movement-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked-1.5.png` | Untracked | 46215 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/movement-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked-1.png` | Untracked | 68467 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/movement-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked.png` | Untracked | 58578 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/movement-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-6-blocked-1.5.png` | Untracked | 50335 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/movement-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-6-blocked-1.png` | Untracked | 68467 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/movement-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-9-blocked-1.png` | Untracked | 69787 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/movement-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit.json` | Untracked | 452970 | Docs | 15413 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/movement-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-0.5.png` | Untracked | 81801 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/movement-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-1.5.png` | Untracked | 109171 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/movement-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-1.png` | Untracked | 95939 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/movement-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked.png` | Untracked | 59147 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/movement-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-0.5.png` | Untracked | 72153 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/movement-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-1.5.png` | Untracked | 101784 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/movement-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-1.png` | Untracked | 65406 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/movement-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked.png` | Untracked | 65868 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/movement-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-13-blocked-1.5.png` | Untracked | 101782 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/movement-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-13-blocked-1.png` | Untracked | 65429 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/movement-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-19-blocked.png` | Untracked | 59396 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/movement-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-2-blocked-1.5.png` | Untracked | 109213 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/movement-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-24-blocked.png` | Untracked | 65819 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/movement-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-6-blocked-1.5.png` | Untracked | 84951 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/movement-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-6-blocked.png` | Untracked | 59385 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/movement-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression.json` | Untracked | 459192 | Docs | 15377 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/movement-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-1-blocked.png` | Untracked | 67079 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/movement-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-27-blocked.png` | Untracked | 76252 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/movement-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-5-blocked.png` | Untracked | 68266 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/movement-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit.json` | Untracked | 224947 | Docs | 7724 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/movement-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-12-blocked.png` | Untracked | 72559 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/movement-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-13-blocked.png` | Untracked | 72943 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/movement-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-19-blocked.png` | Untracked | 68490 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/movement-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-24-blocked.png` | Untracked | 67547 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/movement-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-29-blocked.png` | Untracked | 66922 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/movement-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-6-blocked.png` | Untracked | 68020 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/movement-artifacts/editor-load-and-toolbar/selection/round-1-full-regression.json` | Untracked | 215550 | Docs | 7320 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/movement-artifacts/shared-gate-artifacts/shared-instance-imported-studio.png` | Untracked | 71020 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/movement-artifacts/shared-gate-artifacts/shared-instance-imported-window.png` | Untracked | 71020 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/movement-artifacts/shared-gate-artifacts/shared-instance-local-studio.png` | Untracked | 70400 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/movement-artifacts/shared-gate-artifacts/shared-instance-local-window.png` | Untracked | 70400 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/movement-artifacts/source-project-compat-sample.json` | Untracked | 207 | Docs | 12 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/movement-servers/child-server-1-26808.log` | Untracked | 9238 | Docs | 213 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/movement.log` | Untracked | 12401 | Docs | 256 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/plan.json` | Untracked | 9596 | Docs | 366 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/prepare-lab-adapters.log` | Untracked | 43 | Docs | 1 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/raw.log` | Untracked | 1420595 | Docs | 6916 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/recovery-artifacts/advanced-image-studio.png` | Untracked | 39869 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/recovery-artifacts/advanced-image-window.png` | Untracked | 31100 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/recovery-artifacts/appearance-imported-studio.png` | Untracked | 112599 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/recovery-artifacts/appearance-imported-window.png` | Untracked | 112598 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/recovery-artifacts/appearance-local-studio.png` | Untracked | 83909 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/recovery-artifacts/appearance-local-window.png` | Untracked | 116580 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/recovery-artifacts/component-actions-failure.png` | Untracked | 54956 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/recovery-artifacts/container-move-destination.png` | Untracked | 46958 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/recovery-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-2-blocked-1.5.png` | Untracked | 70164 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/recovery-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-2-blocked-1.png` | Untracked | 66216 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/recovery-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-3-blocked-1.5.png` | Untracked | 69743 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/recovery-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-3-blocked-1.png` | Untracked | 67687 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/recovery-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked-1.5.png` | Untracked | 46215 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/recovery-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked-1.png` | Untracked | 68467 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/recovery-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked.png` | Untracked | 58578 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/recovery-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-6-blocked-1.5.png` | Untracked | 50335 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/recovery-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-6-blocked-1.png` | Untracked | 68467 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/recovery-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-9-blocked-1.png` | Untracked | 69787 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/recovery-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit.json` | Untracked | 452970 | Docs | 15413 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/recovery-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-0.5.png` | Untracked | 81801 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/recovery-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-1.5.png` | Untracked | 109171 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/recovery-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-1.png` | Untracked | 95939 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/recovery-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked.png` | Untracked | 59147 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/recovery-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-0.5.png` | Untracked | 72153 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/recovery-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-1.5.png` | Untracked | 101784 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/recovery-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-1.png` | Untracked | 65406 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/recovery-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked.png` | Untracked | 65868 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/recovery-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-13-blocked-1.5.png` | Untracked | 101782 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/recovery-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-13-blocked-1.png` | Untracked | 65429 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/recovery-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-19-blocked.png` | Untracked | 59396 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/recovery-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-2-blocked-1.5.png` | Untracked | 109213 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/recovery-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-24-blocked.png` | Untracked | 65819 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/recovery-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-6-blocked-1.5.png` | Untracked | 84951 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/recovery-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-6-blocked.png` | Untracked | 59385 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/recovery-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression.json` | Untracked | 459192 | Docs | 15377 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/recovery-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-1-blocked.png` | Untracked | 67079 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/recovery-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-27-blocked.png` | Untracked | 76252 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/recovery-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-5-blocked.png` | Untracked | 68266 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/recovery-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit.json` | Untracked | 224947 | Docs | 7724 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/recovery-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-12-blocked.png` | Untracked | 72559 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/recovery-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-13-blocked.png` | Untracked | 72943 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/recovery-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-19-blocked.png` | Untracked | 68490 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/recovery-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-24-blocked.png` | Untracked | 67547 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/recovery-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-29-blocked.png` | Untracked | 66922 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/recovery-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-6-blocked.png` | Untracked | 68020 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/recovery-artifacts/editor-load-and-toolbar/selection/round-1-full-regression.json` | Untracked | 215550 | Docs | 7320 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/recovery-artifacts/icon-properties-imported-studio.png` | Untracked | 63736 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/recovery-artifacts/icon-properties-imported-window.png` | Untracked | 63716 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/recovery-artifacts/icon-properties-studio.png` | Untracked | 62584 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/recovery-artifacts/icon-properties-window.png` | Untracked | 62577 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/recovery-artifacts/icon-replacement-studio.png` | Untracked | 75046 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/recovery-artifacts/icon-replacement-window.png` | Untracked | 75057 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/recovery-artifacts/imported-responsive-failure.png` | Untracked | 74021 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/recovery-artifacts/responsive-custom-scope.png` | Untracked | 40051 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/recovery-artifacts/responsive-mobile-draft.png` | Untracked | 33824 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/recovery-artifacts/section-order-ready.png` | Untracked | 49538 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/recovery-artifacts/shared-gate-artifacts/shared-instance-imported-studio.png` | Untracked | 71020 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/recovery-artifacts/shared-gate-artifacts/shared-instance-imported-window.png` | Untracked | 71020 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/recovery-artifacts/shared-gate-artifacts/shared-instance-local-studio.png` | Untracked | 70400 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/recovery-artifacts/shared-gate-artifacts/shared-instance-local-window.png` | Untracked | 70400 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/recovery-artifacts/source-project-compat-sample.json` | Untracked | 207 | Docs | 12 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/recovery-servers/child-server-1-31788.log` | Untracked | 15549 | Docs | 402 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/recovery.log` | Untracked | 17552 | Docs | 437 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/responsive-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-2-blocked-1.5.png` | Untracked | 70164 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/responsive-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-2-blocked-1.png` | Untracked | 66216 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/responsive-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-3-blocked-1.5.png` | Untracked | 69743 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/responsive-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-3-blocked-1.png` | Untracked | 67687 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/responsive-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked-1.5.png` | Untracked | 46215 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/responsive-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked-1.png` | Untracked | 68467 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/responsive-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked.png` | Untracked | 58578 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/responsive-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-6-blocked-1.5.png` | Untracked | 50335 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/responsive-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-6-blocked-1.png` | Untracked | 68467 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/responsive-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-9-blocked-1.png` | Untracked | 69787 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/responsive-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit.json` | Untracked | 452970 | Docs | 15413 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/responsive-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-0.5.png` | Untracked | 81801 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/responsive-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-1.5.png` | Untracked | 109171 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/responsive-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-1.png` | Untracked | 95939 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/responsive-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked.png` | Untracked | 59147 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/responsive-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-0.5.png` | Untracked | 72153 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/responsive-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-1.5.png` | Untracked | 101784 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/responsive-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-1.png` | Untracked | 65406 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/responsive-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked.png` | Untracked | 65868 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/responsive-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-13-blocked-1.5.png` | Untracked | 101782 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/responsive-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-13-blocked-1.png` | Untracked | 65429 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/responsive-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-19-blocked.png` | Untracked | 59396 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/responsive-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-2-blocked-1.5.png` | Untracked | 109213 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/responsive-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-24-blocked.png` | Untracked | 65819 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/responsive-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-6-blocked-1.5.png` | Untracked | 84951 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/responsive-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-6-blocked.png` | Untracked | 59385 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/responsive-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression.json` | Untracked | 459192 | Docs | 15377 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/responsive-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-1-blocked.png` | Untracked | 67079 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/responsive-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-27-blocked.png` | Untracked | 76252 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/responsive-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-5-blocked.png` | Untracked | 68266 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/responsive-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit.json` | Untracked | 224947 | Docs | 7724 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/responsive-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-12-blocked.png` | Untracked | 72559 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/responsive-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-13-blocked.png` | Untracked | 72943 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/responsive-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-19-blocked.png` | Untracked | 68490 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/responsive-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-24-blocked.png` | Untracked | 67547 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/responsive-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-29-blocked.png` | Untracked | 66922 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/responsive-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-6-blocked.png` | Untracked | 68020 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/responsive-artifacts/editor-load-and-toolbar/selection/round-1-full-regression.json` | Untracked | 215550 | Docs | 7320 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/responsive-artifacts/responsive-custom-scope.png` | Untracked | 40051 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/responsive-artifacts/responsive-mobile-draft.png` | Untracked | 33824 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/responsive-artifacts/shared-gate-artifacts/shared-instance-imported-studio.png` | Untracked | 71020 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/responsive-artifacts/shared-gate-artifacts/shared-instance-imported-window.png` | Untracked | 71020 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/responsive-artifacts/shared-gate-artifacts/shared-instance-local-studio.png` | Untracked | 70400 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/responsive-artifacts/shared-gate-artifacts/shared-instance-local-window.png` | Untracked | 70400 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/responsive-artifacts/source-project-compat-sample.json` | Untracked | 207 | Docs | 12 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/responsive-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-2-blocked-1.5.png` | Untracked | 70164 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/responsive-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-2-blocked-1.png` | Untracked | 66216 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/responsive-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-3-blocked-1.5.png` | Untracked | 69743 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/responsive-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-3-blocked-1.png` | Untracked | 67687 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/responsive-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked-1.5.png` | Untracked | 46215 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/responsive-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked-1.png` | Untracked | 68467 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/responsive-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked.png` | Untracked | 58578 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/responsive-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-6-blocked-1.5.png` | Untracked | 50335 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/responsive-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-6-blocked-1.png` | Untracked | 68467 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/responsive-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-9-blocked-1.png` | Untracked | 69787 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/responsive-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit.json` | Untracked | 452970 | Docs | 15413 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/responsive-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-0.5.png` | Untracked | 81801 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/responsive-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-1.5.png` | Untracked | 109171 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/responsive-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-1.png` | Untracked | 95939 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/responsive-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked.png` | Untracked | 59147 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/responsive-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-0.5.png` | Untracked | 72153 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/responsive-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-1.5.png` | Untracked | 101784 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/responsive-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-1.png` | Untracked | 65406 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/responsive-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked.png` | Untracked | 65868 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/responsive-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-13-blocked-1.5.png` | Untracked | 101782 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/responsive-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-13-blocked-1.png` | Untracked | 65429 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/responsive-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-19-blocked.png` | Untracked | 59396 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/responsive-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-2-blocked-1.5.png` | Untracked | 109213 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/responsive-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-24-blocked.png` | Untracked | 65819 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/responsive-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-6-blocked-1.5.png` | Untracked | 84951 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/responsive-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-6-blocked.png` | Untracked | 59385 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/responsive-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression.json` | Untracked | 459192 | Docs | 15377 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/responsive-imported-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-1-blocked.png` | Untracked | 67079 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/responsive-imported-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-27-blocked.png` | Untracked | 76252 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/responsive-imported-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-5-blocked.png` | Untracked | 68266 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/responsive-imported-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit.json` | Untracked | 224947 | Docs | 7724 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/responsive-imported-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-12-blocked.png` | Untracked | 72559 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/responsive-imported-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-13-blocked.png` | Untracked | 72943 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/responsive-imported-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-19-blocked.png` | Untracked | 68490 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/responsive-imported-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-24-blocked.png` | Untracked | 67547 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/responsive-imported-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-29-blocked.png` | Untracked | 66922 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/responsive-imported-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-6-blocked.png` | Untracked | 68020 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/responsive-imported-artifacts/editor-load-and-toolbar/selection/round-1-full-regression.json` | Untracked | 215550 | Docs | 7320 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/responsive-imported-artifacts/imported-responsive-failure.png` | Untracked | 74021 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/responsive-imported-artifacts/responsive-custom-scope.png` | Untracked | 40051 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/responsive-imported-artifacts/responsive-mobile-draft.png` | Untracked | 33824 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/responsive-imported-artifacts/shared-gate-artifacts/shared-instance-imported-studio.png` | Untracked | 71020 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/responsive-imported-artifacts/shared-gate-artifacts/shared-instance-imported-window.png` | Untracked | 71020 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/responsive-imported-artifacts/shared-gate-artifacts/shared-instance-local-studio.png` | Untracked | 70400 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/responsive-imported-artifacts/shared-gate-artifacts/shared-instance-local-window.png` | Untracked | 70400 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/responsive-imported-artifacts/source-project-compat-sample.json` | Untracked | 207 | Docs | 12 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/responsive-imported-servers/child-server-1-35152.log` | Untracked | 12043 | Docs | 245 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/responsive-imported-servers/child-server-2-9348.log` | Untracked | 7208 | Docs | 27 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/responsive-imported.log` | Untracked | 23694 | Docs | 362 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/responsive-servers/child-server-1-29028.log` | Untracked | 44858 | Docs | 1051 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/responsive.log` | Untracked | 19909 | Docs | 170 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/results.json` | Untracked | 7907 | Docs | 327 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/section-order-artifacts/advanced-image-studio.png` | Untracked | 39869 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/section-order-artifacts/advanced-image-window.png` | Untracked | 31100 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/section-order-artifacts/appearance-imported-studio.png` | Untracked | 112599 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/section-order-artifacts/appearance-imported-window.png` | Untracked | 112598 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/section-order-artifacts/appearance-local-studio.png` | Untracked | 83909 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/section-order-artifacts/appearance-local-window.png` | Untracked | 116580 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/section-order-artifacts/component-actions-failure.png` | Untracked | 54956 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/section-order-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-2-blocked-1.5.png` | Untracked | 70164 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/section-order-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-2-blocked-1.png` | Untracked | 66216 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/section-order-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-3-blocked-1.5.png` | Untracked | 69743 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/section-order-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-3-blocked-1.png` | Untracked | 67687 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/section-order-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked-1.5.png` | Untracked | 46215 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/section-order-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked-1.png` | Untracked | 68467 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/section-order-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked.png` | Untracked | 58578 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/section-order-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-6-blocked-1.5.png` | Untracked | 50335 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/section-order-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-6-blocked-1.png` | Untracked | 68467 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/section-order-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-9-blocked-1.png` | Untracked | 69787 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/section-order-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit.json` | Untracked | 452970 | Docs | 15413 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/section-order-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-0.5.png` | Untracked | 81801 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/section-order-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-1.5.png` | Untracked | 109171 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/section-order-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-1.png` | Untracked | 95939 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/section-order-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked.png` | Untracked | 59147 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/section-order-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-0.5.png` | Untracked | 72153 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/section-order-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-1.5.png` | Untracked | 101784 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/section-order-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-1.png` | Untracked | 65406 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/section-order-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked.png` | Untracked | 65868 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/section-order-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-13-blocked-1.5.png` | Untracked | 101782 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/section-order-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-13-blocked-1.png` | Untracked | 65429 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/section-order-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-19-blocked.png` | Untracked | 59396 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/section-order-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-2-blocked-1.5.png` | Untracked | 109213 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/section-order-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-24-blocked.png` | Untracked | 65819 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/section-order-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-6-blocked-1.5.png` | Untracked | 84951 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/section-order-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-6-blocked.png` | Untracked | 59385 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/section-order-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression.json` | Untracked | 459192 | Docs | 15377 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/section-order-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-1-blocked.png` | Untracked | 67079 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/section-order-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-27-blocked.png` | Untracked | 76252 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/section-order-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-5-blocked.png` | Untracked | 68266 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/section-order-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit.json` | Untracked | 224947 | Docs | 7724 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/section-order-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-12-blocked.png` | Untracked | 72559 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/section-order-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-13-blocked.png` | Untracked | 72943 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/section-order-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-19-blocked.png` | Untracked | 68490 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/section-order-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-24-blocked.png` | Untracked | 67547 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/section-order-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-29-blocked.png` | Untracked | 66922 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/section-order-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-6-blocked.png` | Untracked | 68020 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/section-order-artifacts/editor-load-and-toolbar/selection/round-1-full-regression.json` | Untracked | 215550 | Docs | 7320 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/section-order-artifacts/icon-properties-imported-studio.png` | Untracked | 63736 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/section-order-artifacts/icon-properties-imported-window.png` | Untracked | 63716 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/section-order-artifacts/icon-properties-studio.png` | Untracked | 62584 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/section-order-artifacts/icon-properties-window.png` | Untracked | 62577 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/section-order-artifacts/icon-replacement-studio.png` | Untracked | 75046 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/section-order-artifacts/icon-replacement-window.png` | Untracked | 75057 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/section-order-artifacts/imported-responsive-failure.png` | Untracked | 74021 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/section-order-artifacts/responsive-custom-scope.png` | Untracked | 40051 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/section-order-artifacts/responsive-mobile-draft.png` | Untracked | 33824 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/section-order-artifacts/section-order-ready.png` | Untracked | 49538 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/section-order-artifacts/shared-gate-artifacts/shared-instance-imported-studio.png` | Untracked | 71020 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/section-order-artifacts/shared-gate-artifacts/shared-instance-imported-window.png` | Untracked | 71020 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/section-order-artifacts/shared-gate-artifacts/shared-instance-local-studio.png` | Untracked | 70400 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/section-order-artifacts/shared-gate-artifacts/shared-instance-local-window.png` | Untracked | 70400 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/section-order-artifacts/source-project-compat-sample.json` | Untracked | 207 | Docs | 12 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/section-order-servers/child-server-1-29428.log` | Untracked | 48372 | Docs | 1190 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/section-order.log` | Untracked | 10567 | Docs | 91 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-2-blocked-1.5.png` | Untracked | 70164 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-2-blocked-1.png` | Untracked | 66216 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-3-blocked-1.5.png` | Untracked | 69743 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-3-blocked-1.png` | Untracked | 67687 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked-1.5.png` | Untracked | 46215 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked-1.png` | Untracked | 68467 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked.png` | Untracked | 58578 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-6-blocked-1.5.png` | Untracked | 50335 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-6-blocked-1.png` | Untracked | 68467 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-9-blocked-1.png` | Untracked | 69787 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit.json` | Untracked | 452970 | Docs | 15413 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-0.5.png` | Untracked | 81801 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-1.5.png` | Untracked | 109171 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-1.png` | Untracked | 95939 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked.png` | Untracked | 59147 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-0.5.png` | Untracked | 72153 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-1.5.png` | Untracked | 101784 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-1.png` | Untracked | 65406 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked.png` | Untracked | 65868 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-13-blocked-1.5.png` | Untracked | 101782 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-13-blocked-1.png` | Untracked | 65429 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-19-blocked.png` | Untracked | 59396 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-2-blocked-1.5.png` | Untracked | 109213 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-24-blocked.png` | Untracked | 65819 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-6-blocked-1.5.png` | Untracked | 84951 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-6-blocked.png` | Untracked | 59385 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression.json` | Untracked | 459192 | Docs | 15377 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-1-blocked.png` | Untracked | 67079 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-27-blocked.png` | Untracked | 76252 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-5-blocked.png` | Untracked | 68266 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit.json` | Untracked | 224947 | Docs | 7724 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-12-blocked.png` | Untracked | 72559 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-13-blocked.png` | Untracked | 72943 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-19-blocked.png` | Untracked | 68490 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-24-blocked.png` | Untracked | 67547 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-29-blocked.png` | Untracked | 66922 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-6-blocked.png` | Untracked | 68020 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-regression.json` | Untracked | 215550 | Docs | 7320 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/selection-fit-overfit.log` | Untracked | 297609 | Docs | 335 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-0.5.png` | Untracked | 81801 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-1.5.png` | Untracked | 109171 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-1.png` | Untracked | 95939 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked.png` | Untracked | 59147 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-0.5.png` | Untracked | 72153 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-1.5.png` | Untracked | 101784 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-1.png` | Untracked | 65406 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked.png` | Untracked | 65868 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-13-blocked-1.5.png` | Untracked | 101782 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-13-blocked-1.png` | Untracked | 65429 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-19-blocked.png` | Untracked | 59396 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-2-blocked-1.5.png` | Untracked | 109213 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-24-blocked.png` | Untracked | 65819 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-6-blocked-1.5.png` | Untracked | 84951 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-6-blocked.png` | Untracked | 59385 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression.json` | Untracked | 459192 | Docs | 15377 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-1-blocked.png` | Untracked | 67079 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-27-blocked.png` | Untracked | 76252 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-5-blocked.png` | Untracked | 68266 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit.json` | Untracked | 224947 | Docs | 7724 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-12-blocked.png` | Untracked | 72559 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-13-blocked.png` | Untracked | 72943 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-19-blocked.png` | Untracked | 68490 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-24-blocked.png` | Untracked | 67547 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-29-blocked.png` | Untracked | 66922 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-6-blocked.png` | Untracked | 68020 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-regression.json` | Untracked | 215550 | Docs | 7320 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/selection-fit-regression.log` | Untracked | 309391 | Docs | 378 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-1-blocked.png` | Untracked | 67079 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-27-blocked.png` | Untracked | 76252 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-5-blocked.png` | Untracked | 68266 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit.json` | Untracked | 224947 | Docs | 7724 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-12-blocked.png` | Untracked | 72559 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-13-blocked.png` | Untracked | 72943 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-19-blocked.png` | Untracked | 68490 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-24-blocked.png` | Untracked | 67547 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-29-blocked.png` | Untracked | 66922 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-6-blocked.png` | Untracked | 68020 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-regression.json` | Untracked | 215550 | Docs | 7320 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/selection-full-overfit.log` | Untracked | 148034 | Docs | 174 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/selection-full-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-12-blocked.png` | Untracked | 72559 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/selection-full-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-13-blocked.png` | Untracked | 72943 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/selection-full-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-19-blocked.png` | Untracked | 68490 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/selection-full-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-24-blocked.png` | Untracked | 67547 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/selection-full-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-29-blocked.png` | Untracked | 66922 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/selection-full-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-6-blocked.png` | Untracked | 68020 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/selection-full-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-regression.json` | Untracked | 215550 | Docs | 7320 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/selection-full-regression.log` | Untracked | 141179 | Docs | 139 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/server-53441.log` | Untracked | 306924 | Docs | 6525 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/server-53442.log` | Untracked | 8432 | Docs | 36 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/server-53443.log` | Untracked | 8306 | Docs | 36 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/server-59758.log` | Untracked | 154695 | Docs | 3166 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/server-59759.log` | Untracked | 47686 | Docs | 104 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-compiler-warmup.log` | Untracked | 2710 | Docs | 27 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-imported-studio-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-2-blocked-1.5.png` | Untracked | 70164 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-imported-studio-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-2-blocked-1.png` | Untracked | 66216 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-imported-studio-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-3-blocked-1.5.png` | Untracked | 69743 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-imported-studio-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-3-blocked-1.png` | Untracked | 67687 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-imported-studio-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked-1.5.png` | Untracked | 46215 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-imported-studio-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked-1.png` | Untracked | 68467 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-imported-studio-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked.png` | Untracked | 58578 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-imported-studio-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-6-blocked-1.5.png` | Untracked | 50335 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-imported-studio-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-6-blocked-1.png` | Untracked | 68467 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-imported-studio-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-9-blocked-1.png` | Untracked | 69787 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-imported-studio-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit.json` | Untracked | 452970 | Docs | 15413 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-imported-studio-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-0.5.png` | Untracked | 81801 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-imported-studio-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-1.5.png` | Untracked | 109171 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-imported-studio-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-1.png` | Untracked | 95939 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-imported-studio-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked.png` | Untracked | 59147 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-imported-studio-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-0.5.png` | Untracked | 72153 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-imported-studio-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-1.5.png` | Untracked | 101784 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-imported-studio-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-1.png` | Untracked | 65406 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-imported-studio-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked.png` | Untracked | 65868 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-imported-studio-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-13-blocked-1.5.png` | Untracked | 101782 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-imported-studio-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-13-blocked-1.png` | Untracked | 65429 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-imported-studio-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-19-blocked.png` | Untracked | 59396 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-imported-studio-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-2-blocked-1.5.png` | Untracked | 109213 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-imported-studio-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-24-blocked.png` | Untracked | 65819 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-imported-studio-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-6-blocked-1.5.png` | Untracked | 84951 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-imported-studio-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-6-blocked.png` | Untracked | 59385 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-imported-studio-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression.json` | Untracked | 459192 | Docs | 15377 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-imported-studio-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-1-blocked.png` | Untracked | 67079 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-imported-studio-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-27-blocked.png` | Untracked | 76252 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-imported-studio-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-5-blocked.png` | Untracked | 68266 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-imported-studio-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit.json` | Untracked | 224947 | Docs | 7724 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-imported-studio-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-12-blocked.png` | Untracked | 72559 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-imported-studio-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-13-blocked.png` | Untracked | 72943 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-imported-studio-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-19-blocked.png` | Untracked | 68490 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-imported-studio-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-24-blocked.png` | Untracked | 67547 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-imported-studio-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-29-blocked.png` | Untracked | 66922 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-imported-studio-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-6-blocked.png` | Untracked | 68020 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-imported-studio-artifacts/editor-load-and-toolbar/selection/round-1-full-regression.json` | Untracked | 215550 | Docs | 7320 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-imported-studio-artifacts/shared-gate-artifacts/shared-instance-imported-studio.png` | Untracked | 71020 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-imported-studio-artifacts/shared-gate-artifacts/shared-instance-local-studio.png` | Untracked | 70400 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-imported-studio-artifacts/shared-gate-artifacts/shared-instance-local-window.png` | Untracked | 70400 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-imported-studio-artifacts/source-project-compat-sample.json` | Untracked | 207 | Docs | 12 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-imported-studio.log` | Untracked | 13434 | Docs | 118 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-imported-window-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-2-blocked-1.5.png` | Untracked | 70164 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-imported-window-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-2-blocked-1.png` | Untracked | 66216 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-imported-window-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-3-blocked-1.5.png` | Untracked | 69743 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-imported-window-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-3-blocked-1.png` | Untracked | 67687 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-imported-window-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked-1.5.png` | Untracked | 46215 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-imported-window-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked-1.png` | Untracked | 68467 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-imported-window-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked.png` | Untracked | 58578 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-imported-window-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-6-blocked-1.5.png` | Untracked | 50335 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-imported-window-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-6-blocked-1.png` | Untracked | 68467 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-imported-window-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-9-blocked-1.png` | Untracked | 69787 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-imported-window-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit.json` | Untracked | 452970 | Docs | 15413 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-imported-window-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-0.5.png` | Untracked | 81801 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-imported-window-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-1.5.png` | Untracked | 109171 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-imported-window-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-1.png` | Untracked | 95939 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-imported-window-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked.png` | Untracked | 59147 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-imported-window-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-0.5.png` | Untracked | 72153 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-imported-window-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-1.5.png` | Untracked | 101784 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-imported-window-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-1.png` | Untracked | 65406 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-imported-window-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked.png` | Untracked | 65868 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-imported-window-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-13-blocked-1.5.png` | Untracked | 101782 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-imported-window-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-13-blocked-1.png` | Untracked | 65429 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-imported-window-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-19-blocked.png` | Untracked | 59396 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-imported-window-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-2-blocked-1.5.png` | Untracked | 109213 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-imported-window-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-24-blocked.png` | Untracked | 65819 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-imported-window-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-6-blocked-1.5.png` | Untracked | 84951 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-imported-window-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-6-blocked.png` | Untracked | 59385 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-imported-window-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression.json` | Untracked | 459192 | Docs | 15377 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-imported-window-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-1-blocked.png` | Untracked | 67079 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-imported-window-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-27-blocked.png` | Untracked | 76252 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-imported-window-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-5-blocked.png` | Untracked | 68266 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-imported-window-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit.json` | Untracked | 224947 | Docs | 7724 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-imported-window-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-12-blocked.png` | Untracked | 72559 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-imported-window-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-13-blocked.png` | Untracked | 72943 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-imported-window-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-19-blocked.png` | Untracked | 68490 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-imported-window-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-24-blocked.png` | Untracked | 67547 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-imported-window-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-29-blocked.png` | Untracked | 66922 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-imported-window-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-6-blocked.png` | Untracked | 68020 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-imported-window-artifacts/editor-load-and-toolbar/selection/round-1-full-regression.json` | Untracked | 215550 | Docs | 7320 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-imported-window-artifacts/shared-gate-artifacts/shared-instance-imported-studio.png` | Untracked | 71020 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-imported-window-artifacts/shared-gate-artifacts/shared-instance-imported-window.png` | Untracked | 71020 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-imported-window-artifacts/shared-gate-artifacts/shared-instance-local-studio.png` | Untracked | 70400 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-imported-window-artifacts/shared-gate-artifacts/shared-instance-local-window.png` | Untracked | 70400 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-imported-window-artifacts/source-project-compat-sample.json` | Untracked | 207 | Docs | 12 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-imported-window.log` | Untracked | 13754 | Docs | 122 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-local-studio-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-2-blocked-1.5.png` | Untracked | 70164 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-local-studio-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-2-blocked-1.png` | Untracked | 66216 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-local-studio-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-3-blocked-1.5.png` | Untracked | 69743 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-local-studio-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-3-blocked-1.png` | Untracked | 67687 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-local-studio-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked-1.5.png` | Untracked | 46215 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-local-studio-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked-1.png` | Untracked | 68467 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-local-studio-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked.png` | Untracked | 58578 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-local-studio-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-6-blocked-1.5.png` | Untracked | 50335 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-local-studio-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-6-blocked-1.png` | Untracked | 68467 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-local-studio-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-9-blocked-1.png` | Untracked | 69787 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-local-studio-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit.json` | Untracked | 452970 | Docs | 15413 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-local-studio-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-0.5.png` | Untracked | 81801 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-local-studio-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-1.5.png` | Untracked | 109171 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-local-studio-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-1.png` | Untracked | 95939 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-local-studio-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked.png` | Untracked | 59147 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-local-studio-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-0.5.png` | Untracked | 72153 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-local-studio-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-1.5.png` | Untracked | 101784 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-local-studio-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-1.png` | Untracked | 65406 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-local-studio-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked.png` | Untracked | 65868 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-local-studio-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-13-blocked-1.5.png` | Untracked | 101782 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-local-studio-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-13-blocked-1.png` | Untracked | 65429 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-local-studio-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-19-blocked.png` | Untracked | 59396 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-local-studio-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-2-blocked-1.5.png` | Untracked | 109213 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-local-studio-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-24-blocked.png` | Untracked | 65819 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-local-studio-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-6-blocked-1.5.png` | Untracked | 84951 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-local-studio-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-6-blocked.png` | Untracked | 59385 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-local-studio-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression.json` | Untracked | 459192 | Docs | 15377 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-local-studio-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-1-blocked.png` | Untracked | 67079 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-local-studio-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-27-blocked.png` | Untracked | 76252 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-local-studio-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-5-blocked.png` | Untracked | 68266 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-local-studio-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit.json` | Untracked | 224947 | Docs | 7724 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-local-studio-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-12-blocked.png` | Untracked | 72559 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-local-studio-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-13-blocked.png` | Untracked | 72943 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-local-studio-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-19-blocked.png` | Untracked | 68490 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-local-studio-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-24-blocked.png` | Untracked | 67547 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-local-studio-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-29-blocked.png` | Untracked | 66922 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-local-studio-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-6-blocked.png` | Untracked | 68020 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-local-studio-artifacts/editor-load-and-toolbar/selection/round-1-full-regression.json` | Untracked | 215550 | Docs | 7320 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-local-studio-artifacts/shared-gate-artifacts/shared-instance-local-studio.png` | Untracked | 70400 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-local-studio-artifacts/source-project-compat-sample.json` | Untracked | 207 | Docs | 12 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-local-studio.log` | Untracked | 14253 | Docs | 122 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-local-window-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-2-blocked-1.5.png` | Untracked | 70164 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-local-window-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-2-blocked-1.png` | Untracked | 66216 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-local-window-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-3-blocked-1.5.png` | Untracked | 69743 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-local-window-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-3-blocked-1.png` | Untracked | 67687 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-local-window-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked-1.5.png` | Untracked | 46215 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-local-window-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked-1.png` | Untracked | 68467 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-local-window-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked.png` | Untracked | 58578 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-local-window-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-6-blocked-1.5.png` | Untracked | 50335 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-local-window-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-6-blocked-1.png` | Untracked | 68467 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-local-window-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-9-blocked-1.png` | Untracked | 69787 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-local-window-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit.json` | Untracked | 452970 | Docs | 15413 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-local-window-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-0.5.png` | Untracked | 81801 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-local-window-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-1.5.png` | Untracked | 109171 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-local-window-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-1.png` | Untracked | 95939 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-local-window-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked.png` | Untracked | 59147 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-local-window-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-0.5.png` | Untracked | 72153 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-local-window-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-1.5.png` | Untracked | 101784 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-local-window-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-1.png` | Untracked | 65406 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-local-window-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked.png` | Untracked | 65868 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-local-window-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-13-blocked-1.5.png` | Untracked | 101782 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-local-window-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-13-blocked-1.png` | Untracked | 65429 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-local-window-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-19-blocked.png` | Untracked | 59396 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-local-window-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-2-blocked-1.5.png` | Untracked | 109213 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-local-window-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-24-blocked.png` | Untracked | 65819 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-local-window-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-6-blocked-1.5.png` | Untracked | 84951 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-local-window-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-6-blocked.png` | Untracked | 59385 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-local-window-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression.json` | Untracked | 459192 | Docs | 15377 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-local-window-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-1-blocked.png` | Untracked | 67079 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-local-window-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-27-blocked.png` | Untracked | 76252 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-local-window-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-5-blocked.png` | Untracked | 68266 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-local-window-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit.json` | Untracked | 224947 | Docs | 7724 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-local-window-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-12-blocked.png` | Untracked | 72559 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-local-window-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-13-blocked.png` | Untracked | 72943 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-local-window-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-19-blocked.png` | Untracked | 68490 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-local-window-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-24-blocked.png` | Untracked | 67547 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-local-window-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-29-blocked.png` | Untracked | 66922 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-local-window-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-6-blocked.png` | Untracked | 68020 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-local-window-artifacts/editor-load-and-toolbar/selection/round-1-full-regression.json` | Untracked | 215550 | Docs | 7320 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-local-window-artifacts/shared-gate-artifacts/shared-instance-local-studio.png` | Untracked | 70400 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-local-window-artifacts/shared-gate-artifacts/shared-instance-local-window.png` | Untracked | 70400 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-local-window-artifacts/source-project-compat-sample.json` | Untracked | 207 | Docs | 12 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-local-window.log` | Untracked | 15055 | Docs | 128 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/shared-runtime-setup.log` | Untracked | 1163 | Docs | 12 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/state-and-transitions-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-2-blocked-1.5.png` | Untracked | 70164 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/state-and-transitions-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-2-blocked-1.png` | Untracked | 66216 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/state-and-transitions-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-3-blocked-1.5.png` | Untracked | 69743 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/state-and-transitions-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-3-blocked-1.png` | Untracked | 67687 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/state-and-transitions-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked-1.5.png` | Untracked | 46215 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/state-and-transitions-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked-1.png` | Untracked | 68467 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/state-and-transitions-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked.png` | Untracked | 58578 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/state-and-transitions-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-6-blocked-1.5.png` | Untracked | 50335 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/state-and-transitions-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-6-blocked-1.png` | Untracked | 68467 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/state-and-transitions-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-9-blocked-1.png` | Untracked | 69787 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/state-and-transitions-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit.json` | Untracked | 452970 | Docs | 15413 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/state-and-transitions-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-0.5.png` | Untracked | 81801 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/state-and-transitions-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-1.5.png` | Untracked | 109171 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/state-and-transitions-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-1.png` | Untracked | 95939 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/state-and-transitions-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked.png` | Untracked | 59147 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/state-and-transitions-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-0.5.png` | Untracked | 72153 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/state-and-transitions-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-1.5.png` | Untracked | 101784 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/state-and-transitions-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-1.png` | Untracked | 65406 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/state-and-transitions-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked.png` | Untracked | 65868 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/state-and-transitions-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-13-blocked-1.5.png` | Untracked | 101782 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/state-and-transitions-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-13-blocked-1.png` | Untracked | 65429 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/state-and-transitions-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-19-blocked.png` | Untracked | 59396 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/state-and-transitions-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-2-blocked-1.5.png` | Untracked | 109213 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/state-and-transitions-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-24-blocked.png` | Untracked | 65819 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/state-and-transitions-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-6-blocked-1.5.png` | Untracked | 84951 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/state-and-transitions-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-6-blocked.png` | Untracked | 59385 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/state-and-transitions-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression.json` | Untracked | 459192 | Docs | 15377 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/state-and-transitions-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-1-blocked.png` | Untracked | 67079 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/state-and-transitions-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-27-blocked.png` | Untracked | 76252 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/state-and-transitions-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-5-blocked.png` | Untracked | 68266 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/state-and-transitions-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit.json` | Untracked | 224947 | Docs | 7724 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/state-and-transitions-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-12-blocked.png` | Untracked | 72559 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/state-and-transitions-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-13-blocked.png` | Untracked | 72943 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/state-and-transitions-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-19-blocked.png` | Untracked | 68490 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/state-and-transitions-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-24-blocked.png` | Untracked | 67547 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/state-and-transitions-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-29-blocked.png` | Untracked | 66922 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/state-and-transitions-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-6-blocked.png` | Untracked | 68020 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/state-and-transitions-artifacts/editor-load-and-toolbar/selection/round-1-full-regression.json` | Untracked | 215550 | Docs | 7320 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/state-and-transitions-artifacts/shared-gate-artifacts/shared-instance-imported-studio.png` | Untracked | 71020 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/state-and-transitions-artifacts/shared-gate-artifacts/shared-instance-imported-window.png` | Untracked | 71020 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/state-and-transitions-artifacts/shared-gate-artifacts/shared-instance-local-studio.png` | Untracked | 70400 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/state-and-transitions-artifacts/shared-gate-artifacts/shared-instance-local-window.png` | Untracked | 70400 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/state-and-transitions-artifacts/source-project-compat-sample.json` | Untracked | 207 | Docs | 12 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/state-and-transitions-servers/child-server-1-11076.log` | Untracked | 10973 | Docs | 250 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/state-and-transitions.log` | Untracked | 13225 | Docs | 288 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/text-editing-artifacts/advanced-image-studio.png` | Untracked | 39869 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/text-editing-artifacts/advanced-image-window.png` | Untracked | 31100 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/text-editing-artifacts/appearance-imported-studio.png` | Untracked | 112599 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/text-editing-artifacts/appearance-imported-window.png` | Untracked | 112598 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/text-editing-artifacts/appearance-local-studio.png` | Untracked | 83909 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/text-editing-artifacts/appearance-local-window.png` | Untracked | 116580 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/text-editing-artifacts/component-actions-failure.png` | Untracked | 54956 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/text-editing-artifacts/container-move-destination.png` | Untracked | 46958 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/text-editing-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-2-blocked-1.5.png` | Untracked | 70164 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/text-editing-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-2-blocked-1.png` | Untracked | 66216 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/text-editing-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-3-blocked-1.5.png` | Untracked | 69743 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/text-editing-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-3-blocked-1.png` | Untracked | 67687 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/text-editing-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked-1.5.png` | Untracked | 46215 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/text-editing-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked-1.png` | Untracked | 68467 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/text-editing-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked.png` | Untracked | 58578 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/text-editing-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-6-blocked-1.5.png` | Untracked | 50335 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/text-editing-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-6-blocked-1.png` | Untracked | 68467 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/text-editing-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-9-blocked-1.png` | Untracked | 69787 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/text-editing-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit.json` | Untracked | 452970 | Docs | 15413 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/text-editing-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-0.5.png` | Untracked | 81801 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/text-editing-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-1.5.png` | Untracked | 109171 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/text-editing-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-1.png` | Untracked | 95939 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/text-editing-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked.png` | Untracked | 59147 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/text-editing-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-0.5.png` | Untracked | 72153 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/text-editing-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-1.5.png` | Untracked | 101784 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/text-editing-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-1.png` | Untracked | 65406 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/text-editing-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked.png` | Untracked | 65868 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/text-editing-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-13-blocked-1.5.png` | Untracked | 101782 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/text-editing-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-13-blocked-1.png` | Untracked | 65429 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/text-editing-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-19-blocked.png` | Untracked | 59396 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/text-editing-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-2-blocked-1.5.png` | Untracked | 109213 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/text-editing-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-24-blocked.png` | Untracked | 65819 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/text-editing-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-6-blocked-1.5.png` | Untracked | 84951 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/text-editing-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-6-blocked.png` | Untracked | 59385 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/text-editing-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression.json` | Untracked | 459192 | Docs | 15377 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/text-editing-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-1-blocked.png` | Untracked | 67079 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/text-editing-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-27-blocked.png` | Untracked | 76252 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/text-editing-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-5-blocked.png` | Untracked | 68266 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/text-editing-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit.json` | Untracked | 224947 | Docs | 7724 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/text-editing-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-12-blocked.png` | Untracked | 72559 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/text-editing-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-13-blocked.png` | Untracked | 72943 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/text-editing-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-19-blocked.png` | Untracked | 68490 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/text-editing-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-24-blocked.png` | Untracked | 67547 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/text-editing-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-29-blocked.png` | Untracked | 66922 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/text-editing-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-6-blocked.png` | Untracked | 68020 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/text-editing-artifacts/editor-load-and-toolbar/selection/round-1-full-regression.json` | Untracked | 215550 | Docs | 7320 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/text-editing-artifacts/icon-properties-imported-studio.png` | Untracked | 63736 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/text-editing-artifacts/icon-properties-imported-window.png` | Untracked | 63716 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/text-editing-artifacts/icon-properties-studio.png` | Untracked | 62584 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/text-editing-artifacts/icon-properties-window.png` | Untracked | 62577 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/text-editing-artifacts/icon-replacement-studio.png` | Untracked | 75046 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/text-editing-artifacts/icon-replacement-window.png` | Untracked | 75057 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/text-editing-artifacts/imported-responsive-failure.png` | Untracked | 74021 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/text-editing-artifacts/responsive-custom-scope.png` | Untracked | 40051 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/text-editing-artifacts/responsive-mobile-draft.png` | Untracked | 33824 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/text-editing-artifacts/section-order-ready.png` | Untracked | 49538 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/text-editing-artifacts/shared-gate-artifacts/shared-instance-imported-studio.png` | Untracked | 71020 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/text-editing-artifacts/shared-gate-artifacts/shared-instance-imported-window.png` | Untracked | 71020 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/text-editing-artifacts/shared-gate-artifacts/shared-instance-local-studio.png` | Untracked | 70400 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/text-editing-artifacts/shared-gate-artifacts/shared-instance-local-window.png` | Untracked | 70400 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/text-editing-artifacts/source-project-compat-sample.json` | Untracked | 207 | Docs | 12 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/text-editing-servers/child-server-1-9516.log` | Untracked | 15247 | Docs | 379 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/text-editing.log` | Untracked | 17758 | Docs | 425 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/unchanged-test-hashes.json` | Untracked | 33300 | Docs | 302 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/warmup-m0-control-lab-fit-network.jsonl` | Untracked | 6954 | Docs | 45 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/warmup-m0-control-lab-full-network.jsonl` | Untracked | 8681 | Docs | 59 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/warmup-m0-overfit-lab-fit-network.jsonl` | Untracked | 7765 | Docs | 50 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/warmup-m0-overfit-lab-full-network.jsonl` | Untracked | 7545 | Docs | 49 | 0 |  |
+| `docs/reliability-gate/2026-11-02T11-58-11-024Z-b23bd1d/worktree-status-after.txt` | Untracked | 62338 | Docs | 932 | 0 |  |
+| `docs/reliability-gate/2026-11-02T16-07-59-730Z-ee50788-responsive-imported/git-status-after.txt` | Untracked | 24764 | Docs | 690 | 0 |  |
+| `docs/reliability-gate/2026-11-02T16-07-59-730Z-ee50788-responsive-imported/git-status-before.txt` | Untracked | 24764 | Docs | 690 | 0 |  |
+| `docs/reliability-gate/2026-11-02T16-07-59-730Z-ee50788-responsive-imported/plan.json` | Untracked | 9021 | Docs | 343 | 0 |  |
+| `docs/reliability-gate/2026-11-02T16-07-59-730Z-ee50788-responsive-imported/raw.log` | Untracked | 25308 | Docs | 395 | 0 |  |
+| `docs/reliability-gate/2026-11-02T16-07-59-730Z-ee50788-responsive-imported/responsive-imported-artifacts/imported-responsive-failure.png` | Untracked | 96593 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T16-07-59-730Z-ee50788-responsive-imported/responsive-imported-artifacts/source-project-compat-sample.json` | Untracked | 207 | Docs | 12 | 0 |  |
+| `docs/reliability-gate/2026-11-02T16-07-59-730Z-ee50788-responsive-imported/responsive-imported-servers/child-server-1-16856.log` | Untracked | 11939 | Docs | 246 | 0 |  |
+| `docs/reliability-gate/2026-11-02T16-07-59-730Z-ee50788-responsive-imported/responsive-imported-servers/child-server-2-31632.log` | Untracked | 7210 | Docs | 27 | 0 |  |
+| `docs/reliability-gate/2026-11-02T16-07-59-730Z-ee50788-responsive-imported/responsive-imported.log` | Untracked | 24670 | Docs | 385 | 0 |  |
+| `docs/reliability-gate/2026-11-02T16-07-59-730Z-ee50788-responsive-imported/results.json` | Untracked | 539 | Docs | 20 | 0 |  |
+| `docs/reliability-gate/2026-11-02T16-07-59-730Z-ee50788-responsive-imported/unchanged-test-hashes.json` | Untracked | 33539 | Docs | 304 | 0 |  |
+| `docs/reliability-gate/2026-11-02T16-07-59-730Z-ee50788-responsive-imported/worktree-status-after.txt` | Untracked | 62321 | Docs | 931 | 0 |  |
+| `docs/reliability-gate/2026-11-02T16-14-28-389Z-f668b3b-responsive-imported/git-status-after.txt` | Untracked | 24764 | Docs | 690 | 0 |  |
+| `docs/reliability-gate/2026-11-02T16-14-28-389Z-f668b3b-responsive-imported/git-status-before.txt` | Untracked | 24764 | Docs | 690 | 0 |  |
+| `docs/reliability-gate/2026-11-02T16-14-28-389Z-f668b3b-responsive-imported/plan.json` | Untracked | 9021 | Docs | 343 | 0 |  |
+| `docs/reliability-gate/2026-11-02T16-14-28-389Z-f668b3b-responsive-imported/raw.log` | Untracked | 21016 | Docs | 185 | 0 |  |
+| `docs/reliability-gate/2026-11-02T16-14-28-389Z-f668b3b-responsive-imported/responsive-imported-artifacts/responsive-imported-window.png` | Untracked | 83274 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T16-14-28-389Z-f668b3b-responsive-imported/responsive-imported-artifacts/source-project-compat-sample.json` | Untracked | 207 | Docs | 12 | 0 |  |
+| `docs/reliability-gate/2026-11-02T16-14-28-389Z-f668b3b-responsive-imported/responsive-imported-servers/child-server-1-8684.log` | Untracked | 46711 | Docs | 1016 | 0 |  |
+| `docs/reliability-gate/2026-11-02T16-14-28-389Z-f668b3b-responsive-imported/responsive-imported-servers/child-server-2-16280.log` | Untracked | 28796 | Docs | 67 | 0 |  |
+| `docs/reliability-gate/2026-11-02T16-14-28-389Z-f668b3b-responsive-imported/responsive-imported.log` | Untracked | 20378 | Docs | 175 | 0 |  |
+| `docs/reliability-gate/2026-11-02T16-14-28-389Z-f668b3b-responsive-imported/results.json` | Untracked | 538 | Docs | 20 | 0 |  |
+| `docs/reliability-gate/2026-11-02T16-14-28-389Z-f668b3b-responsive-imported/unchanged-test-hashes.json` | Untracked | 33539 | Docs | 304 | 0 |  |
+| `docs/reliability-gate/2026-11-02T16-14-28-389Z-f668b3b-responsive-imported/worktree-status-after.txt` | Untracked | 62321 | Docs | 931 | 0 |  |
+| `docs/reliability-gate/2026-11-02T16-20-37-374Z-acd567c-history/git-status-after.txt` | Untracked | 24764 | Docs | 690 | 0 |  |
+| `docs/reliability-gate/2026-11-02T16-20-37-374Z-acd567c-history/git-status-before.txt` | Untracked | 24764 | Docs | 690 | 0 |  |
+| `docs/reliability-gate/2026-11-02T16-20-37-374Z-acd567c-history/history-artifacts/source-project-compat-sample.json` | Untracked | 207 | Docs | 12 | 0 |  |
+| `docs/reliability-gate/2026-11-02T16-20-37-374Z-acd567c-history/history-servers/child-server-1-33756.log` | Untracked | 17800 | Docs | 392 | 0 |  |
+| `docs/reliability-gate/2026-11-02T16-20-37-374Z-acd567c-history/history-servers/child-server-2-4520.log` | Untracked | 7725 | Docs | 29 | 0 |  |
+| `docs/reliability-gate/2026-11-02T16-20-37-374Z-acd567c-history/history.log` | Untracked | 31216 | Docs | 492 | 0 |  |
+| `docs/reliability-gate/2026-11-02T16-20-37-374Z-acd567c-history/plan.json` | Untracked | 9009 | Docs | 343 | 0 |  |
+| `docs/reliability-gate/2026-11-02T16-20-37-374Z-acd567c-history/raw.log` | Untracked | 31803 | Docs | 502 | 0 |  |
+| `docs/reliability-gate/2026-11-02T16-20-37-374Z-acd567c-history/results.json` | Untracked | 524 | Docs | 20 | 0 |  |
+| `docs/reliability-gate/2026-11-02T16-20-37-374Z-acd567c-history/unchanged-test-hashes.json` | Untracked | 33655 | Docs | 305 | 0 |  |
+| `docs/reliability-gate/2026-11-02T16-20-37-374Z-acd567c-history/worktree-status-after.txt` | Untracked | 62321 | Docs | 931 | 0 |  |
+| `docs/reliability-gate/2026-11-02T16-24-35-080Z-b0c9061-history/git-status-after.txt` | Untracked | 24764 | Docs | 690 | 0 |  |
+| `docs/reliability-gate/2026-11-02T16-24-35-080Z-b0c9061-history/git-status-before.txt` | Untracked | 24764 | Docs | 690 | 0 |  |
+| `docs/reliability-gate/2026-11-02T16-24-35-080Z-b0c9061-history/history-artifacts/source-project-compat-sample.json` | Untracked | 207 | Docs | 12 | 0 |  |
+| `docs/reliability-gate/2026-11-02T16-24-35-080Z-b0c9061-history/history-servers/child-server-1-34716.log` | Untracked | 19730 | Docs | 403 | 0 |  |
+| `docs/reliability-gate/2026-11-02T16-24-35-080Z-b0c9061-history/history-servers/child-server-2-35424.log` | Untracked | 7728 | Docs | 29 | 0 |  |
+| `docs/reliability-gate/2026-11-02T16-24-35-080Z-b0c9061-history/history.log` | Untracked | 33219 | Docs | 513 | 0 |  |
+| `docs/reliability-gate/2026-11-02T16-24-35-080Z-b0c9061-history/plan.json` | Untracked | 9009 | Docs | 343 | 0 |  |
+| `docs/reliability-gate/2026-11-02T16-24-35-080Z-b0c9061-history/raw.log` | Untracked | 33806 | Docs | 523 | 0 |  |
+| `docs/reliability-gate/2026-11-02T16-24-35-080Z-b0c9061-history/results.json` | Untracked | 524 | Docs | 20 | 0 |  |
+| `docs/reliability-gate/2026-11-02T16-24-35-080Z-b0c9061-history/unchanged-test-hashes.json` | Untracked | 33885 | Docs | 307 | 0 |  |
+| `docs/reliability-gate/2026-11-02T16-24-35-080Z-b0c9061-history/worktree-status-after.txt` | Untracked | 62321 | Docs | 931 | 0 |  |
+| `docs/reliability-gate/2026-11-02T16-56-08-271Z-ec26692-history/git-status-after.txt` | Untracked | 24764 | Docs | 690 | 0 |  |
+| `docs/reliability-gate/2026-11-02T16-56-08-271Z-ec26692-history/git-status-before.txt` | Untracked | 24764 | Docs | 690 | 0 |  |
+| `docs/reliability-gate/2026-11-02T16-56-08-271Z-ec26692-history/history-artifacts/source-project-compat-sample.json` | Untracked | 207 | Docs | 12 | 0 |  |
+| `docs/reliability-gate/2026-11-02T16-56-08-271Z-ec26692-history/history-servers/child-server-1-18956.log` | Untracked | 9705 | Docs | 176 | 0 |  |
+| `docs/reliability-gate/2026-11-02T16-56-08-271Z-ec26692-history/history-servers/child-server-2-36180.log` | Untracked | 8046 | Docs | 29 | 0 |  |
+| `docs/reliability-gate/2026-11-02T16-56-08-271Z-ec26692-history/history.log` | Untracked | 5910 | Docs | 56 | 0 |  |
+| `docs/reliability-gate/2026-11-02T16-56-08-271Z-ec26692-history/plan.json` | Untracked | 9009 | Docs | 343 | 0 |  |
+| `docs/reliability-gate/2026-11-02T16-56-08-271Z-ec26692-history/raw.log` | Untracked | 6527 | Docs | 67 | 0 |  |
+| `docs/reliability-gate/2026-11-02T16-56-08-271Z-ec26692-history/results.json` | Untracked | 527 | Docs | 20 | 0 |  |
+| `docs/reliability-gate/2026-11-02T16-56-08-271Z-ec26692-history/unchanged-test-hashes.json` | Untracked | 33885 | Docs | 307 | 0 |  |
+| `docs/reliability-gate/2026-11-02T16-56-08-271Z-ec26692-history/worktree-status-after.txt` | Untracked | 62321 | Docs | 931 | 0 |  |
+| `docs/reliability-gate/2026-11-02T17-15-01-891Z-22e17ec-history/git-status-after.txt` | Untracked | 24764 | Docs | 690 | 0 |  |
+| `docs/reliability-gate/2026-11-02T17-15-01-891Z-22e17ec-history/git-status-before.txt` | Untracked | 24764 | Docs | 690 | 0 |  |
+| `docs/reliability-gate/2026-11-02T17-15-01-891Z-22e17ec-history/history-artifacts/source-project-compat-sample.json` | Untracked | 207 | Docs | 12 | 0 |  |
+| `docs/reliability-gate/2026-11-02T17-15-01-891Z-22e17ec-history/history.log` | Untracked | 8257 | Docs | 89 | 0 |  |
+| `docs/reliability-gate/2026-11-02T17-15-01-891Z-22e17ec-history/plan.json` | Untracked | 9009 | Docs | 343 | 0 |  |
+| `docs/reliability-gate/2026-11-02T17-15-01-891Z-22e17ec-history/raw.log` | Untracked | 13086 | Docs | 144 | 0 |  |
+| `docs/reliability-gate/2026-11-02T17-15-01-891Z-22e17ec-history/results.json` | Untracked | 681 | Docs | 27 | 0 |  |
+| `docs/reliability-gate/2026-11-02T17-15-01-891Z-22e17ec-history/server-53472.log` | Untracked | 44850 | Docs | 1130 | 0 |  |
+| `docs/reliability-gate/2026-11-02T17-15-01-891Z-22e17ec-history/server-53473.log` | Untracked | 11889 | Docs | 38 | 0 |  |
+| `docs/reliability-gate/2026-11-02T17-15-01-891Z-22e17ec-history/shared-compiler-warmup.log` | Untracked | 2627 | Docs | 26 | 0 |  |
+| `docs/reliability-gate/2026-11-02T17-15-01-891Z-22e17ec-history/shared-runtime-setup.log` | Untracked | 1164 | Docs | 12 | 0 |  |
+| `docs/reliability-gate/2026-11-02T17-15-01-891Z-22e17ec-history/unchanged-test-hashes.json` | Untracked | 34090 | Docs | 309 | 0 |  |
+| `docs/reliability-gate/2026-11-02T17-15-01-891Z-22e17ec-history/worktree-status-after.txt` | Untracked | 62321 | Docs | 931 | 0 |  |
+| `docs/reliability-gate/2026-11-02T18-42-53-180Z-4614bb8-history/git-status-after.txt` | Untracked | 24984 | Docs | 696 | 0 |  |
+| `docs/reliability-gate/2026-11-02T18-42-53-180Z-4614bb8-history/git-status-before.txt` | Untracked | 24948 | Docs | 695 | 0 |  |
+| `docs/reliability-gate/2026-11-02T18-42-53-180Z-4614bb8-history/history-artifacts/change-history.png` | Untracked | 93785 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T18-42-53-180Z-4614bb8-history/history-artifacts/source-project-compat-sample.json` | Untracked | 207 | Docs | 12 | 0 |  |
+| `docs/reliability-gate/2026-11-02T18-42-53-180Z-4614bb8-history/history.log` | Untracked | 17885 | Docs | 171 | 0 |  |
+| `docs/reliability-gate/2026-11-02T18-42-53-180Z-4614bb8-history/plan.json` | Untracked | 9009 | Docs | 343 | 0 |  |
+| `docs/reliability-gate/2026-11-02T18-42-53-180Z-4614bb8-history/raw.log` | Untracked | 22710 | Docs | 226 | 0 |  |
+| `docs/reliability-gate/2026-11-02T18-42-53-180Z-4614bb8-history/results.json` | Untracked | 679 | Docs | 27 | 0 |  |
+| `docs/reliability-gate/2026-11-02T18-42-53-180Z-4614bb8-history/server-61068.log` | Untracked | 59461 | Docs | 1450 | 0 |  |
+| `docs/reliability-gate/2026-11-02T18-42-53-180Z-4614bb8-history/server-61069.log` | Untracked | 22944 | Docs | 60 | 0 |  |
+| `docs/reliability-gate/2026-11-02T18-42-53-180Z-4614bb8-history/shared-compiler-warmup.log` | Untracked | 2625 | Docs | 26 | 0 |  |
+| `docs/reliability-gate/2026-11-02T18-42-53-180Z-4614bb8-history/shared-runtime-setup.log` | Untracked | 1164 | Docs | 12 | 0 |  |
+| `docs/reliability-gate/2026-11-02T18-42-53-180Z-4614bb8-history/unchanged-test-hashes.json` | Untracked | 34202 | Docs | 310 | 0 |  |
+| `docs/reliability-gate/2026-11-02T18-42-53-180Z-4614bb8-history/worktree-status-after.txt` | Untracked | 62436 | Docs | 934 | 0 |  |
+| `docs/reliability-gate/2026-11-02T18-46-25-112Z-9e55ceb-history/git-status-after.txt` | Untracked | 24984 | Docs | 696 | 0 |  |
+| `docs/reliability-gate/2026-11-02T18-46-25-112Z-9e55ceb-history/git-status-before.txt` | Untracked | 24984 | Docs | 696 | 0 |  |
+| `docs/reliability-gate/2026-11-02T18-46-25-112Z-9e55ceb-history/history-artifacts/change-history.png` | Untracked | 93689 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T18-46-25-112Z-9e55ceb-history/history-artifacts/imported-canvas.png` | Untracked | 74963 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-02T18-46-25-112Z-9e55ceb-history/history-artifacts/source-project-compat-sample.json` | Untracked | 207 | Docs | 12 | 0 |  |
+| `docs/reliability-gate/2026-11-02T18-46-25-112Z-9e55ceb-history/history.log` | Untracked | 19805 | Docs | 176 | 0 |  |
+| `docs/reliability-gate/2026-11-02T18-46-25-112Z-9e55ceb-history/plan.json` | Untracked | 9009 | Docs | 343 | 0 |  |
+| `docs/reliability-gate/2026-11-02T18-46-25-112Z-9e55ceb-history/raw.log` | Untracked | 24717 | Docs | 232 | 0 |  |
+| `docs/reliability-gate/2026-11-02T18-46-25-112Z-9e55ceb-history/results.json` | Untracked | 680 | Docs | 27 | 0 |  |
+| `docs/reliability-gate/2026-11-02T18-46-25-112Z-9e55ceb-history/server-57399.log` | Untracked | 62876 | Docs | 1468 | 0 |  |
+| `docs/reliability-gate/2026-11-02T18-46-25-112Z-9e55ceb-history/server-57400.log` | Untracked | 24198 | Docs | 66 | 0 |  |
+| `docs/reliability-gate/2026-11-02T18-46-25-112Z-9e55ceb-history/shared-compiler-warmup.log` | Untracked | 2710 | Docs | 27 | 0 |  |
+| `docs/reliability-gate/2026-11-02T18-46-25-112Z-9e55ceb-history/shared-runtime-setup.log` | Untracked | 1163 | Docs | 12 | 0 |  |
+| `docs/reliability-gate/2026-11-02T18-46-25-112Z-9e55ceb-history/unchanged-test-hashes.json` | Untracked | 34202 | Docs | 310 | 0 |  |
+| `docs/reliability-gate/2026-11-02T18-46-25-112Z-9e55ceb-history/worktree-status-after.txt` | Untracked | 62436 | Docs | 934 | 0 |  |
+| `docs/reliability-gate/2026-11-03T08-05-11-315Z-9e55ceb-movement/git-status-after.txt` | Untracked | 24984 | Docs | 696 | 0 |  |
+| `docs/reliability-gate/2026-11-03T08-05-11-315Z-9e55ceb-movement/git-status-before.txt` | Untracked | 24984 | Docs | 696 | 0 |  |
+| `docs/reliability-gate/2026-11-03T08-05-11-315Z-9e55ceb-movement/movement-servers/child-server-1-9508.log` | Untracked | 11572 | Docs | 243 | 0 |  |
+| `docs/reliability-gate/2026-11-03T08-05-11-315Z-9e55ceb-movement/movement.log` | Untracked | 15802 | Docs | 301 | 0 |  |
+| `docs/reliability-gate/2026-11-03T08-05-11-315Z-9e55ceb-movement/plan.json` | Untracked | 9010 | Docs | 343 | 0 |  |
+| `docs/reliability-gate/2026-11-03T08-05-11-315Z-9e55ceb-movement/raw.log` | Untracked | 16387 | Docs | 311 | 0 |  |
+| `docs/reliability-gate/2026-11-03T08-05-11-315Z-9e55ceb-movement/results.json` | Untracked | 522 | Docs | 20 | 0 |  |
+| `docs/reliability-gate/2026-11-03T08-05-11-315Z-9e55ceb-movement/unchanged-test-hashes.json` | Untracked | 34202 | Docs | 310 | 0 |  |
+| `docs/reliability-gate/2026-11-03T08-05-11-315Z-9e55ceb-movement/worktree-status-after.txt` | Untracked | 62427 | Docs | 933 | 0 |  |
+| `docs/reliability-gate/2026-11-03T08-07-47-284Z-ea42e26-movement/git-status-after.txt` | Untracked | 24984 | Docs | 696 | 0 |  |
+| `docs/reliability-gate/2026-11-03T08-07-47-284Z-ea42e26-movement/git-status-before.txt` | Untracked | 24984 | Docs | 696 | 0 |  |
+| `docs/reliability-gate/2026-11-03T08-07-47-284Z-ea42e26-movement/movement-artifacts/movement-cancel-failure.png` | Untracked | 73817 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T08-07-47-284Z-ea42e26-movement/movement-servers/child-server-1-23232.log` | Untracked | 11571 | Docs | 243 | 0 |  |
+| `docs/reliability-gate/2026-11-03T08-07-47-284Z-ea42e26-movement/movement.log` | Untracked | 17101 | Docs | 313 | 0 |  |
+| `docs/reliability-gate/2026-11-03T08-07-47-284Z-ea42e26-movement/plan.json` | Untracked | 9010 | Docs | 343 | 0 |  |
+| `docs/reliability-gate/2026-11-03T08-07-47-284Z-ea42e26-movement/raw.log` | Untracked | 17686 | Docs | 323 | 0 |  |
+| `docs/reliability-gate/2026-11-03T08-07-47-284Z-ea42e26-movement/results.json` | Untracked | 522 | Docs | 20 | 0 |  |
+| `docs/reliability-gate/2026-11-03T08-07-47-284Z-ea42e26-movement/unchanged-test-hashes.json` | Untracked | 34312 | Docs | 311 | 0 |  |
+| `docs/reliability-gate/2026-11-03T08-07-47-284Z-ea42e26-movement/worktree-status-after.txt` | Untracked | 62436 | Docs | 934 | 0 |  |
+| `docs/reliability-gate/2026-11-03T08-10-07-832Z-3bd963f-movement/git-status-after.txt` | Untracked | 25024 | Docs | 697 | 0 |  |
+| `docs/reliability-gate/2026-11-03T08-10-07-832Z-3bd963f-movement/git-status-before.txt` | Untracked | 24984 | Docs | 696 | 0 |  |
+| `docs/reliability-gate/2026-11-03T08-10-07-832Z-3bd963f-movement/movement-servers/child-server-1-23044.log` | Untracked | 10880 | Docs | 239 | 0 |  |
+| `docs/reliability-gate/2026-11-03T08-10-07-832Z-3bd963f-movement/movement.log` | Untracked | 26546 | Docs | 417 | 0 |  |
+| `docs/reliability-gate/2026-11-03T08-10-07-832Z-3bd963f-movement/plan.json` | Untracked | 9010 | Docs | 343 | 0 |  |
+| `docs/reliability-gate/2026-11-03T08-10-07-832Z-3bd963f-movement/raw.log` | Untracked | 27131 | Docs | 427 | 0 |  |
+| `docs/reliability-gate/2026-11-03T08-10-07-832Z-3bd963f-movement/results.json` | Untracked | 522 | Docs | 20 | 0 |  |
+| `docs/reliability-gate/2026-11-03T08-10-07-832Z-3bd963f-movement/unchanged-test-hashes.json` | Untracked | 34312 | Docs | 311 | 0 |  |
+| `docs/reliability-gate/2026-11-03T08-10-07-832Z-3bd963f-movement/worktree-status-after.txt` | Untracked | 62427 | Docs | 933 | 0 |  |
+| `docs/reliability-gate/2026-11-03T08-12-38-044Z-0ee55f7-movement/git-status-after.txt` | Untracked | 24984 | Docs | 696 | 0 |  |
+| `docs/reliability-gate/2026-11-03T08-12-38-044Z-0ee55f7-movement/git-status-before.txt` | Untracked | 24984 | Docs | 696 | 0 |  |
+| `docs/reliability-gate/2026-11-03T08-12-38-044Z-0ee55f7-movement/movement-servers/child-server-1-28032.log` | Untracked | 11142 | Docs | 241 | 0 |  |
+| `docs/reliability-gate/2026-11-03T08-12-38-044Z-0ee55f7-movement/movement.log` | Untracked | 25941 | Docs | 402 | 0 |  |
+| `docs/reliability-gate/2026-11-03T08-12-38-044Z-0ee55f7-movement/plan.json` | Untracked | 9010 | Docs | 343 | 0 |  |
+| `docs/reliability-gate/2026-11-03T08-12-38-044Z-0ee55f7-movement/raw.log` | Untracked | 26523 | Docs | 412 | 0 |  |
+| `docs/reliability-gate/2026-11-03T08-12-38-044Z-0ee55f7-movement/results.json` | Untracked | 522 | Docs | 20 | 0 |  |
+| `docs/reliability-gate/2026-11-03T08-12-38-044Z-0ee55f7-movement/unchanged-test-hashes.json` | Untracked | 34312 | Docs | 311 | 0 |  |
+| `docs/reliability-gate/2026-11-03T08-12-38-044Z-0ee55f7-movement/worktree-status-after.txt` | Untracked | 62427 | Docs | 933 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-47-12-281Z-72ca1e5-movement/git-status-after.txt` | Untracked | 24984 | Docs | 696 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-47-12-281Z-72ca1e5-movement/git-status-before.txt` | Untracked | 24984 | Docs | 696 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-47-12-281Z-72ca1e5-movement/movement-artifacts/center-move-drag.png` | Untracked | 118216 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-47-12-281Z-72ca1e5-movement/movement-servers/child-server-1-32968.log` | Untracked | 26450 | Docs | 612 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-47-12-281Z-72ca1e5-movement/movement.log` | Untracked | 36958 | Docs | 608 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-47-12-281Z-72ca1e5-movement/plan.json` | Untracked | 9010 | Docs | 343 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-47-12-281Z-72ca1e5-movement/raw.log` | Untracked | 37542 | Docs | 618 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-47-12-281Z-72ca1e5-movement/results.json` | Untracked | 521 | Docs | 20 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-47-12-281Z-72ca1e5-movement/unchanged-test-hashes.json` | Untracked | 34312 | Docs | 311 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-47-12-281Z-72ca1e5-movement/worktree-status-after.txt` | Untracked | 62436 | Docs | 934 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-49-40-691Z-d6adcb3-movement/git-status-after.txt` | Untracked | 24984 | Docs | 696 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-49-40-691Z-d6adcb3-movement/git-status-before.txt` | Untracked | 24984 | Docs | 696 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-49-40-691Z-d6adcb3-movement/movement-artifacts/center-move-detail.png` | Untracked | 12746 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-49-40-691Z-d6adcb3-movement/movement-artifacts/center-move-drag.png` | Untracked | 114892 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-49-40-691Z-d6adcb3-movement/movement-artifacts/center-move-selection.png` | Untracked | 120056 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-49-40-691Z-d6adcb3-movement/movement-servers/child-server-1-25380.log` | Untracked | 33845 | Docs | 713 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-49-40-691Z-d6adcb3-movement/movement.log` | Untracked | 25997 | Docs | 232 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-49-40-691Z-d6adcb3-movement/plan.json` | Untracked | 9010 | Docs | 343 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-49-40-691Z-d6adcb3-movement/raw.log` | Untracked | 26582 | Docs | 242 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-49-40-691Z-d6adcb3-movement/results.json` | Untracked | 521 | Docs | 20 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-49-40-691Z-d6adcb3-movement/unchanged-test-hashes.json` | Untracked | 34312 | Docs | 311 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-49-40-691Z-d6adcb3-movement/worktree-status-after.txt` | Untracked | 62436 | Docs | 934 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/REPORT.md` | Untracked | 7577 | Docs | 73 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/appearance-layout-artifacts/appearance-imported-studio.png` | Untracked | 116107 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/appearance-layout-artifacts/appearance-local-studio.png` | Untracked | 120294 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/appearance-layout-artifacts/appearance-local-window.png` | Untracked | 116452 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/appearance-layout-artifacts/center-move-detail.png` | Untracked | 12746 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/appearance-layout-artifacts/center-move-drag.png` | Untracked | 114892 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/appearance-layout-artifacts/center-move-selection.png` | Untracked | 120056 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/appearance-layout-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-2-blocked-1.5.png` | Untracked | 73379 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/appearance-layout-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-2-blocked-1.png` | Untracked | 68647 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/appearance-layout-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-3-blocked-1.5.png` | Untracked | 72622 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/appearance-layout-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-3-blocked-1.png` | Untracked | 70410 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/appearance-layout-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked-1.5.png` | Untracked | 49054 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/appearance-layout-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked-1.png` | Untracked | 71445 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/appearance-layout-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked.png` | Untracked | 61632 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/appearance-layout-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-6-blocked-1.5.png` | Untracked | 53146 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/appearance-layout-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-6-blocked-1.png` | Untracked | 71445 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/appearance-layout-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-9-blocked-1.png` | Untracked | 73150 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/appearance-layout-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit.json` | Untracked | 452958 | Docs | 15413 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/appearance-layout-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-1.5.png` | Untracked | 111974 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/appearance-layout-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-1.png` | Untracked | 98952 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/appearance-layout-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked.png` | Untracked | 62222 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/appearance-layout-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-0.5.png` | Untracked | 75441 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/appearance-layout-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-1.5.png` | Untracked | 105237 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/appearance-layout-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-1.png` | Untracked | 67842 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/appearance-layout-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked.png` | Untracked | 70275 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/appearance-layout-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-13-blocked-1.5.png` | Untracked | 105237 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/appearance-layout-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-13-blocked-1.png` | Untracked | 68428 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/appearance-layout-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-19-blocked.png` | Untracked | 70870 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/appearance-layout-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-2-blocked-1.5.png` | Untracked | 111974 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/appearance-layout-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-24-blocked.png` | Untracked | 70111 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/appearance-layout-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-6-blocked-1.5.png` | Untracked | 90020 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/appearance-layout-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-6-blocked.png` | Untracked | 62933 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/appearance-layout-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression.json` | Untracked | 457734 | Docs | 15318 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/appearance-layout-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-1-blocked.png` | Untracked | 70185 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/appearance-layout-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-27-blocked.png` | Untracked | 80867 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/appearance-layout-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-5-blocked.png` | Untracked | 71457 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/appearance-layout-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit.json` | Untracked | 225221 | Docs | 7734 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/appearance-layout-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-12-blocked.png` | Untracked | 77362 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/appearance-layout-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-13-blocked.png` | Untracked | 70665 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/appearance-layout-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-19-blocked.png` | Untracked | 72397 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/appearance-layout-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-24-blocked.png` | Untracked | 72790 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/appearance-layout-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-29-blocked.png` | Untracked | 72124 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/appearance-layout-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-6-blocked.png` | Untracked | 71481 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/appearance-layout-artifacts/editor-load-and-toolbar/selection/round-1-full-regression.json` | Untracked | 215443 | Docs | 7315 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/appearance-layout-artifacts/responsive-custom-scope.png` | Untracked | 44683 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/appearance-layout-artifacts/responsive-imported-window.png` | Untracked | 83420 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/appearance-layout-artifacts/responsive-mobile-draft.png` | Untracked | 39470 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/appearance-layout-artifacts/shared-gate-artifacts/shared-instance-local-studio.png` | Untracked | 82172 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/appearance-layout-artifacts/source-project-compat-sample.json` | Untracked | 207 | Docs | 12 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/appearance-layout-servers/child-server-1-25800.log` | Untracked | 97404 | Docs | 1757 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/appearance-layout-servers/child-server-2-23168.log` | Untracked | 21811 | Docs | 49 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/appearance-layout.log` | Untracked | 51632 | Docs | 510 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-imported-artifacts/advanced-image-failure.png` | Untracked | 8791 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-imported-artifacts/advanced-image-studio.png` | Untracked | 39763 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-imported-artifacts/advanced-image-window.png` | Untracked | 31040 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-imported-artifacts/appearance-imported-studio.png` | Untracked | 116107 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-imported-artifacts/appearance-local-studio.png` | Untracked | 120294 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-imported-artifacts/appearance-local-window.png` | Untracked | 116452 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-imported-artifacts/center-move-detail.png` | Untracked | 12746 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-imported-artifacts/center-move-drag.png` | Untracked | 114892 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-imported-artifacts/center-move-selection.png` | Untracked | 120056 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-imported-artifacts/component-actions-imported-studio.png` | Untracked | 50277 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-imported-artifacts/component-actions-studio.png` | Untracked | 53870 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-2-blocked-1.5.png` | Untracked | 73379 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-2-blocked-1.png` | Untracked | 68647 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-3-blocked-1.5.png` | Untracked | 72622 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-3-blocked-1.png` | Untracked | 70410 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked-1.5.png` | Untracked | 49054 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked-1.png` | Untracked | 71445 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked.png` | Untracked | 61632 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-6-blocked-1.5.png` | Untracked | 53146 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-6-blocked-1.png` | Untracked | 71445 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-9-blocked-1.png` | Untracked | 73150 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit.json` | Untracked | 452958 | Docs | 15413 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-1.5.png` | Untracked | 111974 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-1.png` | Untracked | 98952 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked.png` | Untracked | 62222 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-0.5.png` | Untracked | 75441 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-1.5.png` | Untracked | 105237 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-1.png` | Untracked | 67842 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked.png` | Untracked | 70275 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-13-blocked-1.5.png` | Untracked | 105237 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-13-blocked-1.png` | Untracked | 68428 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-19-blocked.png` | Untracked | 70870 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-2-blocked-1.5.png` | Untracked | 111974 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-24-blocked.png` | Untracked | 70111 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-6-blocked-1.5.png` | Untracked | 90020 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-6-blocked.png` | Untracked | 62933 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression.json` | Untracked | 457734 | Docs | 15318 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-imported-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-1-blocked.png` | Untracked | 70185 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-imported-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-27-blocked.png` | Untracked | 80867 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-imported-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-5-blocked.png` | Untracked | 71457 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-imported-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit.json` | Untracked | 225221 | Docs | 7734 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-imported-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-12-blocked.png` | Untracked | 77362 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-imported-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-13-blocked.png` | Untracked | 70665 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-imported-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-19-blocked.png` | Untracked | 72397 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-imported-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-24-blocked.png` | Untracked | 72790 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-imported-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-29-blocked.png` | Untracked | 72124 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-imported-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-6-blocked.png` | Untracked | 71481 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-imported-artifacts/editor-load-and-toolbar/selection/round-1-full-regression.json` | Untracked | 215443 | Docs | 7315 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-imported-artifacts/responsive-custom-scope.png` | Untracked | 44683 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-imported-artifacts/responsive-imported-window.png` | Untracked | 83420 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-imported-artifacts/responsive-mobile-draft.png` | Untracked | 39470 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-imported-artifacts/shared-gate-artifacts/shared-instance-local-studio.png` | Untracked | 82172 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-imported-artifacts/source-project-compat-sample.json` | Untracked | 207 | Docs | 12 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-imported-servers/child-server-1-8968.log` | Untracked | 72895 | Docs | 1514 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-imported-servers/child-server-2-34580.log` | Untracked | 25612 | Docs | 59 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-imported.log` | Untracked | 30766 | Docs | 271 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-local-artifacts/advanced-image-failure.png` | Untracked | 8791 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-local-artifacts/advanced-image-studio.png` | Untracked | 39763 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-local-artifacts/advanced-image-window.png` | Untracked | 31040 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-local-artifacts/appearance-imported-studio.png` | Untracked | 116107 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-local-artifacts/appearance-local-studio.png` | Untracked | 120294 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-local-artifacts/appearance-local-window.png` | Untracked | 116452 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-local-artifacts/center-move-detail.png` | Untracked | 12746 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-local-artifacts/center-move-drag.png` | Untracked | 114892 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-local-artifacts/center-move-selection.png` | Untracked | 120056 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-local-artifacts/component-actions-studio.png` | Untracked | 53870 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-2-blocked-1.5.png` | Untracked | 73379 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-2-blocked-1.png` | Untracked | 68647 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-3-blocked-1.5.png` | Untracked | 72622 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-3-blocked-1.png` | Untracked | 70410 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked-1.5.png` | Untracked | 49054 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked-1.png` | Untracked | 71445 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked.png` | Untracked | 61632 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-6-blocked-1.5.png` | Untracked | 53146 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-6-blocked-1.png` | Untracked | 71445 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-9-blocked-1.png` | Untracked | 73150 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit.json` | Untracked | 452958 | Docs | 15413 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-1.5.png` | Untracked | 111974 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-1.png` | Untracked | 98952 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked.png` | Untracked | 62222 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-0.5.png` | Untracked | 75441 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-1.5.png` | Untracked | 105237 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-1.png` | Untracked | 67842 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked.png` | Untracked | 70275 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-13-blocked-1.5.png` | Untracked | 105237 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-13-blocked-1.png` | Untracked | 68428 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-19-blocked.png` | Untracked | 70870 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-2-blocked-1.5.png` | Untracked | 111974 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-24-blocked.png` | Untracked | 70111 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-6-blocked-1.5.png` | Untracked | 90020 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-6-blocked.png` | Untracked | 62933 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression.json` | Untracked | 457734 | Docs | 15318 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-local-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-1-blocked.png` | Untracked | 70185 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-local-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-27-blocked.png` | Untracked | 80867 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-local-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-5-blocked.png` | Untracked | 71457 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-local-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit.json` | Untracked | 225221 | Docs | 7734 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-local-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-12-blocked.png` | Untracked | 77362 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-local-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-13-blocked.png` | Untracked | 70665 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-local-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-19-blocked.png` | Untracked | 72397 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-local-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-24-blocked.png` | Untracked | 72790 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-local-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-29-blocked.png` | Untracked | 72124 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-local-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-6-blocked.png` | Untracked | 71481 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-local-artifacts/editor-load-and-toolbar/selection/round-1-full-regression.json` | Untracked | 215443 | Docs | 7315 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-local-artifacts/responsive-custom-scope.png` | Untracked | 44683 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-local-artifacts/responsive-imported-window.png` | Untracked | 83420 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-local-artifacts/responsive-mobile-draft.png` | Untracked | 39470 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-local-artifacts/shared-gate-artifacts/shared-instance-local-studio.png` | Untracked | 82172 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-local-artifacts/source-project-compat-sample.json` | Untracked | 207 | Docs | 12 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-local-servers/child-server-1-20044.log` | Untracked | 75363 | Docs | 1479 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/component-actions-local.log` | Untracked | 31222 | Docs | 282 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/container-move-artifacts/advanced-image-failure.png` | Untracked | 8791 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/container-move-artifacts/advanced-image-studio.png` | Untracked | 39763 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/container-move-artifacts/advanced-image-window.png` | Untracked | 31040 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/container-move-artifacts/appearance-imported-studio.png` | Untracked | 116107 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/container-move-artifacts/appearance-local-studio.png` | Untracked | 120294 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/container-move-artifacts/appearance-local-window.png` | Untracked | 116452 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/container-move-artifacts/center-move-detail.png` | Untracked | 12746 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/container-move-artifacts/center-move-drag.png` | Untracked | 114892 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/container-move-artifacts/center-move-selection.png` | Untracked | 120056 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/container-move-artifacts/component-actions-imported-studio.png` | Untracked | 50277 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/container-move-artifacts/component-actions-studio.png` | Untracked | 53870 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/container-move-artifacts/container-move-destination.png` | Untracked | 51397 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/container-move-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-2-blocked-1.5.png` | Untracked | 73379 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/container-move-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-2-blocked-1.png` | Untracked | 68647 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/container-move-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-3-blocked-1.5.png` | Untracked | 72622 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/container-move-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-3-blocked-1.png` | Untracked | 70410 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/container-move-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked-1.5.png` | Untracked | 49054 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/container-move-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked-1.png` | Untracked | 71445 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/container-move-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked.png` | Untracked | 61632 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/container-move-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-6-blocked-1.5.png` | Untracked | 53146 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/container-move-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-6-blocked-1.png` | Untracked | 71445 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/container-move-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-9-blocked-1.png` | Untracked | 73150 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/container-move-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit.json` | Untracked | 452958 | Docs | 15413 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/container-move-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-1.5.png` | Untracked | 111974 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/container-move-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-1.png` | Untracked | 98952 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/container-move-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked.png` | Untracked | 62222 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/container-move-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-0.5.png` | Untracked | 75441 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/container-move-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-1.5.png` | Untracked | 105237 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/container-move-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-1.png` | Untracked | 67842 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/container-move-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked.png` | Untracked | 70275 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/container-move-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-13-blocked-1.5.png` | Untracked | 105237 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/container-move-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-13-blocked-1.png` | Untracked | 68428 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/container-move-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-19-blocked.png` | Untracked | 70870 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/container-move-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-2-blocked-1.5.png` | Untracked | 111974 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/container-move-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-24-blocked.png` | Untracked | 70111 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/container-move-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-6-blocked-1.5.png` | Untracked | 90020 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/container-move-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-6-blocked.png` | Untracked | 62933 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/container-move-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression.json` | Untracked | 457734 | Docs | 15318 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/container-move-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-1-blocked.png` | Untracked | 70185 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/container-move-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-27-blocked.png` | Untracked | 80867 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/container-move-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-5-blocked.png` | Untracked | 71457 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/container-move-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit.json` | Untracked | 225221 | Docs | 7734 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/container-move-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-12-blocked.png` | Untracked | 77362 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/container-move-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-13-blocked.png` | Untracked | 70665 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/container-move-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-19-blocked.png` | Untracked | 72397 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/container-move-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-24-blocked.png` | Untracked | 72790 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/container-move-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-29-blocked.png` | Untracked | 72124 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/container-move-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-6-blocked.png` | Untracked | 71481 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/container-move-artifacts/editor-load-and-toolbar/selection/round-1-full-regression.json` | Untracked | 215443 | Docs | 7315 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/container-move-artifacts/icon-properties-studio.png` | Untracked | 74810 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/container-move-artifacts/icon-properties-window.png` | Untracked | 71890 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/container-move-artifacts/responsive-custom-scope.png` | Untracked | 44683 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/container-move-artifacts/responsive-imported-window.png` | Untracked | 83420 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/container-move-artifacts/responsive-mobile-draft.png` | Untracked | 39470 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/container-move-artifacts/section-order-ready.png` | Untracked | 55440 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/container-move-artifacts/shared-gate-artifacts/shared-instance-local-studio.png` | Untracked | 82172 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/container-move-artifacts/source-project-compat-sample.json` | Untracked | 207 | Docs | 12 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/container-move-servers/child-server-1-26284.log` | Untracked | 47261 | Docs | 1137 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/container-move.log` | Untracked | 10006 | Docs | 90 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/git-status-after.txt` | Untracked | 24948 | Docs | 695 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/git-status-before.txt` | Untracked | 24948 | Docs | 695 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/icon-properties-artifacts/advanced-image-failure.png` | Untracked | 8791 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/icon-properties-artifacts/advanced-image-studio.png` | Untracked | 39763 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/icon-properties-artifacts/advanced-image-window.png` | Untracked | 31040 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/icon-properties-artifacts/appearance-imported-studio.png` | Untracked | 116107 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/icon-properties-artifacts/appearance-local-studio.png` | Untracked | 120294 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/icon-properties-artifacts/appearance-local-window.png` | Untracked | 116452 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/icon-properties-artifacts/center-move-detail.png` | Untracked | 12746 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/icon-properties-artifacts/center-move-drag.png` | Untracked | 114892 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/icon-properties-artifacts/center-move-selection.png` | Untracked | 120056 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/icon-properties-artifacts/component-actions-imported-studio.png` | Untracked | 50277 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/icon-properties-artifacts/component-actions-studio.png` | Untracked | 53870 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/icon-properties-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-2-blocked-1.5.png` | Untracked | 73379 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/icon-properties-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-2-blocked-1.png` | Untracked | 68647 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/icon-properties-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-3-blocked-1.5.png` | Untracked | 72622 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/icon-properties-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-3-blocked-1.png` | Untracked | 70410 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/icon-properties-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked-1.5.png` | Untracked | 49054 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/icon-properties-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked-1.png` | Untracked | 71445 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/icon-properties-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked.png` | Untracked | 61632 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/icon-properties-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-6-blocked-1.5.png` | Untracked | 53146 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/icon-properties-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-6-blocked-1.png` | Untracked | 71445 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/icon-properties-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-9-blocked-1.png` | Untracked | 73150 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/icon-properties-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit.json` | Untracked | 452958 | Docs | 15413 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/icon-properties-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-1.5.png` | Untracked | 111974 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/icon-properties-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-1.png` | Untracked | 98952 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/icon-properties-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked.png` | Untracked | 62222 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/icon-properties-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-0.5.png` | Untracked | 75441 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/icon-properties-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-1.5.png` | Untracked | 105237 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/icon-properties-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-1.png` | Untracked | 67842 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/icon-properties-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked.png` | Untracked | 70275 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/icon-properties-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-13-blocked-1.5.png` | Untracked | 105237 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/icon-properties-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-13-blocked-1.png` | Untracked | 68428 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/icon-properties-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-19-blocked.png` | Untracked | 70870 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/icon-properties-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-2-blocked-1.5.png` | Untracked | 111974 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/icon-properties-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-24-blocked.png` | Untracked | 70111 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/icon-properties-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-6-blocked-1.5.png` | Untracked | 90020 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/icon-properties-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-6-blocked.png` | Untracked | 62933 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/icon-properties-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression.json` | Untracked | 457734 | Docs | 15318 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/icon-properties-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-1-blocked.png` | Untracked | 70185 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/icon-properties-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-27-blocked.png` | Untracked | 80867 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/icon-properties-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-5-blocked.png` | Untracked | 71457 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/icon-properties-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit.json` | Untracked | 225221 | Docs | 7734 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/icon-properties-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-12-blocked.png` | Untracked | 77362 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/icon-properties-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-13-blocked.png` | Untracked | 70665 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/icon-properties-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-19-blocked.png` | Untracked | 72397 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/icon-properties-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-24-blocked.png` | Untracked | 72790 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/icon-properties-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-29-blocked.png` | Untracked | 72124 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/icon-properties-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-6-blocked.png` | Untracked | 71481 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/icon-properties-artifacts/editor-load-and-toolbar/selection/round-1-full-regression.json` | Untracked | 215443 | Docs | 7315 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/icon-properties-artifacts/icon-properties-studio.png` | Untracked | 74810 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/icon-properties-artifacts/icon-properties-window.png` | Untracked | 71890 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/icon-properties-artifacts/responsive-custom-scope.png` | Untracked | 44683 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/icon-properties-artifacts/responsive-imported-window.png` | Untracked | 83420 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/icon-properties-artifacts/responsive-mobile-draft.png` | Untracked | 39470 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/icon-properties-artifacts/shared-gate-artifacts/shared-instance-local-studio.png` | Untracked | 82172 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/icon-properties-artifacts/source-project-compat-sample.json` | Untracked | 207 | Docs | 12 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/icon-properties-servers/child-server-1-31712.log` | Untracked | 75928 | Docs | 1514 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/icon-properties-servers/child-server-2-19640.log` | Untracked | 6007 | Docs | 19 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/icon-properties.log` | Untracked | 34910 | Docs | 303 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-imported-artifacts/advanced-image-failure.png` | Untracked | 8791 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-imported-artifacts/advanced-image-studio.png` | Untracked | 39763 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-imported-artifacts/advanced-image-window.png` | Untracked | 31040 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-imported-artifacts/appearance-imported-studio.png` | Untracked | 116107 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-imported-artifacts/appearance-local-studio.png` | Untracked | 120294 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-imported-artifacts/appearance-local-window.png` | Untracked | 116452 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-imported-artifacts/center-move-detail.png` | Untracked | 12746 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-imported-artifacts/center-move-drag.png` | Untracked | 114892 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-imported-artifacts/center-move-selection.png` | Untracked | 120056 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-2-blocked-1.5.png` | Untracked | 73379 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-2-blocked-1.png` | Untracked | 68647 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-3-blocked-1.5.png` | Untracked | 72622 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-3-blocked-1.png` | Untracked | 70410 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked-1.5.png` | Untracked | 49054 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked-1.png` | Untracked | 71445 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked.png` | Untracked | 61632 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-6-blocked-1.5.png` | Untracked | 53146 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-6-blocked-1.png` | Untracked | 71445 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-9-blocked-1.png` | Untracked | 73150 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit.json` | Untracked | 452958 | Docs | 15413 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-1.5.png` | Untracked | 111974 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-1.png` | Untracked | 98952 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked.png` | Untracked | 62222 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-0.5.png` | Untracked | 75441 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-1.5.png` | Untracked | 105237 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-1.png` | Untracked | 67842 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked.png` | Untracked | 70275 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-13-blocked-1.5.png` | Untracked | 105237 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-13-blocked-1.png` | Untracked | 68428 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-19-blocked.png` | Untracked | 70870 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-2-blocked-1.5.png` | Untracked | 111974 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-24-blocked.png` | Untracked | 70111 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-6-blocked-1.5.png` | Untracked | 90020 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-6-blocked.png` | Untracked | 62933 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression.json` | Untracked | 457734 | Docs | 15318 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-imported-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-1-blocked.png` | Untracked | 70185 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-imported-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-27-blocked.png` | Untracked | 80867 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-imported-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-5-blocked.png` | Untracked | 71457 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-imported-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit.json` | Untracked | 225221 | Docs | 7734 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-imported-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-12-blocked.png` | Untracked | 77362 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-imported-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-13-blocked.png` | Untracked | 70665 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-imported-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-19-blocked.png` | Untracked | 72397 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-imported-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-24-blocked.png` | Untracked | 72790 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-imported-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-29-blocked.png` | Untracked | 72124 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-imported-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-6-blocked.png` | Untracked | 71481 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-imported-artifacts/editor-load-and-toolbar/selection/round-1-full-regression.json` | Untracked | 215443 | Docs | 7315 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-imported-artifacts/responsive-custom-scope.png` | Untracked | 44683 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-imported-artifacts/responsive-imported-window.png` | Untracked | 83420 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-imported-artifacts/responsive-mobile-draft.png` | Untracked | 39470 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-imported-artifacts/shared-gate-artifacts/shared-instance-local-studio.png` | Untracked | 82172 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-imported-artifacts/source-project-compat-sample.json` | Untracked | 207 | Docs | 12 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-imported-servers/child-server-1-29272.log` | Untracked | 60573 | Docs | 1209 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-imported-servers/child-server-2-19824.log` | Untracked | 36377 | Docs | 87 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-imported.log` | Untracked | 26103 | Docs | 258 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-local-artifacts/advanced-image-failure.png` | Untracked | 8791 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-local-artifacts/appearance-imported-studio.png` | Untracked | 116107 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-local-artifacts/appearance-local-studio.png` | Untracked | 120294 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-local-artifacts/appearance-local-window.png` | Untracked | 116452 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-local-artifacts/center-move-detail.png` | Untracked | 12746 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-local-artifacts/center-move-drag.png` | Untracked | 114892 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-local-artifacts/center-move-selection.png` | Untracked | 120056 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-2-blocked-1.5.png` | Untracked | 73379 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-2-blocked-1.png` | Untracked | 68647 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-3-blocked-1.5.png` | Untracked | 72622 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-3-blocked-1.png` | Untracked | 70410 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked-1.5.png` | Untracked | 49054 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked-1.png` | Untracked | 71445 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked.png` | Untracked | 61632 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-6-blocked-1.5.png` | Untracked | 53146 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-6-blocked-1.png` | Untracked | 71445 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-9-blocked-1.png` | Untracked | 73150 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit.json` | Untracked | 452958 | Docs | 15413 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-1.5.png` | Untracked | 111974 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-1.png` | Untracked | 98952 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked.png` | Untracked | 62222 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-0.5.png` | Untracked | 75441 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-1.5.png` | Untracked | 105237 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-1.png` | Untracked | 67842 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked.png` | Untracked | 70275 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-13-blocked-1.5.png` | Untracked | 105237 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-13-blocked-1.png` | Untracked | 68428 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-19-blocked.png` | Untracked | 70870 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-2-blocked-1.5.png` | Untracked | 111974 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-24-blocked.png` | Untracked | 70111 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-6-blocked-1.5.png` | Untracked | 90020 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-6-blocked.png` | Untracked | 62933 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-local-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression.json` | Untracked | 457734 | Docs | 15318 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-local-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-1-blocked.png` | Untracked | 70185 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-local-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-27-blocked.png` | Untracked | 80867 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-local-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-5-blocked.png` | Untracked | 71457 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-local-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit.json` | Untracked | 225221 | Docs | 7734 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-local-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-12-blocked.png` | Untracked | 77362 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-local-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-13-blocked.png` | Untracked | 70665 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-local-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-19-blocked.png` | Untracked | 72397 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-local-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-24-blocked.png` | Untracked | 72790 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-local-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-29-blocked.png` | Untracked | 72124 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-local-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-6-blocked.png` | Untracked | 71481 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-local-artifacts/editor-load-and-toolbar/selection/round-1-full-regression.json` | Untracked | 215443 | Docs | 7315 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-local-artifacts/responsive-custom-scope.png` | Untracked | 44683 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-local-artifacts/responsive-imported-window.png` | Untracked | 83420 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-local-artifacts/responsive-mobile-draft.png` | Untracked | 39470 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-local-artifacts/shared-gate-artifacts/shared-instance-local-studio.png` | Untracked | 82172 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-local-artifacts/source-project-compat-sample.json` | Untracked | 207 | Docs | 12 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-local-servers/child-server-1-20796.log` | Untracked | 1658 | Docs | 14 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/images-local.log` | Untracked | 2896 | Docs | 45 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/movement-artifacts/center-move-detail.png` | Untracked | 12746 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/movement-artifacts/center-move-drag.png` | Untracked | 114892 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/movement-artifacts/center-move-selection.png` | Untracked | 120056 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/movement-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-2-blocked-1.5.png` | Untracked | 73379 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/movement-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-2-blocked-1.png` | Untracked | 68647 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/movement-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-3-blocked-1.5.png` | Untracked | 72622 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/movement-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-3-blocked-1.png` | Untracked | 70410 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/movement-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked-1.5.png` | Untracked | 49054 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/movement-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked-1.png` | Untracked | 71445 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/movement-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked.png` | Untracked | 61632 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/movement-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-6-blocked-1.5.png` | Untracked | 53146 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/movement-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-6-blocked-1.png` | Untracked | 71445 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/movement-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-9-blocked-1.png` | Untracked | 73150 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/movement-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit.json` | Untracked | 452958 | Docs | 15413 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/movement-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-1.5.png` | Untracked | 111974 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/movement-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-1.png` | Untracked | 98952 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/movement-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked.png` | Untracked | 62222 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/movement-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-0.5.png` | Untracked | 75441 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/movement-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-1.5.png` | Untracked | 105237 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/movement-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-1.png` | Untracked | 67842 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/movement-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked.png` | Untracked | 70275 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/movement-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-13-blocked-1.5.png` | Untracked | 105237 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/movement-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-13-blocked-1.png` | Untracked | 68428 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/movement-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-19-blocked.png` | Untracked | 70870 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/movement-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-2-blocked-1.5.png` | Untracked | 111974 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/movement-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-24-blocked.png` | Untracked | 70111 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/movement-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-6-blocked-1.5.png` | Untracked | 90020 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/movement-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-6-blocked.png` | Untracked | 62933 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/movement-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression.json` | Untracked | 457734 | Docs | 15318 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/movement-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-1-blocked.png` | Untracked | 70185 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/movement-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-27-blocked.png` | Untracked | 80867 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/movement-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-5-blocked.png` | Untracked | 71457 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/movement-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit.json` | Untracked | 225221 | Docs | 7734 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/movement-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-12-blocked.png` | Untracked | 77362 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/movement-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-13-blocked.png` | Untracked | 70665 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/movement-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-19-blocked.png` | Untracked | 72397 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/movement-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-24-blocked.png` | Untracked | 72790 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/movement-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-29-blocked.png` | Untracked | 72124 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/movement-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-6-blocked.png` | Untracked | 71481 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/movement-artifacts/editor-load-and-toolbar/selection/round-1-full-regression.json` | Untracked | 215443 | Docs | 7315 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/movement-artifacts/shared-gate-artifacts/shared-instance-local-studio.png` | Untracked | 82172 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/movement-artifacts/source-project-compat-sample.json` | Untracked | 207 | Docs | 12 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/movement-servers/child-server-1-33688.log` | Untracked | 31282 | Docs | 699 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/movement.log` | Untracked | 24796 | Docs | 227 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/plan.json` | Untracked | 9596 | Docs | 366 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/prepare-lab-adapters.log` | Untracked | 43 | Docs | 1 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/raw.log` | Untracked | 1237699 | Docs | 4884 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/recovery-artifacts/advanced-image-failure.png` | Untracked | 8791 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/recovery-artifacts/advanced-image-studio.png` | Untracked | 39763 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/recovery-artifacts/advanced-image-window.png` | Untracked | 31040 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/recovery-artifacts/appearance-imported-studio.png` | Untracked | 116107 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/recovery-artifacts/appearance-local-studio.png` | Untracked | 120294 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/recovery-artifacts/appearance-local-window.png` | Untracked | 116452 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/recovery-artifacts/center-move-detail.png` | Untracked | 12746 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/recovery-artifacts/center-move-drag.png` | Untracked | 114892 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/recovery-artifacts/center-move-selection.png` | Untracked | 120056 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/recovery-artifacts/component-actions-imported-studio.png` | Untracked | 50277 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/recovery-artifacts/component-actions-studio.png` | Untracked | 53870 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/recovery-artifacts/container-move-destination.png` | Untracked | 51397 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/recovery-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-2-blocked-1.5.png` | Untracked | 73379 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/recovery-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-2-blocked-1.png` | Untracked | 68647 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/recovery-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-3-blocked-1.5.png` | Untracked | 72622 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/recovery-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-3-blocked-1.png` | Untracked | 70410 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/recovery-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked-1.5.png` | Untracked | 49054 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/recovery-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked-1.png` | Untracked | 71445 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/recovery-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked.png` | Untracked | 61632 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/recovery-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-6-blocked-1.5.png` | Untracked | 53146 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/recovery-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-6-blocked-1.png` | Untracked | 71445 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/recovery-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-9-blocked-1.png` | Untracked | 73150 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/recovery-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit.json` | Untracked | 452958 | Docs | 15413 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/recovery-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-1.5.png` | Untracked | 111974 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/recovery-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-1.png` | Untracked | 98952 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/recovery-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked.png` | Untracked | 62222 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/recovery-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-0.5.png` | Untracked | 75441 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/recovery-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-1.5.png` | Untracked | 105237 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/recovery-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-1.png` | Untracked | 67842 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/recovery-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked.png` | Untracked | 70275 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/recovery-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-13-blocked-1.5.png` | Untracked | 105237 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/recovery-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-13-blocked-1.png` | Untracked | 68428 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/recovery-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-19-blocked.png` | Untracked | 70870 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/recovery-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-2-blocked-1.5.png` | Untracked | 111974 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/recovery-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-24-blocked.png` | Untracked | 70111 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/recovery-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-6-blocked-1.5.png` | Untracked | 90020 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/recovery-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-6-blocked.png` | Untracked | 62933 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/recovery-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression.json` | Untracked | 457734 | Docs | 15318 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/recovery-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-1-blocked.png` | Untracked | 70185 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/recovery-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-27-blocked.png` | Untracked | 80867 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/recovery-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-5-blocked.png` | Untracked | 71457 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/recovery-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit.json` | Untracked | 225221 | Docs | 7734 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/recovery-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-12-blocked.png` | Untracked | 77362 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/recovery-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-13-blocked.png` | Untracked | 70665 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/recovery-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-19-blocked.png` | Untracked | 72397 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/recovery-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-24-blocked.png` | Untracked | 72790 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/recovery-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-29-blocked.png` | Untracked | 72124 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/recovery-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-6-blocked.png` | Untracked | 71481 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/recovery-artifacts/editor-load-and-toolbar/selection/round-1-full-regression.json` | Untracked | 215443 | Docs | 7315 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/recovery-artifacts/icon-properties-studio.png` | Untracked | 74810 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/recovery-artifacts/icon-properties-window.png` | Untracked | 71890 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/recovery-artifacts/inline-text-editing.png` | Untracked | 122923 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/recovery-artifacts/responsive-custom-scope.png` | Untracked | 44683 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/recovery-artifacts/responsive-imported-window.png` | Untracked | 83420 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/recovery-artifacts/responsive-mobile-draft.png` | Untracked | 39470 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/recovery-artifacts/section-order-ready.png` | Untracked | 55440 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/recovery-artifacts/shared-gate-artifacts/shared-instance-local-studio.png` | Untracked | 82172 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/recovery-artifacts/source-project-compat-sample.json` | Untracked | 207 | Docs | 12 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/recovery-servers/child-server-1-25880.log` | Untracked | 15984 | Docs | 383 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/recovery.log` | Untracked | 19649 | Docs | 432 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/responsive-artifacts/center-move-detail.png` | Untracked | 12746 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/responsive-artifacts/center-move-drag.png` | Untracked | 114892 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/responsive-artifacts/center-move-selection.png` | Untracked | 120056 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/responsive-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-2-blocked-1.5.png` | Untracked | 73379 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/responsive-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-2-blocked-1.png` | Untracked | 68647 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/responsive-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-3-blocked-1.5.png` | Untracked | 72622 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/responsive-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-3-blocked-1.png` | Untracked | 70410 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/responsive-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked-1.5.png` | Untracked | 49054 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/responsive-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked-1.png` | Untracked | 71445 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/responsive-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked.png` | Untracked | 61632 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/responsive-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-6-blocked-1.5.png` | Untracked | 53146 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/responsive-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-6-blocked-1.png` | Untracked | 71445 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/responsive-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-9-blocked-1.png` | Untracked | 73150 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/responsive-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit.json` | Untracked | 452958 | Docs | 15413 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/responsive-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-1.5.png` | Untracked | 111974 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/responsive-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-1.png` | Untracked | 98952 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/responsive-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked.png` | Untracked | 62222 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/responsive-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-0.5.png` | Untracked | 75441 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/responsive-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-1.5.png` | Untracked | 105237 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/responsive-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-1.png` | Untracked | 67842 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/responsive-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked.png` | Untracked | 70275 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/responsive-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-13-blocked-1.5.png` | Untracked | 105237 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/responsive-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-13-blocked-1.png` | Untracked | 68428 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/responsive-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-19-blocked.png` | Untracked | 70870 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/responsive-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-2-blocked-1.5.png` | Untracked | 111974 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/responsive-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-24-blocked.png` | Untracked | 70111 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/responsive-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-6-blocked-1.5.png` | Untracked | 90020 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/responsive-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-6-blocked.png` | Untracked | 62933 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/responsive-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression.json` | Untracked | 457734 | Docs | 15318 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/responsive-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-1-blocked.png` | Untracked | 70185 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/responsive-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-27-blocked.png` | Untracked | 80867 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/responsive-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-5-blocked.png` | Untracked | 71457 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/responsive-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit.json` | Untracked | 225221 | Docs | 7734 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/responsive-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-12-blocked.png` | Untracked | 77362 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/responsive-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-13-blocked.png` | Untracked | 70665 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/responsive-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-19-blocked.png` | Untracked | 72397 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/responsive-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-24-blocked.png` | Untracked | 72790 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/responsive-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-29-blocked.png` | Untracked | 72124 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/responsive-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-6-blocked.png` | Untracked | 71481 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/responsive-artifacts/editor-load-and-toolbar/selection/round-1-full-regression.json` | Untracked | 215443 | Docs | 7315 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/responsive-artifacts/responsive-custom-scope.png` | Untracked | 44683 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/responsive-artifacts/responsive-mobile-draft.png` | Untracked | 39470 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/responsive-artifacts/shared-gate-artifacts/shared-instance-local-studio.png` | Untracked | 82172 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/responsive-artifacts/source-project-compat-sample.json` | Untracked | 207 | Docs | 12 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/responsive-imported-artifacts/center-move-detail.png` | Untracked | 12746 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/responsive-imported-artifacts/center-move-drag.png` | Untracked | 114892 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/responsive-imported-artifacts/center-move-selection.png` | Untracked | 120056 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/responsive-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-2-blocked-1.5.png` | Untracked | 73379 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/responsive-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-2-blocked-1.png` | Untracked | 68647 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/responsive-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-3-blocked-1.5.png` | Untracked | 72622 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/responsive-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-3-blocked-1.png` | Untracked | 70410 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/responsive-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked-1.5.png` | Untracked | 49054 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/responsive-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked-1.png` | Untracked | 71445 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/responsive-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked.png` | Untracked | 61632 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/responsive-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-6-blocked-1.5.png` | Untracked | 53146 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/responsive-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-6-blocked-1.png` | Untracked | 71445 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/responsive-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-9-blocked-1.png` | Untracked | 73150 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/responsive-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit.json` | Untracked | 452958 | Docs | 15413 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/responsive-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-1.5.png` | Untracked | 111974 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/responsive-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-1.png` | Untracked | 98952 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/responsive-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked.png` | Untracked | 62222 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/responsive-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-0.5.png` | Untracked | 75441 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/responsive-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-1.5.png` | Untracked | 105237 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/responsive-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-1.png` | Untracked | 67842 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/responsive-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked.png` | Untracked | 70275 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/responsive-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-13-blocked-1.5.png` | Untracked | 105237 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/responsive-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-13-blocked-1.png` | Untracked | 68428 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/responsive-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-19-blocked.png` | Untracked | 70870 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/responsive-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-2-blocked-1.5.png` | Untracked | 111974 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/responsive-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-24-blocked.png` | Untracked | 70111 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/responsive-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-6-blocked-1.5.png` | Untracked | 90020 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/responsive-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-6-blocked.png` | Untracked | 62933 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/responsive-imported-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression.json` | Untracked | 457734 | Docs | 15318 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/responsive-imported-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-1-blocked.png` | Untracked | 70185 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/responsive-imported-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-27-blocked.png` | Untracked | 80867 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/responsive-imported-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-5-blocked.png` | Untracked | 71457 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/responsive-imported-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit.json` | Untracked | 225221 | Docs | 7734 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/responsive-imported-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-12-blocked.png` | Untracked | 77362 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/responsive-imported-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-13-blocked.png` | Untracked | 70665 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/responsive-imported-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-19-blocked.png` | Untracked | 72397 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/responsive-imported-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-24-blocked.png` | Untracked | 72790 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/responsive-imported-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-29-blocked.png` | Untracked | 72124 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/responsive-imported-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-6-blocked.png` | Untracked | 71481 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/responsive-imported-artifacts/editor-load-and-toolbar/selection/round-1-full-regression.json` | Untracked | 215443 | Docs | 7315 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/responsive-imported-artifacts/responsive-custom-scope.png` | Untracked | 44683 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/responsive-imported-artifacts/responsive-imported-window.png` | Untracked | 83420 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/responsive-imported-artifacts/responsive-mobile-draft.png` | Untracked | 39470 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/responsive-imported-artifacts/shared-gate-artifacts/shared-instance-local-studio.png` | Untracked | 82172 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/responsive-imported-artifacts/source-project-compat-sample.json` | Untracked | 207 | Docs | 12 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/responsive-imported-servers/child-server-1-30436.log` | Untracked | 46794 | Docs | 1026 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/responsive-imported-servers/child-server-2-15996.log` | Untracked | 28853 | Docs | 67 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/responsive-imported.log` | Untracked | 20381 | Docs | 175 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/responsive-servers/child-server-1-25404.log` | Untracked | 43287 | Docs | 994 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/responsive.log` | Untracked | 19981 | Docs | 172 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/results.json` | Untracked | 8923 | Docs | 328 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/section-order-artifacts/advanced-image-failure.png` | Untracked | 8791 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/section-order-artifacts/advanced-image-studio.png` | Untracked | 39763 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/section-order-artifacts/advanced-image-window.png` | Untracked | 31040 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/section-order-artifacts/appearance-imported-studio.png` | Untracked | 116107 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/section-order-artifacts/appearance-local-studio.png` | Untracked | 120294 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/section-order-artifacts/appearance-local-window.png` | Untracked | 116452 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/section-order-artifacts/center-move-detail.png` | Untracked | 12746 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/section-order-artifacts/center-move-drag.png` | Untracked | 114892 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/section-order-artifacts/center-move-selection.png` | Untracked | 120056 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/section-order-artifacts/component-actions-imported-studio.png` | Untracked | 50277 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/section-order-artifacts/component-actions-studio.png` | Untracked | 53870 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/section-order-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-2-blocked-1.5.png` | Untracked | 73379 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/section-order-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-2-blocked-1.png` | Untracked | 68647 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/section-order-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-3-blocked-1.5.png` | Untracked | 72622 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/section-order-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-3-blocked-1.png` | Untracked | 70410 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/section-order-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked-1.5.png` | Untracked | 49054 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/section-order-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked-1.png` | Untracked | 71445 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/section-order-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked.png` | Untracked | 61632 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/section-order-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-6-blocked-1.5.png` | Untracked | 53146 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/section-order-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-6-blocked-1.png` | Untracked | 71445 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/section-order-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-9-blocked-1.png` | Untracked | 73150 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/section-order-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit.json` | Untracked | 452958 | Docs | 15413 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/section-order-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-1.5.png` | Untracked | 111974 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/section-order-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-1.png` | Untracked | 98952 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/section-order-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked.png` | Untracked | 62222 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/section-order-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-0.5.png` | Untracked | 75441 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/section-order-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-1.5.png` | Untracked | 105237 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/section-order-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-1.png` | Untracked | 67842 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/section-order-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked.png` | Untracked | 70275 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/section-order-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-13-blocked-1.5.png` | Untracked | 105237 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/section-order-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-13-blocked-1.png` | Untracked | 68428 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/section-order-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-19-blocked.png` | Untracked | 70870 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/section-order-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-2-blocked-1.5.png` | Untracked | 111974 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/section-order-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-24-blocked.png` | Untracked | 70111 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/section-order-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-6-blocked-1.5.png` | Untracked | 90020 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/section-order-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-6-blocked.png` | Untracked | 62933 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/section-order-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression.json` | Untracked | 457734 | Docs | 15318 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/section-order-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-1-blocked.png` | Untracked | 70185 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/section-order-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-27-blocked.png` | Untracked | 80867 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/section-order-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-5-blocked.png` | Untracked | 71457 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/section-order-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit.json` | Untracked | 225221 | Docs | 7734 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/section-order-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-12-blocked.png` | Untracked | 77362 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/section-order-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-13-blocked.png` | Untracked | 70665 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/section-order-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-19-blocked.png` | Untracked | 72397 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/section-order-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-24-blocked.png` | Untracked | 72790 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/section-order-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-29-blocked.png` | Untracked | 72124 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/section-order-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-6-blocked.png` | Untracked | 71481 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/section-order-artifacts/editor-load-and-toolbar/selection/round-1-full-regression.json` | Untracked | 215443 | Docs | 7315 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/section-order-artifacts/icon-properties-studio.png` | Untracked | 74810 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/section-order-artifacts/icon-properties-window.png` | Untracked | 71890 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/section-order-artifacts/responsive-custom-scope.png` | Untracked | 44683 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/section-order-artifacts/responsive-imported-window.png` | Untracked | 83420 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/section-order-artifacts/responsive-mobile-draft.png` | Untracked | 39470 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/section-order-artifacts/section-order-ready.png` | Untracked | 55440 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/section-order-artifacts/shared-gate-artifacts/shared-instance-local-studio.png` | Untracked | 82172 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/section-order-artifacts/source-project-compat-sample.json` | Untracked | 207 | Docs | 12 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/section-order-servers/child-server-1-35968.log` | Untracked | 46412 | Docs | 1128 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/section-order.log` | Untracked | 9938 | Docs | 87 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-2-blocked-1.5.png` | Untracked | 73379 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-2-blocked-1.png` | Untracked | 68647 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-3-blocked-1.5.png` | Untracked | 72622 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-3-blocked-1.png` | Untracked | 70410 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked-1.5.png` | Untracked | 49054 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked-1.png` | Untracked | 71445 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked.png` | Untracked | 61632 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-6-blocked-1.5.png` | Untracked | 53146 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-6-blocked-1.png` | Untracked | 71445 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-9-blocked-1.png` | Untracked | 73150 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit.json` | Untracked | 452958 | Docs | 15413 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-1.5.png` | Untracked | 111974 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-1.png` | Untracked | 98952 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked.png` | Untracked | 62222 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-0.5.png` | Untracked | 75441 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-1.5.png` | Untracked | 105237 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-1.png` | Untracked | 67842 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked.png` | Untracked | 70275 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-13-blocked-1.5.png` | Untracked | 105237 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-13-blocked-1.png` | Untracked | 68428 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-19-blocked.png` | Untracked | 70870 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-2-blocked-1.5.png` | Untracked | 111974 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-24-blocked.png` | Untracked | 70111 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-6-blocked-1.5.png` | Untracked | 90020 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-6-blocked.png` | Untracked | 62933 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression.json` | Untracked | 457734 | Docs | 15318 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-1-blocked.png` | Untracked | 70185 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-27-blocked.png` | Untracked | 80867 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-5-blocked.png` | Untracked | 71457 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit.json` | Untracked | 225221 | Docs | 7734 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-12-blocked.png` | Untracked | 77362 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-13-blocked.png` | Untracked | 70665 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-19-blocked.png` | Untracked | 72397 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-24-blocked.png` | Untracked | 72790 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-29-blocked.png` | Untracked | 72124 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-6-blocked.png` | Untracked | 71481 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/selection-fit-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-regression.json` | Untracked | 215443 | Docs | 7315 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/selection-fit-overfit.log` | Untracked | 297572 | Docs | 334 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-1.5.png` | Untracked | 111974 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-1.png` | Untracked | 98952 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked.png` | Untracked | 62222 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-0.5.png` | Untracked | 75441 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-1.5.png` | Untracked | 105237 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-1.png` | Untracked | 67842 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked.png` | Untracked | 70275 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-13-blocked-1.5.png` | Untracked | 105237 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-13-blocked-1.png` | Untracked | 68428 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-19-blocked.png` | Untracked | 70870 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-2-blocked-1.5.png` | Untracked | 111974 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-24-blocked.png` | Untracked | 70111 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-6-blocked-1.5.png` | Untracked | 90020 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-6-blocked.png` | Untracked | 62933 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression.json` | Untracked | 457734 | Docs | 15318 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-1-blocked.png` | Untracked | 70185 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-27-blocked.png` | Untracked | 80867 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-5-blocked.png` | Untracked | 71457 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit.json` | Untracked | 225221 | Docs | 7734 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-12-blocked.png` | Untracked | 77362 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-13-blocked.png` | Untracked | 70665 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-19-blocked.png` | Untracked | 72397 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-24-blocked.png` | Untracked | 72790 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-29-blocked.png` | Untracked | 72124 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-6-blocked.png` | Untracked | 71481 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/selection-fit-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-regression.json` | Untracked | 215443 | Docs | 7315 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/selection-fit-regression.log` | Untracked | 306245 | Docs | 357 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-1-blocked.png` | Untracked | 70185 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-27-blocked.png` | Untracked | 80867 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-5-blocked.png` | Untracked | 71457 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit.json` | Untracked | 225221 | Docs | 7734 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-12-blocked.png` | Untracked | 77362 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-13-blocked.png` | Untracked | 70665 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-19-blocked.png` | Untracked | 72397 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-24-blocked.png` | Untracked | 72790 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-29-blocked.png` | Untracked | 72124 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-6-blocked.png` | Untracked | 71481 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/selection-full-overfit-artifacts/editor-load-and-toolbar/selection/round-1-full-regression.json` | Untracked | 215443 | Docs | 7315 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/selection-full-overfit.log` | Untracked | 149041 | Docs | 183 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/selection-full-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-12-blocked.png` | Untracked | 77362 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/selection-full-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-13-blocked.png` | Untracked | 70665 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/selection-full-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-19-blocked.png` | Untracked | 72397 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/selection-full-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-24-blocked.png` | Untracked | 72790 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/selection-full-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-29-blocked.png` | Untracked | 72124 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/selection-full-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-6-blocked.png` | Untracked | 71481 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/selection-full-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-regression.json` | Untracked | 215443 | Docs | 7315 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/selection-full-regression.log` | Untracked | 142408 | Docs | 151 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/server-50557.log` | Untracked | 82105 | Docs | 2037 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/server-50558.log` | Untracked | 6296 | Docs | 24 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/server-58515.log` | Untracked | 312511 | Docs | 6542 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/server-58516.log` | Untracked | 8194 | Docs | 36 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/server-58517.log` | Untracked | 8310 | Docs | 36 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/shared-compiler-warmup.log` | Untracked | 2625 | Docs | 26 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/shared-local-studio-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-2-blocked-1.5.png` | Untracked | 73379 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/shared-local-studio-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-2-blocked-1.png` | Untracked | 68647 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/shared-local-studio-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-3-blocked-1.5.png` | Untracked | 72622 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/shared-local-studio-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-3-blocked-1.png` | Untracked | 70410 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/shared-local-studio-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked-1.5.png` | Untracked | 49054 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/shared-local-studio-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked-1.png` | Untracked | 71445 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/shared-local-studio-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked.png` | Untracked | 61632 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/shared-local-studio-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-6-blocked-1.5.png` | Untracked | 53146 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/shared-local-studio-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-6-blocked-1.png` | Untracked | 71445 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/shared-local-studio-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-9-blocked-1.png` | Untracked | 73150 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/shared-local-studio-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit.json` | Untracked | 452958 | Docs | 15413 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/shared-local-studio-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-1.5.png` | Untracked | 111974 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/shared-local-studio-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-1.png` | Untracked | 98952 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/shared-local-studio-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked.png` | Untracked | 62222 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/shared-local-studio-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-0.5.png` | Untracked | 75441 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/shared-local-studio-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-1.5.png` | Untracked | 105237 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/shared-local-studio-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-1.png` | Untracked | 67842 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/shared-local-studio-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked.png` | Untracked | 70275 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/shared-local-studio-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-13-blocked-1.5.png` | Untracked | 105237 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/shared-local-studio-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-13-blocked-1.png` | Untracked | 68428 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/shared-local-studio-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-19-blocked.png` | Untracked | 70870 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/shared-local-studio-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-2-blocked-1.5.png` | Untracked | 111974 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/shared-local-studio-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-24-blocked.png` | Untracked | 70111 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/shared-local-studio-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-6-blocked-1.5.png` | Untracked | 90020 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/shared-local-studio-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-6-blocked.png` | Untracked | 62933 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/shared-local-studio-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression.json` | Untracked | 457734 | Docs | 15318 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/shared-local-studio-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-1-blocked.png` | Untracked | 70185 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/shared-local-studio-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-27-blocked.png` | Untracked | 80867 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/shared-local-studio-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-5-blocked.png` | Untracked | 71457 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/shared-local-studio-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit.json` | Untracked | 225221 | Docs | 7734 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/shared-local-studio-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-12-blocked.png` | Untracked | 77362 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/shared-local-studio-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-13-blocked.png` | Untracked | 70665 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/shared-local-studio-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-19-blocked.png` | Untracked | 72397 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/shared-local-studio-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-24-blocked.png` | Untracked | 72790 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/shared-local-studio-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-29-blocked.png` | Untracked | 72124 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/shared-local-studio-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-6-blocked.png` | Untracked | 71481 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/shared-local-studio-artifacts/editor-load-and-toolbar/selection/round-1-full-regression.json` | Untracked | 215443 | Docs | 7315 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/shared-local-studio-artifacts/shared-gate-artifacts/shared-instance-local-studio.png` | Untracked | 82172 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/shared-local-studio-artifacts/source-project-compat-sample.json` | Untracked | 207 | Docs | 12 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/shared-local-studio.log` | Untracked | 14866 | Docs | 123 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/shared-local-window-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-2-blocked-1.5.png` | Untracked | 73379 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/shared-local-window-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-2-blocked-1.png` | Untracked | 68647 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/shared-local-window-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-3-blocked-1.5.png` | Untracked | 72622 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/shared-local-window-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-3-blocked-1.png` | Untracked | 70410 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/shared-local-window-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked-1.5.png` | Untracked | 49054 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/shared-local-window-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked-1.png` | Untracked | 71445 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/shared-local-window-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked.png` | Untracked | 61632 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/shared-local-window-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-6-blocked-1.5.png` | Untracked | 53146 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/shared-local-window-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-6-blocked-1.png` | Untracked | 71445 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/shared-local-window-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-9-blocked-1.png` | Untracked | 73150 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/shared-local-window-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit.json` | Untracked | 452958 | Docs | 15413 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/shared-local-window-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-1.5.png` | Untracked | 111974 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/shared-local-window-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-1.png` | Untracked | 98952 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/shared-local-window-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked.png` | Untracked | 62222 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/shared-local-window-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-0.5.png` | Untracked | 75441 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/shared-local-window-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-1.5.png` | Untracked | 105237 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/shared-local-window-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-1.png` | Untracked | 67842 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/shared-local-window-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked.png` | Untracked | 70275 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/shared-local-window-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-13-blocked-1.5.png` | Untracked | 105237 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/shared-local-window-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-13-blocked-1.png` | Untracked | 68428 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/shared-local-window-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-19-blocked.png` | Untracked | 70870 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/shared-local-window-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-2-blocked-1.5.png` | Untracked | 111974 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/shared-local-window-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-24-blocked.png` | Untracked | 70111 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/shared-local-window-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-6-blocked-1.5.png` | Untracked | 90020 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/shared-local-window-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-6-blocked.png` | Untracked | 62933 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/shared-local-window-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression.json` | Untracked | 457734 | Docs | 15318 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/shared-local-window-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-1-blocked.png` | Untracked | 70185 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/shared-local-window-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-27-blocked.png` | Untracked | 80867 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/shared-local-window-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-5-blocked.png` | Untracked | 71457 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/shared-local-window-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit.json` | Untracked | 225221 | Docs | 7734 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/shared-local-window-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-12-blocked.png` | Untracked | 77362 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/shared-local-window-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-13-blocked.png` | Untracked | 70665 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/shared-local-window-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-19-blocked.png` | Untracked | 72397 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/shared-local-window-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-24-blocked.png` | Untracked | 72790 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/shared-local-window-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-29-blocked.png` | Untracked | 72124 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/shared-local-window-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-6-blocked.png` | Untracked | 71481 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/shared-local-window-artifacts/editor-load-and-toolbar/selection/round-1-full-regression.json` | Untracked | 215443 | Docs | 7315 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/shared-local-window-artifacts/shared-gate-artifacts/shared-instance-local-studio.png` | Untracked | 82172 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/shared-local-window-artifacts/source-project-compat-sample.json` | Untracked | 207 | Docs | 12 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/shared-local-window.log` | Untracked | 355 | Docs | 7 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/shared-runtime-setup.log` | Untracked | 1165 | Docs | 12 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/state-and-transitions-artifacts/center-move-detail.png` | Untracked | 12746 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/state-and-transitions-artifacts/center-move-drag.png` | Untracked | 114892 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/state-and-transitions-artifacts/center-move-selection.png` | Untracked | 120056 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/state-and-transitions-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-2-blocked-1.5.png` | Untracked | 73379 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/state-and-transitions-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-2-blocked-1.png` | Untracked | 68647 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/state-and-transitions-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-3-blocked-1.5.png` | Untracked | 72622 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/state-and-transitions-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-3-blocked-1.png` | Untracked | 70410 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/state-and-transitions-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked-1.5.png` | Untracked | 49054 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/state-and-transitions-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked-1.png` | Untracked | 71445 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/state-and-transitions-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked.png` | Untracked | 61632 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/state-and-transitions-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-6-blocked-1.5.png` | Untracked | 53146 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/state-and-transitions-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-6-blocked-1.png` | Untracked | 71445 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/state-and-transitions-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-9-blocked-1.png` | Untracked | 73150 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/state-and-transitions-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit.json` | Untracked | 452958 | Docs | 15413 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/state-and-transitions-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-1.5.png` | Untracked | 111974 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/state-and-transitions-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-1.png` | Untracked | 98952 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/state-and-transitions-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked.png` | Untracked | 62222 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/state-and-transitions-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-0.5.png` | Untracked | 75441 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/state-and-transitions-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-1.5.png` | Untracked | 105237 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/state-and-transitions-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-1.png` | Untracked | 67842 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/state-and-transitions-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked.png` | Untracked | 70275 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/state-and-transitions-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-13-blocked-1.5.png` | Untracked | 105237 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/state-and-transitions-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-13-blocked-1.png` | Untracked | 68428 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/state-and-transitions-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-19-blocked.png` | Untracked | 70870 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/state-and-transitions-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-2-blocked-1.5.png` | Untracked | 111974 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/state-and-transitions-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-24-blocked.png` | Untracked | 70111 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/state-and-transitions-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-6-blocked-1.5.png` | Untracked | 90020 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/state-and-transitions-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-6-blocked.png` | Untracked | 62933 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/state-and-transitions-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression.json` | Untracked | 457734 | Docs | 15318 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/state-and-transitions-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-1-blocked.png` | Untracked | 70185 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/state-and-transitions-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-27-blocked.png` | Untracked | 80867 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/state-and-transitions-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-5-blocked.png` | Untracked | 71457 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/state-and-transitions-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit.json` | Untracked | 225221 | Docs | 7734 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/state-and-transitions-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-12-blocked.png` | Untracked | 77362 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/state-and-transitions-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-13-blocked.png` | Untracked | 70665 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/state-and-transitions-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-19-blocked.png` | Untracked | 72397 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/state-and-transitions-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-24-blocked.png` | Untracked | 72790 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/state-and-transitions-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-29-blocked.png` | Untracked | 72124 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/state-and-transitions-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-6-blocked.png` | Untracked | 71481 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/state-and-transitions-artifacts/editor-load-and-toolbar/selection/round-1-full-regression.json` | Untracked | 215443 | Docs | 7315 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/state-and-transitions-artifacts/shared-gate-artifacts/shared-instance-local-studio.png` | Untracked | 82172 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/state-and-transitions-artifacts/source-project-compat-sample.json` | Untracked | 207 | Docs | 12 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/state-and-transitions-servers/child-server-1-18352.log` | Untracked | 11122 | Docs | 251 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/state-and-transitions.log` | Untracked | 13803 | Docs | 288 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/summary.json` | Untracked | 1110 | Docs | 61 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/text-editing-artifacts/advanced-image-failure.png` | Untracked | 8791 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/text-editing-artifacts/advanced-image-studio.png` | Untracked | 39763 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/text-editing-artifacts/advanced-image-window.png` | Untracked | 31040 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/text-editing-artifacts/appearance-imported-studio.png` | Untracked | 116107 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/text-editing-artifacts/appearance-local-studio.png` | Untracked | 120294 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/text-editing-artifacts/appearance-local-window.png` | Untracked | 116452 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/text-editing-artifacts/center-move-detail.png` | Untracked | 12746 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/text-editing-artifacts/center-move-drag.png` | Untracked | 114892 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/text-editing-artifacts/center-move-selection.png` | Untracked | 120056 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/text-editing-artifacts/component-actions-imported-studio.png` | Untracked | 50277 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/text-editing-artifacts/component-actions-studio.png` | Untracked | 53870 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/text-editing-artifacts/container-move-destination.png` | Untracked | 51397 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/text-editing-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-2-blocked-1.5.png` | Untracked | 73379 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/text-editing-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-2-blocked-1.png` | Untracked | 68647 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/text-editing-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-3-blocked-1.5.png` | Untracked | 72622 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/text-editing-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-3-blocked-1.png` | Untracked | 70410 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/text-editing-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked-1.5.png` | Untracked | 49054 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/text-editing-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked-1.png` | Untracked | 71445 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/text-editing-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-5-blocked.png` | Untracked | 61632 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/text-editing-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-6-blocked-1.5.png` | Untracked | 53146 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/text-editing-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-6-blocked-1.png` | Untracked | 71445 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/text-editing-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit-case-9-blocked-1.png` | Untracked | 73150 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/text-editing-artifacts/editor-load-and-toolbar/selection/round-1-fit-overfit.json` | Untracked | 452958 | Docs | 15413 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/text-editing-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-1.5.png` | Untracked | 111974 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/text-editing-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked-1.png` | Untracked | 98952 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/text-editing-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-1-blocked.png` | Untracked | 62222 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/text-editing-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-0.5.png` | Untracked | 75441 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/text-editing-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-1.5.png` | Untracked | 105237 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/text-editing-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked-1.png` | Untracked | 67842 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/text-editing-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-12-blocked.png` | Untracked | 70275 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/text-editing-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-13-blocked-1.5.png` | Untracked | 105237 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/text-editing-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-13-blocked-1.png` | Untracked | 68428 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/text-editing-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-19-blocked.png` | Untracked | 70870 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/text-editing-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-2-blocked-1.5.png` | Untracked | 111974 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/text-editing-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-24-blocked.png` | Untracked | 70111 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/text-editing-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-6-blocked-1.5.png` | Untracked | 90020 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/text-editing-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression-case-6-blocked.png` | Untracked | 62933 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/text-editing-artifacts/editor-load-and-toolbar/selection/round-1-fit-regression.json` | Untracked | 457734 | Docs | 15318 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/text-editing-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-1-blocked.png` | Untracked | 70185 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/text-editing-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-27-blocked.png` | Untracked | 80867 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/text-editing-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit-case-5-blocked.png` | Untracked | 71457 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/text-editing-artifacts/editor-load-and-toolbar/selection/round-1-full-overfit.json` | Untracked | 225221 | Docs | 7734 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/text-editing-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-12-blocked.png` | Untracked | 77362 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/text-editing-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-13-blocked.png` | Untracked | 70665 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/text-editing-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-19-blocked.png` | Untracked | 72397 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/text-editing-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-24-blocked.png` | Untracked | 72790 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/text-editing-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-29-blocked.png` | Untracked | 72124 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/text-editing-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-6-blocked.png` | Untracked | 71481 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/text-editing-artifacts/editor-load-and-toolbar/selection/round-1-full-regression.json` | Untracked | 215443 | Docs | 7315 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/text-editing-artifacts/icon-properties-studio.png` | Untracked | 74810 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/text-editing-artifacts/icon-properties-window.png` | Untracked | 71890 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/text-editing-artifacts/inline-text-editing.png` | Untracked | 122923 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/text-editing-artifacts/responsive-custom-scope.png` | Untracked | 44683 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/text-editing-artifacts/responsive-imported-window.png` | Untracked | 83420 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/text-editing-artifacts/responsive-mobile-draft.png` | Untracked | 39470 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/text-editing-artifacts/section-order-ready.png` | Untracked | 55440 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/text-editing-artifacts/shared-gate-artifacts/shared-instance-local-studio.png` | Untracked | 82172 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/text-editing-artifacts/source-project-compat-sample.json` | Untracked | 207 | Docs | 12 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/text-editing-servers/child-server-1-31988.log` | Untracked | 18431 | Docs | 397 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/text-editing.log` | Untracked | 21799 | Docs | 452 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/unchanged-test-hashes.json` | Untracked | 34312 | Docs | 311 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/warmup-m0-control-lab-fit-network.jsonl` | Untracked | 7567 | Docs | 49 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/warmup-m0-control-lab-full-network.jsonl` | Untracked | 11775 | Docs | 79 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/warmup-m0-overfit-lab-fit-network.jsonl` | Untracked | 8237 | Docs | 53 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/warmup-m0-overfit-lab-full-network.jsonl` | Untracked | 8261 | Docs | 54 | 0 |  |
+| `docs/reliability-gate/2026-11-03T10-54-09-847Z-63152ea/worktree-status-after.txt` | Untracked | 62534 | Docs | 937 | 0 |  |
+| `docs/reliability-gate/2026-11-03T12-02-42-990Z-2cb14ad-selection-full-regression/git-status-after.txt` | Untracked | 25300 | Docs | 705 | 0 |  |
+| `docs/reliability-gate/2026-11-03T12-02-42-990Z-2cb14ad-selection-full-regression/git-status-before.txt` | Untracked | 25270 | Docs | 704 | 0 |  |
+| `docs/reliability-gate/2026-11-03T12-02-42-990Z-2cb14ad-selection-full-regression/plan.json` | Untracked | 9027 | Docs | 343 | 0 |  |
+| `docs/reliability-gate/2026-11-03T12-02-42-990Z-2cb14ad-selection-full-regression/prepare-lab-adapters.log` | Untracked | 43 | Docs | 1 | 0 |  |
+| `docs/reliability-gate/2026-11-03T12-02-42-990Z-2cb14ad-selection-full-regression/raw.log` | Untracked | 146185 | Docs | 192 | 0 |  |
+| `docs/reliability-gate/2026-11-03T12-02-42-990Z-2cb14ad-selection-full-regression/results.json` | Untracked | 1226 | Docs | 51 | 0 |  |
+| `docs/reliability-gate/2026-11-03T12-02-42-990Z-2cb14ad-selection-full-regression/selection-full-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-12-blocked.png` | Untracked | 77938 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T12-02-42-990Z-2cb14ad-selection-full-regression/selection-full-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-13-blocked.png` | Untracked | 70666 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T12-02-42-990Z-2cb14ad-selection-full-regression/selection-full-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-19-blocked.png` | Untracked | 72382 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T12-02-42-990Z-2cb14ad-selection-full-regression/selection-full-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-24-blocked.png` | Untracked | 72776 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T12-02-42-990Z-2cb14ad-selection-full-regression/selection-full-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-29-blocked.png` | Untracked | 71479 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T12-02-42-990Z-2cb14ad-selection-full-regression/selection-full-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-regression-case-6-blocked.png` | Untracked | 71457 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T12-02-42-990Z-2cb14ad-selection-full-regression/selection-full-regression-artifacts/editor-load-and-toolbar/selection/round-1-full-regression.json` | Untracked | 215995 | Docs | 7335 | 0 |  |
+| `docs/reliability-gate/2026-11-03T12-02-42-990Z-2cb14ad-selection-full-regression/selection-full-regression.log` | Untracked | 144302 | Docs | 166 | 0 |  |
+| `docs/reliability-gate/2026-11-03T12-02-42-990Z-2cb14ad-selection-full-regression/server-52990.log` | Untracked | 67976 | Docs | 1404 | 0 |  |
+| `docs/reliability-gate/2026-11-03T12-02-42-990Z-2cb14ad-selection-full-regression/server-52991.log` | Untracked | 7738 | Docs | 32 | 0 |  |
+| `docs/reliability-gate/2026-11-03T12-02-42-990Z-2cb14ad-selection-full-regression/server-52992.log` | Untracked | 6899 | Docs | 28 | 0 |  |
+| `docs/reliability-gate/2026-11-03T12-02-42-990Z-2cb14ad-selection-full-regression/unchanged-test-hashes.json` | Untracked | 34427 | Docs | 312 | 0 |  |
+| `docs/reliability-gate/2026-11-03T12-02-42-990Z-2cb14ad-selection-full-regression/warmup-m0-control-lab-fit-network.jsonl` | Untracked | 7568 | Docs | 49 | 0 |  |
+| `docs/reliability-gate/2026-11-03T12-02-42-990Z-2cb14ad-selection-full-regression/warmup-m0-control-lab-full-network.jsonl` | Untracked | 11261 | Docs | 76 | 0 |  |
+| `docs/reliability-gate/2026-11-03T12-02-42-990Z-2cb14ad-selection-full-regression/warmup-m0-overfit-lab-fit-network.jsonl` | Untracked | 8220 | Docs | 53 | 0 |  |
+| `docs/reliability-gate/2026-11-03T12-02-42-990Z-2cb14ad-selection-full-regression/warmup-m0-overfit-lab-full-network.jsonl` | Untracked | 8252 | Docs | 54 | 0 |  |
+| `docs/reliability-gate/2026-11-03T12-02-42-990Z-2cb14ad-selection-full-regression/worktree-status-after.txt` | Untracked | 62910 | Docs | 946 | 0 |  |
+| `docs/reliability-gate/2026-11-03T12-11-46-036Z-ec3973c-shared/git-status-after.txt` | Untracked | 25270 | Docs | 704 | 0 |  |
+| `docs/reliability-gate/2026-11-03T12-11-46-036Z-ec3973c-shared/git-status-before.txt` | Untracked | 25270 | Docs | 704 | 0 |  |
+| `docs/reliability-gate/2026-11-03T12-11-46-036Z-ec3973c-shared/plan.json` | Untracked | 9108 | Docs | 346 | 0 |  |
+| `docs/reliability-gate/2026-11-03T12-11-46-036Z-ec3973c-shared/raw.log` | Untracked | 15149 | Docs | 152 | 0 |  |
+| `docs/reliability-gate/2026-11-03T12-11-46-036Z-ec3973c-shared/results.json` | Untracked | 1543 | Docs | 51 | 0 |  |
+| `docs/reliability-gate/2026-11-03T12-11-46-036Z-ec3973c-shared/server-54380.log` | Untracked | 63352 | Docs | 1585 | 0 |  |
+| `docs/reliability-gate/2026-11-03T12-11-46-036Z-ec3973c-shared/server-54381.log` | Untracked | 6599 | Docs | 26 | 0 |  |
+| `docs/reliability-gate/2026-11-03T12-11-46-036Z-ec3973c-shared/shared-compiler-warmup.log` | Untracked | 2627 | Docs | 26 | 0 |  |
+| `docs/reliability-gate/2026-11-03T12-11-46-036Z-ec3973c-shared/shared-local-studio-artifacts/readiness-evidence/events.jsonl` | Untracked | 19665 | Docs | 195 | 0 |  |
+| `docs/reliability-gate/2026-11-03T12-11-46-036Z-ec3973c-shared/shared-local-studio-artifacts/source-project-compat-sample.json` | Untracked | 207 | Docs | 12 | 0 |  |
+| `docs/reliability-gate/2026-11-03T12-11-46-036Z-ec3973c-shared/shared-local-studio.log` | Untracked | 10073 | Docs | 93 | 0 |  |
+| `docs/reliability-gate/2026-11-03T12-11-46-036Z-ec3973c-shared/shared-runtime-setup.log` | Untracked | 1164 | Docs | 12 | 0 |  |
+| `docs/reliability-gate/2026-11-03T12-11-46-036Z-ec3973c-shared/unchanged-test-hashes.json` | Untracked | 34535 | Docs | 313 | 0 |  |
+| `docs/reliability-gate/2026-11-03T12-11-46-036Z-ec3973c-shared/worktree-status-after.txt` | Untracked | 62923 | Docs | 946 | 0 |  |
+| `docs/reliability-gate/2026-11-03T12-16-59-667Z-ec3973c-shared-local-window/git-status-after.txt` | Untracked | 25270 | Docs | 704 | 0 |  |
+| `docs/reliability-gate/2026-11-03T12-16-59-667Z-ec3973c-shared-local-window/git-status-before.txt` | Untracked | 25270 | Docs | 704 | 0 |  |
+| `docs/reliability-gate/2026-11-03T12-16-59-667Z-ec3973c-shared-local-window/plan.json` | Untracked | 9021 | Docs | 343 | 0 |  |
+| `docs/reliability-gate/2026-11-03T12-16-59-667Z-ec3973c-shared-local-window/raw.log` | Untracked | 15984 | Docs | 156 | 0 |  |
+| `docs/reliability-gate/2026-11-03T12-16-59-667Z-ec3973c-shared-local-window/results.json` | Untracked | 709 | Docs | 27 | 0 |  |
+| `docs/reliability-gate/2026-11-03T12-16-59-667Z-ec3973c-shared-local-window/server-50101.log` | Untracked | 72611 | Docs | 1869 | 0 |  |
+| `docs/reliability-gate/2026-11-03T12-16-59-667Z-ec3973c-shared-local-window/server-50102.log` | Untracked | 6297 | Docs | 24 | 0 |  |
+| `docs/reliability-gate/2026-11-03T12-16-59-667Z-ec3973c-shared-local-window/shared-compiler-warmup.log` | Untracked | 2627 | Docs | 26 | 0 |  |
+| `docs/reliability-gate/2026-11-03T12-16-59-667Z-ec3973c-shared-local-window/shared-local-window-artifacts/readiness-evidence/4-30000.html` | Untracked | 22791 | Docs | 1 | 0 |  |
+| `docs/reliability-gate/2026-11-03T12-16-59-667Z-ec3973c-shared-local-window/shared-local-window-artifacts/readiness-evidence/4-30000.png` | Untracked | 30245 | Docs | Binary | Binary |  |
+| `docs/reliability-gate/2026-11-03T12-16-59-667Z-ec3973c-shared-local-window/shared-local-window-artifacts/readiness-evidence/events.jsonl` | Untracked | 22515 | Docs | 217 | 0 |  |
+| `docs/reliability-gate/2026-11-03T12-16-59-667Z-ec3973c-shared-local-window/shared-local-window-artifacts/source-project-compat-sample.json` | Untracked | 207 | Docs | 12 | 0 |  |
+| `docs/reliability-gate/2026-11-03T12-16-59-667Z-ec3973c-shared-local-window/shared-local-window.log` | Untracked | 11065 | Docs | 100 | 0 |  |
+| `docs/reliability-gate/2026-11-03T12-16-59-667Z-ec3973c-shared-local-window/shared-runtime-setup.log` | Untracked | 1164 | Docs | 12 | 0 |  |
+| `docs/reliability-gate/2026-11-03T12-16-59-667Z-ec3973c-shared-local-window/unchanged-test-hashes.json` | Untracked | 34535 | Docs | 313 | 0 |  |
+| `docs/reliability-gate/2026-11-03T12-16-59-667Z-ec3973c-shared-local-window/worktree-status-after.txt` | Untracked | 62923 | Docs | 946 | 0 |  |
+| `docs/reliability-gate/2026-11-03T20-22-11-171Z-5a141b2/git-status-before.txt` | Untracked | 23162 | Docs | 601 | 0 |  |
+| `docs/reliability-gate/2026-11-03T20-22-11-171Z-5a141b2/plan.json` | Untracked | 9596 | Docs | 366 | 0 |  |
+| `docs/reliability-gate/2026-11-03T20-22-11-171Z-5a141b2/prepare-lab-adapters.log` | Untracked | 43 | Docs | 1 | 0 |  |
+| `docs/reliability-gate/2026-11-03T20-22-11-171Z-5a141b2/raw.log` | Untracked | 8797 | Docs | 36 | 0 |  |
+| `docs/reliability-gate/2026-11-03T20-22-11-171Z-5a141b2/selection-full-regression.log` | Untracked | 7479 | Docs | 20 | 0 |  |
+| `docs/reliability-gate/2026-11-03T20-22-11-171Z-5a141b2/server-60294.log` | Untracked | 19369 | Docs | 269 | 0 |  |
+| `docs/reliability-gate/2026-11-03T20-22-11-171Z-5a141b2/server-60295.log` | Untracked | 7736 | Docs | 32 | 0 |  |
+| `docs/reliability-gate/2026-11-03T20-22-11-171Z-5a141b2/server-60296.log` | Untracked | 6907 | Docs | 28 | 0 |  |
+| `docs/reliability-gate/2026-11-03T20-22-11-171Z-5a141b2/unchanged-test-hashes.json` | Untracked | 34649 | Docs | 314 | 0 |  |
+| `docs/reliability-gate/2026-11-03T20-22-11-171Z-5a141b2/warmup-m0-control-lab-fit-network.jsonl` | Untracked | 7589 | Docs | 49 | 0 |  |
+| `docs/reliability-gate/2026-11-03T20-22-11-171Z-5a141b2/warmup-m0-control-lab-full-network.jsonl` | Untracked | 9338 | Docs | 63 | 0 |  |
+| `docs/reliability-gate/2026-11-03T20-22-11-171Z-5a141b2/warmup-m0-overfit-lab-fit-network.jsonl` | Untracked | 8225 | Docs | 53 | 0 |  |
+| `docs/reliability-gate/2026-11-03T20-22-11-171Z-5a141b2/warmup-m0-overfit-lab-full-network.jsonl` | Untracked | 8243 | Docs | 54 | 0 |  |
+| `docs/reliability-gate/FOLLOW-UP.md` | Untracked | 3767 | Docs | 26 | 0 |  |
+| `docs/reliability-gate/FONT-QUALIFICATION.md` | Untracked | 3414 | Docs | 30 | 0 |  |
+| `docs/reliability-gate/MANIFEST-CANDIDATE.md` | Untracked | 3701 | Docs | 34 | 0 |  |
+| `docs/reliability-gate/QUALIFICATION.md` | Untracked | 3184 | Docs | 22 | 0 |  |
+| `docs/reliability-gate/REPORT.md` | Untracked | 12369 | Docs | 108 | 0 |  |
+| `docs/reliability-gate/changes.patch` | Untracked | 17461 | Docs | 210 | 0 |  |
+| `docs/reliability-gate/comparison-summary.json` | Untracked | 2110 | Docs | 68 | 0 |  |
+| `docs/reliability-gate/diff-stat.txt` | Untracked | 140 | Docs | 3 | 0 |  |
+| `docs/reliability-gate/final-git-status.txt` | Untracked | 24183 | Docs | 673 | 0 |  |
+| `docs/reliability-gate/follow-up-git-status.txt` | Untracked | 24237 | Docs | 675 | 0 |  |
+| `docs/reliability-gate/font-after.log` | Untracked | 55 | Docs | 1 | 0 |  |
+| `docs/reliability-gate/font-before.log` | Untracked | 1269 | Docs | 18 | 0 |  |
+| `docs/reliability-gate/font-qualification-diff-stat.txt` | Untracked | 237 | Docs | 4 | 0 |  |
+| `docs/reliability-gate/font-qualification-status.txt` | Untracked | 24439 | Docs | 680 | 0 |  |
+| `docs/reliability-gate/loadable-after.log` | Untracked | 55 | Docs | 1 | 0 |  |
+| `docs/reliability-gate/loadable-before.log` | Untracked | 1277 | Docs | 18 | 0 |  |
+| `docs/reliability-gate/manifest-candidate-diff-stat.txt` | Untracked | 234 | Docs | 4 | 0 |  |
+| `docs/reliability-gate/manifest-candidate-git-status.txt` | Untracked | 24277 | Docs | 676 | 0 |  |
+| `docs/reliability-gate/manifest-candidate.patch` | Untracked | 4830 | Docs | 109 | 0 |  |
+| `docs/reliability-gate/manifest-test-after.log` | Untracked | 53 | Docs | 1 | 0 |  |
+| `docs/reliability-gate/manifest-test-before.log` | Untracked | 976 | Docs | 16 | 0 |  |
+| `docs/reliability-gate/qualification-diff-stat.txt` | Untracked | 533 | Docs | 8 | 0 |  |
+| `docs/reliability-gate/qualification-status.txt` | Untracked | 24385 | Docs | 679 | 0 |  |
+| `docs/reliability-gate/test-integrity.json` | Untracked | 177 | Docs | 7 | 0 |  |
+| `docs/reliability-gate/webpack-after.log` | Untracked | 55 | Docs | 1 | 0 |  |
+| `docs/reliability-gate/webpack-before.log` | Untracked | 1259 | Docs | 18 | 0 |  |
+| `docs/remaining-roadmap-imported.log` | Untracked | 5422 | Docs | 159 | 0 |  |
+| `docs/resize-baseline.log` | Untracked | 521 | Docs | 17 | 0 |  |
+| `docs/resize-checks.log` | Untracked | 557 | Docs | 17 | 0 |  |
+| `docs/resize-confirmed.log` | Untracked | 6046 | Docs | 160 | 0 |  |
+| `docs/resize-continuous-tracking-report.md` | Untracked | 5865 | Docs | 51 | 0 |  |
+| `docs/resize-cursor-shape-preview.png` | Untracked | 5545 | Docs | Binary | Binary |  |
+| `docs/resize-cursor-vertical-preview.png` | Untracked | 2043 | Docs | Binary | Binary |  |
+| `docs/resize-debug.log` | Untracked | 557 | Docs | 17 | 0 |  |
+| `docs/resize-final.log` | Untracked | 385 | Docs | 12 | 0 |  |
+| `docs/resize-grip/editor-dimensions.png` | Untracked | 85415 | Docs | Binary | Binary |  |
+| `docs/resize-grip/editor.png` | Untracked | 74332 | Docs | Binary | Binary |  |
+| `docs/resize-interaction-after.log` | Untracked | 542 | Docs | 7 | 0 |  |
+| `docs/resize-interaction-before.log` | Untracked | 6007 | Docs | 178 | 0 |  |
+| `docs/resize-interaction-corner-overlap.log` | Untracked | 6065 | Docs | 179 | 0 |  |
+| `docs/resize-interaction-css-before.log` | Untracked | 9048 | Docs | 264 | 0 |  |
+| `docs/resize-interaction-diagnosis.md` | Untracked | 4005 | Docs | 28 | 0 |  |
+| `docs/resize-interaction-diagnostic.log` | Untracked | 6183 | Docs | 181 | 0 |  |
+| `docs/resize-interaction-draft-pass.log` | Untracked | 493 | Docs | 6 | 0 |  |
+| `docs/resize-interaction-layout-limited.log` | Untracked | 8286 | Docs | 243 | 0 |  |
+| `docs/resize-interaction-section-refusal.log` | Untracked | 8389 | Docs | 244 | 0 |  |
+| `docs/resize-interaction-utility-refusal.log` | Untracked | 8518 | Docs | 247 | 0 |  |
+| `docs/resize-layout-browser.log` | Untracked | 1670 | Docs | 2 | 0 |  |
+| `docs/resize-layout-content-box-before.log` | Untracked | 402 | Docs | 18 | 0 |  |
+| `docs/resize-pointer-after-unit.log` | Untracked | 91 | Docs | 1 | 0 |  |
+| `docs/resize-pointer-anchor-report.md` | Untracked | 6246 | Docs | 53 | 0 |  |
+| `docs/resize-pointer-before-refresh-guard.log` | Untracked | 682 | Docs | 11 | 0 |  |
+| `docs/resize-pointer-before.log` | Untracked | 665 | Docs | 21 | 0 |  |
+| `docs/resize-pointer-browser-earlier.log` | Untracked | 685 | Docs | 11 | 0 |  |
+| `docs/resize-pointer-browser-previous.log` | Untracked | 785 | Docs | 12 | 0 |  |
+| `docs/resize-pointer-browser.log` | Untracked | 682 | Docs | 11 | 0 |  |
+| `docs/resize-pointer-existing-unit.log` | Untracked | 129 | Docs | 1 | 0 |  |
+| `docs/resize-pointer-full-before.log` | Untracked | 7983 | Docs | 238 | 0 |  |
+| `docs/resize-pointer-full.log` | Untracked | 339 | Docs | 5 | 0 |  |
+| `docs/resize-pointer-harness-before.log` | Untracked | 5986 | Docs | 172 | 0 |  |
+| `docs/resize-pointer-refresh-after.log` | Untracked | 339 | Docs | 5 | 0 |  |
+| `docs/resize-pointer-refresh-before.log` | Untracked | 5938 | Docs | 176 | 0 |  |
+| `docs/resize-pointer-regression.log` | Untracked | 542 | Docs | 7 | 0 |  |
+| `docs/resize-pointer-target-change.log` | Untracked | 167 | Docs | 2 | 0 |  |
+| `docs/resize-pointer-typecheck.log` | Untracked | 9813 | Docs | 95 | 0 |  |
+| `docs/resize-proof.log` | Untracked | 516 | Docs | 19 | 0 |  |
+| `docs/resize-reflow-after.log` | Untracked | 8330 | Docs | 245 | 0 |  |
+| `docs/resize-reflow-before.log` | Untracked | 5872 | Docs | 172 | 0 |  |
+| `docs/resize-reflow-final.log` | Untracked | 410 | Docs | 5 | 0 |  |
+| `docs/resize-release-final.log` | Untracked | 1631 | Docs | 20 | 0 |  |
+| `docs/resize-validation.log` | Untracked | 521 | Docs | 17 | 0 |  |
+| `docs/responsive-core-regression.log` | Untracked | 6714 | Docs | 159 | 0 |  |
+| `docs/responsive-custom-scope.png` | Untracked | 39737 | Docs | Binary | Binary |  |
+| `docs/responsive-editing-failure.png` | Untracked | 6989 | Docs | Binary | Binary |  |
+| `docs/responsive-editing-qualification.log` | Untracked | 5629 | Docs | 172 | 0 |  |
+| `docs/responsive-imported-final.log` | Untracked | 5636 | Docs | 172 | 0 |  |
+| `docs/responsive-imported-qualification.log` | Untracked | 1004 | Docs | 7 | 0 |  |
+| `docs/responsive-imported-window.png` | Untracked | 80968 | Docs | Binary | Binary |  |
+| `docs/responsive-mobile-draft.png` | Untracked | 35304 | Docs | Binary | Binary |  |
+| `docs/responsive-suspend-diagnostic.log` | Untracked | 1003 | Docs | 29 | 0 |  |
+| `docs/responsive-tailwind3-qualification.log` | Untracked | 423 | Docs | 4 | 0 |  |
+| `docs/section-order-current-page.png` | Untracked | 80557 | Docs | Binary | Binary |  |
+| `docs/section-order-final.log` | Untracked | 4937 | Docs | 153 | 0 |  |
+| `docs/section-order-imported.log` | Untracked | 5375 | Docs | 156 | 0 |  |
+| `docs/section-order-qualification.log` | Untracked | 5362 | Docs | 102 | 0 |  |
+| `docs/section-order-ready.png` | Untracked | 45283 | Docs | Binary | Binary |  |
+| `docs/section-window-final.log` | Untracked | 4928 | Docs | 153 | 0 |  |
+| `docs/security-hardening-path-inputs.txt` | Untracked | 18558 | Docs | 107 | 0 |  |
+| `docs/security-hardening/final-commit.log` | Untracked | 11176 | Docs | 157 | 0 |  |
+| `docs/selection-gate-evidence/00-status-before.txt` | Untracked | 35777 | Docs | 968 | 0 |  |
+| `docs/selection-gate-evidence/README.md` | Untracked | 4479 | Docs | 40 | 0 |  |
+| `docs/selection-gate-evidence/STOP-selection-gate.json` | Untracked | 555 | Docs | 20 | 0 |  |
+| `docs/selection-gate-evidence/baseline-overfit-git-status.txt` | Untracked | 23778 | Docs | 662 | 0 |  |
+| `docs/selection-gate-evidence/baseline-overfit.exit.json` | Untracked | 50 | Docs | 4 | 0 |  |
+| `docs/selection-gate-evidence/baseline-overfit.log` | Untracked | 3625 | Docs | 44 | 0 |  |
+| `docs/selection-gate-evidence/baseline-regression-git-status.txt` | Untracked | 23707 | Docs | 660 | 0 |  |
+| `docs/selection-gate-evidence/baseline-regression.exit.json` | Untracked | 50 | Docs | 4 | 0 |  |
+| `docs/selection-gate-evidence/baseline-regression.log` | Untracked | 3219 | Docs | 44 | 0 |  |
+| `docs/selection-gate-evidence/case-results.json` | Untracked | 12494 | Docs | 428 | 0 |  |
+| `docs/selection-gate-evidence/checkpoint-commit.txt` | Untracked | 19504 | Docs | 321 | 0 |  |
+| `docs/selection-gate-evidence/checkpoint-excluded.json` | Untracked | 159396 | Docs | 5642 | 0 |  |
+| `docs/selection-gate-evidence/checkpoint-included.txt` | Untracked | 10423 | Docs | 312 | 0 |  |
+| `docs/selection-gate-evidence/checkpoint-pathspec.nul` | Untracked | 10423 | Docs | Binary | Binary |  |
+| `docs/selection-gate-evidence/checkpoint-stat.txt` | Untracked | 19223 | Docs | 313 | 0 |  |
+| `docs/selection-gate-evidence/expected-lists-proof.json` | Untracked | 351 | Docs | 16 | 0 |  |
+| `docs/selection-gate-evidence/final-git-diff-stat.txt` | Untracked | 73 | Docs | 2 | 0 |  |
+| `docs/selection-gate-evidence/final-git-status.txt` | Untracked | 23859 | Docs | 664 | 0 |  |
+| `docs/selection-gate-evidence/integrity.json` | Untracked | 163 | Docs | 7 | 0 |  |
+| `docs/selection-gate-evidence/original-test-hashes.json` | Untracked | 20360 | Docs | 188 | 0 |  |
+| `docs/selection-gate-evidence/overfit-copy.diff` | Untracked | 5275 | Docs | 128 | 0 |  |
+| `docs/selection-gate-evidence/overfit-expected-copy.txt` | Untracked | 9628 | Docs | 213 | 0 |  |
+| `docs/selection-gate-evidence/overfit-expected-original.txt` | Untracked | 9628 | Docs | 213 | 0 |  |
+| `docs/selection-gate-evidence/overfit-expected.diff` | Untracked | 0 | Docs | 0 | 0 |  |
+| `docs/selection-gate-evidence/regression-copy.diff` | Untracked | 5565 | Docs | 133 | 0 |  |
+| `docs/selection-gate-evidence/regression-expected-copy.txt` | Untracked | 9305 | Docs | 213 | 0 |  |
+| `docs/selection-gate-evidence/regression-expected-original.txt` | Untracked | 9305 | Docs | 213 | 0 |  |
+| `docs/selection-gate-evidence/regression-expected.diff` | Untracked | 0 | Docs | 0 | 0 |  |
+| `docs/selection-gate-evidence/round-1-git-status.txt` | Untracked | 23859 | Docs | 664 | 0 |  |
+| `docs/selection-gate-evidence/round-1-old-studio-regression.exit.json` | Untracked | 81 | Docs | 6 | 0 |  |
+| `docs/selection-gate-evidence/round-1-old-studio-regression.json` | Untracked | 12130 | Docs | 411 | 0 |  |
+| `docs/selection-gate-evidence/round-1-old-studio-regression.log` | Untracked | 8372 | Docs | 14 | 0 |  |
+| `docs/selection-gate-evidence/server-m0-control-lab.err.log` | Untracked | 843 | Docs | 15 | 0 |  |
+| `docs/selection-gate-evidence/server-m0-control-lab.out.log` | Untracked | 230 | Docs | 9 | 0 |  |
+| `docs/selection-gate-evidence/server-m0-overfit-lab.err.log` | Untracked | 843 | Docs | 15 | 0 |  |
+| `docs/selection-gate-evidence/server-m0-overfit-lab.out.log` | Untracked | 173 | Docs | 7 | 0 |  |
+| `docs/selection-gate-evidence/server-retry-m0-control-lab.err.log` | Untracked | 470 | Docs | 3 | 0 |  |
+| `docs/selection-gate-evidence/server-retry-m0-control-lab.out.log` | Untracked | 651 | Docs | 14 | 0 |  |
+| `docs/selection-gate-evidence/server-retry-m0-overfit-lab.err.log` | Untracked | 202 | Docs | 2 | 0 |  |
+| `docs/selection-gate-evidence/server-retry-m0-overfit-lab.out.log` | Untracked | 311 | Docs | 9 | 0 |  |
+| `docs/selection-gate-evidence/server-studio.err.log` | Untracked | 31510 | Docs | 1072 | 0 |  |
+| `docs/selection-gate-evidence/server-studio.out.log` | Untracked | 11286 | Docs | 96 | 0 |  |
+| `docs/selection-gate-step2-evidence/00-git-status.txt` | Untracked | 23898 | Docs | 665 | 0 |  |
+| `docs/selection-gate-step2-evidence/README.md` | Untracked | 7713 | Docs | 60 | 0 |  |
+| `docs/selection-gate-step2-evidence/STOP-WRONG-TARGET.json` | Untracked | 2094 | Docs | 109 | 0 |  |
+| `docs/selection-gate-step2-evidence/all-case-results.csv` | Untracked | 97117 | Docs | 721 | 0 |  |
+| `docs/selection-gate-step2-evidence/all-case-results.json` | Untracked | 277899 | Docs | 10871 | 0 |  |
+| `docs/selection-gate-step2-evidence/attempt-1-diagnostic-startup.log` | Untracked | 708 | Docs | 12 | 0 |  |
+| `docs/selection-gate-step2-evidence/attempt-1-matrix/round-1-old-studio-overfit-case-1-content-blocked.png` | Untracked | 95337 | Docs | Binary | Binary |  |
+| `docs/selection-gate-step2-evidence/attempt-1-matrix/round-1-old-studio-overfit-case-1-missing.png` | Untracked | 95337 | Docs | Binary | Binary |  |
+| `docs/selection-gate-step2-evidence/attempt-1-matrix/round-1-old-studio-overfit-case-2-content-blocked.png` | Untracked | 95337 | Docs | Binary | Binary |  |
+| `docs/selection-gate-step2-evidence/attempt-1-matrix/round-1-old-studio-overfit-case-2-missing.png` | Untracked | 95337 | Docs | Binary | Binary |  |
+| `docs/selection-gate-step2-evidence/attempt-1-matrix/round-1-old-studio-overfit.json` | Untracked | 35699 | Docs | 1335 | 0 |  |
+| `docs/selection-gate-step2-evidence/attempt-1-matrix/round-1-old-studio-overfit.log` | Untracked | 21853 | Docs | 11 | 0 |  |
+| `docs/selection-gate-step2-evidence/attempt-1-matrix/round-1-old-studio-regression.exit.json` | Untracked | 81 | Docs | 6 | 0 |  |
+| `docs/selection-gate-step2-evidence/attempt-1-matrix/round-1-old-studio-regression.json` | Untracked | 34328 | Docs | 1190 | 0 |  |
+| `docs/selection-gate-step2-evidence/attempt-1-matrix/round-1-old-studio-regression.log` | Untracked | 22353 | Docs | 20 | 0 |  |
+| `docs/selection-gate-step2-evidence/attempt-2-diagnostic.log` | Untracked | 3088 | Docs | 5 | 0 |  |
+| `docs/selection-gate-step2-evidence/case8-after-click.png` | Untracked | 97585 | Docs | Binary | Binary |  |
+| `docs/selection-gate-step2-evidence/case8-before-click.png` | Untracked | 98080 | Docs | Binary | Binary |  |
+| `docs/selection-gate-step2-evidence/case8-comparison.md` | Untracked | 4686 | Docs | 45 | 0 |  |
+| `docs/selection-gate-step2-evidence/case8-diagnostic.exit.json` | Untracked | 10 | Docs | 1 | 0 |  |
+| `docs/selection-gate-step2-evidence/case8-diagnostic.json` | Untracked | 31326 | Docs | 860 | 0 |  |
+| `docs/selection-gate-step2-evidence/case8-diagnostic.log` | Untracked | 3088 | Docs | 5 | 0 |  |
+| `docs/selection-gate-step2-evidence/case8-iframe.html` | Untracked | 48469 | Docs | 3 | 0 |  |
+| `docs/selection-gate-step2-evidence/case8-parent.html` | Untracked | 287176 | Docs | 429 | 0 |  |
+| `docs/selection-gate-step2-evidence/case8-pointer-events.json` | Untracked | 4444 | Docs | 162 | 0 |  |
+| `docs/selection-gate-step2-evidence/corrected-click.exit.json` | Untracked | 10 | Docs | 1 | 0 |  |
+| `docs/selection-gate-step2-evidence/corrected-click.log` | Untracked | 3039 | Docs | 4 | 0 |  |
+| `docs/selection-gate-step2-evidence/corrected-click/case8-after-click.png` | Untracked | 106050 | Docs | Binary | Binary |  |
+| `docs/selection-gate-step2-evidence/corrected-click/case8-before-click.png` | Untracked | 98080 | Docs | Binary | Binary |  |
+| `docs/selection-gate-step2-evidence/corrected-click/case8-diagnostic.json` | Untracked | 34110 | Docs | 929 | 0 |  |
+| `docs/selection-gate-step2-evidence/corrected-click/case8-iframe.html` | Untracked | 48469 | Docs | 3 | 0 |  |
+| `docs/selection-gate-step2-evidence/corrected-click/case8-parent.html` | Untracked | 291197 | Docs | 419 | 0 |  |
+| `docs/selection-gate-step2-evidence/corrected-click/case8-pointer-events.json` | Untracked | 4262 | Docs | 162 | 0 |  |
+| `docs/selection-gate-step2-evidence/expected-list-proof.json` | Untracked | 351 | Docs | 16 | 0 |  |
+| `docs/selection-gate-step2-evidence/final-git-diff-stat.txt` | Untracked | 73 | Docs | 2 | 0 |  |
+| `docs/selection-gate-step2-evidence/final-git-status.txt` | Untracked | 23972 | Docs | 667 | 0 |  |
+| `docs/selection-gate-step2-evidence/harness-before.txt` | Untracked | 5977 | Docs | 70 | 0 |  |
+| `docs/selection-gate-step2-evidence/integrity.json` | Untracked | 124 | Docs | 6 | 0 |  |
+| `docs/selection-gate-step2-evidence/new-harness.diff` | Untracked | 11434 | Docs | 98 | 0 |  |
+| `docs/selection-gate-step2-evidence/overfit-expected-copy.txt` | Untracked | 9628 | Docs | 213 | 0 |  |
+| `docs/selection-gate-step2-evidence/overfit-expected-original.txt` | Untracked | 9628 | Docs | 213 | 0 |  |
+| `docs/selection-gate-step2-evidence/overfit-expected.diff` | Untracked | 0 | Docs | 0 | 0 |  |
+| `docs/selection-gate-step2-evidence/protected-before.json` | Untracked | 42586 | Docs | 395 | 0 |  |
+| `docs/selection-gate-step2-evidence/regression-expected-copy.txt` | Untracked | 9305 | Docs | 213 | 0 |  |
+| `docs/selection-gate-step2-evidence/regression-expected-original.txt` | Untracked | 9305 | Docs | 213 | 0 |  |
+| `docs/selection-gate-step2-evidence/regression-expected.diff` | Untracked | 0 | Docs | 0 | 0 |  |
+| `docs/selection-gate-step2-evidence/results-summary.json` | Untracked | 77 | Docs | 6 | 0 |  |
+| `docs/selection-gate-step2-evidence/round-1-git-status.txt` | Untracked | 23972 | Docs | 667 | 0 |  |
+| `docs/selection-gate-step2-evidence/round-1-old-studio-overfit.exit.json` | Untracked | 78 | Docs | 6 | 0 |  |
+| `docs/selection-gate-step2-evidence/round-1-old-studio-overfit.json` | Untracked | 375 | Docs | 9 | 0 |  |
+| `docs/selection-gate-step2-evidence/round-1-old-studio-overfit.log` | Untracked | 468 | Docs | 11 | 0 |  |
+| `docs/selection-gate-step2-evidence/round-1-old-studio-regression.exit.json` | Untracked | 81 | Docs | 6 | 0 |  |
+| `docs/selection-gate-step2-evidence/round-1-old-studio-regression.json` | Untracked | 88491 | Docs | 3294 | 0 |  |
+| `docs/selection-gate-step2-evidence/round-1-old-studio-regression.log` | Untracked | 55460 | Docs | 32 | 0 |  |
+| `docs/selection-gate-step2-evidence/round-1-old-window-overfit-wrong-target.png` | Untracked | 73558 | Docs | Binary | Binary |  |
+| `docs/selection-gate-step2-evidence/round-1-old-window-overfit.exit.json` | Untracked | 78 | Docs | 6 | 0 |  |
+| `docs/selection-gate-step2-evidence/round-1-old-window-overfit.json` | Untracked | 2832 | Docs | 118 | 0 |  |
+| `docs/selection-gate-step2-evidence/round-1-old-window-overfit.log` | Untracked | 1758 | Docs | 5 | 0 |  |
+| `docs/selection-gate-step2-evidence/round-1-old-window-regression.exit.json` | Untracked | 81 | Docs | 6 | 0 |  |
+| `docs/selection-gate-step2-evidence/round-1-old-window-regression.json` | Untracked | 352 | Docs | 9 | 0 |  |
+| `docs/selection-gate-step2-evidence/round-1-old-window-regression.log` | Untracked | 455 | Docs | 11 | 0 |  |
+| `docs/selection-gate-step2-evidence/round-1-raw.log` | Untracked | 58294 | Docs | 66 | 0 |  |
+| `docs/selection-gate-step2-evidence/server-m0-control-lab.err.log` | Untracked | 843 | Docs | 15 | 0 |  |
+| `docs/selection-gate-step2-evidence/server-m0-control-lab.out.log` | Untracked | 229 | Docs | 9 | 0 |  |
+| `docs/selection-gate-step2-evidence/server-m0-overfit-lab.err.log` | Untracked | 843 | Docs | 15 | 0 |  |
+| `docs/selection-gate-step2-evidence/server-m0-overfit-lab.out.log` | Untracked | 171 | Docs | 6 | 0 |  |
+| `docs/selection-gate-step2-evidence/server-retry-m0-control-lab.err.log` | Untracked | 470 | Docs | 3 | 0 |  |
+| `docs/selection-gate-step2-evidence/server-retry-m0-control-lab.out.log` | Untracked | 5595 | Docs | 49 | 0 |  |
+| `docs/selection-gate-step2-evidence/server-retry-m0-overfit-lab.err.log` | Untracked | 202 | Docs | 2 | 0 |  |
+| `docs/selection-gate-step2-evidence/server-retry-m0-overfit-lab.out.log` | Untracked | 6892 | Docs | 59 | 0 |  |
+| `docs/selection-gate-step2-evidence/server-studio.err.log` | Untracked | 1018959 | Docs | 34715 | 0 |  |
+| `docs/selection-gate-step2-evidence/server-studio.out.log` | Untracked | 254552 | Docs | 2310 | 0 |  |
+| `docs/selection-handles-refined.png` | Untracked | 152743 | Docs | Binary | Binary |  |
+| `docs/selection-polish-initial.png` | Untracked | 121105 | Docs | Binary | Binary |  |
+| `docs/selection-polished.png` | Untracked | 157150 | Docs | Binary | Binary |  |
+| `docs/shared-editor-images.log` | Untracked | 421 | Docs | 5 | 0 |  |
+| `docs/shared-editor-imported.log` | Untracked | 541 | Docs | 3 | 0 |  |
+| `docs/shared-editor-qualification.log` | Untracked | 6618 | Docs | 190 | 0 |  |
+| `docs/shared-editor-window-manifest-failure.log` | Untracked | 24508 | Docs | 633 | 0 |  |
+| `docs/shared-editor-window.log` | Untracked | 5584 | Docs | 162 | 0 |  |
+| `docs/shared-instance-failure.png` | Untracked | 58863 | Docs | Binary | Binary |  |
+| `docs/shared-instance-imported-studio.png` | Untracked | 74308 | Docs | Binary | Binary |  |
+| `docs/shared-instance-imported-window.png` | Untracked | 70292 | Docs | Binary | Binary |  |
+| `docs/shared-instance-local-studio.png` | Untracked | 71997 | Docs | Binary | Binary |  |
+| `docs/shared-instance-local-window.png` | Untracked | 71987 | Docs | Binary | Binary |  |
+| `docs/single-page-canvas-final-qualification.log` | Untracked | 9219 | Docs | 283 | 0 |  |
+| `docs/single-page-canvas-initial.png` | Untracked | 84145 | Docs | Binary | Binary |  |
+| `docs/single-page-canvas-live.png` | Untracked | 136384 | Docs | Binary | Binary |  |
+| `docs/single-page-canvas-qualification.log` | Untracked | 1188 | Docs | 30 | 0 |  |
+| `docs/single-page-canvas-save-qualification.log` | Untracked | 5448 | Docs | 171 | 0 |  |
+| `docs/single-page-canvas-verified.log` | Untracked | 9346 | Docs | 284 | 0 |  |
+| `docs/single-page-canvas.png` | Untracked | 55720 | Docs | Binary | Binary |  |
+| `docs/source-project-2-release.log` | Untracked | 319 | Docs | 3 | 0 |  |
+| `docs/source-project-3-localized-route.log` | Untracked | 662 | Docs | 14 | 0 |  |
+| `docs/source-project-3-release.log` | Untracked | 781 | Docs | 21 | 0 |  |
+| `docs/source-project-3-render-ready.log` | Untracked | 854 | Docs | 17 | 0 |  |
+| `docs/source-project-compat-2.json` | Untracked | 279 | Docs | 14 | 0 |  |
+| `docs/source-project-compat-3.json` | Untracked | 267 | Docs | 14 | 0 |  |
+| `docs/source-project-compat-next-saas.json` | Untracked | 290 | Docs | 15 | 0 |  |
+| `docs/source-project-compat-open-react.json` | Untracked | 287 | Docs | 15 | 0 |  |
+| `docs/source-project-compat-sample.json` | Untracked | 207 | Docs | 12 | 0 |  |
+| `docs/source-project-confirmed.log` | Untracked | 1026 | Docs | 20 | 0 |  |
+| `docs/source-project-ready.log` | Untracked | 1042 | Docs | 24 | 0 |  |
+| `docs/source-project-restoration.log` | Untracked | 1290 | Docs | 34 | 0 |  |
+| `docs/source-project-workflow.log` | Untracked | 6745 | Docs | 68 | 0 |  |
+| `docs/source-refresh-diagnostic.log` | Untracked | 743 | Docs | 21 | 0 |  |
+| `docs/source-rendered-selections-2-candidate-21-response-loss-authorization.json` | Untracked | 698 | Docs | 25 | 0 |  |
+| `docs/source-rendered-selections-2-candidate-21.json` | Untracked | 236 | Docs | 7 | 0 |  |
+| `docs/source-rendered-selections-2-response-loss-authorization.json` | Untracked | 13609 | Docs | 504 | 0 |  |
+| `docs/source-rendered-selections-2.json` | Untracked | 13609 | Docs | 504 | 0 |  |
+| `docs/source-rendered-selections-3.json` | Untracked | 12042 | Docs | 411 | 0 |  |
+| `docs/source-rendered-selections-sample.json` | Untracked | 13970 | Docs | 509 | 0 |  |
+| `docs/source-rendered-validation.log` | Untracked | 1290 | Docs | 34 | 0 |  |
+| `docs/source-sample-final.log` | Untracked | 783 | Docs | 19 | 0 |  |
+| `docs/source-selection-diagnostic.log` | Untracked | 758 | Docs | 21 | 0 |  |
+| `docs/source-selection-test-bug.json` | Untracked | 669 | Docs | 21 | 0 |  |
+| `docs/source-session-refresh.log` | Untracked | 783 | Docs | 19 | 0 |  |
+| `docs/source-verified-refresh.log` | Untracked | 5087 | Docs | 158 | 0 |  |
+| `docs/studio-layers-refined.png` | Untracked | 128419 | Docs | Binary | Binary |  |
+| `docs/studio-move-bridge.log` | Untracked | 39 | Docs | 1 | 0 |  |
+| `docs/studio-move-browser.log` | Untracked | 583 | Docs | 20 | 0 |  |
+| `docs/studio-move-engine.log` | Untracked | 121 | Docs | 1 | 0 |  |
+| `docs/studio-move-final.log` | Untracked | 5102 | Docs | 160 | 0 |  |
+| `docs/studio-move-release-gates.log` | Untracked | 4884 | Docs | 157 | 0 |  |
+| `docs/studio-move-restoration.log` | Untracked | 547 | Docs | 8 | 0 |  |
+| `docs/studio-move-verified.log` | Untracked | 583 | Docs | 20 | 0 |  |
+| `docs/studio-real-project-2.json` | Untracked | 25385 | Docs | 793 | 0 |  |
+| `docs/studio-real-project-3.json` | Untracked | 26845 | Docs | 814 | 0 |  |
+| `docs/studio-real-project-4.json` | Untracked | 24109 | Docs | 801 | 0 |  |
+| `docs/studio-real-project-baseline.json` | Untracked | 7802 | Docs | 70 | 0 |  |
+| `docs/studio-real-project-benchmark.log` | Untracked | 755 | Docs | 9 | 0 |  |
+| `docs/studio-real-project-results.json` | Untracked | 75280 | Docs | 2413 | 0 |  |
+| `docs/studio-resize-complete.log` | Untracked | 159 | Docs | 2 | 0 |  |
+| `docs/studio-resize-evidence.log` | Untracked | 557 | Docs | 17 | 0 |  |
+| `docs/studio-resize-release.log` | Untracked | 557 | Docs | 17 | 0 |  |
+| `docs/studio-review-polish-checks.log` | Untracked | 4852 | Docs | 155 | 0 |  |
+| `docs/studio-safe-review-gates.log` | Untracked | 4832 | Docs | 155 | 0 |  |
+| `docs/studio-safe-review-live.log` | Untracked | 73 | Docs | 1 | 0 |  |
+| `docs/unified-canvas-baseline.png` | Untracked | 138902 | Docs | Binary | Binary |  |
+| `docs/unified-canvas-editing.png` | Untracked | 138828 | Docs | Binary | Binary |  |
+| `docs/unified-canvas-failure.png` | Untracked | 112849 | Docs | Binary | Binary |  |
+| `docs/unified-canvas-imported.log` | Untracked | 369 | Docs | 3 | 0 |  |
+| `docs/unified-canvas-qualification.log` | Untracked | 5428 | Docs | 155 | 0 |  |
+| `docs/unified-editor-evidence/00-git-diff-stat-before.txt` | Untracked | 3432 | Docs | 55 | 0 |  |
+| `docs/unified-editor-evidence/00-git-status-before.txt` | Untracked | 35368 | Docs | 956 | 0 |  |
+| `docs/unified-editor-evidence/00-head.txt` | Untracked | 41 | Docs | 1 | 0 |  |
+| `docs/unified-editor-evidence/00-protected-files.json` | Untracked | 21430 | Docs | 196 | 0 |  |
+| `docs/unified-editor-evidence/01-baseline-shared.exit.json` | Untracked | 188 | Docs | 10 | 0 |  |
+| `docs/unified-editor-evidence/01-baseline-shared.log` | Untracked | 737 | Docs | 6 | 0 |  |
+| `docs/unified-editor-evidence/02-baseline-selection.exit.json` | Untracked | 160 | Docs | 9 | 0 |  |
+| `docs/unified-editor-evidence/02-baseline-selection.log` | Untracked | 600 | Docs | 16 | 0 |  |
+| `docs/unified-editor-evidence/03-routing.exit.json` | Untracked | 167 | Docs | 9 | 0 |  |
+| `docs/unified-editor-evidence/03-routing.log` | Untracked | 139 | Docs | 1 | 0 |  |
+| `docs/unified-editor-evidence/04-typecheck.exit.json` | Untracked | 181 | Docs | 10 | 0 |  |
+| `docs/unified-editor-evidence/04-typecheck.log` | Untracked | 0 | Docs | 0 | 0 |  |
+| `docs/unified-editor-evidence/README.md` | Untracked | 7153 | Docs | 49 | 0 |  |
+| `docs/unified-editor-evidence/attempt-1-round-1-git-diff-stat.txt` | Untracked | 3432 | Docs | 55 | 0 |  |
+| `docs/unified-editor-evidence/attempt-1-round-1-git-status.txt` | Untracked | 34750 | Docs | 966 | 0 |  |
+| `docs/unified-editor-evidence/attempt-1-round-1-selection-full.log` | Untracked | 600 | Docs | 16 | 0 |  |
+| `docs/unified-editor-evidence/attempt-1-round-1-selection-full.log.exit.json` | Untracked | 36 | Docs | 1 | 0 |  |
+| `docs/unified-editor-evidence/attempt-1-round-1.exit.json` | Untracked | 179 | Docs | 10 | 0 |  |
+| `docs/unified-editor-evidence/attempt-1-round-1.log` | Untracked | 23814 | Docs | 506 | 0 |  |
+| `docs/unified-editor-evidence/attempt-2-round-1-git-diff-stat.txt` | Untracked | 3432 | Docs | 55 | 0 |  |
+| `docs/unified-editor-evidence/attempt-2-round-1-git-status.txt` | Untracked | 34750 | Docs | 966 | 0 |  |
+| `docs/unified-editor-evidence/attempt-2-round-1.exit.json` | Untracked | 179 | Docs | 10 | 0 |  |
+| `docs/unified-editor-evidence/attempt-2-round-1.log` | Untracked | 11529 | Docs | 228 | 0 |  |
+| `docs/unified-editor-evidence/attempt-3-round-1-git-status.txt` | Untracked | 35745 | Docs | 967 | 0 |  |
+| `docs/unified-editor-evidence/attempt-3-round-1.exit.json` | Untracked | 179 | Docs | 10 | 0 |  |
+| `docs/unified-editor-evidence/attempt-3-round-1.log` | Untracked | 18664 | Docs | 294 | 0 |  |
+| `docs/unified-editor-evidence/before/app/studio/[repoId]/edit/page.tsx` | Untracked | 153 | Docs | 2 | 0 |  |
+| `docs/unified-editor-evidence/before/app/studio/[repoId]/window/page.tsx` | Untracked | 153 | Docs | 2 | 0 |  |
+| `docs/unified-editor-evidence/before/app/studio/page.tsx` | Untracked | 162 | Docs | 5 | 0 |  |
+| `docs/unified-editor-evidence/before/app/studio/window/page.tsx` | Untracked | 153 | Docs | 2 | 0 |  |
+| `docs/unified-editor-evidence/before/components/Header.tsx` | Untracked | 3272 | Docs | 48 | 0 |  |
+| `docs/unified-editor-evidence/before/components/slightnudge/EditorSurface.tsx` | Untracked | 508 | Docs | 11 | 0 |  |
+| `docs/unified-editor-evidence/before/components/slightnudge/EditorWorkspace.tsx` | Untracked | 216320 | Docs | 3143 | 0 |  |
+| `docs/unified-editor-evidence/before/components/slightnudge/editor-workspace.module.css` | Untracked | 38330 | Docs | 518 | 0 |  |
+| `docs/unified-editor-evidence/debug-syntax.exit.json` | Untracked | 156 | Docs | 9 | 0 |  |
+| `docs/unified-editor-evidence/debug-syntax.log` | Untracked | 3668 | Docs | 119 | 0 |  |
+| `docs/unified-editor-evidence/final-git-diff-stat.txt` | Untracked | 3432 | Docs | 55 | 0 |  |
+| `docs/unified-editor-evidence/final-git-status.txt` | Untracked | 34809 | Docs | 968 | 0 |  |
+| `docs/unified-editor-evidence/final-identity.json` | Untracked | 114 | Docs | 5 | 0 |  |
+| `docs/unified-editor-evidence/protected-files-check.json` | Untracked | 107 | Docs | 6 | 0 |  |
+| `docs/unified-editor-evidence/restored-localhost-listeners.json` | Untracked | 257 | Docs | 18 | 0 |  |
+| `docs/unified-editor-evidence/results-console.txt` | Untracked | 8127 | Docs | 112 | 0 |  |
+| `docs/unified-editor-evidence/results.md` | Untracked | 8126 | Docs | 111 | 0 |  |
+| `docs/unified-editor-evidence/round-1-git-diff-stat.txt` | Untracked | 3432 | Docs | 55 | 0 |  |
+| `docs/unified-editor-evidence/round-1-git-status.txt` | Untracked | 34778 | Docs | 967 | 0 |  |
+| `docs/unified-editor-evidence/round-1-selection-fit.log` | Untracked | 550 | Docs | 14 | 0 |  |
+| `docs/unified-editor-evidence/round-1-selection-fit.log.exit.json` | Untracked | 35 | Docs | 1 | 0 |  |
+| `docs/unified-editor-evidence/round-1-selection-full.log` | Untracked | 551 | Docs | 14 | 0 |  |
+| `docs/unified-editor-evidence/round-1-selection-full.log.exit.json` | Untracked | 36 | Docs | 1 | 0 |  |
+| `docs/unified-editor-evidence/round-1-supplement-fit-git-status.txt` | Untracked | 34809 | Docs | 968 | 0 |  |
+| `docs/unified-editor-evidence/round-1-supplement-fit.exit.json` | Untracked | 203 | Docs | 11 | 0 |  |
+| `docs/unified-editor-evidence/round-1-supplement-fit.log` | Untracked | 5751 | Docs | 49 | 0 |  |
+| `docs/unified-editor-evidence/round-1.exit.json` | Untracked | 179 | Docs | 10 | 0 |  |
+| `docs/unified-editor-evidence/round-1.log` | Untracked | 8421 | Docs | 93 | 0 |  |
+| `docs/unified-editor-evidence/round-2-git-diff-stat.txt` | Untracked | 3432 | Docs | 55 | 0 |  |
+| `docs/unified-editor-evidence/round-2-git-status.txt` | Untracked | 34809 | Docs | 968 | 0 |  |
+| `docs/unified-editor-evidence/round-2-selection-fit.log` | Untracked | 550 | Docs | 14 | 0 |  |
+| `docs/unified-editor-evidence/round-2-selection-fit.log.exit.json` | Untracked | 35 | Docs | 1 | 0 |  |
+| `docs/unified-editor-evidence/round-2-selection-full.log` | Untracked | 551 | Docs | 14 | 0 |  |
+| `docs/unified-editor-evidence/round-2-selection-full.log.exit.json` | Untracked | 36 | Docs | 1 | 0 |  |
+| `docs/unified-editor-evidence/round-2.exit.json` | Untracked | 179 | Docs | 10 | 0 |  |
+| `docs/unified-editor-evidence/round-2.log` | Untracked | 8221 | Docs | 94 | 0 |  |
+| `docs/unified-editor-evidence/round-3-git-diff-stat.txt` | Untracked | 3432 | Docs | 55 | 0 |  |
+| `docs/unified-editor-evidence/round-3-git-status.txt` | Untracked | 34809 | Docs | 968 | 0 |  |
+| `docs/unified-editor-evidence/round-3-selection-fit.log` | Untracked | 550 | Docs | 14 | 0 |  |
+| `docs/unified-editor-evidence/round-3-selection-fit.log.exit.json` | Untracked | 35 | Docs | 1 | 0 |  |
+| `docs/unified-editor-evidence/round-3-selection-full.log` | Untracked | 551 | Docs | 14 | 0 |  |
+| `docs/unified-editor-evidence/round-3-selection-full.log.exit.json` | Untracked | 36 | Docs | 1 | 0 |  |
+| `docs/unified-editor-evidence/round-3.exit.json` | Untracked | 179 | Docs | 10 | 0 |  |
+| `docs/unified-editor-evidence/round-3.log` | Untracked | 8221 | Docs | 94 | 0 |  |
+| `docs/unified-editor-evidence/task-diff-stat.txt` | Untracked | 1267 | Docs | 16 | 0 |  |
+| `docs/unified-editor-evidence/task-existing-files.json` | Untracked | 316 | Docs | 10 | 0 |  |
+| `docs/unified-source-canvas.png` | Untracked | 149501 | Docs | Binary | Binary |  |
+| `docs/workspace-canvas-final-checks.log` | Untracked | 4864 | Docs | 156 | 0 |  |
+| `docs/workspace-canvas-redesign.log` | Untracked | 4863 | Docs | 156 | 0 |  |
+| `docs/workspace-canvas-release.log` | Untracked | 4863 | Docs | 156 | 0 |  |
+| `docs/workspace-floating-dock.png` | Untracked | 92806 | Docs | Binary | Binary |  |
+| `docs/workspace-layout-desktop.png` | Untracked | 91200 | Docs | Binary | Binary |  |
+| `docs/workspace-layout-final-qualification.log` | Untracked | 6033 | Docs | 175 | 0 |  |
+| `docs/workspace-layout-final.png` | Untracked | 62663 | Docs | Binary | Binary |  |
+| `docs/workspace-layout-focus.png` | Untracked | 59070 | Docs | Binary | Binary |  |
+| `docs/workspace-layout-initial.png` | Untracked | 36373 | Docs | Binary | Binary |  |
+| `docs/workspace-layout-inspector.png` | Untracked | 124037 | Docs | Binary | Binary |  |
+| `docs/workspace-layout-mobile.png` | Untracked | 59516 | Docs | Binary | Binary |  |
+| `docs/workspace-layout-qualification.log` | Untracked | 5906 | Docs | 174 | 0 |  |
+| `docs/workspace-layout-selected.png` | Untracked | 95271 | Docs | Binary | Binary |  |
+| `docs/workspace-redesign-baseline.log` | Untracked | 595 | Docs | 20 | 0 |  |
+| `docs/workspace-redesign-final.log` | Untracked | 4881 | Docs | 156 | 0 |  |
+| `docs/workspace-redesign-release.log` | Untracked | 4863 | Docs | 156 | 0 |  |
+| `docs/workspace-redesign-validation.log` | Untracked | 495 | Docs | 19 | 0 |  |
+| `docs/workspace-reference-refinement.log` | Untracked | 4863 | Docs | 156 | 0 |  |
+| `docs/workspace-reference-release.log` | Untracked | 4862 | Docs | 156 | 0 |  |
+| `docs/workspace-typography-checks.log` | Untracked | 4863 | Docs | 156 | 0 |  |
+| `docs/workspace-typography-final.log` | Untracked | 4883 | Docs | 156 | 0 |  |
+| `lib/slightnudge/draft-conflict-recovery.ts` | Untracked | 933 | Product code | 20 | 0 | Slightnudge code |
+| `lib/slightnudge/resize-layout.ts` | Untracked | 5174 | Product code | 57 | 0 | Slightnudge code |
+| `test/canvas-performance.test.ts` | Untracked | 4122 | Test | 65 | 0 |  |
+| `test/consecutive-move.browser.ts` | Untracked | 38383 | Test | 425 | 0 |  |
+| `test/continuous-width.browser.ts` | Untracked | 38449 | Test | 426 | 0 |  |
+| `test/draft-conflict-recovery.browser.ts` | Untracked | 38314 | Test | 425 | 0 |  |
+| `test/draft-conflict-recovery.test.ts` | Untracked | 1723 | Test | 32 | 0 |  |
+| `test/gesture-continuation.browser.ts` | Untracked | 38457 | Test | 426 | 0 |  |
+| `test/gesture-move-regression.browser.ts` | Untracked | 40513 | Test | 444 | 0 |  |
+| `test/gesture-resize-regression.browser.ts` | Untracked | 38434 | Test | 426 | 0 |  |
+| `test/helpers/consecutive-move-browser.ts` | Untracked | 9517 | Test | 135 | 0 |  |
+| `test/helpers/continuous-width-browser.ts` | Untracked | 6350 | Test | 84 | 0 |  |
+| `test/helpers/draft-conflict-recovery-browser.ts` | Untracked | 2980 | Test | 49 | 0 |  |
+| `test/helpers/gesture-continuation-browser.ts` | Untracked | 6411 | Test | 90 | 0 |  |
+| `test/helpers/gesture-move-regression-browser.ts` | Untracked | 9600 | Test | 136 | 0 |  |
+| `test/helpers/gesture-resize-regression-browser.ts` | Untracked | 8731 | Test | 109 | 0 |  |
+| `test/helpers/m0-iframe-selection-gate.ts` | Untracked | 10427 | Test | 98 | 0 |  |
+| `test/helpers/resize-interaction-browser.ts` | Untracked | 5702 | Test | 77 | 0 |  |
+| `test/helpers/resize-pointer-browser.ts` | Untracked | 8247 | Test | 106 | 0 |  |
+| `test/helpers/resize-reflow-browser.ts` | Untracked | 2351 | Test | 30 | 0 |  |
+| `test/m0-case8-diagnostic.ts` | Untracked | 5602 | Test | 45 | 0 |  |
+| `test/m0-overfit.iframe.test.ts` | Untracked | 10320 | Test | 233 | 0 |  |
+| `test/m0-regression.iframe.test.ts` | Untracked | 9984 | Test | 233 | 0 |  |
+| `test/move-continuation-regression.browser.ts` | Untracked | 40470 | Test | 444 | 0 |  |
+| `test/resize-interaction.browser.ts` | Untracked | 38301 | Test | 425 | 0 |  |
+| `test/resize-layout.browser.test.ts` | Untracked | 3642 | Test | 39 | 0 |  |
+| `test/resize-pointer-anchor.test.ts` | Untracked | 1066 | Test | 12 | 0 |  |
+| `test/resize-pointer-regression.browser.ts` | Untracked | 38337 | Test | 425 | 0 |  |
+| `test/resize-pointer.browser.ts` | Untracked | 38423 | Test | 426 | 0 |  |
+| `test/resize-reflow.browser.ts` | Untracked | 38443 | Test | 426 | 0 |  |
+
+</details>
+
+
+## Step 3 — WIP commit
+
+- Branch: codex/fix-resize-pointer-anchor
+- WIP commit: 9e94223c2ca044b8dadc31de690cfb19ec68af84
+- Message: wip: preserve unreviewed uncommitted work before phase 3a (not reviewed, do not merge)
+- Rechecked Step 0 status after excluding this task's untracked evidence and verified all 4,790 live SHA-256 hashes against the manifest.
+- Staged and verified 4,790 exact blobs with the explicit path list in step-3-add-paths.txt.
+- Exact staging command: `git -c core.autocrlf=false --literal-pathspecs add --pathspec-from-file=- --pathspec-file-nul` with the listed paths as NUL-delimited UTF-8 stdin. The command-level setting preserves Windows line endings in the WIP blobs.
+- Post-commit status contains only untracked preservation evidence under docs/.
+
+
+## Step 4 — Commit verification
+
+- Compared raw commit blobs addressed as 9e94223c2ca044b8dadc31de690cfb19ec68af84:<path> with the SHA-256 manifest using git cat-file --batch.
+- Exact matches: 4,790 of 4,790.
+
+### Isolated TypeScript check
+
+- npx tsc --noEmit: Failed (exit 1). See step-4-tsc.txt for the complete error list.
+- Archive excluded by filename: .env.example.
+
+<details>
+<summary>TypeScript output</summary>
+
+~~~text
+docs/phase2b-review-evidence/step2-audit.ts(103,17): error TS2540: Cannot assign to 'NODE_ENV' because it is a read-only property.
+docs/phase2b-review-evidence/step4-regression.ts(176,51): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+docs/phase2b-review-evidence/step4-regression.ts(283,51): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+docs/unified-editor-evidence/before/components/slightnudge/EditorSurface.tsx(4,29): error TS2307: Cannot find module './CanvasStage' or its corresponding type declarations.
+docs/unified-editor-evidence/before/components/slightnudge/EditorWorkspace.tsx(2,36): error TS2307: Cannot find module './AppearanceControls' or its corresponding type declarations.
+docs/unified-editor-evidence/before/components/slightnudge/EditorWorkspace.tsx(3,36): error TS2307: Cannot find module './ConstraintControls' or its corresponding type declarations.
+docs/unified-editor-evidence/before/components/slightnudge/EditorWorkspace.tsx(8,84): error TS2307: Cannot find module './EditorSessionControls' or its corresponding type declarations.
+docs/unified-editor-evidence/before/components/slightnudge/EditorWorkspace.tsx(15,33): error TS2307: Cannot find module './CanvasStage' or its corresponding type declarations.
+docs/unified-editor-evidence/before/components/slightnudge/EditorWorkspace.tsx(2198,18): error TS7006: Parameter 'value' implicitly has an 'any' type.
+docs/unified-editor-evidence/before/components/slightnudge/EditorWorkspace.tsx(2198,25): error TS7006: Parameter 'width' implicitly has an 'any' type.
+docs/unified-editor-evidence/before/components/slightnudge/EditorWorkspace.tsx(2202,16): error TS7006: Parameter 'name' implicitly has an 'any' type.
+docs/unified-editor-evidence/before/components/slightnudge/EditorWorkspace.tsx(2339,16): error TS2741: Property 'panelVisible' is missing in type '{ layers: CanvasLayer[]; selected: string | null; onSelect: (key: string | null) => void; }' but required in type '{ layers: CanvasLayer[]; selected: string | null; panelVisible: boolean; onSelect(key: string): void; }'.
+test/account-isolation.test.ts(12,106): error TS2540: Cannot assign to 'NODE_ENV' because it is a read-only property.
+test/account-isolation.test.ts(22,15): error TS2540: Cannot assign to 'NODE_ENV' because it is a read-only property.
+test/account-isolation.test.ts(32,143): error TS2540: Cannot assign to 'NODE_ENV' because it is a read-only property.
+test/appearance-layout.test.ts(23,98): error TS18048: 'replay.renderPatches' is possibly 'undefined'.
+test/appearance-layout.test.ts(23,139): error TS18048: 'replay.renderPatches' is possibly 'undefined'.
+test/appearance-layout.test.ts(23,214): error TS18048: 'replay.renderPatches' is possibly 'undefined'.
+test/appearance-layout.test.ts(23,280): error TS18048: 'replay.renderPatches' is possibly 'undefined'.
+test/appearance-layout.test.ts(23,354): error TS18048: 'replay.renderPatches' is possibly 'undefined'.
+test/button-editing.test.ts(26,90): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+test/component-actions-bridge.test.ts(12,230): error TS2339: Property 'origin' does not exist on type '(column: number) => { path: string; line: number; column: number; }'.
+test/component-ownership.test.ts(28,102): error TS18048: 'replay.renderPatches' is possibly 'undefined'.
+test/component-ownership.test.ts(35,112): error TS18048: 'mixedReplay.renderPatches' is possibly 'undefined'.
+test/component-ownership.test.ts(37,247): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+test/container-move.test.ts(23,165): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+test/container-move.test.ts(47,131): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+test/format-and-tailwind-report.v2.ts(10,66): error TS2540: Cannot assign to 'NODE_ENV' because it is a read-only property.
+test/helpers/editor-reliability-selection.ts(45,29): error TS2339: Property 'filter' does not exist on type 'Conversion'.
+test/helpers/editor-reliability-selection.ts(45,36): error TS7006: Parameter 'c' implicitly has an 'any' type.
+test/helpers/editor-reliability-selection.ts(47,28): error TS2339: Property 'find' does not exist on type 'Conversion'.
+test/helpers/editor-reliability-selection.ts(47,33): error TS7006: Parameter 'c' implicitly has an 'any' type.
+test/helpers/editor-reliability-selection.v3.ts(45,29): error TS2339: Property 'filter' does not exist on type 'Conversion'.
+test/helpers/editor-reliability-selection.v3.ts(45,36): error TS7006: Parameter 'c' implicitly has an 'any' type.
+test/helpers/editor-reliability-selection.v3.ts(47,28): error TS2339: Property 'find' does not exist on type 'Conversion'.
+test/helpers/editor-reliability-selection.v3.ts(47,33): error TS7006: Parameter 'c' implicitly has an 'any' type.
+test/helpers/security-selection.v2.ts(45,29): error TS2339: Property 'filter' does not exist on type 'Conversion'.
+test/helpers/security-selection.v2.ts(45,36): error TS7006: Parameter 'c' implicitly has an 'any' type.
+test/helpers/security-selection.v2.ts(47,28): error TS2339: Property 'find' does not exist on type 'Conversion'.
+test/helpers/security-selection.v2.ts(47,33): error TS7006: Parameter 'c' implicitly has an 'any' type.
+test/helpers/selection-gate-v3.ts(42,29): error TS2339: Property 'filter' does not exist on type 'Conversion'.
+test/helpers/selection-gate-v3.ts(42,36): error TS7006: Parameter 'c' implicitly has an 'any' type.
+test/helpers/selection-gate-v3.ts(44,28): error TS2339: Property 'find' does not exist on type 'Conversion'.
+test/helpers/selection-gate-v3.ts(44,33): error TS7006: Parameter 'c' implicitly has an 'any' type.
+test/icon-properties-bridge.test.ts(11,230): error TS2339: Property 'origin' does not exist on type '{ path: string; line: number; column: number; }'.
+test/icon-replacement-bridge.test.ts(14,230): error TS2339: Property 'origin' does not exist on type '{ path: string; line: number; column: number; }'.
+test/image-attributes-bridge.test.ts(24,137): error TS2339: Property 'origin' does not exist on type '{ path: string; line: number; column: number; }'.
+test/image-content.test.ts(30,90): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+test/image-framing.test.ts(20,90): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+test/imported-draft.test.ts(33,141): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+test/production-boundaries.test.ts(12,15): error TS2540: Cannot assign to 'NODE_ENV' because it is a read-only property.
+test/production-boundaries.test.ts(26,15): error TS2540: Cannot assign to 'NODE_ENV' because it is a read-only property.
+test/production-boundaries.test.ts(30,52): error TS2704: The operand of a 'delete' operator cannot be a read-only property.
+test/production-boundaries.test.ts(30,91): error TS2540: Cannot assign to 'NODE_ENV' because it is a read-only property.
+test/runtime-class-ownership.test.ts(23,131): error TS2339: Property 'origin' does not exist on type '{ path: string; line: number; column: number; }'.
+test/runtime-class-ownership.test.ts(35,36): error TS2540: Cannot assign to 'className' because it is a read-only property.
+test/section-order.test.ts(20,102): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+test/section-order.test.ts(27,123): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+test/section-order.test.ts(30,13): error TS2532: Object is possibly 'undefined'.
+test/section-order.test.ts(43,13): error TS2532: Object is possibly 'undefined'.
+test/security-hardening-v2.proofs.ts(7,46): error TS2540: Cannot assign to 'NODE_ENV' because it is a read-only property.
+test/shared-instance.test.ts(35,98): error TS18048: 'replay.renderPatches' is possibly 'undefined'.
+test/shared-instance.test.ts(35,142): error TS18048: 'replay.renderPatches' is possibly 'undefined'.
+test/source-rendered-bridge.test.ts(79,45): error TS2540: Cannot assign to 'className' because it is a read-only property.
+test/step1-selection.iframe-v3.test.ts(34,83): error TS2339: Property 'find' does not exist on type 'Conversion'.
+test/step1-selection.iframe-v3.test.ts(34,88): error TS7006: Parameter 'c' implicitly has an 'any' type.
+test/unified-editor.browser.ts(196,9): error TS18048: 'browser' is possibly 'undefined'.
+~~~
+
+</details>
+
+- Removed the verified node_modules junction and isolated archive scratch directory.
+
+
+## Step 5 — Phase 3A gate facts
+
+- Merge base `955007d231d7da7783c6d3222ea2942be03eafb4`.
+- The comparison `feat/studio-full-controls...HEAD` has 0 target-only and 61 WIP-only commits.
+- Target tip `955007d231d7da7783c6d3222ea2942be03eafb4`.
+- Tag ref `f83c5967b17b57e6936becfb9c7921dd71fb311c` and peeled commit `f83c5967b17b57e6936becfb9c7921dd71fb311c`.
+- Tag listing `phase2c1-merged test(types): add non-null assertions on pending.id to satisfy TypeScript strict mode`.
+- Tag ancestry check exited 0. The tag is an ancestor of the target.
+- Tag equals target tip: no.
+
+### Phase 2C-1 reports
+
+~~~text
+docs/phase2c1e-report.md — **Date**: October 23, 2026
+**Status**: **READY TO MERGE** (Passes all audit gates)
+### **VERDICT: READY TO MERGE**
+- **Merge Operation**: Fast-forward merge `git merge --ff-only fix/phase2c-undo-closeout` -> **SUCCESS**
+- **Tag Created**: `phase2c1-merged`
+- **Merged Head Commit**: `f83c5967b17b57e6936becfb9c7921dd71fb311c`
+docs/phase2c1d-report.md — **Date:** 2026-10-23
+docs/phase2c1c-report.md — **Report Date:** 2026-10-23
+~~~
+
+### Five most recent target commits
+
+~~~text
+955007d231d7da7783c6d3222ea2942be03eafb4 2026-10-23 21:00:58 +0530 chore(deps): upgrade Next.js from 16.4.0 to 16.4.3 for security advisory
+f83c5967b17b57e6936becfb9c7921dd71fb311c 2026-10-23 14:13:12 +0530 test(types): add non-null assertions on pending.id to satisfy TypeScript strict mode
+659cc97a0c84e42deb1a0d2c68b7fdd53e60c27a 2026-10-23 11:23:34 +0530 fix(undo): name sameElement variable in edit-history.ts to align with M7 mutant pattern
+19f9c46ab9fc0f178d09a5358b2def4e7fa4ac83 2026-10-23 11:11:36 +0530 fix(undo): allow undo of older edits on different elements via identity dependency
+ae2bde0f27283d638d764479eb091a434d030f0d 2026-10-23 09:29:37 +0530 test(undo): add failing tests for multi-element stacked undo
+~~~
+
+<details>
+<summary>Commits beyond the target</summary>
+
+~~~text
+9e94223 wip: preserve unreviewed uncommitted work before phase 3a (not reviewed, do not merge)
+893c2bb wip: checkpoint resize/cursor/draft-recovery work (unverified)
+5a141b2 docs: specify component focus and variants
+f95411a fix(dev): exclude generated worktrees from application source scans
+6aa5daf docs: distinguish initial readiness from post-Save reload timeouts
+ec3973c test: capture preview readiness before existing deadline
+c3cd4d5 docs: record pages manifest reproduction and cold-start qualification
+2cb14ad core: publish pages manifests atomically
+63152ea docs: record movement and history reliability evidence
+d6adcb3 test: tolerate iframe reload while checking restored geometry
+72ca1e5 test: prepare zero-offset fixture only in disposable movement runtime
+0ee55f7 test: select the actual 75 percent zoom option
+3bd963f fix(editor): focus Move grip so Escape cancels iframe drags
+ea42e26 test: capture cancellation geometry without changing assertions
+9e55ceb test: use unified zoom control in history copy
+4614bb8 fix(editor): preserve Move size in unified Fit canvas
+22e17ec test: reuse owned warm preview for history qualification
+2c4a430 test: reuse owned warm previews for the four icon workflows
+ec26692 fix(editor): expose Move in explicit definition scope
+b0c9061 test: verify current overlay selection and explicit definition refusals
+fefc839 fix(editor): edit literal definition text under explicit ownership
+acd567c test: exercise definition scope in history and current state controls
+f668b3b fix(editor): restore explicitly scoped definition styles
+ee50788 test: restore Studio fit assumptions and exercise definition style access
+d87d989 core: publish app route manifests atomically
+b23bd1d test: refresh copied lab adapters and migrate recovery controls
+5d76305 fix(preview): acknowledge and retry the initial bridge handshake
+0327623 test: await owned server readiness before shared warmup navigation
+5990617 test: account compiler warmup separately from editing workflow caps
+34d5fd0 fix(preview): verify shared-instance server text before refreshing
+5efba37 test: migrate movement and text controls to the unified canvas
+c72c47b test: apply the warmup budget only during cold route preparation
+466ae5a test: register disposable previews within the allowed repository root
+dcb06d1 test: reuse owned warm preview servers for sequential shared checks
+0be2729 test: qualify iframe routing and separate bounded compiler warmup
+f11e470 test: preserve host control scope and warm the editor route
+f4be219 test: isolate gate ports and shorten disposable paths
+a1bd280 test: enforce a shared-group deadline and classify setup errors
+065cc98 test: keep post-case errors nonfatal to the gate
+c7310e1 test: add assertion proof and failed-workflow comparison mode
+fe9b294 test: refuse selection runs against occupied server ports
+967465f test: log setup stages and continue after non-selection failures
+837ccdc test: capture child preview logs and chain iframe locators
+b65e00b test: bound reliability workflows and add v3 harness copies
+2b26542 fix(gate): refuse invalid generated manifest reads
+3e2ebcb fix(dev): publish the font manifest atomically
+4653819 fix(dev): publish the loadable manifest atomically
+754fd00 test: qualify manifest publication with Webpack and load traces
+32c62f8 fix(dev): publish the build manifest atomically
+94a0508 fix(gate): use a file URL for the Windows observer preload
+a4ff43a test: add sequential reliability baseline gate
+81d2b45 test: preserve hardening proofs and stopped regression evidence
+58618d0 fix(editor): stabilize hydration and self-host editor fonts
+5a1c06f core: surface bounded API response diagnostics
+7f9281f core: complete atomic writes and bound rename retries
+7f76c57 core: validate persisted source project boundaries
+5f40e10 fix(security): require mutation origins and loopback binding
+7f1b9cd fix(editor): prevent toolbar from covering selected content
+54b8f42 fix(layers): restore source-backed inline elements
+24c6259 test: selection gate harness
+532019b checkpoint: unified editor stage 1-2
+~~~
+
+</details>
+
+
+## Step 6 — Final checkout
+
+- Verified branch `feat/studio-full-controls` at `955007d231d7da7783c6d3222ea2942be03eafb4`, equal to the Step 5 tip.
+- The tracked tree is clean. The remaining porcelain entries are untracked evidence under docs/.
+- The developer server was left running.
+
+~~~text
+?? docs/preservation/
+?? scratch/M13.patch
+?? scratch/M6.patch
+?? scratch/M7.patch
+?? scratch/actual-canvas-comparison.png
+?? scratch/actual-drag-screenshot.png
+?? scratch/analyze-40.js
+?? scratch/analyze-partials-wilson.js
+?? scratch/analyzed-40.json
+?? scratch/app-paths-manifest-QHZDIw/
+?? scratch/app-paths-manifest-sFXwv9/
+?? scratch/app-paths-manifest-vNVlRx/
+?? scratch/audit-results-detailed.json
+?? scratch/check-3f.cjs
+?? scratch/check-5401.cjs
+?? scratch/check-849.cjs
+?? scratch/check-before-diff.cjs
+?? scratch/check-edits-diff.cjs
+?? scratch/check-filepath.cjs
+?? scratch/check-firsttwo.cjs
+?? scratch/check-hit.ts
+?? scratch/check-lines.cjs
+?? scratch/check-manifest.cjs
+?? scratch/check-n-patches.cjs
+?? scratch/check-patches.cjs
+?? scratch/check-prefix.cjs
+?? scratch/check-rec8-keys.cjs
+?? scratch/check-rec9.cjs
+?? scratch/check-step1808.cjs
+?? scratch/check-step522.cjs
+?? scratch/check-tail.cjs
+?? scratch/classify-unsupported.js
+?? scratch/compare-all.cjs
+?? scratch/compare-da.cjs
+?? scratch/compare-recs.cjs
+?? scratch/compare-step1891.cjs
+?? scratch/compile-summary.json
+?? scratch/compute-repo-mix.js
+?? scratch/copy-labs.ts
+?? scratch/create-n-mutants.cjs
+?? scratch/create-pbt-runner.cjs
+?? scratch/create-runner.cjs
+?? scratch/curved-pill-test.png
+?? scratch/debug-drag.ts
+?? scratch/debug-s1.cjs
+?? scratch/debug-s5.cjs
+?? scratch/diffs/
+?? scratch/do-commit.cjs
+?? scratch/drag-button-dy-120.png
+?? scratch/drag-button-dy-40.png
+?? scratch/drag-button-dy-70.png
+?? scratch/drag-button-dy0.png
+?? scratch/drag-button-dy120.png
+?? scratch/drag-button-dy40.png
+?? scratch/drag-button-dy70.png
+?? scratch/drag-text-dy-120.png
+?? scratch/drag-text-dy-40.png
+?? scratch/drag-text-dy-70.png
+?? scratch/drag-text-dy0.png
+?? scratch/drag-text-dy120.png
+?? scratch/drag-text-dy40.png
+?? scratch/drag-text-dy70.png
+?? scratch/evaluate-40-detailed.ts
+?? scratch/fetch-diffs.js
+?? scratch/final-regression-results.json
+?? scratch/find-missing-record.cjs
+?? scratch/find-record0.cjs
+?? scratch/find-security-error.cjs
+?? scratch/fix-attack6.cjs
+?? scratch/fix-ts-errors.cjs
+?? scratch/full-canvas-demo.png
+?? scratch/g/
+?? scratch/gate-ready-diagnostic.ts
+?? scratch/gate-routing-proof/
+?? scratch/generated-scan-GujN4b/
+?? scratch/generated-scan-LiRKIz/
+?? scratch/generated-scan-TozuYt/
+?? scratch/grid-search-baseline.cjs
+?? scratch/inspect-button-click.cjs
+?? scratch/inspect-corner.js
+?? scratch/inspect-partials.js
+?? scratch/inspect-unsupported.js
+?? scratch/m11-test.tsx
+?? scratch/make-runner.js
+?? scratch/manifest-publication-778AJW/
+?? scratch/manifest-publication-k73gxt/
+?? scratch/manifest-publication-ppQvhC/
+?? scratch/manifest-webpack-8w9i6O/
+?? scratch/manifest-webpack-90shUT/
+?? scratch/manifest-webpack-BmjFcB/
+?? scratch/manifest-webpack-HXgLVy/
+?? scratch/manifest-webpack-MRr87B/
+?? scratch/manifest-webpack-RZkgxh/
+?? scratch/manifest-webpack-axllih/
+?? scratch/manifest-webpack-foGu1B/
+?? scratch/manifest-webpack-g4f9le/
+?? scratch/manifest-webpack-q2vjkq/
+?? scratch/manifest-webpack-v6iscQ/
+?? scratch/manifest-webpack-zuc3wJ/
+?? scratch/n-mutants-results.json
+?? scratch/pages-manifest-QJJTg4/
+?? scratch/pages-manifest-V27GRJ/
+?? scratch/pages-manifest-m61onh/
+?? scratch/pages-manifest-pT0FfN/
+?? scratch/parse-line844.cjs
+?? scratch/parse-step522-valid.cjs
+?? scratch/parse-step844-valid.cjs
+?? scratch/parse-step844.cjs
+?? scratch/parse-study.js
+?? scratch/parsed-rows.json
+?? scratch/partial-breakdown.json
+?? scratch/perfect-fit-test.png
+?? scratch/pill-comparison.png
+?? scratch/pill-zoom.png
+?? scratch/print-disagreements.js
+?? scratch/print-reproduced.js
+?? scratch/print-s3.cjs
+?? scratch/print-step1893-start.cjs
+?? scratch/program/
+?? scratch/reconstruct-edits.cjs
+?? scratch/reliability-gate/
+?? scratch/repo-stats.json
+?? scratch/reproduce-user-drag.cjs
+?? scratch/restore-baseline.cjs
+?? scratch/run-build-gate.cjs
+?? scratch/run-final-regression.ts
+?? scratch/run-host-attacks-clean.cjs
+?? scratch/run-phase2c1d-secrets.cjs
+?? scratch/run-post-merge.cjs
+?? scratch/run-secret-scan.cjs
+?? scratch/run-step1-mutants.cjs
+?? scratch/run-step2-verification.cjs
+?? scratch/run-step3f-triplicate.cjs
+?? scratch/run-step4d-suite.ts
+?? scratch/run-step5-regression.cjs
+?? scratch/run-step5d-battery.cjs
+?? scratch/run-stepA-triplicate.ts
+?? scratch/run-stepB-verification.ts
+?? scratch/run-stepC-triplicate.ts
+?? scratch/run-stepD-triplicate.ts
+?? scratch/run-verification.cjs
+?? scratch/runner-property-harness-phase2c1e.js
+?? scratch/sample-40.js
+?? scratch/sampled-40.json
+?? scratch/scan-secrets.cjs
+?? scratch/scan-secrets.js
+?? scratch/security-hardening-20261101/
+?? scratch/selection-gate-baseline.cjs
+?? scratch/selection-gate-matrix.cjs
+?? scratch/selection-gate-step2-matrix.cjs
+?? scratch/setup-temp-copy.cjs
+?? scratch/simulate-slots.js
+?? scratch/stepC-results.json
+?? scratch/stepD-results.json
+?? scratch/studio-active-drag.png
+?? scratch/studio-hover-corner.png
+?? scratch/studio-idle-corner.png
+?? scratch/summarize-audit.js
+?? scratch/test-all-slots.cjs
+?? scratch/test-archive-tsc.cjs
+?? scratch/test-build-env.cjs
+?? scratch/test-canvas-actual.js
+?? scratch/test-compare-3f.cjs
+?? scratch/test-corner-drag.js
+?? scratch/test-crash-direct.ts
+?? scratch/test-end.cjs
+?? scratch/test-engine-on-samples.ts
+?? scratch/test-f1-commits.ts
+?? scratch/test-find-pkg.cjs
+?? scratch/test-full-demo.js
+?? scratch/test-http-apply.cjs
+?? scratch/test-http-s1.tsx
+?? scratch/test-lab-server.ts
+?? scratch/test-m10.cjs
+?? scratch/test-m11-90s.cjs
+?? scratch/test-m11.cjs
+?? scratch/test-m14-kill.cjs
+?? scratch/test-m14-m17.cjs
+?? scratch/test-m5-runner.mjs
+?? scratch/test-m7-match.cjs
+?? scratch/test-mutant-behavior.cjs
+?? scratch/test-mutant-transforms.cjs
+?? scratch/test-n-mutants.cjs
+?? scratch/test-parent-apply.cjs
+?? scratch/test-parse.cjs
+?? scratch/test-perfect-fit.js
+?? scratch/test-pill-zoom.js
+?? scratch/test-pill.js
+?? scratch/test-prewrite-apply-guard.cjs
+?? scratch/test-reconstruct-exact.cjs
+?? scratch/test-require.ts
+?? scratch/test-rsg.cjs
+?? scratch/test-s1-debug.tsx
+?? scratch/test-s2.cjs
+?? scratch/test-s5-debug.tsx
+?? scratch/test-step1b-verifier.cjs
+?? scratch/test-step1c-adversarial.ts
+?? scratch/test-step2-stability.cjs
+?? scratch/test-stepA-demonstration.ts
+?? scratch/test-studio-polish.ts
+?? scratch/test-task5-security.cjs
+?? scratch/test-task6-atomic.cjs
+?? scratch/test-task7-engine-crash.cjs
+?? scratch/test-task7-verifier.cjs
+?? scratch/test-task8-playwright.cjs
+?? scratch/test-token-host-clean.ts
+?? scratch/test-trace-apply.cjs
+?? scratch/test-tw-config.cjs
+?? scratch/test-tw-version.cjs
+?? scratch/test-tw.cjs
+?? scratch/test-tw.js
+?? scratch/test-tw3-direct.cjs
+?? scratch/test-tw3-direct.ts
+?? scratch/test-tw3-experiment.cjs
+?? scratch/test-tw3-experiment.ts
+?? scratch/test-user-order.cjs
+?? scratch/test-verifier.cjs
+?? scratch/test-zoomed-fit.js
+?? scratch/unified-audit.cjs
+?? scratch/unified-baseline-manifest.cjs
+?? scratch/unified-capture.cjs
+?? scratch/unified-debug.ts
+?? scratch/unified-next-rounds.cjs
+?? scratch/unified-results.cjs
+?? scratch/unified-selection-round1.cjs
+?? scratch/unsupported-classification.json
+?? scratch/update-existing-adapters.ts
+?? scratch/user-overlap-reproduced.png
+?? scratch/verify-appearance-ui.ts
+?? scratch/verify-existing-previews.ts
+?? scratch/verify-step2-prod.cjs
+?? scratch/zoom-corner-inspect.png
+?? scratch/zoomed-fit.png
+~~~
+
+### State hashes after checkout
+
+| Path | SHA-256 |
+|---|---|
+| `.slightnudge/history/edits.json` | `cbd243197fa766dae2553e1b6d63dc8088b3d71a7f0132cd70f79b73474ac97a` |
+| `fixtures/1-plain-static.tsx` | `12227233f9c8f7824cff7d32529aca76a88eef9e319f5f16a0114c6103ffad65` |
+| `fixtures/2-several-utilities.tsx` | `d83df5b78fcb3108afb6ee8ee725b10a049c8f8d0077151c69e05083a092cde3` |
+| `fixtures/3-conditional-cn.tsx` | `3108c5c61e89baaba90ea10cd7d8325ea7c196ffb077e0f637acc27e64f5ffa6` |
+| `fixtures/4-shared-component.tsx` | `3344af67715bfa37e5aef42f6f8b34d9ad4dcde14cfe702ed69b8c772784edd8` |
+| `fixtures/5-responsive-classes.tsx` | `126ecff807cf098a66bc6cd9e2503f58f1dfeb3223efa5b2629558a24cfcdce0` |
+
+### Recover the preserved work
+
+Run from the repository root.
+
+~~~powershell
+git checkout codex/fix-resize-pointer-anchor
+~~~
+
+The WIP branch points to `9e94223c2ca044b8dadc31de690cfb19ec68af84`. The verified byte-for-byte backup is at `C:\dev\vibecheck-backups\20261106-175508`. Its files subdirectory preserves the original relative paths. See step-1-sha256.csv for the manifest.
+
+
+### Final recheck — STOP
+
+The immediate Step 6 status showed untracked files under both docs/ and scratch/. The target branch does not ignore scratch/, so 690 previously ignored scratch files became visible after checkout.
+
+The final recheck on `feat/studio-full-controls` at `955007d231d7da7783c6d3222ea2942be03eafb4` found a new tracked modification to `next-env.d.ts`. Its recorded last write was 2026-11-06T18:08:33+05:30. The worktree is now dirty, so the Phase 3A checkout gate is incomplete. The new change was left in place. The saved patch and the complete final porcelain output are in the Step 6 evidence.
+
+~~~text
+ M next-env.d.ts
+~~~

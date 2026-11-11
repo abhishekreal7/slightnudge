@@ -1,0 +1,99 @@
+npx tsc --noEmit
+Exit: 1
+
+docs/phase2b-review-evidence/step2-audit.ts(103,17): error TS2540: Cannot assign to 'NODE_ENV' because it is a read-only property.
+docs/phase2b-review-evidence/step4-regression.ts(176,51): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+docs/phase2b-review-evidence/step4-regression.ts(283,51): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+docs/unified-editor-evidence/before/components/slightnudge/EditorSurface.tsx(4,29): error TS2307: Cannot find module './CanvasStage' or its corresponding type declarations.
+docs/unified-editor-evidence/before/components/slightnudge/EditorWorkspace.tsx(2,36): error TS2307: Cannot find module './AppearanceControls' or its corresponding type declarations.
+docs/unified-editor-evidence/before/components/slightnudge/EditorWorkspace.tsx(3,36): error TS2307: Cannot find module './ConstraintControls' or its corresponding type declarations.
+docs/unified-editor-evidence/before/components/slightnudge/EditorWorkspace.tsx(8,84): error TS2307: Cannot find module './EditorSessionControls' or its corresponding type declarations.
+docs/unified-editor-evidence/before/components/slightnudge/EditorWorkspace.tsx(15,33): error TS2307: Cannot find module './CanvasStage' or its corresponding type declarations.
+docs/unified-editor-evidence/before/components/slightnudge/EditorWorkspace.tsx(2198,18): error TS7006: Parameter 'value' implicitly has an 'any' type.
+docs/unified-editor-evidence/before/components/slightnudge/EditorWorkspace.tsx(2198,25): error TS7006: Parameter 'width' implicitly has an 'any' type.
+docs/unified-editor-evidence/before/components/slightnudge/EditorWorkspace.tsx(2202,16): error TS7006: Parameter 'name' implicitly has an 'any' type.
+docs/unified-editor-evidence/before/components/slightnudge/EditorWorkspace.tsx(2339,16): error TS2741: Property 'panelVisible' is missing in type '{ layers: CanvasLayer[]; selected: string | null; onSelect: (key: string | null) => void; }' but required in type '{ layers: CanvasLayer[]; selected: string | null; panelVisible: boolean; onSelect(key: string): void; }'.
+test/account-isolation.test.ts(12,106): error TS2540: Cannot assign to 'NODE_ENV' because it is a read-only property.
+test/account-isolation.test.ts(22,15): error TS2540: Cannot assign to 'NODE_ENV' because it is a read-only property.
+test/account-isolation.test.ts(32,143): error TS2540: Cannot assign to 'NODE_ENV' because it is a read-only property.
+test/appearance-layout.test.ts(23,98): error TS18048: 'replay.renderPatches' is possibly 'undefined'.
+test/appearance-layout.test.ts(23,139): error TS18048: 'replay.renderPatches' is possibly 'undefined'.
+test/appearance-layout.test.ts(23,214): error TS18048: 'replay.renderPatches' is possibly 'undefined'.
+test/appearance-layout.test.ts(23,280): error TS18048: 'replay.renderPatches' is possibly 'undefined'.
+test/appearance-layout.test.ts(23,354): error TS18048: 'replay.renderPatches' is possibly 'undefined'.
+test/button-editing.test.ts(26,90): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+test/component-actions-bridge.test.ts(12,230): error TS2339: Property 'origin' does not exist on type '(column: number) => { path: string; line: number; column: number; }'.
+test/component-ownership.test.ts(28,102): error TS18048: 'replay.renderPatches' is possibly 'undefined'.
+test/component-ownership.test.ts(35,112): error TS18048: 'mixedReplay.renderPatches' is possibly 'undefined'.
+test/component-ownership.test.ts(37,247): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+test/container-move.test.ts(23,165): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+test/container-move.test.ts(47,131): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+test/format-and-tailwind-report.v2.ts(10,66): error TS2540: Cannot assign to 'NODE_ENV' because it is a read-only property.
+test/helpers/editor-reliability-selection.ts(45,29): error TS2339: Property 'filter' does not exist on type 'Conversion'.
+test/helpers/editor-reliability-selection.ts(45,36): error TS7006: Parameter 'c' implicitly has an 'any' type.
+test/helpers/editor-reliability-selection.ts(47,28): error TS2339: Property 'find' does not exist on type 'Conversion'.
+test/helpers/editor-reliability-selection.ts(47,33): error TS7006: Parameter 'c' implicitly has an 'any' type.
+test/helpers/editor-reliability-selection.v3.ts(45,29): error TS2339: Property 'filter' does not exist on type 'Conversion'.
+test/helpers/editor-reliability-selection.v3.ts(45,36): error TS7006: Parameter 'c' implicitly has an 'any' type.
+test/helpers/editor-reliability-selection.v3.ts(47,28): error TS2339: Property 'find' does not exist on type 'Conversion'.
+test/helpers/editor-reliability-selection.v3.ts(47,33): error TS7006: Parameter 'c' implicitly has an 'any' type.
+test/helpers/security-selection.v2.ts(45,29): error TS2339: Property 'filter' does not exist on type 'Conversion'.
+test/helpers/security-selection.v2.ts(45,36): error TS7006: Parameter 'c' implicitly has an 'any' type.
+test/helpers/security-selection.v2.ts(47,28): error TS2339: Property 'find' does not exist on type 'Conversion'.
+test/helpers/security-selection.v2.ts(47,33): error TS7006: Parameter 'c' implicitly has an 'any' type.
+test/helpers/selection-gate-v3.ts(42,29): error TS2339: Property 'filter' does not exist on type 'Conversion'.
+test/helpers/selection-gate-v3.ts(42,36): error TS7006: Parameter 'c' implicitly has an 'any' type.
+test/helpers/selection-gate-v3.ts(44,28): error TS2339: Property 'find' does not exist on type 'Conversion'.
+test/helpers/selection-gate-v3.ts(44,33): error TS7006: Parameter 'c' implicitly has an 'any' type.
+test/icon-properties-bridge.test.ts(11,230): error TS2339: Property 'origin' does not exist on type '{ path: string; line: number; column: number; }'.
+test/icon-replacement-bridge.test.ts(14,230): error TS2339: Property 'origin' does not exist on type '{ path: string; line: number; column: number; }'.
+test/image-attributes-bridge.test.ts(24,137): error TS2339: Property 'origin' does not exist on type '{ path: string; line: number; column: number; }'.
+test/image-content.test.ts(30,90): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+test/image-framing.test.ts(20,90): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+test/imported-draft.test.ts(33,141): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+test/production-boundaries.test.ts(12,15): error TS2540: Cannot assign to 'NODE_ENV' because it is a read-only property.
+test/production-boundaries.test.ts(26,15): error TS2540: Cannot assign to 'NODE_ENV' because it is a read-only property.
+test/production-boundaries.test.ts(30,52): error TS2704: The operand of a 'delete' operator cannot be a read-only property.
+test/production-boundaries.test.ts(30,91): error TS2540: Cannot assign to 'NODE_ENV' because it is a read-only property.
+test/runtime-class-ownership.test.ts(23,131): error TS2339: Property 'origin' does not exist on type '{ path: string; line: number; column: number; }'.
+test/runtime-class-ownership.test.ts(35,36): error TS2540: Cannot assign to 'className' because it is a read-only property.
+test/section-order.test.ts(20,102): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+test/section-order.test.ts(27,123): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+test/section-order.test.ts(30,13): error TS2532: Object is possibly 'undefined'.
+test/section-order.test.ts(43,13): error TS2532: Object is possibly 'undefined'.
+test/security-hardening-v2.proofs.ts(7,46): error TS2540: Cannot assign to 'NODE_ENV' because it is a read-only property.
+test/shared-instance.test.ts(35,98): error TS18048: 'replay.renderPatches' is possibly 'undefined'.
+test/shared-instance.test.ts(35,142): error TS18048: 'replay.renderPatches' is possibly 'undefined'.
+test/source-rendered-bridge.test.ts(79,45): error TS2540: Cannot assign to 'className' because it is a read-only property.
+test/step1-selection.iframe-v3.test.ts(34,83): error TS2339: Property 'find' does not exist on type 'Conversion'.
+test/step1-selection.iframe-v3.test.ts(34,88): error TS7006: Parameter 'c' implicitly has an 'any' type.
+test/unified-editor.browser.ts(196,9): error TS18048: 'browser' is possibly 'undefined'.

@@ -1,0 +1,25 @@
+> node --import tsx test/perf/history-baseline.ts docs/editor/evidence/amendment4-history-baseline.json
+Owned measurement workspace: C:\Users\abhis\AppData\Local\Temp\sn-perf-history-bLwCfz
+{"sourceLines":20,"historyRecords":0,"historyBytes":2,"readHistoryMs":{"runs":20,"median":0.2703000000000202,"p95":0.4230999999999767},"cpuMs":{"runs":20,"median":0,"p95":0}}
+{"sourceLines":20,"historyRecords":100,"historyBytes":320092,"readHistoryMs":{"runs":20,"median":29.431800000000067,"p95":35.40560000000005},"cpuMs":{"runs":20,"median":31,"p95":32}}
+{"sourceLines":20,"historyRecords":500,"historyBytes":1600892,"readHistoryMs":{"runs":20,"median":157.67799999999988,"p95":524.3334000000004},"cpuMs":{"runs":20,"median":156,"p95":454}}
+{"sourceLines":20,"historyRecords":2000,"historyBytes":6404892,"readHistoryMs":{"runs":20,"median":1786.4681999999957,"p95":5227.588},"cpuMs":{"runs":20,"median":1656,"p95":2000}}
+{"sourceLines":2000,"historyRecords":0,"historyBytes":2,"readHistoryMs":{"runs":20,"median":0.8570000000036089,"p95":2.315199999997276},"cpuMs":{"runs":20,"median":0,"p95":15}}
+{"sourceLines":2000,"historyRecords":100,"historyBytes":30385692,"readHistoryMs":{"runs":20,"median":651.6757999999973,"p95":2527.686799999996},"cpuMs":{"runs":20,"median":312,"p95":438}}
+{"sourceLines":2000,"historyRecords":500,"historyBytes":151928892,"readHistoryMs":{"runs":20,"median":568.703800000003,"p95":4368.184599999993},"cpuMs":{"runs":20,"median":562,"p95":1578}}
+Confirmed measurement workspace removed: C:\Users\abhis\AppData\Local\Temp\sn-perf-history-bLwCfz
+C:\dev\vibecheck\test\perf\history-baseline.ts:28
+      const serialized = JSON.stringify(syntheticHistory(count, source), null, 2);
+                              ^
+
+
+RangeError: Invalid string length
+    at JSON.stringify (<anonymous>)
+    at <anonymous> (C:\dev\vibecheck\test\perf\history-baseline.ts:28:31)
+    at ModuleJob.run (node:internal/modules/esm/module_job:345:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:651:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)
+
+Node.js v22.19.0
+exit 1
+CONFIRMED: protected files and Git status unchanged.

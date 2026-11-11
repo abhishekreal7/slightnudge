@@ -1,54 +1,11 @@
 {
   "checks": [
     {
-      "name": "Dock container ignores pointer events",
+      "name": "Browser workflow completed",
       "pass": false,
       "detail": {
-        "rect": {
-          "x": 226.03125,
-          "y": 836,
-          "width": 987.9375,
-          "height": 48,
-          "top": 836,
-          "right": 1213.96875,
-          "bottom": 884,
-          "left": 226.03125
-        },
-        "pointerEvents": "auto",
-        "zIndex": "90",
-        "position": "fixed"
+        "error": "TimeoutError: locator.waitFor: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-source-ready=\"true\"]') to be visible\u001b[22m\n"
       }
-    },
-    {
-      "name": "Dock padding lets content receive pointer events",
-      "pass": true,
-      "detail": {
-        "isDock": false,
-        "tag": "IFRAME"
-      }
-    },
-    {
-      "name": "Both source-backed inline badge instances appear in Layers",
-      "pass": false,
-      "detail": {
-        "count": 0
-      }
-    },
-    {
-      "name": "Dock avoids selected footer rectangle",
-      "pass": false
-    },
-    {
-      "name": "Click at old dock position selects the actual footer badge",
-      "pass": false,
-      "detail": {
-        "selected": null
-      }
-    },
-    {
-      "name": "No page errors",
-      "pass": true,
-      "detail": []
     }
   ],
   "events": []

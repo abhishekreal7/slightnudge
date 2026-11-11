@@ -1,0 +1,65 @@
+> node --import tsx scratch/editor-sprint1-isolate.ts history-store-blobs test/history-store-blobs.test.ts lib/slightnudge/history-store/errors.ts lib/slightnudge/history-store/io.ts lib/slightnudge/history-store/blobs.ts
+{"temporaryRoot":"C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-history-store-blobs-rqtsZz","baseline":"8fc551ec58b9479ede872a0d1b3f82977817d8d9","suite":"history-store-blobs","overlays":["test/history-store-blobs.test.ts","lib/slightnudge/history-store/errors.ts","lib/slightnudge/history-store/io.ts","lib/slightnudge/history-store/blobs.ts"],"omitted":".env.example"}
+Seeded primitive mutant: containment
+Isolated seed staged paths: .env.example, lib/slightnudge/history-store/blobs.ts, lib/slightnudge/history-store/errors.ts, lib/slightnudge/history-store/io.ts, test/history-store-blobs.test.ts
+TAP version 13
+# Subtest: shares identical byte snapshots and verifies exact bytes
+ok 1 - shares identical byte snapshots and verifies exact bytes
+  ---
+  duration_ms: 8.0426
+  type: 'test'
+  ...
+# Subtest: rejects wrong hashes, missing blobs and bad sizes without private diagnostics
+ok 2 - rejects wrong hashes, missing blobs and bad sizes without private diagnostics
+  ---
+  duration_ms: 39.4279
+  type: 'test'
+  ...
+# Subtest: rejects path escapes and junction reads before reading outside bytes
+not ok 3 - rejects path escapes and junction reads before reading outside bytes
+  ---
+  duration_ms: 4.8189
+  type: 'test'
+  location: 'C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-history-store-blobs-rqtsZz\\source\\test\\history-store-blobs.test.ts:1:1707'
+  failureType: 'testCodeFailure'
+  error: 'Missing expected exception.'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  operator: 'throws'
+  stack: |-
+    <anonymous> (C:\Users\abhis\AppData\Local\Temp\sn-sprint1-history-store-blobs-rqtsZz\source\test\history-store-blobs.test.ts:42:14)
+    temporary (C:\Users\abhis\AppData\Local\Temp\sn-sprint1-history-store-blobs-rqtsZz\source\test\history-store-blobs.test.ts:12:9)
+    TestContext.<anonymous> (C:\Users\abhis\AppData\Local\Temp\sn-sprint1-history-store-blobs-rqtsZz\source\test\history-store-blobs.test.ts:35:82)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: a fault before rename leaves the old value intact and removes temporary files
+ok 4 - a fault before rename leaves the old value intact and removes temporary files
+  ---
+  duration_ms: 4.1911
+  type: 'test'
+  ...
+# Subtest: privacy: every primitive failure emits only fixed reason codes and no log lines
+ok 5 - privacy: every primitive failure emits only fixed reason codes and no log lines
+  ---
+  duration_ms: 7.3892
+  type: 'test'
+  ...
+1..5
+# tests 5
+# suites 0
+# pass 4
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 70.4207
+Owned temporary entries before cleanup: ["tsx-abhis"]
+Confirmed cleanup: C:\Users\abhis\AppData\Local\Temp\sn-sprint1-history-store-blobs-rqtsZz
+exit 1
+CONFIRMED: protected files and Git status unchanged.

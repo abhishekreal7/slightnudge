@@ -1,0 +1,9 @@
+> C:\nvm4w\nodejs\node.exe --import tsx scratch/editor-s1-group.ts amendment9-engine-multi-file-group multi-file-group test/helpers/real-state.ts
+{"temporaryRoot":"C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-multi-file-group-7ebU6F","baseline":"8c613619b4ce051027689fd3d782d4ee029e7052","suite":"multi-file-group","overlays":["test/helpers/real-state.ts"],"omitted":".env.example"}
+Isolated seed staged paths: .env.example, test/helpers/real-state.ts
+PASS grouped Save/Undo: two files, idempotency, group ownership, interruption at journal/member/source/receipt boundaries, read-only source status, explicit resume, exact Undo recovery, third-version preservation, duplicate/mixed-scope refusal, whole-group prevalidation
+Owned temporary entries before cleanup: ["sn-multi-file-InFAeD","tsx-abhis"]
+Confirmed cleanup: C:\Users\abhis\AppData\Local\Temp\sn-sprint1-multi-file-group-7ebU6F
+CONFIRMED: integration checkout protected files and status unchanged.
+exit 0
+CONFIRMED: protected files and Git status unchanged.

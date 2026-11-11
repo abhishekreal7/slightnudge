@@ -1,0 +1,41 @@
+> node --import tsx scratch/editor-sprint1-isolate.ts overlay-apply test/overlay-apply.test.ts app/studio/page.tsx components/slightnudge/SlightNudgeOverlay.tsx
+{"temporaryRoot":"C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-overlay-apply-Uw18X9","baseline":"ac69d7d0d8f342c2e0628096640ff572fcb049fb","suite":"overlay-apply","overlays":["test/overlay-apply.test.ts","app/studio/page.tsx","components/slightnudge/SlightNudgeOverlay.tsx"],"omitted":".env.example"}
+Isolated seed staged paths: .env.example, app/studio/page.tsx, components/slightnudge/SlightNudgeOverlay.tsx, test/overlay-apply.test.ts
+TAP version 13
+studio Control: prepare draft
+studio Meta: prepare draft
+# Subtest: studio: one Apply, both platform shortcuts, Escape discard and guarded Undo
+ok 1 - studio: one Apply, both platform shortcuts, Escape discard and guarded Undo
+  ---
+  duration_ms: 50403.3934
+  type: 'test'
+  ...
+source Control: prepare draft
+source Meta: prepare draft
+# Subtest: source: one Apply, both platform shortcuts, Escape discard and guarded Undo
+not ok 2 - source: one Apply, both platform shortcuts, Escape discard and guarded Undo
+  ---
+  duration_ms: 12084.3096
+  type: 'test'
+  location: 'C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-overlay-apply-Uw18X9\\source\\test\\overlay-apply.test.ts:1:3405'
+  failureType: 'testCodeFailure'
+  error: 'page.waitForResponse: Timeout 5000ms exceeded while waiting for event "response"'
+  code: 'ERR_TEST_FAILURE'
+  name: 'TimeoutError'
+  stack: |-
+    preview (C:\Users\abhis\AppData\Local\Temp\sn-sprint1-overlay-apply-Uw18X9\source\test\overlay-apply.test.ts:37:25)
+    async TestContext.<anonymous> (C:\Users\abhis\AppData\Local\Temp\sn-sprint1-overlay-apply-Uw18X9\source\test\overlay-apply.test.ts:75:11)
+  ...
+1..2
+# tests 2
+# suites 0
+# pass 1
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 65880.3856
+Owned temporary entries before cleanup: ["node-compile-cache","npm-cache","tsx-abhis"]
+Confirmed cleanup: C:\Users\abhis\AppData\Local\Temp\sn-sprint1-overlay-apply-Uw18X9
+exit 1
+CONFIRMED: protected files and Git status unchanged.

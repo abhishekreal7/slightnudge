@@ -1,0 +1,59 @@
+> node --import tsx --test test/history-store-mode.test.ts
+TAP version 13
+# Subtest: activates an empty store with a marker and refuses cooperating legacy writers
+ok 1 - activates an empty store with a marker and refuses cooperating legacy writers
+  ---
+  duration_ms: 54.1006
+  type: 'test'
+  ...
+# Subtest: records legacy-only mode under the lock before a cooperating legacy write
+not ok 2 - records legacy-only mode under the lock before a cooperating legacy write
+  ---
+  duration_ms: 3.7101
+  type: 'test'
+  location: 'C:\\dev\\vibecheck\\test\\history-store-mode.test.ts:1:1757'
+  failureType: 'testCodeFailure'
+  error: 'STORE_IO'
+  code: 'STORE_IO'
+  name: 'StoreError'
+  stack: |-
+    protect (C:\dev\vibecheck\lib\slightnudge\history-store\io.ts:40:87)
+    Object.withMutationLock (C:\dev\vibecheck\lib\slightnudge\history-store\io.ts:46:14)
+    Object.withLegacyWrite (C:\dev\vibecheck\lib\slightnudge\history-store\store.ts:64:59)
+    <anonymous> (C:\dev\vibecheck\test\history-store-mode.test.ts:42:7)
+    temporary (C:\dev\vibecheck\test\history-store-mode.test.ts:15:15)
+    TestContext.<anonymous> (C:\dev\vibecheck\test\history-store-mode.test.ts:40:89)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+  ...
+# Subtest: never steals busy or abandoned locks and checks migrating mode while locked
+ok 3 - never steals busy or abandoned locks and checks migrating mode while locked
+  ---
+  duration_ms: 61.4102
+  type: 'test'
+  ...
+# Subtest: legacy content is never activated or overwritten implicitly; corrupt metadata refuses unchanged
+ok 4 - legacy content is never activated or overwritten implicitly; corrupt metadata refuses unchanged
+  ---
+  duration_ms: 89.9905
+  type: 'test'
+  ...
+# Subtest: two processes appending concurrently lose no committed records
+ok 5 - two processes appending concurrently lose no committed records
+  ---
+  duration_ms: 648.073
+  type: 'test'
+  ...
+1..5
+# tests 5
+# suites 0
+# pass 4
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1079.6629
+exit 1
+CONFIRMED: protected files and Git status unchanged.

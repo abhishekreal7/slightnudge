@@ -1,0 +1,13 @@
+> node --import tsx test/perf/history-baseline.ts docs/editor/evidence/amendment4-history-streamed.json
+Owned measurement workspace: C:\Users\abhis\AppData\Local\Temp\sn-perf-history-JO7MBr
+{"sourceLines":20,"historyRecords":0,"historyBytes":4,"successfulReads":20,"errors":{},"attemptMs":{"runs":20,"median":0.2300999999999931,"p95":0.4632000000000289},"cpuMs":{"runs":20,"median":0,"p95":0}}
+{"sourceLines":20,"historyRecords":100,"historyBytes":315892,"successfulReads":20,"errors":{},"attemptMs":{"runs":20,"median":30.28290000000004,"p95":62.196300000000065},"cpuMs":{"runs":20,"median":31,"p95":47}}
+{"sourceLines":20,"historyRecords":500,"historyBytes":1579892,"successfulReads":20,"errors":{},"attemptMs":{"runs":20,"median":421.61090000000013,"p95":3835.5196000000014},"cpuMs":{"runs":20,"median":391,"p95":593}}
+{"sourceLines":20,"historyRecords":2000,"historyBytes":6320892,"successfulReads":20,"errors":{},"attemptMs":{"runs":20,"median":1850.781799999997,"p95":5190.7197000000015},"cpuMs":{"runs":20,"median":1593,"p95":1860}}
+{"sourceLines":2000,"historyRecords":0,"historyBytes":4,"successfulReads":20,"errors":{},"attemptMs":{"runs":20,"median":0.21369999999296851,"p95":0.3184000000037486},"cpuMs":{"runs":20,"median":0,"p95":0}}
+{"sourceLines":2000,"historyRecords":100,"historyBytes":30381492,"successfulReads":20,"errors":{},"attemptMs":{"runs":20,"median":110.30019999999786,"p95":125.9600000000064},"cpuMs":{"runs":20,"median":109,"p95":126}}
+{"sourceLines":2000,"historyRecords":500,"historyBytes":151907892,"successfulReads":20,"errors":{},"attemptMs":{"runs":20,"median":1425.3067999999912,"p95":3011.911599999992},"cpuMs":{"runs":20,"median":1016,"p95":1749}}
+{"sourceLines":2000,"historyRecords":2000,"historyBytes":607632892,"successfulReads":0,"errors":{"ERR_STRING_TOO_LONG":20},"attemptMs":{"runs":20,"median":1702.3777999999875,"p95":2192.896999999997},"cpuMs":{"runs":20,"median":1578,"p95":1671}}
+Confirmed measurement workspace removed: C:\Users\abhis\AppData\Local\Temp\sn-perf-history-JO7MBr
+exit 0
+CONFIRMED: protected files and Git status unchanged.

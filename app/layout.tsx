@@ -50,7 +50,7 @@ export default async function RootLayout({
   const allowToken = process.env.NODE_ENV !== 'production' && isRequestHostAllowed(headerList);
   const sessionToken = allowToken ? getSessionToken() : null;
   return (
-    <html lang="en" className={`${geist.variable} ${geistMono.variable} ${inter.variable} ${manrope.variable}`}>
+    <html lang="en" suppressHydrationWarning className={`${geist.variable} ${geistMono.variable} ${inter.variable} ${manrope.variable}`}>
       <head>
         {sessionToken ? (
           <script

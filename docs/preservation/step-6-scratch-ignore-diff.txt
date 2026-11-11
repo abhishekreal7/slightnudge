@@ -1,0 +1,11 @@
+diff --git a/.gitignore b/.gitignore
+index e57afd2..35e77f7 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -4,5 +4,6 @@ node_modules
+ .env
+ .env.local
+ recordings
++/scratch/
+ tsconfig.tsbuildinfo
+ node_modules

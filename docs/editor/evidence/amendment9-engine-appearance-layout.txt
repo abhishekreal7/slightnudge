@@ -1,0 +1,9 @@
+> C:\nvm4w\nodejs\node.exe --import tsx scratch/editor-s1-group.ts amendment9-engine-appearance-layout appearance-layout test/helpers/real-state.ts
+{"temporaryRoot":"C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-appearance-layout-zk3tbK","baseline":"8c613619b4ce051027689fd3d782d4ee029e7052","suite":"appearance-layout","overlays":["test/helpers/real-state.ts"],"omitted":".env.example"}
+Isolated seed staged paths: .env.example, test/helpers/real-state.ts
+PASS appearance/constraints: atomic gradient and shadow replacement, independent solid fill/ring/breakpoint preservation, typed validation, custom-effect refusal, custom responsive constraints, compiler CSS, draft replay, Save and exact Undo
+Owned temporary entries before cleanup: ["tsx-abhis"]
+Confirmed cleanup: C:\Users\abhis\AppData\Local\Temp\sn-sprint1-appearance-layout-zk3tbK
+CONFIRMED: integration checkout protected files and status unchanged.
+exit 0
+CONFIRMED: protected files and Git status unchanged.

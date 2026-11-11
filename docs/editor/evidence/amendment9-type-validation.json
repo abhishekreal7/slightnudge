@@ -1,0 +1,80 @@
+{
+  "originalDiagnostics": 56,
+  "candidateRemaining": {
+    "focus": 55,
+    "readonlyEnvironment": 46,
+    "optionalValues": 26,
+    "browserTyping": 0
+  },
+  "buildPass": true,
+  "productBehaviorChange": false,
+  "unrunLegacyBrowserWorkflows": [
+    "editor-reliability-selection",
+    "editor-reliability-selection.v3",
+    "security-selection.v2",
+    "selection-gate-v3",
+    "step1-selection.iframe-v3",
+    "unified-editor.browser"
+  ],
+  "unrunReason": "Existing workflows target live/hard-coded owner URLs or require their separately generated lab runtime; not contacted. Six in-memory routed bridge suites and a transformed-iframe coordinate probe cover the changed browser plumbing; full editor/lab workflows remain UNVERIFIED.",
+  "baselineDefects": [
+    {
+      "suite": "imported-draft",
+      "reason": "Missing generated registry causes ENOENT before the expected different-source refusal; unchanged behavior reproduces after optional-message fallback."
+    },
+    {
+      "suite": "format-and-tailwind-report.v2",
+      "reason": "Historical disposable Prettier tool path absent. Two attempts fail MODULE_NOT_FOUND; no safety bypass or formatter recovery claim."
+    }
+  ],
+  "groups": [
+    [
+      "focus",
+      [
+        "components/slightnudge/EditorWorkspace.tsx"
+      ]
+    ],
+    [
+      "readonly-env",
+      [
+        "test/account-isolation.test.ts",
+        "test/production-boundaries.test.ts",
+        "test/format-and-tailwind-report.v2.ts",
+        "test/security-hardening-v2.proofs.ts"
+      ]
+    ],
+    [
+      "optional",
+      [
+        "test/appearance-layout.test.ts",
+        "test/button-editing.test.ts",
+        "test/component-ownership.test.ts",
+        "test/container-move.test.ts",
+        "test/image-content.test.ts",
+        "test/image-framing.test.ts",
+        "test/imported-draft.test.ts",
+        "test/section-order.test.ts",
+        "test/shared-instance.test.ts"
+      ]
+    ],
+    [
+      "browser",
+      [
+        "test/component-actions-bridge.test.ts",
+        "test/icon-properties-bridge.test.ts",
+        "test/icon-replacement-bridge.test.ts",
+        "test/image-attributes-bridge.test.ts",
+        "test/runtime-class-ownership.test.ts",
+        "test/source-rendered-bridge.test.ts",
+        "test/helpers/selection-gate-v3-coordinates.ts",
+        "test/helpers/editor-reliability-selection.ts",
+        "test/helpers/editor-reliability-selection.v3.ts",
+        "test/helpers/security-selection.v2.ts",
+        "test/helpers/selection-gate-v3.ts",
+        "test/step1-selection.iframe-v3.test.ts",
+        "test/unified-editor.browser.ts",
+        "test/selection-coordinates.test.ts"
+      ]
+    ]
+  ]
+}

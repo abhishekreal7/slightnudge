@@ -32,7 +32,7 @@ function sourceCanvasRuntime(continuous: boolean, repositoryId = '', protocol = 
   const editingStyle = document.createElement('style'); editingStyle.textContent = '[contenteditable="plaintext-only"]{outline:none;user-select:text}[contenteditable="plaintext-only"][aria-label="Edit selected text"]{caret-color:#16845b}html[data-slightnudge-destination] *{cursor:crosshair!important}'; document.head.append(editingStyle);
   const cssRules = new Set<string>();
   const send = (type: string, extra: Record<string, unknown> = {}) => window.parent.postMessage({ channel: 'slightnudge', session, type, repositoryId, pageUrl: location.href, ...extra }, origin);
-  const properties = ['fontSize', 'fontWeight', 'fontFamily', 'fontStyle', 'lineHeight', 'letterSpacing', 'textAlign', 'textDecorationLine', 'textTransform', 'color', 'backgroundColor', 'paddingTop', 'paddingRight', 'paddingBottom', 'paddingLeft', 'marginTop', 'marginRight', 'marginBottom', 'marginLeft', 'height', 'borderRadius', 'borderWidth', 'borderColor', 'display', 'width', 'maxWidth', 'gap', 'flexDirection', 'justifyContent', 'alignItems', 'order', 'transform', 'translate', 'transitionProperty', 'transitionDuration', 'transitionDelay', 'transitionTimingFunction'];
+  const properties = ['fontSize', 'fontWeight', 'fontFamily', 'fontStyle', 'lineHeight', 'letterSpacing', 'textAlign', 'textDecorationLine', 'textTransform', 'color', 'backgroundColor', 'paddingTop', 'paddingRight', 'paddingBottom', 'paddingLeft', 'marginTop', 'marginRight', 'marginBottom', 'marginLeft', 'height', 'borderRadius', 'borderTopLeftRadius', 'borderTopRightRadius', 'borderBottomLeftRadius', 'borderBottomRightRadius', 'borderWidth', 'borderColor', 'display', 'width', 'maxWidth', 'gap', 'flexDirection', 'justifyContent', 'alignItems', 'order', 'transform', 'translate', 'transitionProperty', 'transitionDuration', 'transitionDelay', 'transitionTimingFunction'];
   properties.push('backgroundImage', 'boxShadow', 'minWidth', 'minHeight', 'flexGrow', 'flexShrink', 'alignSelf', 'gridTemplateColumns', 'flexWrap', 'objectFit', 'objectPosition');
   const propertyNames: Record<string, string> = { alignment: 'textAlign', textColor: 'color', textDecoration: 'textDecorationLine', padding: 'paddingTop' };
   const locator = (element: HTMLElement) => ({ path: element.dataset.sourceFile || '', line: Number(element.dataset.sourceLine), column: Number(element.dataset.sourceColumn) || (element.id ? 1 : 0), elementId: element.id || undefined, instance: instanceTrace(element.dataset.slightnudgeCallsite) ? element.dataset.slightnudgeCallsite : undefined });
@@ -76,7 +76,7 @@ function sourceCanvasRuntime(continuous: boolean, repositoryId = '', protocol = 
     const icon = target.closest<HTMLElement>('svg[data-source-file]');
     if (icon) return icon;
     const button = target.closest<HTMLElement>('a[data-source-file],button[data-source-file]');
-    return button && (editing === button || labelNode(button)) && !target.closest('img') ? button : target.closest<HTMLElement>('[data-source-file]');
+    return button && !target.closest('img') ? button : target.closest<HTMLElement>('[data-source-file]');
   };
   const describe = (element: HTMLElement) => {
     const rect = element.getBoundingClientRect(), style = getComputedStyle(element);
@@ -357,6 +357,60 @@ function sourceCanvasRuntime(continuous: boolean, repositoryId = '', protocol = 
     const reply = (success: boolean, reason = '', selection?: unknown) => send('edit-result', { requestId: message.requestId, success, reason, selection });
     try {
       if (message.operation === 'set-mode') { if (editing) finishText(true); inspectEnabled = message.edit !== false; destinationMode = inspectEnabled && message.destination === true; document.documentElement.toggleAttribute('data-slightnudge-destination', destinationMode); hoverSignature = ''; if (!destinationMode) { cancelAnimationFrame(hoverFrame); hoverFrame = 0; send('destination-hover', { selection: null }); } (window as any).__slightnudge_inspect = inspectEnabled; if (!inspectEnabled) selected = null; reply(true); return; }
+      if (message.operation === 'set-theme') {
+        const theme = message.theme === 'dark' ? 'dark' : 'light';
+        const doc = document.documentElement;
+        doc.classList.toggle('dark', theme === 'dark');
+        if (document.body) document.body.classList.toggle('dark', theme === 'dark');
+        doc.setAttribute('data-theme', theme);
+        doc.setAttribute('data-slightnudge-theme', theme);
+        doc.style.colorScheme = theme;
+        let smartStyle = document.getElementById('slightnudge-smart-theme') as HTMLStyleElement | null;
+        if (!smartStyle) {
+          smartStyle = document.createElement('style');
+          smartStyle.id = 'slightnudge-smart-theme';
+          smartStyle.textContent = `
+            html[data-slightnudge-force-dark="true"] {
+              filter: invert(0.92) hue-rotate(180deg) contrast(0.98) brightness(1.04) !important;
+              background-color: #0c0f17 !important;
+            }
+            html[data-slightnudge-force-dark="true"] img,
+            html[data-slightnudge-force-dark="true"] video,
+            html[data-slightnudge-force-dark="true"] picture,
+            html[data-slightnudge-force-dark="true"] canvas,
+            html[data-slightnudge-force-dark="true"] [data-preserve-color] {
+              filter: invert(1) hue-rotate(180deg) !important;
+            }
+            html[data-slightnudge-force-light="true"] {
+              filter: invert(0.92) hue-rotate(180deg) contrast(0.98) brightness(1.04) !important;
+              background-color: #ffffff !important;
+            }
+            html[data-slightnudge-force-light="true"] img,
+            html[data-slightnudge-force-light="true"] video,
+            html[data-slightnudge-force-light="true"] picture,
+            html[data-slightnudge-force-light="true"] canvas,
+            html[data-slightnudge-force-light="true"] [data-preserve-color] {
+              filter: invert(1) hue-rotate(180deg) !important;
+            }
+          `;
+          document.head.append(smartStyle);
+        }
+        if (document.body) {
+          const bg = getComputedStyle(document.body).backgroundColor;
+          const match = bg ? bg.match(/\\d+/g) : null;
+          const isLight = !match || match.length < 3 ? true : (0.299 * Number(match[0]) + 0.587 * Number(match[1]) + 0.114 * Number(match[2])) > 130;
+          if (theme === 'dark') {
+            doc.removeAttribute('data-slightnudge-force-light');
+            if (isLight) doc.setAttribute('data-slightnudge-force-dark', 'true');
+            else doc.removeAttribute('data-slightnudge-force-dark');
+          } else {
+            doc.removeAttribute('data-slightnudge-force-dark');
+            if (!isLight) doc.setAttribute('data-slightnudge-force-light', 'true');
+            else doc.removeAttribute('data-slightnudge-force-light');
+          }
+        }
+        reply(true); return;
+      }
       if (message.operation === 'catalog') { catalog(); reply(true); return; }
       if (message.operation === 'verify-document') {
         // Probe server HTML without hydrating it or touching the live draft.

@@ -1,0 +1,9 @@
+> node --import tsx scratch/editor-sprint1-isolate.ts typecheck test/history-store-pages.test.ts lib/slightnudge/history-store/pages.ts lib/slightnudge/history-store/errors.ts
+{"temporaryRoot":"C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-typecheck-Sy2ZEH","baseline":"6a879c4b8a4390cd08d8b13019bc65674a57e883","suite":"typecheck","overlays":["test/history-store-pages.test.ts","lib/slightnudge/history-store/pages.ts","lib/slightnudge/history-store/errors.ts"],"omitted":".env.example"}
+Isolated seed staged paths: .env.example, lib/slightnudge/history-store/errors.ts, lib/slightnudge/history-store/pages.ts, test/history-store-pages.test.ts
+Generating route types...
+✓ Types generated successfully
+Owned temporary entries before cleanup: []
+Confirmed cleanup: C:\Users\abhis\AppData\Local\Temp\sn-sprint1-typecheck-Sy2ZEH
+exit 0
+CONFIRMED: protected files and Git status unchanged.

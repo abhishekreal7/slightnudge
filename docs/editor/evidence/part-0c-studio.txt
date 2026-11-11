@@ -1,0 +1,27 @@
+> node ./node_modules/next/dist/bin/next start -H 127.0.0.1 -p 57403
+▲ Next.js 16.4.3
+- Local:         http://127.0.0.1:57403
+- Network:       http://127.0.0.1:57403
+✓ Ready in 213ms
+✓ Running next.config.mjs took 30ms
+Chromium opened /studio (HTTP 200).
+The session token reached the browser.
+Nudge preview status: 200
+Stopped the production server on port 57403.
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Preview identifies existing classes
+    at file:///C:/Users/abhis/AppData/Local/Temp/slightnudge-sprint1-gate-5daeefc996a8491ca59a3345f1045e77/source/part-0c-smoke.mjs:55:10 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v22.19.0
+exit 1
+CONFIRMED: real-state snapshots match

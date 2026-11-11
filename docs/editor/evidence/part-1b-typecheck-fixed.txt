@@ -1,0 +1,9 @@
+> node --import tsx scratch/editor-sprint1-isolate.ts typecheck test/conditional-undo-characterization.test.ts
+{"temporaryRoot":"C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-typecheck-OrgnMR","baseline":"1b93d2b24c8efce52b2e7482d9303a86c88a1c1a","suite":"typecheck","overlays":["test/conditional-undo-characterization.test.ts"],"omitted":".env.example"}
+Isolated seed staged paths: .env.example, test/conditional-undo-characterization.test.ts
+Generating route types...
+✓ Types generated successfully
+Owned temporary entries before cleanup: []
+Confirmed cleanup: C:\Users\abhis\AppData\Local\Temp\sn-sprint1-typecheck-OrgnMR
+exit 0
+CONFIRMED: protected files and Git status unchanged.

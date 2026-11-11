@@ -1,0 +1,9 @@
+> C:\nvm4w\nodejs\node.exe --import tsx scratch/editor-s1-group.ts amendment9-engine-shared-instance shared-instance test/helpers/real-state.ts
+{"temporaryRoot":"C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-shared-instance-yq8kTL","baseline":"8c613619b4ce051027689fd3d782d4ee029e7052","suite":"shared-instance","overlays":["test/helpers/real-state.ts"],"omitted":".env.example"}
+Isolated seed staged paths: .env.example, test/helpers/real-state.ts
+PASS shared instances: exact repeated caller identity, same/cross-file typed props, draft recovery, Save, exact Undo, invalid enums, stale callers, repeated-data refusal, development-only loader
+Owned temporary entries before cleanup: ["tsx-abhis"]
+Confirmed cleanup: C:\Users\abhis\AppData\Local\Temp\sn-sprint1-shared-instance-yq8kTL
+CONFIRMED: integration checkout protected files and status unchanged.
+exit 0
+CONFIRMED: protected files and Git status unchanged.

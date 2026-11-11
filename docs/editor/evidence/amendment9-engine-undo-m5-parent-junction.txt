@@ -1,0 +1,55 @@
+> C:\nvm4w\nodejs\node.exe --import tsx scratch/editor-s1-group.ts amendment9-engine-undo-m5-parent-junction undo-m5-parent-junction test/helpers/real-state.ts
+{"temporaryRoot":"C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-undo-m5-parent-junction-e6QY7w","baseline":"8c613619b4ce051027689fd3d782d4ee029e7052","suite":"undo-m5-parent-junction","overlays":["test/helpers/real-state.ts"],"omitted":".env.example"}
+Isolated seed staged paths: .env.example, test/helpers/real-state.ts
+TAP version 13
+Case 1 parent junction refusal message: The target file must be inside the SlightNudge workspace.
+Case 2 apply parent junction refusal message: The target file must be inside the SlightNudge workspace.
+Case 3 file swap refusal message: The target file must be inside the SlightNudge workspace.
+[INFO UNVERIFIED] Windows file symlinks require Developer Mode (SeCreateSymbolicLinkPrivilege).
+To enable: Settings -> System -> For developers -> Developer Mode: ON.
+[INFO CONFIRMED] Directory junctions verified without admin; file symlinks marked UNVERIFIED as expected.
+# Subtest: Mutant M5 Closeout: Parent Directory Junction TOCTOU Attack Battery
+    # Subtest: case 1 (undoSourceEdit): swaps PARENT directory for junction to outside folder -> containment refusal identifies guard, outside sentinel unchanged
+    ok 1 - case 1 (undoSourceEdit): swaps PARENT directory for junction to outside folder -> containment refusal identifies guard, outside sentinel unchanged
+      ---
+      duration_ms: 446.1063
+      type: 'test'
+      ...
+    # Subtest: case 2 (applyPendingSourceEdit): swaps PARENT directory for junction -> containment refusal identifies guard, outside file unchanged
+    ok 2 - case 2 (applyPendingSourceEdit): swaps PARENT directory for junction -> containment refusal identifies guard, outside file unchanged
+      ---
+      duration_ms: 159.2918
+      type: 'test'
+      ...
+    # Subtest: case 3 (swapping file itself - old test case with error identity): asserts specific containment guard identity
+    ok 3 - case 3 (swapping file itself - old test case with error identity): asserts specific containment guard identity
+      ---
+      duration_ms: 156.7508
+      type: 'test'
+      ...
+    # Subtest: case 4 (symlink privilege audit): checks Developer Mode / SeCreateSymbolicLinkPrivilege
+    ok 4 - case 4 (symlink privilege audit): checks Developer Mode / SeCreateSymbolicLinkPrivilege
+      ---
+      duration_ms: 1.8031
+      type: 'test'
+      ...
+    1..4
+ok 1 - Mutant M5 Closeout: Parent Directory Junction TOCTOU Attack Battery
+  ---
+  duration_ms: 765.8662
+  type: 'suite'
+  ...
+1..1
+# tests 4
+# suites 1
+# pass 4
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 784.5821
+Owned temporary entries before cleanup: ["tsx-abhis"]
+Confirmed cleanup: C:\Users\abhis\AppData\Local\Temp\sn-sprint1-undo-m5-parent-junction-e6QY7w
+CONFIRMED: integration checkout protected files and status unchanged.
+exit 0
+CONFIRMED: protected files and Git status unchanged.

@@ -1,0 +1,63 @@
+> node --import tsx scratch/editor-sprint1-isolate.ts overlay-apply test/overlay-apply.test.ts
+{"temporaryRoot":"C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-overlay-apply-Nk3UZc","baseline":"ac69d7d0d8f342c2e0628096640ff572fcb049fb","suite":"overlay-apply","overlays":["test/overlay-apply.test.ts"],"omitted":".env.example"}
+Isolated seed staged paths: .env.example, test/overlay-apply.test.ts
+TAP version 13
+# Subtest: studio: one Apply, both platform shortcuts, Escape discard and guarded Undo
+not ok 1 - studio: one Apply, both platform shortcuts, Escape discard and guarded Undo
+  ---
+  duration_ms: 17843.5184
+  type: 'test'
+  location: 'C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-overlay-apply-Nk3UZc\\source\\test\\overlay-apply.test.ts:1:3315'
+  failureType: 'testCodeFailure'
+  error: |-
+    Exactly one save action must remain
+    
+    2 !== 1
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 1
+  actual: 2
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (C:\Users\abhis\AppData\Local\Temp\sn-sprint1-overlay-apply-Nk3UZc\source\test\overlay-apply.test.ts:72:18)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+# Subtest: source: one Apply, both platform shortcuts, Escape discard and guarded Undo
+not ok 2 - source: one Apply, both platform shortcuts, Escape discard and guarded Undo
+  ---
+  duration_ms: 7724.1736
+  type: 'test'
+  location: 'C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-overlay-apply-Nk3UZc\\source\\test\\overlay-apply.test.ts:1:3315'
+  failureType: 'testCodeFailure'
+  error: 'page.waitForResponse: Timeout 5000ms exceeded while waiting for event "response"'
+  code: 'ERR_TEST_FAILURE'
+  name: 'TimeoutError'
+  stack: |-
+    TestContext.<anonymous> (C:\Users\abhis\AppData\Local\Temp\sn-sprint1-overlay-apply-Nk3UZc\source\test\overlay-apply.test.ts:74:32)
+  ...
+1..2
+# tests 2
+# suites 0
+# pass 0
+# fail 2
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 27762.3439
+Owned temporary entries before cleanup: ["node-compile-cache","npm-cache","tsx-abhis"]
+Confirmed cleanup: C:\Users\abhis\AppData\Local\Temp\sn-sprint1-overlay-apply-Nk3UZc
+exit 1
+P0: AssertionError [ERR_ASSERTION]: Git status changed during the test group
++ actual - expected
+
+  [
++   ' M app/studio/page.tsx',
++   ' M components/slightnudge/SlightNudgeOverlay.tsx',
+    '?? docs/editor/evidence/',
+    '?? docs/editor/onlook-spike-evidence/',
+    '?? docs/editor/onlook-spike.md',
+    '?? docs/preservation/',
+    '?? scratch/M13.patch',
+

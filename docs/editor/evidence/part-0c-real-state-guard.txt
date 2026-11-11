@@ -1,0 +1,61 @@
+> node --import tsx --test test/real-state-guard.test.ts
+TAP version 13
+# Subtest: Real State Integrity Guard
+    # Subtest: verifies SHA256 of real edits.json and fixtures/* match recorded baseline exactly
+    not ok 1 - verifies SHA256 of real edits.json and fixtures/* match recorded baseline exactly
+      ---
+      duration_ms: 4.4808
+      type: 'test'
+      location: 'C:\\dev\\vibecheck\\test\\real-state-guard.test.ts:1:895'
+      failureType: 'testCodeFailure'
+      error: |-
+        Integrity violation: SHA256 mismatch for .slightnudge/history/edits.json (expected 29e3ff2cf25549fb7ed6165749ad5175934865ba6266ccf266dfe00cc8197b52, got cbd243197fa766dae2553e1b6d63dc8088b3d71a7f0132cd70f79b73474ac97a)
+        + actual - expected
+        
+        + 'cbd243197fa766dae2553e1b6d63dc8088b3d71a7f0132cd70f79b73474ac97a'
+        - '29e3ff2cf25549fb7ed6165749ad5175934865ba6266ccf266dfe00cc8197b52'
+        
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: '29e3ff2cf25549fb7ed6165749ad5175934865ba6266ccf266dfe00cc8197b52'
+      actual: 'cbd243197fa766dae2553e1b6d63dc8088b3d71a7f0132cd70f79b73474ac97a'
+      operator: 'strictEqual'
+      stack: |-
+        TestContext.<anonymous> (C:\dev\vibecheck\test\real-state-guard.test.ts:30:14)
+        Test.runInAsyncScope (node:async_hooks:214:14)
+        Test.run (node:internal/test_runner/test:1047:25)
+        Test.start (node:internal/test_runner/test:944:17)
+        node:internal/test_runner/test:1440:71
+        node:internal/per_context/primordials:483:82
+        new Promise (<anonymous>)
+        new SafePromise (node:internal/per_context/primordials:451:29)
+        node:internal/per_context/primordials:483:9
+        Array.map (<anonymous>)
+      ...
+    # Subtest: verifies git status porcelain shows zero changes on real edits.json and fixtures/*
+    ok 2 - verifies git status porcelain shows zero changes on real edits.json and fixtures/*
+      ---
+      duration_ms: 47.5817
+      type: 'test'
+      ...
+    1..2
+not ok 1 - Real State Integrity Guard
+  ---
+  duration_ms: 53.0854
+  type: 'suite'
+  location: 'C:\\dev\\vibecheck\\test\\real-state-guard.test.ts:1:193'
+  failureType: 'subtestsFailed'
+  error: '1 subtest failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+1..1
+# tests 2
+# suites 1
+# pass 1
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 380.3214
+exit 1
+CONFIRMED: real-state snapshots match

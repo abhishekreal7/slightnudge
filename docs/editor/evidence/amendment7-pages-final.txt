@@ -1,0 +1,52 @@
+> node --import tsx --test test/history-store-pages.test.ts
+TAP version 13
+# {"existingRecords":10,"appendBytes":3241,"appendMs":0.10110000000000241}
+# {"existingRecords":2000,"appendBytes":395,"appendMs":0.05370000000004893}
+# {"existingRecords":1999,"appendBytes":14507,"appendMs":0.15370000000001482}
+# Subtest: append bytes stay bounded at 10 and 2000 records; listing reads only a bounded metadata page
+ok 1 - append bytes stay bounded at 10 and 2000 records; listing reads only a bounded metadata page
+  ---
+  duration_ms: 300.4232
+  type: 'test'
+  ...
+# Subtest: replaces a different uncommitted tail and ignores its obsolete locator
+ok 2 - replaces a different uncommitted tail and ignores its obsolete locator
+  ---
+  duration_ms: 1.0585
+  type: 'test'
+  ...
+# Subtest: publishes blobs before pages, locators and head
+ok 3 - publishes blobs before pages, locators and head
+  ---
+  duration_ms: 0.286
+  type: 'test'
+  ...
+# Subtest: cursor revisions restart after append/status change, and status rewrites only one bounded page
+ok 4 - cursor revisions restart after append/status change, and status rewrites only one bounded page
+  ---
+  duration_ms: 4.0098
+  type: 'test'
+  ...
+# Subtest: every before/after blob, page, locator and head crash boundary reopens without missing blobs or duplicate tails
+ok 5 - every before/after blob, page, locator and head crash boundary reopens without missing blobs or duplicate tails
+  ---
+  duration_ms: 1.5815
+  type: 'test'
+  ...
+# Subtest: a corrupt head or page refuses without writing and a tampered record is skipped with aggregate reasons
+ok 6 - a corrupt head or page refuses without writing and a tampered record is skipped with aggregate reasons
+  ---
+  duration_ms: 0.5095
+  type: 'test'
+  ...
+1..6
+# tests 6
+# suites 0
+# pass 6
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 551.8461
+exit 0
+CONFIRMED: protected files and Git status unchanged.

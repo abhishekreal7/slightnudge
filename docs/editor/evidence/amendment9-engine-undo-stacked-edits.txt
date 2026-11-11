@@ -1,0 +1,73 @@
+> C:\nvm4w\nodejs\node.exe --import tsx scratch/editor-s1-group.ts amendment9-engine-undo-stacked-edits undo-stacked-edits test/helpers/real-state.ts
+{"temporaryRoot":"C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-undo-stacked-edits-Bt5XBr","baseline":"8c613619b4ce051027689fd3d782d4ee029e7052","suite":"undo-stacked-edits","overlays":["test/helpers/real-state.ts"],"omitted":".env.example"}
+Isolated seed staged paths: .env.example, test/helpers/real-state.ts
+TAP version 13
+Same element refusal message: Cannot undo this edit because a newer edit ("font-normal → font-bold") on the same element depends on it. Undo the newer edit first.
+Legacy record refusal message: This file changed after the visual edit: element identity cannot be established. Open fixtures/page4.tsx near line 1 and change the className to remove "none" and restore "none". Nothing was changed.
+Structural edit refusal message: Cannot undo this edit because a structural edit ("reorder: move earlier") was applied to this file. Undo the structural edit first.
+Same-line refusal message: Cannot undo this edit because a newer edit on the same line depends on it. Undo the newer edit first.
+Starting 300 randomized order test runs (seed base: 771234)...
+All 300 randomized order test runs passed successfully!
+# Subtest: Multi-Element Stacked Edits Undo Battery
+    # Subtest: (1) edit A on elem1, edit B on elem2: undo A accepted, then undo B accepted -> byte-identical
+    ok 1 - (1) edit A on elem1, edit B on elem2: undo A accepted, then undo B accepted -> byte-identical
+      ---
+      duration_ms: 1474.9116
+      type: 'test'
+      ...
+    # Subtest: (2) edit A then B, undo B first then A -> byte-identical
+    ok 2 - (2) edit A then B, undo B first then A -> byte-identical
+      ---
+      duration_ms: 375.8665
+      type: 'test'
+      ...
+    # Subtest: (3) edit A then edit B on the SAME element: undo A refused naming newer edit, undo B accepted, then undo A accepted
+    ok 3 - (3) edit A then edit B on the SAME element: undo A refused naming newer edit, undo B accepted, then undo A accepted
+      ---
+      duration_ms: 1356.6744
+      type: 'test'
+      ...
+    # Subtest: (4) legacy records without elementId and without derivable identity: undo of older refused with manual instructions
+    ok 4 - (4) legacy records without elementId and without derivable identity: undo of older refused with manual instructions
+      ---
+      duration_ms: 135.9504
+      type: 'test'
+      ...
+    # Subtest: (5) newer record of structural kind (reorder) in same file: undo of older edit refused
+    ok 5 - (5) newer record of structural kind (reorder) in same file: undo of older edit refused
+      ---
+      duration_ms: 1603.7918
+      type: 'test'
+      ...
+    # Subtest: (6) different elements on the SAME line: refused due to same-line ambiguity
+    ok 6 - (6) different elements on the SAME line: refused due to same-line ambiguity
+      ---
+      duration_ms: 1758.9745
+      type: 'test'
+      ...
+    # Subtest: (7) randomized order test: 300 seeded runs with N (2..5) edits undone in random order
+    ok 7 - (7) randomized order test: 300 seeded runs with N (2..5) edits undone in random order
+      ---
+      duration_ms: 1230644.7849
+      type: 'test'
+      ...
+    1..7
+ok 1 - Multi-Element Stacked Edits Undo Battery
+  ---
+  duration_ms: 1237355.4064
+  type: 'suite'
+  ...
+1..1
+# tests 7
+# suites 1
+# pass 7
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1237367.7696
+Owned temporary entries before cleanup: ["tsx-abhis"]
+Confirmed cleanup: C:\Users\abhis\AppData\Local\Temp\sn-sprint1-undo-stacked-edits-Bt5XBr
+CONFIRMED: integration checkout protected files and status unchanged.
+exit 0
+CONFIRMED: protected files and Git status unchanged.

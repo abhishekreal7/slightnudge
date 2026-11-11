@@ -1,0 +1,957 @@
+diff --git a/app/globals.css b/app/globals.css
+index e284177..f0c5f7d 100644
+--- a/app/globals.css
++++ b/app/globals.css
+@@ -1,5 +1,11 @@
+ @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap');
+-@import "tailwindcss";
++@import "tailwindcss" source(none);
++
++/* Scan the source that renders the app and its editable previews. */
++@source ".";
++@source "../components";
++@source "../fixtures";
++@source "../lib";
+ 
+ :root, body{--canvas:#f7f8f6;--surface:#fff;--surface-soft:#f1f3f1;--ink:#17211f;--muted:#697571;--line:#e2e7e4;--accent:#176b55;--accent-dark:#10533f;--danger:#b43e35;--font-ui:var(--font-geist-sans,"Inter",-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Segoe UI",Roboto,"Helvetica Neue",sans-serif);--font-mono:var(--font-geist-mono,"JetBrains Mono","SF Mono","Cascadia Code","Fira Code",Consolas,Menlo,Monaco,monospace);--content:1160px;--ease:cubic-bezier(.2,.75,.25,1)}
+ *{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:88px}body{margin:0;background:var(--canvas);color:var(--ink);font-family:var(--font-ui);font-size:16px;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility;font-optical-sizing:auto}code,kbd,samp,pre{font-family:var(--font-mono);font-feature-settings:"calt" 1,"tnum" 1}::selection{background:#cce5d8;color:#123e30}button,input{font:inherit}button,a{-webkit-tap-highlight-color:transparent}a{color:inherit;text-decoration:none}button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid #5eaa8d;outline-offset:3px}.page-shell{position:relative;z-index:1;overflow:hidden}.hero-glow{position:absolute;z-index:0;pointer-events:none;top:85px;right:5%;width:580px;height:480px;background:radial-gradient(ellipse,rgba(45,112,88,.075),transparent 68%);filter:blur(12px)}
+diff --git a/app/layout.tsx b/app/layout.tsx
+index 422090a..88f4b75 100644
+--- a/app/layout.tsx
++++ b/app/layout.tsx
+@@ -46,8 +46,9 @@ export default async function RootLayout({
+ }: {
+   children: React.ReactNode;
+ }) {
+-  const headerList = await headers();
+-  const allowToken = process.env.NODE_ENV !== 'production' && isRequestHostAllowed(headerList);
++  // Only the local editor needs request headers. Reading them in production
++  // forces otherwise static marketing pages to render for every request.
++  const allowToken = process.env.NODE_ENV !== 'production' && isRequestHostAllowed(await headers());
+   const sessionToken = allowToken ? getSessionToken() : null;
+   return (
+     <html lang="en" className={`${geist.variable} ${geistMono.variable} ${inter.variable} ${manrope.variable}`}>
+diff --git a/components/slightnudge/CanvasStage.tsx b/components/slightnudge/CanvasStage.tsx
+index 2e4f8ca..23260d1 100644
+--- a/components/slightnudge/CanvasStage.tsx
++++ b/components/slightnudge/CanvasStage.tsx
+@@ -11,6 +11,7 @@ export function CanvasStage({ width, zoom, reset, pan, disabled, onZoom, childre
+   const dragged = useRef(false);
+   const [space, setSpace] = useState(false);
+   const anchor = useRef<{ x: number; y: number; worldX: number; worldY: number } | null>(null);
++  const previousLayout = useRef<{ scale: number; left: number; top: number; width: number; height: number } | null>(null);
+   const scale = zoom === 'fit' ? Math.max(.02, Math.min(1, (bounds.width - 96) / width, (bounds.height - 96) / bounds.pageHeight)) : zoom;
+   const sceneWidth = Math.max(bounds.width * 3, width * scale + bounds.width * 2), sceneHeight = Math.max(bounds.height * 3, bounds.pageHeight * scale + bounds.height * 2);
+   const left = (sceneWidth - width * scale) / 2, top = (sceneHeight - bounds.pageHeight * scale) / 2;
+@@ -25,8 +26,23 @@ export function CanvasStage({ width, zoom, reset, pan, disabled, onZoom, childre
+   }, [width]);
+   useLayoutEffect(() => {
+     const host = viewport.current; if (!host) return;
+-    if (zoom === 'fit') { host.scrollLeft = (sceneWidth - host.clientWidth) / 2; host.scrollTop = (sceneHeight - host.clientHeight) / 2; }
+-    else if (anchor.current) { const a = anchor.current; host.scrollLeft = left + a.worldX * scale - a.x; host.scrollTop = top + a.worldY * scale - a.y; }
++    const previous = previousLayout.current;
++    const width = host.clientWidth;
++    const height = host.clientHeight;
++    if (zoom === 'fit' || !previous) {
++      host.scrollLeft = (sceneWidth - width) / 2;
++      host.scrollTop = zoom === 'fit' ? (sceneHeight - height) / 2 : Math.min(top - 32, (sceneHeight - height) / 2);
++    } else {
++      const point = anchor.current ?? {
++        x: width / 2,
++        y: height / 2,
++        worldX: (host.scrollLeft + previous.width / 2 - previous.left) / previous.scale,
++        worldY: (host.scrollTop + previous.height / 2 - previous.top) / previous.scale,
++      };
++      host.scrollLeft = left + point.worldX * scale - point.x;
++      host.scrollTop = top + point.worldY * scale - point.y;
++    }
++    previousLayout.current = { scale, left, top, width, height };
+     anchor.current = null;
+     window.dispatchEvent(new Event('resize'));
+   }, [scale, left, top, sceneWidth, sceneHeight, zoom, reset]);
+@@ -42,8 +58,10 @@ export function CanvasStage({ width, zoom, reset, pan, disabled, onZoom, childre
+         const x = Math.max(0, Math.min(host.clientWidth, (Number(data.clientX) || box.left + host.clientWidth / 2) - box.left));
+         const y = Math.max(0, Math.min(host.clientHeight, (Number(data.clientY) || box.top + host.clientHeight / 2) - box.top));
+         const current = latest.current;
++        const nextScale = Math.max(.1, Math.min(2, Math.round(current.scale * Math.exp(-dy * .003) * 100) / 100));
++        if (nextScale === current.scale) return;
+         anchor.current = { x, y, worldX: (host.scrollLeft + x - current.left) / current.scale, worldY: (host.scrollTop + y - current.top) / current.scale };
+-        current.onZoom(Math.max(.1, Math.min(2, Math.round(current.scale * Math.exp(-dy * .003) * 100) / 100)));
++        current.onZoom(nextScale);
+       } else if (forwarded) {
+         const unit = data.deltaMode === 1 ? 16 : data.deltaMode === 2 ? host.clientHeight : 1;
+         host.scrollBy(dx * unit, dy * unit);
+@@ -55,6 +73,7 @@ export function CanvasStage({ width, zoom, reset, pan, disabled, onZoom, childre
+   }, []);
+   const hand = (pan || space) && !disabled;
+   return <div ref={viewport} className={styles.viewport} data-canvas-stage data-hand={hand || undefined} data-zoom={scale} tabIndex={0} aria-label="Page canvas"
++    onBlur={event => { if (!event.currentTarget.contains(event.relatedTarget)) setSpace(false); }}
+     onClick={event => { if (hand || dragged.current) { event.stopPropagation(); dragged.current = false; } }}
+     onKeyDown={event => { if (event.target !== event.currentTarget) return; if (event.code === 'Space') { event.preventDefault(); event.stopPropagation(); setSpace(true); } if (['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(event.key)) { event.preventDefault(); event.stopPropagation(); event.currentTarget.scrollBy(event.key === 'ArrowLeft' ? -40 : event.key === 'ArrowRight' ? 40 : 0, event.key === 'ArrowUp' ? -40 : event.key === 'ArrowDown' ? 40 : 0); } }} onKeyUp={event => { if (event.code === 'Space') { event.preventDefault(); setSpace(false); } }}
+     onPointerDown={event => { if (disabled || event.button !== 0 && event.button !== 1 || !hand && event.button !== 1 && event.target !== event.currentTarget && !(event.target instanceof HTMLElement && event.target.hasAttribute('data-canvas-scene'))) return; event.preventDefault(); event.stopPropagation(); event.currentTarget.focus(); event.currentTarget.setPointerCapture(event.pointerId); gesture.current = { pointer: event.pointerId, x: event.clientX, y: event.clientY, left: event.currentTarget.scrollLeft, top: event.currentTarget.scrollTop }; }}
+diff --git a/components/slightnudge/EditorWorkspace.tsx b/components/slightnudge/EditorWorkspace.tsx
+index 22cbefe..01e46e7 100644
+--- a/components/slightnudge/EditorWorkspace.tsx
++++ b/components/slightnudge/EditorWorkspace.tsx
+@@ -6,7 +6,7 @@ import { AppearanceControls } from './AppearanceControls';
+ import { ConstraintControls } from './ConstraintControls';
+ 
+ 
+-import React, { useState, useEffect, useLayoutEffect, useCallback, useRef } from 'react';
++import React, { useState, useEffect, useLayoutEffect, useCallback, useRef, useSyncExternalStore } from 'react';
+ import { EditorSurface, type EditorMode } from './EditorSurface';
+ import { EditorDraftControls, EditorHistoryControls, EditorViewportControls } from './EditorSessionControls';
+ import { useWindowDock } from '@/components/slightnudge/useWindowDock';
+@@ -448,21 +448,48 @@ const styleOptions = {
+   padding: ['p-0', 'p-1', 'p-2', 'p-3', 'p-4', 'p-6', 'p-8', 'p-12'],
+ } as const;
+ 
++const studioWidth = '(min-width: 1100px)';
++function subscribeStudioWidth(update: () => void) {
++  const query = window.matchMedia(studioWidth);
++  query.addEventListener('change', update);
++  return () => query.removeEventListener('change', update);
++}
++const isStudioWidth = () => window.matchMedia(studioWidth).matches;
++const isServerStudioWidth = () => false;
++
+ /** One editing session implementation; mode controls the workspace presentation. */
+ export function EditorWorkspace({ mode, unified = false, view = 'full', projectId, initialPanel = null }: { mode: EditorMode; unified?: boolean; view?: EditorView; projectId?: string; initialPanel?: 'layers' | 'inspector' | null }) {
+   const windowMode = unified || mode === 'window';
+   const sourceWindowMode = unified ? view === 'full' : windowMode;
+   const router = useRouter();
+   const changeView = (next:EditorView) => {const url=new URL(location.href);url.searchParams.set('view',next);router.replace(url.pathname+url.search,{scroll:false});};
+-  const windowDock = useWindowDock(windowMode);
++  const wideWorkspace = useSyncExternalStore(subscribeStudioWidth, isStudioWidth, isServerStudioWidth);
++  const docked = unified && view === 'fit' && wideWorkspace;
++  const windowDock = useWindowDock(windowMode && !docked);
+   const routeParams = useParams<{ repoId?: string }>();
+   const repositoryId = projectId ?? routeParams?.repoId;
+   const usesDrafts = true;
+   const projectDraftStorageKey = repositoryId ? `${draftStorageKey}:${repositoryId}` : draftStorageKey;
+   const [windowPanel, setWindowPanel] = useState<'layers' | 'inspector' | null>(initialPanel);
++  const [dockedPanels, setDockedPanels] = useState({ layers: true, inspector: true });
++  const layersOpen = docked ? dockedPanels.layers : windowPanel === 'layers';
++  const designOpen = docked ? dockedPanels.inspector : windowPanel === 'inspector';
++  const togglePanel = (panel: 'layers' | 'inspector') => {
++    if (docked) setDockedPanels(previous => ({ ...previous, [panel]: !previous[panel] }));
++    else setWindowPanel(previous => previous === panel ? null : panel);
++  };
++  const openDesign = () => {
++    if (docked) setDockedPanels(previous => ({ ...previous, inspector: true }));
++    else setWindowPanel('inspector');
++  };
+   const [browseMode, setBrowseMode] = useState(false);
+   const [canvasZoom, setCanvasZoom] = useState<CanvasZoom>(unified && view === 'full' ? 1 : 'fit');
+-  useEffect(()=>{if(unified)setCanvasZoom(view==='fit'?'fit':1);},[unified,view]);
++  const requestedFitZoom = useRef<CanvasZoom | null>(null);
++  useEffect(() => {
++    if (!unified) return;
++    setCanvasZoom(view === 'fit' ? requestedFitZoom.current ?? 'fit' : 1);
++    requestedFitZoom.current = null;
++  }, [unified, view]);
+   const [canvasReset, setCanvasReset] = useState(0);
+   const [canvasPan, setCanvasPan] = useState(false);
+   const [inspectorWidth, setInspectorWidth] = useState(288);
+@@ -629,18 +656,23 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
+   const scopeTokens = (classes: string) => classes.split(/\s+/).filter(token => editScope ? token.startsWith(`${editScope}:`) : !token.includes(':')).map(token => (editScope ? token.slice(editScope.length + 1) : token).replace(/^!|!$/g, ''));
+   const responsiveSourcePath = repositoryId && !selectedLayer ? sourceLayers[0]?.path : activeElement.filePath;
+   useEffect(() => {
+-    let cancelled = false; setScopeLoading(true); setScopeError(''); setResponsiveScopes([]);
++    const request = new AbortController();
++    setScopeLoading(true); setScopeError(''); setResponsiveScopes([]);
+     if (!responsiveSourcePath) { setScopeLoading(false); return; }
+     void (async () => {
+       try {
+         const token = await getClientSessionToken();
+-        const response = await fetch('/api/slightnudge/responsive', { method: 'POST', headers: { 'content-type': 'application/json', 'x-slightnudge-token': token }, body: JSON.stringify({ repositoryId, filePath: responsiveSourcePath }) });
++        const response = await fetch('/api/slightnudge/responsive', {
++          signal: AbortSignal.any([request.signal, AbortSignal.timeout(15000)]),
++          method: 'POST', headers: { 'content-type': 'application/json', 'x-slightnudge-token': token },
++          body: JSON.stringify({ repositoryId, filePath: responsiveSourcePath }),
++        });
+         const result = await readApiJson(response); if (!response.ok) throw new Error(result.error || 'Project breakpoints are unavailable.');
+-        if (!cancelled) setResponsiveScopes(result.breakpoints);
+-      } catch (error) { if (!cancelled) setScopeError(error instanceof Error ? error.message : 'Project breakpoints are unavailable.'); }
+-      finally { if (!cancelled) setScopeLoading(false); }
++        if (!request.signal.aborted) setResponsiveScopes(result.breakpoints);
++      } catch (error) { if (!request.signal.aborted) setScopeError(error instanceof Error && error.name === 'TimeoutError' ? 'Reading project breakpoints timed out. Reselect the source file or reload the editor to retry.' : error instanceof Error ? error.message : 'Project breakpoints are unavailable.'); }
++      finally { if (!request.signal.aborted) setScopeLoading(false); }
+     })();
+-    return () => { cancelled = true; };
++    return () => request.abort();
+   }, [repositoryId, responsiveSourcePath]);
+ 
+ 
+@@ -899,6 +931,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
+         obstacles.push(new DOMRect(previewFrame.left + layer.rect.left * previewScale, previewFrame.top + layer.rect.top * previewScale, layer.rect.width * previewScale, layer.rect.height * previewScale));
+       }
+       const move = node.querySelector('[aria-label="Move element"]')?.getBoundingClientRect();
++      const dimensions = node.querySelector('[aria-label="Selection dimensions"]')?.getBoundingClientRect();
+       const overlap = (left: number, top: number, rect: DOMRect) => Math.max(0, Math.min(left + width, rect.right) - Math.max(left, rect.left)) * Math.max(0, Math.min(top + height, rect.bottom) - Math.max(top, rect.top));
+       const candidates = [
+         [selection.left, selection.top - height - 10], [selection.right - width, selection.top - height - 10],
+@@ -908,7 +941,8 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
+         [selection.left - width - 12, selection.top], [selection.right + 12, selection.top],
+       ].map(([x, y], index) => {
+         const left = clampLeft(x), top = clampTop(y);
+-        const score = overlap(left, top, selection) * 12 + (move ? overlap(left, top, move) * 12 : 0) + obstacles.reduce((sum, rect) => sum + overlap(left, top, rect), 0) * 4 + Math.abs(left - x) + Math.abs(top - y) + index;
++        const selectionOverlap = overlap(left, top, selection) + (move ? overlap(left, top, move) : 0) + (dimensions ? overlap(left, top, dimensions) : 0);
++        const score = selectionOverlap * 12 + obstacles.reduce((sum, rect) => sum + overlap(left, top, rect), 0) * 4 + Math.abs(left - x) + Math.abs(top - y) + index;
+         return { left, top, score };
+       });
+       const best = candidates.reduce((a, b) => a.score <= b.score ? a : b);
+@@ -1391,7 +1425,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
+       if (e.target instanceof HTMLElement && e.target.closest('input, textarea, select, [contenteditable="true"]')) return;
+       if (e.key === 'Escape') {
+         if (destinationSource.current) { cancelDestination(); return; }
+-        if (windowMode && windowPanel && !isDraggingMove && !isResizing) { setWindowPanel(null); return; }
++        if (windowMode && !docked && windowPanel && !isDraggingMove && !isResizing) { setWindowPanel(null); return; }
+         if (isDraggingMove) {
+           setIsDraggingMove(false);
+           setDragLayerKey(null);
+@@ -1409,7 +1443,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
+     };
+     window.addEventListener('keydown', handleKeyDown);
+     return () => window.removeEventListener('keydown', handleKeyDown);
+-  }, [isDraggingMove, isResizing, windowMode, windowPanel]);
++  }, [isDraggingMove, isResizing, windowMode, windowPanel, docked]);
+ 
+   const restoreSnapshot = (edit: PendingEdit) => {
+     inlineSessionRef.current = null;
+@@ -2018,7 +2052,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
+     if (type === 'text-cancel' && selection) { cancelInlineText(sourceKey(selection)); return; }
+     if (type === 'text-request' && selection) { sourceSelections.current[sourceKey(selection)] = selection; receiveSourceSelection(selection); beginInlineText(sourceKey(selection)); return; }
+     if (type === 'save-request') { saveTextRef.current = null; setSaveRequested(true); return; }
+-    if (type === 'shortcut') { if (text === 'Escape') { if (destinationSource.current) cancelDestination(); else if (windowMode && windowPanel) setWindowPanel(null); else setSelectedLayer(null); } else if (text?.toLowerCase() === 's') requestSave(); else if (text?.toLowerCase() === 'y' || shift) navigateDraft(1); else void handleUndo(); }
++    if (type === 'shortcut') { if (text === 'Escape') { if (destinationSource.current) cancelDestination(); else if (windowMode && !docked && windowPanel) setWindowPanel(null); else setSelectedLayer(null); } else if (text?.toLowerCase() === 's') requestSave(); else if (text?.toLowerCase() === 'y' || shift) navigateDraft(1); else void handleUndo(); }
+   };
+ 
+   const reorderSibling = (direction: 'earlier' | 'later') => {
+@@ -2120,10 +2154,16 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
+ 
+   // Contextual formatting controls share the inspector's neutral surfaces.
+   const renderMoveControl = () => {
+-    const supported = usesDrafts && /^(h[1-6]|p|section|div|article|aside|header|footer|nav|main|a|button|img)$/.test(activeElement.tag) && !activeVariant && !activeBreakpoint;
++    const unsupportedReason = activeVariant || activeBreakpoint
++      ? 'Choose All sizes and the Default state to move this element.'
++      : !usesDrafts || !/^(h[1-6]|p|section|div|article|aside|header|footer|nav|main|a|button|img)$/.test(activeElement.tag)
++        ? 'Move is unavailable for this element.'
++        : '';
++    const supported = !unsupportedReason;
++    const moveHint = unsupportedReason || 'Drag to move. Click for arrow controls. Shift locks an axis. Escape cancels.';
+     const disabled = (busy && movePipeline.current?.key !== selectedLayer) || isApplying || isResizing || reviewBlocking || Boolean(uncertainUndoId) || !supported;
+     return (
+-      <div ref={moveControlRef} className={reviewStyles.moveControl} onClick={event => event.stopPropagation()}
++      <div ref={moveControlRef} className={reviewStyles.moveControl} title={moveHint} onClick={event => event.stopPropagation()}
+         onBlur={event => { if (!event.currentTarget.contains(event.relatedTarget as Node)) setMoveOpen(false); }}>
+         <button type="button" className={reviewStyles.moveTrigger} aria-label="Move element" aria-expanded={moveOpen}
+           aria-pressed={moveArmed || Boolean(liveMove)} onPointerDown={event => { if (selectedLayer) startDragMove(selectedLayer, event); }}
+@@ -2138,7 +2178,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
+           aria-controls="selection-move-controls" disabled={disabled} onClick={() => { if (moveClickSuppressed.current) { moveClickSuppressed.current = false; return; } setMoveOpen(value => !value); }}>
+           <Move size={15} /><span className="sr-only">Move</span>
+         </button>
+-        <span id="selection-move-hint" className="sr-only">{!supported ? 'Move is available with All sizes and the Default state' : 'Drag to move this element and its contents. Click for arrow controls. Shift locks an axis. Escape cancels.'}</span>
++        <span id="selection-move-hint" className="sr-only">{moveHint}</span>
+         {moveOpen && <div id="selection-move-controls" className={reviewStyles.movePopover} role="group" aria-label="Move selected element">
+           <div className={reviewStyles.moveHeading}><span>Move element</span><span>4 px steps</span></div>
+           <div className={reviewStyles.movePad}>
+@@ -2159,7 +2199,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
+     const locked = busy || isApplying || reviewBlocking || Boolean(uncertainUndoId) || destinationMode || viewportChanging || Boolean(activeBreakpoint) && scopeLoading;
+     if(activeElement.instance && !editingDefinitionStyles)return createPortal(<div ref={formattingRef} role="toolbar" aria-label="Selection formatting" className={reviewStyles.floatingFormatting} style={{position:'fixed',left:formattingPosition?.left||0,top:formattingPosition?.top||0,visibility:formattingPosition?.visible?'visible':'hidden'}} onClick={event=>event.stopPropagation()}><div className={reviewStyles.formattingBar}>
+       {isTextElement&&<button type="button" className={reviewStyles.editTextControl} disabled={locked} onClick={()=>beginInlineText(selectedLayer)}><Pencil size={13}/><span>Edit text</span></button>}
+-      <button type="button" className={reviewStyles.editTextControl} disabled={locked} onClick={()=>{setWindowPanel('inspector');requestAnimationFrame(()=>document.querySelector<HTMLElement>('[aria-label="Component properties"] textarea, [aria-label="Component properties"] select')?.focus())}}><SlidersHorizontal size={13}/><span>Instance props</span></button>
++      <button type="button" className={reviewStyles.editTextControl} disabled={locked} onClick={()=>{openDesign();requestAnimationFrame(()=>document.querySelector<HTMLElement>('[aria-label="Component properties"] textarea, [aria-label="Component properties"] select')?.focus())}}><SlidersHorizontal size={13}/><span>Instance props</span></button>
+     </div></div>,document.body);
+     const parentKey = sourceSelections.current[selectedLayer]?.parentKey;
+     const siblings = parentKey ? sourceLayers.filter(layer => layer.parentKey === parentKey && layer.path === activeElement.filePath && (layer.computed.order || '0') === (sourceSelections.current[selectedLayer]?.computed.order || '0')) : [];
+@@ -2458,13 +2498,13 @@ className={`${reviewStyles.cornerResizeHandle} ${reviewStyles.eastCorner}`} aria
+         )}
+ 
+         {/* Workspace Body: Left Sidebar + Center Canvas + Right Inspector */}
+-        <div data-editor-workspace className="min-h-0 flex-1 flex overflow-hidden">
++        <div data-editor-workspace data-docked={docked || undefined} data-layers-open={layersOpen || undefined} data-design-open={designOpen || undefined} className="min-h-0 flex-1 flex overflow-hidden">
+ 
+           {/* ======================================================== */}
+           {/* LEFT SIDEBAR: Layers & Pages (SaaS Theme)                */}
+           {/* ======================================================== */}
+           <aside data-editor-panel="layers" className="w-60 bg-white border-r border-[#E5E7EB] flex flex-col shrink-0 z-20">
+-            {windowMode && <div className={reviewStyles.windowPanelHeader}><strong>Layers</strong><button type="button" aria-label="Close layers" onClick={() => setWindowPanel(null)}><X size={14}/></button></div>}
++            {windowMode && !docked && <div className={reviewStyles.windowPanelHeader}><strong>Layers</strong><button type="button" aria-label="Close layers" onClick={() => setWindowPanel(null)}><X size={14}/></button></div>}
+             {/* Brand header aligns with the editor toolbar. */}
+             <div data-editor-brand className="h-12 px-3 border-b border-[#E5E7EB] flex items-center justify-between shrink-0 bg-white select-none">
+               <Link href="/workspace" className="flex items-center space-x-2 text-slate-900 hover:opacity-85 transition" title="Back to workspace">
+@@ -2522,7 +2562,7 @@ className={`${reviewStyles.cornerResizeHandle} ${reviewStyles.eastCorner}`} aria
+ 
+             {/* Sidebar Content: Layers Tree OR Pages List */}
+             {repositoryId || sidebarTab === 'layers' ? (
+-              <SourceLayers layers={sourceLayers} selected={selectedLayer} onSelect={setSelectedLayer} />
++              <SourceLayers layers={sourceLayers} selected={selectedLayer} panelVisible={windowMode ? layersOpen : !focusMode} onSelect={setSelectedLayer} />
+             ) : (
+               /* Pages Selection Panel: Pure Native List */
+               <div className="flex-1 overflow-y-auto px-2 py-3 space-y-0.5 text-xs text-slate-700">
+@@ -2596,27 +2636,33 @@ className={`${reviewStyles.cornerResizeHandle} ${reviewStyles.eastCorner}`} aria
+           {/* ======================================================== */}
+           <div className={`${reviewStyles.editorColumn} flex-1 flex flex-col overflow-hidden bg-[#F8F9FA]`}>
+             {windowMode && (
+-            <header ref={windowDock.ref} style={windowMode ? windowDock.style : undefined} className={reviewStyles.editorTopbar} aria-label="Editor toolbar">
++            <header ref={windowDock.ref} style={docked ? undefined : windowDock.style} className={reviewStyles.editorTopbar} aria-label="Editor toolbar">
+               {windowMode && <div className={reviewStyles.windowActions}>
+-                <button type="button" aria-label="Move editing toolbar" title="Drag to move · Arrow keys to position · Home to reset" className={reviewStyles.dockGrip} {...windowDock.grip}><MoreHorizontal size={15}/></button>
++                {!docked && <button type="button" aria-label="Move editing toolbar" title="Drag to move · Arrow keys to position · Home to reset" className={reviewStyles.dockGrip} {...windowDock.grip}><MoreHorizontal size={15}/></button>}
+                 <Link href={repositoryId ? `/studio/${encodeURIComponent(repositoryId)}/edit` : '/studio'} aria-label="Back to Studio" title="Back to Studio" onClick={event => { if (reviewRef.current || inlineSessionRef.current) { event.preventDefault(); showToast('Save or discard your draft before returning to Studio.'); } }}><ArrowLeft size={15}/></Link>
+                 <div role="group" aria-label="Page interaction" className={reviewStyles.interactionMode}>
+                   <button type="button" aria-pressed={!browseMode} onClick={() => setBrowseMode(false)}>Edit</button>
+                   <button type="button" aria-pressed={browseMode} disabled={busy || isApplying} onClick={() => { if (reviewRef.current || inlineSessionRef.current) { showToast('Save or discard your draft before browsing the page.'); return; } setSelectedLayerState(null); setBrowseMode(true); }}>Browse</button>
+                 </div>
+-                <button type="button" aria-label="Toggle layers" title="Layers" aria-expanded={windowPanel === 'layers'} onClick={() => setWindowPanel(previous => previous === 'layers' ? null : 'layers')}><Columns2 size={15}/></button>
+-                <button type="button" aria-label="Toggle design panel" title="Design" aria-expanded={windowPanel === 'inspector'} onClick={() => setWindowPanel(previous => previous === 'inspector' ? null : 'inspector')}><Pencil size={15}/></button>
++                <button type="button" aria-label="Toggle layers" title="Layers" aria-expanded={layersOpen} onClick={() => togglePanel('layers')}><Columns2 size={15}/></button>
++                <button type="button" aria-label="Toggle design panel" title="Design" aria-expanded={designOpen} onClick={() => togglePanel('inspector')}><Pencil size={15}/></button>
+               </div>}
+               <div className={reviewStyles.projectContext}>
+-                <span className={reviewStyles.sourceDot} role="img" aria-label="Local source connected" />
+-                <span className={reviewStyles.projectName}>{repositoryId || 'vibecheck'}</span>
++                {sourceReady && <span className={reviewStyles.sourceDot} role="img" aria-label="Source connected" />}
++                <span className={reviewStyles.projectName}>{repositoryId || 'Playground'}</span>
+                 <span className={reviewStyles.contextSlash} aria-hidden="true">/</span>
+                 <span className={reviewStyles.pageName}>{repositoryId ? 'Live project' : selectedPage.title}</span>
+               </div>
+ 
+               {unified && <div className={reviewStyles.unifiedViewTools}>
+                 <label>View <select aria-label="Editor view" value={view} disabled={busy || isApplying || isInlineEditing || isResizing || moveArmed || Boolean(liveMove)} onChange={event=>changeView(event.target.value as EditorView)}><option value="full">Full page</option><option value="fit">Fit canvas</option></select></label>
+-                <select aria-label="Canvas zoom" title="Fit starts with automatic scaling; zoom can also be adjusted manually." value={canvasZoom} disabled={busy || isApplying || isInlineEditing || isResizing || moveArmed || Boolean(liveMove)} onChange={event=>{const zoom=event.target.value==='fit'?'fit':Number(event.target.value);setCanvasZoom(zoom);if(view==='full'&&zoom!==1)changeView('fit');}}>
++                <select aria-label="Canvas zoom" title="Fit starts with automatic scaling; zoom can also be adjusted manually." value={canvasZoom} disabled={busy || isApplying || isInlineEditing || isResizing || moveArmed || Boolean(liveMove)} onChange={event => {
++                  const zoom = event.target.value === 'fit' ? 'fit' : Number(event.target.value);
++                  if (view === 'full' && zoom !== 1) {
++                    requestedFitZoom.current = zoom;
++                    changeView('fit');
++                  } else setCanvasZoom(zoom);
++                }}>
+                   <option value="fit">Fit page</option>{[.1,.25,.5,.75,1,1.5,2].map(value=><option key={value} value={value}>{Math.round(value*100)}%</option>)}{typeof canvasZoom==='number'&&![.1,.25,.5,.75,1,1.5,2].includes(canvasZoom)&&<option value={canvasZoom}>{Math.round(canvasZoom*100)}%</option>}
+                 </select>
+               </div>}
+@@ -2677,6 +2723,17 @@ className={`${reviewStyles.cornerResizeHandle} ${reviewStyles.eastCorner}`} aria
+             </div>
+ 
+           </main>
++          {docked && <div className={reviewStyles.studioStatus}>
++            <div className={reviewStyles.canvasViewTools} role="group" aria-label="Canvas navigation">
++              <button type="button" aria-label="Select elements" title="Select elements" aria-pressed={!canvasPan} onClick={() => setCanvasPan(false)}><MousePointer2 size={15}/></button>
++              <button type="button" aria-label="Pan canvas" title="Pan canvas · hold Space to pan temporarily" aria-pressed={canvasPan} disabled={busy || isApplying || isInlineEditing || isResizing || moveArmed || Boolean(liveMove)} onClick={() => setCanvasPan(value => !value)}><Hand size={15}/></button>
++              <button type="button" aria-label="Fit page to canvas" title="Fit page to canvas" disabled={busy || isApplying || isInlineEditing || isResizing || moveArmed || Boolean(liveMove)} onClick={() => { setCanvasZoom('fit'); setCanvasReset(value => value + 1); }}><Scan size={15}/></button>
++            </div>
++            <span className={reviewStyles.selectionPath} title={selectedLayer ? `${activeElement.filePath}:${activeElement.line}` : undefined}>
++              {selectedLayer ? <><Code2 size={14}/><span>{activeElement.filePath}:{activeElement.line}</span></> : 'Select a layer or click the canvas'}
++            </span>
++            <span className={reviewStyles.canvasMode}>{browseMode ? 'Browsing' : 'Editing'}</span>
++          </div>}
+           {!windowMode && <div className={reviewStyles.canvasFooter} role="region" aria-label="Canvas controls">
+             <button type="button" className={reviewStyles.panelToggle} aria-label={focusMode ? 'Restore sidebars' : 'Focus canvas'} aria-pressed={focusMode} title={focusMode ? 'Restore sidebars' : 'Focus canvas'} onClick={() => setFocusMode(value => !value)}><Columns2 size={15}/></button>
+             {<div className={reviewStyles.canvasViewTools} role="group" aria-label="Canvas navigation">
+@@ -2710,7 +2767,7 @@ className={`${reviewStyles.cornerResizeHandle} ${reviewStyles.eastCorner}`} aria
+                   <MousePointer2 size={12} className="text-[#247253]" />
+                 </div>
+                 <div>
+-                  <span className="font-semibold text-xs text-[#26342C] block leading-tight">Visual editor</span>
++                  <span className="font-semibold text-xs text-[#26342C] block leading-tight">{docked ? 'Design' : 'Visual editor'}</span>
+                 </div>
+                 {selectedLayer && (
+                   <span className="text-[10px] font-mono text-slate-400 bg-slate-50 px-1.5 py-0.5 rounded border border-slate-200/60 truncate max-w-[85px]">
+@@ -2719,7 +2776,7 @@ className={`${reviewStyles.cornerResizeHandle} ${reviewStyles.eastCorner}`} aria
+                 )}
+               </div>
+               {!windowMode && <button type="button" aria-label="Hide design panel" title="Hide design panel" onClick={() => setInspectorCollapsed(true)} className={reviewStyles.panelToggle}><ChevronRight size={14}/></button>}
+-              {windowMode && <button type="button" aria-label="Close design panel" onClick={() => setWindowPanel(null)} className={reviewStyles.windowLaunch}><X size={14}/></button>}
++              {windowMode && <button type="button" aria-label="Close design panel" onClick={() => togglePanel('inspector')} className={reviewStyles.windowLaunch}><X size={14}/></button>}
+             </div>
+ 
+             {/* Inspector Content */}
+diff --git a/components/slightnudge/ResponsiveControls.tsx b/components/slightnudge/ResponsiveControls.tsx
+index 7dfe686..57570c9 100644
+--- a/components/slightnudge/ResponsiveControls.tsx
++++ b/components/slightnudge/ResponsiveControls.tsx
+@@ -14,9 +14,16 @@ export function ResponsiveControls({ width, requestedWidth, scope, scopes, loadi
+   useEffect(() => { if (!focused.current) setInput(String(shownWidth || '')); }, [shownWidth]);
+   const selected = scopes.find(item => item.name === scope);
+   const outside = Boolean(selected && width < selected.minWidth);
+-  const commit = (raw: string) => { const value = Number(raw); if (Number.isInteger(value) && value >= 240 && value <= 3840) onWidth(value); else setInput(String(shownWidth || '')); };
++  const commit = (raw: string) => {
++    const value = Number(raw);
++    if (!Number.isInteger(value) || value < 240 || value > 3840 || value === shownWidth) {
++      setInput(String(shownWidth || ''));
++      return;
++    }
++    onWidth(value);
++  };
+   return <div className={styles.controls} aria-label="Responsive editing" onClick={event => event.stopPropagation()}>
+-    <label className={styles.width} title="Preview width in CSS pixels. This does not choose where edits apply."><input aria-label="Preview width" type="number" min="240" max="3840" step="1" value={input} disabled={disabled || !width} onFocus={() => { focused.current = true; }} onChange={event => setInput(event.target.value)} onBlur={event => { focused.current = false; commit(event.currentTarget.value); }} onKeyDown={event => { if (event.key === 'Enter') { event.preventDefault(); commit(event.currentTarget.value); event.currentTarget.blur(); } }} /><span>px</span></label>
++    <label className={styles.width} title="Preview width in CSS pixels. This does not choose where edits apply."><input aria-label="Preview width" type="number" min="240" max="3840" step="1" value={input} disabled={disabled || !width} onFocus={() => { focused.current = true; }} onChange={event => setInput(event.target.value)} onBlur={event => { focused.current = false; commit(event.currentTarget.value); }} onKeyDown={event => { if (event.key === 'Enter') { event.preventDefault(); event.currentTarget.blur(); } }} /><span>px</span></label>
+     <label className={styles.scope}><span>Edit</span><select aria-label="Responsive edit scope" value={scope} disabled={disabled || loading || scopeDisabled} title={scopeDisabled ? 'Open the editing window to edit responsive styles.' : error || 'All sizes changes the base style. A breakpoint changes that size and larger screens.'} onChange={event => onScope(event.target.value)}>
+       <option value="">{loading ? 'Reading project…' : 'All sizes'}</option>
+       {scope && !selected && <option value={scope} disabled>{scope} · unavailable</option>}
+diff --git a/components/slightnudge/SourceLayers.tsx b/components/slightnudge/SourceLayers.tsx
+index 373267e..699a386 100644
+--- a/components/slightnudge/SourceLayers.tsx
++++ b/components/slightnudge/SourceLayers.tsx
+@@ -1,6 +1,6 @@
+ 'use client';
+ 
+-import { useEffect, useRef, useState } from 'react';
++import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+ import { ChevronRight, Frame, PanelsTopLeft, Navigation, PanelTop, PanelBottom, Image, PenTool, TextCursorInput, SquareMousePointer, Link2, FileText, Rows3, Columns3, Grid2X2, Type, Heading, Search, X } from 'lucide-react';
+ import type { CanvasLayer } from '@/lib/slightnudge/source-canvas-contract';
+ import styles from './source-layers.module.css';
+@@ -37,9 +37,11 @@ function layerAppearance(layer: CanvasLayer) {
+   return { Icon: Frame, kind: 'frame' };
+ }
+ 
+-export function SourceLayers({ layers, selected, onSelect }: { layers: CanvasLayer[]; selected: string | null; onSelect(key: string): void }) {
++export function SourceLayers({ layers, selected, panelVisible, onSelect }: { layers: CanvasLayer[]; selected: string | null; panelVisible: boolean; onSelect(key: string): void }) {
+   const [collapsed, setCollapsed] = useState<Set<string>>(new Set());
+   const [query, setQuery] = useState('');
++  const scrollPane = useRef<HTMLElement>(null);
++  const selectedRow = useRef<HTMLDivElement>(null);
+   // Styled block containers own padding, fills and clipping too. They can be
+   // covered by a parent's decorative pseudo-element, making Layers their only
+   // reliable selection route. Keep unstyled pass-through divs out of the tree.
+@@ -72,6 +74,15 @@ export function SourceLayers({ layers, selected, onSelect }: { layers: CanvasLay
+     previousSelection.current = selected;
+     if (selected && needle && !matches.has(selected)) setQuery('');
+   }, [selected]);
++  useLayoutEffect(() => {
++    const pane = scrollPane.current;
++    const row = selectedRow.current;
++    if (!panelVisible || !pane || !row) return;
++    const list = pane.getBoundingClientRect();
++    const item = row.getBoundingClientRect();
++    if (item.top < list.top) pane.scrollTop += item.top - list.top;
++    else if (item.bottom > list.bottom) pane.scrollTop += item.bottom - list.bottom;
++  }, [selected, panelVisible, collapsed, needle]);
+   const childParents = new Set(parents.values());
+   return <section className={styles.panel} aria-label="Layers panel">
+     <div className={styles.searchRow}>
+@@ -81,13 +92,13 @@ export function SourceLayers({ layers, selected, onSelect }: { layers: CanvasLay
+         {query && <button type="button" aria-label="Clear layer search" onClick={() => setQuery('')}><X size={12}/></button>}
+       </div>
+     </div>
+-    <nav className={styles.layers} aria-label="Source layers">
++    <nav ref={scrollPane} className={styles.layers} aria-label="Source layers">
+       {!visible.length && <p className={styles.empty}>Your page layers will appear here.</p>}
+       {needle && !matches.size && <div className={styles.empty} role="status"><p>No matching layers.</p><button type="button" onClick={() => setQuery('')}>Clear search</button></div>}
+       {visible.filter(layer => needle ? shown.has(layer.key) : !ancestors(layer.key).some(key => collapsed.has(key))).map(layer => {
+         const children = childParents.has(layer.key), repeated = (layer.instances || 1) > 1;
+         const { Icon, kind } = layerAppearance(layer);
+-        return <div key={layer.key} className={styles.row} data-selected={selected === layer.key} data-layer-kind={kind} data-layer-tag={layer.tagName} style={{ paddingLeft: 4 + Math.min(ancestors(layer.key).length, 5) * 12 }}>
++        return <div key={layer.key} ref={selected === layer.key ? selectedRow : undefined} className={styles.row} data-selected={selected === layer.key} data-layer-kind={kind} data-layer-tag={layer.tagName} style={{ paddingLeft: 4 + Math.min(ancestors(layer.key).length, 5) * 12 }}>
+           {children ? <button type="button" className={styles.disclosure} disabled={Boolean(needle)} aria-label={`${collapsed.has(layer.key) && !needle ? 'Expand' : 'Collapse'} ${layerLabel(layer)}`} aria-expanded={Boolean(needle) || !collapsed.has(layer.key)}
+             onClick={() => setCollapsed(previous => { const next = new Set(previous); if (next.has(layer.key)) next.delete(layer.key); else next.add(layer.key); return next; })}><ChevronRight size={12} /></button> : <span className={styles.spacer} />}
+           <button type="button" className={styles.select} disabled={repeated} aria-pressed={selected === layer.key} onClick={() => onSelect(layer.key)}
+diff --git a/components/slightnudge/SourceProjectCanvas.tsx b/components/slightnudge/SourceProjectCanvas.tsx
+index a1ba1be..64e5223 100644
+--- a/components/slightnudge/SourceProjectCanvas.tsx
++++ b/components/slightnudge/SourceProjectCanvas.tsx
+@@ -97,15 +97,21 @@ export const SourceProjectCanvas = forwardRef<SourceCanvasHandle, {
+       if (!windowMode) next.searchParams.set('__slightnudge_canvas', '1');
+       documentUrl.current = next.toString(); setUrl(next.toString()); return;
+     }
+-    let active = true;
+-    fetch(`/api/slightnudge/repositories/${encodeURIComponent(repositoryId)}`).then(async response => {
++    const request = new AbortController();
++    fetch(`/api/slightnudge/repositories/${encodeURIComponent(repositoryId)}`, {
++      signal: AbortSignal.any([request.signal, AbortSignal.timeout(15000)]),
++    }).then(async response => {
+       const data = await readApiJson(response);
+       if (!response.ok) throw new Error(data.error || 'Could not inspect project compatibility.');
+-      if (!active) return;
++      if (request.signal.aborted) return;
+       setFramework(data.framework);
+       if (data.framework !== 'Next.js') setError(`${data.framework} source mapping is unsupported. No source changes are available.`);
+-    }).catch(cause => { if (active) { setFramework('Unavailable'); setError(cause.message); } });
+-    return () => { active = false; };
++    }).catch(cause => {
++      if (request.signal.aborted) return;
++      setFramework('Unavailable');
++      setError(cause.name === 'TimeoutError' ? 'Reading project compatibility timed out. Reload the editor to retry.' : cause.message);
++    });
++    return () => request.abort();
+   }, [repositoryId, localPageId, windowMode]);
+ 
+   useEffect(() => {
+@@ -235,12 +241,13 @@ export const SourceProjectCanvas = forwardRef<SourceCanvasHandle, {
+     setLoading(true); setError('');
+     try {
+       const token = await getClientSessionToken();
++      const signal = AbortSignal.timeout(35000);
+       let data: { url?: string; error?: string } | undefined;
+       // Only retry the read-only connection probe, never Save or Undo. A
+       // restarted Next server can be listening while its route still rebuilds.
+       for (let attempt = 0; attempt < 3; attempt++) {
+         const response = await fetch(`/api/slightnudge/repositories/${encodeURIComponent(repositoryId)}/preview-check`, {
+-          method: 'POST', headers: { 'content-type': 'application/json', 'x-slightnudge-token': token }, body: JSON.stringify({ url: address }),
++          signal, method: 'POST', headers: { 'content-type': 'application/json', 'x-slightnudge-token': token }, body: JSON.stringify({ url: address }),
+         });
+         data = await readApiJson(response);
+         if (response.ok) break;
+@@ -259,7 +266,7 @@ export const SourceProjectCanvas = forwardRef<SourceCanvasHandle, {
+       else next.searchParams.delete('__slightnudge_canvas');
+       setPageHeight(720);
+       setUrl(next.toString());
+-    } catch (cause) { setError(cause instanceof Error ? cause.message : 'Could not connect.'); }
++    } catch (cause) { setError(cause instanceof Error && cause.name === 'TimeoutError' ? 'Connecting to the local preview timed out. Check its server and try again.' : cause instanceof Error ? cause.message : 'Could not connect.'); }
+     finally { setLoading(false); }
+   }
+   function connect(event: React.FormEvent) { event.preventDefault(); void connectTo(input); }
+diff --git a/components/slightnudge/canvas-stage.module.css b/components/slightnudge/canvas-stage.module.css
+index 05898fa..0cb7189 100644
+--- a/components/slightnudge/canvas-stage.module.css
++++ b/components/slightnudge/canvas-stage.module.css
+@@ -1,7 +1,7 @@
+-.viewport { position: absolute; inset: 0; overflow: auto; outline: none; scrollbar-width: none; overscroll-behavior: contain; background: #f4f5f4; }
++.viewport { position: absolute; inset: 0; overflow: auto; outline: none; scrollbar-width: none; overscroll-behavior: contain; background: #eef1ef; }
+ .viewport::-webkit-scrollbar { display: none; }
+-.scene { position: relative; min-width: 100%; min-height: 100%; }
+-.page { position: absolute; transform-origin: top left; }
++.scene { position: relative; min-width: 100%; min-height: 100%; background-image: radial-gradient(#aab7af 0.7px, transparent 0.7px); background-size: 20px 20px; }
++.page { position: absolute; transform-origin: top left; background: #fff; outline: 1px solid #293b3026; box-shadow: 0 5px 20px #20372a18; }
+ .page > section { gap: 0; }
+ .page [data-selection-artboard], .page iframe { border: 0; border-radius: 0; box-shadow: none; }
+ .viewport[data-hand='true'] { cursor: grab; }
+diff --git a/components/slightnudge/editor-workspace.module.css b/components/slightnudge/editor-workspace.module.css
+index e7e717f..8eb28c6 100644
+--- a/components/slightnudge/editor-workspace.module.css
++++ b/components/slightnudge/editor-workspace.module.css
+@@ -35,10 +35,10 @@
+ .inspectorControls button:focus-visible, .studioShell [data-editor-tabs] button:focus-visible { outline: 2px solid #93afa0; outline-offset: 2px; }
+ .windowShell .editorColumn { width: 100vw; height: 100dvh; }
+ .windowShell [data-editor-canvas] { padding: 0; display: block; overflow: auto; }
+-.windowShell [data-editor-panel] { display: none; position: fixed; top: 80px; bottom: 16px; z-index: 80; border: 1px solid #e1e7e3; border-radius: 12px; box-shadow: 0 8px 32px #1d33231a; }
++.windowShell [data-editor-panel] { display: none; position: fixed; top: 16px; bottom: max(84px, calc(var(--floating-dock-height, 52px) + 32px)); max-width: calc(100vw - 32px); z-index: 80; border: 1px solid #dce4df; border-radius: 12px; box-shadow: 0 8px 32px #1d33231a; }
+ .windowShell[data-window-panel='layers'] [data-editor-panel='layers'] { display: flex; left: 16px; }
+ .windowShell[data-window-panel='inspector'] [data-editor-panel='inspector'] { display: flex; right: 16px; }
+-.windowShell .editorTopbar { position: fixed; z-index: 90; bottom: 16px; top: auto; left: 50%; transform: translateX(-50%); display: flex; flex-wrap: wrap; align-items: center; width: max-content; max-width: calc(100vw - 32px); min-height: 48px; height: auto; padding: 6px 10px; gap: 12px; border: 1px solid #e0e6e2; border-radius: 12px; background: #ffffffef; backdrop-filter: blur(16px); box-shadow: 0 4px 24px #223a2c15; pointer-events: none; }
++.windowShell .editorTopbar { position: fixed; z-index: 90; bottom: 16px; top: auto; left: 50%; transform: translateX(-50%); display: flex; flex-wrap: wrap; align-items: center; width: max-content; max-width: calc(100vw - 32px); min-height: 48px; height: auto; padding: 7px 10px; gap: 10px; border: 1px solid #dce4df; border-radius: 12px; background: #fff; box-shadow: 0 6px 24px #223a2c20; pointer-events: none; }
+ .windowShell .editorTopbar :is(button, a, input, select, textarea, [role='button']) { pointer-events: auto; }
+ .windowShell .projectContext, .windowShell .projectsLink, .windowShell [data-editor-breadcrumb] { display: none; }
+ .windowShell [data-editor-brand] { display: none; }
+@@ -47,13 +47,13 @@
+ .windowPanelHeader button { display: inline-flex; border: 0; padding: 5px; border-radius: 5px; color: #8a958e; background: transparent; cursor: pointer; }
+ .windowPanelHeader button:hover { background: #f1f5f2; color: #365241; }
+ .windowActions { display: flex; align-items: center; gap: 5px; flex-shrink: 0; }
+-.windowActions > button, .windowActions > a, .windowLaunch { display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px; padding: 0; border: 0; border-radius: 6px; color: #718077; background: transparent; cursor: pointer; }
++.windowActions > button, .windowActions > a, .windowLaunch { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; padding: 0; border: 0; border-radius: 6px; color: #45574d; background: transparent; cursor: pointer; }
+ .windowActions > button:hover, .windowActions > a:hover, .windowLaunch:hover { color: #176b55; background: #f0f5f2; }
+ .windowActions > button[aria-expanded='true'] { color: #176b55; background: #eaf3ed; }
+ .windowActions > .dockGrip { width: 18px; cursor: grab; touch-action: none; color: #a0aaa3; }
+ .windowActions > .dockGrip:active { cursor: grabbing; }
+ .interactionMode { display: flex; gap: 2px; padding: 3px; background: #f0f3f1; border-radius: 8px; margin: 0 5px; }
+-.interactionMode button { border: 0; border-radius: 5px; padding: 5px 10px; background: transparent; color: #87928b; font-size: 11px; cursor: pointer; }
++.interactionMode button { min-height: 28px; border: 0; border-radius: 5px; padding: 4px 10px; background: transparent; color: #53645a; font-size: 12px; cursor: pointer; }
+ .interactionMode button[aria-pressed='true'] { color: #263d30; background: #fff; box-shadow: 0 1px 3px #1c322317; }
+ .windowShell .draftControls { border-right: 0; padding-right: 0; }
+ @media(max-width: 760px) { .windowShell .viewportControl, .windowShell .draftControls [role='status'] { display: none; } .windowShell .editorTopbar { gap: 5px; } }
+@@ -267,7 +267,7 @@
+   user-select: none;
+ }
+ .floatingFormatting { z-index: 70; display: flex; flex-direction: column; align-items: center; min-width: max-content; user-select: none; }
+-.sourceSelection { position: relative; border: 1px solid #0ccb8b; border-radius: 2px; pointer-events: none; }
++.sourceSelection { position: relative; border: 1px solid #168360; border-radius: 2px; pointer-events: none; }
+ .sourceLayer:disabled { cursor: default; opacity: .55; }
+ .sourceSelection .moveAnchor, .sourceSelection .edgeResizeHandle, .sourceSelection .cornerResizeHandle { pointer-events: auto; }
+ .sourceLayer { display: flex; align-items: center; gap: 8px; width: 100%; min-height: 30px; padding: 5px 8px; border: 0; border-radius: 5px; background: transparent; text-align: left; cursor: pointer; }
+@@ -448,7 +448,7 @@
+ .draftSummary button span { padding: 1px 5px; border-radius: 4px; background: #eef5ef; font-variant-numeric: tabular-nums; }
+ .draftSummary button:disabled { opacity: .4; cursor: default; }
+ .draftSummary ol { flex-basis: 100%; max-height: 130px; overflow: auto; margin: 0; padding-left: 18px; color: #738076; font-size: 10px; line-height: 1.8; }
+-.resizeBar button { display: flex; align-items: center; gap: 7px; height: 24px; padding: 0 8px; border: 0; border-radius: 4px; color: #4a5547; background: transparent; font-size: 10px; cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cpath d='M16 3 9 12h14zM16 18a6 6 0 1 0 0 12a6 6 0 1 0 0 -12z' fill='%2315191d' stroke='white' stroke-width='2' stroke-linejoin='round'/%3E%3C/svg%3E") 16 16, ew-resize; touch-action: none; }
++.resizeBar button { display: flex; align-items: center; gap: 7px; height: 24px; padding: 0 8px; border: 0; border-radius: 4px; color: #4a5547; background: transparent; font-size: 10px; cursor: ew-resize; touch-action: none; }
+ .resizeBar button:hover, .resizeBar button[aria-pressed='true'] { background: #edf2e9; color: #274b35; }
+ .resizeValue { font-variant-numeric: tabular-nums; color: #7d8678; }
+ .resizeBar select { height: 24px; width: 110px; border: 0; border-left: 1px solid #e5e9e7; background: transparent; font-size: 10px; color: #687261; padding-left: 8px; }
+@@ -503,17 +503,17 @@
+ .recoveryCard button:focus-visible { outline: 2px solid #729082; outline-offset: 3px; }
+ .recoveryCard small { display: block; margin-top: 12px; color: #929b8d; text-align: center; font-size: 10px; }
+ 
+-.edgeResizeHandle, .cornerResizeHandle { position: absolute; z-index: 35; padding: 0; border: 0; background: transparent; cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cpath d='M16 3 9 12h14zM16 18a6 6 0 1 0 0 12a6 6 0 1 0 0 -12z' fill='%2315191d' stroke='white' stroke-width='2' stroke-linejoin='round'/%3E%3C/svg%3E") 16 16, ew-resize; touch-action: none; }
++.edgeResizeHandle, .cornerResizeHandle { position: absolute; z-index: 35; padding: 0; border: 0; background: transparent; cursor: ew-resize; touch-action: none; }
+ .edgeResizeHandle { top: 50%; width: 18px; height: 30px; transform: translateY(-50%); }
+ .westHandle { left: -9px; }
+ .eastHandle { right: -9px; }
+-.edgeResizeHandle::after, .cornerResizeHandle::after { content: ''; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 10px; height: 10px; border: 0; border-radius: 50%; background: #0ccb8b; transition: box-shadow 100ms ease; }
++.edgeResizeHandle::after, .cornerResizeHandle::after { content: ''; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 9px; height: 9px; border: 1px solid #168360; border-radius: 2px; background: #fff; transition: background 100ms ease, box-shadow 100ms ease; }
+ .cornerResizeHandle { bottom: -15px; width: 30px; height: 30px; }
+ .westCorner { left: -15px; }
+ .eastCorner { right: -15px; }
+-.westCorner { cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cpath d='M16 3 9 12h14zM16 18a6 6 0 1 0 0 12a6 6 0 1 0 0 -12z' fill='%2315191d' stroke='white' stroke-width='2' stroke-linejoin='round'/%3E%3C/svg%3E") 16 16, nesw-resize; }
+-.eastCorner { cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cpath d='M16 3 9 12h14zM16 18a6 6 0 1 0 0 12a6 6 0 1 0 0 -12z' fill='%2315191d' stroke='white' stroke-width='2' stroke-linejoin='round'/%3E%3C/svg%3E") 16 16, nwse-resize; }
+-.edgeResizeHandle:hover::after, .cornerResizeHandle:hover::after, .edgeResizeHandle[aria-pressed='true']::after, .cornerResizeHandle[aria-pressed='true']::after { background: #0ccb8b; box-shadow: 0 0 0 3px #0ccb8b20; }
++.westCorner { cursor: nesw-resize; }
++.eastCorner { cursor: nwse-resize; }
++.edgeResizeHandle:hover:not(:disabled)::after, .cornerResizeHandle:hover:not(:disabled)::after, .edgeResizeHandle[aria-pressed='true']::after, .cornerResizeHandle[aria-pressed='true']::after { background: #168360; box-shadow: 0 0 0 3px #16836026; }
+ .edgeResizeHandle:focus-visible, .cornerResizeHandle:focus-visible { outline: 2px solid #729082; outline-offset: 1px; border-radius: 7px; }
+ .edgeResizeHandle:disabled, .cornerResizeHandle:disabled { opacity: .45; cursor: default; }
+ .cornerResizeHandle:disabled { width: 10px; height: 10px; bottom: -5px; z-index: 34; }
+@@ -534,6 +534,14 @@
+ .unifiedViewTools label {display:flex;align-items:center;gap:5px;color:#78857d;font-size:11px}
+ .unifiedViewTools select {border:1px solid #e0e6e2;border-radius:6px;background:#f6f8f6;padding:5px 6px;color:#35463b;font:inherit;max-width:104px}
+ .unifiedViewTools select:focus-visible {outline:2px solid #85b8a5;outline-offset:2px}
++.windowShell .canvasTools { flex-wrap: wrap; min-width: 0; max-width: 100%; }
++.windowShell .draftControls > span { color: #54665b; }
++
++@media (max-width: 900px) {
++  .windowShell .viewportControl { display: flex; }
++  .windowShell .viewportControl button { width: 28px; padding: 0; }
++  .windowShell .viewportControl button span { display: none; }
++}
+ 
+ .sourceConflictNotice {
+   position: fixed;
+@@ -564,4 +572,76 @@
+ .sourceConflictNotice button:disabled { opacity: .5; cursor: wait; }
+ 
+ /* Keep the active resize cursor over the iframe and moving edge until release. */
+-.resizeCapture { position: fixed; inset: 0; z-index: 80; background: transparent; touch-action: none; }
++.resizeCapture { position: fixed; inset: 0; z-index: 95; background: transparent; touch-action: none; }
++
++.windowShell [data-docked='true'] {
++  --layers-width: 0px;
++  --design-width: 0px;
++  display: grid;
++  grid-template-columns: var(--layers-width) minmax(0, 1fr) var(--design-width);
++  grid-template-rows: auto minmax(0, 1fr) 40px;
++  background: #fff;
++}
++.windowShell [data-docked='true'][data-layers-open='true'] { --layers-width: 224px; }
++.windowShell [data-docked='true'][data-design-open='true'] { --design-width: 312px; }
++.windowShell [data-docked='true'] .editorColumn { display: contents; }
++.windowShell [data-docked='true'] .editorTopbar {
++  position: relative;
++  grid-area: 1 / 1 / 2 / -1;
++  inset: auto;
++  transform: none;
++  width: 100%;
++  max-width: none;
++  min-height: 54px;
++  padding: 8px 14px;
++  gap: 12px;
++  border: 0;
++  border-bottom: 1px solid #e0e5e2;
++  border-radius: 0;
++  box-shadow: none;
++  pointer-events: auto;
++}
++.windowShell [data-docked='true'] .projectContext { display: flex; min-width: 0; flex: 1; }
++.windowShell [data-docked='true'] .projectName { max-width: 180px; }
++.windowShell [data-docked='true'] [data-editor-panel] {
++  position: relative;
++  inset: auto;
++  grid-row: 2 / -1;
++  min-height: 0;
++  width: auto;
++  border: 0;
++  border-radius: 0;
++  box-shadow: none;
++}
++.windowShell [data-docked='true'] [data-editor-panel='layers'] { grid-column: 1; border-right: 1px solid #e0e5e2; }
++.windowShell [data-docked='true'] [data-editor-panel='inspector'] { grid-column: 3; border-left: 1px solid #e0e5e2; }
++.windowShell [data-docked='true'][data-layers-open] [data-editor-panel='layers'],
++.windowShell [data-docked='true'][data-design-open] [data-editor-panel='inspector'],
++.windowShell [data-docked='true'] [data-editor-brand] { display: flex; }
++.windowShell [data-docked='true']:not([data-layers-open]) [data-editor-panel='layers'],
++.windowShell [data-docked='true']:not([data-design-open]) [data-editor-panel='inspector'] { display: none; }
++.windowShell[data-editor-view='fit'] [data-docked='true'] [data-editor-canvas] {
++  grid-area: 2 / 2;
++  min-width: 0;
++  padding: 0;
++}
++.windowShell [data-docked='true'] .moveAnchor { top: auto; bottom: calc(100% + 6px); }
++.windowShell [data-docked='true'] .moveControl { transform-origin: center bottom; }
++.studioStatus {
++  grid-area: 3 / 2;
++  display: flex;
++  align-items: center;
++  min-width: 0;
++  gap: 12px;
++  padding: 0 10px;
++  border-top: 1px solid #e0e5e2;
++  color: #526259;
++}
++.selectionPath { display: flex; align-items: center; gap: 6px; min-width: 0; font-size: 11px; }
++.selectionPath svg { flex-shrink: 0; }
++.selectionPath span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
++.canvasMode { margin-left: auto; flex-shrink: 0; font-size: 11px; }
++@media (max-width: 1320px) {
++  .windowShell [data-docked='true'] .contextSlash,
++  .windowShell [data-docked='true'] .pageName { display: none; }
++}
+diff --git a/components/slightnudge/responsive-controls.module.css b/components/slightnudge/responsive-controls.module.css
+index ba9d042..be41fa5 100644
+--- a/components/slightnudge/responsive-controls.module.css
++++ b/components/slightnudge/responsive-controls.module.css
+@@ -1,11 +1,11 @@
+-.controls { display:flex; align-items:center; gap:8px; color:#667168; font-family:inherit; font-size:11px; line-height:1.4; }
++.controls { display:flex; flex-wrap:wrap; align-items:center; gap:8px; color:#53645a; font-family:inherit; font-size:11px; line-height:1.4; }
+ .width { display:flex; align-items:center; gap:3px; padding:4px 7px; border:1px solid #e3e8e4; border-radius:6px; background:#fff; font-variant-numeric:tabular-nums; }
+ .width input { width:42px; padding:0; border:0; outline:none; background:transparent; color:#34443b; font:inherit; appearance:textfield; }
+ .width input::-webkit-inner-spin-button { appearance:none; }
+ .width:focus-within { border-color:#729b87; box-shadow:0 0 0 2px #16805c0b; }
+ .width span { color:#98a198; font-size:10px; }
+ .scope { display:flex; align-items:center; gap:6px; }
+-.scope > span { color:#879187; font-size:10px; }
++.scope > span { color:#53645a; font-size:11px; }
+ .scope select { max-width:165px; min-height:28px; padding:4px 22px 4px 7px; border:1px solid #e3e8e4; border-radius:6px; background-color:#fff; color:#34443b; font:inherit; cursor:pointer; }
+ .scope select:focus-visible { outline:2px solid #729b87; outline-offset:2px; }
+ .match { border:0; border-radius:5px; padding:5px 7px; background:#edf5ef; color:#2e7055; font:inherit; cursor:pointer; white-space:nowrap; }
+diff --git a/components/slightnudge/useWindowDock.ts b/components/slightnudge/useWindowDock.ts
+index 186e41d..d37ca7e 100644
+--- a/components/slightnudge/useWindowDock.ts
++++ b/components/slightnudge/useWindowDock.ts
+@@ -4,7 +4,6 @@ import { useEffect, useRef, useState, type PointerEvent, type KeyboardEvent, typ
+ export function useWindowDock(enabled: boolean) {
+   const ref = useRef<HTMLElement>(null);
+   const [position, setPosition] = useState<{ x: number; y: number } | null>(null);
+-  const [occluded, setOccluded] = useState(false);
+   const scheduleAvoidance = useRef(() => {});
+   const drag = useRef<{ pointer: number; x: number; y: number; left: number; top: number; previous: typeof position } | null>(null);
+   const clamp = (x: number, y: number) => ({ x: Math.round(Math.max(8, Math.min(x, innerWidth - (ref.current?.offsetWidth || 0) - 8))), y: Math.round(Math.max(8, Math.min(y, innerHeight - (ref.current?.offsetHeight || 48) - 8))) });
+@@ -19,11 +18,11 @@ export function useWindowDock(enabled: boolean) {
+     const avoidSelection = () => {
+       if (!ref.current || drag.current) return;
+       const selection = document.querySelector<HTMLElement>('[aria-label="Selected source element"]');
+-      if (!selection) { setOccluded(false); return; }
++      if (!selection) return;
+       const target = selection.getBoundingClientRect(), dock = ref.current.getBoundingClientRect();
+-      if (!target.width || !target.height) { setOccluded(false); return; }
++      if (!target.width || !target.height) return;
+       const clear = (x: number, y: number) => x + dock.width <= target.left || x >= target.right || y + dock.height <= target.top || y >= target.bottom;
+-      if (clear(dock.left, dock.top)) { setOccluded(false); return; }
++      if (clear(dock.left, dock.top)) return;
+       const gap = 8;
+       const candidates = [
+         { x: dock.left, y: target.top - dock.height - gap },
+@@ -32,18 +31,27 @@ export function useWindowDock(enabled: boolean) {
+         { x: target.right + gap, y: dock.top },
+       ].filter(point => point.x >= gap && point.y >= gap && point.x + dock.width <= innerWidth - gap && point.y + dock.height <= innerHeight - gap && clear(point.x, point.y));
+       const next = candidates.sort((a, b) => Math.hypot(a.x - dock.left, a.y - dock.top) - Math.hypot(b.x - dock.left, b.y - dock.top))[0];
+-      // When a selection fills the viewport there is no free band for a dock.
+-      // Yield its controls until selection clears rather than cover the target.
+-      setOccluded(!next);
++      // Keep Save, Undo and view controls reachable for viewport-sized selections.
+       if (next) setPosition(previous => previous?.x === next.x && previous?.y === next.y ? previous : next);
+     };
+-    const schedule = () => { cancelAnimationFrame(animation); animation = requestAnimationFrame(avoidSelection); };
++    const schedule = () => {
++      if (animation) return;
++      animation = requestAnimationFrame(() => { animation = 0; avoidSelection(); });
++    };
+     scheduleAvoidance.current = schedule;
+     const changes = new MutationObserver(schedule);
+     changes.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['style', 'class'] });
+-    const sizes = new ResizeObserver(schedule); if (ref.current) sizes.observe(ref.current);
++    const toolbar = ref.current;
++    const workspace = toolbar?.closest<HTMLElement>('[data-editor-workspace]');
++    const measure = () => {
++      if (toolbar && workspace) workspace.style.setProperty('--floating-dock-height', `${toolbar.offsetHeight}px`);
++      schedule();
++    };
++    const sizes = new ResizeObserver(measure);
++    if (toolbar) sizes.observe(toolbar);
++    measure();
+     window.addEventListener('scroll', schedule, true); window.addEventListener('resize', schedule); schedule();
+-    return () => { cancelAnimationFrame(animation); changes.disconnect(); sizes.disconnect(); window.removeEventListener('scroll', schedule, true); window.removeEventListener('resize', schedule); scheduleAvoidance.current = () => {}; };
++    return () => { cancelAnimationFrame(animation); changes.disconnect(); sizes.disconnect(); workspace?.style.removeProperty('--floating-dock-height'); window.removeEventListener('scroll', schedule, true); window.removeEventListener('resize', schedule); scheduleAvoidance.current = () => {}; };
+   }, [enabled]);
+   const release = (event: PointerEvent<HTMLButtonElement>) => { if (event.currentTarget.hasPointerCapture(event.pointerId)) event.currentTarget.releasePointerCapture(event.pointerId); drag.current = null; scheduleAvoidance.current(); };
+   const grip = {
+@@ -65,6 +73,6 @@ export function useWindowDock(enabled: boolean) {
+       setPosition(clamp(box.left + (event.key === 'ArrowLeft' ? -step : event.key === 'ArrowRight' ? step : 0), box.top + (event.key === 'ArrowUp' ? -step : event.key === 'ArrowDown' ? step : 0)));
+     },
+   };
+-  const style: CSSProperties = { ...(position ? { left: position.x, top: position.y, bottom: 'auto', transform: 'none' } : {}), visibility: occluded ? 'hidden' : undefined };
++  const style: CSSProperties = position ? { left: position.x, top: position.y, bottom: 'auto', transform: 'none' } : {};
+   return { ref, position, style, grip };
+ }
+diff --git a/fixtures/1-plain-static.tsx b/fixtures/1-plain-static.tsx
+index 87558a4..923ce98 100644
+--- a/fixtures/1-plain-static.tsx
++++ b/fixtures/1-plain-static.tsx
+@@ -2,13 +2,13 @@
+ 
+ export default function PlainStaticPage() {
+   return (
+-    <main className="sn-playground-page translate-x-[4px] translate-y-[8px]">
+-      <section className="sn-playground-hero p-3 translate-x-[-36px] translate-y-[0px]" id="overview">
++    <main className="sn-playground-page translate-x-[0px] translate-y-[0px] max-w-6xl">
++      <section className="sn-playground-hero p-3 translate-x-[-24px] translate-y-[20px] max-w-6xl" id="overview">
+                   <div className="sn-playground-visual"><div className="sn-playground-window"><div className="sn-playground-window-head"><span/><span/><span/><i>northstar.app/workspace</i></div><div className="sn-playground-window-body"><div className="sn-playground-sidebar"><span/><span/><span/><span/></div><div className="sn-playground-main"><span className="sn-playground-skeleton short"/><span className="sn-playground-skeleton title"/><div className="sn-playground-cards"><i/><i/><i/></div><div className="sn-playground-chart"><b/><b/><b/><b/><b/><b/><b/></div></div></div></div><div className="sn-playground-floating-card"><span className="sn-playground-check">✓</span><div><strong>Focus time protected</strong><span>Your team is in flow</span></div></div></div>
+-                  <div className="sn-playground-content p-3 lg:p-4 translate-x-[-8px] translate-y-[4px]"><p className="sn-playground-eyebrow"><span/> A calmer way to work</p><p className="sn-playground-description text-xl max-w-sm translate-x-[-4px] translate-y-[4px]">One thoughtful workspace for the people, projects, and plans that move your business forward.</p><span className="sn-playground-note">Free to start · Set up in minutes</span><h1 id="target" data-source-file="fixtures/1-plain-static.tsx" data-source-line="8" className="ml-2.5 mt-1 text-2xl translate-x-[-16px] translate-y-[0px]">Make room for your best work.</h1><a href="#start" className="sn-playground-primary lg:text-lg">Get started <span>→</span></a></div>
++                  <div className="sn-playground-content p-3 lg:p-4 translate-x-[-8px] translate-y-[4px]"><p className="sn-playground-eyebrow"><span/> A calmer way to work</p><p className="sn-playground-description text-xl max-w-sm translate-x-[168px] translate-y-[-172px]">One thoughtful workspace for the people, projects, and plans that move your business forward.</p><span className="sn-playground-note">Free to start · Set up in minutes</span><h1 id="target" data-source-file="fixtures/1-plain-static.tsx" data-source-line="8" className="ml-2.5 mt-1 text-2xl translate-x-[480px] translate-y-[-116px] max-w-sm">Make room for your best work.</h1><a href="#start" className="sn-playground-primary lg:text-lg">Get started <span>→</span></a></div>
+                 </section>
+       <nav className="sn-playground-nav"><a className="sn-playground-logo" href="#overview"><span>n</span> northstar</a><div><a href="#features">Product</a><a href="#pricing">Pricing</a><a href="#resources">Resources</a></div><a className="sn-playground-nav-cta" href="#start">Log in <span>↗</span></a></nav>
+-      <section className="sn-playground-trust" id="features"><span>Designed for the work that matters</span><div><i>Team planning</i><i>Clear priorities</i><i>One calm workspace</i></div></section>
++      <section className="sn-playground-trust translate-x-[12px] translate-y-[-4px]" id="features"><span>Designed for the work that matters</span><div><i>Team planning</i><i>Clear priorities</i><i>One calm workspace</i></div></section>
+     </main>
+   );
+ }
+diff --git a/lib/slightnudge/client.ts b/lib/slightnudge/client.ts
+index cdbf9c4..6e6a326 100644
+--- a/lib/slightnudge/client.ts
++++ b/lib/slightnudge/client.ts
+@@ -266,6 +266,7 @@ export async function discardEditAPI(previewId: string): Promise<boolean> {
+   try {
+     const token = await getClientSessionToken();
+     const res = await fetch(`/api/slightnudge/preview?id=${encodeURIComponent(previewId)}`, {
++      signal: AbortSignal.timeout(10000),
+       method: 'DELETE',
+       headers: {
+         'x-slightnudge-token': token,
+diff --git a/lib/slightnudge/imported-canvas-runtime.ts b/lib/slightnudge/imported-canvas-runtime.ts
+index face5cc..a8ed8e8 100644
+--- a/lib/slightnudge/imported-canvas-runtime.ts
++++ b/lib/slightnudge/imported-canvas-runtime.ts
+@@ -9,7 +9,12 @@ export function importedCanvasRuntime(send: (type: string, extra?: Record<string
+   // Growing the iframe must not repeatedly grow a 100vh hero. Pin vertical
+   // viewport units to the design viewport, keeping width breakpoints native.
+   const originals = new WeakMap<CSSStyleDeclaration, Map<string, { authored: string; pinned: string }>>();
++  const pinnedDeclarations = new WeakMap<CSSStyleDeclaration, { cssText: string; width: number }>();
+   const pin = (style: CSSStyleDeclaration) => {
++    // Geometry updates during gestures revisit the same stylesheets. Reuse
++    // unchanged declarations, but invalidate for CSSOM edits and vmin/vmax.
++    const cached = pinnedDeclarations.get(style);
++    if (cached?.cssText === style.cssText && cached.width === innerWidth) return;
+     let values = originals.get(style);
+     if (!values) { values = new Map(); originals.set(style, values); }
+     for (const property of Array.from(style)) {
+@@ -24,6 +29,7 @@ export function importedCanvasRuntime(send: (type: string, extra?: Record<string
+       if (pinned !== current) style.setProperty(property, pinned, style.getPropertyPriority(property));
+       values.set(property, { authored, pinned });
+     }
++    pinnedDeclarations.set(style, { cssText: style.cssText, width: innerWidth });
+   };
+   const rules = (list: CSSRuleList) => {
+     for (const rule of Array.from(list)) {
+diff --git a/lib/slightnudge/source-canvas-bridge.ts b/lib/slightnudge/source-canvas-bridge.ts
+index f4d4023..98e9e1a 100644
+--- a/lib/slightnudge/source-canvas-bridge.ts
++++ b/lib/slightnudge/source-canvas-bridge.ts
+@@ -525,14 +525,27 @@ function sourceCanvasRuntime(continuous: boolean, repositoryId = '', protocol =
+       catalog(); geometry(); reply(false, error instanceof Error ? error.message : 'The source page could not verify this operation.');
+     }
+   });
+-  let scheduled = false;
+-  const changed = () => { if (scheduled) return; scheduled = true; requestAnimationFrame(() => { scheduled = false; geometry(); }); };
++  let scheduled = false, viewportChanged = false;
++  const changed = () => {
++    if (scheduled) return;
++    scheduled = true;
++    requestAnimationFrame(() => {
++      scheduled = false;
++      if (viewportChanged) {
++        viewportChanged = false;
++        viewport();
++        catalog();
++      }
++      geometry();
++    });
++  };
+   const viewport = () => {
+     const probe = document.createElement('span'); probe.style.cssText = 'display:none!important;font-size:initial!important'; document.documentElement.append(probe);
+     const initialFontSize = parseFloat(getComputedStyle(probe).fontSize); probe.remove();
+     send('source-viewport', { width: innerWidth, height: innerHeight, initialFontSize });
+   };
+-  window.addEventListener('scroll', changed, { passive: true }); window.addEventListener('resize', () => { viewport(); catalog(); changed(); });
++  window.addEventListener('scroll', changed, { passive: true });
++  window.addEventListener('resize', () => { viewportChanged = true; changed(); });
+   const observer = new ResizeObserver(changed); observer.observe(root);
+   let route = location.pathname + location.search;
+   const routes = new MutationObserver(() => { const next = location.pathname + location.search; if (next === route) return; route = next; selected = null; catalog(); send('source-route'); });
+diff --git a/next-env.d.ts b/next-env.d.ts
+index ce4e94a..a419cbe 100644
+--- a/next-env.d.ts
++++ b/next-env.d.ts
+@@ -1,7 +1,7 @@
+ /// <reference types="next" />
+ /// <reference types="next/image-types/global" />
+-import "./.next/types/routes.d.ts";
+-import "./.next/types/root-params.d.ts";
++import "./.next/dev/types/routes.d.ts";
++import "./.next/dev/types/root-params.d.ts";
+ 
+ // NOTE: This file should not be edited
+ // see https://nextjs.org/docs/app/api-reference/config/typescript for more information.
+diff --git a/test/helpers/core-editing-browser.ts b/test/helpers/core-editing-browser.ts
+index 2967b29..312cbc0 100644
+--- a/test/helpers/core-editing-browser.ts
++++ b/test/helpers/core-editing-browser.ts
+@@ -20,7 +20,7 @@ export default function Page(){return <main className="bg-white p-10">
+     for (const windowMode of [false, true]) {
+       fs.writeFileSync(file, fixture);
+       await page.goto('about:blank');
+-      await page.goto(`${baseURL}/studio${windowMode ? '/window' : ''}`, { waitUntil: 'domcontentloaded', timeout: 120000 });
++      await page.goto(`${baseURL}/editor?view=${windowMode ? 'full' : 'fit&panel=inspector'}`, { waitUntil: 'domcontentloaded', timeout: 120000 });
+       await page.locator('[data-source-ready="true"]').waitFor({ timeout: 120000 });
+       const frame = page.frameLocator('iframe[title="Actual project"]');
+       const toolbar = page.getByRole('toolbar', { name: 'Selection formatting', exact: true });
+@@ -132,6 +132,10 @@ export default function Page(){return <main className="bg-white p-10">
+         await page.getByRole('button', { name: 'Browse', exact: true }).click();
+         const prevented = await frame.locator('body').evaluate(el => { const event = new KeyboardEvent('keydown', { key: 'z', ctrlKey: true, bubbles: true, cancelable: true }); el.dispatchEvent(event); return event.defaultPrevented; });
+         assert.equal(prevented, false, 'Browse keeps website keyboard behavior');
++        await page.getByRole('combobox', { name: 'Canvas zoom', exact: true }).selectOption('0.5');
++        await page.waitForURL(url => url.searchParams.get('view') === 'fit');
++        await page.locator('[data-canvas-stage][data-zoom="0.5"]').waitFor();
++        assert.equal(await page.getByRole('combobox', { name: 'Canvas zoom', exact: true }).inputValue(), '0.5', 'Switching from Full page preserves the chosen zoom');
+       }
+       assert.deepEqual(errors, []);
+       console.log(`PASS core editing ${windowMode ? 'window' : 'Studio'}: original-size text, button/icon, alignment/fill, padding/width, keyboard ownership, Move/Undo/Redo, grid, section order, responsive isolation, grouped Save/exact Undo`);
+diff --git a/test/helpers/imported-canvas-browser.ts b/test/helpers/imported-canvas-browser.ts
+index 0b4246f..f61e9ad 100644
+--- a/test/helpers/imported-canvas-browser.ts
++++ b/test/helpers/imported-canvas-browser.ts
+@@ -34,7 +34,7 @@ export async function checkImportedCanvas(page: Page, baseURL: string, workspace
+     let ready = false;
+     for (let i = 0; i < 100; i++) { try { if ((await fetch(previewURL, { signal: AbortSignal.timeout(5000) })).ok) { ready = true; break; } } catch {} await page.waitForTimeout(300); }
+     assert.ok(ready, diagnostic);
+-    const navigate = () => page.goto(`${baseURL}/studio/source-proof/edit?preview=${encodeURIComponent(previewURL)}`, { waitUntil: 'domcontentloaded', timeout: 120000 });
++    const navigate = () => page.goto(`${baseURL}/editor/source-proof?view=fit&panel=inspector&preview=${encodeURIComponent(previewURL)}`, { waitUntil: 'domcontentloaded', timeout: 120000 });
+     await navigate(); await connected();
+     const stage = page.locator('[data-canvas-stage]'), iframe = page.locator('iframe[title="Actual project"]');
+     const zoom = page.getByRole('combobox', { name: 'Canvas zoom', exact: true });
+@@ -112,7 +112,7 @@ export async function checkImportedCanvas(page: Page, baseURL: string, workspace
+     await page.getByRole('button', { name: 'Fit page to canvas', exact: true }).click();
+     await page.screenshot({ path: path.join(process.cwd(), 'docs/imported-canvas.png') });
+     // The separate editing window retains the site's native viewport/scrolling.
+-    await page.goto(`${baseURL}/studio/source-proof/window?preview=${encodeURIComponent(previewURL)}`, { waitUntil: 'domcontentloaded', timeout: 120000 }); await connected();
++    await page.goto(`${baseURL}/editor/source-proof?view=full&panel=inspector&preview=${encodeURIComponent(previewURL)}`, { waitUntil: 'domcontentloaded', timeout: 120000 }); await connected();
+     assert.equal(await frame.locator('html').getAttribute('data-editor-canvas-page'), null);
+     assert.equal(await hero.evaluate(() => getComputedStyle(document.documentElement).overflow), 'scroll');
+     assert.deepEqual(errors, []);
+diff --git a/test/review-consent.browser.ts b/test/review-consent.browser.ts
+index c17daf3..0db61f1 100644
+--- a/test/review-consent.browser.ts
++++ b/test/review-consent.browser.ts
+@@ -54,6 +54,13 @@ if (process.argv.includes('--demo') && (process.argv.includes('--live') || proce
+   throw new Error('Imported-project interactive demos are not available yet. Use --m1 --demo for the current Studio with real edits in a disposable copy.');
+ }
+ const workspace = fs.mkdtempSync(path.join(os.tmpdir(), 'sn-review-consent-'));
++// Runtime dependencies added by gesture and draft recovery must also exist in
++// the disposable app, including when they have not yet been committed.
++for (const file of ['lib/slightnudge/draft-conflict-recovery.ts', 'lib/slightnudge/resize-layout.ts']) {
++  const dest = path.join(workspace, file);
++  fs.mkdirSync(path.dirname(dest), { recursive: true });
++  fs.copyFileSync(path.join(root, file), dest);
++}
+ for (const file of ['lib/slightnudge/appearance-values.ts','components/slightnudge/AppearanceControls.tsx','components/slightnudge/ConstraintControls.tsx','components/slightnudge/appearance-controls.module.css','test/helpers/appearance-layout-browser.ts','lib/slightnudge/instance-ownership.ts','lib/slightnudge/instance-props.ts','lib/slightnudge/instance-trace.ts','test/helpers/shared-instance-browser.ts','lib/slightnudge/component-ownership.ts', 'lib/slightnudge/component-props.ts', 'components/slightnudge/ComponentProps.tsx', 'test/helpers/component-props-browser.ts']) { const dest = path.join(workspace, file); fs.mkdirSync(path.dirname(dest), { recursive: true }); fs.copyFileSync(path.join(root, file), dest); }
+ for (const file of ['test/helpers/high-fidelity-browser.ts', 'test/preview-connection.test.ts', 'test/helpers/real-multi-file-browser.ts', 'lib/slightnudge/editing-capabilities.ts', 'test/helpers/core-editing-browser.ts', 'test/helpers/real-project-canvas-browser.ts', 'components/marketing/ReviewWorkflowSection.tsx', 'lib/slightnudge/jsx-text.ts']) {
+   const dest = path.join(workspace, file); fs.mkdirSync(path.dirname(dest), { recursive: true }); fs.copyFileSync(path.join(root, file), dest);
+@@ -107,6 +114,11 @@ for (const file of ['lib/slightnudge/direct-manipulation.ts', 'test/direct-manip
+ if (process.argv.includes('--baseline')) {
+   fs.writeFileSync(path.join(workspace, 'components/slightnudge/SlightNudgeOverlay.tsx'), execFileSync('git', ['show', 'HEAD:components/slightnudge/SlightNudgeOverlay.tsx']));
+ }
++if (process.argv.includes('--performance-baseline')) {
++  for (const file of ['app/layout.tsx', 'lib/slightnudge/imported-canvas-runtime.ts']) {
++    fs.writeFileSync(path.join(workspace, file), execFileSync('git', ['show', `HEAD:${file}`]));
++  }
++}
+ if (process.argv.includes('--current-baseline')) {
+   fs.writeFileSync(path.join(workspace, 'app/studio/page.tsx'), execFileSync('git', ['show', 'HEAD:app/studio/page.tsx']));
+ }

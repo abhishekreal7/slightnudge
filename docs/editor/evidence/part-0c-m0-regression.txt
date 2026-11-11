@@ -1,0 +1,52 @@
+> C:\nvm4w\nodejs\node.exe --import tsx scratch/editor-sprint1-isolate.ts m0-regression
+{"temporaryRoot":"C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-m0-regression-w5yW6v","baseline":"6cadd06eb1dbbf55032354db2817add1c52e3ac3","suite":"m0-regression","overlays":[],"omitted":".env.example"}
+Isolated seed staged paths: .env.example
+Isolated lab URL: http://127.0.0.1:3110
+====================================================
+🧪 M0 REGRESSION SUITE: 30 SELECTIONS PLAYWRIGHT TEST
+====================================================
+
+| # | Section | Clicked Element | Expected | Actual | Target File:Line:Tag | Verdict |
+|---|---|---|---|---|---|---|
+| 1 | Hero | hero section boundary/background | allowed | allowed | Hero.tsx:10:section | OK |
+| 2 | Hero | eyebrow text | allowed | allowed | Hero.tsx:12:p | OK |
+| 3 | Hero | main headline (prop title) | allowed | allowed | Hero.tsx:13:h1 | OK |
+| 4 | Hero | supporting paragraph (prop description) | allowed | allowed | Hero.tsx:14:p | OK |
+| 5 | Hero | primary CTA | allowed | allowed | Hero.tsx:16:a | OK |
+| 6 | Features | features section boundary/background | allowed | allowed | Features.tsx:11:section | OK |
+| 7 | Features | section heading | allowed | allowed | Features.tsx:13:h2 | OK |
+| 8 | Features | feature grid background | allowed | allowed | Features.tsx:14:div | OK |
+| 9 | Features | first feature card surface (conditional cn) | refused | refused | Features.tsx:16:article | OK |
+| 10 | Features | first feature title (in map) | refused | refused | Features.tsx:18:h3 | OK |
+| 11 | Features | first feature description (in map) | refused | refused | Features.tsx:19:p | OK |
+| 12 | Pricing | pricing section boundary/background | allowed | allowed | Pricing.tsx:5:section | OK |
+| 13 | Pricing | pricing heading | allowed | allowed | Pricing.tsx:6:h2 | OK |
+| 14 | Pricing | first plan card surface (static card) | allowed | allowed | Pricing.tsx:8:article | OK |
+| 15 | Pricing | plan name | allowed | allowed | Pricing.tsx:9:h3 | OK |
+| 16 | Pricing | monthly price | allowed | allowed | Pricing.tsx:11:span | OK |
+| 17 | Pricing | first plan feature row (in essentials.map) | refused | refused | Pricing.tsx:12:li | OK |
+| 18 | Pricing | secondary CTA button (no className) | refused | refused | Pricing.tsx:13:button | OK |
+| 19 | Testimonials | testimonials section boundary/background | allowed | allowed | Testimonials.tsx:9:section | OK |
+| 20 | Testimonials | section heading | allowed | allowed | Testimonials.tsx:11:h2 | OK |
+| 21 | Testimonials | first quote card surface (in map) | refused | refused | Testimonials.tsx:14:article | OK |
+| 22 | Testimonials | first quote text (in map) | refused | refused | Testimonials.tsx:15:p | OK |
+| 23 | Testimonials | first author name (in map) | refused | refused | Testimonials.tsx:16:p | OK |
+| 24 | FAQ | FAQ section boundary/background | allowed | allowed | FAQ.tsx:11:section | OK |
+| 25 | FAQ | FAQ heading | allowed | allowed | FAQ.tsx:13:h2 | OK |
+| 26 | FAQ | first answer card surface (conditional cn) | refused | refused | FAQ.tsx:16:article | OK |
+| 27 | FAQ | first question (in map) | refused | refused | FAQ.tsx:17:h3 | OK |
+| 28 | FAQ | first answer (in map) | refused | refused | FAQ.tsx:18:p | OK |
+| 29 | Footer | brand link | allowed | allowed | Footer.tsx:9:a | OK |
+| 30 | Footer | trust badge rendered twice | refused | refused | Footer.tsx:2:span | OK |
+
+====================================================
+M0 REGRESSION TEST RESULTS:
+  Allowed: 18
+  Refused: 12
+  Wrong Targets: 0
+====================================================
+
+Owned temporary entries before cleanup: ["node-compile-cache","tsx-abhis"]
+Confirmed cleanup: C:\Users\abhis\AppData\Local\Temp\sn-sprint1-m0-regression-w5yW6v
+exit 0
+CONFIRMED: protected files and Git status unchanged.

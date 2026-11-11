@@ -1,0 +1,13 @@
+> C:\nvm4w\nodejs\node.exe --import tsx scratch/editor-s1-group.ts amendment9-engine-undo-recovery undo-recovery test/helpers/real-state.ts
+{"temporaryRoot":"C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-undo-recovery-BPYZLq","baseline":"8c613619b4ce051027689fd3d782d4ee029e7052","suite":"undo-recovery","overlays":["test/helpers/real-state.ts"],"omitted":".env.example"}
+Isolated seed staged paths: .env.example, test/helpers/real-state.ts
+PASS: duplicate bound Undo retains the older accepted edit
+PASS: required target, authorization, scope, read-only status, and historical receipts
+PASS: eight real process-exit cases; exact and token Undo preserve outside edits, recover receipts, and block conflicts
+PASS: an obsolete proposal cannot Undo an extended edit group
+PASS: unrelated history growth preserves unfinished Undo recovery
+Owned temporary entries before cleanup: ["tsx-abhis"]
+Confirmed cleanup: C:\Users\abhis\AppData\Local\Temp\sn-sprint1-undo-recovery-BPYZLq
+CONFIRMED: integration checkout protected files and status unchanged.
+exit 0
+CONFIRMED: protected files and Git status unchanged.

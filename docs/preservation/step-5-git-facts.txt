@@ -1,0 +1,99 @@
+$ git merge-base HEAD feat/studio-full-controls
+955007d231d7da7783c6d3222ea2942be03eafb4
+Exit: 0
+
+$ git rev-list --left-right --count feat/studio-full-controls...HEAD
+0	61
+Exit: 0
+
+$ git log --oneline feat/studio-full-controls..HEAD
+9e94223 wip: preserve unreviewed uncommitted work before phase 3a (not reviewed, do not merge)
+893c2bb wip: checkpoint resize/cursor/draft-recovery work (unverified)
+5a141b2 docs: specify component focus and variants
+f95411a fix(dev): exclude generated worktrees from application source scans
+6aa5daf docs: distinguish initial readiness from post-Save reload timeouts
+ec3973c test: capture preview readiness before existing deadline
+c3cd4d5 docs: record pages manifest reproduction and cold-start qualification
+2cb14ad core: publish pages manifests atomically
+63152ea docs: record movement and history reliability evidence
+d6adcb3 test: tolerate iframe reload while checking restored geometry
+72ca1e5 test: prepare zero-offset fixture only in disposable movement runtime
+0ee55f7 test: select the actual 75 percent zoom option
+3bd963f fix(editor): focus Move grip so Escape cancels iframe drags
+ea42e26 test: capture cancellation geometry without changing assertions
+9e55ceb test: use unified zoom control in history copy
+4614bb8 fix(editor): preserve Move size in unified Fit canvas
+22e17ec test: reuse owned warm preview for history qualification
+2c4a430 test: reuse owned warm previews for the four icon workflows
+ec26692 fix(editor): expose Move in explicit definition scope
+b0c9061 test: verify current overlay selection and explicit definition refusals
+fefc839 fix(editor): edit literal definition text under explicit ownership
+acd567c test: exercise definition scope in history and current state controls
+f668b3b fix(editor): restore explicitly scoped definition styles
+ee50788 test: restore Studio fit assumptions and exercise definition style access
+d87d989 core: publish app route manifests atomically
+b23bd1d test: refresh copied lab adapters and migrate recovery controls
+5d76305 fix(preview): acknowledge and retry the initial bridge handshake
+0327623 test: await owned server readiness before shared warmup navigation
+5990617 test: account compiler warmup separately from editing workflow caps
+34d5fd0 fix(preview): verify shared-instance server text before refreshing
+5efba37 test: migrate movement and text controls to the unified canvas
+c72c47b test: apply the warmup budget only during cold route preparation
+466ae5a test: register disposable previews within the allowed repository root
+dcb06d1 test: reuse owned warm preview servers for sequential shared checks
+0be2729 test: qualify iframe routing and separate bounded compiler warmup
+f11e470 test: preserve host control scope and warm the editor route
+f4be219 test: isolate gate ports and shorten disposable paths
+a1bd280 test: enforce a shared-group deadline and classify setup errors
+065cc98 test: keep post-case errors nonfatal to the gate
+c7310e1 test: add assertion proof and failed-workflow comparison mode
+fe9b294 test: refuse selection runs against occupied server ports
+967465f test: log setup stages and continue after non-selection failures
+837ccdc test: capture child preview logs and chain iframe locators
+b65e00b test: bound reliability workflows and add v3 harness copies
+2b26542 fix(gate): refuse invalid generated manifest reads
+3e2ebcb fix(dev): publish the font manifest atomically
+4653819 fix(dev): publish the loadable manifest atomically
+754fd00 test: qualify manifest publication with Webpack and load traces
+32c62f8 fix(dev): publish the build manifest atomically
+94a0508 fix(gate): use a file URL for the Windows observer preload
+a4ff43a test: add sequential reliability baseline gate
+81d2b45 test: preserve hardening proofs and stopped regression evidence
+58618d0 fix(editor): stabilize hydration and self-host editor fonts
+5a1c06f core: surface bounded API response diagnostics
+7f9281f core: complete atomic writes and bound rename retries
+7f76c57 core: validate persisted source project boundaries
+5f40e10 fix(security): require mutation origins and loopback binding
+7f1b9cd fix(editor): prevent toolbar from covering selected content
+54b8f42 fix(layers): restore source-backed inline elements
+24c6259 test: selection gate harness
+532019b checkpoint: unified editor stage 1-2
+Exit: 0
+
+$ git rev-parse feat/studio-full-controls
+955007d231d7da7783c6d3222ea2942be03eafb4
+Exit: 0
+
+$ git rev-parse phase2c1-merged
+f83c5967b17b57e6936becfb9c7921dd71fb311c
+Exit: 0
+
+$ git rev-parse phase2c1-merged^{commit}
+f83c5967b17b57e6936becfb9c7921dd71fb311c
+Exit: 0
+
+$ git tag -l -n1 phase2c1-merged
+phase2c1-merged test(types): add non-null assertions on pending.id to satisfy TypeScript strict mode
+Exit: 0
+
+$ git log -5 "--format=%H %ci %s" feat/studio-full-controls
+955007d231d7da7783c6d3222ea2942be03eafb4 2026-10-23 21:00:58 +0530 chore(deps): upgrade Next.js from 16.4.0 to 16.4.3 for security advisory
+f83c5967b17b57e6936becfb9c7921dd71fb311c 2026-10-23 14:13:12 +0530 test(types): add non-null assertions on pending.id to satisfy TypeScript strict mode
+659cc97a0c84e42deb1a0d2c68b7fdd53e60c27a 2026-10-23 11:23:34 +0530 fix(undo): name sameElement variable in edit-history.ts to align with M7 mutant pattern
+19f9c46ab9fc0f178d09a5358b2def4e7fa4ac83 2026-10-23 11:11:36 +0530 fix(undo): allow undo of older edits on different elements via identity dependency
+ae2bde0f27283d638d764479eb091a434d030f0d 2026-10-23 09:29:37 +0530 test(undo): add failing tests for multi-element stacked undo
+Exit: 0
+
+$ git merge-base --is-ancestor phase2c1-merged feat/studio-full-controls
+
+Exit: 0

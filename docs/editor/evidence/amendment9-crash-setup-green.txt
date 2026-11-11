@@ -1,0 +1,9 @@
+> node --import tsx scratch/editor-s1-group.ts amendment9-crash-setup-green apply-crash-recovery test/helpers/real-state.ts test/apply-crash-recovery.test.ts
+{"temporaryRoot":"C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-apply-crash-recovery-0B59Wb","baseline":"7a4c44a9b8a1c1b08d0c8d15541dabb1900636df","suite":"apply-crash-recovery","overlays":["test/helpers/real-state.ts","test/apply-crash-recovery.test.ts"],"omitted":".env.example"}
+Isolated seed staged paths: .env.example, test/apply-crash-recovery.test.ts, test/helpers/real-state.ts
+PASS: crash boundaries; no replay; exact Undo; grouped recovery; unrelated history preserved; conflict refusal; project/file scope; expiry/cache loss; history I/O failure; concurrent reconciliation
+Owned temporary entries before cleanup: ["tsx-abhis"]
+Confirmed cleanup: C:\Users\abhis\AppData\Local\Temp\sn-sprint1-apply-crash-recovery-0B59Wb
+CONFIRMED: integration checkout protected files and status unchanged.
+exit 0
+CONFIRMED: protected files and Git status unchanged.

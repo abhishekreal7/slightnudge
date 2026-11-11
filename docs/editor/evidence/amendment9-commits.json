@@ -1,0 +1,110 @@
+[
+  {
+    "group": "focus",
+    "sha": "ed11f8abf14a838d0f5d42382430b7d72e11e238",
+    "files": [
+      "components/slightnudge/EditorWorkspace.tsx"
+    ],
+    "cachedPathsConfirmedBeforeCommit": true,
+    "nextEnvAbsent": true,
+    "committedPaths": [
+      "components/slightnudge/EditorWorkspace.tsx"
+    ]
+  },
+  {
+    "group": "readonly-env",
+    "sha": "cd0845190f3bc9b2bc962bf90a1966a996c34411",
+    "files": [
+      "test/account-isolation.test.ts",
+      "test/production-boundaries.test.ts",
+      "test/format-and-tailwind-report.v2.ts",
+      "test/security-hardening-v2.proofs.ts"
+    ],
+    "cachedPathsConfirmedBeforeCommit": true,
+    "nextEnvAbsent": true,
+    "committedPaths": [
+      "test/account-isolation.test.ts",
+      "test/format-and-tailwind-report.v2.ts",
+      "test/production-boundaries.test.ts",
+      "test/security-hardening-v2.proofs.ts"
+    ]
+  },
+  {
+    "group": "optional",
+    "sha": "6037c3fd9e7b686fe6732243c217ddffe016381d",
+    "files": [
+      "test/appearance-layout.test.ts",
+      "test/button-editing.test.ts",
+      "test/component-ownership.test.ts",
+      "test/container-move.test.ts",
+      "test/image-content.test.ts",
+      "test/image-framing.test.ts",
+      "test/imported-draft.test.ts",
+      "test/section-order.test.ts",
+      "test/shared-instance.test.ts"
+    ],
+    "cachedPathsConfirmedBeforeCommit": true,
+    "nextEnvAbsent": true,
+    "committedPaths": [
+      "test/appearance-layout.test.ts",
+      "test/button-editing.test.ts",
+      "test/component-ownership.test.ts",
+      "test/container-move.test.ts",
+      "test/image-content.test.ts",
+      "test/image-framing.test.ts",
+      "test/imported-draft.test.ts",
+      "test/section-order.test.ts",
+      "test/shared-instance.test.ts"
+    ]
+  },
+  {
+    "group": "browser",
+    "sha": "e86cc173f0a1f1eb73cc1398b33ecab599000db9",
+    "files": [
+      "test/component-actions-bridge.test.ts",
+      "test/icon-properties-bridge.test.ts",
+      "test/icon-replacement-bridge.test.ts",
+      "test/image-attributes-bridge.test.ts",
+      "test/runtime-class-ownership.test.ts",
+      "test/source-rendered-bridge.test.ts",
+      "test/helpers/selection-gate-v3-coordinates.ts",
+      "test/helpers/editor-reliability-selection.ts",
+      "test/helpers/editor-reliability-selection.v3.ts",
+      "test/helpers/security-selection.v2.ts",
+      "test/helpers/selection-gate-v3.ts",
+      "test/step1-selection.iframe-v3.test.ts",
+      "test/unified-editor.browser.ts",
+      "test/selection-coordinates.test.ts"
+    ],
+    "cachedPathsConfirmedBeforeCommit": true,
+    "nextEnvAbsent": true,
+    "committedPaths": [
+      "test/component-actions-bridge.test.ts",
+      "test/helpers/editor-reliability-selection.ts",
+      "test/helpers/editor-reliability-selection.v3.ts",
+      "test/helpers/security-selection.v2.ts",
+      "test/helpers/selection-gate-v3-coordinates.ts",
+      "test/helpers/selection-gate-v3.ts",
+      "test/icon-properties-bridge.test.ts",
+      "test/icon-replacement-bridge.test.ts",
+      "test/image-attributes-bridge.test.ts",
+      "test/runtime-class-ownership.test.ts",
+      "test/selection-coordinates.test.ts",
+      "test/source-rendered-bridge.test.ts",
+      "test/step1-selection.iframe-v3.test.ts",
+      "test/unified-editor.browser.ts"
+    ]
+  },
+  {
+    "group": "unchanged-real-state-helper",
+    "sha": "33feb4836f207e25884b6cf19252b0d38bee63da",
+    "files": [
+      "test/helpers/real-state.ts"
+    ],
+    "cachedPathsConfirmedBeforeCommit": true,
+    "nextEnvAbsent": true,
+    "committedPaths": [
+      "test/helpers/real-state.ts"
+    ]
+  }
+]

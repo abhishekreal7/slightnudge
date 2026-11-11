@@ -1,31 +1,33 @@
-.section {border-top:1px solid #edf0ed;padding:16px 0;font-size:12px;color:#37413d}
-.section summary {cursor:pointer;font-weight:500;user-select:none}
-.content {display:grid;gap:14px;padding-top:12px}
-.group {border:1px solid #e6eae7;border-radius:8px;padding:10px}
-.group>summary {display:list-item;line-height:20px}
-.group>summary>span {float:right;color:#89938d;font-size:11px;font-weight:400}
+.section {border-top:1px solid rgba(255,255,255,0.08);padding:3px 0;font-size:11.5px;color:#cbd5e1}
+.section summary {cursor:pointer;font-weight:500;color:#cbd5e1;user-select:none;min-height:28px;display:flex;align-items:center;gap:6px;padding:3px 6px;border-radius:6px;transition:all 120ms ease}
+.section summary:hover {background:rgba(255,255,255,0.06);color:#ffffff}
+.content {display:grid;gap:8px;padding:4px 4px 6px}
+.group {border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:8px 10px;background:rgba(255,255,255,0.03)}
+.group>summary {display:list-item;line-height:20px;font-weight:500;color:#cbd5e1}
+.group>summary>span {float:right;color:#94a3b8;font-size:10.5px;font-weight:400}
 .group[open]>:not(summary) {margin-top:10px}
-.note {font-size:11px;line-height:1.6;color:#89938d;margin:0}
-.swatch {height:32px;border:1px solid #e3e8e4;border-radius:5px;background-color:#f7f8f7}
-.row {display:flex;align-items:center;justify-content:space-between;gap:10px}
+.note {font-size:10.5px;line-height:1.5;color:#94a3b8;margin:0}
+.swatch {height:32px;border:1px solid rgba(255,255,255,0.12);border-radius:7px;background-color:#1e293b}
+.row {display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:11px;color:#cbd5e1;font-weight:400}
 .row>input,.row>select {width:138px;min-width:0}
-.field {display:grid;gap:5px;font-size:11px;color:#697571}
+.field {display:grid;gap:4px;font-size:10.5px;color:#cbd5e1}
 .field>input {width:100%;min-width:0}
-.section input,.section select {border:1px solid #e3e8e4;background:#f7f8f7;border-radius:5px;padding:6px 7px;font:inherit;color:#37413d;box-sizing:border-box}
-.section input:focus-visible,.section select:focus-visible,.section button:focus-visible {outline:2px solid #86b9a8;outline-offset:2px}
+.section input,.section select {border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.06);border-radius:7px;padding:5px 7px;font:inherit;font-size:11px;color:#f8fafc;box-sizing:border-box}
+.section select option {background:#1a1e1c;color:#ffffff}
+.section input:focus-visible,.section select:focus-visible,.section button:focus-visible {outline:2px solid #10b981;outline-offset:2px}
 .grid {display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .stop {display:flex;align-items:center;gap:5px}
 .stop>input {width:60px;min-width:0;font-size:11px}
-.stop>span {font-size:10px;color:#89938d}
+.stop>span {font-size:10px;color:#94a3b8}
 .color {display:flex;align-items:center;gap:5px;flex:1;min-width:0}
-.color>span {width:18px;height:18px;flex-shrink:0;border:1px solid #dce2dd;border-radius:4px}
+.color>span {width:18px;height:18px;flex-shrink:0;border:1px solid rgba(255,255,255,0.2);border-radius:4px}
 .color>input {width:100%;min-width:0;font-size:11px}
 .actions {display:flex;gap:6px;flex-wrap:wrap}
-.section button {border:1px solid #e3e8e4;background:white;border-radius:5px;padding:6px 8px;font:inherit;cursor:pointer}
-.section button:hover {background:#f2f5f3}
+.section button {border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.08);border-radius:7px;padding:5px 8px;font:inherit;font-size:11px;font-weight:450;color:#f8fafc;cursor:pointer;transition:all 120ms ease}
+.section button:hover {background:rgba(255,255,255,0.16);color:#ffffff;box-shadow:0 1px 3px rgba(0,0,0,0.3)}
 .section :disabled {opacity:.5;cursor:default}
-.error {color:#a23b32;font-size:11px;line-height:1.6}
-.color>input[type=color],.shadowColor>input[type=color] {width:24px;height:28px;flex:0 0 24px;padding:2px;cursor:pointer}
+.error {color:#f87171;font-size:11px;line-height:1.6}
+.color>input[type=color],.shadowColor>input[type=color] {width:24px;height:28px;flex:0 0 24px;padding:2px;cursor:pointer;background:transparent;border:none}
 .shadowColor {display:flex;gap:5px;width:138px;min-width:0}
 .shadowColor>input {width:100%;min-width:0}
 .section summary {list-style:none;display:flex;align-items:center;gap:6px}

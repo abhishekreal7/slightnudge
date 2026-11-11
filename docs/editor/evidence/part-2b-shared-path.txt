@@ -1,0 +1,31 @@
+> node --import tsx scratch/editor-sprint1-isolate.ts overlay-apply test/overlay-apply.test.ts
+{"temporaryRoot":"C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-overlay-apply-jCbUgd","baseline":"ac69d7d0d8f342c2e0628096640ff572fcb049fb","suite":"overlay-apply","overlays":["test/overlay-apply.test.ts"],"omitted":".env.example"}
+Isolated seed staged paths: .env.example, test/overlay-apply.test.ts
+TAP version 13
+# Subtest: both existing playground Apply buttons post the same pending id to the same save route
+not ok 1 - both existing playground Apply buttons post the same pending id to the same save route
+  ---
+  duration_ms: 45856.8053
+  type: 'test'
+  location: 'C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-overlay-apply-jCbUgd\\source\\test\\overlay-apply.test.ts:1:2122'
+  failureType: 'testCodeFailure'
+  error: 'page.waitForResponse: Timeout 5000ms exceeded while waiting for event "response"'
+  code: 'ERR_TEST_FAILURE'
+  name: 'TimeoutError'
+  stack: |-
+    preview (C:\Users\abhis\AppData\Local\Temp\sn-sprint1-overlay-apply-jCbUgd\source\test\overlay-apply.test.ts:33:25)
+    TestContext.<anonymous> (C:\Users\abhis\AppData\Local\Temp\sn-sprint1-overlay-apply-jCbUgd\source\test\overlay-apply.test.ts:48:13)
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 0
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 61008.5658
+Owned temporary entries before cleanup: ["node-compile-cache","npm-cache","tsx-abhis"]
+Confirmed cleanup: C:\Users\abhis\AppData\Local\Temp\sn-sprint1-overlay-apply-jCbUgd
+exit 1
+CONFIRMED: protected files and Git status unchanged.

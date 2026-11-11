@@ -1,0 +1,402 @@
+{
+  "EventTarget focus": [
+    {
+      "file": "components/slightnudge/EditorWorkspace.tsx",
+      "line": 924,
+      "column": 43,
+      "code": "TS2339",
+      "message": "Property 'focus' does not exist on type 'EventTarget & Element'."
+    }
+  ],
+  "readonly NODE_ENV": [
+    {
+      "file": "test/account-isolation.test.ts",
+      "line": 12,
+      "column": 106,
+      "code": "TS2540",
+      "message": "Cannot assign to 'NODE_ENV' because it is a read-only property."
+    },
+    {
+      "file": "test/account-isolation.test.ts",
+      "line": 22,
+      "column": 15,
+      "code": "TS2540",
+      "message": "Cannot assign to 'NODE_ENV' because it is a read-only property."
+    },
+    {
+      "file": "test/account-isolation.test.ts",
+      "line": 32,
+      "column": 143,
+      "code": "TS2540",
+      "message": "Cannot assign to 'NODE_ENV' because it is a read-only property."
+    },
+    {
+      "file": "test/format-and-tailwind-report.v2.ts",
+      "line": 10,
+      "column": 66,
+      "code": "TS2540",
+      "message": "Cannot assign to 'NODE_ENV' because it is a read-only property."
+    },
+    {
+      "file": "test/production-boundaries.test.ts",
+      "line": 12,
+      "column": 15,
+      "code": "TS2540",
+      "message": "Cannot assign to 'NODE_ENV' because it is a read-only property."
+    },
+    {
+      "file": "test/production-boundaries.test.ts",
+      "line": 26,
+      "column": 15,
+      "code": "TS2540",
+      "message": "Cannot assign to 'NODE_ENV' because it is a read-only property."
+    },
+    {
+      "file": "test/production-boundaries.test.ts",
+      "line": 30,
+      "column": 52,
+      "code": "TS2704",
+      "message": "The operand of a 'delete' operator cannot be a read-only property."
+    },
+    {
+      "file": "test/production-boundaries.test.ts",
+      "line": 30,
+      "column": 91,
+      "code": "TS2540",
+      "message": "Cannot assign to 'NODE_ENV' because it is a read-only property."
+    },
+    {
+      "file": "test/security-hardening-v2.proofs.ts",
+      "line": 7,
+      "column": 46,
+      "code": "TS2540",
+      "message": "Cannot assign to 'NODE_ENV' because it is a read-only property."
+    }
+  ],
+  "optional values": [
+    {
+      "file": "test/appearance-layout.test.ts",
+      "line": 23,
+      "column": 98,
+      "code": "TS18048",
+      "message": "'replay.renderPatches' is possibly 'undefined'."
+    },
+    {
+      "file": "test/appearance-layout.test.ts",
+      "line": 23,
+      "column": 139,
+      "code": "TS18048",
+      "message": "'replay.renderPatches' is possibly 'undefined'."
+    },
+    {
+      "file": "test/appearance-layout.test.ts",
+      "line": 23,
+      "column": 214,
+      "code": "TS18048",
+      "message": "'replay.renderPatches' is possibly 'undefined'."
+    },
+    {
+      "file": "test/appearance-layout.test.ts",
+      "line": 23,
+      "column": 280,
+      "code": "TS18048",
+      "message": "'replay.renderPatches' is possibly 'undefined'."
+    },
+    {
+      "file": "test/appearance-layout.test.ts",
+      "line": 23,
+      "column": 354,
+      "code": "TS18048",
+      "message": "'replay.renderPatches' is possibly 'undefined'."
+    },
+    {
+      "file": "test/button-editing.test.ts",
+      "line": 26,
+      "column": 90,
+      "code": "TS2769",
+      "message": "No overload matches this call."
+    },
+    {
+      "file": "test/component-ownership.test.ts",
+      "line": 28,
+      "column": 102,
+      "code": "TS18048",
+      "message": "'replay.renderPatches' is possibly 'undefined'."
+    },
+    {
+      "file": "test/component-ownership.test.ts",
+      "line": 35,
+      "column": 112,
+      "code": "TS18048",
+      "message": "'mixedReplay.renderPatches' is possibly 'undefined'."
+    },
+    {
+      "file": "test/component-ownership.test.ts",
+      "line": 37,
+      "column": 247,
+      "code": "TS2769",
+      "message": "No overload matches this call."
+    },
+    {
+      "file": "test/container-move.test.ts",
+      "line": 23,
+      "column": 165,
+      "code": "TS2769",
+      "message": "No overload matches this call."
+    },
+    {
+      "file": "test/container-move.test.ts",
+      "line": 47,
+      "column": 131,
+      "code": "TS2769",
+      "message": "No overload matches this call."
+    },
+    {
+      "file": "test/image-content.test.ts",
+      "line": 30,
+      "column": 90,
+      "code": "TS2769",
+      "message": "No overload matches this call."
+    },
+    {
+      "file": "test/image-framing.test.ts",
+      "line": 20,
+      "column": 90,
+      "code": "TS2769",
+      "message": "No overload matches this call."
+    },
+    {
+      "file": "test/imported-draft.test.ts",
+      "line": 33,
+      "column": 141,
+      "code": "TS2769",
+      "message": "No overload matches this call."
+    },
+    {
+      "file": "test/section-order.test.ts",
+      "line": 20,
+      "column": 102,
+      "code": "TS2769",
+      "message": "No overload matches this call."
+    },
+    {
+      "file": "test/section-order.test.ts",
+      "line": 27,
+      "column": 123,
+      "code": "TS2769",
+      "message": "No overload matches this call."
+    },
+    {
+      "file": "test/section-order.test.ts",
+      "line": 30,
+      "column": 13,
+      "code": "TS2532",
+      "message": "Object is possibly 'undefined'."
+    },
+    {
+      "file": "test/section-order.test.ts",
+      "line": 43,
+      "column": 13,
+      "code": "TS2532",
+      "message": "Object is possibly 'undefined'."
+    },
+    {
+      "file": "test/shared-instance.test.ts",
+      "line": 35,
+      "column": 98,
+      "code": "TS18048",
+      "message": "'replay.renderPatches' is possibly 'undefined'."
+    },
+    {
+      "file": "test/shared-instance.test.ts",
+      "line": 35,
+      "column": 142,
+      "code": "TS18048",
+      "message": "'replay.renderPatches' is possibly 'undefined'."
+    }
+  ],
+  "older browser-test typings": [
+    {
+      "file": "test/component-actions-bridge.test.ts",
+      "line": 12,
+      "column": 230,
+      "code": "TS2339",
+      "message": "Property 'origin' does not exist on type '(column: number) => { path: string; line: number; column: number; }'."
+    },
+    {
+      "file": "test/helpers/editor-reliability-selection.ts",
+      "line": 45,
+      "column": 29,
+      "code": "TS2339",
+      "message": "Property 'filter' does not exist on type 'Conversion'."
+    },
+    {
+      "file": "test/helpers/editor-reliability-selection.ts",
+      "line": 45,
+      "column": 36,
+      "code": "TS7006",
+      "message": "Parameter 'c' implicitly has an 'any' type."
+    },
+    {
+      "file": "test/helpers/editor-reliability-selection.ts",
+      "line": 47,
+      "column": 28,
+      "code": "TS2339",
+      "message": "Property 'find' does not exist on type 'Conversion'."
+    },
+    {
+      "file": "test/helpers/editor-reliability-selection.ts",
+      "line": 47,
+      "column": 33,
+      "code": "TS7006",
+      "message": "Parameter 'c' implicitly has an 'any' type."
+    },
+    {
+      "file": "test/helpers/editor-reliability-selection.v3.ts",
+      "line": 45,
+      "column": 29,
+      "code": "TS2339",
+      "message": "Property 'filter' does not exist on type 'Conversion'."
+    },
+    {
+      "file": "test/helpers/editor-reliability-selection.v3.ts",
+      "line": 45,
+      "column": 36,
+      "code": "TS7006",
+      "message": "Parameter 'c' implicitly has an 'any' type."
+    },
+    {
+      "file": "test/helpers/editor-reliability-selection.v3.ts",
+      "line": 47,
+      "column": 28,
+      "code": "TS2339",
+      "message": "Property 'find' does not exist on type 'Conversion'."
+    },
+    {
+      "file": "test/helpers/editor-reliability-selection.v3.ts",
+      "line": 47,
+      "column": 33,
+      "code": "TS7006",
+      "message": "Parameter 'c' implicitly has an 'any' type."
+    },
+    {
+      "file": "test/helpers/security-selection.v2.ts",
+      "line": 45,
+      "column": 29,
+      "code": "TS2339",
+      "message": "Property 'filter' does not exist on type 'Conversion'."
+    },
+    {
+      "file": "test/helpers/security-selection.v2.ts",
+      "line": 45,
+      "column": 36,
+      "code": "TS7006",
+      "message": "Parameter 'c' implicitly has an 'any' type."
+    },
+    {
+      "file": "test/helpers/security-selection.v2.ts",
+      "line": 47,
+      "column": 28,
+      "code": "TS2339",
+      "message": "Property 'find' does not exist on type 'Conversion'."
+    },
+    {
+      "file": "test/helpers/security-selection.v2.ts",
+      "line": 47,
+      "column": 33,
+      "code": "TS7006",
+      "message": "Parameter 'c' implicitly has an 'any' type."
+    },
+    {
+      "file": "test/helpers/selection-gate-v3.ts",
+      "line": 42,
+      "column": 29,
+      "code": "TS2339",
+      "message": "Property 'filter' does not exist on type 'Conversion'."
+    },
+    {
+      "file": "test/helpers/selection-gate-v3.ts",
+      "line": 42,
+      "column": 36,
+      "code": "TS7006",
+      "message": "Parameter 'c' implicitly has an 'any' type."
+    },
+    {
+      "file": "test/helpers/selection-gate-v3.ts",
+      "line": 44,
+      "column": 28,
+      "code": "TS2339",
+      "message": "Property 'find' does not exist on type 'Conversion'."
+    },
+    {
+      "file": "test/helpers/selection-gate-v3.ts",
+      "line": 44,
+      "column": 33,
+      "code": "TS7006",
+      "message": "Parameter 'c' implicitly has an 'any' type."
+    },
+    {
+      "file": "test/icon-properties-bridge.test.ts",
+      "line": 11,
+      "column": 230,
+      "code": "TS2339",
+      "message": "Property 'origin' does not exist on type '{ path: string; line: number; column: number; }'."
+    },
+    {
+      "file": "test/icon-replacement-bridge.test.ts",
+      "line": 14,
+      "column": 230,
+      "code": "TS2339",
+      "message": "Property 'origin' does not exist on type '{ path: string; line: number; column: number; }'."
+    },
+    {
+      "file": "test/image-attributes-bridge.test.ts",
+      "line": 24,
+      "column": 137,
+      "code": "TS2339",
+      "message": "Property 'origin' does not exist on type '{ path: string; line: number; column: number; }'."
+    },
+    {
+      "file": "test/runtime-class-ownership.test.ts",
+      "line": 23,
+      "column": 131,
+      "code": "TS2339",
+      "message": "Property 'origin' does not exist on type '{ path: string; line: number; column: number; }'."
+    },
+    {
+      "file": "test/runtime-class-ownership.test.ts",
+      "line": 35,
+      "column": 36,
+      "code": "TS2540",
+      "message": "Cannot assign to 'className' because it is a read-only property."
+    },
+    {
+      "file": "test/source-rendered-bridge.test.ts",
+      "line": 79,
+      "column": 45,
+      "code": "TS2540",
+      "message": "Cannot assign to 'className' because it is a read-only property."
+    },
+    {
+      "file": "test/step1-selection.iframe-v3.test.ts",
+      "line": 34,
+      "column": 83,
+      "code": "TS2339",
+      "message": "Property 'find' does not exist on type 'Conversion'."
+    },
+    {
+      "file": "test/step1-selection.iframe-v3.test.ts",
+      "line": 34,
+      "column": 88,
+      "code": "TS7006",
+      "message": "Parameter 'c' implicitly has an 'any' type."
+    },
+    {
+      "file": "test/unified-editor.browser.ts",
+      "line": 196,
+      "column": 9,
+      "code": "TS18048",
+      "message": "'browser' is possibly 'undefined'."
+    }
+  ]
+}

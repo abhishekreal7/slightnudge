@@ -1,0 +1,126 @@
+focus components/slightnudge/EditorWorkspace.tsx
+  const startDragMove = (layerKey: string, e: React.PointerEvent<HTMLElement>) => {
+
+readonly-env test/account-isolation.test.ts
+const mutableTestEnvironment: Record<string, string | undefined> = process.env;
+  delete process.env.NEXT_PUBLIC_SUPABASE_URL; delete process.env.SUPABASE_SERVICE_ROLE_KEY; mutableTestEnvironment.NODE_ENV = 'production';
+  mutableTestEnvironment.NODE_ENV = 'development';
+} finally { for (const name of names) { const value = previous.get(name); if (value === undefined) delete process.env[name]; else mutableTestEnvironment[name] = value; } }
+
+readonly-env test/production-boundaries.test.ts
+const mutableTestEnvironment: Record<string, string | undefined> = process.env;
+  mutableTestEnvironment.NODE_ENV = 'production';
+  mutableTestEnvironment.NODE_ENV = 'development';
+} finally { if (previousMode === undefined) delete mutableTestEnvironment.NODE_ENV; else mutableTestEnvironment.NODE_ENV = previousMode; if (previousAdmin === undefined) delete process.env.ADMIN_SECRET_KEY; else process.env.ADMIN_SECRET_KEY = previousAdmin; }
+
+readonly-env test/format-and-tailwind-report.v2.ts
+const mutableTestEnvironment: Record<string, string | undefined> = process.env;
+process.chdir(root);process.env.SLIGHTNUDGE_TEST='1';mutableTestEnvironment.NODE_ENV='test';process.env.SLIGHTNUDGE_WORKSPACE_ROOT=root;process.env.SLIGHTNUDGE_DATA_DIR=path.join(root,'.slightnudge');
+
+readonly-env test/security-hardening-v2.proofs.ts
+const mutableTestEnvironment: Record<string, string | undefined> = process.env;
+process.env.SLIGHTNUDGE_TEST='1';mutableTestEnvironment.NODE_ENV='test';process.env.SLIGHTNUDGE_WORKSPACE_ROOT=root;process.env.SLIGHTNUDGE_DATA_DIR=path.join(root,'.slightnudge');
+
+optional test/appearance-layout.test.ts
+ const replay=await readRenderableDraft(draft.id,path.join(root,'page.tsx'),{root});assert.ok(replay.renderPatches,'Draft replay must contain render patches');assert.equal(replay.renderPatches.length,1);assert.ok(replay.renderPatches[0].className?.includes('tablet:min-w-fit'));assert.ok(replay.renderPatches[0].className?.includes('ring-1'));assert.ok(!replay.renderPatches[0].className?.includes('shadow-black/10'));assert.ok(replay.renderPatches[0].className?.includes('md:shadow-sm'));
+
+optional test/button-editing.test.ts
+  const saved = await applyPendingSourceEdit(edit.id); assert.equal(saved.success, true, saved.error ?? 'Expected the operation to succeed');
+
+optional test/component-ownership.test.ts
+  const replay=await readRenderableDraft(edit.id,path.join(root,'app/page.tsx'),{root});assert.ok(replay.renderPatches,'Draft replay must contain render patches');assert.equal(replay.renderPatches[0].text,'Saved');
+  const mixedReplay=await readRenderableDraft(mixedEdit.id,path.join(root,'app/page.tsx'),{root});assert.ok(mixedReplay.renderPatches,'Draft replay must contain render patches');assert.equal(mixedReplay.renderPatches.length,2);
+  const transaction=randomUUID(),group=await saveSourceGroup(transaction,[{previewId:mixedEdit.id,filePath:path.join(root,'app/page.tsx')},{previewId:extraEdit.id,filePath:path.join(root,'app/extra.tsx')}],{root});assert.equal(group.success,true, group.error ?? 'Expected the operation to succeed');assert.equal(fs.readFileSync('components/Callout.tsx','utf8'),definition);assert.ok(fs.readFileSync('app/extra.tsx','utf8').includes('Extra saved'));assert.equal(undoSourceGroup(transaction,{root}).success,true);assert.equal(fs.readFileSync('app/page.tsx','utf8'),mixed);assert.equal(fs.readFileSync('app/extra.tsx','utf8'),extra);
+
+optional test/container-move.test.ts
+  const editPlan = prepareDraftTarget(source, draft.id); const edited = updateStaticJsxText({ ...editPlan.target, value: 'Start here' }); assert.ok(edited.success, edited.reason ?? 'Expected the operation to succeed');
+    const changed = updateStaticJsxText({ ...continued.target, value: 'Moved into empty container' }); assert.ok(changed.success, changed.reason ?? 'Expected the operation to succeed');
+
+optional test/image-content.test.ts
+  const saved = await applyPendingSourceEdit(edit.id); assert.equal(saved.success, true, saved.error ?? 'Expected the operation to succeed');
+
+optional test/image-framing.test.ts
+  const saved = await applyPendingSourceEdit(edit.id); assert.equal(saved.success, true, saved.error ?? 'Expected the operation to succeed');
+
+optional test/imported-draft.test.ts
+  const saved = await applyPendingSourceEdit(second.id, undefined, scope.repositoryId, 'page.tsx', file); assert.equal(saved.success, true, saved.error ?? 'Expected the operation to succeed');
+
+optional test/section-order.test.ts
+  const result = reorderElement({ ...plan.target, direction: 'earlier' }); assert.ok(result.success, result.reason ?? 'Expected the operation to succeed');
+  const edited = updateStaticJsxText({ ...next.target, value: 'Second, edited after moving' }); assert.ok(edited.success, edited.reason ?? 'Expected the operation to succeed');
+  const composedReplay = await readRenderableDraft(composed.id, file); assert.ok(composedReplay.renderPatches, 'Draft replay must contain render patches'); assert.ok(composedReplay.renderPatches.some(patch => patch.order));
+  const bareReplay = await readRenderableDraft(bareDraft.id, file); assert.ok(bareReplay.renderPatches, 'Draft replay must contain render patches'); assert.ok(bareReplay.renderPatches.some(patch => patch.order)); assert.equal(fs.readFileSync(file, 'utf8'), bare);
+
+optional test/shared-instance.test.ts
+  const replay=await readRenderableDraft(edit.id,path.join(root,'page.tsx'),{root});assert.ok(replay.renderPatches,'Draft replay must contain render patches');assert.equal(replay.renderPatches.length,1);assert.equal(replay.renderPatches[0].text,'Only second');
+
+browser test/component-actions-bridge.test.ts
+  const command = async (operation: string, patches: any[]) => { const requestId = String(++id); await page.evaluate(message => (document.querySelector('iframe') as HTMLIFrameElement).contentWindow!.postMessage(message, window.location.origin), { channel: 'slightnudge', session: 'test', type: 'source-edit', operation, requestId, patches }); await page.waitForFunction(id => (window as any).messages.some((item: any) => item.requestId === id), requestId); return page.evaluate(id => (window as any).messages.find((item: any) => item.requestId === id), requestId); };
+
+browser test/icon-properties-bridge.test.ts
+  const command = async (operation: string, patches: any[]) => { const requestId = String(++id); await page.evaluate(message => (document.querySelector('iframe') as HTMLIFrameElement).contentWindow!.postMessage(message, window.location.origin), { channel: 'slightnudge', session: 'test', type: 'source-edit', operation, requestId, patches }); await page.waitForFunction(id => (window as any).messages.some((item: any) => item.requestId === id), requestId); return page.evaluate(id => (window as any).messages.find((item: any) => item.requestId === id), requestId); };
+
+browser test/icon-replacement-bridge.test.ts
+  const command = async (operation: string, patches: any[]) => { const requestId = String(++id); await page.evaluate(message => (document.querySelector('iframe') as HTMLIFrameElement).contentWindow!.postMessage(message, window.location.origin), { channel: 'slightnudge', session: 'test', type: 'source-edit', operation, requestId, patches }); await page.waitForFunction(id => (window as any).messages.some((item: any) => item.requestId === id), requestId); return page.evaluate(id => (window as any).messages.find((item: any) => item.requestId === id), requestId); };
+
+browser test/image-attributes-bridge.test.ts
+    await page.evaluate(message => (document.querySelector('iframe') as HTMLIFrameElement).contentWindow!.postMessage(message, window.location.origin), { channel: 'slightnudge', session: 'test', type: 'source-edit', requestId, operation, patches });
+
+browser test/runtime-class-ownership.test.ts
+    await page.evaluate(data => (document.querySelector('iframe') as HTMLIFrameElement).contentWindow!.postMessage(data, window.location.origin), { channel: 'slightnudge', session: 'test', type: 'source-edit', requestId, operation, selection, ...extra });
+  await target.evaluate(el => { if (!(el instanceof HTMLElement)) throw Error('Expected an HTML heading'); el.className = 'font-bold aos-init aos-animate'; });
+
+browser test/source-rendered-bridge.test.ts
+  await frame.locator('h1').evaluate(e => { if (!(e instanceof HTMLElement)) throw Error('Expected an HTML heading'); e.className = 'outside-change'; });
+
+browser test/helpers/selection-gate-v3-coordinates.ts
+ const serializable:typeof callback=Function('return ('+callback.toString().replace(/\b__name\(/g,'((value)=>value)(')+')')();
+ return locator.evaluate(serializable,position) as Promise<ReturnType<typeof callback>>;
+
+browser test/helpers/editor-reliability-selection.ts
+   const probe=await probeElement(locator,s.clickPosition);if(!probe.source?.path)throw Error('Expected source metadata for the selected element');row.probe={...probe,candidates:undefined,candidateCount:probe.candidates.length};
+
+browser test/helpers/editor-reliability-selection.v3.ts
+   const probe=await probeElement(locator,s.clickPosition);if(!probe.source?.path)throw Error('Expected source metadata for the selected element');row.probe={...probe,candidates:undefined,candidateCount:probe.candidates.length};
+
+browser test/helpers/security-selection.v2.ts
+   const probe=await probeElement(locator,s.clickPosition);if(!probe.source?.path)throw Error('Expected source metadata for the selected element');row.probe={...probe,candidates:undefined,candidateCount:probe.candidates.length};
+
+browser test/helpers/selection-gate-v3.ts
+   const probe=await probeElement(locator,s.clickPosition);if(!probe.source?.path)throw Error('Expected source metadata for the selected element');row.probe={...probe,candidates:undefined,candidateCount:probe.candidates.length};
+
+browser test/step1-selection.iframe-v3.test.ts
+   const locator=frame.locator(expected.selector);await locator.waitFor();await locator.scrollIntoViewIfNeeded();const probe=await probeElement(locator);if(!probe.source?.path)throw Error('Expected source metadata for the selected element');
+
+browser test/unified-editor.browser.ts
+  assert.ok(browser, 'The workflow browser must still be open'); await browser.close();browser=undefined;
+
+browser test/selection-coordinates.test.ts
+import assert from 'node:assert/strict';
+import { chromium } from 'playwright';
+import { probeElement, logicalToScreen, hitSource } from './helpers/selection-gate-v3-coordinates';
+// Owned in-memory documents only: no editor server or live URL is contacted.
+const browser = await chromium.launch();
+try {
+  const page = await browser.newPage({ viewport: { width: 900, height: 600 } });
+  await page.setContent('<iframe title="Actual project" style="position:absolute;left:30px;top:40px;width:500px;height:300px;border:2px solid;transform:scale(.8);transform-origin:top left"></iframe>');
+  await page.locator('iframe').evaluate(iframe => {
+    if (!(iframe instanceof HTMLIFrameElement)) throw Error('Expected iframe');
+    iframe.srcdoc = '<style>body{margin:0}h1{margin:10px;padding:20px;width:220px;height:60px}p{margin:10px}</style><h1 data-source-file="app/page.tsx" data-source-line="2" data-source-column="4">Heading</h1><p>Without source metadata</p>';
+  });
+  const iframe = await page.locator('iframe').elementHandle(); assert.ok(iframe);
+  const frame = await iframe.contentFrame(); assert.ok(frame);
+  await frame.locator('h1').waitFor();
+  const probe = await probeElement(frame.locator('h1'));
+  assert.ok(probe.source); assert.equal(probe.source.path, 'app/page.tsx');
+  assert.equal(probe.source.line, 2); assert.equal(probe.source.column, 4);
+  assert.ok(probe.candidates.length > 0);
+  const conversions = await logicalToScreen(page, probe.candidates);
+  assert.equal(conversions.length, probe.candidates.length);
+  const point = conversions.find(candidate => candidate.parentHit?.isIframe); assert.ok(point);
+  const hit = await hitSource(frame, point.logical); assert.deepEqual(hit.source, probe.source);
+  assert.ok(Math.abs(point.scale.x - .8) < .001); assert.ok(Math.abs(point.scale.y - .8) < .001);
+  const single = await logicalToScreen(page, point.logical); assert.deepEqual(single.screen, point.screen);
+  assert.equal((await probeElement(frame.locator('p'))).source, null);
+  console.log('PASS coordinate helper: serialized typed probe, source metadata, absent metadata, candidate-array and single-point overloads, transformed iframe geometry and exact physical hit');
+} finally { await browser.close(); }

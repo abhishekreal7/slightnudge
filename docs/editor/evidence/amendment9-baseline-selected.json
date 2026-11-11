@@ -1,0 +1,210 @@
+{
+  "selected": [
+    "apply-outcome",
+    "apply-client-recovery",
+    "apply-denial",
+    "source-operation-lock",
+    "undo-client-recovery",
+    "undo-recovery",
+    "studio-recovery",
+    "s1-auth-bypass",
+    "test-override-guard",
+    "prewrite-hook-guard",
+    "m5-containment-helper",
+    "history-resilience",
+    "history-summary",
+    "s3-atomic-write",
+    "token-undo",
+    "undo-refusals",
+    "undo-m3-restored-token",
+    "undo-m5-parent-junction",
+    "adapter",
+    "advanced-image-source",
+    "api-response-diagnostics.v2",
+    "api-response-helper.v2",
+    "appearance-layout",
+    "button-editing",
+    "component-actions",
+    "component-ownership",
+    "component-props",
+    "container-move",
+    "continuous-draft",
+    "direct-manipulation",
+    "drag-move",
+    "fixtures",
+    "hmr-sync",
+    "icon-properties",
+    "icon-replacement",
+    "image-assets",
+    "image-content",
+    "image-framing",
+    "imported-draft",
+    "in-situ-focus",
+    "inspection-client",
+    "jsx-text",
+    "m1-interactions",
+    "move-controls",
+    "multi-file-crash",
+    "multi-file-group",
+    "preview-connection",
+    "project-compatibility",
+    "reorder-safety",
+    "s1-auth-origin",
+    "s2-path-traversal",
+    "s5-tailwind-compile",
+    "s5-theme-support",
+    "s5-v3-support",
+    "section-order",
+    "shared-instance",
+    "style-isolation",
+    "token-html-host",
+    "undo-stacked-edits",
+    "unified-editor-routing"
+  ],
+  "alreadyPassed": [
+    "apply-crash-recovery",
+    "apply-review-race"
+  ],
+  "deferred": [
+    {
+      "suite": "advanced-image-bridge",
+      "browser": true,
+      "status": "ready"
+    },
+    {
+      "suite": "bridge-ready-handshake.browser",
+      "browser": true,
+      "status": "ready"
+    },
+    {
+      "suite": "component-actions-bridge",
+      "browser": true,
+      "status": "ready"
+    },
+    {
+      "suite": "component-inline-bridge",
+      "browser": true,
+      "status": "ready"
+    },
+    {
+      "suite": "icon-properties-bridge",
+      "browser": true,
+      "status": "ready"
+    },
+    {
+      "suite": "icon-replacement-bridge",
+      "browser": true,
+      "status": "ready"
+    },
+    {
+      "suite": "image-attributes-bridge",
+      "browser": true,
+      "status": "ready"
+    },
+    {
+      "suite": "imported-canvas-runtime",
+      "browser": true,
+      "status": "ready"
+    },
+    {
+      "suite": "in-situ-controls",
+      "browser": true,
+      "status": "ready"
+    },
+    {
+      "suite": "m0-overfit.iframe-v3",
+      "browser": true,
+      "status": "lab harness required"
+    },
+    {
+      "suite": "m0-overfit.reliability",
+      "browser": true,
+      "status": "lab harness required"
+    },
+    {
+      "suite": "m0-overfit.reliability.v3",
+      "browser": true,
+      "status": "lab harness required"
+    },
+    {
+      "suite": "m0-overfit.security-v2",
+      "browser": true,
+      "status": "lab harness required"
+    },
+    {
+      "suite": "m0-overfit",
+      "browser": true,
+      "status": "lab harness required"
+    },
+    {
+      "suite": "m0-regression.iframe-v3",
+      "browser": true,
+      "status": "lab harness required"
+    },
+    {
+      "suite": "m0-regression.reliability",
+      "browser": true,
+      "status": "lab harness required"
+    },
+    {
+      "suite": "m0-regression.reliability.v3",
+      "browser": true,
+      "status": "lab harness required"
+    },
+    {
+      "suite": "m0-regression.security-v2",
+      "browser": true,
+      "status": "lab harness required"
+    },
+    {
+      "suite": "m0-regression",
+      "browser": true,
+      "status": "lab harness required"
+    },
+    {
+      "suite": "move-css-compatibility",
+      "browser": true,
+      "status": "ready"
+    },
+    {
+      "suite": "responsive-scopes",
+      "browser": true,
+      "status": "ready"
+    },
+    {
+      "suite": "responsive-tailwind3",
+      "browser": true,
+      "status": "ready"
+    },
+    {
+      "suite": "runtime-class-ownership",
+      "browser": true,
+      "status": "ready"
+    },
+    {
+      "suite": "section-order-bridge",
+      "browser": true,
+      "status": "ready"
+    },
+    {
+      "suite": "shared-instance-bridge",
+      "browser": true,
+      "status": "ready"
+    },
+    {
+      "suite": "source-document-fence.browser",
+      "browser": true,
+      "status": "ready"
+    },
+    {
+      "suite": "source-rendered-bridge",
+      "browser": true,
+      "status": "ready"
+    },
+    {
+      "suite": "step2-nudging",
+      "browser": true,
+      "status": "deferred: hard-coded live port; requires disposable URL harness"
+    }
+  ]
+}

@@ -1,14 +1,12 @@
-.controls { display:flex; align-items:center; gap:8px; color:#667168; font-family:inherit; font-size:11px; line-height:1.4; }
-.width { display:flex; align-items:center; gap:3px; padding:4px 7px; border:1px solid #e3e8e4; border-radius:6px; background:#fff; font-variant-numeric:tabular-nums; }
-.width input { width:42px; padding:0; border:0; outline:none; background:transparent; color:#34443b; font:inherit; appearance:textfield; }
+.controls { display:flex; align-items:center; gap:4px; color:#667168; font-family:inherit; font-size:11px; line-height:1.4; }
+.width { display:flex; align-items:center; gap:2px; height:24px; padding:0 6px; border:1px solid #e3e8e4; border-radius:6px; background:#ffffff; font-variant-numeric:tabular-nums; }
+.width input { width:32px; padding:0; border:0; outline:none; background:transparent; color:#34443b; font:inherit; font-weight:500; font-size:11px; appearance:textfield; text-align:center; }
 .width input::-webkit-inner-spin-button { appearance:none; }
-.width:focus-within { border-color:#729b87; box-shadow:0 0 0 2px #16805c0b; }
+.width:focus-within { border-color:#729b87; box-shadow:0 0 0 2px rgba(16, 185, 129, 0.15); }
 .width span { color:#98a198; font-size:10px; }
-.widthLabel, .scope { display:flex; align-items:center; gap:6px; }
-.fieldLabel { color:#667168; font-size:10px; white-space:nowrap; }
-.scope select { max-width:165px; min-height:28px; padding:4px 22px 4px 7px; border:1px solid #e3e8e4; border-radius:6px; background-color:#fff; color:#34443b; font:inherit; cursor:pointer; }
+.widthLabel, .scope { display:flex; align-items:center; gap:3px; }
+.fieldLabel { display:none; }
+.scope select { max-width:85px; height:24px; padding:0 14px 0 6px; border:1px solid #e3e8e4; border-radius:6px; background-color:#ffffff; color:#34443b; font:inherit; font-size:11px; font-weight:500; cursor:pointer; }
 .scope select:focus-visible { outline:2px solid #729b87; outline-offset:2px; }
-.match { border:0; border-radius:5px; padding:5px 7px; background:#edf5ef; color:#2e7055; font:inherit; cursor:pointer; white-space:nowrap; }
+.match { border:0; border-radius:5px; height:24px; padding:0 6px; background:#edf5ef; color:#2e7055; font:inherit; font-size:11px; font-weight:500; cursor:pointer; white-space:nowrap; }
 .error { color:#96754d; font-size:10px; white-space:nowrap; }
-@media(max-width:700px) { .fieldLabel { display:none; } .controls { gap:5px; } .scope select { max-width:125px; } }
-@container editor-column (max-width:480px) { .fieldLabel { display:none; } .controls { gap:5px; } .scope select { max-width:120px; } .match { padding:4px; font-size:10px; } }

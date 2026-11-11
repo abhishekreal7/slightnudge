@@ -1,0 +1,39 @@
+> node --import tsx --test test/history-store-blobs.test.ts
+TAP version 13
+# node:internal/modules/run_main:123
+#     triggerUncaughtException(
+#     ^
+# Error [ERR_MODULE_NOT_FOUND]: Cannot find module 'C:\\dev\\vibecheck\\lib\\slightnudge\\history-store\\blobs' imported from C:\\dev\\vibecheck\\test\\history-store-blobs.test.ts
+#     at finalizeResolution (node:internal/modules/esm/resolve:274:11)
+#     at moduleResolve (node:internal/modules/esm/resolve:859:10)
+#     at defaultResolve (node:internal/modules/esm/resolve:983:11)
+#     at nextResolve (node:internal/modules/esm/hooks:748:28)
+#     at resolveBase (file:///C:/dev/vibecheck/node_modules/tsx/dist/register-nyXW-TH3.mjs:2:10494)
+#     at async resolveDirectory (file:///C:/dev/vibecheck/node_modules/tsx/dist/register-nyXW-TH3.mjs:2:11575) {
+#   code: 'ERR_MODULE_NOT_FOUND',
+#   url: 'file:///C:/dev/vibecheck/lib/slightnudge/history-store/blobs'
+# }
+# Node.js v22.19.0
+# Subtest: test\\history-store-blobs.test.ts
+not ok 1 - test\\history-store-blobs.test.ts
+  ---
+  duration_ms: 237.1032
+  type: 'test'
+  location: 'C:\\dev\\vibecheck\\test\\history-store-blobs.test.ts:1:1'
+  failureType: 'testCodeFailure'
+  exitCode: 1
+  signal: ~
+  error: 'test failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 0
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 245.1399
+exit 1
+CONFIRMED: protected files and Git status unchanged.

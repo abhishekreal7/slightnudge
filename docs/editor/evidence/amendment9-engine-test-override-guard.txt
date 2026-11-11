@@ -1,0 +1,33 @@
+> C:\nvm4w\nodejs\node.exe --import tsx scratch/editor-s1-group.ts amendment9-engine-test-override-guard test-override-guard test/helpers/real-state.ts
+{"temporaryRoot":"C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-test-override-guard-Hpt3ll","baseline":"8c613619b4ce051027689fd3d782d4ee029e7052","suite":"test-override-guard","overlays":["test/helpers/real-state.ts"],"omitted":".env.example"}
+Isolated seed staged paths: .env.example, test/helpers/real-state.ts
+🧪 RUNNING TEST OVERRIDE GUARD SUITE
+  ✅ [PASS] NODE_ENV=production strictly ignores all SLIGHTNUDGE_* overrides even when SLIGHTNUDGE_TEST=1
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Session token override honored in dev/test mode
++ actual - expected
+
++ 'fa7b616de354601017e57fb5ca66a2d6e29c2b0f23cbefc086a1cff3c1552493'
+- 'canary-secret-token-12345'
+
+    at <anonymous> (C:\Users\abhis\AppData\Local\Temp\sn-sprint1-test-override-guard-Hpt3ll\source\test\test-override-guard.test.ts:77:12)
+    at ModuleJob.run (node:internal/modules/esm/module_job:345:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:651:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 'fa7b616de354601017e57fb5ca66a2d6e29c2b0f23cbefc086a1cff3c1552493',
+  expected: 'canary-secret-token-12345',
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v22.19.0
+Owned temporary entries before cleanup: ["tsx-abhis"]
+Confirmed cleanup: C:\Users\abhis\AppData\Local\Temp\sn-sprint1-test-override-guard-Hpt3ll
+CONFIRMED: integration checkout protected files and status unchanged.
+exit 1
+CONFIRMED: protected files and Git status unchanged.

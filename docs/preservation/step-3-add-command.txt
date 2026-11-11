@@ -1,0 +1,2 @@
+git -c core.autocrlf=false --literal-pathspecs add --pathspec-from-file=- --pathspec-file-nul
+Standard input: all paths in step-3-add-paths.txt, UTF-8 and NUL-delimited.

@@ -1,0 +1,59 @@
+> C:\nvm4w\nodejs\node.exe --import tsx scratch/editor-s1-group.ts amendment9-engine-fixtures fixtures test/helpers/real-state.ts
+{"temporaryRoot":"C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-fixtures-EX7Eo0","baseline":"8c613619b4ce051027689fd3d782d4ee029e7052","suite":"fixtures","overlays":["test/helpers/real-state.ts"],"omitted":".env.example"}
+Isolated seed staged paths: .env.example, test/helpers/real-state.ts
+====================================================
+🧪 SLIGHTNUDGE - STEP 0: FIXTURE VERIFICATION SUITE
+====================================================
+
+--- Fixture 1: Plain static className ---
+  ✅ [PASS] Fixture 1 starts with ml-2
+  ✅ [PASS] Nudge succeeded
+  ✅ [PASS] Not refused
+  ✅ [PASS] Identified old class as ml-2
+  ✅ [PASS] Nudged ml-2 -> ml-2.5
+  ✅ [PASS] File written with className="ml-2.5"
+  ✅ [PASS] Old className="ml-2" replaced cleanly
+  ✅ [PASS] Exact expected file change verified: only className modified
+
+--- Fixture 2: Several utilities in one className ---
+  ✅ [PASS] Fixture 2 starts with original multi-utility className
+  ✅ [PASS] Nudge succeeded
+  ✅ [PASS] Identified old class as ml-2
+  ✅ [PASS] Nudged ml-2 -> ml-2.5
+  ✅ [PASS] Updated className preserves all other utilities
+  ✅ [PASS] Old multi-utility className replaced
+  ✅ [PASS] Exact expected file change verified: only ml-2 changed, rest untouched
+
+--- Fixture 3: className built with cn()/clsx and a condition ---
+  ✅ [PASS] Edit not executed
+  ✅ [PASS] Refused safely without guessing
+  ✅ [PASS] Reported "can't edit this safely" to user
+  ✅ [PASS] Source file left completely untouched (0 bytes modified)
+
+--- Fixture 4: Component rendered twice with different props ---
+  ✅ [PASS] Edit card-1 instance not executed
+  ✅ [PASS] card-1 instance refused safely
+  ✅ [PASS] Reported component used in several places on instance
+  ✅ [PASS] Edit inner element not executed
+  ✅ [PASS] Inner element refused safely
+  ✅ [PASS] Reported component used in several places on inner element
+  ✅ [PASS] Source file left completely untouched (0 bytes modified)
+
+--- Fixture 5: Responsive classes (md:, lg:) ---
+  ✅ [PASS] Fixture 5 starts with base + responsive classes
+  ✅ [PASS] Nudge succeeded
+  ✅ [PASS] Targeted base class ml-2
+  ✅ [PASS] Nudged base class to ml-2.5
+  ✅ [PASS] Updated className preserves md:ml-4 and lg:ml-8
+  ✅ [PASS] Old base class replaced
+  ✅ [PASS] Exact expected file change verified: responsive classes preserved
+
+====================================================
+🎉 ALL 33/33 STEP 0 FIXTURE TESTS PASSED!
+====================================================
+
+Owned temporary entries before cleanup: ["tsx-abhis"]
+Confirmed cleanup: C:\Users\abhis\AppData\Local\Temp\sn-sprint1-fixtures-EX7Eo0
+CONFIRMED: integration checkout protected files and status unchanged.
+exit 0
+CONFIRMED: protected files and Git status unchanged.

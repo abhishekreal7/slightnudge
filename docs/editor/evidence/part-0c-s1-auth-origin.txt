@@ -1,0 +1,66 @@
+> C:\nvm4w\nodejs\node.exe --import tsx scratch/editor-sprint1-isolate.ts s1-auth-origin
+{"temporaryRoot":"C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-s1-auth-origin-rXW8fl","baseline":"6cadd06eb1dbbf55032354db2817add1c52e3ac3","suite":"s1-auth-origin","overlays":[],"omitted":".env.example"}
+Isolated seed staged paths: .env.example
+TAP version 13
+# Subtest: S1: Authenticated, local-only mutating requests
+    # Subtest: rejects mutating request with no Origin and no token with 403 (not 404)
+    ok 1 - rejects mutating request with no Origin and no token with 403 (not 404)
+      ---
+      duration_ms: 4217.1875
+      type: 'test'
+      ...
+    # Subtest: rejects mutating request with wrong Host with 403
+    ok 2 - rejects mutating request with wrong Host with 403
+      ---
+      duration_ms: 55.729
+      type: 'test'
+      ...
+    # Subtest: rejects mutating request with valid Origin but missing token with 403
+    ok 3 - rejects mutating request with valid Origin but missing token with 403
+      ---
+      duration_ms: 16.5296
+      type: 'test'
+      ...
+    # Subtest: rejects mutating request with valid Origin but invalid token with 403
+    ok 4 - rejects mutating request with valid Origin but invalid token with 403
+      ---
+      duration_ms: 16.0938
+      type: 'test'
+      ...
+    # Subtest: returns normal not-found error for fake previewId with valid token and valid Origin
+    ok 5 - returns normal not-found error for fake previewId with valid token and valid Origin
+      ---
+      duration_ms: 39.4172
+      type: 'test'
+      ...
+    # Subtest: allows missing Origin when valid token is present and proceeds to normal handling
+    ok 6 - allows missing Origin when valid token is present and proceeds to normal handling
+      ---
+      duration_ms: 30.6191
+      type: 'test'
+      ...
+    # Subtest: completes preview, apply, and undo flow in a temp copy with valid token and Origin
+    ok 7 - completes preview, apply, and undo flow in a temp copy with valid token and Origin
+      ---
+      duration_ms: 4317.6625
+      type: 'test'
+      ...
+    1..7
+ok 1 - S1: Authenticated, local-only mutating requests
+  ---
+  duration_ms: 26049.2722
+  type: 'suite'
+  ...
+1..1
+# tests 7
+# suites 1
+# pass 7
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 26057.4274
+Owned temporary entries before cleanup: ["node-compile-cache","npm-cache","tsx-abhis"]
+Confirmed cleanup: C:\Users\abhis\AppData\Local\Temp\sn-sprint1-s1-auth-origin-rXW8fl
+exit 0
+CONFIRMED: protected files and Git status unchanged.

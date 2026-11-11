@@ -1,0 +1,9 @@
+> git diff --cached --name-only
+docs/editor-sprint1-report.md
+docs/editor/BRIEF.md
+docs/editor/STATE.md
+test/helpers/real-state.ts
+test/real-state-guard-v2.test.ts
+CONFIRMED: next-env.d.ts, evidence and scratch are absent from the index.
+Commit: b96f47c21fcb4e55dfdfd3db1ab30c06e6a09e7c
+Label: WIP incomplete; v2 fixture-to-HEAD check is failing.

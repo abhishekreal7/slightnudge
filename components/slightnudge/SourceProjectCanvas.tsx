@@ -2,7 +2,7 @@
 import { readApiJson } from '@/lib/slightnudge/api-response';
 
 
-import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { getClientSessionToken } from '@/lib/slightnudge/client';
 import type { CanvasLayer, CanvasRenderPatch } from '@/lib/slightnudge/source-canvas-contract';
@@ -20,8 +20,10 @@ export interface SourceSelection {
 }
 export interface SourceCanvasHandle {
   openWindow(): void;
-  command(operation: 'preview' | 'check' | 'discard' | 'verify' | 'verify-document' | 'restore' | 'select' | 'catalog' | 'gesture' | 'cancel-gesture' | 'begin-text' | 'cancel-text' | 'finish-text' | 'verify-batch' | 'set-mode', selection?: SourceSelection | null, extra?: Record<string, unknown>): Promise<SourceSelection | undefined>;
+  command(operation: 'preview' | 'check' | 'discard' | 'verify' | 'verify-document' | 'restore' | 'select' | 'catalog' | 'gesture' | 'cancel-gesture' | 'begin-text' | 'cancel-text' | 'finish-text' | 'verify-batch' | 'set-mode' | 'set-theme', selection?: SourceSelection | null, extra?: Record<string, unknown>): Promise<SourceSelection | undefined>;
   reload(selection?: SourceSelection, expectedClass?: string, expectedText?: string, expectedBatch?: CanvasRenderPatch[]): Promise<void>;
+  getDocument?(): Document | null;
+  getFrame?(): HTMLIFrameElement | null;
 }
 
 export const SourceProjectCanvas = forwardRef<SourceCanvasHandle, {
@@ -33,7 +35,8 @@ export const SourceProjectCanvas = forwardRef<SourceCanvasHandle, {
   onText?(type: string, selection?: SourceSelection, text?: string, shift?: boolean): void;
   renderSelection?(selection: SourceSelection): React.ReactNode;
   onSelect(selection: SourceSelection): void; onNotice(message: string): void; onClearSelection(): void;
-}>(function SourceProjectCanvas({ repositoryId, localPageId, width, blocked, windowMode = false, continuousDraft = false, browseMode = false, destinationMode = false, onDestination, onSelect, onNotice, onClearSelection, onLayers, onGeometry, onReady, onViewport, onText, renderSelection }, ref) {
+  theme?: 'light' | 'dark';
+}>(function SourceProjectCanvas({ repositoryId, localPageId, width, blocked, windowMode = false, continuousDraft = false, browseMode = false, destinationMode = false, onDestination, onSelect, onNotice, onClearSelection, onLayers, onGeometry, onReady, onViewport, onText, renderSelection, theme = 'light' }, ref) {
   const frame = useRef<HTMLIFrameElement>(null);
   const [input, setInput] = useState('http://127.0.0.1:3001');
   const [url, setUrl] = useState('');
@@ -60,6 +63,79 @@ export const SourceProjectCanvas = forwardRef<SourceCanvasHandle, {
   const modeRef = useRef(browseMode); modeRef.current = browseMode;
   const props = useRef({ blocked, onSelect, onNotice, onClearSelection, onLayers, onGeometry, onReady, onViewport, onText }); props.current = { blocked, onSelect, onNotice, onClearSelection, onLayers, onGeometry, onReady, onViewport, onText };
   const requests = useRef(new Map<string, { resolve(selection?: SourceSelection): void; reject(error: Error): void; timer: ReturnType<typeof setTimeout> }> () );
+
+  const applyTheme = useCallback((doc: Document, activeTheme: 'light' | 'dark') => {
+    try {
+      const root = doc.documentElement;
+      if (!root) return;
+      root.classList.toggle('dark', activeTheme === 'dark');
+      if (doc.body) doc.body.classList.toggle('dark', activeTheme === 'dark');
+      root.setAttribute('data-theme', activeTheme);
+      root.setAttribute('data-slightnudge-theme', activeTheme);
+      root.style.colorScheme = activeTheme;
+
+      let styleEl = doc.getElementById('slightnudge-smart-theme') as HTMLStyleElement | null;
+      if (!styleEl) {
+        styleEl = doc.createElement('style');
+        styleEl.id = 'slightnudge-smart-theme';
+        styleEl.textContent = `
+          html[data-slightnudge-force-dark="true"] {
+            filter: invert(0.92) hue-rotate(180deg) contrast(0.98) brightness(1.04) !important;
+            background-color: #0c0f17 !important;
+          }
+          html[data-slightnudge-force-dark="true"] img,
+          html[data-slightnudge-force-dark="true"] video,
+          html[data-slightnudge-force-dark="true"] picture,
+          html[data-slightnudge-force-dark="true"] canvas,
+          html[data-slightnudge-force-dark="true"] [data-preserve-color] {
+            filter: invert(1) hue-rotate(180deg) !important;
+          }
+          html[data-slightnudge-force-light="true"] {
+            filter: invert(0.92) hue-rotate(180deg) contrast(0.98) brightness(1.04) !important;
+            background-color: #ffffff !important;
+          }
+          html[data-slightnudge-force-light="true"] img,
+          html[data-slightnudge-force-light="true"] video,
+          html[data-slightnudge-force-light="true"] picture,
+          html[data-slightnudge-force-light="true"] canvas,
+          html[data-slightnudge-force-light="true"] [data-preserve-color] {
+            filter: invert(1) hue-rotate(180deg) !important;
+          }
+        `;
+        doc.head.append(styleEl);
+      }
+      if (doc.body) {
+        const bg = getComputedStyle(doc.body).backgroundColor;
+        const match = bg ? bg.match(/\\d+/g) : null;
+        const isLight = !match || match.length < 3 ? true : (0.299 * Number(match[0]) + 0.587 * Number(match[1]) + 0.114 * Number(match[2])) > 130;
+        if (activeTheme === 'dark') {
+          root.removeAttribute('data-slightnudge-force-light');
+          if (isLight) root.setAttribute('data-slightnudge-force-dark', 'true');
+          else root.removeAttribute('data-slightnudge-force-dark');
+        } else {
+          root.removeAttribute('data-slightnudge-force-dark');
+          if (!isLight) root.setAttribute('data-slightnudge-force-light', 'true');
+          else root.removeAttribute('data-slightnudge-force-light');
+        }
+      }
+    } catch {
+      // Cross-origin iframe fallback handled via postMessage
+    }
+  }, []);
+
+  useEffect(() => {
+    const iframe = frame.current;
+    if (!iframe) return;
+    try {
+      const doc = iframe.contentDocument;
+      if (doc) applyTheme(doc, theme);
+    } catch { /* cross-origin */ }
+    if (url && iframe.contentWindow) {
+      try {
+        iframe.contentWindow.postMessage({ channel: 'slightnudge', session: session.current, type: 'source-edit', operation: 'set-theme', theme }, new URL(url).origin);
+      } catch { /* ignore */ }
+    }
+  }, [theme, url, ready, documentRevision, applyTheme]);
   useEffect(() => {
     if (repositoryId || windowMode || !ready) return;
     const iframe = frame.current, doc = iframe?.contentDocument;
@@ -94,6 +170,7 @@ export const SourceProjectCanvas = forwardRef<SourceCanvasHandle, {
       const next = new URL(`/studio/preview/${encodeURIComponent(localPageId || 'fixture-1')}`, window.location.origin);
       next.searchParams.set('__slightnudge_parent', window.location.origin); next.searchParams.set('__slightnudge_session', session.current);
       if (!windowMode) next.searchParams.set('__slightnudge_canvas', '1');
+      next.searchParams.set('__slightnudge_theme', theme);
       documentUrl.current = next.toString(); setUrl(next.toString()); return;
     }
     let active = true;
@@ -140,7 +217,15 @@ export const SourceProjectCanvas = forwardRef<SourceCanvasHandle, {
       if (message.type === 'destination-hover' && destinationRef.current) { setDestination(message.selection?.rect ? message.selection : null); return; }
       if (message.type === 'destination-picked' && destinationRef.current && message.selection?.rect && typeof message.selection.path === 'string' && Number.isInteger(message.selection.line) && Number.isInteger(message.selection.column)) { destinationCallback.current?.(message.selection); return; }
       if (message.type === 'selection-refused') { props.current.onNotice(typeof message.reason === 'string' ? message.reason : 'This source element cannot be selected uniquely.'); return; }
-      if (message.type === 'source-rect' && message.selection?.rect) { selected.current = message.selection; setGeometry(message.selection); props.current.onGeometry?.(message.selection); return; }
+      if (message.type === 'source-rect' && message.selection?.rect) {
+        if (typeof window !== 'undefined' && (window as any).__slightnudge_gesture_active) return;
+        const cur = selected.current?.rect;
+        const nxt = message.selection.rect;
+        if (cur && Math.abs(cur.top - nxt.top) < 0.5 && Math.abs(cur.left - nxt.left) < 0.5 && Math.abs(cur.width - nxt.width) < 0.5 && Math.abs(cur.height - nxt.height) < 0.5) {
+          return;
+        }
+        selected.current = message.selection; setGeometry(message.selection); props.current.onGeometry?.(message.selection); return;
+      }
       if (['text-draft', 'text-commit', 'text-cancel', 'text-request', 'save-request', 'shortcut'].includes(message.type)) { props.current.onText?.(message.type, message.selection, message.text ?? message.key, message.shift); return; }
       if (message.type === 'edit-result') {
         const request = requests.current.get(message.requestId);
@@ -177,6 +262,14 @@ export const SourceProjectCanvas = forwardRef<SourceCanvasHandle, {
   useImperativeHandle(ref, () => ({
     command,
     openWindow,
+    getDocument: () => {
+      try {
+        return frame.current?.contentDocument ?? null;
+      } catch {
+        return null;
+      }
+    },
+    getFrame: () => frame.current,
     async reload(selection, expectedClass, expectedText, expectedBatch) {
       // Recovery can finish before this newly mounted window has connected.
       // There is no document to reload yet; release the operation so the
@@ -246,6 +339,7 @@ export const SourceProjectCanvas = forwardRef<SourceCanvasHandle, {
       if (continuousDraft) next.searchParams.set('__slightnudge_draft', '1');
       if (!windowMode) next.searchParams.set('__slightnudge_canvas', '1');
       else next.searchParams.delete('__slightnudge_canvas');
+      next.searchParams.set('__slightnudge_theme', theme);
       setPageHeight(720);
       setUrl(next.toString());
     } catch (cause) { setError(cause instanceof Error ? cause.message : 'Could not connect.'); }
@@ -319,7 +413,13 @@ export const SourceProjectCanvas = forwardRef<SourceCanvasHandle, {
     {url && windowMode && ready && <p role="status" className={windowStyles.status}>Live source connected</p>}
     {url && <div data-selection-artboard className={windowMode ? windowStyles.artboard : 'relative mx-auto'} style={{ width, flexShrink: 0, maxWidth: width === '100%' ? '100%' : undefined }}>
       <iframe ref={frame} title="Actual project" src={url} onLoad={() => setDocumentRevision(value => value + 1)} scrolling={!windowMode ? 'no' : undefined} inert={!ready} tabIndex={ready ? 0 : -1} className="block w-full border-0 bg-white" style={{ height: windowMode ? '100dvh' : pageHeight, pointerEvents: ready ? 'auto' : 'none' }} />
-      {geometry && ready && renderSelection && <div className="absolute pointer-events-none" style={{ inset: 0, overflow: 'clip' }}><div style={{ position: 'absolute', top: geometry.rect.top, left: geometry.rect.left, width: geometry.rect.width, height: geometry.rect.height }}>{renderSelection(geometry)}</div></div>}
+      {geometry && ready && renderSelection && (
+        <div className="absolute pointer-events-none" style={{ inset: 0, overflow: 'visible' }}>
+          <div style={{ position: 'absolute', top: geometry.rect.top, left: geometry.rect.left, width: geometry.rect.width, height: geometry.rect.height }}>
+            {renderSelection(geometry)}
+          </div>
+        </div>
+      )}
       {destinationMode && destination && ready && <div className={windowStyles.destinationTarget} aria-label="Move destination preview" style={{ top: destination.rect.top, left: destination.rect.left, width: destination.rect.width, height: destination.rect.height }}><span>Move to end</span><i/></div>}
     </div>}
   </section>;

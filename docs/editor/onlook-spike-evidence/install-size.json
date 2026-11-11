@@ -1,0 +1,74 @@
+{
+  "upstreamInstalled": {
+    "files": 131174,
+    "bytes": 1841793882,
+    "linksSkipped": 29
+  },
+  "workspaces": {
+    "node_modules": {
+      "files": 126139,
+      "bytes": 1755839751,
+      "linksSkipped": 29
+    },
+    "apps/web/client/node_modules": {
+      "files": 4098,
+      "bytes": 47579336,
+      "linksSkipped": 0
+    },
+    "docs/node_modules": {
+      "files": 552,
+      "bytes": 25002653,
+      "linksSkipped": 0
+    },
+    "packages/file-system/node_modules": {
+      "files": 35,
+      "bytes": 759826,
+      "linksSkipped": 0
+    },
+    "packages/github/node_modules": {
+      "files": 103,
+      "bytes": 2151049,
+      "linksSkipped": 0
+    },
+    "packages/scripts/node_modules": {
+      "files": 69,
+      "bytes": 2280683,
+      "linksSkipped": 0
+    },
+    "packages/stripe/node_modules": {
+      "files": 12,
+      "bytes": 76591,
+      "linksSkipped": 0
+    },
+    "packages/ui/node_modules": {
+      "files": 69,
+      "bytes": 4925033,
+      "linksSkipped": 0
+    },
+    "packages/utility/node_modules": {
+      "files": 28,
+      "bytes": 898277,
+      "linksSkipped": 0
+    },
+    "tooling/prettier/node_modules": {
+      "files": 69,
+      "bytes": 2280683,
+      "linksSkipped": 0
+    }
+  },
+  "bunCache": {
+    "files": 133210,
+    "bytes": 1864455844,
+    "linksSkipped": 2294
+  },
+  "npmRuntimeAndProbeDependencies": {
+    "files": 17733,
+    "bytes": 540935310,
+    "linksSkipped": 0
+  },
+  "npmCache": {
+    "files": 328,
+    "bytes": 562665545,
+    "linksSkipped": 0
+  }
+}

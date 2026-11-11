@@ -1,0 +1,9 @@
+> C:\nvm4w\nodejs\node.exe --import tsx scratch/editor-s1-group.ts amendment9-engine-icon-replacement icon-replacement test/helpers/real-state.ts
+{"temporaryRoot":"C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-icon-replacement-XlXiIs","baseline":"8c613619b4ce051027689fd3d782d4ee029e7052","suite":"icon-replacement","overlays":["test/helpers/real-state.ts"],"omitted":".env.example"}
+Isolated seed staged paths: .env.example, test/helpers/real-state.ts
+PASS icon replacement source/API: installed catalogue, safe static shapes, selected usage only, import reuse/cleanup/shadowing, composed size and shape changes, exact Save/Undo, unsafe/provider/scope refusal
+Owned temporary entries before cleanup: ["sn-icon-replacement-p4I96A","tsx-abhis"]
+Confirmed cleanup: C:\Users\abhis\AppData\Local\Temp\sn-sprint1-icon-replacement-XlXiIs
+CONFIRMED: integration checkout protected files and status unchanged.
+exit 0
+CONFIRMED: protected files and Git status unchanged.

@@ -1,0 +1,43 @@
+> node --import tsx --test test/history-store-blobs.test.ts
+TAP version 13
+# Subtest: shares identical byte snapshots and verifies exact bytes
+ok 1 - shares identical byte snapshots and verifies exact bytes
+  ---
+  duration_ms: 7.815
+  type: 'test'
+  ...
+# Subtest: rejects wrong hashes, missing blobs and bad sizes without private diagnostics
+ok 2 - rejects wrong hashes, missing blobs and bad sizes without private diagnostics
+  ---
+  duration_ms: 5.6914
+  type: 'test'
+  ...
+# Subtest: rejects path escapes and junction reads before reading outside bytes
+ok 3 - rejects path escapes and junction reads before reading outside bytes
+  ---
+  duration_ms: 2.4143
+  type: 'test'
+  ...
+# Subtest: a fault before rename leaves the old value intact and removes temporary files
+ok 4 - a fault before rename leaves the old value intact and removes temporary files
+  ---
+  duration_ms: 4.1758
+  type: 'test'
+  ...
+# Subtest: privacy: every primitive failure emits only fixed reason codes and no log lines
+ok 5 - privacy: every primitive failure emits only fixed reason codes and no log lines
+  ---
+  duration_ms: 6.5464
+  type: 'test'
+  ...
+1..5
+# tests 5
+# suites 0
+# pass 5
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 205.7619
+exit 0
+CONFIRMED: protected files and Git status unchanged.

@@ -1,0 +1,14 @@
+> node ./node_modules/next/dist/bin/next start -H 127.0.0.1 -p 65187
+▲ Next.js 16.4.3
+- Local:         http://127.0.0.1:65187
+- Network:       http://127.0.0.1:65187
+✓ Ready in 205ms
+✓ Running next.config.mjs took 36ms
+Chromium opened /studio (HTTP 200).
+The session token reached the browser.
+Nudge preview status: 200
+Apply status: 200
+Confirmed source write in the archive: ml-2.5 mt-1 text-2xl -> ml-3 mt-1 text-2xl
+Stopped the production server on port 65187.
+exit 0
+CONFIRMED: real-state snapshots match

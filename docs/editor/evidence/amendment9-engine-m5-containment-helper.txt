@@ -1,0 +1,94 @@
+> C:\nvm4w\nodejs\node.exe --import tsx scratch/editor-s1-group.ts amendment9-engine-m5-containment-helper m5-containment-helper test/helpers/real-state.ts
+{"temporaryRoot":"C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-m5-containment-helper-0e9Toq","baseline":"8c613619b4ce051027689fd3d782d4ee029e7052","suite":"m5-containment-helper","overlays":["test/helpers/real-state.ts"],"omitted":".env.example"}
+Isolated seed staged paths: .env.example, test/helpers/real-state.ts
+Symlink creation requires elevated privileges (marked UNVERIFIED per instructions)
+TAP version 13
+# Subtest: M5: Pre-write containment check & helper verification
+    # Subtest: Unit tests for assertWriteTargetInsideWorkspace
+        # Subtest: refuses path with .. segments escaping workspace root
+        ok 1 - refuses path with .. segments escaping workspace root
+          ---
+          duration_ms: 2.3688
+          type: 'test'
+          ...
+        # Subtest: refuses relative .. path traversal
+        ok 2 - refuses relative .. path traversal
+          ---
+          duration_ms: 0.637
+          type: 'test'
+          ...
+        # Subtest: refuses UNC paths
+        ok 3 - refuses UNC paths
+          ---
+          duration_ms: 0.2443
+          type: 'test'
+          ...
+        # Subtest: refuses \\\\?\\ paths pointing outside workspace
+        ok 4 - refuses \\\\?\\ paths pointing outside workspace
+          ---
+          duration_ms: 0.1271
+          type: 'test'
+          ...
+        # Subtest: refuses 8.3 short names pointing outside workspace
+        ok 5 - refuses 8.3 short names pointing outside workspace
+          ---
+          duration_ms: 0.5299
+          type: 'test'
+          ...
+        # Subtest: refuses junction to an outside directory
+        ok 6 - refuses junction to an outside directory
+          ---
+          duration_ms: 3.4002
+          type: 'test'
+          ...
+        # Subtest: verifies or marks symlink test UNVERIFIED if admin rights are missing
+        ok 7 - verifies or marks symlink test UNVERIFIED if admin rights are missing
+          ---
+          duration_ms: 0.9827
+          type: 'test'
+          ...
+        # Subtest: accepts valid path inside workspace
+        ok 8 - accepts valid path inside workspace
+          ---
+          duration_ms: 1.0223
+          type: 'test'
+          ...
+        1..8
+    ok 1 - Unit tests for assertWriteTargetInsideWorkspace
+      ---
+      duration_ms: 10.678
+      type: 'suite'
+      ...
+    # Subtest: Wiring test for TOCTOU pre-write swap via hook
+        # Subtest: refuses undo and preserves outside sentinel when target is swapped for junction before write
+        ok 1 - refuses undo and preserves outside sentinel when target is swapped for junction before write
+          ---
+          duration_ms: 49.9269
+          type: 'test'
+          ...
+        1..1
+    ok 2 - Wiring test for TOCTOU pre-write swap via hook
+      ---
+      duration_ms: 50.083
+      type: 'suite'
+      ...
+    1..2
+ok 1 - M5: Pre-write containment check & helper verification
+  ---
+  duration_ms: 68.9867
+  type: 'suite'
+  ...
+1..1
+# tests 9
+# suites 3
+# pass 9
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 79.6144
+Owned temporary entries before cleanup: ["m5-ws-04ae1f8c-2e07-418d-ae6f-928c30b4f4db","tsx-abhis"]
+Confirmed cleanup: C:\Users\abhis\AppData\Local\Temp\sn-sprint1-m5-containment-helper-0e9Toq
+CONFIRMED: integration checkout protected files and status unchanged.
+exit 0
+CONFIRMED: protected files and Git status unchanged.

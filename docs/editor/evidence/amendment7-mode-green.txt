@@ -1,0 +1,37 @@
+> node --import tsx --test test/history-store-mode.test.ts
+TAP version 13
+# Subtest: activates an empty store with a marker and refuses cooperating legacy writers
+ok 1 - activates an empty store with a marker and refuses cooperating legacy writers
+  ---
+  duration_ms: 39.1636
+  type: 'test'
+  ...
+# Subtest: never steals busy or abandoned locks and checks migrating mode while locked
+ok 2 - never steals busy or abandoned locks and checks migrating mode while locked
+  ---
+  duration_ms: 33.2466
+  type: 'test'
+  ...
+# Subtest: legacy content is never activated or overwritten implicitly; corrupt metadata refuses unchanged
+ok 3 - legacy content is never activated or overwritten implicitly; corrupt metadata refuses unchanged
+  ---
+  duration_ms: 39.1846
+  type: 'test'
+  ...
+# Subtest: two processes appending concurrently lose no committed records
+ok 4 - two processes appending concurrently lose no committed records
+  ---
+  duration_ms: 606.8132
+  type: 'test'
+  ...
+1..4
+# tests 4
+# suites 0
+# pass 4
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 921.4112
+exit 0
+CONFIRMED: protected files and Git status unchanged.

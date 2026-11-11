@@ -1,0 +1,201 @@
+> C:\nvm4w\nodejs\node.exe --import tsx scratch/editor-s1-group.ts amendment9-engine-token-html-host token-html-host test/helpers/real-state.ts
+{"temporaryRoot":"C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-token-html-host-xSxS28","baseline":"8c613619b4ce051027689fd3d782d4ee029e7052","suite":"token-html-host","overlays":["test/helpers/real-state.ts"],"omitted":".env.example"}
+Isolated seed staged paths: .env.example, test/helpers/real-state.ts
+TAP version 13
+# Subtest: P0: Token HTML Host Header Validation
+    # Subtest: disallows token in HTML for / with evil.localhost
+    ok 1 - disallows token in HTML for / with evil.localhost
+      ---
+      duration_ms: 10624.0798
+      type: 'test'
+      ...
+    # Subtest: disallows token in HTML for / with attacker.example
+    ok 2 - disallows token in HTML for / with attacker.example
+      ---
+      duration_ms: 67.1812
+      type: 'test'
+      ...
+    # Subtest: disallows token in HTML for / with wrong port (port+1)
+    ok 3 - disallows token in HTML for / with wrong port (port+1)
+      ---
+      duration_ms: 66.2028
+      type: 'test'
+      ...
+    # Subtest: disallows token in HTML for / with missing Host
+    ok 4 - disallows token in HTML for / with missing Host
+      ---
+      duration_ms: 1.2444
+      type: 'test'
+      ...
+    # Subtest: disallows token in HTML for / with valid Host + X-Forwarded-Host: evil.localhost
+    ok 5 - disallows token in HTML for / with valid Host + X-Forwarded-Host: evil.localhost
+      ---
+      duration_ms: 65.4807
+      type: 'test'
+      ...
+    # Subtest: disallows token in HTML for / with valid Host + Forwarded: host=evil.localhost
+    ok 6 - disallows token in HTML for / with valid Host + Forwarded: host=evil.localhost
+      ---
+      duration_ms: 62.9072
+      type: 'test'
+      ...
+    # Subtest: disallows token in HTML for / with valid 127.0.0.1 + X-Forwarded-Host: evil.localhost
+    ok 7 - disallows token in HTML for / with valid 127.0.0.1 + X-Forwarded-Host: evil.localhost
+      ---
+      duration_ms: 86.5123
+      type: 'test'
+      ...
+    # Subtest: disallows token in HTML for / with valid 127.0.0.1 + Forwarded: host=evil.localhost
+    ok 8 - disallows token in HTML for / with valid 127.0.0.1 + Forwarded: host=evil.localhost
+      ---
+      duration_ms: 89.344
+      type: 'test'
+      ...
+    # Subtest: renders token in HTML for / with valid Host localhost:PORT
+    ok 9 - renders token in HTML for / with valid Host localhost:PORT
+      ---
+      duration_ms: 63.4658
+      type: 'test'
+      ...
+    # Subtest: renders token in HTML for / with valid Host 127.0.0.1:PORT
+    ok 10 - renders token in HTML for / with valid Host 127.0.0.1:PORT
+      ---
+      duration_ms: 67.3176
+      type: 'test'
+      ...
+    # Subtest: disallows token in HTML for /studio with evil.localhost
+    ok 11 - disallows token in HTML for /studio with evil.localhost
+      ---
+      duration_ms: 4413.4123
+      type: 'test'
+      ...
+    # Subtest: disallows token in HTML for /studio with attacker.example
+    ok 12 - disallows token in HTML for /studio with attacker.example
+      ---
+      duration_ms: 47.0475
+      type: 'test'
+      ...
+    # Subtest: disallows token in HTML for /studio with wrong port (port+1)
+    ok 13 - disallows token in HTML for /studio with wrong port (port+1)
+      ---
+      duration_ms: 49.2727
+      type: 'test'
+      ...
+    # Subtest: disallows token in HTML for /studio with missing Host
+    ok 14 - disallows token in HTML for /studio with missing Host
+      ---
+      duration_ms: 0.8698
+      type: 'test'
+      ...
+    # Subtest: disallows token in HTML for /studio with valid Host + X-Forwarded-Host: evil.localhost
+    ok 15 - disallows token in HTML for /studio with valid Host + X-Forwarded-Host: evil.localhost
+      ---
+      duration_ms: 45.5812
+      type: 'test'
+      ...
+    # Subtest: disallows token in HTML for /studio with valid Host + Forwarded: host=evil.localhost
+    ok 16 - disallows token in HTML for /studio with valid Host + Forwarded: host=evil.localhost
+      ---
+      duration_ms: 51.5801
+      type: 'test'
+      ...
+    # Subtest: disallows token in HTML for /studio with valid 127.0.0.1 + X-Forwarded-Host: evil.localhost
+    ok 17 - disallows token in HTML for /studio with valid 127.0.0.1 + X-Forwarded-Host: evil.localhost
+      ---
+      duration_ms: 48.2828
+      type: 'test'
+      ...
+    # Subtest: disallows token in HTML for /studio with valid 127.0.0.1 + Forwarded: host=evil.localhost
+    ok 18 - disallows token in HTML for /studio with valid 127.0.0.1 + Forwarded: host=evil.localhost
+      ---
+      duration_ms: 51.6775
+      type: 'test'
+      ...
+    # Subtest: renders token in HTML for /studio with valid Host localhost:PORT
+    not ok 19 - renders token in HTML for /studio with valid Host localhost:PORT
+      ---
+      duration_ms: 52.2804
+      type: 'test'
+      location: 'C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-token-html-host-xSxS28\\source\\test\\token-html-host.test.ts:1:2603'
+      failureType: 'testCodeFailure'
+      error: |-
+        Expected 200 OK for localhost:3110
+        
+        307 !== 200
+        
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: 200
+      actual: 307
+      operator: 'strictEqual'
+      stack: |-
+        TestContext.<anonymous> (C:\Users\abhis\AppData\Local\Temp\sn-sprint1-token-html-host-xSxS28\source\test\token-html-host.test.ts:90:14)
+        process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+        async Test.run (node:internal/test_runner/test:1054:7)
+        async Suite.processPendingSubtests (node:internal/test_runner/test:744:7)
+      ...
+    # Subtest: renders token in HTML for /studio with valid Host 127.0.0.1:PORT
+    not ok 20 - renders token in HTML for /studio with valid Host 127.0.0.1:PORT
+      ---
+      duration_ms: 56.9567
+      type: 'test'
+      location: 'C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-token-html-host-xSxS28\\source\\test\\token-html-host.test.ts:1:3104'
+      failureType: 'testCodeFailure'
+      error: |-
+        Expected 200 OK for 127.0.0.1:3110
+        
+        307 !== 200
+        
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: 200
+      actual: 307
+      operator: 'strictEqual'
+      stack: |-
+        TestContext.<anonymous> (C:\Users\abhis\AppData\Local\Temp\sn-sprint1-token-html-host-xSxS28\source\test\token-html-host.test.ts:103:14)
+        process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+        async Test.run (node:internal/test_runner/test:1054:7)
+        async Suite.processPendingSubtests (node:internal/test_runner/test:744:7)
+      ...
+    # Subtest: refuses token endpoint for disallowed host (evil.localhost) with 403
+    ok 21 - refuses token endpoint for disallowed host (evil.localhost) with 403
+      ---
+      duration_ms: 43.0654
+      type: 'test'
+      ...
+    # Subtest: refuses token endpoint when X-Forwarded-Host is evil.localhost with 403
+    ok 22 - refuses token endpoint when X-Forwarded-Host is evil.localhost with 403
+      ---
+      duration_ms: 13.2246
+      type: 'test'
+      ...
+    # Subtest: token endpoint response includes Cache-Control: no-store
+    ok 23 - token endpoint response includes Cache-Control: no-store
+      ---
+      duration_ms: 14.0635
+      type: 'test'
+      ...
+    1..23
+not ok 1 - P0: Token HTML Host Header Validation
+  ---
+  duration_ms: 32877.3005
+  type: 'suite'
+  location: 'C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-token-html-host-xSxS28\\source\\test\\token-html-host.test.ts:1:274'
+  failureType: 'subtestsFailed'
+  error: '2 subtests failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+1..1
+# tests 23
+# suites 1
+# pass 21
+# fail 2
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 32881.6503
+Owned temporary entries before cleanup: ["node-compile-cache","npm-cache","tsx-abhis"]
+Confirmed cleanup: C:\Users\abhis\AppData\Local\Temp\sn-sprint1-token-html-host-xSxS28
+CONFIRMED: integration checkout protected files and status unchanged.
+exit 1
+CONFIRMED: protected files and Git status unchanged.

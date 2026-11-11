@@ -1,0 +1,647 @@
+[
+  {
+    "suite": "apply-outcome",
+    "first": {
+      "label": "amendment9-engine-apply-outcome",
+      "code": 1,
+      "protectedFailure": false
+    },
+    "retry": {
+      "label": "amendment9-engine-apply-outcome-retry",
+      "code": 1,
+      "protectedFailure": false
+    },
+    "classification": "BASELINE DEFECT",
+    "reason": "Generated project registry missing (ENOENT repositories.json) in scoped test setup before outcome recovery can run; no raw evidence of a violated safety property."
+  },
+  {
+    "suite": "apply-client-recovery",
+    "first": {
+      "label": "amendment9-engine-apply-client-recovery",
+      "code": 0,
+      "protectedFailure": false
+    },
+    "retry": null,
+    "classification": "PASS"
+  },
+  {
+    "suite": "apply-denial",
+    "first": {
+      "label": "amendment9-engine-apply-denial",
+      "code": 0,
+      "protectedFailure": false
+    },
+    "retry": null,
+    "classification": "PASS"
+  },
+  {
+    "suite": "source-operation-lock",
+    "first": {
+      "label": "amendment9-engine-source-operation-lock",
+      "code": 0,
+      "protectedFailure": false
+    },
+    "retry": null,
+    "classification": "PASS"
+  },
+  {
+    "suite": "undo-client-recovery",
+    "first": {
+      "label": "amendment9-engine-undo-client-recovery",
+      "code": 0,
+      "protectedFailure": false
+    },
+    "retry": null,
+    "classification": "PASS"
+  },
+  {
+    "suite": "undo-recovery",
+    "first": {
+      "label": "amendment9-engine-undo-recovery",
+      "code": 0,
+      "protectedFailure": false
+    },
+    "retry": null,
+    "classification": "PASS"
+  },
+  {
+    "suite": "studio-recovery",
+    "first": {
+      "label": "amendment9-engine-studio-recovery",
+      "code": 0,
+      "protectedFailure": false
+    },
+    "retry": null,
+    "classification": "PASS"
+  },
+  {
+    "suite": "s1-auth-bypass",
+    "first": {
+      "label": "amendment9-engine-s1-auth-bypass",
+      "code": 0,
+      "protectedFailure": false
+    },
+    "retry": null,
+    "classification": "PASS"
+  },
+  {
+    "suite": "test-override-guard",
+    "first": {
+      "label": "amendment9-engine-test-override-guard",
+      "code": 1,
+      "protectedFailure": false
+    },
+    "retry": {
+      "label": "amendment9-engine-test-override-guard-retry",
+      "code": 1,
+      "protectedFailure": false
+    },
+    "classification": "BASELINE DEFECT",
+    "reason": "Obsolete dev/test token-override expectation: S1 intentionally removed SLIGHTNUDGE_SESSION_TOKEN override. The production override rejection checks pass; no authentication bypass is shown. Keep the stronger product auth and leave the assertion unchanged."
+  },
+  {
+    "suite": "prewrite-hook-guard",
+    "first": {
+      "label": "amendment9-engine-prewrite-hook-guard",
+      "code": 0,
+      "protectedFailure": false
+    },
+    "retry": null,
+    "classification": "PASS"
+  },
+  {
+    "suite": "m5-containment-helper",
+    "first": {
+      "label": "amendment9-engine-m5-containment-helper",
+      "code": 0,
+      "protectedFailure": false
+    },
+    "retry": null,
+    "classification": "PASS"
+  },
+  {
+    "suite": "history-resilience",
+    "first": {
+      "label": "amendment9-engine-history-resilience",
+      "code": 0,
+      "protectedFailure": false
+    },
+    "retry": null,
+    "classification": "PASS"
+  },
+  {
+    "suite": "history-summary",
+    "first": {
+      "label": "amendment9-engine-history-summary",
+      "code": 0,
+      "protectedFailure": false
+    },
+    "retry": null,
+    "classification": "PASS"
+  },
+  {
+    "suite": "s3-atomic-write",
+    "first": {
+      "label": "amendment9-engine-s3-atomic-write",
+      "code": 1,
+      "protectedFailure": false
+    },
+    "retry": {
+      "label": "amendment9-engine-s3-atomic-write-retry",
+      "code": 1,
+      "protectedFailure": false
+    },
+    "classification": "BASELINE DEFECT",
+    "reason": "The permanent global rename fault also intercepts S1 source-operation lock acquisition; SOURCE_OPERATION_BUSY occurs before the intended source atomic-write path. No lost edit/outside write or unrecoverable accepted operation is shown."
+  },
+  {
+    "suite": "token-undo",
+    "first": {
+      "label": "amendment9-engine-token-undo",
+      "code": 0,
+      "protectedFailure": false
+    },
+    "retry": null,
+    "classification": "PASS"
+  },
+  {
+    "suite": "undo-refusals",
+    "first": {
+      "label": "amendment9-engine-undo-refusals",
+      "code": 0,
+      "protectedFailure": false
+    },
+    "retry": null,
+    "classification": "PASS"
+  },
+  {
+    "suite": "undo-m3-restored-token",
+    "first": {
+      "label": "amendment9-engine-undo-m3-restored-token",
+      "code": 0,
+      "protectedFailure": false
+    },
+    "retry": null,
+    "classification": "PASS"
+  },
+  {
+    "suite": "undo-m5-parent-junction",
+    "first": {
+      "label": "amendment9-engine-undo-m5-parent-junction",
+      "code": 0,
+      "protectedFailure": false
+    },
+    "retry": null,
+    "classification": "PASS"
+  },
+  {
+    "suite": "adapter",
+    "first": {
+      "label": "amendment9-engine-adapter",
+      "code": 0,
+      "protectedFailure": false
+    },
+    "retry": null,
+    "classification": "PASS"
+  },
+  {
+    "suite": "advanced-image-source",
+    "first": {
+      "label": "amendment9-engine-advanced-image-source",
+      "code": 0,
+      "protectedFailure": false
+    },
+    "retry": null,
+    "classification": "PASS"
+  },
+  {
+    "suite": "api-response-diagnostics.v2",
+    "first": {
+      "label": "amendment9-engine-api-response-diagnostics-v2",
+      "code": 0,
+      "protectedFailure": false
+    },
+    "retry": null,
+    "classification": "PASS"
+  },
+  {
+    "suite": "api-response-helper.v2",
+    "first": {
+      "label": "amendment9-engine-api-response-helper-v2",
+      "code": 0,
+      "protectedFailure": false
+    },
+    "retry": null,
+    "classification": "PASS"
+  },
+  {
+    "suite": "appearance-layout",
+    "first": {
+      "label": "amendment9-engine-appearance-layout",
+      "code": 0,
+      "protectedFailure": false
+    },
+    "retry": null,
+    "classification": "PASS"
+  },
+  {
+    "suite": "button-editing",
+    "first": {
+      "label": "amendment9-engine-button-editing",
+      "code": 0,
+      "protectedFailure": false
+    },
+    "retry": null,
+    "classification": "PASS"
+  },
+  {
+    "suite": "component-actions",
+    "first": {
+      "label": "amendment9-engine-component-actions",
+      "code": 0,
+      "protectedFailure": false
+    },
+    "retry": null,
+    "classification": "PASS"
+  },
+  {
+    "suite": "component-ownership",
+    "first": {
+      "label": "amendment9-engine-component-ownership",
+      "code": 0,
+      "protectedFailure": false
+    },
+    "retry": null,
+    "classification": "PASS"
+  },
+  {
+    "suite": "component-props",
+    "first": {
+      "label": "amendment9-engine-component-props",
+      "code": 0,
+      "protectedFailure": false
+    },
+    "retry": null,
+    "classification": "PASS"
+  },
+  {
+    "suite": "container-move",
+    "first": {
+      "label": "amendment9-engine-container-move",
+      "code": 0,
+      "protectedFailure": false
+    },
+    "retry": null,
+    "classification": "PASS"
+  },
+  {
+    "suite": "continuous-draft",
+    "first": {
+      "label": "amendment9-engine-continuous-draft",
+      "code": 0,
+      "protectedFailure": false
+    },
+    "retry": null,
+    "classification": "PASS"
+  },
+  {
+    "suite": "direct-manipulation",
+    "first": {
+      "label": "amendment9-engine-direct-manipulation",
+      "code": 0,
+      "protectedFailure": false
+    },
+    "retry": null,
+    "classification": "PASS"
+  },
+  {
+    "suite": "drag-move",
+    "first": {
+      "label": "amendment9-engine-drag-move",
+      "code": 0,
+      "protectedFailure": false
+    },
+    "retry": null,
+    "classification": "PASS"
+  },
+  {
+    "suite": "fixtures",
+    "first": {
+      "label": "amendment9-engine-fixtures",
+      "code": 0,
+      "protectedFailure": false
+    },
+    "retry": null,
+    "classification": "PASS"
+  },
+  {
+    "suite": "hmr-sync",
+    "first": {
+      "label": "amendment9-engine-hmr-sync",
+      "code": 0,
+      "protectedFailure": false
+    },
+    "retry": null,
+    "classification": "PASS"
+  },
+  {
+    "suite": "icon-properties",
+    "first": {
+      "label": "amendment9-engine-icon-properties",
+      "code": 0,
+      "protectedFailure": false
+    },
+    "retry": null,
+    "classification": "PASS"
+  },
+  {
+    "suite": "icon-replacement",
+    "first": {
+      "label": "amendment9-engine-icon-replacement",
+      "code": 0,
+      "protectedFailure": false
+    },
+    "retry": null,
+    "classification": "PASS"
+  },
+  {
+    "suite": "image-assets",
+    "first": {
+      "label": "amendment9-engine-image-assets",
+      "code": 0,
+      "protectedFailure": false
+    },
+    "retry": null,
+    "classification": "PASS"
+  },
+  {
+    "suite": "image-content",
+    "first": {
+      "label": "amendment9-engine-image-content",
+      "code": 0,
+      "protectedFailure": false
+    },
+    "retry": null,
+    "classification": "PASS"
+  },
+  {
+    "suite": "image-framing",
+    "first": {
+      "label": "amendment9-engine-image-framing",
+      "code": 0,
+      "protectedFailure": false
+    },
+    "retry": null,
+    "classification": "PASS"
+  },
+  {
+    "suite": "imported-draft",
+    "first": {
+      "label": "amendment9-engine-imported-draft",
+      "code": 1,
+      "protectedFailure": false
+    },
+    "retry": {
+      "label": "amendment9-engine-imported-draft-retry",
+      "code": 1,
+      "protectedFailure": false
+    },
+    "classification": "BASELINE DEFECT",
+    "reason": "Generated repositories.json is absent before the intended wrong-project assertion; the thrown error is ENOENT rather than the expected scope-refusal message. No source write or scope bypass is shown."
+  },
+  {
+    "suite": "in-situ-focus",
+    "first": {
+      "label": "amendment9-engine-in-situ-focus",
+      "code": 1,
+      "protectedFailure": false
+    },
+    "retry": {
+      "label": "amendment9-engine-in-situ-focus-retry",
+      "code": 1,
+      "protectedFailure": false
+    },
+    "classification": "BASELINE DEFECT",
+    "reason": "Adapter-lifecycle test assumes a registered repository in the disposable source but creates no .slightnudge registry; getNextSourceAdapterStatus fails closed with ENOENT before lifecycle checks. No outside write or authorization bypass is shown."
+  },
+  {
+    "suite": "inspection-client",
+    "first": {
+      "label": "amendment9-engine-inspection-client",
+      "code": 0,
+      "protectedFailure": false
+    },
+    "retry": null,
+    "classification": "PASS"
+  },
+  {
+    "suite": "jsx-text",
+    "first": {
+      "label": "amendment9-engine-jsx-text",
+      "code": 0,
+      "protectedFailure": false
+    },
+    "retry": null,
+    "classification": "PASS"
+  },
+  {
+    "suite": "m1-interactions",
+    "first": {
+      "label": "amendment9-engine-m1-interactions",
+      "code": 0,
+      "protectedFailure": false
+    },
+    "retry": null,
+    "classification": "PASS"
+  },
+  {
+    "suite": "move-controls",
+    "first": {
+      "label": "amendment9-engine-move-controls",
+      "code": 0,
+      "protectedFailure": false
+    },
+    "retry": null,
+    "classification": "PASS"
+  },
+  {
+    "suite": "multi-file-crash",
+    "first": {
+      "label": "amendment9-engine-multi-file-crash",
+      "code": 0,
+      "protectedFailure": false
+    },
+    "retry": null,
+    "classification": "PASS"
+  },
+  {
+    "suite": "multi-file-group",
+    "first": {
+      "label": "amendment9-engine-multi-file-group",
+      "code": 0,
+      "protectedFailure": false
+    },
+    "retry": null,
+    "classification": "PASS"
+  },
+  {
+    "suite": "preview-connection",
+    "first": {
+      "label": "amendment9-engine-preview-connection",
+      "code": 1,
+      "protectedFailure": false
+    },
+    "retry": {
+      "label": "amendment9-engine-preview-connection-retry",
+      "code": 1,
+      "protectedFailure": false
+    },
+    "classification": "BASELINE DEFECT",
+    "reason": "The synthetic Request has Host and token but omits the required Origin header, so S1 denies it with 403 before preview connection. This is auth/test setup mismatch, not a bypass."
+  },
+  {
+    "suite": "project-compatibility",
+    "first": {
+      "label": "amendment9-engine-project-compatibility",
+      "code": 0,
+      "protectedFailure": false
+    },
+    "retry": null,
+    "classification": "PASS"
+  },
+  {
+    "suite": "reorder-safety",
+    "first": {
+      "label": "amendment9-engine-reorder-safety",
+      "code": 1,
+      "protectedFailure": false
+    },
+    "retry": {
+      "label": "amendment9-engine-reorder-safety-retry",
+      "code": 1,
+      "protectedFailure": false
+    },
+    "classification": "BASELINE DEFECT",
+    "reason": "The targetIndex validation helper sends no x-slightnudge-token and relies on the old process-name reorder auth bypass removed in S1. Auth runs before payload validation; the raw first failure is targetIndex NaN expected status 400, not a successful unsafe reorder. Existing direct AST reorder checks passed."
+  },
+  {
+    "suite": "s1-auth-origin",
+    "first": {
+      "label": "amendment9-engine-s1-auth-origin",
+      "code": 1,
+      "protectedFailure": false
+    },
+    "retry": {
+      "label": "amendment9-engine-s1-auth-origin-retry",
+      "code": 1,
+      "protectedFailure": false
+    },
+    "classification": "BASELINE DEFECT",
+    "reason": "Obsolete expectations: missing Origin with a valid token is now correctly rejected (403); the old Undo request supplies only filePath, but S1 requires previewId and returns UNDO_TARGET_REQUIRED (400). Valid Host/Origin/token rejection cases pass. No bypass or unrecoverable accepted edit is shown."
+  },
+  {
+    "suite": "s2-path-traversal",
+    "first": {
+      "label": "amendment9-engine-s2-path-traversal",
+      "code": 0,
+      "protectedFailure": false
+    },
+    "retry": null,
+    "classification": "PASS"
+  },
+  {
+    "suite": "s5-tailwind-compile",
+    "first": {
+      "label": "amendment9-engine-s5-tailwind-compile",
+      "code": 0,
+      "protectedFailure": false
+    },
+    "retry": null,
+    "classification": "PASS"
+  },
+  {
+    "suite": "s5-theme-support",
+    "first": {
+      "label": "amendment9-engine-s5-theme-support",
+      "code": 0,
+      "protectedFailure": false
+    },
+    "retry": null,
+    "classification": "PASS"
+  },
+  {
+    "suite": "s5-v3-support",
+    "first": {
+      "label": "amendment9-engine-s5-v3-support",
+      "code": 0,
+      "protectedFailure": false
+    },
+    "retry": null,
+    "classification": "PASS"
+  },
+  {
+    "suite": "section-order",
+    "first": {
+      "label": "amendment9-engine-section-order",
+      "code": 0,
+      "protectedFailure": false
+    },
+    "retry": null,
+    "classification": "PASS"
+  },
+  {
+    "suite": "shared-instance",
+    "first": {
+      "label": "amendment9-engine-shared-instance",
+      "code": 0,
+      "protectedFailure": false
+    },
+    "retry": null,
+    "classification": "PASS"
+  },
+  {
+    "suite": "style-isolation",
+    "first": {
+      "label": "amendment9-engine-style-isolation",
+      "code": 0,
+      "protectedFailure": false
+    },
+    "retry": null,
+    "classification": "PASS"
+  },
+  {
+    "suite": "token-html-host",
+    "first": {
+      "label": "amendment9-engine-token-html-host",
+      "code": 1,
+      "protectedFailure": false
+    },
+    "retry": {
+      "label": "amendment9-engine-token-html-host-retry",
+      "code": 1,
+      "protectedFailure": false
+    },
+    "classification": "BASELINE DEFECT",
+    "reason": "21/23 Host/token checks pass; the two failures expect 200 HTML at /studio, but S1 intentionally redirects that legacy route to /editor with 307. Invalid/forwarded-host checks pass, and no token/Host bypass is shown."
+  },
+  {
+    "suite": "undo-stacked-edits",
+    "first": {
+      "label": "amendment9-engine-undo-stacked-edits",
+      "code": 0,
+      "protectedFailure": false
+    },
+    "retry": null,
+    "classification": "PASS"
+  },
+  {
+    "suite": "unified-editor-routing",
+    "first": {
+      "label": "amendment9-engine-unified-editor-routing",
+      "code": 0,
+      "protectedFailure": false
+    },
+    "retry": null,
+    "classification": "PASS"
+  }
+]

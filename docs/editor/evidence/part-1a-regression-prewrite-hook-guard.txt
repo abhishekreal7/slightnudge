@@ -1,0 +1,9 @@
+> node --import tsx scratch/editor-sprint1-isolate.ts prewrite-hook-guard lib/slightnudge/edit-history.ts test/prewrite-cas.test.ts
+{"temporaryRoot":"C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-prewrite-hook-guard-zzIs6p","baseline":"3e924ad9702e5548d4f42874451fc82c8d2acb1d","suite":"prewrite-hook-guard","overlays":["lib/slightnudge/edit-history.ts","test/prewrite-cas.test.ts"],"omitted":".env.example"}
+Isolated seed staged paths: .env.example, lib/slightnudge/edit-history.ts, test/prewrite-cas.test.ts
+🧪 RUNNING PRE-WRITE HOOK GUARD SUITE
+✅ ALL PRE-WRITE HOOK GUARD TESTS PASSED
+Owned temporary entries before cleanup: ["tsx-abhis"]
+Confirmed cleanup: C:\Users\abhis\AppData\Local\Temp\sn-sprint1-prewrite-hook-guard-zzIs6p
+exit 0
+CONFIRMED: protected files and Git status unchanged.

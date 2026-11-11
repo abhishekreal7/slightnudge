@@ -1,0 +1,9 @@
+> C:\nvm4w\nodejs\node.exe --import tsx scratch/editor-s1-group.ts amendment9-engine-source-operation-lock source-operation-lock test/helpers/real-state.ts
+{"temporaryRoot":"C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-source-operation-lock-5aYfWP","baseline":"8c613619b4ce051027689fd3d782d4ee029e7052","suite":"source-operation-lock","overlays":["test/helpers/real-state.ts"],"omitted":".env.example"}
+Isolated seed staged paths: .env.example, test/helpers/real-state.ts
+PASS: live-owner exclusion, dead/reused-PID recovery, live worker-thread exclusion, 18 competing processes without overlapping mutation/lost updates, synchronous nesting
+Owned temporary entries before cleanup: ["tsx-abhis"]
+Confirmed cleanup: C:\Users\abhis\AppData\Local\Temp\sn-sprint1-source-operation-lock-5aYfWP
+CONFIRMED: integration checkout protected files and status unchanged.
+exit 0
+CONFIRMED: protected files and Git status unchanged.

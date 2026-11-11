@@ -1,0 +1,133 @@
+> C:\nvm4w\nodejs\node.exe --import tsx scratch/editor-s1-group.ts amendment9-engine-undo-refusals undo-refusals test/helpers/real-state.ts
+{"temporaryRoot":"C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-undo-refusals-fyhdlu","baseline":"8c613619b4ce051027689fd3d782d4ee029e7052","suite":"undo-refusals","overlays":["test/helpers/real-state.ts"],"omitted":".env.example"}
+Isolated seed staged paths: .env.example, test/helpers/real-state.ts
+TAP version 13
+# Subtest: Undo Refusals & Safety Mutants Battery
+    # Subtest: M3: refuses undo when element already contains a removed token (user restored it)
+    ok 1 - M3: refuses undo when element already contains a removed token (user restored it)
+      ---
+      duration_ms: 292.6997
+      type: 'test'
+      ...
+    # Subtest: M6: refuses undo when history record contains tampered malicious tokens
+    ok 2 - M6: refuses undo when history record contains tampered malicious tokens
+      ---
+      duration_ms: 246.1183
+      type: 'test'
+      ...
+    # Subtest: Branch 1: path-containment catch refuses escaping path
+    ok 3 - Branch 1: path-containment catch refuses escaping path
+      ---
+      duration_ms: 9.2862
+      type: 'test'
+      ...
+    # Subtest: Branch 2: interrupted-undo recovery succeeds when status is undoing and file equals before
+    ok 4 - Branch 2: interrupted-undo recovery succeeds when status is undoing and file equals before
+      ---
+      duration_ms: 17.4371
+      type: 'test'
+      ...
+    # Subtest: Branch 3: textContent refusal when file changed after visual edit
+    ok 5 - Branch 3: textContent refusal when file changed after visual edit
+      ---
+      duration_ms: 18.4615
+      type: 'test'
+      ...
+    # Subtest: Branch 4: imageSource refusal when file changed after visual edit
+    ok 6 - Branch 4: imageSource refusal when file changed after visual edit
+      ---
+      duration_ms: 19.4519
+      type: 'test'
+      ...
+    # Subtest: Branch 5: non-className fallback refusal when neither textContent nor imageSource
+    ok 7 - Branch 5: non-className fallback refusal when neither textContent nor imageSource
+      ---
+      duration_ms: 19.7831
+      type: 'test'
+      ...
+    # Subtest: Branch 6: existing-file parse failure refuses cleanly
+    ok 8 - Branch 6: existing-file parse failure refuses cleanly
+      ---
+      duration_ms: 128.7144
+      type: 'test'
+      ...
+    # Subtest: Branch 7: multiple candidate elements without unique id refuses ambiguity
+    ok 9 - Branch 7: multiple candidate elements without unique id refuses ambiguity
+      ---
+      duration_ms: 128.6084
+      type: 'test'
+      ...
+    # Subtest: Branch 8: element inside repeating list refuses
+    ok 10 - Branch 8: element inside repeating list refuses
+      ---
+      duration_ms: 103.0441
+      type: 'test'
+      ...
+    # Subtest: Branch 9: component used multiple times refuses
+    ok 11 - Branch 9: component used multiple times refuses
+      ---
+      duration_ms: 118.971
+      type: 'test'
+      ...
+    # Subtest: Branch 10: element inside conditional expression refuses
+    ok 12 - Branch 10: element inside conditional expression refuses
+      ---
+      duration_ms: 138.211
+      type: 'test'
+      ...
+    # Subtest: Branch 11: element inside an if statement refuses
+    ok 13 - Branch 11: element inside an if statement refuses
+      ---
+      duration_ms: 110.1288
+      type: 'test'
+      ...
+    # Subtest: Branch 12: same-line sibling ambiguity refuses
+    ok 14 - Branch 12: same-line sibling ambiguity refuses
+      ---
+      duration_ms: 103.5088
+      type: 'test'
+      ...
+    # Subtest: Branch 13: className attribute missing refuses
+    ok 15 - Branch 13: className attribute missing refuses
+      ---
+      duration_ms: 89.4739
+      type: 'test'
+      ...
+    # Subtest: Branch 14: dynamic or template-literal className refuses
+    ok 16 - Branch 14: dynamic or template-literal className refuses
+      ---
+      duration_ms: 104.8546
+      type: 'test'
+      ...
+    # Subtest: Branch 15: re-parse failure after substitution refuses
+    ok 17 - Branch 15: re-parse failure after substitution refuses
+      ---
+      duration_ms: 252.2883
+      type: 'test'
+      ...
+    # Subtest: Branch 16: atomicWrite I/O error resets status to applied
+    ok 18 - Branch 16: atomicWrite I/O error resets status to applied
+      ---
+      duration_ms: 233.2807
+      type: 'test'
+      ...
+    1..18
+ok 1 - Undo Refusals & Safety Mutants Battery
+  ---
+  duration_ms: 2136.1389
+  type: 'suite'
+  ...
+1..1
+# tests 18
+# suites 1
+# pass 18
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2150.7615
+Owned temporary entries before cleanup: ["tsx-abhis"]
+Confirmed cleanup: C:\Users\abhis\AppData\Local\Temp\sn-sprint1-undo-refusals-fyhdlu
+CONFIRMED: integration checkout protected files and status unchanged.
+exit 0
+CONFIRMED: protected files and Git status unchanged.

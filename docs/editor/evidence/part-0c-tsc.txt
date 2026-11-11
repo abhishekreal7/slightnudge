@@ -1,0 +1,7 @@
+> npx.cmd --no-install next typegen
+Generating route types...
+✓ Types generated successfully
+exit 0
+> npx.cmd --no-install tsc --noEmit
+exit 0
+CONFIRMED: real-state snapshots match

@@ -1,0 +1,10 @@
+> C:\nvm4w\nodejs\node.exe --import tsx scratch/editor-s1-group.ts amendment9-engine-m1-interactions m1-interactions test/helpers/real-state.ts
+{"temporaryRoot":"C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-m1-interactions-n5UOAa","baseline":"8c613619b4ce051027689fd3d782d4ee029e7052","suite":"m1-interactions","overlays":["test/helpers/real-state.ts"],"omitted":".env.example"}
+Isolated seed staged paths: .env.example, test/helpers/real-state.ts
+PASS: 17 interaction source cases (disposable files)
+PASS: 30 offered Tailwind utilities compile in the installed project version
+Owned temporary entries before cleanup: ["tsx-abhis"]
+Confirmed cleanup: C:\Users\abhis\AppData\Local\Temp\sn-sprint1-m1-interactions-n5UOAa
+CONFIRMED: integration checkout protected files and status unchanged.
+exit 0
+CONFIRMED: protected files and Git status unchanged.

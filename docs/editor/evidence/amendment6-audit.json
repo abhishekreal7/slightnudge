@@ -1,0 +1,21 @@
+{
+  "matchedPairs": [
+    "amendment6-blobs-green-before.json",
+    "amendment6-blobs-privacy-before.json",
+    "amendment6-blobs-red-before.json",
+    "amendment6-mutant-containment-before.json",
+    "amendment6-mutant-hash-before.json",
+    "amendment6-regression-atomic-before.json",
+    "amendment6-regression-history-before.json",
+    "amendment6-typecheck-before.json"
+  ],
+  "removedIsolationRoots": [
+    "C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-history-resilience-iGtI94",
+    "C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-history-store-blobs-hCQ0rG",
+    "C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-history-store-blobs-rqtsZz",
+    "C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-s3-atomic-write-XfOEue",
+    "C:\\Users\\abhis\\AppData\\Local\\Temp\\sn-sprint1-typecheck-ObTnWw"
+  ],
+  "primitiveTempPrefix": "sn-blob-contract-; suffixes not captured, cleanup in finally",
+  "fullStoreComplete": false
+}

@@ -1,7 +1,7 @@
 'use client';
 
 import type { ComponentProps, ReactNode } from 'react';
-import { Check, History, Laptop2, Redo2, Smartphone, Tablet, Undo2 } from 'lucide-react';
+import { Check, History, Laptop2, Moon, Redo2, Smartphone, Sun, Tablet, Undo2 } from 'lucide-react';
 import { ResponsiveControls } from './ResponsiveControls';
 import styles from './editor-workspace.module.css';
 
@@ -34,10 +34,13 @@ export function EditorDraftControls({ saveLabel, disabled, onSave }: {
 
 export type EditorViewport = 'desktop' | 'tablet' | 'mobile';
 
-export function EditorViewportControls({ viewport, requestedWidth, disabled, onViewport, responsive, children }: {
+export function EditorViewportControls({ viewport, requestedWidth, disabled, onViewport, responsive, theme, onToggleTheme, children }: {
   viewport: EditorViewport; requestedWidth: number | null; disabled: boolean;
   onViewport(viewport: EditorViewport, width: number | null): void;
-  responsive: ComponentProps<typeof ResponsiveControls>; children?: ReactNode;
+  responsive: ComponentProps<typeof ResponsiveControls>;
+  theme?: 'light' | 'dark';
+  onToggleTheme?(): void;
+  children?: ReactNode;
 }) {
   return <div className={styles.canvasTools}>
     <div className={styles.viewportControl} role="group" aria-label="Canvas viewport">
@@ -52,6 +55,29 @@ export function EditorViewportControls({ viewport, requestedWidth, disabled, onV
         </button>;
       })}
     </div>
+    {onToggleTheme && (
+      <button
+        type="button"
+        aria-label={`Toggle light / dark mode (currently ${theme || 'light'})`}
+        title={`Switch between Light and Dark mode · Works on any website`}
+        disabled={disabled}
+        onClick={onToggleTheme}
+        className={styles.themeToggleBtn}
+        data-theme={theme || 'light'}
+      >
+        {theme === 'dark' ? (
+          <>
+            <Moon size={13} strokeWidth={2} className="text-violet-400" />
+            <span>Dark</span>
+          </>
+        ) : (
+          <>
+            <Sun size={13} strokeWidth={2} className="text-amber-500" />
+            <span>Light</span>
+          </>
+        )}
+      </button>
+    )}
     <ResponsiveControls {...responsive}/>
     {children}
   </div>;

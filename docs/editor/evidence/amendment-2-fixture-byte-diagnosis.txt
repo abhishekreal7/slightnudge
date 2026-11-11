@@ -1,0 +1,13 @@
+Read-only fixture byte comparison
+> git config --show-origin --get core.autocrlf
+file:C:/Program Files/Git/etc/gitconfig	true
+> git check-attr text eol -- fixtures/*.tsx
+fixtures/*.tsx: text: unspecified
+fixtures/*.tsx: eol: unspecified
+> Compare raw HEAD blobs and raw worktree bytes without changing either
+{"path":"fixtures/1-plain-static.tsx","headBytes":2118,"worktreeBytes":2132,"headSha256":"9af205f23e78efe0a380d6a95f5ebf6dba068b2e9fb8b2ee7d4cd87e8cbfbc9b","worktreeSha256":"12227233f9c8f7824cff7d32529aca76a88eef9e319f5f16a0114c6103ffad65","worktreeCRLF":14,"headCRLF":0,"equalAfterCRLFNormalization":true}
+{"path":"fixtures/2-several-utilities.tsx","headBytes":451,"worktreeBytes":468,"headSha256":"04ee0a6a76918652e0743270ca02c076293177a0a2aabc7be58a0fcbc767ccb1","worktreeSha256":"d83df5b78fcb3108afb6ee8ee725b10a049c8f8d0077151c69e05083a092cde3","worktreeCRLF":17,"headCRLF":0,"equalAfterCRLFNormalization":true}
+{"path":"fixtures/3-conditional-cn.tsx","headBytes":630,"worktreeBytes":653,"headSha256":"36ef3aa9837553c36177d6939e39294918d652ed1806eacd9cef188d78d1906b","worktreeSha256":"3108c5c61e89baaba90ea10cd7d8325ea7c196ffb077e0f637acc27e64f5ffa6","worktreeCRLF":23,"headCRLF":0,"equalAfterCRLFNormalization":true}
+{"path":"fixtures/4-shared-component.tsx","headBytes":761,"worktreeBytes":791,"headSha256":"6874c38db282730a6e6e030c99bcde9189f65f57bbe10ee6665c5a92ab78b67e","worktreeSha256":"3344af67715bfa37e5aef42f6f8b34d9ad4dcde14cfe702ed69b8c772784edd8","worktreeCRLF":30,"headCRLF":0,"equalAfterCRLFNormalization":true}
+{"path":"fixtures/5-responsive-classes.tsx","headBytes":447,"worktreeBytes":464,"headSha256":"3616ec1af1c17477beeeb3eb0dd1ce2b3c7d162c36f1ca701bd6eba89ff79255","worktreeSha256":"126ecff807cf098a66bc6cd9e2503f58f1dfeb3223efa5b2629558a24cfcdce0","worktreeCRLF":17,"headCRLF":0,"equalAfterCRLFNormalization":true}
+> git status --porcelain=v1 -- fixtures/ test/real-state-guard.test.ts
