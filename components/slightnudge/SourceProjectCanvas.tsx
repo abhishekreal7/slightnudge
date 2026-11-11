@@ -178,6 +178,7 @@ export const SourceProjectCanvas = forwardRef<SourceCanvasHandle, {
       if (message.type === 'destination-picked' && destinationRef.current && message.selection?.rect && typeof message.selection.path === 'string' && Number.isInteger(message.selection.line) && Number.isInteger(message.selection.column)) { destinationCallback.current?.(message.selection); return; }
       if (message.type === 'selection-refused') { props.current.onNotice(typeof message.reason === 'string' ? message.reason : 'This source element cannot be selected uniquely.'); return; }
       if (message.type === 'source-rect' && message.selection?.rect) {
+        if (typeof window !== 'undefined' && (window as any).__slightnudge_gesture_active) return;
         const sanitized = { ...message.selection, transformChain: sanitizeTransformChain(message.selection.transformChain) };
         selected.current = sanitized; setGeometry(sanitized); props.current.onGeometry?.(sanitized); return;
       }

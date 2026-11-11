@@ -916,6 +916,29 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
 
   // Dynamic DOM refs & element bounding dimensions
   const elementRefs = useRef<Record<string, HTMLElement | null>>({});
+  const pendingOverlayResetKeyRef = useRef<string | null>(null);
+  const pendingDirectStyleRef = useRef<Record<string, { targetEl: HTMLElement | null; initialStyle: string | null }>>({});
+  const inFlightMoveRef = useRef<Record<string, Translation>>({});
+  const [overlayResetTick, setOverlayResetTick] = useState(0);
+  const resetOverlayNode = useCallback((key: string | null | undefined) => {
+    if (!key) return;
+    const node = elementRefs.current[key];
+    if (node) {
+      node.style.width = '100%';
+      node.style.height = '100%';
+      node.style.transform = '';
+    }
+  }, []);
+  const restorePendingDirectStyle = useCallback((key: string | null | undefined) => {
+    if (!key) return;
+    const pending = pendingDirectStyleRef.current[key];
+    if (!pending) return;
+    delete pendingDirectStyleRef.current[key];
+    if (pending.targetEl) {
+      if (pending.initialStyle === null) pending.targetEl.removeAttribute('style');
+      else pending.targetEl.setAttribute('style', pending.initialStyle);
+    }
+  }, []);
   const [formattingPosition, setFormattingPosition] = useState<{ left: number; top: number; visible: boolean; menuSide: 'above' | 'below' } | null>(null);
   const [elementDimensions, setElementDimensions] = useState<Record<string, { w: number; h: number }>>({
     text: { w: 672, h: 114 },
@@ -943,7 +966,16 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
     const key = sourceKey(selection); sourceSelections.current[key] = selection;
     if (selectedLayer === key) sourceSelection.current = selection;
     setElementDimensions(previous => ({ ...previous, [key]: { w: Math.round(selection.rect.width), h: Math.round(selection.rect.height) } }));
+    if (pendingOverlayResetKeyRef.current === key) {
+      setOverlayResetTick(tick => tick + 1);
+    }
   };
+  useLayoutEffect(() => {
+    if (pendingOverlayResetKeyRef.current && pendingOverlayResetKeyRef.current === selectedLayer) {
+      resetOverlayNode(pendingOverlayResetKeyRef.current);
+      pendingOverlayResetKeyRef.current = null;
+    }
+  }, [elementDimensions, overlayResetTick, selectedLayer, resetOverlayNode]);
   const replaySourceDraft = (edit: PendingEdit | null): Promise<boolean> => {
     if (!sourceReady) { needsDraftReplay.current = true; return Promise.resolve(false); }
     if (draftReplayPromise.current) return draftReplayPromise.current;
@@ -1147,7 +1179,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
     if (!node || !frame) return;
 
     try {
-      const base = readTranslation(elements[layerKey].classes);
+      const base = inFlightMoveRef.current[layerKey] ?? readTranslation(elements[layerKey].classes);
       const targetElem = elements[layerKey] || activeElement;
       const actualSelection = sourceSelections.current[layerKey] || sourceSelection.current;
       const zoom = resolveStageScale(layerKey);
@@ -1155,7 +1187,8 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
       // Check same-origin iframe target element
       const iframeDoc = sourceCanvas.current?.getDocument?.();
       const targetEl = findSourceElementInDocument(iframeDoc, actualSelection);
-      const initialTargetStyle = targetEl?.getAttribute('style') || null;
+      const initialTargetStyle =
+        pendingDirectStyleRef.current[layerKey]?.initialStyle ?? (targetEl?.getAttribute('style') || null);
 
       const siblings = collectSiblingSnapRects(layerKey);
       const snapSession = createDirectSnapSession(siblings);
@@ -1170,6 +1203,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
       moveClickSuppressed.current = false;
       setMoveArmed(true);
       setIsDraggingMove(true);
+      if (typeof window !== 'undefined') (window as any).__slightnudge_gesture_active = true;
 
       if (eventShieldRef.current) {
         eventShieldRef.current.style.display = 'block';
@@ -1232,7 +1266,8 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
     // Check same-origin iframe target element
     const iframeDoc = sourceCanvas.current?.getDocument?.();
     const targetEl = findSourceElementInDocument(iframeDoc, actualSelection);
-    const initialTargetStyle = targetEl?.getAttribute('style') || null;
+    const initialTargetStyle =
+      pendingDirectStyleRef.current[key]?.initialStyle ?? (targetEl?.getAttribute('style') || null);
 
     const siblings = collectSiblingSnapRects(key);
     const snapSession = createDirectSnapSession(siblings);
@@ -1279,6 +1314,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
     setResizeStartY(e.clientY);
     setResizeStartWidth(currentW);
     setResizeStartHeight(currentH);
+    if (typeof window !== 'undefined') (window as any).__slightnudge_gesture_active = true;
 
     directDragRef.current = {
       type: 'resize',
@@ -1343,7 +1379,8 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
     const iframeDoc = sourceCanvas.current?.getDocument?.();
     const targetEl = findSourceElementInDocument(iframeDoc, actualSelection);
 
-    const initialTargetStyle = targetEl?.getAttribute('style') || null;
+    const initialTargetStyle =
+      pendingDirectStyleRef.current[key]?.initialStyle ?? (targetEl?.getAttribute('style') || null);
     const parsedRadii = parseBorderRadius(renderedElement.borderRadius || actualSelection?.computed?.borderRadius, currentW, currentH);
     const initialR = Math.max(parsedRadii.tl, parsedRadii.tr, parsedRadii.br, parsedRadii.bl);
     const maxRadius = Math.min(currentW, currentH) / 2;
@@ -1357,6 +1394,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
       eventShieldRef.current.style.display = 'block';
       eventShieldRef.current.style.cursor = 'crosshair';
     }
+    if (typeof window !== 'undefined') (window as any).__slightnudge_gesture_active = true;
 
     directDragRef.current = {
       type: 'radius',
@@ -1419,13 +1457,16 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
   };
 
   // Backend Integration: Trigger Preview on Style/Text/Nudge/Reorder
+  const latestElementsRef = useRef(elements);
+  latestElementsRef.current = elements;
   const triggerBackendPreview = useCallback(
     async (
       kind: 'style' | 'text' | 'nudge' | 'reorder' | 'reparent' | 'move' | 'image' | 'action' | 'icon' | 'component',
       payload: Record<string, any>,
       layerKeyOverride?: string,
       commitVisual?: () => void,
-      background = false
+      background = false,
+      beforeBridgePreview?: () => void
     ) => {
       if (directDragRef.current) return;
       if (!background && (operationRef.current || draftReplayPromise.current || blocksReview() || undoRecoveryRef.current)) {
@@ -1438,7 +1479,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
       }
       const activeKey = layerKeyOverride || selectedLayer;
       if (!activeKey) return;
-      const renderedElement = elements[activeKey] || activeElement;
+      const renderedElement = latestElementsRef.current[activeKey] || elements[activeKey] || activeElement;
       const owner = kind==='component' ? payload.owner as import('@/lib/slightnudge/component-ownership').ComponentOwner|undefined : undefined;
       let targetElem = owner ? {...renderedElement,filePath:owner.filePath,line:owner.line,column:owner.column,tag:owner.tagName,id:''} : renderedElement;
       const fileHead = draftHeads(reviewRef.current)[targetElem.filePath];
@@ -1514,6 +1555,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
           try {
             if (!sourceCanvas.current || !actualSelection) throw new Error('Select the actual source element again.');
             if (kind !== 'text' && typeof result.oldClassName === 'string' && !sourceClassesMatch(actualSelection.className, result.oldClassName)) throw new Error('Rendered classes differ from the source. Select a stable source element.');
+            beforeBridgePreview?.();
             rendered = kind === 'image' || kind === 'action' || kind === 'icon' || kind === 'component' || (kind === 'reorder' || kind === 'reparent') && result.draftClean ? await sourceCanvas.current.command('restore', null, { patches: kind === 'image' || kind === 'action' || kind === 'icon' || kind === 'component' ? composedPatches : otherPatches }) : await sourceCanvas.current.command('preview', actualSelection, {
               kind, property: kind === 'nudge' ? (payload.direction === 'left' || payload.direction === 'right' ? 'marginLeft' : 'marginTop') : payload.property,
               utility: kind === 'nudge' || kind === 'style' ? result.newValue || payload.value : payload.value,
@@ -1534,11 +1576,18 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
             throw error;
           }
           if (!state) commitVisual?.();
+          if (rendered) {
+            sourceSelections.current[activeKey] = rendered;
+            if (selectedLayer === activeKey) sourceSelection.current = rendered;
+          }
           setElements(previous => ({ ...previous, [activeKey]: {
             ...previous[activeKey], ...(rendered ? elementFromSource(rendered) : {}),
             classes: result.newClassName || previous[activeKey].classes,
             text: kind === 'text' ? payload.value : previous[activeKey].text,
           } }));
+          if (pendingOverlayResetKeyRef.current === activeKey) {
+            setOverlayResetTick(tick => tick + 1);
+          }
           if (usesDrafts && !draftRef.current) storeDraft({ version: 1, frames: [{ elements, order: childOrder, edit: null }], cursor: 0 });
           if (usesDrafts) captureDraftRef.current = true;
           const touchedKeys = new Set([activeKey, ...(draftRef.current?.frames.slice(1).flatMap(frame => frame.edit ? [frame.edit.layerKey] : []) || [])]);
@@ -1582,6 +1631,8 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
     },
     [activeBreakpoint, activeVariant, activeElement, elements, selectedLayer, childOrder, repositoryId, usesDrafts, responsiveScopes, definitionStyleKey]
   );
+  const triggerBackendPreviewRef = useRef(triggerBackendPreview);
+  triggerBackendPreviewRef.current = triggerBackendPreview;
 
   // 60fps Unified Direct Manipulation Pointer Engine
   useEffect(() => {
@@ -1888,6 +1939,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
 
     const cleanupVisuals = () => {
       cancelAnimationFrame(animationId);
+      if (typeof window !== 'undefined') (window as any).__slightnudge_gesture_active = false;
       if (eventShieldRef.current) eventShieldRef.current.style.display = 'none';
       if (guideVRef.current) guideVRef.current.style.display = 'none';
       if (guideHRef.current) guideHRef.current.style.display = 'none';
@@ -1939,11 +1991,6 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
       } catch {}
 
       const overlayNode = elementRefs.current[gesture.key];
-      if (overlayNode) {
-        overlayNode.style.width = '';
-        overlayNode.style.height = '';
-        overlayNode.style.transform = '';
-      }
 
       if (gesture.type === 'resize') {
         setIsResizing(false);
@@ -1963,6 +2010,13 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
           const rem = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
           const snapped = snapWidth(gesture.nextWidth, rem);
           const token = snapped.token;
+          const prevMaxWidth = latestElementsRef.current[gesture.key]?.maxWidth;
+
+          pendingDirectStyleRef.current[gesture.key] = {
+            targetEl: gesture.targetEl,
+            initialStyle: gesture.initialTargetStyle,
+          };
+          pendingOverlayResetKeyRef.current = gesture.key;
 
           // Optimistic update immediately
           setElements(prev => ({
@@ -1971,25 +2025,56 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
           }));
 
           // Background save via client-side queue (never blocking input)
-          enqueueFileOperation(
+          void enqueueFileOperation(
             gesture.filePath,
             async () => {
-              return triggerBackendPreview('style', { property: 'maxWidth', value: token }, gesture.key, undefined, true);
+              const ok = await triggerBackendPreviewRef.current(
+                'style',
+                { property: 'maxWidth', value: token },
+                gesture.key,
+                undefined,
+                true,
+                () => restorePendingDirectStyle(gesture.key)
+              );
+              if (!ok) throw new Error('Resize preview refused');
+              return ok;
             },
             {
               onRollback: () => {
-                if (gesture.targetEl) {
-                  if (gesture.initialTargetStyle === null) gesture.targetEl.removeAttribute('style');
-                  else gesture.targetEl.setAttribute('style', gesture.initialTargetStyle);
+                restorePendingDirectStyle(gesture.key);
+                if (!gesture.targetEl && sourceCanvas.current) {
+                  const selection = sourceSelections.current[gesture.key];
+                  if (selection) void sourceCanvas.current.command('cancel-gesture', selection);
                 }
-                showToast('Could not save resized width.');
+                if (pendingOverlayResetKeyRef.current === gesture.key) {
+                  pendingOverlayResetKeyRef.current = null;
+                }
+                resetOverlayNode(gesture.key);
+                setElements(prev =>
+                  prev[gesture.key] ? { ...prev, [gesture.key]: { ...prev[gesture.key], maxWidth: prevMaxWidth } } : prev
+                );
               },
             }
-          );
+          ).catch(() => {});
+        } else {
+          if (gesture.targetEl) {
+            if (gesture.initialTargetStyle === null) gesture.targetEl.removeAttribute('style');
+            else gesture.targetEl.setAttribute('style', gesture.initialTargetStyle);
+          } else if (gesture.moved && sourceCanvas.current) {
+            const selection = sourceSelections.current[gesture.key];
+            if (selection) void sourceCanvas.current.command('cancel-gesture', selection);
+          }
+          if (pendingOverlayResetKeyRef.current === gesture.key) {
+            pendingOverlayResetKeyRef.current = null;
+          }
+          resetOverlayNode(gesture.key);
         }
       } else if (gesture.type === 'move') {
         setIsDraggingMove(false);
         setMoveArmed(false);
+        if (gesture.moved) {
+          moveClickSuppressed.current = true;
+        }
 
         const changed = gesture.moved && (gesture.nextTranslation.x !== gesture.baseTranslation.x || gesture.nextTranslation.y !== gesture.baseTranslation.y);
         if (changed) {
@@ -2003,23 +2088,71 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
               }
             }
           }
-          enqueueFileOperation(
+          if (overlayNode) {
+            overlayNode.style.width = '100%';
+            overlayNode.style.height = '100%';
+          }
+          pendingDirectStyleRef.current[gesture.key] = {
+            targetEl: gesture.targetEl,
+            initialStyle: gesture.initialTargetStyle,
+          };
+          inFlightMoveRef.current[gesture.key] = gesture.nextTranslation;
+          pendingOverlayResetKeyRef.current = gesture.key;
+
+          void enqueueFileOperation(
             gesture.filePath,
             async () => {
-              return triggerBackendPreview('move', gesture.nextTranslation, gesture.key, undefined, true);
+              try {
+                const ok = await triggerBackendPreviewRef.current(
+                  'move',
+                  gesture.nextTranslation,
+                  gesture.key,
+                  undefined,
+                  true,
+                  () => restorePendingDirectStyle(gesture.key)
+                );
+                if (!ok) throw new Error('Move preview refused');
+                return ok;
+              } finally {
+                if (inFlightMoveRef.current[gesture.key] === gesture.nextTranslation) {
+                  delete inFlightMoveRef.current[gesture.key];
+                }
+              }
             },
             {
               onRollback: () => {
-                if (gesture.targetEl) {
-                  if (gesture.initialTargetStyle === null) gesture.targetEl.removeAttribute('style');
-                  else gesture.targetEl.setAttribute('style', gesture.initialTargetStyle);
+                restorePendingDirectStyle(gesture.key);
+                if (!gesture.targetEl && sourceCanvas.current) {
+                  const selection = sourceSelections.current[gesture.key];
+                  if (selection) void sourceCanvas.current.command('cancel-gesture', selection);
                 }
-                showToast('Could not save moved position.');
+                if (inFlightMoveRef.current[gesture.key] === gesture.nextTranslation) {
+                  delete inFlightMoveRef.current[gesture.key];
+                }
+                if (pendingOverlayResetKeyRef.current === gesture.key) {
+                  pendingOverlayResetKeyRef.current = null;
+                }
+                resetOverlayNode(gesture.key);
               },
             }
-          );
+          ).catch(() => {});
+        } else {
+          if (gesture.targetEl) {
+            if (gesture.initialTargetStyle === null) gesture.targetEl.removeAttribute('style');
+            else gesture.targetEl.setAttribute('style', gesture.initialTargetStyle);
+          } else if (gesture.moved && sourceCanvas.current) {
+            const selection = sourceSelections.current[gesture.key];
+            if (selection) void sourceCanvas.current.command('cancel-gesture', selection);
+          }
+          delete pendingDirectStyleRef.current[gesture.key];
+          delete inFlightMoveRef.current[gesture.key];
+          if (pendingOverlayResetKeyRef.current === gesture.key) {
+            pendingOverlayResetKeyRef.current = null;
+          }
+          resetOverlayNode(gesture.key);
         }
       } else if (gesture.type === 'radius') {
+        resetOverlayNode(gesture.key);
         if (gesture.moved && gesture.nextRadiusStep) {
           const step = gesture.nextRadiusStep;
           if (gesture.targetEl) {
@@ -2048,6 +2181,12 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
         }
       } catch {}
 
+      delete pendingDirectStyleRef.current[gesture.key];
+      delete inFlightMoveRef.current[gesture.key];
+      if (pendingOverlayResetKeyRef.current === gesture.key) {
+        pendingOverlayResetKeyRef.current = null;
+      }
+
       if (gesture.targetEl) {
         if (gesture.initialTargetStyle === null) gesture.targetEl.removeAttribute('style');
         else gesture.targetEl.setAttribute('style', gesture.initialTargetStyle);
@@ -2056,12 +2195,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
         if (selection) void sourceCanvas.current.command('cancel-gesture', selection);
       }
 
-      const overlayNode = elementRefs.current[gesture.key];
-      if (overlayNode) {
-        overlayNode.style.width = '';
-        overlayNode.style.height = '';
-        overlayNode.style.transform = '';
-      }
+      resetOverlayNode(gesture.key);
 
       if (gesture.type === 'resize') {
         setIsResizing(false);
