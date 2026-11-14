@@ -6,6 +6,13 @@ import {
   X,
   Save,
   RotateCcw,
+  LayoutGrid,
+  Type,
+  Palette,
+  Sparkles,
+  MousePointerClick,
+  Code2,
+  History,
 } from 'lucide-react';
 import {
   LayoutMatrix,
@@ -202,11 +209,7 @@ export function RightToolDock({
               onClick={() => toggleTool('layout')}
               className={railBtnClass(activeTool === 'layout')}
             >
-              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
-                <rect x="3" y="3" width="18" height="7" rx="2" />
-                <rect x="3" y="14" width="8" height="7" rx="2" />
-                <rect x="13" y="14" width="8" height="7" rx="2" />
-              </svg>
+              <LayoutGrid size={18} strokeWidth={2} />
             </button>
             {showTooltips && (
               <div className={tooltipClass}>
@@ -221,13 +224,17 @@ export function RightToolDock({
             <button
               type="button"
               aria-label="Spacing and padding"
-              title="Spacing & Box Model (Padding)"
+              title="Spacing & Box Model (Padding, Margin, Gap)"
               onClick={() => toggleTool('spacing')}
               className={railBtnClass(activeTool === 'spacing')}
             >
-              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                <rect x="3" y="3" width="18" height="18" rx="3.5" strokeDasharray="3 2" opacity="0.65" />
-                <rect x="7" y="7" width="10" height="10" rx="2" fill="currentColor" fillOpacity="0.2" stroke="currentColor" strokeWidth="1.8" />
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="3" y="3" width="18" height="18" rx="4" strokeWidth="1.8" />
+                <rect x="7.5" y="7.5" width="9" height="9" rx="2" strokeWidth="1.4" strokeDasharray="2 1.5" opacity="0.65" />
+                <path d="M12 3v4" />
+                <path d="M12 17v4" />
+                <path d="M3 12h4" />
+                <path d="M17 12h4" />
               </svg>
             </button>
             {showTooltips && (
@@ -247,11 +254,7 @@ export function RightToolDock({
               onClick={() => toggleTool('type')}
               className={railBtnClass(activeTool === 'type')}
             >
-              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M4 6.5V4h16v2.5" />
-                <path d="M12 4v16" />
-                <path d="M8.5 20h7" />
-              </svg>
+              <Type size={18} strokeWidth={2.2} />
             </button>
             {showTooltips && (
               <div className={tooltipClass}>
@@ -270,12 +273,7 @@ export function RightToolDock({
               onClick={() => toggleTool('colors')}
               className={railBtnClass(activeTool === 'colors')}
             >
-              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.563-2.512 5.563-5.563C22 6.5 17.5 2 12 2z" />
-                <circle cx="7.5" cy="11.5" r="1.3" fill="#F43F5E" stroke="none" />
-                <circle cx="12" cy="7.5" r="1.3" fill="#FBBF24" stroke="none" />
-                <circle cx="16.5" cy="11.5" r="1.3" fill="#38BDF8" stroke="none" />
-              </svg>
+              <Palette size={18} strokeWidth={1.9} />
             </button>
             {showTooltips && (
               <div className={tooltipClass}>
@@ -294,9 +292,10 @@ export function RightToolDock({
               onClick={() => toggleTool('borders')}
               className={railBtnClass(activeTool === 'borders')}
             >
-              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M4 20V10a6 6 0 0 1 6-6h10" />
-                <circle cx="14" cy="14" r="3.2" fill="currentColor" fillOpacity="0.2" />
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="3.5" y="3.5" width="17" height="17" rx="5" strokeWidth="1.9" />
+                <path d="M3.5 10.5a7 7 0 0 1 7-7" strokeWidth="2.5" />
+                <circle cx="10.5" cy="10.5" r="1.5" fill="currentColor" />
               </svg>
             </button>
             {showTooltips && (
@@ -312,14 +311,11 @@ export function RightToolDock({
             <button
               type="button"
               aria-label="Shadows and effects"
-              title="Fill, Shadows & Constraints"
+              title="Shadows, Blurs & Visual Effects"
               onClick={() => toggleTool('effects')}
               className={railBtnClass(activeTool === 'effects')}
             >
-              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                <rect x="3" y="3" width="13" height="13" rx="2.5" />
-                <path d="M8 21h10a2 2 0 0 0 2-2V8" />
-              </svg>
+              <Sparkles size={18} strokeWidth={2} />
             </button>
             {showTooltips && (
               <div className={tooltipClass}>
@@ -334,7 +330,7 @@ export function RightToolDock({
             <button
               type="button"
               aria-label="States"
-              title="Interactive States (Hover, Focus, Pressed)"
+              title="Interactive States (Default, Hover, Focus, Pressed)"
               onClick={() => toggleTool('states')}
               className={
                 activeVariant && activeTool !== 'states'
@@ -342,10 +338,7 @@ export function RightToolDock({
                   : railBtnClass(activeTool === 'states')
               }
             >
-              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
-                <path d="m12 2.5-2 6a1.8 1.8 0 0 1-1.2 1.2l-6 2 6 2a1.8 1.8 0 0 1 1.2 1.2l2 6 2-6a1.8 1.8 0 0 1 1.2-1.2l6-2-6-2a1.8 1.8 0 0 1-1.2-1.2z" fill="currentColor" fillOpacity="0.18" />
-                <circle cx="18" cy="6" r="1.5" fill="currentColor" />
-              </svg>
+              <MousePointerClick size={18} strokeWidth={2} />
             </button>
             {showTooltips && (
               <div className={tooltipClass}>
@@ -366,10 +359,7 @@ export function RightToolDock({
               onClick={() => toggleTool('code')}
               className={railBtnClass(activeTool === 'code')}
             >
-              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <polyline points="16 18 22 12 16 6" />
-                <polyline points="8 6 2 12 8 18" />
-              </svg>
+              <Code2 size={18} strokeWidth={2} />
             </button>
             {showTooltips && (
               <div className={tooltipClass}>
@@ -402,7 +392,7 @@ export function RightToolDock({
                   onClick={() => toggleTool('drafts')}
                   className={railBtnClass(activeTool === 'drafts')}
                 >
-                  <RotateCcw size={16} strokeWidth={2.1} />
+                  <History size={17} strokeWidth={2.1} />
                 </button>
               )}
 
