@@ -966,7 +966,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
       else pending.targetEl.setAttribute('style', pending.initialStyle);
     }
   }, []);
-  const [formattingPosition, setFormattingPosition] = useState<{ left: number; top: number; visible: boolean; menuSide: 'above' | 'below' } | null>(null);
+  const [formattingPosition, setFormattingPosition] = useState<{ left: number; top: number; visible: boolean; menuSide: 'above' | 'below'; menuAlign?: 'left' | 'right' } | null>(null);
   const [elementDimensions, setElementDimensions] = useState<Record<string, { w: number; h: number }>>({
     text: { w: 672, h: 114 },
     paragraph: { w: 576, h: 48 },
@@ -1061,59 +1061,194 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
     if (!node || !toolbar || !canvas) { setFormattingPosition(null); return; }
     let animation = 0;
     const update = () => {
-      const selection = node.getBoundingClientRect(), frame = canvas.getBoundingClientRect();
-      const width = toolbar.offsetWidth, height = toolbar.offsetHeight;
-      const bounds = { left: frame.left + 12, right: frame.right - 12, top: frame.top + 10, bottom: Math.min(frame.bottom, window.innerHeight) - 12 };
-      const visible = selection.bottom > bounds.top && selection.top < bounds.bottom && selection.right > bounds.left && selection.left < bounds.right;
-      const menu = toolbar.querySelector<HTMLElement>('[data-formatting-details]');
-      const minLeft = bounds.left + Math.max(0, (menu?.offsetWidth || 0) - width);
-      const clampLeft = (left: number) => Math.max(minLeft, Math.min(left, bounds.right - width));
-      const clampTop = (top: number) => Math.max(bounds.top, Math.min(top, bounds.bottom - height));
-      const obstacles = [...Object.values(elementRefs.current), node.closest('[data-selection-artboard]')?.querySelector('nav')]
-        .filter((element): element is HTMLElement => !!element && element !== node && !element.contains(node) && !node.contains(element))
-        .map(element => element.getBoundingClientRect());
-      if (windowMode) { for (const panel of document.querySelectorAll('[aria-label="Editor toolbar"], [data-editor-panel], [data-editor-rail]')) { const rect = panel.getBoundingClientRect(); if (rect.width && rect.height) obstacles.push(rect); } }
-      const previewElement = canvas.querySelector('iframe');
-      const previewFrame = previewElement?.getBoundingClientRect();
-      const previewScale = previewElement && previewFrame ? previewFrame.width / previewElement.clientWidth : 1;
-      if (previewFrame) for (const layer of sourceLayers) {
-        if (layer.key === selectedLayer || !/^(nav|header|h[1-6]|p|a|button|label)$/.test(layer.tagName)) continue;
-        obstacles.push(new DOMRect(previewFrame.left + layer.rect.left * previewScale, previewFrame.top + layer.rect.top * previewScale, layer.rect.width * previewScale, layer.rect.height * previewScale));
+      const selection = node.getBoundingClientRect();
+      const frame = canvas.getBoundingClientRect();
+      const width = toolbar.offsetWidth || 300;
+      const height = toolbar.offsetHeight || 38;
+      const viewportW = window.innerWidth;
+      const viewportH = window.innerHeight;
+
+      // Absolute safe boundaries: the toolbar must NEVER clip outside viewport or dock/panels
+      let safeTop = 14;
+      const headerEl = document.querySelector('header');
+      if (headerEl) {
+        const hRect = headerEl.getBoundingClientRect();
+        if (hRect.bottom > 0 && hRect.top < viewportH * 0.3) {
+          safeTop = Math.max(safeTop, Math.round(hRect.bottom) + 10);
+        }
       }
-      const move = node.querySelector('[aria-label="Move element"]')?.getBoundingClientRect();
-      const overlap = (left: number, top: number, rect: DOMRect) => Math.max(0, Math.min(left + width, rect.right) - Math.max(left, rect.left)) * Math.max(0, Math.min(top + height, rect.bottom) - Math.max(top, rect.top));
+      if (frame.top > safeTop && frame.top < viewportH * 0.3) {
+        safeTop = Math.max(safeTop, Math.round(frame.top) + 10);
+      }
+
+      let safeBottom = viewportH - 14;
+      const bottomDockEl = document.querySelector('[aria-label="Editor toolbar"]');
+      if (bottomDockEl) {
+        const bRect = bottomDockEl.getBoundingClientRect();
+        if (bRect.top > 0 && bRect.top < viewportH) {
+          safeBottom = Math.min(safeBottom, Math.round(bRect.top) - 10);
+        }
+      }
+      if (frame.bottom < safeBottom && frame.bottom > viewportH * 0.7) {
+        safeBottom = Math.min(safeBottom, Math.round(frame.bottom) - 10);
+      }
+
+      let safeLeft = 14;
+      let safeRight = viewportW - 14;
+      for (const panel of document.querySelectorAll('[data-editor-rail], [data-editor-panel]')) {
+        const pRect = panel.getBoundingClientRect();
+        if (pRect.width > 0 && pRect.height > 0) {
+          if (pRect.left < viewportW * 0.4) {
+            safeLeft = Math.max(safeLeft, Math.round(pRect.right) + 12);
+          } else if (pRect.right > viewportW * 0.6) {
+            safeRight = Math.min(safeRight, Math.round(pRect.left) - 12);
+          }
+        }
+      }
+      if (frame.left > safeLeft && frame.left < viewportW * 0.5) {
+        safeLeft = Math.max(safeLeft, Math.round(frame.left) + 8);
+      }
+      if (frame.right < safeRight && frame.right > viewportW * 0.5) {
+        safeRight = Math.min(safeRight, Math.round(frame.right) - 8);
+      }
+
+      if (safeRight - width < safeLeft) {
+        safeRight = Math.max(safeLeft + width, viewportW - 14);
+      }
+      if (safeBottom - height < safeTop) {
+        safeBottom = Math.max(safeTop + height, viewportH - 14);
+      }
+      const bounds = { left: safeLeft, right: safeRight, top: safeTop, bottom: safeBottom };
+
+      const visible = selection.bottom > bounds.top && selection.top < bounds.bottom && selection.right > bounds.left && selection.left < bounds.right;
+      const clampLeft = (left: number) => Math.max(bounds.left, Math.min(left, bounds.right - width));
+      const clampTop = (top: number) => Math.max(bounds.top, Math.min(top, bounds.bottom - height));
+
+      const move = node.querySelector('[aria-label="Move element"]')?.getBoundingClientRect() || document.querySelector('.moveAnchor')?.getBoundingClientRect() || null;
+      const overlap = (left: number, top: number, rect: DOMRect) =>
+        Math.max(0, Math.min(left + width, rect.right) - Math.max(left, rect.left)) *
+        Math.max(0, Math.min(top + height, rect.bottom) - Math.max(top, rect.top));
+
       const isActionEl = ['button', 'a'].includes((elements[selectedLayer]?.tag || '').toLowerCase());
-      const rawCandidates: [number, number][] = isActionEl
-        ? [
-            [selection.left + (selection.width - width) / 2, selection.bottom + 10],
-            [selection.left, selection.bottom + 10],
-            [selection.right - width, selection.bottom + 10],
-            [selection.left - width - 12, selection.top + (selection.height - height) / 2],
-            [selection.right + 12, selection.top + (selection.height - height) / 2],
-            [selection.left, selection.top - height - 38],
-          ]
-        : [
-            [selection.left, selection.top - height - 10], [selection.right - width, selection.top - height - 10],
-            [selection.left - 12, selection.bottom + 10], [selection.right - width + 12, selection.bottom + 10],
-            [selection.left + (selection.width - width) / 2, selection.top - height - 24],
-            [selection.left - width / 3, selection.bottom + 10], [selection.right - width * 2 / 3, selection.bottom + 10],
-            [selection.left - width - 12, selection.top], [selection.right + 12, selection.top],
-          ];
+      const clearAboveTop = move ? move.top - height - 8 : selection.top - height - 12;
+      const clearBelowTop = selection.bottom + 10;
+
+      const hasSpaceAbove = clearAboveTop >= bounds.top;
+      const hasSpaceBelow = clearBelowTop + height <= bounds.bottom;
+
+      const rawCandidates: [number, number][] = [];
+      if (isActionEl) {
+        if (hasSpaceBelow) {
+          rawCandidates.push(
+            [selection.left + (selection.width - width) / 2, clearBelowTop],
+            [selection.left, clearBelowTop],
+            [selection.right - width, clearBelowTop]
+          );
+          if (hasSpaceAbove) {
+            rawCandidates.push(
+              [selection.left + (selection.width - width) / 2, clearAboveTop],
+              [selection.left, clearAboveTop]
+            );
+          }
+        } else if (hasSpaceAbove) {
+          rawCandidates.push(
+            [selection.left + (selection.width - width) / 2, clearAboveTop],
+            [selection.left, clearAboveTop],
+            [selection.right - width, clearAboveTop]
+          );
+        } else {
+          rawCandidates.push(
+            [selection.left + (selection.width - width) / 2, bounds.top + 16],
+            [selection.left, bounds.top + 16]
+          );
+        }
+      } else {
+        if (!hasSpaceAbove && hasSpaceBelow) {
+          // Near the top of the viewport: cleanly place below the element
+          rawCandidates.push(
+            [selection.left + (selection.width - width) / 2, clearBelowTop],
+            [selection.left, clearBelowTop],
+            [selection.right - width, clearBelowTop]
+          );
+        } else if (hasSpaceAbove && !hasSpaceBelow) {
+          // Near the bottom of the viewport: cleanly place above the element
+          rawCandidates.push(
+            [selection.left + (selection.width - width) / 2, clearAboveTop],
+            [selection.left, clearAboveTop],
+            [selection.right - width, clearAboveTop]
+          );
+        } else if (hasSpaceAbove && hasSpaceBelow) {
+          // Plenty of room: prefer above, with fallback below
+          rawCandidates.push(
+            [selection.left + (selection.width - width) / 2, clearAboveTop],
+            [selection.left, clearAboveTop],
+            [selection.right - width, clearAboveTop],
+            [selection.left + (selection.width - width) / 2, clearBelowTop],
+            [selection.left, clearBelowTop]
+          );
+        } else {
+          // Tall element spanning viewport: place safely inside top margin
+          rawCandidates.push(
+            [selection.left + (selection.width - width) / 2, bounds.top + 16],
+            [selection.left + 16, bounds.top + 16]
+          );
+        }
+      }
+
       const candidates = rawCandidates.map(([x, y], index) => {
         const left = clampLeft(x), top = clampTop(y);
-        const score = overlap(left, top, selection) * 16 + (move ? overlap(left, top, move) * 20 : 0) + obstacles.reduce((sum, rect) => sum + overlap(left, top, rect), 0) * 4 + Math.abs(left - x) + Math.abs(top - y) + index;
+        const selOverlap = overlap(left, top, selection);
+        const moveOverlap = move ? overlap(left, top, move) : 0;
+        const score = selOverlap * 50
+          + moveOverlap * 60
+          + (Math.abs(left - x) + Math.abs(top - y)) * 10
+          + index;
         return { left, top, score };
       });
+
       const best = candidates.reduce((a, b) => a.score <= b.score ? a : b);
-      const menuSide = menu && best.top + height + 8 + menu.offsetHeight > bounds.bottom && best.top - menu.offsetHeight - 8 >= bounds.top ? 'above' : 'below';
-      setFormattingPosition(previous => previous && previous.left === best.left && previous.top === best.top && previous.visible === visible && previous.menuSide === menuSide ? previous : { left: best.left, top: best.top, visible, menuSide });
+      const menu = toolbar.querySelector<HTMLElement>('[data-formatting-details]');
+      const menuW = menu?.offsetWidth || 276;
+      const menuH = menu?.offsetHeight || 220;
+      const menuSide: 'above' | 'below' =
+        best.top + height + 8 + menuH > bounds.bottom && best.top - menuH - 8 >= bounds.top
+          ? 'above'
+          : 'below';
+      const menuAlign: 'left' | 'right' =
+        best.left + width - menuW < bounds.left
+          ? 'left'
+          : 'right';
+
+      setFormattingPosition(previous =>
+        previous &&
+        previous.left === best.left &&
+        previous.top === best.top &&
+        previous.visible === visible &&
+        previous.menuSide === menuSide &&
+        previous.menuAlign === menuAlign
+          ? previous
+          : { left: best.left, top: best.top, visible, menuSide, menuAlign }
+      );
     };
+
     const schedule = () => { cancelAnimationFrame(animation); animation = requestAnimationFrame(update); };
     update();
-    const observer = new ResizeObserver(schedule); observer.observe(node); observer.observe(toolbar); observer.observe(canvas);
-    const menu = toolbar.querySelector<HTMLElement>('[data-formatting-details]'); if (menu) observer.observe(menu);
-    window.addEventListener('scroll', schedule, true); window.addEventListener('resize', schedule);
-    return () => { observer.disconnect(); cancelAnimationFrame(animation); window.removeEventListener('scroll', schedule, true); window.removeEventListener('resize', schedule); };
+    const observer = new ResizeObserver(schedule);
+    observer.observe(node);
+    observer.observe(toolbar);
+    observer.observe(canvas);
+    const menu = toolbar.querySelector<HTMLElement>('[data-formatting-details]');
+    if (menu) observer.observe(menu);
+    window.addEventListener('scroll', schedule, true);
+    window.addEventListener('resize', schedule);
+    canvas.addEventListener('scroll', schedule, { passive: true });
+    return () => {
+      observer.disconnect();
+      cancelAnimationFrame(animation);
+      window.removeEventListener('scroll', schedule, true);
+      window.removeEventListener('resize', schedule);
+      canvas.removeEventListener('scroll', schedule);
+    };
   }, [selectedLayer, repositoryId, elements, breakpoint, showQuickActions, liveMove, isResizing, isDraggingMove, childOrder, elementDimensions, sourceLayers, sourceSelection.current?.rect?.left, sourceSelection.current?.rect?.top, windowMode, windowPanel, windowDock.position, definitionStyleKey]);
 
   const resolveStageScale = (layerKey?: string): number => {
@@ -3102,7 +3237,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
   const renderHUDBar = () => {
     if (!selectedLayer || activeElement.tag === 'svg') return null;
     const locked = busy || isApplying || reviewBlocking || Boolean(uncertainUndoId) || destinationMode || viewportChanging || Boolean(activeBreakpoint) && scopeLoading;
-    if(activeElement.instance && !editingDefinitionStyles)return createPortal(<div ref={formattingRef} role="toolbar" aria-label="Selection formatting" className={reviewStyles.floatingFormatting} style={{position:'fixed',left:formattingPosition?.left||0,top:formattingPosition?.top||0,visibility:formattingPosition?.visible?'visible':'hidden'}} onClick={event=>event.stopPropagation()}><div className={reviewStyles.formattingBar}>
+    if(activeElement.instance && !editingDefinitionStyles)return createPortal(<div ref={formattingRef} role="toolbar" aria-label="Selection formatting" className={reviewStyles.floatingFormatting} data-menu-side={formattingPosition?.menuSide} data-menu-align={formattingPosition?.menuAlign} style={{position:'fixed',left:formattingPosition?.left||0,top:formattingPosition?.top||0,visibility:formattingPosition?.visible?'visible':'hidden'}} onClick={event=>event.stopPropagation()}><div className={reviewStyles.formattingBar}>
       {isTextElement&&<button type="button" className={reviewStyles.editTextControl} disabled={locked} onClick={()=>beginInlineText(selectedLayer)}><Pencil size={13}/><span>{preparingInlineText ? 'Checking text…' : 'Edit text'}</span></button>}
       <button type="button" className={reviewStyles.editTextControl} disabled={locked} onClick={()=>{setWindowPanel('inspector');setRightDockVisible(true);setRightDockTool('inspect');requestAnimationFrame(()=>document.querySelector<HTMLElement>('[aria-label="Component properties"] textarea, [aria-label="Component properties"] select')?.focus())}}><SlidersHorizontal size={13}/><span>Instance props</span></button>
     </div></div>,document.body);
@@ -3137,7 +3272,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
     const isActionElement = ['button', 'a'].includes(activeElement.tag.toLowerCase());
     const hud = (
       <div ref={formattingRef} role="toolbar" aria-label="Selection formatting"
-        className={reviewStyles.floatingFormatting} data-menu-side={formattingPosition?.menuSide}
+        className={reviewStyles.floatingFormatting} data-menu-side={formattingPosition?.menuSide} data-menu-align={formattingPosition?.menuAlign}
         style={{ position: 'fixed', left: formattingPosition?.left || 0, top: formattingPosition?.top || 0, visibility: formattingPosition?.visible ? 'visible' : 'hidden' }}
         onClick={event => event.stopPropagation()}
         onBlur={event => { if (event.relatedTarget && !event.currentTarget.contains(event.relatedTarget as Node)) setShowQuickActions(false); }}>

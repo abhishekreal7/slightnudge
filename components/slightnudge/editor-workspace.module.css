@@ -384,6 +384,7 @@
 .sourceLayer[aria-pressed='true'] > span { color: #3d7754; }
 .sourceLayer:focus-visible { outline: 2px solid #729082; outline-offset: -2px; }
 .floatingFormatting[data-menu-side='above'] .formatDetails { top: auto; bottom: calc(100% + 8px); }
+.floatingFormatting[data-menu-align='left'] .formatDetails { right: auto; left: 0; }
 .formattingBar button, .formattingBar [title] {
   background: transparent;
   background-image: none;
@@ -421,7 +422,7 @@
 .paddingControl { display: flex; align-items: center; gap: 7px; padding: 0 5px; color: #68776c; font-size: 11px; }
 .paddingControl select { height: 28px; border: 0; background: transparent; color: #44564a; font-size: 11px; }
 .formattingBar button:disabled, .formattingBar select:disabled { opacity: .4; cursor: default; }
-.formatDetails { position: absolute; top: calc(100% + 8px); right: 0; width: 276px; max-height: min(470px, 72vh); overflow: auto; padding: 12px; border: 1px solid #e1e7e2; border-radius: 10px; background: #fff; color: #506254; box-shadow: 0 12px 36px #1b362715, 0 2px 6px #1b362708; text-align: left; }
+.formatDetails { position: absolute; top: calc(100% + 8px); right: 0; width: 276px; max-width: calc(100vw - 28px); max-height: min(470px, 72vh); overflow: auto; padding: 12px; border: 1px solid #e1e7e2; border-radius: 10px; background: #fff; color: #506254; box-shadow: 0 12px 36px #1b362715, 0 2px 6px #1b362708; text-align: left; }
 .formatDetailsHeading { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; padding: 0 0 7px; color: #8b978d; font-size: 10px; }
 .formatDetailsHeading button { display: grid; place-items: center; width: 23px; height: 23px; border: 0; border-radius: 4px; background: transparent; color: #8b978d; cursor: pointer; }
 .formatOptionRow { display: flex; align-items: center; justify-content: space-between; gap: 10px; min-height: 39px; font-size: 10.5px; }
