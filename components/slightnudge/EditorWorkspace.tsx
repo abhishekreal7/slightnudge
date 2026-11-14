@@ -3815,12 +3815,6 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
                 >
                   {isArc ? (
                     <span className={reviewStyles.handleHitArea} />
-                  ) : !isOriented && !isCorner && (chrome.variant === 'arc' || chrome.variant === 'capsule' || chrome.variant === 'text') ? (
-                    <span
-                      className={`${reviewStyles.handleBar} ${
-                        h.dir === 'n' || h.dir === 's' ? reviewStyles.handleBarH : reviewStyles.handleBarV
-                      }`}
-                    />
                   ) : (
                     <span className={reviewStyles.handleDot} />
                   )}
