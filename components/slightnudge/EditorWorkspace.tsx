@@ -1866,29 +1866,9 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
   useEffect(() => {
     let animationId = 0;
 
-    const applyGuidesToOverlay = (guides: readonly GuideLine[], artboardToMain: Matrix2D, moved: boolean) => {
-      let showedV = false;
-      let showedH = false;
-      if (moved && guides.length > 0) {
-        for (const rawGuide of guides) {
-          const g = transformGuideLineToContainer(rawGuide, artboardToMain);
-          if (g.type === 'vertical' && !showedV && guideVRef.current) {
-            showedV = true;
-            guideVRef.current.style.display = 'block';
-            guideVRef.current.style.left = `${g.position}px`;
-            guideVRef.current.style.top = `${g.start}px`;
-            guideVRef.current.style.height = `${Math.max(10, g.end - g.start)}px`;
-          } else if (g.type === 'horizontal' && !showedH && guideHRef.current) {
-            showedH = true;
-            guideHRef.current.style.display = 'block';
-            guideHRef.current.style.top = `${g.position}px`;
-            guideHRef.current.style.left = `${g.start}px`;
-            guideHRef.current.style.width = `${Math.max(10, g.end - g.start)}px`;
-          }
-        }
-      }
-      if (!showedV && guideVRef.current) guideVRef.current.style.display = 'none';
-      if (!showedH && guideHRef.current) guideHRef.current.style.display = 'none';
+    const applyGuidesToOverlay = (_guides: readonly GuideLine[], _artboardToMain: Matrix2D, _moved: boolean) => {
+      if (guideVRef.current) guideVRef.current.style.display = 'none';
+      if (guideHRef.current) guideHRef.current.style.display = 'none';
     };
 
     const onTick = () => {

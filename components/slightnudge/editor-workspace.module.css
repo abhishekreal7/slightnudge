@@ -696,23 +696,10 @@
 .handleSw { top: 100%; left: 0; cursor: nesw-resize; }
 .handleW  { top: 50%; left: 0; cursor: ew-resize; }
 
-/* Smart Snapping Guides */
-.smartGuideV {
-  position: absolute;
-  width: 1px;
-  background: #0ccb8b;
-  z-index: 100;
-  pointer-events: none;
-  box-shadow: 0 0 2px rgba(12, 203, 139, 0.8);
-}
-
+/* Smart Snapping Guides (Disabled) */
+.smartGuideV,
 .smartGuideH {
-  position: absolute;
-  height: 1px;
-  background: #0ccb8b;
-  z-index: 100;
-  pointer-events: none;
-  box-shadow: 0 0 2px rgba(12, 203, 139, 0.8);
+  display: none !important;
 }
 
 /* Selection Chrome v2 SVG and Element-Aware Chrome */
