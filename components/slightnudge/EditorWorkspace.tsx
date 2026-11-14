@@ -1064,7 +1064,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
       const selection = node.getBoundingClientRect();
       const frame = canvas.getBoundingClientRect();
       const width = toolbar.offsetWidth || 300;
-      const height = toolbar.offsetHeight || 38;
+      const height = toolbar.offsetHeight || 32;
       const viewportW = window.innerWidth;
       const viewportH = window.innerHeight;
 
@@ -1130,8 +1130,8 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
         Math.max(0, Math.min(top + height, rect.bottom) - Math.max(top, rect.top));
 
       const isActionEl = ['button', 'a'].includes((elements[selectedLayer]?.tag || '').toLowerCase());
-      const clearAboveTop = move ? move.top - height - 8 : selection.top - height - 12;
-      const clearBelowTop = selection.bottom + 10;
+      const clearAboveTop = selection.top - height - 8;
+      const clearBelowTop = selection.bottom + 8;
 
       const hasSpaceAbove = clearAboveTop >= bounds.top;
       const hasSpaceBelow = clearBelowTop + height <= bounds.bottom;
@@ -1163,34 +1163,26 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
           );
         }
       } else {
-        if (!hasSpaceAbove && hasSpaceBelow) {
+        if (hasSpaceAbove) {
+          rawCandidates.push(
+            [selection.left, clearAboveTop],
+            [selection.left + (selection.width - width) / 2, move && Math.abs((selection.left + selection.width / 2) - (selection.left + width / 2)) < width / 2 + 15 ? move.top - height - 8 : clearAboveTop],
+            [selection.right - width, clearAboveTop],
+            [selection.left, clearBelowTop],
+            [selection.left + (selection.width - width) / 2, clearBelowTop]
+          );
+        } else if (hasSpaceBelow) {
           // Near the top of the viewport: cleanly place below the element
           rawCandidates.push(
-            [selection.left + (selection.width - width) / 2, clearBelowTop],
             [selection.left, clearBelowTop],
-            [selection.right - width, clearBelowTop]
-          );
-        } else if (hasSpaceAbove && !hasSpaceBelow) {
-          // Near the bottom of the viewport: cleanly place above the element
-          rawCandidates.push(
-            [selection.left + (selection.width - width) / 2, clearAboveTop],
-            [selection.left, clearAboveTop],
-            [selection.right - width, clearAboveTop]
-          );
-        } else if (hasSpaceAbove && hasSpaceBelow) {
-          // Plenty of room: prefer above, with fallback below
-          rawCandidates.push(
-            [selection.left + (selection.width - width) / 2, clearAboveTop],
-            [selection.left, clearAboveTop],
-            [selection.right - width, clearAboveTop],
             [selection.left + (selection.width - width) / 2, clearBelowTop],
-            [selection.left, clearBelowTop]
+            [selection.right - width, clearBelowTop]
           );
         } else {
           // Tall element spanning viewport: place safely inside top margin
           rawCandidates.push(
-            [selection.left + (selection.width - width) / 2, bounds.top + 16],
-            [selection.left + 16, bounds.top + 16]
+            [selection.left, bounds.top + 16],
+            [selection.left + (selection.width - width) / 2, bounds.top + 16]
           );
         }
       }
