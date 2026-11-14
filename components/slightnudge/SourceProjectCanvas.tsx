@@ -59,6 +59,7 @@ export interface SourceCanvasHandle {
   reload(selection?: SourceSelection, expectedClass?: string, expectedText?: string, expectedBatch?: CanvasRenderPatch[]): Promise<void>;
   getFrame?(): HTMLIFrameElement | null;
   getDocument?(): Document | null;
+  updateSelectionRect?(rect: { left: number; top: number; width: number; height: number }): void;
 }
 
 export const SourceProjectCanvas = forwardRef<SourceCanvasHandle, {
@@ -228,6 +229,12 @@ export const SourceProjectCanvas = forwardRef<SourceCanvasHandle, {
         return frame.current?.contentDocument || null;
       } catch {
         return null;
+      }
+    },
+    updateSelectionRect: (rect: { left: number; top: number; width: number; height: number }) => {
+      setGeometry(prev => (prev ? { ...prev, rect: { ...prev.rect, ...rect } } : prev));
+      if (selected.current) {
+        selected.current = { ...selected.current, rect: { ...selected.current.rect, ...rect } };
       }
     },
     async reload(selection, expectedClass, expectedText, expectedBatch) {

@@ -1931,12 +1931,54 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
           }
         );
 
-        const res = solved.resize.rect;
+        let res = solved.resize.rect;
         const preserveAutoHeight = Boolean(gesture.widthOnlyHeight && !effectiveShift);
         gesture.nextWidth = Math.max(1, res.width);
         gesture.nextHeight = preserveAutoHeight ? gesture.startHeight : Math.max(1, res.height);
         gesture.nextLeft = res.left;
         gesture.nextTop = preserveAutoHeight ? gesture.startTop : res.top;
+
+        // Apply width to target element immediately so text reflows in the iframe
+        if (gesture.targetEl && !gesture.outlineOnly) {
+          gesture.targetEl.style.maxWidth = `${roundValue(gesture.nextWidth, 'nearest', 1)}px`;
+          // If resizing horizontally (e or w handle), measure the actual rendered geometry as text wraps
+          if (gesture.handle === 'e' || gesture.handle === 'w' || gesture.widthOnlyHeight) {
+            const iframe = sourceCanvas.current?.getFrame?.();
+            const iframeBox = iframe?.getBoundingClientRect();
+            const elBox = gesture.targetEl.getBoundingClientRect();
+            if (iframeBox && elBox) {
+              const liveLeft = elBox.left - iframeBox.left;
+              const liveTop = elBox.top - iframeBox.top;
+              const liveW = elBox.width;
+              const liveH = elBox.height;
+              if (liveH > 0 && liveW > 0) {
+                gesture.nextWidth = liveW;
+                gesture.nextHeight = liveH;
+                gesture.nextLeft = liveLeft;
+                gesture.nextTop = liveTop;
+                res = {
+                  left: liveLeft,
+                  top: liveTop,
+                  width: liveW,
+                  height: liveH,
+                  right: liveLeft + liveW,
+                  bottom: liveTop + liveH,
+                };
+              }
+            } else {
+              const liveH = gesture.targetEl.offsetHeight;
+              if (liveH && liveH > 0) {
+                gesture.nextHeight = liveH;
+                res = { ...res, height: liveH };
+              }
+            }
+          }
+        } else if (sourceCanvas.current && gesture.moved && !gesture.outlineOnly) {
+          const selection = sourceSelections.current[gesture.key];
+          if (selection) {
+            void sourceCanvas.current.command('gesture', selection, { maxWidth: roundValue(gesture.nextWidth, 'nearest', 1) });
+          }
+        }
 
         // 1. Direct overlay write (transform + width/height for axis-aligned; oriented Quad for rotated/flipped/skewed)
         const haloEl = outlineHaloRef.current[gesture.key];
@@ -2035,16 +2077,6 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
                 btn.style.top = `${arc.center.y}px`;
               }
             }
-          }
-        }
-
-        // 2. Direct style write on canvas element (same-origin direct or bridge gesture)
-        if (gesture.targetEl && !gesture.outlineOnly) {
-          gesture.targetEl.style.maxWidth = `${roundValue(gesture.nextWidth, 'nearest', 1)}px`;
-        } else if (sourceCanvas.current && gesture.moved && !gesture.outlineOnly) {
-          const selection = sourceSelections.current[gesture.key];
-          if (selection) {
-            void sourceCanvas.current.command('gesture', selection, { maxWidth: roundValue(gesture.nextWidth, 'nearest', 1) });
           }
         }
 
@@ -2249,6 +2281,27 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
 
           if (!gesture.outlineOnly && gesture.targetEl) {
             gesture.targetEl.style.maxWidth = `${snapped.width}px`;
+            const updatedH = gesture.targetEl.offsetHeight;
+            const updatedW = gesture.targetEl.offsetWidth;
+            const iframe = sourceCanvas.current?.getFrame?.();
+            const iframeBox = iframe?.getBoundingClientRect();
+            const elBox = gesture.targetEl.getBoundingClientRect();
+
+            if (iframeBox && elBox) {
+              const updatedRect = {
+                left: elBox.left - iframeBox.left,
+                top: elBox.top - iframeBox.top,
+                width: updatedW,
+                height: updatedH,
+              };
+              sourceCanvas.current?.updateSelectionRect?.(updatedRect);
+              if (sourceSelections.current[gesture.key]) {
+                sourceSelections.current[gesture.key] = {
+                  ...sourceSelections.current[gesture.key],
+                  rect: updatedRect,
+                };
+              }
+            }
           }
           pendingDirectStyleRef.current[gesture.key] = {
             targetEl: gesture.targetEl,
