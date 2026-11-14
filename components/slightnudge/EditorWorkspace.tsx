@@ -1112,12 +1112,12 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
         safeRight = Math.min(safeRight, Math.round(frame.right) - 8);
       }
 
-      if (safeRight - width < safeLeft) {
-        safeRight = Math.max(safeLeft + width, viewportW - 14);
-      }
-      if (safeBottom - height < safeTop) {
-        safeBottom = Math.max(safeTop + height, viewportH - 14);
-      }
+      // Hard clamp bounds to ensure window boundaries are strictly respected under all screen sizes & panel states
+      safeLeft = Math.max(14, Math.min(safeLeft, viewportW - width - 14));
+      safeRight = Math.min(viewportW - 14, Math.max(safeRight, safeLeft + width));
+      safeTop = Math.max(14, Math.min(safeTop, viewportH - height - 14));
+      safeBottom = Math.min(viewportH - 14, Math.max(safeBottom, safeTop + height));
+
       const bounds = { left: safeLeft, right: safeRight, top: safeTop, bottom: safeBottom };
 
       const visible = selection.bottom > bounds.top && selection.top < bounds.bottom && selection.right > bounds.left && selection.left < bounds.right;
@@ -1133,11 +1133,10 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
       const clearAboveTop = selection.top - height - 8;
       const clearBelowTop = selection.bottom + 8;
 
-      const hasSpaceAbove = clearAboveTop >= bounds.top;
-      const hasSpaceBelow = clearBelowTop + height <= bounds.bottom;
-
       const rawCandidates: [number, number][] = [];
       if (isActionEl) {
+        const hasSpaceBelow = clearBelowTop + height <= bounds.bottom;
+        const hasSpaceAbove = clearAboveTop >= bounds.top;
         if (hasSpaceBelow) {
           rawCandidates.push(
             [selection.left + (selection.width - width) / 2, clearBelowTop],
@@ -1163,33 +1162,22 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
           );
         }
       } else {
-        if (hasSpaceAbove) {
-          rawCandidates.push(
-            [selection.left, clearAboveTop],
-            [selection.left + (selection.width - width) / 2, move && Math.abs((selection.left + selection.width / 2) - (selection.left + width / 2)) < width / 2 + 15 ? move.top - height - 8 : clearAboveTop],
-            [selection.right - width, clearAboveTop],
-            [selection.left, clearBelowTop],
-            [selection.left + (selection.width - width) / 2, clearBelowTop]
-          );
-        } else if (hasSpaceBelow) {
-          // Near the top of the viewport: cleanly place below the element
-          rawCandidates.push(
-            [selection.left, clearBelowTop],
-            [selection.left + (selection.width - width) / 2, clearBelowTop],
-            [selection.right - width, clearBelowTop]
-          );
-        } else {
-          // Tall element spanning viewport: place safely inside top margin
-          rawCandidates.push(
-            [selection.left, bounds.top + 16],
-            [selection.left + (selection.width - width) / 2, bounds.top + 16]
-          );
-        }
+        // Text elements (h1-h6, p, span, etc.):
+        // Standard studio behavior (Figma, Framer, Docs): ALWAYS anchor above the text layer.
+        // It never flips below to obscure child/subordinate paragraphs.
+        // When scrolled near the top edge, clampTop pins it safely at bounds.top.
+        const aboveMoveTop = move ? move.top - height - 8 : clearAboveTop;
+        rawCandidates.push(
+          [selection.left, clearAboveTop],
+          [selection.left, aboveMoveTop],
+          [selection.left + (selection.width - width) / 2, aboveMoveTop],
+          [selection.right - width, clearAboveTop]
+        );
       }
 
       const candidates = rawCandidates.map(([x, y], index) => {
         const left = clampLeft(x), top = clampTop(y);
-        const selOverlap = overlap(left, top, selection);
+        const selOverlap = isActionEl ? overlap(left, top, selection) : 0;
         const moveOverlap = move ? overlap(left, top, move) : 0;
         const score = selOverlap * 50
           + moveOverlap * 60
