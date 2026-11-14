@@ -170,7 +170,7 @@ export const SourceProjectCanvas = forwardRef<SourceCanvasHandle, {
         if (!syncFailed.current) { readyRef.current = true; const finish = () => { setReady(true); setError(''); props.current.onReady?.(); }; if (windowMode) void command('set-mode', null, { edit: !modeRef.current }).then(finish).catch(cause => setError(cause.message)); else finish(); }
         return;
       }
-      if (message.type === 'source-route') { selected.current = null; setGeometry(null); props.current.onClearSelection(); return; }
+      if (message.type === 'source-route' || message.type === 'selection-cleared') { selected.current = null; setGeometry(null); props.current.onClearSelection(); return; }
       if (message.type === 'source-viewport' && Number.isInteger(message.width) && message.width > 0 && message.width <= 20000) { props.current.onViewport?.(message.width, typeof message.initialFontSize === 'number' && message.initialFontSize > 0 && message.initialFontSize < 1024 ? message.initialFontSize : undefined); return; }
       if (message.type === 'source-navigating') { readyRef.current = false; setReady(false); selected.current = null; setGeometry(null); props.current.onClearSelection(); return; }
       if (message.type === 'source-tree' && Array.isArray(message.layers) && message.layers.length <= 1000) { props.current.onLayers?.(message.layers); return; }

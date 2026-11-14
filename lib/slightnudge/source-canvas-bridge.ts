@@ -392,7 +392,22 @@ function sourceCanvasRuntime(continuous: boolean, repositoryId = '', protocol = 
     if (!inspectEnabled) return;
     if (!(event.target instanceof Element)) return;
     if (destinationMode) { event.preventDefault(); event.stopImmediatePropagation(); const destination = destinationAt(event.target); if (destination) send('destination-picked', { selection: describe(destination) }); else send('selection-refused', { reason: 'Choose another layout container in the same source component. Escape cancels the move.' }); return; }
-    const element = sourceElement(event.target); if (!element || !root.contains(element)) return;
+    const element = sourceElement(event.target);
+    const isEmptyRootCanvas = Boolean(
+      element &&
+        event.target === element &&
+        element.tagName === 'MAIN' &&
+        !element.id &&
+        element.getBoundingClientRect().height >= window.innerHeight * 0.9
+    );
+    if (!element || !root.contains(element) || isEmptyRootCanvas) {
+      if (!destinationMode && (continuous || !pendingReview) && selected) {
+        if (editing) finishText();
+        selected = null;
+        send('selection-cleared');
+      }
+      return;
+    }
     if (editing === element) { if (/^(A|BUTTON)$/.test(element.tagName)) { event.preventDefault(); event.stopImmediatePropagation(); } return; }
     event.preventDefault(); event.stopImmediatePropagation();
     if (!continuous && pendingReview) return;

@@ -625,7 +625,13 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
     }
   };
   const inspectorActive = true;
-  useEffect(() => { setMoveOpen(false); }, [selectedLayer]);
+  useEffect(() => {
+    setMoveOpen(false);
+    pendingOverlayResetKeyRef.current = null;
+    if (guideVRef.current) guideVRef.current.style.display = 'none';
+    if (guideHRef.current) guideHRef.current.style.display = 'none';
+    if (cursorTagRef.current) cursorTagRef.current.style.display = 'none';
+  }, [selectedLayer]);
   useEffect(() => {
     if (!moveOpen) return;
     const outside = (event: PointerEvent) => { if (!moveControlRef.current?.contains(event.target as Node)) setMoveOpen(false); };
@@ -902,6 +908,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
     targetEl: HTMLElement | null;
     initialTargetStyle: string | null;
     outlineOnly?: boolean;
+    widthOnlyHeight?: boolean;
     lockedAspect?: boolean;
     initialRadius?: number;
     maxRadius?: number;
@@ -926,7 +933,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
   const pendingDirectStyleRef = useRef<Record<string, { targetEl: HTMLElement | null; initialStyle: string | null }>>({});
   const inFlightMoveRef = useRef<Record<string, Translation>>({});
   const [overlayResetTick, setOverlayResetTick] = useState(0);
-  const resetOverlayNode = useCallback((key: string | null | undefined) => {
+  const resetOverlayNode = useCallback((key: string | null | undefined, bumpTick = true) => {
     if (!key) return;
     const node = elementRefs.current[key];
     if (node) {
@@ -934,6 +941,20 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
       node.style.height = '100%';
       node.style.transform = '';
     }
+    const keyHandles = handleButtonRefs.current[key];
+    if (keyHandles) {
+      for (const btn of Object.values(keyHandles)) {
+        if (!btn) continue;
+        btn.style.left = btn.dataset.baseLeft || '';
+        btn.style.top = btn.dataset.baseTop || '';
+      }
+    }
+    const gripBtn = radiusGripRef.current[key];
+    if (gripBtn) {
+      gripBtn.style.left = gripBtn.dataset.baseLeft || '';
+      gripBtn.style.top = gripBtn.dataset.baseTop || '';
+    }
+    if (bumpTick) setOverlayResetTick(tick => tick + 1);
   }, []);
   const restorePendingDirectStyle = useCallback((key: string | null | undefined) => {
     if (!key) return;
@@ -978,8 +999,9 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
   };
   useLayoutEffect(() => {
     if (pendingOverlayResetKeyRef.current && pendingOverlayResetKeyRef.current === selectedLayer) {
-      resetOverlayNode(pendingOverlayResetKeyRef.current);
+      const key = pendingOverlayResetKeyRef.current;
       pendingOverlayResetKeyRef.current = null;
+      resetOverlayNode(key, false);
     }
   }, [elementDimensions, overlayResetTick, selectedLayer, resetOverlayNode]);
   const replaySourceDraft = (edit: PendingEdit | null): Promise<boolean> => {
@@ -1032,7 +1054,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
   }, [selectedLayer, elements, childOrder]);
 
   useLayoutEffect(() => {
-    if (!selectedLayer || liveMove || isResizing) return;
+    if (!selectedLayer || liveMove || isResizing || isDraggingMove) return;
     const node = elementRefs.current[selectedLayer];
     const toolbar = formattingRef.current;
     const canvas = node?.closest('main');
@@ -1050,7 +1072,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
       const obstacles = [...Object.values(elementRefs.current), node.closest('[data-selection-artboard]')?.querySelector('nav')]
         .filter((element): element is HTMLElement => !!element && element !== node && !element.contains(node) && !node.contains(element))
         .map(element => element.getBoundingClientRect());
-      if (windowMode) { for (const panel of document.querySelectorAll('[aria-label="Editor toolbar"], [data-editor-panel]')) { const rect = panel.getBoundingClientRect(); if (rect.width && rect.height) obstacles.push(rect); } }
+      if (windowMode) { for (const panel of document.querySelectorAll('[aria-label="Editor toolbar"], [data-editor-panel], [data-editor-rail]')) { const rect = panel.getBoundingClientRect(); if (rect.width && rect.height) obstacles.push(rect); } }
       const previewElement = canvas.querySelector('iframe');
       const previewFrame = previewElement?.getBoundingClientRect();
       const previewScale = previewElement && previewFrame ? previewFrame.width / previewElement.clientWidth : 1;
@@ -1060,15 +1082,26 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
       }
       const move = node.querySelector('[aria-label="Move element"]')?.getBoundingClientRect();
       const overlap = (left: number, top: number, rect: DOMRect) => Math.max(0, Math.min(left + width, rect.right) - Math.max(left, rect.left)) * Math.max(0, Math.min(top + height, rect.bottom) - Math.max(top, rect.top));
-      const candidates = [
-        [selection.left, selection.top - height - 10], [selection.right - width, selection.top - height - 10],
-        [selection.left - 12, selection.bottom + 10], [selection.right - width + 12, selection.bottom + 10],
-        [selection.left + (selection.width - width) / 2, selection.top - height - 24],
-        [selection.left - width / 3, selection.bottom + 10], [selection.right - width * 2 / 3, selection.bottom + 10],
-        [selection.left - width - 12, selection.top], [selection.right + 12, selection.top],
-      ].map(([x, y], index) => {
+      const isActionEl = ['button', 'a'].includes((elements[selectedLayer]?.tag || '').toLowerCase());
+      const rawCandidates: [number, number][] = isActionEl
+        ? [
+            [selection.left + (selection.width - width) / 2, selection.bottom + 10],
+            [selection.left, selection.bottom + 10],
+            [selection.right - width, selection.bottom + 10],
+            [selection.left - width - 12, selection.top + (selection.height - height) / 2],
+            [selection.right + 12, selection.top + (selection.height - height) / 2],
+            [selection.left, selection.top - height - 38],
+          ]
+        : [
+            [selection.left, selection.top - height - 10], [selection.right - width, selection.top - height - 10],
+            [selection.left - 12, selection.bottom + 10], [selection.right - width + 12, selection.bottom + 10],
+            [selection.left + (selection.width - width) / 2, selection.top - height - 24],
+            [selection.left - width / 3, selection.bottom + 10], [selection.right - width * 2 / 3, selection.bottom + 10],
+            [selection.left - width - 12, selection.top], [selection.right + 12, selection.top],
+          ];
+      const candidates = rawCandidates.map(([x, y], index) => {
         const left = clampLeft(x), top = clampTop(y);
-        const score = overlap(left, top, selection) * 12 + (move ? overlap(left, top, move) * 12 : 0) + obstacles.reduce((sum, rect) => sum + overlap(left, top, rect), 0) * 4 + Math.abs(left - x) + Math.abs(top - y) + index;
+        const score = overlap(left, top, selection) * 16 + (move ? overlap(left, top, move) * 20 : 0) + obstacles.reduce((sum, rect) => sum + overlap(left, top, rect), 0) * 4 + Math.abs(left - x) + Math.abs(top - y) + index;
         return { left, top, score };
       });
       const best = candidates.reduce((a, b) => a.score <= b.score ? a : b);
@@ -1081,7 +1114,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
     const menu = toolbar.querySelector<HTMLElement>('[data-formatting-details]'); if (menu) observer.observe(menu);
     window.addEventListener('scroll', schedule, true); window.addEventListener('resize', schedule);
     return () => { observer.disconnect(); cancelAnimationFrame(animation); window.removeEventListener('scroll', schedule, true); window.removeEventListener('resize', schedule); };
-  }, [selectedLayer, repositoryId, elements, breakpoint, showQuickActions, liveMove, isResizing, childOrder, elementDimensions, sourceLayers, windowMode, windowPanel, windowDock.position, definitionStyleKey]);
+  }, [selectedLayer, repositoryId, elements, breakpoint, showQuickActions, liveMove, isResizing, isDraggingMove, childOrder, elementDimensions, sourceLayers, sourceSelection.current?.rect?.left, sourceSelection.current?.rect?.top, windowMode, windowPanel, windowDock.position, definitionStyleKey]);
 
   const resolveStageScale = (layerKey?: string): number => {
     if (typeof canvasZoom === 'number' && Number.isFinite(canvasZoom) && canvasZoom > 0) {
@@ -1350,6 +1383,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
       targetEl,
       initialTargetStyle,
       outlineOnly: outlineDrag,
+      widthOnlyHeight: !isNonTrivialTransform && /^(a|button|input|select)$/i.test(renderedElement.tag || actualSelection?.tagName || ''),
       lockedAspect: aspectLockOverrides.current[key] ?? /^(img|video|svg|canvas)$/i.test(renderedElement.tag || actualSelection?.tagName || ''),
       latestPointer: { x: e.clientX, y: e.clientY, shiftKey: e.shiftKey, altKey: e.altKey, ctrlKey: e.ctrlKey || e.metaKey, metaKey: e.metaKey },
       rafPending: false,
@@ -1531,7 +1565,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
           ...(usesDrafts ? { draft: true, parentPreviewId: fileHead?.id } : {}),
           ...(repositoryId ? { repositoryId, sourcePath: targetElem.filePath } : {}),
           kind,
-          important: kind === 'style' && ['a', 'button'].includes(targetElem.tag),
+          important: kind === 'style' && ['a', 'button'].includes(targetElem.tag) && ['textColor', 'backgroundColor'].includes(payload.property),
           filePath: targetElem.filePath,
           instance: definitionStyleKey === activeKey && ['style', 'text', 'nudge', 'move'].includes(kind) ? undefined : renderedElement.instance,
           line: targetElem.line,
@@ -1545,6 +1579,11 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
 
         if (result.responsiveScopes) setResponsiveScopes(result.responsiveScopes);
         if (result.success && result.changed === false) {
+          beforeBridgePreview?.();
+          if (pendingOverlayResetKeyRef.current === activeKey) {
+            pendingOverlayResetKeyRef.current = null;
+          }
+          resetOverlayNode(activeKey);
           showToast('This value is already applied.');
           return true;
         }
@@ -1710,10 +1749,11 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
         );
 
         const res = solved.resize.rect;
+        const preserveAutoHeight = Boolean(gesture.widthOnlyHeight && !effectiveShift);
         gesture.nextWidth = Math.max(1, res.width);
-        gesture.nextHeight = Math.max(1, res.height);
+        gesture.nextHeight = preserveAutoHeight ? gesture.startHeight : Math.max(1, res.height);
         gesture.nextLeft = res.left;
-        gesture.nextTop = res.top;
+        gesture.nextTop = preserveAutoHeight ? gesture.startTop : res.top;
 
         // 1. Direct overlay write (transform + width/height for axis-aligned; oriented Quad for rotated/flipped/skewed)
         const haloEl = outlineHaloRef.current[gesture.key];
@@ -1825,8 +1865,12 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
           }
         }
 
-        // 3. Smart 1px guides transformed into <main> coordinate space
-        applyGuidesToOverlay(solved.guides, gesture.artboardToMain, gesture.moved);
+        // 3. Smart 1px guides transformed into <main> coordinate space (keep hidden for width-only CTA drags)
+        applyGuidesToOverlay(
+          preserveAutoHeight ? [] : solved.guides,
+          gesture.artboardToMain,
+          gesture.moved
+        );
 
         // 4. Live cursor W x H tag
         if (cursorTagRef.current && gesture.moved) {
@@ -1888,7 +1932,9 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
           }
         }
 
-        applyGuidesToOverlay(snap.guides, gesture.artboardToMain, gesture.moved);
+        // Keep smart guide lines hidden during Move so laser crosshairs never slice across canvas elements
+        if (guideVRef.current) guideVRef.current.style.display = 'none';
+        if (guideHRef.current) guideHRef.current.style.display = 'none';
 
         if (cursorTagRef.current && gesture.moved) {
           cursorTagRef.current.style.display = 'block';
@@ -2018,11 +2064,15 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
           const token = snapped.token;
           const prevMaxWidth = latestElementsRef.current[gesture.key]?.maxWidth;
 
+          if (!gesture.outlineOnly && gesture.targetEl) {
+            gesture.targetEl.style.maxWidth = `${snapped.width}px`;
+          }
           pendingDirectStyleRef.current[gesture.key] = {
             targetEl: gesture.targetEl,
             initialStyle: gesture.initialTargetStyle,
           };
           pendingOverlayResetKeyRef.current = gesture.key;
+          resetOverlayNode(gesture.key);
 
           // Optimistic update immediately
           setElements(prev => ({
@@ -3084,6 +3134,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
       ...(isTextElement ? [{ label: 'Text color', property: 'textColor', colors: textColors }] : []),
       { label: 'Fill', property: 'backgroundColor', colors: fills },
     ];
+    const isActionElement = ['button', 'a'].includes(activeElement.tag.toLowerCase());
     const hud = (
       <div ref={formattingRef} role="toolbar" aria-label="Selection formatting"
         className={reviewStyles.floatingFormatting} data-menu-side={formattingPosition?.menuSide}
@@ -3091,7 +3142,19 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
         onClick={event => event.stopPropagation()}
         onBlur={event => { if (event.relatedTarget && !event.currentTarget.contains(event.relatedTarget as Node)) setShowQuickActions(false); }}>
         <div className={reviewStyles.formattingBar}>
-          {isTextElement ? <>
+          {isActionElement ? (
+            <button type="button" className={reviewStyles.editTextControl} disabled={locked} onClick={() => {
+              setShowQuickActions(false);
+              if (usesDrafts && selectedLayer) beginInlineText(selectedLayer);
+              else {
+                setOpenSections(previous => ({ ...previous, text: true }));
+                requestAnimationFrame(() => {
+                  const input = document.querySelector<HTMLInputElement>('input[aria-label="Content"]');
+                  input?.focus(); input?.select();
+                });
+              }
+            }}><Pencil size={13} strokeWidth={1.7} /><span>{preparingInlineText ? 'Checking text…' : 'Edit text'}</span></button>
+          ) : isTextElement ? <>
             <button type="button" className={reviewStyles.editTextControl} disabled={locked} onClick={() => {
               setShowQuickActions(false);
               if (usesDrafts && selectedLayer) beginInlineText(selectedLayer);
@@ -3223,6 +3286,18 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
     const isMediaEl = /^(img|video|svg|canvas|picture)$/i.test(renderedElem.tag || selection.tagName);
     const aspectLocked = aspectLockOverrides.current[layerKey] ?? isMediaEl;
 
+    const tagLower = (renderedElem.tag || selection.tagName).toLowerCase();
+    const isAct =
+      ['button', 'input', 'select'].includes(tagLower) ||
+      (tagLower === 'a' &&
+        Boolean(
+          (selection.computed.backgroundColor &&
+            selection.computed.backgroundColor !== 'rgba(0, 0, 0, 0)' &&
+            selection.computed.backgroundColor !== 'transparent') ||
+            selection.attributes?.role === 'button' ||
+            /\b(btn|button|bg-|rounded-)\b/.test(renderedElem.classes || '')
+        ));
+
     const chrome = selectionStyleFor({
       tag: renderedElem.tag || selection.tagName,
       role: undefined,
@@ -3230,9 +3305,9 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
       width: boxW,
       height: boxH,
       borderRadius: currentRadius,
-      isText: /^(h[1-6]|p|span|a|label|strong|em|b|i|small)$/i.test(renderedElem.tag || selection.tagName),
+      isText: !isAct && /^(h[1-6]|p|span|a|label|strong|em|b|i|small)$/i.test(tagLower),
       isMedia: isMediaEl,
-      isControl: /^(button|input|select)$/i.test(renderedElem.tag || selection.tagName),
+      isControl: isAct,
       zoom: zoomVal,
       lockedAspect: aspectLocked,
       currentVariant: previousVariantRef.current[layerKey],
@@ -3293,6 +3368,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
       >
         {/* SVG Overlay layer with dual-stroke 1.5px accent over 1px white halo */}
         <svg
+          key={overlayResetTick}
           className={reviewStyles.selectionSvg}
           style={isOriented ? { inset: 0, width: '100%', height: '100%' } : { width: `${currentW + 4}px`, height: `${currentH + 4}px` }}
         >
@@ -3383,6 +3459,8 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
             ref={el => { radiusGripRef.current[layerKey] = el; }}
             type="button"
             role="slider"
+            data-base-left={`${gripLeft}px`}
+            data-base-top={`${gripTop}px`}
             aria-label="Adjust corner radius"
             title="Drag to adjust corner radius (Arrow keys to change step)"
             aria-valuemin={0}
@@ -3443,6 +3521,9 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
               return (
                 <button
                   key={h.dir}
+                  data-resize-handle={h.dir}
+                  data-base-left={customStyle?.left !== undefined ? String(customStyle.left) : ''}
+                  data-base-top={customStyle?.top !== undefined ? String(customStyle.top) : ''}
                   ref={el => {
                     if (!handleButtonRefs.current[layerKey]) handleButtonRefs.current[layerKey] = {};
                     handleButtonRefs.current[layerKey][h.dir] = el;
@@ -3815,7 +3896,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
               onClick={() => setSelectedLayer(null)}
               className="flex-1 overflow-auto bg-[#F8F9FA] relative flex flex-col justify-between p-6 md:p-12 items-center"
             >
-            {selectedLayer && !browseMode && inspectorActive && !liveMove && !isResizing && renderHUDBar()}
+            {selectedLayer && !browseMode && inspectorActive && !liveMove && !isResizing && !isDraggingMove && !directDragRef.current && renderHUDBar()}
             {destinationMode && <div className={reviewStyles.destinationBanner} role="status" aria-label="Choose move destination" onClick={event => event.stopPropagation()}><span>Choose a container · Insert at end</span><button type="button" onClick={cancelDestination}>Cancel <kbd>Esc</kbd></button></div>}
             <EditorSurface mode={mode} view={unified ? view : undefined} width={viewportWidth || (breakpoint === 'mobile' ? 375 : breakpoint === 'tablet' ? 768 : 1200)} zoom={canvasZoom} reset={canvasReset} pan={canvasPan} disabled={busy || isApplying || isInlineEditing || isResizing || moveArmed || Boolean(liveMove)} onZoom={setCanvasZoom}>
             <SourceProjectCanvas ref={sourceCanvas} repositoryId={repositoryId} localPageId={selectedPage.id} width={artboardWidth} windowMode={sourceWindowMode} continuousDraft={Boolean(repositoryId)} browseMode={browseMode} destinationMode={destinationMode}
@@ -3824,7 +3905,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
               blocked={busy || isApplying || recoveryBooting || recoveryChecking || reviewBlocking || Boolean(uncertainUndoId)}
               onNotice={showToast} onSelect={receiveSourceSelection} onLayers={receiveSourceLayers} onGeometry={receiveSourceGeometry}
               onReady={() => { setSourceReady(true); needsDraftReplay.current = Boolean(draftRef.current); if (draftRef.current && !operationRef.current && !recoveryBooting && !recoveryChecking && !isApplying) void replaySourceDraft(reviewRef.current); }}
-              onClearSelection={() => { if (!operationRef.current && !blocksReview()) { cancelDestination(); sourceSelection.current = null; setSelectedLayerState(null); } }}
+              onClearSelection={() => { if (!operationRef.current && !blocksReview()) { cancelDestination(); sourceSelection.current = null; setSelectedLayerState(null); if (guideVRef.current) guideVRef.current.style.display = 'none'; if (guideHRef.current) guideHRef.current.style.display = 'none'; if (cursorTagRef.current) cursorTagRef.current.style.display = 'none'; } }}
               onText={receiveSourceText} renderSelection={renderSourceSelection}
             />
             </EditorSurface>

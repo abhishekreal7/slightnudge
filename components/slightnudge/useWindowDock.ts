@@ -10,10 +10,35 @@ export function useWindowDock(enabled: boolean, isSuspended?: () => boolean, res
   const isSuspendedRef = useRef(isSuspended);
   isSuspendedRef.current = isSuspended;
   const drag = useRef<{ pointer: number; x: number; y: number; left: number; top: number; previous: typeof position } | null>(null);
-  const clamp = (x: number, y: number) => ({
-    x: roundValue(Math.max(8, Math.min(x, innerWidth - (ref.current?.offsetWidth || 0) - 8)), 'nearest', 1),
-    y: roundValue(Math.max(8, Math.min(y, innerHeight - (ref.current?.offsetHeight || 48) - 8)), 'nearest', 1),
-  });
+  const getBounds = () => {
+    const visibleRight = (sel: string, fallback = 0) => {
+      const el = typeof document !== 'undefined' ? document.querySelector<HTMLElement>(sel) : null;
+      if (!el || el.getAttribute('data-dock-visible') === 'false') return fallback;
+      const r = el.getBoundingClientRect();
+      return r.width > 0 && r.right > 0 && r.left < innerWidth / 2 ? r.right + 12 : fallback;
+    };
+    const visibleLeft = (sel: string, fallback: number) => {
+      const el = typeof document !== 'undefined' ? document.querySelector<HTMLElement>(sel) : null;
+      if (!el || el.getAttribute('data-dock-visible') === 'false') return fallback;
+      const r = el.getBoundingClientRect();
+      return r.width > 0 && r.left < innerWidth && r.left > innerWidth / 2 ? r.left - 12 : fallback;
+    };
+    const minLeft = Math.max(12, visibleRight('[data-editor-panel="layers"]'), visibleRight('[data-editor-rail="left"]'));
+    const maxRight = Math.min(typeof innerWidth === 'number' ? innerWidth - 12 : 1200, visibleLeft('[data-editor-panel="inspector"]', 99999), visibleLeft('[data-editor-rail="right"]', 99999));
+    const dockWidth = ref.current?.offsetWidth || 400;
+    const dockHeight = ref.current?.offsetHeight || 48;
+    const safeMinX = minLeft;
+    const safeMaxX = Math.max(safeMinX, maxRight - dockWidth);
+    const safeMaxY = (typeof innerHeight === 'number' ? innerHeight : 900) - dockHeight - 12;
+    return { minLeft, maxRight, safeMinX, safeMaxX, safeMaxY, dockWidth, dockHeight };
+  };
+  const clamp = (x: number, y: number) => {
+    const { safeMinX, safeMaxX, safeMaxY } = getBounds();
+    return {
+      x: roundValue(Math.max(safeMinX, Math.min(x, safeMaxX)), 'nearest', 1),
+      y: roundValue(Math.max(12, Math.min(y, safeMaxY)), 'nearest', 1),
+    };
+  };
   useEffect(() => {
     if (!enabled) return;
     const resize = () => setPosition(previous => previous ? clamp(previous.x, previous.y) : previous);
@@ -25,24 +50,37 @@ export function useWindowDock(enabled: boolean, isSuspended?: () => boolean, res
     const avoidSelection = () => {
       if (!ref.current || drag.current || isSuspendedRef.current?.()) return;
       const selection = document.querySelector<HTMLElement>('[aria-label="Selected source element"]');
-      if (!selection) { setOccluded(false); return; }
+      if (!selection) {
+        setOccluded(false);
+        setPosition(prev => (prev !== null ? null : prev));
+        return;
+      }
       const target = selection.getBoundingClientRect(), dock = ref.current.getBoundingClientRect();
-      if (!target.width || !target.height) { setOccluded(false); return; }
+      if (!target.width || !target.height) {
+        setOccluded(false);
+        setPosition(prev => (prev !== null ? null : prev));
+        return;
+      }
       const targetBox = { left: target.left, top: target.top, width: target.width, height: target.height };
       const clear = (x: number, y: number) => !rectIntersects({ left: x, top: y, width: dock.width, height: dock.height }, targetBox);
+      const { minLeft, maxRight, dockWidth, dockHeight } = getBounds();
+      const defaultX = roundValue(Math.max(minLeft, minLeft + (maxRight - minLeft - dockWidth) / 2), 'nearest', 1);
+      const defaultY = innerHeight - dockHeight - 12;
+      if (clear(defaultX, defaultY)) {
+        setOccluded(false);
+        setPosition(prev => (prev !== null ? null : prev));
+        return;
+      }
       if (clear(dock.left, dock.top)) { setOccluded(false); return; }
-      const gap = 8;
-      const candidates = [
-        { x: dock.left, y: target.top - dock.height - gap },
-        { x: dock.left, y: target.bottom + gap },
-        { x: target.left - dock.width - gap, y: dock.top },
-        { x: target.right + gap, y: dock.top },
-      ].filter(point => point.x >= gap && point.y >= gap && point.x + dock.width <= innerWidth - gap && point.y + dock.height <= innerHeight - gap && clear(point.x, point.y));
-      const next = candidates.sort((a, b) => Math.hypot(a.x - dock.left, a.y - dock.top) - Math.hypot(b.x - dock.left, b.y - dock.top))[0];
-      // When a selection fills the viewport there is no free band for a dock.
-      // Yield its controls until selection clears rather than cover the target.
-      setOccluded(!next);
-      if (next) setPosition(previous => previous?.x === next.x && previous?.y === next.y ? previous : next);
+      const gap = 12;
+      const candidateY = roundValue(target.top - dockHeight - gap, 'nearest', 1);
+      const fitsVertically = candidateY >= 12 && candidateY + dockHeight <= innerHeight - 12;
+      if (fitsVertically && clear(defaultX, candidateY)) {
+        setOccluded(false);
+        setPosition(prev => (prev?.x === defaultX && prev?.y === candidateY ? prev : { x: defaultX, y: candidateY }));
+      } else {
+        setOccluded(true);
+      }
     };
     const schedule = () => {
       if (isSuspendedRef.current?.()) return;

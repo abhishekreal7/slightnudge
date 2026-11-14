@@ -76,9 +76,6 @@ export default function PlainStaticPage() {
             </a>
             <a
               href="#start"
-              data-source-file="fixtures/1-plain-static.tsx"
-              data-source-line="79"
-              data-source-column="13"
               className="inline-flex items-center gap-1.5 bg-slate-950 hover:bg-slate-800 !text-white dark:bg-white dark:hover:bg-slate-100 dark:!text-slate-950 text-xs font-semibold px-4 py-2 rounded-xl transition shadow-sm cursor-pointer"
             >
               Get Started <ArrowRight size={13} />
@@ -92,7 +89,7 @@ export default function PlainStaticPage() {
       {/* =================================================================== */}
       <section id="overview" className="relative pt-16 pb-20 px-4 sm:px-6 max-w-5xl mx-auto text-center">
         {/* Release Pill Badge */}
-        <div data-source-file="fixtures/1-plain-static.tsx" data-source-line="93" data-source-column="9" className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/90 dark:bg-white/[0.04] border border-slate-200/90 dark:border-white/10 text-xs text-slate-700 dark:text-slate-300 hover:border-emerald-500/40 transition mb-6 cursor-pointer backdrop-blur-md shadow-xs">
+        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/90 dark:bg-white/[0.04] border border-slate-200/90 dark:border-white/10 text-xs text-slate-700 dark:text-slate-300 hover:border-emerald-500/40 transition mb-6 cursor-pointer backdrop-blur-md shadow-xs">
           <span className="flex h-2 w-2 relative">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
             <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
@@ -105,8 +102,6 @@ export default function PlainStaticPage() {
         {/* Primary Headline */}
         <h1
           id="target"
-          data-source-file="fixtures/1-plain-static.tsx"
-          data-source-line="95"
           className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-slate-950 dark:text-white max-w-4xl mx-auto leading-[1.08] mb-6 text-center"
         >
           Craft digital products at the speed of thought.
@@ -121,9 +116,6 @@ export default function PlainStaticPage() {
         <div className="flex flex-wrap items-center justify-center gap-3.5 mb-12">
           <a
             href="#start"
-            data-source-file="fixtures/1-plain-static.tsx"
-            data-source-line="123"
-            data-source-column="11"
             className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 dark:bg-emerald-500 dark:hover:bg-emerald-400 !text-white dark:!text-slate-950 font-semibold text-sm transition shadow-lg shadow-emerald-500/20 cursor-pointer"
           >
             Start Building for Free <ArrowRight size={15} />
@@ -169,7 +161,7 @@ export default function PlainStaticPage() {
         {/* ================================================================= */}
         {/* 3. HERO INTERACTIVE DASHBOARD CANVAS MOCKUP                       */}
         {/* ================================================================= */}
-        <div id="showcase" data-source-file="fixtures/1-plain-static.tsx" data-source-line="171" data-source-column="9" className="relative mt-14 mx-auto max-w-5xl rounded-2xl border border-slate-200/90 dark:border-white/10 bg-white/95 dark:bg-slate-900/60 shadow-2xl shadow-slate-300/40 dark:shadow-emerald-950/40 backdrop-blur-2xl p-2 sm:p-3 overflow-hidden text-left transition-colors">
+        <div id="showcase" className="relative mt-14 mx-auto max-w-5xl rounded-2xl border border-slate-200/90 dark:border-white/10 bg-white/95 dark:bg-slate-900/60 shadow-2xl shadow-slate-300/40 dark:shadow-emerald-950/40 backdrop-blur-2xl p-2 sm:p-3 overflow-hidden text-left transition-colors">
           {/* macOS Titlebar */}
           <div className="flex items-center justify-between px-3 py-2 border-b border-slate-100 dark:border-white/5 bg-slate-50/70 dark:bg-white/[0.02] rounded-t-xl mb-3">
             <div className="flex items-center gap-1.5">

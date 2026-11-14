@@ -557,7 +557,7 @@
 .resizeBar button:disabled, .resizeBar select:disabled { opacity: .45; cursor: default; }
 .resizeBar button:focus-visible, .resizeBar select:focus-visible { outline: 2px solid #729082; outline-offset: 2px; }
 
-.moveAnchor { position: absolute; top: -14px; left: 50%; transform: translateX(-50%); z-index: 45; }
+.moveAnchor { position: absolute; bottom: calc(100% + 10px); left: 50%; transform: translateX(-50%); z-index: 55; }
 .moveControl { position: relative; color: #405046; font-family: inherit; text-align: left; }
 .moveControl .moveTrigger {
   position: relative; display: flex; align-items: center; justify-content: center; width: 27px; height: 27px; padding: 0;
