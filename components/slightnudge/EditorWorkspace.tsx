@@ -4115,41 +4115,10 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
             <header ref={windowDock.ref} style={windowMode ? windowDock.style : undefined} className={reviewStyles.editorTopbar} aria-label="Editor toolbar">
               {windowMode && <div className={reviewStyles.windowActions}>
                 <button type="button" aria-label="Move editing toolbar" title="Drag to move · Arrow keys to position · Home to reset" className={reviewStyles.dockGrip} {...windowDock.grip}><GripVertical size={15}/></button>
-                <details className={reviewStyles.dockOptions}>
-                  <summary aria-label="Editor options" title="Editor options"><MoreHorizontal size={15}/></summary>
-                  <div><Link href={repositoryId ? `/studio/${encodeURIComponent(repositoryId)}/edit` : '/studio'} aria-label="Back to Studio" title="Back to Studio" onClick={event => { if (reviewRef.current || inlineSessionRef.current) { event.preventDefault(); showToast('Save or discard your draft before returning to Studio.'); } }}><ArrowLeft size={15}/> Back to Studio</Link></div>
-                </details>
                 <div role="group" aria-label="Page interaction" className={reviewStyles.interactionMode}>
                   <button type="button" aria-pressed={!browseMode} onClick={() => setBrowseMode(false)}>Edit</button>
                   <button type="button" aria-pressed={browseMode} disabled={busy || isApplying} onClick={() => { if (reviewRef.current || inlineSessionRef.current) { showToast('Save or discard your draft before browsing the page.'); return; } setSelectedLayerState(null); setBrowseMode(true); }}>Browse</button>
                 </div>
-                <button type="button" aria-label="Toggle layers" title="Layers" aria-expanded={leftDockVisible} onClick={() => setLeftDockVisible(v => !v)}><Columns2 size={15}/></button>
-                <button type="button" aria-label="Toggle design panel" title="Design" aria-expanded={rightDockVisible} onClick={() => setRightDockVisible(v => !v)}><Pencil size={15}/></button>
-              </div>}
-              <div className={reviewStyles.projectContext}>
-                <span className={reviewStyles.sourceDot} role="img" aria-label="Local source connected" />
-                <span className={reviewStyles.projectName}>{repositoryId || 'vibecheck'}</span>
-                <span className={reviewStyles.contextSlash} aria-hidden="true">/</span>
-                <span className={reviewStyles.pageName}>{repositoryId ? 'Live project' : selectedPage.title}</span>
-              </div>
-
-              {unified && <div className={reviewStyles.unifiedViewTools}>
-                <label><select aria-label="Editor view" value={view} disabled={busy || isApplying || isInlineEditing || isResizing || Boolean(liveMove)} onChange={event=>changeView(event.target.value as EditorView)}><option value="full">Full page</option><option value="fit">Fit canvas</option></select></label>
-                {view === 'fit' && <select aria-label="Canvas zoom" title="Fit starts with automatic scaling; zoom can also be adjusted manually." value={canvasZoom} disabled={busy || isApplying || isInlineEditing || isResizing || Boolean(liveMove)} onChange={event => setCanvasZoom(event.target.value === 'fit' ? 'fit' : Number(event.target.value))}>
-                  <option value="fit">Fit page</option>{[.1,.25,.5,.75,1,1.5,2].map(value=><option key={value} value={value}>{Math.round(value*100)}%</option>)}{typeof canvasZoom==='number'&&![.1,.25,.5,.75,1,1.5,2].includes(canvasZoom)&&<option value={canvasZoom}>{Math.round(canvasZoom*100)}%</option>}
-                </select>}
-                <button
-                  type="button"
-                  aria-label="Toggle lightweight outline drag"
-                  title={outlineDrag ? "Outline-only drag active (wireframe preview for zero reflow)" : "Enable lightweight outline drag"}
-                  aria-pressed={outlineDrag}
-                  disabled={busy || isApplying || isInlineEditing || isResizing || Boolean(liveMove)}
-                  onClick={() => setOutlineDrag(v => !v)}
-                  className={reviewStyles.outlineToggle}
-                >
-                  <SquareDashed size={13} />
-                  <span>Outline</span>
-                </button>
               </div>}
               {renderCanvasControls()}
               <div className={reviewStyles.topbarActions}>{renderDraftControls()}</div>
