@@ -405,7 +405,7 @@ interface DraftFrame { elements: Record<string, ElementMeta>; order: string[]; e
 interface StudioDraft { version: 1; pageId?: string; frames: DraftFrame[]; cursor: number; viewport?: { width: number | null; scope: string; preset: 'desktop' | 'tablet' | 'mobile' } }
 const draftStorageKey = 'slightnudge:studio:continuous-draft:v1';
 function editPath(edit: PendingEdit) { return edit.ownerPath || edit.snapshot.element.filePath; }
-function draftIds(edit: PendingEdit | null) { return Object.fromEntries(Object.entries(draftHeads(edit)).map(([file,head]) => [file,head.id])); }
+function draftIds(edit: PendingEdit | null) { return Object.fromEntries(Object.entries(draftHeads(edit)).map(([file, head]) => [file, head.id])); }
 function draftHeads(edit: PendingEdit | null): Record<string, PendingEdit> { return edit ? edit.heads || { [editPath(edit)]: edit } : {}; }
 function draftPatches(edit: PendingEdit | null): CanvasRenderPatch[] { return Object.values(draftHeads(edit)).flatMap(head => head.renderPatches || []); }
 function composeDraft(previous: PendingEdit | null, file: string, next: PendingEdit | null): PendingEdit | null {
@@ -442,8 +442,9 @@ function isRecoveryElement(value: unknown): value is ElementMeta {
 function sourceKey(selection: SourceSelection) { return selection.key || (selection.elementId ? `${selection.path}#${selection.elementId}` : `${selection.path}:${selection.line}:${selection.column}:${selection.tagName}`); }
 function elementFromSource(selection: SourceSelection): ElementMeta {
   const c = selection.computed, tokens = selection.className.split(/\s+/).map(token => token.replace(/^!|!$/g, ''));
-  return { ...defaultElements.hero, id: selection.elementId || '', name: selection.name || selection.textContent.trim().slice(0, 60) || selection.tagName,
-    instance:selection.instance, tag: selection.tagName, filePath: selection.path, line: selection.line, column: selection.column, classes: selection.className, text: selection.textContent,
+  return {
+    ...defaultElements.hero, id: selection.elementId || '', name: selection.name || selection.textContent.trim().slice(0, 60) || selection.tagName,
+    instance: selection.instance, tag: selection.tagName, filePath: selection.path, line: selection.line, column: selection.column, classes: selection.className, text: selection.textContent,
     display: c.display || '', width: tokens.find(token => /^w-/.test(token)) || '', maxWidth: tokens.find(token => /^max-w-/.test(token)) || '', height: c.height || '',
     fontWeight: c.fontWeight || '', typeface: c.fontFamily || '', textColor: c.color || '', bgFill: tokens.find(token => /^bg-/.test(token))?.slice(3) || c.backgroundColor || '',
     paddingTop: c.paddingTop || '', paddingRight: c.paddingRight || '', paddingBottom: c.paddingBottom || '', paddingLeft: c.paddingLeft || '',
@@ -458,7 +459,7 @@ function isRecoveryEdit(value: unknown): value is PendingEdit {
   const edit = value as PendingEdit;
   return ['id', 'filePath', 'summary', 'oldValue', 'newValue', 'layerKey'].every(key => typeof edit[key as keyof PendingEdit] === 'string') &&
     Boolean(edit.id && edit.filePath && edit.snapshot) && isRecoveryElement(edit.snapshot.element) &&
-    (edit.ownerPath===undefined||typeof edit.ownerPath==='string'&&edit.ownerPath.length>0&&edit.ownerPath.length<=1000&&!edit.ownerPath.startsWith('/')&&!/^[a-z]:/i.test(edit.ownerPath)&&!edit.ownerPath.split('/').includes('..')) &&
+    (edit.ownerPath === undefined || typeof edit.ownerPath === 'string' && edit.ownerPath.length > 0 && edit.ownerPath.length <= 1000 && !edit.ownerPath.startsWith('/') && !/^[a-z]:/i.test(edit.ownerPath) && !edit.ownerPath.split('/').includes('..')) &&
     (!edit.groupTransactionId || /^[0-9a-f-]{36}$/i.test(edit.groupTransactionId)) &&
     (!edit.heads || Object.keys(edit.heads).length <= 16 && Object.entries(edit.heads).every(([file, head]) => !head.heads && isRecoveryEdit(head) && editPath(head) === file)) &&
     Array.isArray(edit.snapshot.order) && edit.snapshot.order.every(key => typeof key === 'string') &&
@@ -509,7 +510,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
   const windowMode = unified || mode === 'window';
   const sourceWindowMode = unified ? view === 'full' : windowMode;
   const router = useRouter();
-  const changeView = (next:EditorView) => {const url=new URL(location.href);url.searchParams.set('view',next);router.replace(url.pathname+url.search,{scroll:false});};
+  const changeView = (next: EditorView) => { const url = new URL(location.href); url.searchParams.set('view', next); router.replace(url.pathname + url.search, { scroll: false }); };
   const routeParams = useParams<{ repoId?: string }>();
   const repositoryId = projectId ?? routeParams?.repoId;
   const usesDrafts = true;
@@ -521,19 +522,19 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
   const [rightDockVisible, setRightDockVisible] = useState<boolean>(true);
   const [browseMode, setBrowseMode] = useState(false);
   const [canvasZoom, setCanvasZoom] = useState<CanvasZoom>(unified && view === 'full' ? 1 : 'fit');
-  useEffect(()=>{if(unified)setCanvasZoom(view==='fit'?'fit':1);},[unified,view]);
+  useEffect(() => { if (unified) setCanvasZoom(view === 'fit' ? 'fit' : 1); }, [unified, view]);
   const [outlineDrag, setOutlineDrag] = useState<boolean>(() => {
     if (typeof window !== 'undefined') {
       try {
         return localStorage.getItem('slightnudge:outline-drag') === '1';
-      } catch {}
+      } catch { }
     }
     return false;
   });
   useEffect(() => {
     try {
       localStorage.setItem('slightnudge:outline-drag', outlineDrag ? '1' : '0');
-    } catch {}
+    } catch { }
   }, [outlineDrag]);
   const [canvasReset, setCanvasReset] = useState(0);
   const [canvasPan, setCanvasPan] = useState(false);
@@ -601,7 +602,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
   const moveControlRef = useRef<HTMLDivElement>(null);
   const appliedSnapshots = useRef<PendingEdit[]>([]);
   const inlineSessionRef = useRef<string | null>(null);
-  const inlinePropRef = useRef<{ key: string; property: string; owner?:import('@/lib/slightnudge/component-ownership').ComponentOwner; definition?:{filePath:string;line:number;column:number;instance?:string} } | null>(null);
+  const inlinePropRef = useRef<{ key: string; property: string; owner?: import('@/lib/slightnudge/component-ownership').ComponentOwner; definition?: { filePath: string; line: number; column: number; instance?: string } } | null>(null);
   const inlineCommittingRef = useRef(false);
   const textInspectionCache = useRef<Partial<Record<string, Promise<{ safe: boolean; prop?: { key: string; property: string; owner?: import('@/lib/slightnudge/component-ownership').ComponentOwner; definition?: { filePath: string; line: number; column: number; instance?: string } }; error?: string }>>>>({});
   const activeInlineInspection = useRef<Promise<{ safe: boolean; prop?: { key: string; property: string; owner?: import('@/lib/slightnudge/component-ownership').ComponentOwner; definition?: { filePath: string; line: number; column: number; instance?: string } }; error?: string }> | null>(null);
@@ -615,7 +616,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
       queuedSelectionRef.current = key;
       void sourceCanvas.current?.command('finish-text', sourceSelections.current[inlineSessionRef.current]).then(() => {
         if (!operationRef.current && queuedSelectionRef.current !== undefined) { const next = queuedSelectionRef.current; queuedSelectionRef.current = undefined; setSelectedLayer(next); }
-      }).catch(() => {});
+      }).catch(() => { });
       return;
     }
     if (operationRef.current && usesDrafts) { queuedSelectionRef.current = key; return; }
@@ -623,7 +624,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
     setSelectedLayerState(key);
     if (key && sourceSelections.current[key]) {
       sourceSelection.current = sourceSelections.current[key];
-      void sourceCanvas.current?.command('select', sourceSelection.current).catch(() => {});
+      void sourceCanvas.current?.command('select', sourceSelection.current).catch(() => { });
     }
   };
   const inspectorActive = true;
@@ -1302,11 +1303,11 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
 
       setFormattingPosition(previous =>
         previous &&
-        previous.left === best.left &&
-        previous.top === best.top &&
-        previous.visible === visible &&
-        previous.menuSide === menuSide &&
-        previous.menuAlign === menuAlign
+          previous.left === best.left &&
+          previous.top === best.top &&
+          previous.visible === visible &&
+          previous.menuSide === menuSide &&
+          previous.menuAlign === menuAlign
           ? previous
           : { left: best.left, top: best.top, visible, menuSide, menuAlign }
       );
@@ -1324,7 +1325,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
     try {
       iframeWin = iframeEl?.contentWindow || null;
       if (iframeWin) iframeWin.addEventListener('scroll', schedule, { passive: true });
-    } catch {}
+    } catch { }
 
     return () => {
       cancelAnimationFrame(animation);
@@ -1333,7 +1334,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
       window.removeEventListener('resize', schedule);
       if (canvas) canvas.removeEventListener('scroll', schedule);
       if (iframeWin) {
-        try { iframeWin.removeEventListener('scroll', schedule); } catch {}
+        try { iframeWin.removeEventListener('scroll', schedule); } catch { }
       }
     };
   }, [selectedLayer, repositoryId, elements, breakpoint, showQuickActions, liveMove, isResizing, isDraggingMove, childOrder, elementDimensions, sourceLayers, sourceSelection.current?.rect?.left, sourceSelection.current?.rect?.top, windowMode, windowPanel, windowDock.position, definitionStyleKey]);
@@ -1422,7 +1423,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
           0,
         ];
       }
-    } catch {}
+    } catch { }
     const elementToScreen = matMultiply(stageToScreen, linearLocal);
     return { artboardToMain, stageToScreen, elementToScreen, elementToArtboard, chain };
   };
@@ -1459,7 +1460,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
       try {
         e.currentTarget.focus({ preventScroll: true });
         e.currentTarget.setPointerCapture(e.pointerId);
-      } catch {}
+      } catch { }
 
       moveClickSuppressed.current = false;
       setMoveArmed(true);
@@ -1563,7 +1564,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
     try {
       e.currentTarget.focus({ preventScroll: true });
       e.currentTarget.setPointerCapture(e.pointerId);
-    } catch {}
+    } catch { }
 
     if (eventShieldRef.current) {
       eventShieldRef.current.style.display = 'block';
@@ -1651,7 +1652,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
     try {
       e.currentTarget.focus({ preventScroll: true });
       e.currentTarget.setPointerCapture(e.pointerId);
-    } catch {}
+    } catch { }
 
     if (eventShieldRef.current) {
       eventShieldRef.current.style.display = 'block';
@@ -1743,8 +1744,8 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
       const activeKey = layerKeyOverride || selectedLayer;
       if (!activeKey) return;
       const renderedElement = latestElementsRef.current[activeKey] || elements[activeKey] || activeElement;
-      const owner = kind==='component' ? payload.owner as import('@/lib/slightnudge/component-ownership').ComponentOwner|undefined : undefined;
-      let targetElem = owner ? {...renderedElement,filePath:owner.filePath,line:owner.line,column:owner.column,tag:owner.tagName,id:''} : renderedElement;
+      const owner = kind === 'component' ? payload.owner as import('@/lib/slightnudge/component-ownership').ComponentOwner | undefined : undefined;
+      let targetElem = owner ? { ...renderedElement, filePath: owner.filePath, line: owner.line, column: owner.column, tag: owner.tagName, id: '' } : renderedElement;
       const fileHead = draftHeads(reviewRef.current)[targetElem.filePath];
       if (usesDrafts && !fileHead && Object.keys(draftHeads(reviewRef.current)).length >= 16) {
         showToast('This change set already contains 16 files. Save it before editing another source file.');
@@ -1836,7 +1837,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
             });
             if (usesDrafts && result.renderPatches) {
               const checked = await sourceCanvas.current.command('check', actualSelection, { patches: composedPatches });
-              if (checked?.renderPatches) { const owned=result.renderPatches; result.renderPatches = checked.renderPatches.filter(patch => owned.some(candidate=>candidate.before.path===patch.before.path&&candidate.before.line===patch.before.line&&candidate.before.column===patch.before.column&&candidate.before.elementId===patch.before.elementId)); }
+              if (checked?.renderPatches) { const owned = result.renderPatches; result.renderPatches = checked.renderPatches.filter(patch => owned.some(candidate => candidate.before.path === patch.before.path && candidate.before.line === patch.before.line && candidate.before.column === patch.before.column && candidate.before.elementId === patch.before.elementId)); }
             }
           } catch (error) {
             if (result.id) await discardEditAPI(result.id);
@@ -1849,11 +1850,13 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
             if (selectedLayer === activeKey) sourceSelection.current = rendered;
             sourceCanvas.current?.updateSelectionRect?.(rendered.rect);
           }
-          setElements(previous => ({ ...previous, [activeKey]: {
-            ...previous[activeKey], ...(rendered ? elementFromSource(rendered) : {}),
-            classes: result.newClassName || previous[activeKey].classes,
-            text: kind === 'text' ? payload.value : previous[activeKey].text,
-          } }));
+          setElements(previous => ({
+            ...previous, [activeKey]: {
+              ...previous[activeKey], ...(rendered ? elementFromSource(rendered) : {}),
+              classes: result.newClassName || previous[activeKey].classes,
+              text: kind === 'text' ? payload.value : previous[activeKey].text,
+            }
+          }));
           if (pendingOverlayResetKeyRef.current === activeKey) {
             setOverlayResetTick(tick => tick + 1);
           }
@@ -1894,7 +1897,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
         if (queuedSelectionRef.current !== undefined) {
           const key = queuedSelectionRef.current; queuedSelectionRef.current = undefined;
           setSelectedLayerState(key);
-          if (key && sourceSelections.current[key]) { sourceSelection.current = sourceSelections.current[key]; void sourceCanvas.current?.command('select', sourceSelections.current[key]).catch(() => {}); }
+          if (key && sourceSelections.current[key]) { sourceSelection.current = sourceSelections.current[key]; void sourceCanvas.current?.command('select', sourceSelections.current[key]).catch(() => { }); }
         }
       }
     },
@@ -2272,7 +2275,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
         if (gesture.capture.hasPointerCapture(gesture.pointerId)) {
           gesture.capture.releasePointerCapture(gesture.pointerId);
         }
-      } catch {}
+      } catch { }
 
       const overlayNode = elementRefs.current[gesture.key];
 
@@ -2366,7 +2369,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
                 );
               },
             }
-          ).catch(() => {});
+          ).catch(() => { });
         } else {
           if (gesture.targetEl) {
             if (gesture.initialTargetStyle === null) gesture.targetEl.removeAttribute('style');
@@ -2446,7 +2449,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
                 resetOverlayNode(gesture.key);
               },
             }
-          ).catch(() => {});
+          ).catch(() => { });
         } else {
           if (gesture.targetEl) {
             if (gesture.initialTargetStyle === null) gesture.targetEl.removeAttribute('style');
@@ -2490,7 +2493,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
         if (gesture.capture.hasPointerCapture(gesture.pointerId)) {
           gesture.capture.releasePointerCapture(gesture.pointerId);
         }
-      } catch {}
+      } catch { }
 
       delete pendingDirectStyleRef.current[gesture.key];
       delete inFlightMoveRef.current[gesture.key];
@@ -2554,10 +2557,10 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
     const nextWidth = event.key === 'Home'
       ? 1
       : event.key === 'End'
-      ? 2048
-      : event.key === 'ArrowRight' || event.key === 'ArrowDown'
-      ? current + step
-      : Math.max(1, current - step);
+        ? 2048
+        : event.key === 'ArrowRight' || event.key === 'ArrowDown'
+          ? current + step
+          : Math.max(1, current - step);
     const next = snapWidth(nextWidth, rem);
     const key = selectedLayer;
     const targetElem = elements[key] || activeElement;
@@ -2658,7 +2661,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
       if (frame.edit) {
         if (frame.edit.groupTransactionId) {
           const group = await changeSetAPI('status', frame.edit.groupTransactionId, [], repositoryId);
-          if (group.success && ['saved','undone'].includes(group.state || '')) { setElements(rebaseDraftElements(frame.elements, frame.edit)); storeDraft(null); setReview(null); }
+          if (group.success && ['saved', 'undone'].includes(group.state || '')) { setElements(rebaseDraftElements(frame.elements, frame.edit)); storeDraft(null); setReview(null); }
           else { setUncertainApplyId(frame.edit.id); showToast(group.error || 'This change set needs recovery. Use Resume Save.'); }
           return true;
         }
@@ -2678,8 +2681,10 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
       accepted: appliedSnapshots.current.slice(repositoryId ? -20 : -5).map(compact),
       breakpoint, activeBreakpoint, activeVariant, viewportWidth,
     };
-    const record = saveStudioRecovery({ kind, previewId: edit.id, editId: edit.editId, filePath: edit.filePath,
-      repositoryId, sourcePath: repositoryId ? editPath(edit) : undefined, view });
+    const record = saveStudioRecovery({
+      kind, previewId: edit.id, editId: edit.editId, filePath: edit.filePath,
+      repositoryId, sourcePath: repositoryId ? editPath(edit) : undefined, view
+    });
     recoveryRecordRef.current = record;
     return record;
   };
@@ -2806,7 +2811,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [repositoryId]);
 
-  const runGroupOperation = async (kind: 'save'|'undo', initial: PendingEdit, recovering = false) => {
+  const runGroupOperation = async (kind: 'save' | 'undo', initial: PendingEdit, recovering = false) => {
     if ((operationRef.current || busy || isApplying) && !recovering) return;
     operationRef.current = true; setIsApplying(true);
     let edit = initial, committed = false;
@@ -2818,7 +2823,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
         edit = { ...edit, groupTransactionId: crypto.randomUUID(), renderPatches: checked?.renderPatches || draftPatches(edit) };
         setReview(edit);
         const current = draftRef.current;
-        if (current) storeDraft({ ...current, frames: current.frames.map((frame,index) => index === current.cursor ? { ...frame, edit } : frame) });
+        if (current) storeDraft({ ...current, frames: current.frames.map((frame, index) => index === current.cursor ? { ...frame, edit } : frame) });
       }
       preserveOperation(kind === 'save' ? 'apply' : 'undo', edit);
       if (kind === 'save' && !recovering && !uncertainApplyId && edit.renderPatches?.some(patch => patch.order)) await sourceCanvas.current?.command('restore', null, { patches: [] });
@@ -2828,7 +2833,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
           const unbound = { ...edit, groupTransactionId: undefined };
           setReview(unbound); finishOperationRecovery(); setUncertainApplyId(null); setGroupProgress(result);
           const current = draftRef.current;
-          if (current) storeDraft({ ...current, frames: current.frames.map((frame,index) => index === current.cursor ? { ...frame, edit: unbound } : frame) });
+          if (current) storeDraft({ ...current, frames: current.frames.map((frame, index) => index === current.cursor ? { ...frame, edit: unbound } : frame) });
           showToast(result.error || 'The change set was refused before source writes. Your draft is preserved.'); return;
         }
         if (kind === 'save') { setReview(edit); setUncertainApplyId(edit.id); }
@@ -3209,7 +3214,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
 
     inlineCommittingRef.current = true; setInlineCommitKey(key);
     const prop = inlinePropRef.current?.key === key ? inlinePropRef.current : null; inlinePropRef.current = null;
-    void triggerBackendPreview(prop ? 'component' : 'text', { value: text, ...(prop ? { property: prop.property, owner:prop.owner, definition:prop.definition } : {}) }, key, () => setElements(previous => ({ ...previous, [key]: { ...previous[key], text } }))).then(async success => {
+    void triggerBackendPreview(prop ? 'component' : 'text', { value: text, ...(prop ? { property: prop.property, owner: prop.owner, definition: prop.definition } : {}) }, key, () => setElements(previous => ({ ...previous, [key]: { ...previous[key], text } }))).then(async success => {
       if (!success) await sourceCanvas.current?.command('cancel-text', sourceSelections.current[key]);
     }).catch(error => showToast(error.message)).finally(() => {
       inlineCommittingRef.current = false; setInlineCommitKey(null);
@@ -3221,7 +3226,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
     activeInlineInspection.current = null;
     deferredInlineCommit.current = null;
     inlineSessionRef.current = null; setIsInlineEditing(false); setDraftText(elements[key]?.text || '');
-    void sourceCanvas.current?.command('cancel-text', sourceSelections.current[key]).catch(() => {});
+    void sourceCanvas.current?.command('cancel-text', sourceSelections.current[key]).catch(() => { });
   };
   useEffect(() => {
     if (busy || operationRef.current || !deferredInlineCommit.current) return;
@@ -3299,7 +3304,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
   };
 
   const toggleBold = () => {
-    const isBold = Number(previewStyleFor(activeElement).fontWeight) >= 700 || (!activeVariant && ['Bold', 'Extra Bold'].includes(activeElement.fontWeight)) || scopeTokens(activeElement.classes).some(token => ['font-bold','font-extrabold','font-black'].includes(token));
+    const isBold = Number(previewStyleFor(activeElement).fontWeight) >= 700 || (!activeVariant && ['Bold', 'Extra Bold'].includes(activeElement.fontWeight)) || scopeTokens(activeElement.classes).some(token => ['font-bold', 'font-extrabold', 'font-black'].includes(token));
     const nextVal = isBold ? 'font-normal' : 'font-bold';
     updateStyle('fontWeight', nextVal);
   };
@@ -3330,7 +3335,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
   };
   const currentGapClass = activeElement.classes.match(/gap-(\d+)/)?.[0] || 'gap-2';
   const currentGapLabel = currentGapClass.replace('gap-', '');
-  const isBold = Number(previewStyleFor(activeElement).fontWeight) >= 700 || (!activeVariant && ['Bold', 'Extra Bold'].includes(activeElement.fontWeight)) || scopeTokens(activeElement.classes).some(token => ['font-bold','font-extrabold','font-black'].includes(token));
+  const isBold = Number(previewStyleFor(activeElement).fontWeight) >= 700 || (!activeVariant && ['Bold', 'Extra Bold'].includes(activeElement.fontWeight)) || scopeTokens(activeElement.classes).some(token => ['font-bold', 'font-extrabold', 'font-black'].includes(token));
   const isItalic = scopeTokens(activeElement.classes).includes('italic');
   const isUnderline = scopeTokens(activeElement.classes).includes('underline');
 
@@ -3376,10 +3381,10 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
   const renderHUDBar = () => {
     if (!selectedLayer || activeElement.tag === 'svg') return null;
     const locked = busy || isApplying || reviewBlocking || Boolean(uncertainUndoId) || destinationMode || viewportChanging || Boolean(activeBreakpoint) && scopeLoading;
-    if(activeElement.instance && !editingDefinitionStyles)return createPortal(<div ref={formattingRef} role="toolbar" aria-label="Selection formatting" className={reviewStyles.floatingFormatting} data-menu-side={formattingPosition?.menuSide} data-menu-align={formattingPosition?.menuAlign} style={{position:'fixed',left:formattingPosition?.left||0,top:formattingPosition?.top||0,visibility:formattingPosition?.visible?'visible':'hidden'}} onClick={event=>event.stopPropagation()}><div className={reviewStyles.formattingBar}>
-      {isTextElement&&<button type="button" className={reviewStyles.editTextControl} disabled={locked} onClick={()=>beginInlineText(selectedLayer)}><Pencil size={13}/><span>Edit text</span></button>}
-      <button type="button" className={reviewStyles.editTextControl} disabled={locked} onClick={()=>{setWindowPanel('inspector');setRightDockVisible(true);setRightDockTool('inspect');requestAnimationFrame(()=>document.querySelector<HTMLElement>('[aria-label="Component properties"] textarea, [aria-label="Component properties"] select')?.focus())}}><SlidersHorizontal size={13}/><span>Instance props</span></button>
-    </div></div>,document.body);
+    if (activeElement.instance && !editingDefinitionStyles) return createPortal(<div ref={formattingRef} role="toolbar" aria-label="Selection formatting" className={reviewStyles.floatingFormatting} data-menu-side={formattingPosition?.menuSide} data-menu-align={formattingPosition?.menuAlign} style={{ position: 'fixed', left: formattingPosition?.left || 0, top: formattingPosition?.top || 0, visibility: formattingPosition?.visible ? 'visible' : 'hidden' }} onClick={event => event.stopPropagation()}><div className={reviewStyles.formattingBar}>
+      {isTextElement && <button type="button" className={reviewStyles.editTextControl} disabled={locked} onClick={() => beginInlineText(selectedLayer)}><Pencil size={13} /><span>Edit text</span></button>}
+      <button type="button" className={reviewStyles.editTextControl} disabled={locked} onClick={() => { setWindowPanel('inspector'); setRightDockVisible(true); setRightDockTool('inspect'); requestAnimationFrame(() => document.querySelector<HTMLElement>('[aria-label="Component properties"] textarea, [aria-label="Component properties"] select')?.focus()) }}><SlidersHorizontal size={13} /><span>Instance props</span></button>
+    </div></div>, document.body);
     const parentKey = sourceSelections.current[selectedLayer]?.parentKey;
     const siblings = parentKey ? sourceLayers.filter(layer => layer.parentKey === parentKey && layer.path === activeElement.filePath && (layer.computed.order || '0') === (sourceSelections.current[selectedLayer]?.computed.order || '0')) : [];
     const siblingIndex = siblings.findIndex(layer => layer.key === selectedLayer);
@@ -3509,12 +3514,12 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
           ))}
           {canArrange && <div className={reviewStyles.arrangeOptions} role="group" aria-label="Order in container">
             <span>Order in container</span><div>
-              <button type="button" disabled={locked || siblingIndex === 0} onClick={() => { setShowQuickActions(false); reorderSibling('earlier'); }}><ArrowUp size={13}/><span>Move earlier</span></button>
-              <button type="button" disabled={locked || siblingIndex === siblings.length - 1} onClick={() => { setShowQuickActions(false); reorderSibling('later'); }}><ArrowDown size={13}/><span>Move later</span></button>
+              <button type="button" disabled={locked || siblingIndex === 0} onClick={() => { setShowQuickActions(false); reorderSibling('earlier'); }}><ArrowUp size={13} /><span>Move earlier</span></button>
+              <button type="button" disabled={locked || siblingIndex === siblings.length - 1} onClick={() => { setShowQuickActions(false); reorderSibling('later'); }}><ArrowDown size={13} /><span>Move later</span></button>
             </div>
           </div>}
           <div className={reviewStyles.formatMenuFooter}>
-            {usesDrafts && !activeVariant && !activeBreakpoint && <button type="button" disabled={locked} onClick={() => { if (!selectedLayer) return; destinationSource.current = selectedLayer; setDestinationMode(true); setShowQuickActions(false); }}><ArrowUpRight size={13}/><span>Move to…</span></button>}
+            {usesDrafts && !activeVariant && !activeBreakpoint && <button type="button" disabled={locked} onClick={() => { if (!selectedLayer) return; destinationSource.current = selectedLayer; setDestinationMode(true); setShowQuickActions(false); }}><ArrowUpRight size={13} /><span>Move to…</span></button>}
             <button type="button" onClick={async () => {
               try { await navigator.clipboard.writeText(activeElement.classes); showToast('Styles copied'); }
               catch { showToast('Could not copy styles. Check browser clipboard access.'); }
@@ -3568,8 +3573,8 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
           (selection.computed.backgroundColor &&
             selection.computed.backgroundColor !== 'rgba(0, 0, 0, 0)' &&
             selection.computed.backgroundColor !== 'transparent') ||
-            selection.attributes?.role === 'button' ||
-            /\b(btn|button|bg-|rounded-)\b/.test(renderedElem.classes || '')
+          selection.attributes?.role === 'button' ||
+          /\b(btn|button|bg-|rounded-)\b/.test(renderedElem.classes || '')
         ));
 
     const chrome = selectionStyleFor({
@@ -3592,10 +3597,10 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
     const chromeGeom: SelectionChromeGeometry | null =
       transformChain.length > 0
         ? computeSelectionChromeGeometry(
-            transformChain,
-            { originX: 0, originY: 0, panX: 0, panY: 0, zoom: 1 },
-            chrome.visibleHandles
-          )
+          transformChain,
+          { originX: 0, originY: 0, panX: 0, panY: 0, zoom: 1 },
+          chrome.visibleHandles
+        )
         : null;
     const isOriented = Boolean(chromeGeom?.isNonTrivialTransform);
 
@@ -3603,21 +3608,21 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
     const outlinePath =
       chromeGeom && isOriented
         ? buildQuadOutlinePath(
-            transformQuadByOffset(chromeGeom.prediction.quad, -selection.rect.left, -selection.rect.top),
-            2
-          )
+          transformQuadByOffset(chromeGeom.prediction.quad, -selection.rect.left, -selection.rect.top),
+          2
+        )
         : buildRoundedRectPath(
-            -2,
-            -2,
-            currentW + 4,
-            currentH + 4,
-            {
-              tl: chrome.outlineRadii.tl + (chrome.outlineRadii.tl > 0 ? 2 : 0),
-              tr: chrome.outlineRadii.tr + (chrome.outlineRadii.tr > 0 ? 2 : 0),
-              br: chrome.outlineRadii.br + (chrome.outlineRadii.br > 0 ? 2 : 0),
-              bl: chrome.outlineRadii.bl + (chrome.outlineRadii.bl > 0 ? 2 : 0),
-            }
-          );
+          -2,
+          -2,
+          currentW + 4,
+          currentH + 4,
+          {
+            tl: chrome.outlineRadii.tl + (chrome.outlineRadii.tl > 0 ? 2 : 0),
+            tr: chrome.outlineRadii.tr + (chrome.outlineRadii.tr > 0 ? 2 : 0),
+            br: chrome.outlineRadii.br + (chrome.outlineRadii.br > 0 ? 2 : 0),
+            bl: chrome.outlineRadii.bl + (chrome.outlineRadii.bl > 0 ? 2 : 0),
+          }
+        );
 
     const toggleAspectLock = (e: React.MouseEvent) => {
       e.stopPropagation();
@@ -3729,29 +3734,29 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
             gripTop = gripPt.y - selection.rect.top;
           }
           return (
-          <button
-            ref={el => { radiusGripRef.current[layerKey] = el; }}
-            type="button"
-            role="slider"
-            data-base-left={`${gripLeft}px`}
-            data-base-top={`${gripTop}px`}
-            aria-label="Adjust corner radius"
-            title="Drag to adjust corner radius (Arrow keys to change step)"
-            aria-valuemin={0}
-            aria-valuemax={Math.round(Math.min(boxW, boxH) / 2)}
-            aria-valuenow={Math.round(chrome.effectiveRadius)}
-            aria-valuetext={`${Math.round(chrome.effectiveRadius)}px radius`}
-            className={reviewStyles.radiusGrip}
-            style={{
-              left: `${gripLeft}px`,
-              top: `${gripTop}px`,
-            }}
-            onPointerDown={startRadiusDrag}
-            onKeyDown={handleRadiusKeyDown}
-            onClick={e => e.stopPropagation()}
-          >
-            <span className={reviewStyles.radiusGripDot} />
-          </button>
+            <button
+              ref={el => { radiusGripRef.current[layerKey] = el; }}
+              type="button"
+              role="slider"
+              data-base-left={`${gripLeft}px`}
+              data-base-top={`${gripTop}px`}
+              aria-label="Adjust corner radius"
+              title="Drag to adjust corner radius (Arrow keys to change step)"
+              aria-valuemin={0}
+              aria-valuemax={Math.round(Math.min(boxW, boxH) / 2)}
+              aria-valuenow={Math.round(chrome.effectiveRadius)}
+              aria-valuetext={`${Math.round(chrome.effectiveRadius)}px radius`}
+              className={reviewStyles.radiusGrip}
+              style={{
+                left: `${gripLeft}px`,
+                top: `${gripTop}px`,
+              }}
+              onPointerDown={startRadiusDrag}
+              onKeyDown={handleRadiusKeyDown}
+              onClick={e => e.stopPropagation()}
+            >
+              <span className={reviewStyles.radiusGripDot} />
+            </button>
           );
         })()}
 
@@ -3787,10 +3792,10 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
               const cursorClass = isOriented
                 ? ''
                 : h.dir === 'ne' || h.dir === 'sw'
-                ? reviewStyles.westCorner
-                : h.dir === 'nw' || h.dir === 'se'
-                ? reviewStyles.eastCorner
-                : '';
+                  ? reviewStyles.westCorner
+                  : h.dir === 'nw' || h.dir === 'se'
+                    ? reviewStyles.eastCorner
+                    : '';
 
               return (
                 <button
@@ -3815,6 +3820,11 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
                 >
                   {isArc ? (
                     <span className={reviewStyles.handleHitArea} />
+                  ) : !isOriented && !isCorner && (chrome.variant === 'arc' || chrome.variant === 'capsule' || chrome.variant === 'text') ? (
+                    <span
+                      className={`${reviewStyles.handleBar} ${h.dir === 'n' || h.dir === 's' ? reviewStyles.handleBarH : reviewStyles.handleBarV
+                        }`}
+                    />
                   ) : (
                     <span className={reviewStyles.handleDot} />
                   )}
@@ -3867,7 +3877,8 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
     viewport={breakpoint} requestedWidth={viewportWidth}
     disabled={busy || isApplying || isInlineEditing || isResizing || moveArmed || Boolean(liveMove)}
     onViewport={(value, width) => { setBreakpoint(value); setViewportWidth(width); }}
-    responsive={{ width: actualViewportWidth, requestedWidth: viewportWidth, scope: activeBreakpoint, scopes: resolvedResponsiveScopes, loading: scopeLoading, error: scopeError, scopeDisabled: !usesDrafts,
+    responsive={{
+      width: actualViewportWidth, requestedWidth: viewportWidth, scope: activeBreakpoint, scopes: resolvedResponsiveScopes, loading: scopeLoading, error: scopeError, scopeDisabled: !usesDrafts,
       disabled: !sourceReady || busy || isApplying || isInlineEditing || isResizing || moveArmed || destinationMode || Boolean(liveMove) || Boolean(uncertainApplyId) || Boolean(uncertainUndoId),
       onWidth: setViewportWidth,
       onScope: name => { setActiveBreakpoint(name); setActiveVariant(''); const scope = resolvedResponsiveScopes.find(item => item.name === name); if (scope) setViewportWidth(Math.ceil(scope.minWidth)); }
@@ -3910,7 +3921,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
 
       {/* Main Studio Shell: Fullscreen SlightNudge SaaS Environment */}
       <div aria-label="Visual editing workspace" aria-busy={busy || isApplying || recoveryBooting || recoveryChecking} data-editor-view={unified ? view : undefined} data-editor-legacy={!unified || undefined} data-window-panel={windowPanel || ''} data-focus-mode={!windowMode && focusMode || undefined} data-inspector-collapsed={!windowMode && inspectorCollapsed || undefined} data-selected-source={repositoryId && selectedLayer ? `${activeElement.filePath}:${activeElement.line}:${activeElement.column}:${activeElement.tag}` : undefined} className={`${reviewStyles.studioShell} ${windowMode ? reviewStyles.windowShell : reviewStyles.classicShell} fixed inset-0 z-50 flex flex-col h-screen w-screen bg-[#F8F9FA] select-none text-slate-800 text-xs overflow-hidden`}>
-        {historyOpen && createPortal(<ChangeHistory repositoryId={repositoryId} draft={draft?.frames.slice(1).map((frame, index) => ({ summary: frame.edit?.summary || 'Restored original value', state: index < draft.cursor ? 'draft' as const : 'redo' as const })) || []} recovery={Boolean(uncertainApplyId || uncertainUndoId || restoredOperation || recoveryError)} onClose={() => setHistoryOpen(false)}/>, document.body)}
+        {historyOpen && createPortal(<ChangeHistory repositoryId={repositoryId} draft={draft?.frames.slice(1).map((frame, index) => ({ summary: frame.edit?.summary || 'Restored original value', state: index < draft.cursor ? 'draft' as const : 'redo' as const })) || []} recovery={Boolean(uncertainApplyId || uncertainUndoId || restoredOperation || recoveryError)} onClose={() => setHistoryOpen(false)} />, document.body)}
         {recoveryBooting && <p role="status" className={reviewStyles.recoveryBootStatus}>Checking your saved draft…</p>}
         {(restoredOperation || recoveryError) && <div className={reviewStyles.recoveryOverlay}>
           <section className={reviewStyles.recoveryCard} role="dialog" aria-modal="true" aria-label="Recover previous source operation">
@@ -3927,1066 +3938,1062 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
           </section>
         </div>}
         <div style={{ display: 'contents' }} inert={recoveryBooting || Boolean(restoredOperation) || Boolean(recoveryError)}>
-        
-        {/* Toast Notification */}
-        {toastMessage && (
-          <div role="status" aria-label="Editor notice" className="fixed top-4 left-1/2 -translate-x-1/2 z-[115] bg-[#14221c]/95 backdrop-blur-md text-slate-50 text-xs font-medium px-4 py-2 rounded-full shadow-2xl flex items-center space-x-2 border border-white/10 animate-fade-in">
-            <span>{toastMessage}</span>
-          </div>
-        )}
 
-        {/* Workspace Body: Left Sidebar + Center Canvas + Right Inspector */}
-        <div data-editor-workspace className="min-h-0 flex-1 flex overflow-hidden">
-
-          {/* ======================================================== */}
-          {/* LEFT SIDEBAR / FLOATING LIGHT DOCK                       */}
-          {/* ======================================================== */}
-          {windowMode ? (
-            <LeftToolDock
-              visible={leftDockVisible}
-              activeTool={leftDockTool}
-              onToggleTool={(tool) => {
-                setLeftDockVisible(true);
-                setLeftDockTool(tool);
-              }}
-              onClose={() => {
-                setLeftDockVisible(false);
-              }}
-              sourceLayers={sourceLayers}
-              selectedLayer={selectedLayer}
-              onSelectLayer={setSelectedLayer}
-              pages={pages.filter(page => /^fixture-[1-5]$/.test(page.id))}
-              selectedPage={selectedPage}
-              onSelectPage={(page) => {
-                if (operationRef.current || blocksReview() || undoRecoveryRef.current) {
-                  showToast(undoRecoveryRef.current ? 'Check Undo status before making another change.' : reviewNotice);
-                  return;
-                }
-                if (draftRef.current && page.id !== selectedPage.id) {
-                  showToast('Save or discard this page’s draft before switching source files.');
-                  return;
-                }
-                setSelectedLayerState(null);
-                setSourceReady(false);
-                setSourceLayers([]);
-                setSelectedPage(page);
-                showToast(`Opened ${page.title}`);
-              }}
-              activeElement={activeElement}
-              repositoryId={repositoryId}
-              uncertainUndoId={uncertainUndoId}
-              onUndo={handleUndo}
-            />
-          ) : (
-          <aside data-editor-panel="layers" className="w-60 bg-white border-r border-[#E5E7EB] flex flex-col shrink-0 z-20">
-            {windowMode && <div className={reviewStyles.windowPanelHeader}><strong>Layers</strong><button type="button" aria-label="Close layers" onClick={() => setWindowPanel(null)}><X size={14}/></button></div>}
-            {/* Brand header aligns with the editor toolbar. */}
-            <div data-editor-brand className="h-12 px-3 border-b border-[#E5E7EB] flex items-center justify-between shrink-0 bg-white select-none">
-              <Link href="/workspace" className="flex items-center space-x-2 text-slate-900 hover:opacity-85 transition" title="Back to workspace">
-                <Image
-                  src="/icon.svg"
-                  alt="SlightNudge"
-                  width={20}
-                  height={20}
-                  className="w-5 h-5 rounded-md shadow-2xs object-contain"
-                  unoptimized
-                />
-                <span className="font-semibold text-xs tracking-tight text-[#26342C]">SlightNudge</span>
-              </Link>
-
-              {!windowMode && <details ref={workspaceMenuRef} className={reviewStyles.workspaceMenu}>
-                <summary aria-label="Workspace options" title="Workspace options"><MoreHorizontal size={16}/></summary>
-                <div>
-                  <strong title={repositoryId || selectedPage.title}>{repositoryId || selectedPage.title}</strong>
-                  <Link href="/workspace">Projects <ArrowUpRight size={13}/></Link>
-                  <button type="button" disabled={!sourceReady || busy || isApplying || recoveryBooting || recoveryChecking || reviewBlocking || Boolean(uncertainUndoId)} onClick={event => { sourceCanvas.current?.openWindow(); event.currentTarget.closest('details')?.removeAttribute('open'); }}>Open editing window <ArrowUpRight size={13}/></button>
-                  <button type="button" onClick={event => { setFocusMode(true); event.currentTarget.closest('details')?.removeAttribute('open'); }}>Focus canvas</button>
-                </div>
-              </details>}
+          {/* Toast Notification */}
+          {toastMessage && (
+            <div role="status" aria-label="Editor notice" className="fixed top-4 left-1/2 -translate-x-1/2 z-[115] bg-[#14221c]/95 backdrop-blur-md text-slate-50 text-xs font-medium px-4 py-2 rounded-full shadow-2xl flex items-center space-x-2 border border-white/10 animate-fade-in">
+              <span>{toastMessage}</span>
             </div>
-
-            {/* 2. Sidebar Tabs: Layers & Pages */}
-            <div data-editor-tabs className="h-11 px-3 border-b border-[#F1F5F9] flex items-center justify-between text-xs shrink-0 bg-white" role="group" aria-label="Workspace panels">
-              <div className="flex items-center space-x-3 h-full">
-                <button
-                  aria-pressed={sidebarTab === 'layers'} onClick={() => setSidebarTab('layers')}
-                  className={`h-full flex items-center space-x-1.5 font-medium border-b-2 transition ${
-                    sidebarTab === 'layers'
-                      ? 'border-[#059669] text-slate-900 font-semibold'
-                      : 'border-transparent text-slate-500 hover:text-slate-700'
-                  }`}
-                >
-                  <Layers2 size={15} strokeWidth={1.7} aria-hidden="true"/>
-                  <span>Layers</span>
-                </button>
-
-                {!repositoryId && <button
-                  aria-pressed={sidebarTab === 'pages'} onClick={() => setSidebarTab('pages')}
-                  className={`h-full flex items-center space-x-1.5 font-medium border-b-2 transition ${
-                    sidebarTab === 'pages'
-                      ? 'border-[#059669] text-slate-900 font-semibold'
-                      : 'border-transparent text-slate-500 hover:text-slate-700'
-                  }`}
-                >
-                  <FileText size={15} strokeWidth={1.7} aria-hidden="true"/>
-                  <span>Pages</span>
-                </button>}
-              </div>
-
-            </div>
-
-            {/* Sidebar Content: Layers Tree OR Pages List */}
-            {repositoryId || sidebarTab === 'layers' ? (
-              <SourceLayers layers={sourceLayers} selected={selectedLayer} onSelect={setSelectedLayer} />
-            ) : (
-              /* Pages Selection Panel: Pure Native List */
-              <div className="flex-1 overflow-y-auto px-2 py-3 space-y-0.5 text-xs text-slate-700">
-                {pages.filter(page => /^fixture-[1-5]$/.test(page.id)).map((page) => {
-                  const isSelected = selectedPage.id === page.id;
-                  return (
-                    <div
-                      key={page.id}
-                      onClick={() => {
-                        if (operationRef.current || blocksReview() || undoRecoveryRef.current) { showToast(undoRecoveryRef.current ? 'Check Undo status before making another change.' : reviewNotice); return; }
-                        if (draftRef.current && page.id !== selectedPage.id) {
-                          showToast('Save or discard this page’s draft before switching source files.');
-                          return;
-                        }
-                        setSelectedLayerState(null); setSourceReady(false); setSourceLayers([]); setSelectedPage(page);
-                        showToast(`Opened ${page.title}`);
-                      }}
-                      className={`flex items-center justify-between px-2 py-1.5 rounded cursor-pointer transition ${
-                        isSelected
-                          ? 'bg-[#EFF5F0] text-[#1B5E3B] font-medium'
-                          : 'hover:bg-slate-50 text-slate-700'
-                      }`}
-                    >
-                      <div className="flex items-center space-x-2 truncate">
-                        <svg
-                          className={`w-3.5 h-3.5 shrink-0 ${isSelected ? 'text-[#059669]' : 'text-slate-400'}`}
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                        >
-                          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                          <polyline points="14 2 14 8 20 8" />
-                        </svg>
-                        <span className="text-[11.5px] truncate">{page.title}</span>
-                      </div>
-
-                      <span className={`text-[10px] font-mono shrink-0 ml-2 ${isSelected ? 'text-[#059669]' : 'text-slate-400'}`}>
-                        {page.route}
-                      </span>
-                    </div>
-                  );
-                })}
-              </div>
-            )}
-
-            {/* Bottom Actions: Undo & Source Location */}
-            <div className="border-t border-[#F1F5F9] p-2.5 shrink-0 space-y-2">
-              {uncertainUndoId && <p role="status" className="px-2 text-[11px] text-amber-800">Undo status unconfirmed. Editing is paused until it is checked.</p>}
-              {uncertainUndoId && <button
-                onClick={handleUndo}
-                className="w-full flex items-center justify-between px-2.5 py-1.5 rounded bg-slate-50 hover:bg-slate-100 text-slate-700 font-medium text-[11px] transition"
-                title="Undo last source edit (Ctrl+Z)"
-              >
-                <span className="flex items-center space-x-1.5">
-                  <Undo2 size={13} className="text-slate-500" />
-                  <span>{uncertainUndoId ? undoRecoveryRef.current?.groupTransactionId ? 'Resume Undo' : 'Check Undo status' : 'Undo edit'}</span>
-                </span>
-                <span className="text-[9px] font-mono text-slate-400">Ctrl+Z</span>
-              </button>}
-
-              <div className="flex items-center gap-2 px-2 py-1.5 text-[11px] text-slate-400" title={activeElement.filePath}>
-                <Code2 size={13} className="shrink-0" />
-                <span className="truncate">{repositoryId && !selectedLayer ? 'Select an element' : (selectedLayer ? activeElement.filePath : selectedPage.file).split(/[\\/]/).pop()}</span>
-              </div>
-            </div>
-          </aside>
           )}
 
-          {/* ======================================================== */}
-          {/* CENTER CANVAS COLUMN                                     */}
-          {/* ======================================================== */}
-          <div className={`${reviewStyles.editorColumn} flex-1 flex flex-col overflow-hidden bg-[#F8F9FA]`}>
-            {windowMode && (
-            <header ref={windowDock.ref} style={windowMode ? windowDock.style : undefined} className={reviewStyles.editorTopbar} aria-label="Editor toolbar">
-              {windowMode && <div className={reviewStyles.windowActions}>
-                <button type="button" aria-label="Move editing toolbar" title="Drag to move · Arrow keys to position · Home to reset" className={reviewStyles.dockGrip} {...windowDock.grip}><GripVertical size={15}/></button>
-                <div role="group" aria-label="Page interaction" className={reviewStyles.interactionMode}>
-                  <button type="button" aria-pressed={!browseMode} onClick={() => setBrowseMode(false)}>Edit</button>
-                  <button type="button" aria-pressed={browseMode} disabled={busy || isApplying} onClick={() => { if (reviewRef.current || inlineSessionRef.current) { showToast('Save or discard your draft before browsing the page.'); return; } setSelectedLayerState(null); setBrowseMode(true); }}>Browse</button>
+          {/* Workspace Body: Left Sidebar + Center Canvas + Right Inspector */}
+          <div data-editor-workspace className="min-h-0 flex-1 flex overflow-hidden">
+
+            {/* ======================================================== */}
+            {/* LEFT SIDEBAR / FLOATING LIGHT DOCK                       */}
+            {/* ======================================================== */}
+            {windowMode ? (
+              <LeftToolDock
+                visible={leftDockVisible}
+                activeTool={leftDockTool}
+                onToggleTool={(tool) => {
+                  setLeftDockVisible(true);
+                  setLeftDockTool(tool);
+                }}
+                onClose={() => {
+                  setLeftDockVisible(false);
+                }}
+                sourceLayers={sourceLayers}
+                selectedLayer={selectedLayer}
+                onSelectLayer={setSelectedLayer}
+                pages={pages.filter(page => /^fixture-[1-5]$/.test(page.id))}
+                selectedPage={selectedPage}
+                onSelectPage={(page) => {
+                  if (operationRef.current || blocksReview() || undoRecoveryRef.current) {
+                    showToast(undoRecoveryRef.current ? 'Check Undo status before making another change.' : reviewNotice);
+                    return;
+                  }
+                  if (draftRef.current && page.id !== selectedPage.id) {
+                    showToast('Save or discard this page’s draft before switching source files.');
+                    return;
+                  }
+                  setSelectedLayerState(null);
+                  setSourceReady(false);
+                  setSourceLayers([]);
+                  setSelectedPage(page);
+                  showToast(`Opened ${page.title}`);
+                }}
+                activeElement={activeElement}
+                repositoryId={repositoryId}
+                uncertainUndoId={uncertainUndoId}
+                onUndo={handleUndo}
+              />
+            ) : (
+              <aside data-editor-panel="layers" className="w-60 bg-white border-r border-[#E5E7EB] flex flex-col shrink-0 z-20">
+                {windowMode && <div className={reviewStyles.windowPanelHeader}><strong>Layers</strong><button type="button" aria-label="Close layers" onClick={() => setWindowPanel(null)}><X size={14} /></button></div>}
+                {/* Brand header aligns with the editor toolbar. */}
+                <div data-editor-brand className="h-12 px-3 border-b border-[#E5E7EB] flex items-center justify-between shrink-0 bg-white select-none">
+                  <Link href="/workspace" className="flex items-center space-x-2 text-slate-900 hover:opacity-85 transition" title="Back to workspace">
+                    <Image
+                      src="/icon.svg"
+                      alt="SlightNudge"
+                      width={20}
+                      height={20}
+                      className="w-5 h-5 rounded-md shadow-2xs object-contain"
+                      unoptimized
+                    />
+                    <span className="font-semibold text-xs tracking-tight text-[#26342C]">SlightNudge</span>
+                  </Link>
+
+                  {!windowMode && <details ref={workspaceMenuRef} className={reviewStyles.workspaceMenu}>
+                    <summary aria-label="Workspace options" title="Workspace options"><MoreHorizontal size={16} /></summary>
+                    <div>
+                      <strong title={repositoryId || selectedPage.title}>{repositoryId || selectedPage.title}</strong>
+                      <Link href="/workspace">Projects <ArrowUpRight size={13} /></Link>
+                      <button type="button" disabled={!sourceReady || busy || isApplying || recoveryBooting || recoveryChecking || reviewBlocking || Boolean(uncertainUndoId)} onClick={event => { sourceCanvas.current?.openWindow(); event.currentTarget.closest('details')?.removeAttribute('open'); }}>Open editing window <ArrowUpRight size={13} /></button>
+                      <button type="button" onClick={event => { setFocusMode(true); event.currentTarget.closest('details')?.removeAttribute('open'); }}>Focus canvas</button>
+                    </div>
+                  </details>}
                 </div>
-              </div>}
-              {renderCanvasControls()}
-              <div className={reviewStyles.topbarActions}>{renderDraftControls()}</div>
-            </header>
+
+                {/* 2. Sidebar Tabs: Layers & Pages */}
+                <div data-editor-tabs className="h-11 px-3 border-b border-[#F1F5F9] flex items-center justify-between text-xs shrink-0 bg-white" role="group" aria-label="Workspace panels">
+                  <div className="flex items-center space-x-3 h-full">
+                    <button
+                      aria-pressed={sidebarTab === 'layers'} onClick={() => setSidebarTab('layers')}
+                      className={`h-full flex items-center space-x-1.5 font-medium border-b-2 transition ${sidebarTab === 'layers'
+                        ? 'border-[#059669] text-slate-900 font-semibold'
+                        : 'border-transparent text-slate-500 hover:text-slate-700'
+                        }`}
+                    >
+                      <Layers2 size={15} strokeWidth={1.7} aria-hidden="true" />
+                      <span>Layers</span>
+                    </button>
+
+                    {!repositoryId && <button
+                      aria-pressed={sidebarTab === 'pages'} onClick={() => setSidebarTab('pages')}
+                      className={`h-full flex items-center space-x-1.5 font-medium border-b-2 transition ${sidebarTab === 'pages'
+                        ? 'border-[#059669] text-slate-900 font-semibold'
+                        : 'border-transparent text-slate-500 hover:text-slate-700'
+                        }`}
+                    >
+                      <FileText size={15} strokeWidth={1.7} aria-hidden="true" />
+                      <span>Pages</span>
+                    </button>}
+                  </div>
+
+                </div>
+
+                {/* Sidebar Content: Layers Tree OR Pages List */}
+                {repositoryId || sidebarTab === 'layers' ? (
+                  <SourceLayers layers={sourceLayers} selected={selectedLayer} onSelect={setSelectedLayer} />
+                ) : (
+                  /* Pages Selection Panel: Pure Native List */
+                  <div className="flex-1 overflow-y-auto px-2 py-3 space-y-0.5 text-xs text-slate-700">
+                    {pages.filter(page => /^fixture-[1-5]$/.test(page.id)).map((page) => {
+                      const isSelected = selectedPage.id === page.id;
+                      return (
+                        <div
+                          key={page.id}
+                          onClick={() => {
+                            if (operationRef.current || blocksReview() || undoRecoveryRef.current) { showToast(undoRecoveryRef.current ? 'Check Undo status before making another change.' : reviewNotice); return; }
+                            if (draftRef.current && page.id !== selectedPage.id) {
+                              showToast('Save or discard this page’s draft before switching source files.');
+                              return;
+                            }
+                            setSelectedLayerState(null); setSourceReady(false); setSourceLayers([]); setSelectedPage(page);
+                            showToast(`Opened ${page.title}`);
+                          }}
+                          className={`flex items-center justify-between px-2 py-1.5 rounded cursor-pointer transition ${isSelected
+                            ? 'bg-[#EFF5F0] text-[#1B5E3B] font-medium'
+                            : 'hover:bg-slate-50 text-slate-700'
+                            }`}
+                        >
+                          <div className="flex items-center space-x-2 truncate">
+                            <svg
+                              className={`w-3.5 h-3.5 shrink-0 ${isSelected ? 'text-[#059669]' : 'text-slate-400'}`}
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                            >
+                              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                              <polyline points="14 2 14 8 20 8" />
+                            </svg>
+                            <span className="text-[11.5px] truncate">{page.title}</span>
+                          </div>
+
+                          <span className={`text-[10px] font-mono shrink-0 ml-2 ${isSelected ? 'text-[#059669]' : 'text-slate-400'}`}>
+                            {page.route}
+                          </span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+
+                {/* Bottom Actions: Undo & Source Location */}
+                <div className="border-t border-[#F1F5F9] p-2.5 shrink-0 space-y-2">
+                  {uncertainUndoId && <p role="status" className="px-2 text-[11px] text-amber-800">Undo status unconfirmed. Editing is paused until it is checked.</p>}
+                  {uncertainUndoId && <button
+                    onClick={handleUndo}
+                    className="w-full flex items-center justify-between px-2.5 py-1.5 rounded bg-slate-50 hover:bg-slate-100 text-slate-700 font-medium text-[11px] transition"
+                    title="Undo last source edit (Ctrl+Z)"
+                  >
+                    <span className="flex items-center space-x-1.5">
+                      <Undo2 size={13} className="text-slate-500" />
+                      <span>{uncertainUndoId ? undoRecoveryRef.current?.groupTransactionId ? 'Resume Undo' : 'Check Undo status' : 'Undo edit'}</span>
+                    </span>
+                    <span className="text-[9px] font-mono text-slate-400">Ctrl+Z</span>
+                  </button>}
+
+                  <div className="flex items-center gap-2 px-2 py-1.5 text-[11px] text-slate-400" title={activeElement.filePath}>
+                    <Code2 size={13} className="shrink-0" />
+                    <span className="truncate">{repositoryId && !selectedLayer ? 'Select an element' : (selectedLayer ? activeElement.filePath : selectedPage.file).split(/[\\/]/).pop()}</span>
+                  </div>
+                </div>
+              </aside>
             )}
 
-            {usesDrafts && <EditorDraftStatus status={draftStatus}/>}
+            {/* ======================================================== */}
+            {/* CENTER CANVAS COLUMN                                     */}
+            {/* ======================================================== */}
+            <div className={`${reviewStyles.editorColumn} flex-1 flex flex-col overflow-hidden bg-[#F8F9FA]`}>
+              {windowMode && (
+                <header ref={windowDock.ref} style={windowMode ? windowDock.style : undefined} className={reviewStyles.editorTopbar} aria-label="Editor toolbar">
+                  {windowMode && (
+                    <div className={reviewStyles.windowActions}>
+                      <button type="button" aria-label="Move editing toolbar" title="Drag to move · Arrow keys to position · Home to reset" className={reviewStyles.dockGrip} {...windowDock.grip}><GripVertical size={15} /></button>
+                      <div role="group" aria-label="Page interaction" className={reviewStyles.interactionMode}>
+                        <button type="button" aria-pressed={!browseMode} onClick={() => setBrowseMode(false)}>Edit</button>
+                        <button type="button" aria-pressed={browseMode} disabled={busy || isApplying} onClick={() => { if (reviewRef.current || inlineSessionRef.current) { showToast('Save or discard your draft before browsing the page.'); return; } setSelectedLayerState(null); setBrowseMode(true); }}>Browse</button>
+                      </div>
+                    </div>
+                  )}
+                  {renderCanvasControls()}
+                  <div className={reviewStyles.topbarActions}>{renderDraftControls()}</div>
+                </header>
+              )}
 
-            {/* Canvas Main Scroll Area */}
-            <main
-              data-editor-canvas data-free-canvas={!sourceWindowMode || undefined}
-              onClick={() => setSelectedLayer(null)}
-              className="flex-1 overflow-auto bg-[#F8F9FA] relative flex flex-col justify-between p-6 md:p-12 items-center"
-            >
-            {selectedLayer && !browseMode && inspectorActive && !liveMove && !isResizing && !isDraggingMove && !directDragRef.current && renderHUDBar()}
-            {destinationMode && <div className={reviewStyles.destinationBanner} role="status" aria-label="Choose move destination" onClick={event => event.stopPropagation()}><span>Choose a container · Insert at end</span><button type="button" onClick={cancelDestination}>Cancel <kbd>Esc</kbd></button></div>}
-            <EditorSurface mode={mode} view={unified ? view : undefined} width={viewportWidth || (breakpoint === 'mobile' ? 375 : breakpoint === 'tablet' ? 768 : 1200)} zoom={canvasZoom} reset={canvasReset} pan={canvasPan} disabled={busy || isApplying || isInlineEditing || isResizing || moveArmed || Boolean(liveMove)} onZoom={setCanvasZoom}>
-            <SourceProjectCanvas ref={sourceCanvas} repositoryId={repositoryId} localPageId={selectedPage.id} width={artboardWidth} windowMode={sourceWindowMode} continuousDraft={Boolean(repositoryId)} browseMode={browseMode} destinationMode={destinationMode}
-              onViewport={(width, fontSize) => { setActualViewportWidth(width); if (fontSize) setInitialMediaFontSize(fontSize); }}
-              onDestination={selection => { const key = destinationSource.current; if (!key) return; cancelDestination(); void triggerBackendPreview('reparent', { destination: { path: selection.path, line: selection.line, column: selection.column, tagName: selection.tagName, elementId: selection.elementId } }, key); }}
-              blocked={busy || isApplying || recoveryBooting || recoveryChecking || reviewBlocking || Boolean(uncertainUndoId)}
-              onNotice={showToast} onSelect={receiveSourceSelection} onLayers={receiveSourceLayers} onGeometry={receiveSourceGeometry}
-              onReady={() => { setSourceReady(true); needsDraftReplay.current = Boolean(draftRef.current); if (draftRef.current && !operationRef.current && !recoveryBooting && !recoveryChecking && !isApplying) void replaySourceDraft(reviewRef.current); }}
-              onClearSelection={() => { if (!operationRef.current && !blocksReview()) { cancelDestination(); sourceSelection.current = null; setSelectedLayerState(null); if (guideVRef.current) guideVRef.current.style.display = 'none'; if (guideHRef.current) guideHRef.current.style.display = 'none'; if (cursorTagRef.current) cursorTagRef.current.style.display = 'none'; } }}
-              onText={receiveSourceText} renderSelection={renderSourceSelection}
-            />
-            </EditorSurface>
+              {usesDrafts && <EditorDraftStatus status={draftStatus} />}
 
-            {/* Bottom Breadcrumb Bar */}
-            <div data-editor-breadcrumb className="w-full flex items-center justify-between text-[11px] text-slate-500 font-normal mt-4 px-2">
-              <div className="flex items-center space-x-2">
-                <div className="flex items-center space-x-1 hover:text-slate-800 cursor-pointer">
-                  <svg className="w-3 h-3 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <rect x="3" y="3" width="18" height="18" rx="3" />
-                  </svg>
-                  <span>Body</span>
-                </div>
-                <span className="text-slate-300">›</span>
-                <div className="flex items-center space-x-1 text-slate-800 font-medium cursor-pointer">
-                  <svg className="w-3 h-3 text-[#059669]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <rect x="3" y="3" width="18" height="18" rx="3" />
-                  </svg>
-                  <span>{selectedLayer ? activeElement.name : 'Canvas'}</span>
-                </div>
-                {selectedLayer && (
-                  <>
+              {/* Canvas Main Scroll Area */}
+              <main
+                data-editor-canvas data-free-canvas={!sourceWindowMode || undefined}
+                onClick={() => setSelectedLayer(null)}
+                className="flex-1 overflow-auto bg-[#F8F9FA] relative flex flex-col justify-between p-6 md:p-12 items-center"
+              >
+                {selectedLayer && !browseMode && inspectorActive && !liveMove && !isResizing && !isDraggingMove && !directDragRef.current && renderHUDBar()}
+                {destinationMode && <div className={reviewStyles.destinationBanner} role="status" aria-label="Choose move destination" onClick={event => event.stopPropagation()}><span>Choose a container · Insert at end</span><button type="button" onClick={cancelDestination}>Cancel <kbd>Esc</kbd></button></div>}
+                <EditorSurface mode={mode} view={unified ? view : undefined} width={viewportWidth || (breakpoint === 'mobile' ? 375 : breakpoint === 'tablet' ? 768 : 1200)} zoom={canvasZoom} reset={canvasReset} pan={canvasPan} disabled={busy || isApplying || isInlineEditing || isResizing || moveArmed || Boolean(liveMove)} onZoom={setCanvasZoom}>
+                  <SourceProjectCanvas ref={sourceCanvas} repositoryId={repositoryId} localPageId={selectedPage.id} width={artboardWidth} windowMode={sourceWindowMode} continuousDraft={Boolean(repositoryId)} browseMode={browseMode} destinationMode={destinationMode}
+                    onViewport={(width, fontSize) => { setActualViewportWidth(width); if (fontSize) setInitialMediaFontSize(fontSize); }}
+                    onDestination={selection => { const key = destinationSource.current; if (!key) return; cancelDestination(); void triggerBackendPreview('reparent', { destination: { path: selection.path, line: selection.line, column: selection.column, tagName: selection.tagName, elementId: selection.elementId } }, key); }}
+                    blocked={busy || isApplying || recoveryBooting || recoveryChecking || reviewBlocking || Boolean(uncertainUndoId)}
+                    onNotice={showToast} onSelect={receiveSourceSelection} onLayers={receiveSourceLayers} onGeometry={receiveSourceGeometry}
+                    onReady={() => { setSourceReady(true); needsDraftReplay.current = Boolean(draftRef.current); if (draftRef.current && !operationRef.current && !recoveryBooting && !recoveryChecking && !isApplying) void replaySourceDraft(reviewRef.current); }}
+                    onClearSelection={() => { if (!operationRef.current && !blocksReview()) { cancelDestination(); sourceSelection.current = null; setSelectedLayerState(null); if (guideVRef.current) guideVRef.current.style.display = 'none'; if (guideHRef.current) guideHRef.current.style.display = 'none'; if (cursorTagRef.current) cursorTagRef.current.style.display = 'none'; } }}
+                    onText={receiveSourceText} renderSelection={renderSourceSelection}
+                  />
+                </EditorSurface>
+
+                {/* Bottom Breadcrumb Bar */}
+                <div data-editor-breadcrumb className="w-full flex items-center justify-between text-[11px] text-slate-500 font-normal mt-4 px-2">
+                  <div className="flex items-center space-x-2">
+                    <div className="flex items-center space-x-1 hover:text-slate-800 cursor-pointer">
+                      <svg className="w-3 h-3 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <rect x="3" y="3" width="18" height="18" rx="3" />
+                      </svg>
+                      <span>Body</span>
+                    </div>
                     <span className="text-slate-300">›</span>
-                    <span className="text-slate-400 font-mono text-[10px]">{activeElement.tag}</span>
-                  </>
-                )}
-              </div>
+                    <div className="flex items-center space-x-1 text-slate-800 font-medium cursor-pointer">
+                      <svg className="w-3 h-3 text-[#059669]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <rect x="3" y="3" width="18" height="18" rx="3" />
+                      </svg>
+                      <span>{selectedLayer ? activeElement.name : 'Canvas'}</span>
+                    </div>
+                    {selectedLayer && (
+                      <>
+                        <span className="text-slate-300">›</span>
+                        <span className="text-slate-400 font-mono text-[10px]">{activeElement.tag}</span>
+                      </>
+                    )}
+                  </div>
 
-              {/* Source Mapping Pill */}
-              <div className="text-[10px] font-mono text-slate-400 flex items-center space-x-2">
-                <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-                <span>{repositoryId && !selectedLayer ? 'Waiting for live selection' : `${activeElement.filePath}:${activeElement.line}`}</span>
-              </div>
+                  {/* Source Mapping Pill */}
+                  <div className="text-[10px] font-mono text-slate-400 flex items-center space-x-2">
+                    <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                    <span>{repositoryId && !selectedLayer ? 'Waiting for live selection' : `${activeElement.filePath}:${activeElement.line}`}</span>
+                  </div>
+                </div>
+
+                {/* Transparent event shield during active drag */}
+                <div ref={eventShieldRef} className={reviewStyles.eventShield} style={{ display: 'none' }} />
+
+                {/* Smart snapping guides */}
+                <div ref={guideVRef} className={reviewStyles.smartGuideV} style={{ display: 'none' }} />
+                <div ref={guideHRef} className={reviewStyles.smartGuideH} style={{ display: 'none' }} />
+
+                {/* Live W x H dimension tag next to cursor */}
+                <div ref={cursorTagRef} className={reviewStyles.cursorTag} style={{ display: 'none' }} />
+
+              </main>
+              {!windowMode && <div className={reviewStyles.canvasFooter} role="region" aria-label="Canvas controls">
+                <button type="button" className={reviewStyles.panelToggle} aria-label={focusMode ? 'Restore sidebars' : 'Focus canvas'} aria-pressed={focusMode} title={focusMode ? 'Restore sidebars' : 'Focus canvas'} onClick={() => setFocusMode(value => !value)}><Columns2 size={15} /></button>
+                {<div className={reviewStyles.canvasViewTools} role="group" aria-label="Canvas navigation">
+                  <button type="button" aria-label="Select elements" title="Select elements" aria-pressed={!canvasPan} onClick={() => setCanvasPan(false)}><MousePointer2 size={16} /></button>
+                  <button type="button" aria-label="Pan canvas" title="Pan canvas · drag to move the view" aria-pressed={canvasPan} disabled={busy || isApplying || isInlineEditing || isResizing || moveArmed || Boolean(liveMove)} onClick={() => setCanvasPan(value => !value)}><Hand size={16} /></button>
+                  <select aria-label="Canvas zoom" value={canvasZoom} disabled={busy || isApplying || isInlineEditing || isResizing || moveArmed || Boolean(liveMove)} onChange={event => setCanvasZoom(event.target.value === 'fit' ? 'fit' : Number(event.target.value))}>
+                    <option value="fit">Fit page</option>
+                    {[.1, .25, .5, .75, 1, 1.5, 2].map(value => <option key={value} value={value}>{Math.round(value * 100)}%</option>)}
+                    {typeof canvasZoom === 'number' && ![.1, .25, .5, .75, 1, 1.5, 2].includes(canvasZoom) && <option value={canvasZoom}>{Math.round(canvasZoom * 100)}%</option>}
+                  </select>
+                  <button type="button" aria-label="Fit page to canvas" title="Fit page to canvas" disabled={busy || isApplying || isInlineEditing || isResizing || moveArmed || Boolean(liveMove)} onClick={() => { setCanvasZoom('fit'); setCanvasReset(value => value + 1); }}><Scan size={15} /></button>
+                  <button
+                    type="button"
+                    aria-label="Toggle lightweight outline drag"
+                    title={outlineDrag ? "Outline-only drag active (wireframe preview for zero reflow)" : "Enable lightweight outline drag"}
+                    aria-pressed={outlineDrag}
+                    disabled={busy || isApplying || isInlineEditing || isResizing || moveArmed || Boolean(liveMove)}
+                    onClick={() => setOutlineDrag(v => !v)}
+                    className={`p-1.5 text-xs rounded border transition-colors ${outlineDrag ? 'bg-emerald-50 text-emerald-700 border-emerald-300 font-medium' : 'text-slate-600 border-transparent hover:bg-slate-100'}`}
+                  >
+                    <SquareDashed size={14} />
+                  </button>
+                </div>}
+                {renderCanvasControls()}
+                <button type="button" className={reviewStyles.panelToggle} aria-label={inspectorCollapsed || focusMode ? 'Show design panel' : 'Hide design panel'} aria-expanded={!inspectorCollapsed && !focusMode} title={inspectorCollapsed || focusMode ? 'Show design panel' : 'Hide design panel'} onClick={() => { if (focusMode) { setFocusMode(false); setInspectorCollapsed(false); } else setInspectorCollapsed(value => !value); }}><Pencil size={14} /></button>
+                {(inspectorCollapsed || focusMode) && <div className={reviewStyles.collapsedActions}>{renderHistoryControls()}{renderDraftControls()}</div>}
+              </div>}
             </div>
 
-            {/* Transparent event shield during active drag */}
-            <div ref={eventShieldRef} className={reviewStyles.eventShield} style={{ display: 'none' }} />
-
-            {/* Smart snapping guides */}
-            <div ref={guideVRef} className={reviewStyles.smartGuideV} style={{ display: 'none' }} />
-            <div ref={guideHRef} className={reviewStyles.smartGuideH} style={{ display: 'none' }} />
-
-            {/* Live W x H dimension tag next to cursor */}
-            <div ref={cursorTagRef} className={reviewStyles.cursorTag} style={{ display: 'none' }} />
-
-          </main>
-          {!windowMode && <div className={reviewStyles.canvasFooter} role="region" aria-label="Canvas controls">
-            <button type="button" className={reviewStyles.panelToggle} aria-label={focusMode ? 'Restore sidebars' : 'Focus canvas'} aria-pressed={focusMode} title={focusMode ? 'Restore sidebars' : 'Focus canvas'} onClick={() => setFocusMode(value => !value)}><Columns2 size={15}/></button>
-            {<div className={reviewStyles.canvasViewTools} role="group" aria-label="Canvas navigation">
-              <button type="button" aria-label="Select elements" title="Select elements" aria-pressed={!canvasPan} onClick={() => setCanvasPan(false)}><MousePointer2 size={16}/></button>
-              <button type="button" aria-label="Pan canvas" title="Pan canvas · drag to move the view" aria-pressed={canvasPan} disabled={busy || isApplying || isInlineEditing || isResizing || moveArmed || Boolean(liveMove)} onClick={() => setCanvasPan(value => !value)}><Hand size={16}/></button>
-              <select aria-label="Canvas zoom" value={canvasZoom} disabled={busy || isApplying || isInlineEditing || isResizing || moveArmed || Boolean(liveMove)} onChange={event => setCanvasZoom(event.target.value === 'fit' ? 'fit' : Number(event.target.value))}>
-                <option value="fit">Fit page</option>
-                {[.1,.25,.5,.75,1,1.5,2].map(value => <option key={value} value={value}>{Math.round(value * 100)}%</option>)}
-                {typeof canvasZoom === 'number' && ![.1,.25,.5,.75,1,1.5,2].includes(canvasZoom) && <option value={canvasZoom}>{Math.round(canvasZoom * 100)}%</option>}
-              </select>
-              <button type="button" aria-label="Fit page to canvas" title="Fit page to canvas" disabled={busy || isApplying || isInlineEditing || isResizing || moveArmed || Boolean(liveMove)} onClick={() => { setCanvasZoom('fit'); setCanvasReset(value => value + 1); }}><Scan size={15}/></button>
-              <button
-                type="button"
-                aria-label="Toggle lightweight outline drag"
-                title={outlineDrag ? "Outline-only drag active (wireframe preview for zero reflow)" : "Enable lightweight outline drag"}
-                aria-pressed={outlineDrag}
-                disabled={busy || isApplying || isInlineEditing || isResizing || moveArmed || Boolean(liveMove)}
-                onClick={() => setOutlineDrag(v => !v)}
-                className={`p-1.5 text-xs rounded border transition-colors ${outlineDrag ? 'bg-emerald-50 text-emerald-700 border-emerald-300 font-medium' : 'text-slate-600 border-transparent hover:bg-slate-100'}`}
-              >
-                <SquareDashed size={14} />
-              </button>
-            </div>}
-            {renderCanvasControls()}
-            <button type="button" className={reviewStyles.panelToggle} aria-label={inspectorCollapsed || focusMode ? 'Show design panel' : 'Hide design panel'} aria-expanded={!inspectorCollapsed && !focusMode} title={inspectorCollapsed || focusMode ? 'Show design panel' : 'Hide design panel'} onClick={() => { if (focusMode) { setFocusMode(false); setInspectorCollapsed(false); } else setInspectorCollapsed(value => !value); }}><Pencil size={14}/></button>
-            {(inspectorCollapsed || focusMode) && <div className={reviewStyles.collapsedActions}>{renderHistoryControls()}{renderDraftControls()}</div>}
-          </div>}
-        </div>
-
-          {/* ======================================================== */}
-          {/* RIGHT INSPECTOR / FLOATING LIGHT DOCK                    */}
-          {/* ======================================================== */}
-          {windowMode ? (
-            <RightToolDock
-              visible={rightDockVisible}
-              selectedLayer={selectedLayer}
-              activeElement={activeElement}
-              computed={selectedLayer ? sourceSelections.current[selectedLayer]?.computed || {} : {}}
-              draft={draft}
-              usesDrafts={usesDrafts}
-              busy={busy}
-              isApplying={isApplying}
-              reviewBlocking={reviewBlocking}
-              destinationMode={destinationMode}
-              viewportChanging={viewportChanging}
-              activeVariant={activeVariant}
-              activeBreakpoint={activeBreakpoint}
-              repositoryId={repositoryId}
-              pendingEdit={pendingEdit}
-              sourceSelections={sourceSelections.current}
-              sourceLayers={sourceLayers}
-              activeToolOverride={rightDockTool}
-              onActiveToolChange={setRightDockTool}
-              onUpdateStyle={updateStyle}
-              onRequestSave={requestSave}
-              onDiscardDraft={() => void discardPendingEdit()}
-              onDeselect={() => setSelectedLayerState(null)}
-              onSetActiveVariant={setActiveVariant}
-              onUndo={handleUndo}
-              onRedo={() => navigateDraft(1)}
-              onTriggerBackendPreview={triggerBackendPreview}
-              overviewControls={selectedLayer ? (
-                <div className="space-y-2.5">
-                  {(activeElement.instance || !['svg', 'img', 'source'].includes(activeElement.tag)) && (
-                    <ComponentProps
-                      key={`props:${selectedLayer}`}
-                      drafts={draftIds(pendingEdit)}
-                      source={{ filePath: activeElement.filePath, line: activeElement.line, column: activeElement.column, elementId: activeElement.id, instance: activeElement.instance, tagName: activeElement.tag, repositoryId }}
-                      parentPreviewId={draftHeads(pendingEdit)[activeElement.filePath]?.id}
-                      disabled={busy || isApplying || reviewBlocking || destinationMode || Boolean(activeBreakpoint || activeVariant) || (sourceLayers.find(layer => layer.key === selectedLayer)?.instances || 1) > 1}
-                      onChange={(property, value, owner) => triggerBackendPreview('component', { property, value, owner, ...(owner ? { definition: { filePath: activeElement.filePath, line: activeElement.line, column: activeElement.column, instance: activeElement.instance } } : {}) })}
-                    />
-                  )}
-                  {!activeElement.instance && activeElement.tag === 'svg' && (
-                    <IconControls
-                      key={selectedLayer}
-                      selectionKey={selectedLayer}
-                      source={{ filePath: activeElement.filePath, line: activeElement.line, column: activeElement.column, elementId: activeElement.id, tagName: 'svg', repositoryId }}
-                      parentPreviewId={draftHeads(pendingEdit)[activeElement.filePath]?.id}
-                      instances={sourceLayers.find(layer => layer.key === selectedLayer)?.instances || 1}
-                      scoped={Boolean(activeBreakpoint || activeVariant)}
-                      disabled={busy || isApplying || reviewBlocking || destinationMode}
-                      onChange={(property, value) => triggerBackendPreview('icon', { property, value })}
-                    />
-                  )}
-                  {!activeElement.instance && ['a', 'button'].includes(activeElement.tag) && (
-                    <ActionControls
-                      key={selectedLayer}
-                      selectionKey={selectedLayer}
-                      attributes={sourceSelections.current[selectedLayer]?.attributes}
-                      source={{ filePath: activeElement.filePath, line: activeElement.line, column: activeElement.column, elementId: activeElement.id, tagName: activeElement.tag, repositoryId }}
-                      parentPreviewId={draftHeads(pendingEdit)[activeElement.filePath]?.id}
-                      instances={sourceLayers.find(layer => layer.key === selectedLayer)?.instances || 1}
-                      scoped={Boolean(activeBreakpoint || activeVariant)}
-                      disabled={busy || isApplying || reviewBlocking || destinationMode}
-                      onChange={(property, value) => triggerBackendPreview('action', { property, value })}
-                    />
-                  )}
-                  {activeElement.tag === 'img' && !activeElement.instance && (
-                    <>
-                      <ImageContent
+            {/* ======================================================== */}
+            {/* RIGHT INSPECTOR / FLOATING LIGHT DOCK                    */}
+            {/* ======================================================== */}
+            {windowMode ? (
+              <RightToolDock
+                visible={rightDockVisible}
+                selectedLayer={selectedLayer}
+                activeElement={activeElement}
+                computed={selectedLayer ? sourceSelections.current[selectedLayer]?.computed || {} : {}}
+                draft={draft}
+                usesDrafts={usesDrafts}
+                busy={busy}
+                isApplying={isApplying}
+                reviewBlocking={reviewBlocking}
+                destinationMode={destinationMode}
+                viewportChanging={viewportChanging}
+                activeVariant={activeVariant}
+                activeBreakpoint={activeBreakpoint}
+                repositoryId={repositoryId}
+                pendingEdit={pendingEdit}
+                sourceSelections={sourceSelections.current}
+                sourceLayers={sourceLayers}
+                activeToolOverride={rightDockTool}
+                onActiveToolChange={setRightDockTool}
+                onUpdateStyle={updateStyle}
+                onRequestSave={requestSave}
+                onDiscardDraft={() => void discardPendingEdit()}
+                onDeselect={() => setSelectedLayerState(null)}
+                onSetActiveVariant={setActiveVariant}
+                onUndo={handleUndo}
+                onRedo={() => navigateDraft(1)}
+                onTriggerBackendPreview={triggerBackendPreview}
+                overviewControls={selectedLayer ? (
+                  <div className="space-y-2.5">
+                    {(activeElement.instance || !['svg', 'img', 'source'].includes(activeElement.tag)) && (
+                      <ComponentProps
+                        key={`props:${selectedLayer}`}
+                        drafts={draftIds(pendingEdit)}
+                        source={{ filePath: activeElement.filePath, line: activeElement.line, column: activeElement.column, elementId: activeElement.id, instance: activeElement.instance, tagName: activeElement.tag, repositoryId }}
+                        parentPreviewId={draftHeads(pendingEdit)[activeElement.filePath]?.id}
+                        disabled={busy || isApplying || reviewBlocking || destinationMode || Boolean(activeBreakpoint || activeVariant) || (sourceLayers.find(layer => layer.key === selectedLayer)?.instances || 1) > 1}
+                        onChange={(property, value, owner) => triggerBackendPreview('component', { property, value, owner, ...(owner ? { definition: { filePath: activeElement.filePath, line: activeElement.line, column: activeElement.column, instance: activeElement.instance } } : {}) })}
+                      />
+                    )}
+                    {!activeElement.instance && activeElement.tag === 'svg' && (
+                      <IconControls
+                        key={selectedLayer}
+                        selectionKey={selectedLayer}
+                        source={{ filePath: activeElement.filePath, line: activeElement.line, column: activeElement.column, elementId: activeElement.id, tagName: 'svg', repositoryId }}
+                        parentPreviewId={draftHeads(pendingEdit)[activeElement.filePath]?.id}
+                        instances={sourceLayers.find(layer => layer.key === selectedLayer)?.instances || 1}
+                        scoped={Boolean(activeBreakpoint || activeVariant)}
+                        disabled={busy || isApplying || reviewBlocking || destinationMode}
+                        onChange={(property, value) => triggerBackendPreview('icon', { property, value })}
+                      />
+                    )}
+                    {!activeElement.instance && ['a', 'button'].includes(activeElement.tag) && (
+                      <ActionControls
                         key={selectedLayer}
                         selectionKey={selectedLayer}
                         attributes={sourceSelections.current[selectedLayer]?.attributes}
-                        repositoryId={repositoryId}
+                        source={{ filePath: activeElement.filePath, line: activeElement.line, column: activeElement.column, elementId: activeElement.id, tagName: activeElement.tag, repositoryId }}
+                        parentPreviewId={draftHeads(pendingEdit)[activeElement.filePath]?.id}
+                        instances={sourceLayers.find(layer => layer.key === selectedLayer)?.instances || 1}
                         scoped={Boolean(activeBreakpoint || activeVariant)}
                         disabled={busy || isApplying || reviewBlocking || destinationMode}
-                        onChange={(property, value) => triggerBackendPreview('image', { property, value })}
+                        onChange={(property, value) => triggerBackendPreview('action', { property, value })}
                       />
-                      <ImageFraming
-                        classes={activeElement.classes}
-                        computed={selectedLayer ? sourceSelections.current[selectedLayer]?.computed || {} : {}}
-                        scope={activeBreakpoint || activeVariant}
-                        disabled={busy || isApplying || reviewBlocking || destinationMode || viewportChanging || Boolean(activeBreakpoint) && scopeLoading}
-                        onChange={updateStyle}
-                      />
-                    </>
-                  )}
-                </div>
-              ) : undefined}
-              layoutExtraControls={selectedLayer ? (
-                <div className="space-y-2.5 pt-2 border-t border-[#E7ECE9]">
-                  {!repositoryId && (
-                    <div className={reviewStyles.resizeBar}>
-                      <button
-                        type="button"
-                        aria-label="Drag to resize width"
-                        aria-pressed={isResizing}
-                        aria-describedby="selection-width-hint"
-                        aria-keyshortcuts="ArrowLeft ArrowRight Home End"
-                        onKeyDown={resizeWithKeyboard}
-                        disabled={busy || isApplying || reviewBlocking || Boolean(uncertainUndoId) || Boolean(liveMove) || moveArmed}
-                        onPointerDown={event => startResize('ne', event)}
-                      >
-                        <ArrowUpDown size={12} style={{ transform: 'rotate(90deg)' }} />
-                        <span>Resize</span>
-                        <span className={reviewStyles.resizeValue}>{liveWidth || elementDimensions[selectedLayer]?.w || 0}px</span>
-                      </button>
-                      <select
-                        aria-label="Maximum width"
-                        disabled={isResizing || busy || isApplying || reviewBlocking || Boolean(uncertainUndoId) || Boolean(liveMove) || moveArmed}
-                        value={scopeTokens(activeElement.classes).find(token => token.startsWith('max-w-')) || ''}
-                        onChange={event => {
-                          const value = event.target.value;
-                          const key = selectedLayer;
-                          void triggerBackendPreview('style', { property: 'maxWidth', value }, key, () => setElements(previous => ({ ...previous, [key]: { ...previous[key], maxWidth: value } })));
-                        }}
-                      >
-                        <option value="" disabled>Set max width</option>
-                        {['sm', 'md', 'lg', 'xl', '2xl', '3xl', '4xl', '5xl', '6xl'].map(size => (
-                          <option key={size} value={`max-w-${size}`}>Max {size}</option>
-                        ))}
-                      </select>
-                    </div>
-                  )}
-                  <ConstraintControls
-                    classes={activeElement.classes}
-                    computed={selectedLayer ? sourceSelections.current[selectedLayer]?.computed || {} : {}}
-                    scope={activeBreakpoint || activeVariant}
-                    disabled={busy || isApplying || reviewBlocking || destinationMode || viewportChanging}
-                    onChange={updateStyle}
-                  />
-                </div>
-              ) : undefined}
-            />
-          ) : (
-          <aside data-editor-panel="inspector" style={windowMode ? undefined : { width: inspectorWidth }} className="w-[288px] bg-white border-l border-[#E5E7EB] flex flex-col shrink-0 z-20 overflow-hidden shadow-xs">
-            {!windowMode && <div role="separator" aria-label="Resize design panel" aria-orientation="vertical" aria-valuemin={272} aria-valuemax={360} aria-valuenow={inspectorWidth} tabIndex={0} className={reviewStyles.inspectorDivider}
-              onPointerDown={event => { if (event.button !== 0) return; event.preventDefault(); inspectorResize.current = { x: event.clientX, width: inspectorWidth }; event.currentTarget.setPointerCapture(event.pointerId); }}
-              onPointerMove={event => resizeInspector(event.clientX)} onPointerUp={event => { if (!inspectorResize.current) return; resizeInspector(event.clientX); inspectorResize.current = null; event.currentTarget.releasePointerCapture(event.pointerId); }} onPointerCancel={() => { inspectorResize.current = null; }} onLostPointerCapture={() => { inspectorResize.current = null; }}
-              onDoubleClick={() => setInspectorWidth(288)} onKeyDown={event => { if (['ArrowLeft', 'ArrowRight', 'Home'].includes(event.key)) { event.preventDefault(); event.stopPropagation(); setInspectorWidth(value => event.key === 'Home' ? 288 : Math.max(272, Math.min(360, value + (event.key === 'ArrowLeft' ? 8 : -8)))); } }} />}
-            {/* Visual Editor Header */}
-            <div className="h-12 px-3.5 border-b border-[#E5E7EB] flex items-center justify-between shrink-0 bg-white">
-              <div className="flex items-center space-x-2">
-                <div className="w-5 h-5 rounded-md bg-[#EFF5F0] text-[#247253] border border-[#E1EBE4] flex items-center justify-center shrink-0">
-                  <MousePointer2 size={12} className="text-[#247253]" />
-                </div>
-                <div>
-                  <span className="font-semibold text-xs text-[#26342C] block leading-tight">Visual editor</span>
-                </div>
-                {selectedLayer && (
-                  <span className="text-[10px] font-mono text-slate-400 bg-slate-50 px-1.5 py-0.5 rounded border border-slate-200/60 truncate max-w-[85px]">
-                    &lt;{activeElement.tag.split('.')[0]}&gt;
-                  </span>
-                )}
-              </div>
-              {!windowMode && <button type="button" aria-label="Hide design panel" title="Hide design panel" onClick={() => setInspectorCollapsed(true)} className={reviewStyles.panelToggle}><ChevronRight size={14}/></button>}
-              {windowMode && <button type="button" aria-label="Close design panel" onClick={() => setWindowPanel(null)} className={reviewStyles.windowLaunch}><X size={14}/></button>}
-            </div>
-
-            {/* Inspector Content */}
-            {!restoredOperation && renderGroupProgress()}
-            {usesDrafts && draft && <div className={reviewStyles.draftSummary}>
-              <button type="button" aria-label={reviewOpen ? 'Hide changes' : 'Review changes'} onClick={() => { if (!selectedLayer && pendingEdit) setSelectedLayerState(pendingEdit.layerKey); setReviewOpen(value => !value); }} aria-expanded={reviewOpen}>{reviewOpen ? 'Hide changes' : 'Review changes'}<span>{draft.cursor}</span></button>
-              <button type="button" onClick={() => void discardPendingEdit()} disabled={busy || isApplying || Boolean(uncertainApplyId)}>Discard draft</button>
-              {reviewOpen && Object.keys(draftHeads(pendingEdit)).length > 1 && <ul aria-label="Change-set files" className={reviewStyles.changeSetFiles}>{Object.values(draftHeads(pendingEdit)).map(head => <li key={head.id}><Code2 size={12}/><span title={editPath(head)}>{editPath(head)}</span></li>)}</ul>}
-              {reviewOpen && <ol aria-label="Draft change history">{draft.frames.slice(1, draft.cursor + 1).map((frame, index) => <li key={index}>{frame.edit?.summary || 'Restored original value'}</li>)}</ol>}
-            </div>}
-            {!selectedLayer ? (
-              <div className={reviewStyles.emptyInspector}>
-                <MousePointer2 size={18} strokeWidth={1.5}/>
-                <strong>Select an element to edit</strong>
-                <p>Click the page or choose a layer.</p>
-              </div>
+                    )}
+                    {activeElement.tag === 'img' && !activeElement.instance && (
+                      <>
+                        <ImageContent
+                          key={selectedLayer}
+                          selectionKey={selectedLayer}
+                          attributes={sourceSelections.current[selectedLayer]?.attributes}
+                          repositoryId={repositoryId}
+                          scoped={Boolean(activeBreakpoint || activeVariant)}
+                          disabled={busy || isApplying || reviewBlocking || destinationMode}
+                          onChange={(property, value) => triggerBackendPreview('image', { property, value })}
+                        />
+                        <ImageFraming
+                          classes={activeElement.classes}
+                          computed={selectedLayer ? sourceSelections.current[selectedLayer]?.computed || {} : {}}
+                          scope={activeBreakpoint || activeVariant}
+                          disabled={busy || isApplying || reviewBlocking || destinationMode || viewportChanging || Boolean(activeBreakpoint) && scopeLoading}
+                          onChange={updateStyle}
+                        />
+                      </>
+                    )}
+                  </div>
+                ) : undefined}
+                layoutExtraControls={selectedLayer ? (
+                  <div className="space-y-2.5 pt-2 border-t border-[#E7ECE9]">
+                    {!repositoryId && (
+                      <div className={reviewStyles.resizeBar}>
+                        <button
+                          type="button"
+                          aria-label="Drag to resize width"
+                          aria-pressed={isResizing}
+                          aria-describedby="selection-width-hint"
+                          aria-keyshortcuts="ArrowLeft ArrowRight Home End"
+                          onKeyDown={resizeWithKeyboard}
+                          disabled={busy || isApplying || reviewBlocking || Boolean(uncertainUndoId) || Boolean(liveMove) || moveArmed}
+                          onPointerDown={event => startResize('ne', event)}
+                        >
+                          <ArrowUpDown size={12} style={{ transform: 'rotate(90deg)' }} />
+                          <span>Resize</span>
+                          <span className={reviewStyles.resizeValue}>{liveWidth || elementDimensions[selectedLayer]?.w || 0}px</span>
+                        </button>
+                        <select
+                          aria-label="Maximum width"
+                          disabled={isResizing || busy || isApplying || reviewBlocking || Boolean(uncertainUndoId) || Boolean(liveMove) || moveArmed}
+                          value={scopeTokens(activeElement.classes).find(token => token.startsWith('max-w-')) || ''}
+                          onChange={event => {
+                            const value = event.target.value;
+                            const key = selectedLayer;
+                            void triggerBackendPreview('style', { property: 'maxWidth', value }, key, () => setElements(previous => ({ ...previous, [key]: { ...previous[key], maxWidth: value } })));
+                          }}
+                        >
+                          <option value="" disabled>Set max width</option>
+                          {['sm', 'md', 'lg', 'xl', '2xl', '3xl', '4xl', '5xl', '6xl'].map(size => (
+                            <option key={size} value={`max-w-${size}`}>Max {size}</option>
+                          ))}
+                        </select>
+                      </div>
+                    )}
+                    <ConstraintControls
+                      classes={activeElement.classes}
+                      computed={selectedLayer ? sourceSelections.current[selectedLayer]?.computed || {} : {}}
+                      scope={activeBreakpoint || activeVariant}
+                      disabled={busy || isApplying || reviewBlocking || destinationMode || viewportChanging}
+                      onChange={updateStyle}
+                    />
+                  </div>
+                ) : undefined}
+              />
             ) : (
-              /* SELECTED ELEMENT STATE (Clean SaaS Design Inspector) */
-              <div className="flex-1 flex flex-col overflow-hidden">
-                {selectedLayer && (activeElement.instance || !['svg', 'img', 'source'].includes(activeElement.tag)) && <ComponentProps key={`props:${selectedLayer}`} drafts={draftIds(pendingEdit)} source={{ filePath: activeElement.filePath, line: activeElement.line, column: activeElement.column, elementId: activeElement.id, instance:activeElement.instance, tagName: activeElement.tag, repositoryId }} parentPreviewId={draftHeads(pendingEdit)[activeElement.filePath]?.id} disabled={busy || isApplying || reviewBlocking || destinationMode || Boolean(activeBreakpoint || activeVariant) || (sourceLayers.find(layer => layer.key === selectedLayer)?.instances || 1) > 1} onChange={(property, value, owner) => triggerBackendPreview('component', { property, value, owner, ...(owner ? {definition:{filePath:activeElement.filePath,line:activeElement.line,column:activeElement.column,instance:activeElement.instance}} : {}) })}/>}
-                {selectedLayer && !activeElement.instance && activeElement.tag === 'svg' && <IconControls key={selectedLayer} selectionKey={selectedLayer} source={{ filePath: activeElement.filePath, line: activeElement.line, column: activeElement.column, elementId: activeElement.id, tagName: 'svg', repositoryId }} parentPreviewId={draftHeads(pendingEdit)[activeElement.filePath]?.id} instances={sourceLayers.find(layer => layer.key === selectedLayer)?.instances || 1} scoped={Boolean(activeBreakpoint || activeVariant)} disabled={busy || isApplying || reviewBlocking || destinationMode} onChange={(property, value) => triggerBackendPreview('icon', { property, value })}/>}
-                {selectedLayer && !activeElement.instance && ['a', 'button'].includes(activeElement.tag) && <ActionControls key={selectedLayer} selectionKey={selectedLayer} attributes={sourceSelections.current[selectedLayer]?.attributes} source={{ filePath: activeElement.filePath, line: activeElement.line, column: activeElement.column, elementId: activeElement.id, tagName: activeElement.tag, repositoryId }} parentPreviewId={draftHeads(pendingEdit)[activeElement.filePath]?.id} instances={sourceLayers.find(layer => layer.key === selectedLayer)?.instances || 1} scoped={Boolean(activeBreakpoint || activeVariant)} disabled={busy || isApplying || reviewBlocking || destinationMode} onChange={(property, value) => triggerBackendPreview('action', { property, value })}/>}
-                {activeElement.tag === 'img' && !activeElement.instance && selectedLayer && <ImageContent key={selectedLayer} selectionKey={selectedLayer} attributes={sourceSelections.current[selectedLayer]?.attributes} repositoryId={repositoryId} scoped={Boolean(activeBreakpoint || activeVariant)} disabled={busy || isApplying || reviewBlocking || destinationMode} onChange={(property, value) => triggerBackendPreview('image', { property, value })} />}
-                {activeElement.tag === 'img' && !activeElement.instance && <ImageFraming classes={activeElement.classes} computed={selectedLayer ? sourceSelections.current[selectedLayer]?.computed || {} : {}} scope={activeBreakpoint || activeVariant} disabled={busy || isApplying || reviewBlocking || destinationMode || viewportChanging || Boolean(activeBreakpoint) && scopeLoading} onChange={updateStyle} />}
-                {/* One source review, alongside the selected element's controls. */}
-                {pendingEdit && (!usesDrafts || reviewOpen || uncertainApplyId) && (
-                  <section className={reviewStyles.review} aria-label="Review source change" aria-busy={isApplying}>
-                    <div className={reviewStyles.heading}>
-                      <h2>{repositoryId ? 'Review change' : 'Draft changes'}</h2>
-                      <span className={reviewStyles.status}>{uncertainApplyId === pendingEdit.id ? 'Save status unconfirmed' : 'Not saved to source'}</span>
+              <aside data-editor-panel="inspector" style={windowMode ? undefined : { width: inspectorWidth }} className="w-[288px] bg-white border-l border-[#E5E7EB] flex flex-col shrink-0 z-20 overflow-hidden shadow-xs">
+                {!windowMode && <div role="separator" aria-label="Resize design panel" aria-orientation="vertical" aria-valuemin={272} aria-valuemax={360} aria-valuenow={inspectorWidth} tabIndex={0} className={reviewStyles.inspectorDivider}
+                  onPointerDown={event => { if (event.button !== 0) return; event.preventDefault(); inspectorResize.current = { x: event.clientX, width: inspectorWidth }; event.currentTarget.setPointerCapture(event.pointerId); }}
+                  onPointerMove={event => resizeInspector(event.clientX)} onPointerUp={event => { if (!inspectorResize.current) return; resizeInspector(event.clientX); inspectorResize.current = null; event.currentTarget.releasePointerCapture(event.pointerId); }} onPointerCancel={() => { inspectorResize.current = null; }} onLostPointerCapture={() => { inspectorResize.current = null; }}
+                  onDoubleClick={() => setInspectorWidth(288)} onKeyDown={event => { if (['ArrowLeft', 'ArrowRight', 'Home'].includes(event.key)) { event.preventDefault(); event.stopPropagation(); setInspectorWidth(value => event.key === 'Home' ? 288 : Math.max(272, Math.min(360, value + (event.key === 'ArrowLeft' ? 8 : -8)))); } }} />}
+                {/* Visual Editor Header */}
+                <div className="h-12 px-3.5 border-b border-[#E5E7EB] flex items-center justify-between shrink-0 bg-white">
+                  <div className="flex items-center space-x-2">
+                    <div className="w-5 h-5 rounded-md bg-[#EFF5F0] text-[#247253] border border-[#E1EBE4] flex items-center justify-center shrink-0">
+                      <MousePointer2 size={12} className="text-[#247253]" />
                     </div>
-                    <p className={reviewStyles.summary}>{pendingEdit.summary}</p>
-                    <div className={reviewStyles.source}>
-                      <Code2 size={12} strokeWidth={1.5} aria-hidden="true" />
-                      <span title={`${pendingEdit.filePath}:${pendingEdit.line}`}>
-                        {pendingEdit.filePath}:{pendingEdit.line}
+                    <div>
+                      <span className="font-semibold text-xs text-[#26342C] block leading-tight">Visual editor</span>
+                    </div>
+                    {selectedLayer && (
+                      <span className="text-[10px] font-mono text-slate-400 bg-slate-50 px-1.5 py-0.5 rounded border border-slate-200/60 truncate max-w-[85px]">
+                        &lt;{activeElement.tag.split('.')[0]}&gt;
                       </span>
-                    </div>
-                    <div className={reviewStyles.diff}>
-                      <div className={reviewStyles.diffRow}>
-                        <span>Before</span>
-                        <pre aria-label="Before change">{pendingEdit.oldValue || 'Empty value'}</pre>
-                      </div>
-                      <div className={reviewStyles.diffRow}>
-                        <span>After</span>
-                        <pre aria-label="After change">{pendingEdit.newValue || 'Empty value'}</pre>
-                      </div>
-                    </div>
-                    <div className={reviewStyles.actions}>
-                      <button type="button" onMouseDown={event => event.preventDefault()} onClick={requestSave} disabled={isApplying || busy} className={reviewStyles.apply}>
-                        <span>{isApplying ? (uncertainApplyId ? 'Checking…' : 'Saving…') : uncertainApplyId === pendingEdit.id ? 'Check save status' : repositoryId ? 'Apply to code' : 'Save changes'}</span>
-                      </button>
-                      <button type="button" onClick={discardPendingEdit} disabled={isApplying || uncertainApplyId === pendingEdit.id}>Discard</button>
-                    </div>
-                  </section>
-                )}
-
-                {/* Inspector tabs */}
-                <div className="flex border-b border-[#E5E7EB] px-3 shrink-0 bg-white sticky top-0 z-10">
-                  <button
-                    type="button"
-                    aria-pressed={activeTab === 'design'} onClick={() => setActiveTab('design')}
-                    className={`py-2 px-3 text-xs font-semibold relative transition cursor-pointer ${
-                      activeTab === 'design' ? 'text-[#2F342F]' : 'text-slate-500 hover:text-slate-900'
-                    }`}
-                  >
-                    Design
-                    {activeTab === 'design' && (
-                      <span className="absolute bottom-0 left-2 right-2 h-[2px] bg-[#414A3E] rounded-full"></span>
                     )}
-                  </button>
-                  <button
-                    type="button"
-                    aria-pressed={activeTab === 'settings'} onClick={() => setActiveTab('settings')}
-                    className={`py-2 px-3 text-xs font-medium relative transition cursor-pointer ${
-                      activeTab === 'settings' ? 'text-[#2F342F]' : 'text-slate-500 hover:text-slate-900'
-                    }`}
-                  >
-                    Source
-                    {activeTab === 'settings' && (
-                      <span className="absolute bottom-0 left-2 right-2 h-[2px] bg-[#414A3E] rounded-full"></span>
-                    )}
-                  </button>
+                  </div>
+                  {!windowMode && <button type="button" aria-label="Hide design panel" title="Hide design panel" onClick={() => setInspectorCollapsed(true)} className={reviewStyles.panelToggle}><ChevronRight size={14} /></button>}
+                  {windowMode && <button type="button" aria-label="Close design panel" onClick={() => setWindowPanel(null)} className={reviewStyles.windowLaunch}><X size={14} /></button>}
                 </div>
 
                 {/* Inspector Content */}
-                <div className={`${reviewStyles.inspectorControls} flex-1 overflow-y-auto`}>
-                  {activeElement.instance && editingDefinitionStyles && <div className="border-b border-[#edf0ed] px-4 py-3 text-xs" role="note" aria-label="Definition style scope"><strong>Shared definition</strong><p className="mt-1 text-[#89938d]">Definition edits affect every use. Props above still change this instance.</p><button type="button" onClick={() => setDefinitionStyleKey(null)} className="mt-2 rounded border border-[#e6eae7] px-2 py-1">Return to instance controls</button></div>}
-                  {activeElement.instance && !editingDefinitionStyles ? (<div className="space-y-3 px-4 py-4 text-xs leading-relaxed text-[#89938d]"><p>Props above change this instance. Layout and typography belong to the shared definition.</p><button type="button" disabled={busy || isApplying || reviewBlocking || destinationMode || moveArmed || isResizing} onClick={() => void openDefinitionStyles()} className="rounded-md border border-[#e6eae7] bg-white px-3 py-2 font-medium text-[#3c4b41] disabled:opacity-50">Edit shared definition</button><p>Definition edits affect every use and must pass the source safety checks.</p></div>) : activeTab === 'design' ? (
-                    <div className="p-3.5 space-y-4 text-xs text-slate-700">
-
-                      <div className={reviewStyles.states}>
-                        <span className={reviewStyles.stateLabel}>State</span>
-                        <div className={reviewStyles.segments} role="group" aria-label="Element state">
-                          {[
-                            { id: '', label: 'Default' },
-                            { id: 'hover', label: 'Hover' },
-                            { id: 'focus-visible', label: 'Focus' },
-                            { id: 'active', label: 'Pressed' },
-                          ].map((variant) => (
-                            <button
-                              key={variant.id}
-                              type="button"
-                              disabled={Boolean(activeBreakpoint) && Boolean(variant.id)}
-                              onClick={() => {
-                                if (operationRef.current || blocksReview() || undoRecoveryRef.current) { showToast(undoRecoveryRef.current ? 'Check Undo status before making another change.' : reviewNotice); return; }
-                                setActiveVariant(variant.id);
-                              }}
-                              aria-pressed={activeVariant === variant.id}
-                            >
-                              {variant.label}
-                            </button>
-                          ))}
+                {!restoredOperation && renderGroupProgress()}
+                {usesDrafts && draft && <div className={reviewStyles.draftSummary}>
+                  <button type="button" aria-label={reviewOpen ? 'Hide changes' : 'Review changes'} onClick={() => { if (!selectedLayer && pendingEdit) setSelectedLayerState(pendingEdit.layerKey); setReviewOpen(value => !value); }} aria-expanded={reviewOpen}>{reviewOpen ? 'Hide changes' : 'Review changes'}<span>{draft.cursor}</span></button>
+                  <button type="button" onClick={() => void discardPendingEdit()} disabled={busy || isApplying || Boolean(uncertainApplyId)}>Discard draft</button>
+                  {reviewOpen && Object.keys(draftHeads(pendingEdit)).length > 1 && <ul aria-label="Change-set files" className={reviewStyles.changeSetFiles}>{Object.values(draftHeads(pendingEdit)).map(head => <li key={head.id}><Code2 size={12} /><span title={editPath(head)}>{editPath(head)}</span></li>)}</ul>}
+                  {reviewOpen && <ol aria-label="Draft change history">{draft.frames.slice(1, draft.cursor + 1).map((frame, index) => <li key={index}>{frame.edit?.summary || 'Restored original value'}</li>)}</ol>}
+                </div>}
+                {!selectedLayer ? (
+                  <div className={reviewStyles.emptyInspector}>
+                    <MousePointer2 size={18} strokeWidth={1.5} />
+                    <strong>Select an element to edit</strong>
+                    <p>Click the page or choose a layer.</p>
+                  </div>
+                ) : (
+                  /* SELECTED ELEMENT STATE (Clean SaaS Design Inspector) */
+                  <div className="flex-1 flex flex-col overflow-hidden">
+                    {selectedLayer && (activeElement.instance || !['svg', 'img', 'source'].includes(activeElement.tag)) && <ComponentProps key={`props:${selectedLayer}`} drafts={draftIds(pendingEdit)} source={{ filePath: activeElement.filePath, line: activeElement.line, column: activeElement.column, elementId: activeElement.id, instance: activeElement.instance, tagName: activeElement.tag, repositoryId }} parentPreviewId={draftHeads(pendingEdit)[activeElement.filePath]?.id} disabled={busy || isApplying || reviewBlocking || destinationMode || Boolean(activeBreakpoint || activeVariant) || (sourceLayers.find(layer => layer.key === selectedLayer)?.instances || 1) > 1} onChange={(property, value, owner) => triggerBackendPreview('component', { property, value, owner, ...(owner ? { definition: { filePath: activeElement.filePath, line: activeElement.line, column: activeElement.column, instance: activeElement.instance } } : {}) })} />}
+                    {selectedLayer && !activeElement.instance && activeElement.tag === 'svg' && <IconControls key={selectedLayer} selectionKey={selectedLayer} source={{ filePath: activeElement.filePath, line: activeElement.line, column: activeElement.column, elementId: activeElement.id, tagName: 'svg', repositoryId }} parentPreviewId={draftHeads(pendingEdit)[activeElement.filePath]?.id} instances={sourceLayers.find(layer => layer.key === selectedLayer)?.instances || 1} scoped={Boolean(activeBreakpoint || activeVariant)} disabled={busy || isApplying || reviewBlocking || destinationMode} onChange={(property, value) => triggerBackendPreview('icon', { property, value })} />}
+                    {selectedLayer && !activeElement.instance && ['a', 'button'].includes(activeElement.tag) && <ActionControls key={selectedLayer} selectionKey={selectedLayer} attributes={sourceSelections.current[selectedLayer]?.attributes} source={{ filePath: activeElement.filePath, line: activeElement.line, column: activeElement.column, elementId: activeElement.id, tagName: activeElement.tag, repositoryId }} parentPreviewId={draftHeads(pendingEdit)[activeElement.filePath]?.id} instances={sourceLayers.find(layer => layer.key === selectedLayer)?.instances || 1} scoped={Boolean(activeBreakpoint || activeVariant)} disabled={busy || isApplying || reviewBlocking || destinationMode} onChange={(property, value) => triggerBackendPreview('action', { property, value })} />}
+                    {activeElement.tag === 'img' && !activeElement.instance && selectedLayer && <ImageContent key={selectedLayer} selectionKey={selectedLayer} attributes={sourceSelections.current[selectedLayer]?.attributes} repositoryId={repositoryId} scoped={Boolean(activeBreakpoint || activeVariant)} disabled={busy || isApplying || reviewBlocking || destinationMode} onChange={(property, value) => triggerBackendPreview('image', { property, value })} />}
+                    {activeElement.tag === 'img' && !activeElement.instance && <ImageFraming classes={activeElement.classes} computed={selectedLayer ? sourceSelections.current[selectedLayer]?.computed || {} : {}} scope={activeBreakpoint || activeVariant} disabled={busy || isApplying || reviewBlocking || destinationMode || viewportChanging || Boolean(activeBreakpoint) && scopeLoading} onChange={updateStyle} />}
+                    {/* One source review, alongside the selected element's controls. */}
+                    {pendingEdit && (!usesDrafts || reviewOpen || uncertainApplyId) && (
+                      <section className={reviewStyles.review} aria-label="Review source change" aria-busy={isApplying}>
+                        <div className={reviewStyles.heading}>
+                          <h2>{repositoryId ? 'Review change' : 'Draft changes'}</h2>
+                          <span className={reviewStyles.status}>{uncertainApplyId === pendingEdit.id ? 'Save status unconfirmed' : 'Not saved to source'}</span>
                         </div>
-                      </div>
-
-                      <AppearanceControls key={selectedLayer} classes={activeElement.classes} computed={selectedLayer ? sourceSelections.current[selectedLayer]?.computed || {} : {}} scope={activeBreakpoint || activeVariant} disabled={busy || isApplying || reviewBlocking || destinationMode || viewportChanging} onChange={updateStyle}/>
-                      <ConstraintControls classes={activeElement.classes} computed={selectedLayer ? sourceSelections.current[selectedLayer]?.computed || {} : {}} scope={activeBreakpoint || activeVariant} disabled={busy || isApplying || reviewBlocking || destinationMode || viewportChanging} onChange={updateStyle}/>
-
-<section className={reviewStyles.interactions} aria-label="Transitions">
-                        <button type="button" className={reviewStyles.disclosure} aria-expanded={showInteractions} onClick={() => setShowInteractions(value => !value)}>
-                          {showInteractions ? <ChevronDown size={12} /> : <ChevronRight size={12} />}
-                          <span>Transitions</span>
-                        </button>
-                        {showInteractions && (
-                        <div className={reviewStyles.controlRows}>
-                          {interactionControls.map(control => (
-                            <label key={control.property}>
-                              <span>{control.label}</span>
-                              <select
-                                aria-label={control.label}
-                                value={interactionValue(activeElement.classes, control.property, editScope)}
-                                disabled={busy || reviewBlocking}
-                                onChange={e => updateStyle(control.property, e.target.value)}
-                              >
-                                <option value="" disabled>{activeVariant ? 'Inherit default' : 'Not set in source'}</option>
-                                {control.options.map(([value, label]) => <option key={value} value={value}>{label}</option>)}
-                              </select>
-                            </label>
-                          ))}
-                          <p>Changes apply to {activeVariant === 'focus-visible' ? 'keyboard focus' : activeVariant === 'active' ? 'the pressed state' : activeVariant || 'the default appearance'}. Your device’s reduced-motion preference is respected in this preview.</p>
+                        <p className={reviewStyles.summary}>{pendingEdit.summary}</p>
+                        <div className={reviewStyles.source}>
+                          <Code2 size={12} strokeWidth={1.5} aria-hidden="true" />
+                          <span title={`${pendingEdit.filePath}:${pendingEdit.line}`}>
+                            {pendingEdit.filePath}:{pendingEdit.line}
+                          </span>
                         </div>
-                        )}
+                        <div className={reviewStyles.diff}>
+                          <div className={reviewStyles.diffRow}>
+                            <span>Before</span>
+                            <pre aria-label="Before change">{pendingEdit.oldValue || 'Empty value'}</pre>
+                          </div>
+                          <div className={reviewStyles.diffRow}>
+                            <span>After</span>
+                            <pre aria-label="After change">{pendingEdit.newValue || 'Empty value'}</pre>
+                          </div>
+                        </div>
+                        <div className={reviewStyles.actions}>
+                          <button type="button" onMouseDown={event => event.preventDefault()} onClick={requestSave} disabled={isApplying || busy} className={reviewStyles.apply}>
+                            <span>{isApplying ? (uncertainApplyId ? 'Checking…' : 'Saving…') : uncertainApplyId === pendingEdit.id ? 'Check save status' : repositoryId ? 'Apply to code' : 'Save changes'}</span>
+                          </button>
+                          <button type="button" onClick={discardPendingEdit} disabled={isApplying || uncertainApplyId === pendingEdit.id}>Discard</button>
+                        </div>
                       </section>
+                    )}
 
-                      {/* ---------------------------------------------------- */}
-                      {/* Section: Layout                                      */}
-                      {/* ---------------------------------------------------- */}
-                      <div className="space-y-2">
-                        <button
-                          type="button"
-                          aria-expanded={openSections.layout} onClick={() => toggleSection('layout')}
-                          className="w-full flex items-center justify-between text-left font-semibold text-xs text-slate-800 cursor-pointer select-none"
-                        >
-                          <span className="flex items-center space-x-1.5">
-                            {openSections.layout ? (
-                              <ChevronDown size={13} className="text-slate-400 shrink-0" />
-                            ) : (
-                              <ChevronRight size={13} className="text-slate-400 shrink-0" />
-                            )}
-                            <span>Layout</span>
-                          </span>
-                        </button>
-
-{openSections.layout && <LayoutControls classes={activeElement.classes} computed={selectedLayer ? sourceSelections.current[selectedLayer]?.computed || {} : {}} disabled={busy || isApplying || reviewBlocking || destinationMode} scope={activeBreakpoint || activeVariant} onChange={updateStyle} />}
-                      </div>
-
-                      <hr className="border-[#F1F5F9]" />
-
-                      {/* ---------------------------------------------------- */}
-                      {/* Section: Size                                        */}
-                      {/* ---------------------------------------------------- */}
-                      <div className="space-y-2">
-                        <button
-                          type="button"
-                          aria-expanded={openSections.size} onClick={() => toggleSection('size')}
-                          className="w-full flex items-center justify-between text-left font-semibold text-xs text-slate-800 cursor-pointer select-none"
-                        >
-                          <span className="flex items-center space-x-1.5">
-                            {openSections.size ? (
-                              <ChevronDown size={13} className="text-slate-400 shrink-0" />
-                            ) : (
-                              <ChevronRight size={13} className="text-slate-400 shrink-0" />
-                            )}
-                            <span>Size</span>
-                          </span>
-                        </button>
-
-                        {openSections.size && (
-                          <div className="space-y-2.5 pt-0.5 text-xs">
-                            {/* Width */}
-                            <div className="flex items-center justify-between">
-                              <span className={reviewStyles.propertyLabel}>Width</span>
-                              <div className="relative w-36">
-                                <select
-                                  aria-label="Width"
-                                  disabled={busy || isApplying || reviewBlocking || destinationMode}
-                                  value={activeElement.width}
-                                  onChange={(e) => updateStyle('width', e.target.value)}
-                                  className="w-full bg-white border border-[#E2E8F0] rounded-md px-2.5 py-1.5 text-xs text-slate-800 appearance-none focus:outline-none focus:border-[#059669] focus:ring-1 focus:ring-emerald-500/20"
-                                >
-                                  <option value="" disabled>Inherited / custom</option>
-                                  <option value="w-auto">Auto</option>
-                                  <option value="w-full">Full</option>
-                                  <option value="w-1/2">1/2</option>
-                                  <option value="w-fit">Fit</option>
-                                </select>
-                                <ChevronDown size={12} className="text-slate-400 absolute right-2.5 top-2.5 pointer-events-none" />
-                              </div>
-                            </div>
-
-                            {!repositoryId && selectedLayer && <div className={reviewStyles.resizeBar}>
-                              <button type="button" aria-label="Drag to resize width" aria-pressed={isResizing}
-                                aria-describedby="selection-width-hint" aria-keyshortcuts="ArrowLeft ArrowRight Home End" onKeyDown={resizeWithKeyboard}
-                                disabled={busy || isApplying || reviewBlocking || Boolean(uncertainUndoId) || Boolean(liveMove) || moveArmed}
-                                onPointerDown={event => startResize('ne', event)}>
-                                <ArrowUpDown size={12} style={{ transform: 'rotate(90deg)' }} />
-                                <span>Resize</span><span className={reviewStyles.resizeValue}>{liveWidth || elementDimensions[selectedLayer]?.w || 0}px</span>
-                              </button>
-                              <select aria-label="Maximum width" disabled={isResizing || busy || isApplying || reviewBlocking || Boolean(uncertainUndoId) || Boolean(liveMove) || moveArmed}
-                                value={scopeTokens(activeElement.classes).find(token => token.startsWith('max-w-')) || ''}
-                                onChange={event => { const value = event.target.value; const key = selectedLayer; void triggerBackendPreview('style', { property: 'maxWidth', value }, key, () => setElements(previous => ({ ...previous, [key]: { ...previous[key], maxWidth: value } }))); }}>
-                                <option value="" disabled>Set max width</option>
-                                {['sm', 'md', 'lg', 'xl', '2xl', '3xl', '4xl', '5xl', '6xl'].map(size => <option key={size} value={`max-w-${size}`}>Max {size}</option>)}
-                              </select>
-                            </div>}
-                          </div>
+                    {/* Inspector tabs */}
+                    <div className="flex border-b border-[#E5E7EB] px-3 shrink-0 bg-white sticky top-0 z-10">
+                      <button
+                        type="button"
+                        aria-pressed={activeTab === 'design'} onClick={() => setActiveTab('design')}
+                        className={`py-2 px-3 text-xs font-semibold relative transition cursor-pointer ${activeTab === 'design' ? 'text-[#2F342F]' : 'text-slate-500 hover:text-slate-900'
+                          }`}
+                      >
+                        Design
+                        {activeTab === 'design' && (
+                          <span className="absolute bottom-0 left-2 right-2 h-[2px] bg-[#414A3E] rounded-full"></span>
                         )}
-                      </div>
-
-                      <hr className="border-[#F1F5F9]" />
-
-                      {/* ---------------------------------------------------- */}
-                      {/* Section: Spacing (The Box Model Diagram)             */}
-                      {/* ---------------------------------------------------- */}
-                      <div className="space-y-2">
-                        <button
-                          type="button"
-                          aria-expanded={openSections.spacing} onClick={() => toggleSection('spacing')}
-                          className="w-full flex items-center justify-between text-left font-semibold text-xs text-slate-800 cursor-pointer select-none"
-                        >
-                          <span className="flex items-center space-x-1.5">
-                            {openSections.spacing ? (
-                              <ChevronDown size={13} className="text-slate-400 shrink-0" />
-                            ) : (
-                              <ChevronRight size={13} className="text-slate-400 shrink-0" />
-                            )}
-                            <span>Spacing</span>
-                          </span>
-                        </button>
-
-                        {openSections.spacing && (
-                          <div className={reviewStyles.controlRows}>
-                            <label>
-                              <span>Padding</span>
-                              <select aria-label="Padding" disabled={busy || isApplying || reviewBlocking || destinationMode} value={scopeTokens(activeElement.classes).find(token => /^p-\d+$/.test(token)) || ''} onChange={e => updateStyle('padding', e.target.value)}>
-                                <option value="" disabled>Not set in source</option>
-                                {['p-0','p-1','p-2','p-3','p-4','p-6','p-8','p-10','p-12'].map(value => <option key={value} value={value}>{value.slice(2)} units</option>)}
-                              </select>
-                            </label>
-                            <p>Applies equally to all four sides.</p>
-                          </div>
+                      </button>
+                      <button
+                        type="button"
+                        aria-pressed={activeTab === 'settings'} onClick={() => setActiveTab('settings')}
+                        className={`py-2 px-3 text-xs font-medium relative transition cursor-pointer ${activeTab === 'settings' ? 'text-[#2F342F]' : 'text-slate-500 hover:text-slate-900'
+                          }`}
+                      >
+                        Source
+                        {activeTab === 'settings' && (
+                          <span className="absolute bottom-0 left-2 right-2 h-[2px] bg-[#414A3E] rounded-full"></span>
                         )}
-                      </div>
+                      </button>
+                    </div>
 
-                      <hr className="border-[#F1F5F9]" />
+                    {/* Inspector Content */}
+                    <div className={`${reviewStyles.inspectorControls} flex-1 overflow-y-auto`}>
+                      {activeElement.instance && editingDefinitionStyles && <div className="border-b border-[#edf0ed] px-4 py-3 text-xs" role="note" aria-label="Definition style scope"><strong>Shared definition</strong><p className="mt-1 text-[#89938d]">Definition edits affect every use. Props above still change this instance.</p><button type="button" onClick={() => setDefinitionStyleKey(null)} className="mt-2 rounded border border-[#e6eae7] px-2 py-1">Return to instance controls</button></div>}
+                      {activeElement.instance && !editingDefinitionStyles ? (<div className="space-y-3 px-4 py-4 text-xs leading-relaxed text-[#89938d]"><p>Props above change this instance. Layout and typography belong to the shared definition.</p><button type="button" disabled={busy || isApplying || reviewBlocking || destinationMode || moveArmed || isResizing} onClick={() => void openDefinitionStyles()} className="rounded-md border border-[#e6eae7] bg-white px-3 py-2 font-medium text-[#3c4b41] disabled:opacity-50">Edit shared definition</button><p>Definition edits affect every use and must pass the source safety checks.</p></div>) : activeTab === 'design' ? (
+                        <div className="p-3.5 space-y-4 text-xs text-slate-700">
 
-                      {/* ---------------------------------------------------- */}
-                      {/* Section: Text                                        */}
-                      {/* ---------------------------------------------------- */}
-                      {activeElement.tag !== 'svg' && <div className="space-y-2">
-                        <button
-                          type="button"
-                          aria-expanded={openSections.text} onClick={() => toggleSection('text')}
-                          className="w-full flex items-center justify-between text-left font-semibold text-xs text-slate-800 cursor-pointer select-none"
-                        >
-                          <span className="flex items-center space-x-1.5">
-                            {openSections.text ? (
-                              <ChevronDown size={13} className="text-slate-400 shrink-0" />
-                            ) : (
-                              <ChevronRight size={13} className="text-slate-400 shrink-0" />
-                            )}
-                            <span>Text</span>
-                          </span>
-                        </button>
-
-                        {openSections.text && (
-                          <div className="space-y-2.5 pt-0.5 text-xs">
-                            {/* Typeface */}
-                            <div className="flex items-center justify-between">
-                              <span className={reviewStyles.propertyLabel}>Typeface</span>
-                              <div className="relative w-36">
-                                <select
-                                  value={scopeTokens(activeElement.classes).find(token => ['font-sans','font-serif','font-mono'].includes(token)) || ''}
-                                  onChange={e => updateStyle('fontFamily', e.target.value)}
-                                  className="w-full bg-white border border-[#E2E8F0] rounded-md px-2.5 py-1.5 text-xs text-slate-800 appearance-none focus:outline-none focus:border-[#059669]"
+                          <div className={reviewStyles.states}>
+                            <span className={reviewStyles.stateLabel}>State</span>
+                            <div className={reviewStyles.segments} role="group" aria-label="Element state">
+                              {[
+                                { id: '', label: 'Default' },
+                                { id: 'hover', label: 'Hover' },
+                                { id: 'focus-visible', label: 'Focus' },
+                                { id: 'active', label: 'Pressed' },
+                              ].map((variant) => (
+                                <button
+                                  key={variant.id}
+                                  type="button"
+                                  disabled={Boolean(activeBreakpoint) && Boolean(variant.id)}
+                                  onClick={() => {
+                                    if (operationRef.current || blocksReview() || undoRecoveryRef.current) { showToast(undoRecoveryRef.current ? 'Check Undo status before making another change.' : reviewNotice); return; }
+                                    setActiveVariant(variant.id);
+                                  }}
+                                  aria-pressed={activeVariant === variant.id}
                                 >
-                                  <option value="" disabled>Inherited</option>
-                                  <option value="font-sans">Project sans</option>
-                                  <option value="font-serif">Project serif</option>
-                                  <option value="font-mono">Project mono</option>
-                                </select>
-                                <ChevronDown size={12} className="text-slate-400 absolute right-2.5 top-2.5 pointer-events-none" />
-                              </div>
+                                  {variant.label}
+                                </button>
+                              ))}
                             </div>
+                          </div>
 
-                            {/* Weight - Protected: Needed by test/studio-restore.test.ts */}
-                            <div className="flex items-center justify-between">
-                              <span className={reviewStyles.propertyLabel}>Weight</span>
-                              <div className="relative w-36">
-                                <select
-                                  value={scopeTokens(activeElement.classes).find(token => /^font-(normal|medium|semibold|bold|extrabold)$/.test(token)) || ''}
-                                  onChange={e => updateStyle('fontWeight', e.target.value)}
-                                  className="w-full bg-white border border-[#E2E8F0] rounded-md px-2.5 py-1.5 text-xs text-slate-800 appearance-none focus:outline-none focus:border-[#059669]"
-                                >
-                                  <option value="" disabled>Inherited</option>
-                                  <option value="font-normal">Regular</option>
-                                  <option value="font-medium">Medium</option>
-                                  <option value="font-semibold">Semibold</option>
-                                  <option value="font-bold">Bold</option>
-                                  <option value="font-extrabold">Extra bold</option>
-                                </select>
-                                <ChevronDown size={12} className="text-slate-400 absolute right-2.5 top-2.5 pointer-events-none" />
-                              </div>
-                            </div>
+                          <AppearanceControls key={selectedLayer} classes={activeElement.classes} computed={selectedLayer ? sourceSelections.current[selectedLayer]?.computed || {} : {}} scope={activeBreakpoint || activeVariant} disabled={busy || isApplying || reviewBlocking || destinationMode || viewportChanging} onChange={updateStyle} />
+                          <ConstraintControls classes={activeElement.classes} computed={selectedLayer ? sourceSelections.current[selectedLayer]?.computed || {} : {}} scope={activeBreakpoint || activeVariant} disabled={busy || isApplying || reviewBlocking || destinationMode || viewportChanging} onChange={updateStyle} />
 
-                            {/* Size */}
-                            <div className="flex items-center justify-between">
-                              <span className={reviewStyles.propertyLabel}>Size</span>
-                              <div className="relative w-36">
-                                <select
-                                  value={scopeTokens(activeElement.classes).find(token => /^text-(xs|sm|base|lg|xl|[2-7]xl)$/.test(token)) || ''}
-                                  onChange={(e) => updateStyle('fontSize', e.target.value)}
-                                  className="w-full bg-white border border-[#E2E8F0] rounded-md px-2.5 py-1.5 text-xs text-slate-800 appearance-none focus:outline-none focus:border-[#059669]"
-                                >
-                                  <option value="" disabled>Inherited</option>
-                                  <option value="text-xs">Extra small</option>
-                                  <option value="text-sm">SM</option>
-                                  <option value="text-base">Base</option>
-                                  <option value="text-lg">LG</option>
-                                  <option value="text-xl">XL</option>
-                                  <option value="text-2xl">2XL</option>
-                                  <option value="text-3xl">3XL</option>
-                                  <option value="text-4xl">4XL</option>
-                                  <option value="text-5xl">5XL</option>
-                                  <option value="text-6xl">6XL</option>
-                                </select>
-                                <ChevronDown size={12} className="text-slate-400 absolute right-2.5 top-2.5 pointer-events-none" />
-                              </div>
-                            </div>
-
-                            {/* Alignment */}
-                            <div className="flex items-center justify-between">
-                              <span className={reviewStyles.propertyLabel}>Align</span>
-                              <div className="flex items-center space-x-1 w-36 bg-slate-50 p-0.5 rounded-md border border-slate-200">
-                                {[
-                                  { id: 'text-left', label: 'Left', icon: <AlignLeft size={12} /> },
-                                  { id: 'text-center', label: 'Center', icon: <AlignCenter size={12} /> },
-                                  { id: 'text-right', label: 'Right', icon: <AlignRight size={12} /> },
-                                ].map((al) => (
-                                  <button
-                                    key={al.id}
-                                    type="button"
-                                    onClick={() => updateStyle('textAlign', al.id)}
-                                    className={`flex-1 py-1 flex items-center justify-center rounded text-xs transition cursor-pointer ${
-                                      activeElement.classes.includes(al.id) || (al.id === 'text-left' && !activeElement.classes.includes('text-center') && !activeElement.classes.includes('text-right'))
-                                        ? 'bg-white text-emerald-700 shadow-2xs font-semibold'
-                                        : 'text-slate-400 hover:text-slate-700'
-                                    }`}
-                                    title={al.label}
-                                  >
-                                    {al.icon}
-                                  </button>
+                          <section className={reviewStyles.interactions} aria-label="Transitions">
+                            <button type="button" className={reviewStyles.disclosure} aria-expanded={showInteractions} onClick={() => setShowInteractions(value => !value)}>
+                              {showInteractions ? <ChevronDown size={12} /> : <ChevronRight size={12} />}
+                              <span>Transitions</span>
+                            </button>
+                            {showInteractions && (
+                              <div className={reviewStyles.controlRows}>
+                                {interactionControls.map(control => (
+                                  <label key={control.property}>
+                                    <span>{control.label}</span>
+                                    <select
+                                      aria-label={control.label}
+                                      value={interactionValue(activeElement.classes, control.property, editScope)}
+                                      disabled={busy || reviewBlocking}
+                                      onChange={e => updateStyle(control.property, e.target.value)}
+                                    >
+                                      <option value="" disabled>{activeVariant ? 'Inherit default' : 'Not set in source'}</option>
+                                      {control.options.map(([value, label]) => <option key={value} value={value}>{label}</option>)}
+                                    </select>
+                                  </label>
                                 ))}
+                                <p>Changes apply to {activeVariant === 'focus-visible' ? 'keyboard focus' : activeVariant === 'active' ? 'the pressed state' : activeVariant || 'the default appearance'}. Your device’s reduced-motion preference is respected in this preview.</p>
                               </div>
-                            </div>
-
-                            {/* Color */}
-                            <div className="flex items-center justify-between">
-                              <span className={reviewStyles.propertyLabel}>Color</span>
-                              <select aria-label="Text color" value={scopeTokens(activeElement.classes).find(token => ['text-slate-900','text-slate-600','text-emerald-600','text-blue-600','text-rose-600','text-white','text-black'].includes(token)) || ''} onChange={e => updateStyle('textColor',e.target.value)} className="w-36 rounded-md border border-slate-200 bg-white px-2 py-1.5 text-xs">
-                                <option value="" disabled>Inherited / custom</option>
-                                <option value="text-slate-900">Charcoal</option><option value="text-slate-600">Gray</option>
-                                <option value="text-emerald-600">Green</option><option value="text-blue-600">Blue</option>
-                                <option value="text-rose-600">Rose</option><option value="text-white">White</option><option value="text-black">Black</option>
-                              </select>
-                            </div>
-
-                            {/* Content */}
-                            <div className="flex items-center justify-between">
-                              <span className={reviewStyles.propertyLabel}>Content</span>
-                              <input
-                                type="text"
-                                aria-label="Content"
-                                value={draftText}
-                                onChange={(e) => setDraftText(e.target.value)}
-                                onBlur={() => { if (draftText !== activeElement.text) updateText(draftText); }}
-                                onKeyDown={(e) => {
-                                  e.stopPropagation();
-                                  if (e.key === 'Enter') e.currentTarget.blur();
-                                  if (e.key === 'Escape') setDraftText(activeElement.text || '');
-                                }}
-                                placeholder="Edit text content..."
-                                className="w-36 bg-white border border-[#E2E8F0] rounded-md px-2.5 py-1.5 text-xs text-slate-800 focus:outline-none focus:border-[#059669]"
-                              />
-                            </div>
-                          </div>
-                        )}
-                      </div>}
-
-                      <hr className="border-[#F1F5F9]" />
-
-                      {/* ---------------------------------------------------- */}
-                      {/* Section: Background (Collapsible)                    */}
-                      {/* ---------------------------------------------------- */}
-                      <div>
-                        <button
-                          type="button"
-                          aria-expanded={openSections.background} onClick={() => toggleSection('background')}
-                          className="w-full flex items-center justify-between text-left font-semibold text-xs text-slate-800 cursor-pointer select-none"
-                        >
-                          <span className="flex items-center space-x-1.5">
-                            {openSections.background ? (
-                              <ChevronDown size={13} className="text-slate-400 shrink-0" />
-                            ) : (
-                              <ChevronRight size={13} className="text-slate-400 shrink-0" />
                             )}
-                            <span>Background</span>
-                          </span>
-                        </button>
-                        {openSections.background && (
-                          <div className="pt-2 text-xs text-slate-500 space-y-2">
-                            <div className="flex items-center justify-between">
-                              <span className="text-[11px]">Fill</span>
-                              <div className="relative w-36">
-                                <select
-                                  aria-label="Fill color" value={activeElement.bgFill}
-                                  onChange={(e) => updateStyle('backgroundColor', `bg-${e.target.value}`)}
-                                  className="w-full bg-white border border-[#E2E8F0] rounded-md px-2.5 py-1.5 text-xs text-slate-800 appearance-none focus:outline-none focus:border-[#059669]"
-                                >
-                                  {!['transparent', 'white', 'slate-50', 'slate-900', 'emerald-600', 'blue-600', 'rose-500'].includes(activeElement.bgFill) && <option value={activeElement.bgFill} disabled>Custom fill</option>}
-                                  <option value="transparent">Transparent</option>
-                                  <option value="white">White</option>
-                                  <option value="slate-50">Slate 50</option>
-                                  <option value="slate-900">Slate 900</option>
-                                  <option value="emerald-600">Emerald 600</option>
-                                  <option value="blue-600">Blue 600</option>
-                                  <option value="rose-500">Rose 500</option>
-                                </select>
-                                <ChevronDown size={11} className="text-slate-400 absolute right-2.5 top-2.5 pointer-events-none" />
-                              </div>
-                            </div>
+                          </section>
+
+                          {/* ---------------------------------------------------- */}
+                          {/* Section: Layout                                      */}
+                          {/* ---------------------------------------------------- */}
+                          <div className="space-y-2">
+                            <button
+                              type="button"
+                              aria-expanded={openSections.layout} onClick={() => toggleSection('layout')}
+                              className="w-full flex items-center justify-between text-left font-semibold text-xs text-slate-800 cursor-pointer select-none"
+                            >
+                              <span className="flex items-center space-x-1.5">
+                                {openSections.layout ? (
+                                  <ChevronDown size={13} className="text-slate-400 shrink-0" />
+                                ) : (
+                                  <ChevronRight size={13} className="text-slate-400 shrink-0" />
+                                )}
+                                <span>Layout</span>
+                              </span>
+                            </button>
+
+                            {openSections.layout && <LayoutControls classes={activeElement.classes} computed={selectedLayer ? sourceSelections.current[selectedLayer]?.computed || {} : {}} disabled={busy || isApplying || reviewBlocking || destinationMode} scope={activeBreakpoint || activeVariant} onChange={updateStyle} />}
                           </div>
-                        )}
-                      </div>
 
-                      <hr className="border-[#F1F5F9]" />
+                          <hr className="border-[#F1F5F9]" />
 
-                      {/* ---------------------------------------------------- */}
-                      {/* Section: Borders (Collapsible)                       */}
-                      {/* ---------------------------------------------------- */}
-                      <div>
-                        <button
-                          type="button"
-                          aria-expanded={openSections.borders} onClick={() => toggleSection('borders')}
-                          className="w-full flex items-center justify-between text-left font-semibold text-xs text-slate-800 cursor-pointer select-none"
-                        >
-                          <span className="flex items-center space-x-1.5">
-                            {openSections.borders ? (
-                              <ChevronDown size={13} className="text-slate-400 shrink-0" />
-                            ) : (
-                              <ChevronRight size={13} className="text-slate-400 shrink-0" />
+                          {/* ---------------------------------------------------- */}
+                          {/* Section: Size                                        */}
+                          {/* ---------------------------------------------------- */}
+                          <div className="space-y-2">
+                            <button
+                              type="button"
+                              aria-expanded={openSections.size} onClick={() => toggleSection('size')}
+                              className="w-full flex items-center justify-between text-left font-semibold text-xs text-slate-800 cursor-pointer select-none"
+                            >
+                              <span className="flex items-center space-x-1.5">
+                                {openSections.size ? (
+                                  <ChevronDown size={13} className="text-slate-400 shrink-0" />
+                                ) : (
+                                  <ChevronRight size={13} className="text-slate-400 shrink-0" />
+                                )}
+                                <span>Size</span>
+                              </span>
+                            </button>
+
+                            {openSections.size && (
+                              <div className="space-y-2.5 pt-0.5 text-xs">
+                                {/* Width */}
+                                <div className="flex items-center justify-between">
+                                  <span className={reviewStyles.propertyLabel}>Width</span>
+                                  <div className="relative w-36">
+                                    <select
+                                      aria-label="Width"
+                                      disabled={busy || isApplying || reviewBlocking || destinationMode}
+                                      value={activeElement.width}
+                                      onChange={(e) => updateStyle('width', e.target.value)}
+                                      className="w-full bg-white border border-[#E2E8F0] rounded-md px-2.5 py-1.5 text-xs text-slate-800 appearance-none focus:outline-none focus:border-[#059669] focus:ring-1 focus:ring-emerald-500/20"
+                                    >
+                                      <option value="" disabled>Inherited / custom</option>
+                                      <option value="w-auto">Auto</option>
+                                      <option value="w-full">Full</option>
+                                      <option value="w-1/2">1/2</option>
+                                      <option value="w-fit">Fit</option>
+                                    </select>
+                                    <ChevronDown size={12} className="text-slate-400 absolute right-2.5 top-2.5 pointer-events-none" />
+                                  </div>
+                                </div>
+
+                                {!repositoryId && selectedLayer && <div className={reviewStyles.resizeBar}>
+                                  <button type="button" aria-label="Drag to resize width" aria-pressed={isResizing}
+                                    aria-describedby="selection-width-hint" aria-keyshortcuts="ArrowLeft ArrowRight Home End" onKeyDown={resizeWithKeyboard}
+                                    disabled={busy || isApplying || reviewBlocking || Boolean(uncertainUndoId) || Boolean(liveMove) || moveArmed}
+                                    onPointerDown={event => startResize('ne', event)}>
+                                    <ArrowUpDown size={12} style={{ transform: 'rotate(90deg)' }} />
+                                    <span>Resize</span><span className={reviewStyles.resizeValue}>{liveWidth || elementDimensions[selectedLayer]?.w || 0}px</span>
+                                  </button>
+                                  <select aria-label="Maximum width" disabled={isResizing || busy || isApplying || reviewBlocking || Boolean(uncertainUndoId) || Boolean(liveMove) || moveArmed}
+                                    value={scopeTokens(activeElement.classes).find(token => token.startsWith('max-w-')) || ''}
+                                    onChange={event => { const value = event.target.value; const key = selectedLayer; void triggerBackendPreview('style', { property: 'maxWidth', value }, key, () => setElements(previous => ({ ...previous, [key]: { ...previous[key], maxWidth: value } }))); }}>
+                                    <option value="" disabled>Set max width</option>
+                                    {['sm', 'md', 'lg', 'xl', '2xl', '3xl', '4xl', '5xl', '6xl'].map(size => <option key={size} value={`max-w-${size}`}>Max {size}</option>)}
+                                  </select>
+                                </div>}
+                              </div>
                             )}
-                            <span>Borders</span>
-                          </span>
-                        </button>
-                        {openSections.borders && (
-                          <div className="pt-2 text-xs text-slate-500 space-y-2">
-                            <div className="flex items-center justify-between">
-                              <span className="text-[11px]">Radius</span>
-                              <div className="relative w-36">
-                                <select
-                                  aria-label="Corner radius" value={activeElement.borderRadius || '__computed'}
-                                  onChange={(e) => updateStyle('borderRadius', e.target.value)}
-                                  className="w-full bg-white border border-[#E2E8F0] rounded-md px-2.5 py-1.5 text-xs text-slate-800 appearance-none focus:outline-none focus:border-[#059669]"
-                                >
-                                  {!activeElement.borderRadius && <option value="__computed" disabled>Custom · {activeElement.previewStyle?.borderRadius || 'inherited'}</option>}
-                                  <option value="rounded-none">Square</option>
-                                  <option value="rounded-sm">Small</option>
-                                  <option value="rounded-md">Medium</option>
-                                  <option value="rounded-lg">Large</option>
-                                  <option value="rounded-xl">Extra Large</option>
-                                  <option value="rounded-full">Pill</option>
-                                </select>
-                                <ChevronDown size={11} className="text-slate-400 absolute right-2.5 top-2.5 pointer-events-none" />
-                              </div>
-                            </div>
+                          </div>
 
-                            <div className="flex items-center justify-between">
-                              <span className="text-[11px]">Width</span>
-                              <div className="relative w-36">
-                                <select
-                                  value={activeElement.classes.match(/\bborder(-[0248])?\b/)?.[0] || 'border-0'}
-                                  onChange={(e) => updateStyle('borderWidth', e.target.value)}
-                                  className="w-full bg-white border border-[#E2E8F0] rounded-md px-2.5 py-1.5 text-xs text-slate-800 appearance-none focus:outline-none focus:border-[#059669]"
-                                >
-                                  <option value="border-0">None (0px)</option>
-                                  <option value="border">Thin (1px)</option>
-                                  <option value="border-2">Medium (2px)</option>
-                                  <option value="border-4">Thick (4px)</option>
-                                </select>
-                                <ChevronDown size={11} className="text-slate-400 absolute right-2.5 top-2.5 pointer-events-none" />
-                              </div>
-                            </div>
+                          <hr className="border-[#F1F5F9]" />
 
-                            <div className="flex items-center justify-between">
-                              <span className="text-[11px]">Color</span>
-                              <div className="relative w-36">
-                                <select
-                                  value={activeElement.classes.match(/\bborder-(slate|emerald|blue|rose|transparent)-\d+\b|\bborder-(transparent|white|black)\b/)?.[0] || 'border-transparent'}
-                                  onChange={(e) => updateStyle('borderColor', e.target.value)}
-                                  className="w-full bg-white border border-[#E2E8F0] rounded-md px-2.5 py-1.5 text-xs text-slate-800 appearance-none focus:outline-none focus:border-[#059669]"
-                                >
-                                  <option value="border-transparent">Transparent</option>
-                                  <option value="border-slate-200">Slate 200</option>
-                                  <option value="border-slate-900">Slate 900</option>
-                                  <option value="border-emerald-500">Emerald 500</option>
-                                </select>
-                                <ChevronDown size={11} className="text-slate-400 absolute right-2.5 top-2.5 pointer-events-none" />
+                          {/* ---------------------------------------------------- */}
+                          {/* Section: Spacing (The Box Model Diagram)             */}
+                          {/* ---------------------------------------------------- */}
+                          <div className="space-y-2">
+                            <button
+                              type="button"
+                              aria-expanded={openSections.spacing} onClick={() => toggleSection('spacing')}
+                              className="w-full flex items-center justify-between text-left font-semibold text-xs text-slate-800 cursor-pointer select-none"
+                            >
+                              <span className="flex items-center space-x-1.5">
+                                {openSections.spacing ? (
+                                  <ChevronDown size={13} className="text-slate-400 shrink-0" />
+                                ) : (
+                                  <ChevronRight size={13} className="text-slate-400 shrink-0" />
+                                )}
+                                <span>Spacing</span>
+                              </span>
+                            </button>
+
+                            {openSections.spacing && (
+                              <div className={reviewStyles.controlRows}>
+                                <label>
+                                  <span>Padding</span>
+                                  <select aria-label="Padding" disabled={busy || isApplying || reviewBlocking || destinationMode} value={scopeTokens(activeElement.classes).find(token => /^p-\d+$/.test(token)) || ''} onChange={e => updateStyle('padding', e.target.value)}>
+                                    <option value="" disabled>Not set in source</option>
+                                    {['p-0', 'p-1', 'p-2', 'p-3', 'p-4', 'p-6', 'p-8', 'p-10', 'p-12'].map(value => <option key={value} value={value}>{value.slice(2)} units</option>)}
+                                  </select>
+                                </label>
+                                <p>Applies equally to all four sides.</p>
                               </div>
+                            )}
+                          </div>
+
+                          <hr className="border-[#F1F5F9]" />
+
+                          {/* ---------------------------------------------------- */}
+                          {/* Section: Text                                        */}
+                          {/* ---------------------------------------------------- */}
+                          {activeElement.tag !== 'svg' && <div className="space-y-2">
+                            <button
+                              type="button"
+                              aria-expanded={openSections.text} onClick={() => toggleSection('text')}
+                              className="w-full flex items-center justify-between text-left font-semibold text-xs text-slate-800 cursor-pointer select-none"
+                            >
+                              <span className="flex items-center space-x-1.5">
+                                {openSections.text ? (
+                                  <ChevronDown size={13} className="text-slate-400 shrink-0" />
+                                ) : (
+                                  <ChevronRight size={13} className="text-slate-400 shrink-0" />
+                                )}
+                                <span>Text</span>
+                              </span>
+                            </button>
+
+                            {openSections.text && (
+                              <div className="space-y-2.5 pt-0.5 text-xs">
+                                {/* Typeface */}
+                                <div className="flex items-center justify-between">
+                                  <span className={reviewStyles.propertyLabel}>Typeface</span>
+                                  <div className="relative w-36">
+                                    <select
+                                      value={scopeTokens(activeElement.classes).find(token => ['font-sans', 'font-serif', 'font-mono'].includes(token)) || ''}
+                                      onChange={e => updateStyle('fontFamily', e.target.value)}
+                                      className="w-full bg-white border border-[#E2E8F0] rounded-md px-2.5 py-1.5 text-xs text-slate-800 appearance-none focus:outline-none focus:border-[#059669]"
+                                    >
+                                      <option value="" disabled>Inherited</option>
+                                      <option value="font-sans">Project sans</option>
+                                      <option value="font-serif">Project serif</option>
+                                      <option value="font-mono">Project mono</option>
+                                    </select>
+                                    <ChevronDown size={12} className="text-slate-400 absolute right-2.5 top-2.5 pointer-events-none" />
+                                  </div>
+                                </div>
+
+                                {/* Weight - Protected: Needed by test/studio-restore.test.ts */}
+                                <div className="flex items-center justify-between">
+                                  <span className={reviewStyles.propertyLabel}>Weight</span>
+                                  <div className="relative w-36">
+                                    <select
+                                      value={scopeTokens(activeElement.classes).find(token => /^font-(normal|medium|semibold|bold|extrabold)$/.test(token)) || ''}
+                                      onChange={e => updateStyle('fontWeight', e.target.value)}
+                                      className="w-full bg-white border border-[#E2E8F0] rounded-md px-2.5 py-1.5 text-xs text-slate-800 appearance-none focus:outline-none focus:border-[#059669]"
+                                    >
+                                      <option value="" disabled>Inherited</option>
+                                      <option value="font-normal">Regular</option>
+                                      <option value="font-medium">Medium</option>
+                                      <option value="font-semibold">Semibold</option>
+                                      <option value="font-bold">Bold</option>
+                                      <option value="font-extrabold">Extra bold</option>
+                                    </select>
+                                    <ChevronDown size={12} className="text-slate-400 absolute right-2.5 top-2.5 pointer-events-none" />
+                                  </div>
+                                </div>
+
+                                {/* Size */}
+                                <div className="flex items-center justify-between">
+                                  <span className={reviewStyles.propertyLabel}>Size</span>
+                                  <div className="relative w-36">
+                                    <select
+                                      value={scopeTokens(activeElement.classes).find(token => /^text-(xs|sm|base|lg|xl|[2-7]xl)$/.test(token)) || ''}
+                                      onChange={(e) => updateStyle('fontSize', e.target.value)}
+                                      className="w-full bg-white border border-[#E2E8F0] rounded-md px-2.5 py-1.5 text-xs text-slate-800 appearance-none focus:outline-none focus:border-[#059669]"
+                                    >
+                                      <option value="" disabled>Inherited</option>
+                                      <option value="text-xs">Extra small</option>
+                                      <option value="text-sm">SM</option>
+                                      <option value="text-base">Base</option>
+                                      <option value="text-lg">LG</option>
+                                      <option value="text-xl">XL</option>
+                                      <option value="text-2xl">2XL</option>
+                                      <option value="text-3xl">3XL</option>
+                                      <option value="text-4xl">4XL</option>
+                                      <option value="text-5xl">5XL</option>
+                                      <option value="text-6xl">6XL</option>
+                                    </select>
+                                    <ChevronDown size={12} className="text-slate-400 absolute right-2.5 top-2.5 pointer-events-none" />
+                                  </div>
+                                </div>
+
+                                {/* Alignment */}
+                                <div className="flex items-center justify-between">
+                                  <span className={reviewStyles.propertyLabel}>Align</span>
+                                  <div className="flex items-center space-x-1 w-36 bg-slate-50 p-0.5 rounded-md border border-slate-200">
+                                    {[
+                                      { id: 'text-left', label: 'Left', icon: <AlignLeft size={12} /> },
+                                      { id: 'text-center', label: 'Center', icon: <AlignCenter size={12} /> },
+                                      { id: 'text-right', label: 'Right', icon: <AlignRight size={12} /> },
+                                    ].map((al) => (
+                                      <button
+                                        key={al.id}
+                                        type="button"
+                                        onClick={() => updateStyle('textAlign', al.id)}
+                                        className={`flex-1 py-1 flex items-center justify-center rounded text-xs transition cursor-pointer ${activeElement.classes.includes(al.id) || (al.id === 'text-left' && !activeElement.classes.includes('text-center') && !activeElement.classes.includes('text-right'))
+                                          ? 'bg-white text-emerald-700 shadow-2xs font-semibold'
+                                          : 'text-slate-400 hover:text-slate-700'
+                                          }`}
+                                        title={al.label}
+                                      >
+                                        {al.icon}
+                                      </button>
+                                    ))}
+                                  </div>
+                                </div>
+
+                                {/* Color */}
+                                <div className="flex items-center justify-between">
+                                  <span className={reviewStyles.propertyLabel}>Color</span>
+                                  <select aria-label="Text color" value={scopeTokens(activeElement.classes).find(token => ['text-slate-900', 'text-slate-600', 'text-emerald-600', 'text-blue-600', 'text-rose-600', 'text-white', 'text-black'].includes(token)) || ''} onChange={e => updateStyle('textColor', e.target.value)} className="w-36 rounded-md border border-slate-200 bg-white px-2 py-1.5 text-xs">
+                                    <option value="" disabled>Inherited / custom</option>
+                                    <option value="text-slate-900">Charcoal</option><option value="text-slate-600">Gray</option>
+                                    <option value="text-emerald-600">Green</option><option value="text-blue-600">Blue</option>
+                                    <option value="text-rose-600">Rose</option><option value="text-white">White</option><option value="text-black">Black</option>
+                                  </select>
+                                </div>
+
+                                {/* Content */}
+                                <div className="flex items-center justify-between">
+                                  <span className={reviewStyles.propertyLabel}>Content</span>
+                                  <input
+                                    type="text"
+                                    aria-label="Content"
+                                    value={draftText}
+                                    onChange={(e) => setDraftText(e.target.value)}
+                                    onBlur={() => { if (draftText !== activeElement.text) updateText(draftText); }}
+                                    onKeyDown={(e) => {
+                                      e.stopPropagation();
+                                      if (e.key === 'Enter') e.currentTarget.blur();
+                                      if (e.key === 'Escape') setDraftText(activeElement.text || '');
+                                    }}
+                                    placeholder="Edit text content..."
+                                    className="w-36 bg-white border border-[#E2E8F0] rounded-md px-2.5 py-1.5 text-xs text-slate-800 focus:outline-none focus:border-[#059669]"
+                                  />
+                                </div>
+                              </div>
+                            )}
+                          </div>}
+
+                          <hr className="border-[#F1F5F9]" />
+
+                          {/* ---------------------------------------------------- */}
+                          {/* Section: Background (Collapsible)                    */}
+                          {/* ---------------------------------------------------- */}
+                          <div>
+                            <button
+                              type="button"
+                              aria-expanded={openSections.background} onClick={() => toggleSection('background')}
+                              className="w-full flex items-center justify-between text-left font-semibold text-xs text-slate-800 cursor-pointer select-none"
+                            >
+                              <span className="flex items-center space-x-1.5">
+                                {openSections.background ? (
+                                  <ChevronDown size={13} className="text-slate-400 shrink-0" />
+                                ) : (
+                                  <ChevronRight size={13} className="text-slate-400 shrink-0" />
+                                )}
+                                <span>Background</span>
+                              </span>
+                            </button>
+                            {openSections.background && (
+                              <div className="pt-2 text-xs text-slate-500 space-y-2">
+                                <div className="flex items-center justify-between">
+                                  <span className="text-[11px]">Fill</span>
+                                  <div className="relative w-36">
+                                    <select
+                                      aria-label="Fill color" value={activeElement.bgFill}
+                                      onChange={(e) => updateStyle('backgroundColor', `bg-${e.target.value}`)}
+                                      className="w-full bg-white border border-[#E2E8F0] rounded-md px-2.5 py-1.5 text-xs text-slate-800 appearance-none focus:outline-none focus:border-[#059669]"
+                                    >
+                                      {!['transparent', 'white', 'slate-50', 'slate-900', 'emerald-600', 'blue-600', 'rose-500'].includes(activeElement.bgFill) && <option value={activeElement.bgFill} disabled>Custom fill</option>}
+                                      <option value="transparent">Transparent</option>
+                                      <option value="white">White</option>
+                                      <option value="slate-50">Slate 50</option>
+                                      <option value="slate-900">Slate 900</option>
+                                      <option value="emerald-600">Emerald 600</option>
+                                      <option value="blue-600">Blue 600</option>
+                                      <option value="rose-500">Rose 500</option>
+                                    </select>
+                                    <ChevronDown size={11} className="text-slate-400 absolute right-2.5 top-2.5 pointer-events-none" />
+                                  </div>
+                                </div>
+                              </div>
+                            )}
+                          </div>
+
+                          <hr className="border-[#F1F5F9]" />
+
+                          {/* ---------------------------------------------------- */}
+                          {/* Section: Borders (Collapsible)                       */}
+                          {/* ---------------------------------------------------- */}
+                          <div>
+                            <button
+                              type="button"
+                              aria-expanded={openSections.borders} onClick={() => toggleSection('borders')}
+                              className="w-full flex items-center justify-between text-left font-semibold text-xs text-slate-800 cursor-pointer select-none"
+                            >
+                              <span className="flex items-center space-x-1.5">
+                                {openSections.borders ? (
+                                  <ChevronDown size={13} className="text-slate-400 shrink-0" />
+                                ) : (
+                                  <ChevronRight size={13} className="text-slate-400 shrink-0" />
+                                )}
+                                <span>Borders</span>
+                              </span>
+                            </button>
+                            {openSections.borders && (
+                              <div className="pt-2 text-xs text-slate-500 space-y-2">
+                                <div className="flex items-center justify-between">
+                                  <span className="text-[11px]">Radius</span>
+                                  <div className="relative w-36">
+                                    <select
+                                      aria-label="Corner radius" value={activeElement.borderRadius || '__computed'}
+                                      onChange={(e) => updateStyle('borderRadius', e.target.value)}
+                                      className="w-full bg-white border border-[#E2E8F0] rounded-md px-2.5 py-1.5 text-xs text-slate-800 appearance-none focus:outline-none focus:border-[#059669]"
+                                    >
+                                      {!activeElement.borderRadius && <option value="__computed" disabled>Custom · {activeElement.previewStyle?.borderRadius || 'inherited'}</option>}
+                                      <option value="rounded-none">Square</option>
+                                      <option value="rounded-sm">Small</option>
+                                      <option value="rounded-md">Medium</option>
+                                      <option value="rounded-lg">Large</option>
+                                      <option value="rounded-xl">Extra Large</option>
+                                      <option value="rounded-full">Pill</option>
+                                    </select>
+                                    <ChevronDown size={11} className="text-slate-400 absolute right-2.5 top-2.5 pointer-events-none" />
+                                  </div>
+                                </div>
+
+                                <div className="flex items-center justify-between">
+                                  <span className="text-[11px]">Width</span>
+                                  <div className="relative w-36">
+                                    <select
+                                      value={activeElement.classes.match(/\bborder(-[0248])?\b/)?.[0] || 'border-0'}
+                                      onChange={(e) => updateStyle('borderWidth', e.target.value)}
+                                      className="w-full bg-white border border-[#E2E8F0] rounded-md px-2.5 py-1.5 text-xs text-slate-800 appearance-none focus:outline-none focus:border-[#059669]"
+                                    >
+                                      <option value="border-0">None (0px)</option>
+                                      <option value="border">Thin (1px)</option>
+                                      <option value="border-2">Medium (2px)</option>
+                                      <option value="border-4">Thick (4px)</option>
+                                    </select>
+                                    <ChevronDown size={11} className="text-slate-400 absolute right-2.5 top-2.5 pointer-events-none" />
+                                  </div>
+                                </div>
+
+                                <div className="flex items-center justify-between">
+                                  <span className="text-[11px]">Color</span>
+                                  <div className="relative w-36">
+                                    <select
+                                      value={activeElement.classes.match(/\bborder-(slate|emerald|blue|rose|transparent)-\d+\b|\bborder-(transparent|white|black)\b/)?.[0] || 'border-transparent'}
+                                      onChange={(e) => updateStyle('borderColor', e.target.value)}
+                                      className="w-full bg-white border border-[#E2E8F0] rounded-md px-2.5 py-1.5 text-xs text-slate-800 appearance-none focus:outline-none focus:border-[#059669]"
+                                    >
+                                      <option value="border-transparent">Transparent</option>
+                                      <option value="border-slate-200">Slate 200</option>
+                                      <option value="border-slate-900">Slate 900</option>
+                                      <option value="border-emerald-500">Emerald 500</option>
+                                    </select>
+                                    <ChevronDown size={11} className="text-slate-400 absolute right-2.5 top-2.5 pointer-events-none" />
+                                  </div>
+                                </div>
+                              </div>
+                            )}
+                          </div>
+
+                        </div>
+                      ) : (
+                        /* SETTINGS TAB */
+                        <div className="p-3.5 space-y-3.5 text-xs text-slate-700">
+                          <div className="space-y-1">
+                            <div className="text-[11.5px] font-semibold text-slate-900">Element & Workspace Metadata</div>
+                            <div className="text-[10.5px] text-slate-500">Connected AST nudger and local source adapter.</div>
+                          </div>
+
+                          <div className="p-2.5 rounded-lg bg-slate-50 border border-slate-200 space-y-1.5 font-mono text-[10.5px]">
+                            <div className="flex justify-between">
+                              <span className="text-slate-500 font-sans">Tag / Name:</span>
+                              <span className="text-slate-900 font-semibold">{activeElement.tag}</span>
+                            </div>
+                            <div className="flex justify-between">
+                              <span className="text-slate-500 font-sans">Element ID:</span>
+                              <span className="text-slate-700 font-mono">{activeElement.id}</span>
+                            </div>
+                            <div className="flex justify-between">
+                              <span className="text-slate-500 font-sans">Source File:</span>
+                              <span className="text-slate-900 truncate max-w-[130px]">{activeElement.filePath}</span>
+                            </div>
+                            <div className="flex justify-between">
+                              <span className="text-slate-500 font-sans">Target Line:</span>
+                              <span className="text-emerald-700 font-bold">{activeElement.line}</span>
+                            </div>
+                            <div className="flex justify-between">
+                              <span className="text-slate-500 font-sans">AST Status:</span>
+                              <span className="text-emerald-600 font-semibold">Checked before preview</span>
                             </div>
                           </div>
-                        )}
-                      </div>
 
+                          <div className="space-y-1.5 pt-1 text-[11px]">
+                            <div className="font-semibold text-slate-800">Element Tailwind Classes</div>
+                            <div className="p-2 rounded bg-slate-50 border border-slate-200 font-mono text-[10px] text-slate-600 break-all leading-relaxed">
+                              {activeElement.classes}
+                            </div>
+                          </div>
+
+                          <div className="pt-2">
+                            <Link
+                              href="/workspace"
+                              className="w-full flex items-center justify-center space-x-1.5 py-1.5 px-3 rounded-md border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-medium transition shadow-2xs"
+                            >
+                              <span>Switch Repository / Project</span>
+                              <ArrowUpRight size={12} />
+                            </Link>
+                          </div>
+                        </div>
+                      )}
                     </div>
-                  ) : (
-                    /* SETTINGS TAB */
-                    <div className="p-3.5 space-y-3.5 text-xs text-slate-700">
-                      <div className="space-y-1">
-                        <div className="text-[11.5px] font-semibold text-slate-900">Element & Workspace Metadata</div>
-                        <div className="text-[10.5px] text-slate-500">Connected AST nudger and local source adapter.</div>
-                      </div>
 
-                      <div className="p-2.5 rounded-lg bg-slate-50 border border-slate-200 space-y-1.5 font-mono text-[10.5px]">
-                        <div className="flex justify-between">
-                          <span className="text-slate-500 font-sans">Tag / Name:</span>
-                          <span className="text-slate-900 font-semibold">{activeElement.tag}</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-slate-500 font-sans">Element ID:</span>
-                          <span className="text-slate-700 font-mono">{activeElement.id}</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-slate-500 font-sans">Source File:</span>
-                          <span className="text-slate-900 truncate max-w-[130px]">{activeElement.filePath}</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-slate-500 font-sans">Target Line:</span>
-                          <span className="text-emerald-700 font-bold">{activeElement.line}</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-slate-500 font-sans">AST Status:</span>
-                          <span className="text-emerald-600 font-semibold">Checked before preview</span>
-                        </div>
-                      </div>
-
-                      <div className="space-y-1.5 pt-1 text-[11px]">
-                        <div className="font-semibold text-slate-800">Element Tailwind Classes</div>
-                        <div className="p-2 rounded bg-slate-50 border border-slate-200 font-mono text-[10px] text-slate-600 break-all leading-relaxed">
-                          {activeElement.classes}
-                        </div>
-                      </div>
-
-                      <div className="pt-2">
-                        <Link
-                          href="/workspace"
-                          className="w-full flex items-center justify-center space-x-1.5 py-1.5 px-3 rounded-md border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-medium transition shadow-2xs"
-                        >
-                          <span>Switch Repository / Project</span>
-                          <ArrowUpRight size={12} />
-                        </Link>
-                      </div>
+                    {/* Footer: Deselect action */}
+                    <div className="h-10 px-3.5 border-t border-[#F1F5F9] bg-white flex items-center justify-between text-xs text-slate-500 shrink-0">
+                      <button
+                        type="button"
+                        onClick={() => setSelectedLayer(null)}
+                        className="flex items-center space-x-1.5 text-slate-600 hover:text-slate-900 font-medium px-1.5 py-1 rounded hover:bg-slate-50 transition cursor-pointer"
+                      >
+                        <RotateCcw size={13} />
+                        <span>Deselect</span>
+                      </button>
+                      <span className="text-[10px] text-slate-400 truncate max-w-[155px]" title="Edit freely. Save changes when ready.">
+                        {repositoryId ? 'Review before saving' : 'Ctrl+S to save changes'}
+                      </span>
                     </div>
-                  )}
-                </div>
-
-                {/* Footer: Deselect action */}
-                <div className="h-10 px-3.5 border-t border-[#F1F5F9] bg-white flex items-center justify-between text-xs text-slate-500 shrink-0">
-                  <button
-                    type="button"
-                    onClick={() => setSelectedLayer(null)}
-                    className="flex items-center space-x-1.5 text-slate-600 hover:text-slate-900 font-medium px-1.5 py-1 rounded hover:bg-slate-50 transition cursor-pointer"
-                  >
-                    <RotateCcw size={13} />
-                    <span>Deselect</span>
-                  </button>
-                  <span className="text-[10px] text-slate-400 truncate max-w-[155px]" title="Edit freely. Save changes when ready.">
-                    {repositoryId ? 'Review before saving' : 'Ctrl+S to save changes'}
-                  </span>
-                </div>
-              </div>
+                  </div>
+                )}
+                {!windowMode && <footer className={reviewStyles.inspectorFooter} aria-label="Save and history">
+                  {renderHistoryControls()}{renderDraftControls()}
+                </footer>}
+              </aside>
             )}
-            {!windowMode && <footer className={reviewStyles.inspectorFooter} aria-label="Save and history">
-              {renderHistoryControls()}{renderDraftControls()}
-            </footer>}
-          </aside>
-          )}
 
-        </div>
+          </div>
         </div>
       </div>
     </>
