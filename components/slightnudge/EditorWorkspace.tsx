@@ -1054,43 +1054,87 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
   }, [selectedLayer, elements, childOrder]);
 
   useLayoutEffect(() => {
-    if (!selectedLayer || liveMove || isResizing || isDraggingMove) return;
-    const node = elementRefs.current[selectedLayer];
-    const toolbar = formattingRef.current;
-    const canvas = node?.closest('main');
-    if (!node || !toolbar || !canvas) { setFormattingPosition(null); return; }
+    if (!selectedLayer || liveMove || isResizing || isDraggingMove) {
+      setFormattingPosition(null);
+      return;
+    }
+
     let animation = 0;
+    let observer: ResizeObserver | null = null;
+    let observedNode: HTMLElement | null = null;
+    let observedToolbar: HTMLElement | null = null;
+    let iframeWin: Window | null = null;
+    let retries = 0;
+
     const update = () => {
+      const node = elementRefs.current[selectedLayer] || document.querySelector<HTMLElement>('[aria-label="Selected source element"]');
+      const toolbar = formattingRef.current || document.querySelector<HTMLElement>('[role="toolbar"][aria-label="Selection formatting"]');
+      const canvas = node?.closest('main') || document.querySelector<HTMLElement>('main[data-editor-canvas]');
+
+      if (!node || !toolbar || !canvas) {
+        if (retries++ < 12) {
+          animation = requestAnimationFrame(update);
+        }
+        return;
+      }
+
       const selection = node.getBoundingClientRect();
+      if (selection.width === 0 && selection.height === 0) {
+        if (retries++ < 12) {
+          animation = requestAnimationFrame(update);
+        }
+        return;
+      }
+      retries = 0;
+
+      if (!observer) {
+        observer = new ResizeObserver(() => {
+          cancelAnimationFrame(animation);
+          animation = requestAnimationFrame(update);
+        });
+        observer.observe(canvas);
+      }
+      if (node !== observedNode) {
+        if (observedNode) observer.unobserve(observedNode);
+        observer.observe(node);
+        observedNode = node;
+      }
+      if (toolbar !== observedToolbar) {
+        if (observedToolbar) observer.unobserve(observedToolbar);
+        observer.observe(toolbar);
+        observedToolbar = toolbar;
+      }
+
       const frame = canvas.getBoundingClientRect();
-      const width = toolbar.offsetWidth || 300;
-      const height = toolbar.offsetHeight || 32;
+      const width = toolbar.offsetWidth || 284;
+      const height = toolbar.offsetHeight || 33;
       const viewportW = window.innerWidth;
       const viewportH = window.innerHeight;
 
-      // Absolute safe boundaries: the toolbar must NEVER clip outside viewport or dock/panels
+      // Absolute safe boundaries: the toolbar must NEVER clip outside viewport or docks/panels
       let safeTop = 14;
       const headerEl = document.querySelector('header');
       if (headerEl) {
         const hRect = headerEl.getBoundingClientRect();
         if (hRect.bottom > 0 && hRect.top < viewportH * 0.3) {
-          safeTop = Math.max(safeTop, Math.round(hRect.bottom) + 10);
+          safeTop = Math.max(safeTop, Math.round(hRect.bottom) + 8);
         }
       }
       if (frame.top > safeTop && frame.top < viewportH * 0.3) {
-        safeTop = Math.max(safeTop, Math.round(frame.top) + 10);
+        safeTop = Math.max(safeTop, Math.round(frame.top) + 8);
       }
 
       let safeBottom = viewportH - 14;
-      const bottomDockEl = document.querySelector('[aria-label="Editor toolbar"]');
+      // Bottom dock check: ONLY apply if an element is actually docked at the bottom half of the screen
+      const bottomDockEl = document.querySelector('[data-dock-position="bottom"], [data-editor-dock="bottom"]');
       if (bottomDockEl) {
         const bRect = bottomDockEl.getBoundingClientRect();
-        if (bRect.top > 0 && bRect.top < viewportH) {
+        if (bRect.top > viewportH * 0.5 && bRect.top < viewportH) {
           safeBottom = Math.min(safeBottom, Math.round(bRect.top) - 10);
         }
       }
       if (frame.bottom < safeBottom && frame.bottom > viewportH * 0.7) {
-        safeBottom = Math.min(safeBottom, Math.round(frame.bottom) - 10);
+        safeBottom = Math.min(safeBottom, Math.round(frame.bottom) - 8);
       }
 
       let safeLeft = 14;
@@ -1112,11 +1156,11 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
         safeRight = Math.min(safeRight, Math.round(frame.right) - 8);
       }
 
-      // Hard clamp bounds to ensure window boundaries are strictly respected under all screen sizes & panel states
+      // Hard clamp bounds to guarantee window boundaries are strictly respected under all screen sizes & panel states
       safeLeft = Math.max(14, Math.min(safeLeft, viewportW - width - 14));
       safeRight = Math.min(viewportW - 14, Math.max(safeRight, safeLeft + width));
       safeTop = Math.max(14, Math.min(safeTop, viewportH - height - 14));
-      safeBottom = Math.min(viewportH - 14, Math.max(safeBottom, safeTop + height));
+      safeBottom = Math.max(safeTop + height + 10, Math.min(viewportH - 14, safeBottom));
 
       const bounds = { left: safeLeft, right: safeRight, top: safeTop, bottom: safeBottom };
 
@@ -1157,22 +1201,40 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
           );
         } else {
           rawCandidates.push(
-            [selection.left + (selection.width - width) / 2, bounds.top + 16],
-            [selection.left, bounds.top + 16]
+            [selection.left + (selection.width - width) / 2, bounds.top + 8],
+            [selection.left, bounds.top + 8]
           );
         }
       } else {
         // Text elements (h1-h6, p, span, etc.):
-        // Standard studio behavior (Figma, Framer, Docs): ALWAYS anchor above the text layer.
-        // It never flips below to obscure child/subordinate paragraphs.
-        // When scrolled near the top edge, clampTop pins it safely at bounds.top.
+        // Standard studio behavior (Figma, Framer, Docs):
+        // 1. Prefer ABOVE the text layer when space allows (clearing the top move handle).
+        // 2. If scrolled near the top edge and space above is insufficient, cleanly place BELOW.
+        const hasSpaceAbove = clearAboveTop >= bounds.top;
+        const hasSpaceBelow = clearBelowTop + height <= bounds.bottom;
         const aboveMoveTop = move ? move.top - height - 8 : clearAboveTop;
-        rawCandidates.push(
-          [selection.left, clearAboveTop],
-          [selection.left, aboveMoveTop],
-          [selection.left + (selection.width - width) / 2, aboveMoveTop],
-          [selection.right - width, clearAboveTop]
-        );
+
+        if (hasSpaceAbove) {
+          rawCandidates.push(
+            [selection.left, clearAboveTop],
+            [selection.left, aboveMoveTop],
+            [selection.left + (selection.width - width) / 2, aboveMoveTop],
+            [selection.right - width, clearAboveTop]
+          );
+        } else if (hasSpaceBelow) {
+          // Scrolled right against the top of the canvas: place below to avoid clipping/overlapping header
+          rawCandidates.push(
+            [selection.left, clearBelowTop],
+            [selection.left + (selection.width - width) / 2, clearBelowTop],
+            [selection.right - width, clearBelowTop]
+          );
+        } else {
+          // Tall block covering viewport: pin inside safely
+          rawCandidates.push(
+            [selection.left, bounds.top + 8],
+            [selection.left + (selection.width - width) / 2, bounds.top + 8]
+          );
+        }
       }
 
       const candidates = rawCandidates.map(([x, y], index) => {
@@ -1213,21 +1275,27 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
 
     const schedule = () => { cancelAnimationFrame(animation); animation = requestAnimationFrame(update); };
     update();
-    const observer = new ResizeObserver(schedule);
-    observer.observe(node);
-    observer.observe(toolbar);
-    observer.observe(canvas);
-    const menu = toolbar.querySelector<HTMLElement>('[data-formatting-details]');
-    if (menu) observer.observe(menu);
+
     window.addEventListener('scroll', schedule, true);
     window.addEventListener('resize', schedule);
-    canvas.addEventListener('scroll', schedule, { passive: true });
+    const canvas = document.querySelector('main[data-editor-canvas]');
+    if (canvas) canvas.addEventListener('scroll', schedule, { passive: true });
+
+    const iframeEl = document.querySelector('iframe');
+    try {
+      iframeWin = iframeEl?.contentWindow || null;
+      if (iframeWin) iframeWin.addEventListener('scroll', schedule, { passive: true });
+    } catch {}
+
     return () => {
-      observer.disconnect();
       cancelAnimationFrame(animation);
+      if (observer) observer.disconnect();
       window.removeEventListener('scroll', schedule, true);
       window.removeEventListener('resize', schedule);
-      canvas.removeEventListener('scroll', schedule);
+      if (canvas) canvas.removeEventListener('scroll', schedule);
+      if (iframeWin) {
+        try { iframeWin.removeEventListener('scroll', schedule); } catch {}
+      }
     };
   }, [selectedLayer, repositoryId, elements, breakpoint, showQuickActions, liveMove, isResizing, isDraggingMove, childOrder, elementDimensions, sourceLayers, sourceSelection.current?.rect?.left, sourceSelection.current?.rect?.top, windowMode, windowPanel, windowDock.position, definitionStyleKey]);
 

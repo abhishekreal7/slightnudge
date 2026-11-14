@@ -8,11 +8,12 @@ import {
   RotateCcw,
   LayoutGrid,
   Type,
-  Palette,
+  Pipette,
   Sparkles,
   MousePointerClick,
   Code2,
   History,
+  Ruler,
 } from 'lucide-react';
 import {
   LayoutMatrix,
@@ -228,14 +229,7 @@ export function RightToolDock({
               onClick={() => toggleTool('spacing')}
               className={railBtnClass(activeTool === 'spacing')}
             >
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <rect x="3" y="3" width="18" height="18" rx="4" strokeWidth="1.8" />
-                <rect x="7.5" y="7.5" width="9" height="9" rx="2" strokeWidth="1.4" strokeDasharray="2 1.5" opacity="0.65" />
-                <path d="M12 3v4" />
-                <path d="M12 17v4" />
-                <path d="M3 12h4" />
-                <path d="M17 12h4" />
-              </svg>
+              <Ruler size={18} strokeWidth={2} />
             </button>
             {showTooltips && (
               <div className={tooltipClass}>
@@ -273,7 +267,7 @@ export function RightToolDock({
               onClick={() => toggleTool('colors')}
               className={railBtnClass(activeTool === 'colors')}
             >
-              <Palette size={18} strokeWidth={1.9} />
+              <Pipette size={18} strokeWidth={2} />
             </button>
             {showTooltips && (
               <div className={tooltipClass}>
@@ -293,9 +287,8 @@ export function RightToolDock({
               className={railBtnClass(activeTool === 'borders')}
             >
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <rect x="3.5" y="3.5" width="17" height="17" rx="5" strokeWidth="1.9" />
-                <path d="M3.5 10.5a7 7 0 0 1 7-7" strokeWidth="2.5" />
-                <circle cx="10.5" cy="10.5" r="1.5" fill="currentColor" />
+                <rect width="18" height="18" x="3" y="3" rx="5" />
+                <path d="M3 9a6 6 0 0 1 6-6" strokeWidth="2.5" />
               </svg>
             </button>
             {showTooltips && (
