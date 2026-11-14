@@ -993,6 +993,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
     const key = sourceKey(selection); sourceSelections.current[key] = selection;
     if (selectedLayer === key) sourceSelection.current = selection;
     setElementDimensions(previous => ({ ...previous, [key]: { w: Math.round(selection.rect.width), h: Math.round(selection.rect.height) } }));
+    sourceCanvas.current?.updateSelectionRect?.(selection.rect);
     if (pendingOverlayResetKeyRef.current === key) {
       setOverlayResetTick(tick => tick + 1);
     }
@@ -1808,6 +1809,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
           if (rendered) {
             sourceSelections.current[activeKey] = rendered;
             if (selectedLayer === activeKey) sourceSelection.current = rendered;
+            sourceCanvas.current?.updateSelectionRect?.(rendered.rect);
           }
           setElements(previous => ({ ...previous, [activeKey]: {
             ...previous[activeKey], ...(rendered ? elementFromSource(rendered) : {}),
@@ -1919,11 +1921,9 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
         gesture.nextLeft = res.left;
         gesture.nextTop = preserveAutoHeight ? gesture.startTop : res.top;
 
-        // Apply width to target element immediately so text reflows in the iframe
+        // Apply continuous width to target element immediately so text reflows smoothly in the iframe at 60fps
         if (gesture.targetEl && !gesture.outlineOnly) {
-          const rem = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
-          const snapped = snapWidth(gesture.nextWidth, rem);
-          gesture.targetEl.style.maxWidth = `${snapped.width}px`;
+          gesture.targetEl.style.maxWidth = `${roundValue(gesture.nextWidth, 'nearest', 1)}px`;
           // If resizing horizontally (e or w handle), measure the actual rendered geometry as text wraps
           if (gesture.handle === 'e' || gesture.handle === 'w' || gesture.widthOnlyHeight) {
             const elBox = gesture.targetEl.getBoundingClientRect();
@@ -2273,6 +2273,12 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
               if (sourceSelections.current[gesture.key]) {
                 sourceSelections.current[gesture.key] = {
                   ...sourceSelections.current[gesture.key],
+                  rect: updatedRect,
+                };
+              }
+              if (sourceSelection.current && sourceKey(sourceSelection.current) === gesture.key) {
+                sourceSelection.current = {
+                  ...sourceSelection.current,
                   rect: updatedRect,
                 };
               }
@@ -3581,7 +3587,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
         <svg
           key={overlayResetTick}
           className={reviewStyles.selectionSvg}
-          style={isOriented ? { inset: 0, width: '100%', height: '100%' } : { width: `${currentW + 4}px`, height: `${currentH + 4}px` }}
+          style={isOriented ? { inset: 0, width: '100%', height: '100%', overflow: 'visible' } : { inset: -2, width: 'calc(100% + 4px)', height: 'calc(100% + 4px)', overflow: 'visible' }}
         >
           {/* 1. Halo outline */}
           <path

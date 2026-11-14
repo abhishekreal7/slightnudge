@@ -190,6 +190,10 @@ export const SourceProjectCanvas = forwardRef<SourceCanvasHandle, {
         clearTimeout(request.timer); requests.current.delete(message.requestId);
         if (message.success === true) {
           const sel = message.selection?.rect ? { ...message.selection, transformChain: sanitizeTransformChain(message.selection.transformChain) } : message.selection;
+          if (sel?.rect) {
+            selected.current = sel;
+            setGeometry(sel);
+          }
           request.resolve(sel);
         } else request.reject(new Error(message.reason || 'The live page could not verify this preview.'));
         return;
