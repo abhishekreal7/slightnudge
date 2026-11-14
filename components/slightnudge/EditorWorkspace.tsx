@@ -1501,12 +1501,13 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
     );
     const localFrame = chain.length > 0 ? chain[chain.length - 1] : null;
     const isNonTrivialTransform = isAffineNonTrivial(elementToArtboard);
+    const elRect = targetEl?.getBoundingClientRect();
     const currentW =
       (isNonTrivialTransform
         ? targetEl
           ? targetEl.offsetWidth
           : localFrame?.width
-        : elementRefs.current[key]?.offsetWidth) ||
+        : elRect ? elRect.width : elementRefs.current[key]?.offsetWidth) ||
       actualSelection?.rect?.width ||
       672;
     const currentH =
@@ -1514,11 +1515,11 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
         ? targetEl
           ? targetEl.offsetHeight
           : localFrame?.height
-        : elementRefs.current[key]?.offsetHeight) ||
+        : elRect ? elRect.height : elementRefs.current[key]?.offsetHeight) ||
       actualSelection?.rect?.height ||
       114;
-    const startLeft = isNonTrivialTransform ? 0 : wrapperLeft;
-    const startTop = isNonTrivialTransform ? 0 : wrapperTop;
+    const startLeft = isNonTrivialTransform ? 0 : (elRect ? elRect.left : wrapperLeft);
+    const startTop = isNonTrivialTransform ? 0 : (elRect ? elRect.top : wrapperTop);
 
     try {
       e.currentTarget.focus({ preventScroll: true });
@@ -1920,31 +1921,29 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
 
         // Apply width to target element immediately so text reflows in the iframe
         if (gesture.targetEl && !gesture.outlineOnly) {
-          gesture.targetEl.style.maxWidth = `${roundValue(gesture.nextWidth, 'nearest', 1)}px`;
+          const rem = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
+          const snapped = snapWidth(gesture.nextWidth, rem);
+          gesture.targetEl.style.maxWidth = `${snapped.width}px`;
           // If resizing horizontally (e or w handle), measure the actual rendered geometry as text wraps
           if (gesture.handle === 'e' || gesture.handle === 'w' || gesture.widthOnlyHeight) {
-            const iframe = sourceCanvas.current?.getFrame?.();
-            const iframeBox = iframe?.getBoundingClientRect();
             const elBox = gesture.targetEl.getBoundingClientRect();
-            if (iframeBox && elBox) {
-              const liveLeft = elBox.left - iframeBox.left;
-              const liveTop = elBox.top - iframeBox.top;
+            if (elBox && elBox.width > 0 && elBox.height > 0) {
+              const liveLeft = elBox.left;
+              const liveTop = elBox.top;
               const liveW = elBox.width;
               const liveH = elBox.height;
-              if (liveH > 0 && liveW > 0) {
-                gesture.nextWidth = liveW;
-                gesture.nextHeight = liveH;
-                gesture.nextLeft = liveLeft;
-                gesture.nextTop = liveTop;
-                res = {
-                  left: liveLeft,
-                  top: liveTop,
-                  width: liveW,
-                  height: liveH,
-                  right: liveLeft + liveW,
-                  bottom: liveTop + liveH,
-                };
-              }
+              gesture.nextWidth = liveW;
+              gesture.nextHeight = liveH;
+              gesture.nextLeft = liveLeft;
+              gesture.nextTop = liveTop;
+              res = {
+                left: liveLeft,
+                top: liveTop,
+                width: liveW,
+                height: liveH,
+                right: liveLeft + liveW,
+                bottom: liveTop + liveH,
+              };
             } else {
               const liveH = gesture.targetEl.offsetHeight;
               if (liveH && liveH > 0) {
@@ -2261,18 +2260,14 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
 
           if (!gesture.outlineOnly && gesture.targetEl) {
             gesture.targetEl.style.maxWidth = `${snapped.width}px`;
-            const updatedH = gesture.targetEl.offsetHeight;
-            const updatedW = gesture.targetEl.offsetWidth;
-            const iframe = sourceCanvas.current?.getFrame?.();
-            const iframeBox = iframe?.getBoundingClientRect();
             const elBox = gesture.targetEl.getBoundingClientRect();
 
-            if (iframeBox && elBox) {
+            if (elBox && elBox.width > 0 && elBox.height > 0) {
               const updatedRect = {
-                left: elBox.left - iframeBox.left,
-                top: elBox.top - iframeBox.top,
-                width: updatedW,
-                height: updatedH,
+                left: elBox.left,
+                top: elBox.top,
+                width: elBox.width,
+                height: elBox.height,
               };
               sourceCanvas.current?.updateSelectionRect?.(updatedRect);
               if (sourceSelections.current[gesture.key]) {

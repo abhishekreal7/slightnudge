@@ -1,8 +1,10 @@
 /** The local canvas's supported max-width scale, in rem. Imported/custom
  * project scales need their own compiler-backed capability before dragging. */
 export const widthSteps = [
+  [20, 'max-w-xs'],
   [24, 'max-w-sm'], [28, 'max-w-md'], [32, 'max-w-lg'], [36, 'max-w-xl'],
   [42, 'max-w-2xl'], [48, 'max-w-3xl'], [56, 'max-w-4xl'], [64, 'max-w-5xl'], [72, 'max-w-6xl'],
+  [80, 'max-w-7xl'],
 ] as const;
 
 export interface WidthSnap { width: number; token: string }

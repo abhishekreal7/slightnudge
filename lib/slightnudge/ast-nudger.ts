@@ -1158,7 +1158,7 @@ const editableUtilities: Record<EditableStyleProperty, { pattern: RegExp; values
   padding: { pattern: /^p[trblxy]?-(?:\d+(?:\.\d+)?|\[)/, values: new Set(['p-0', 'p-1', 'p-2', 'p-3', 'p-4', 'p-6', 'p-8', 'p-10', 'p-12']) },
   display: { pattern: /^(?:block|inline-block|flex|inline-flex|grid|hidden)$/, values: new Set(['block', 'inline-block', 'flex', 'inline-flex', 'grid', 'hidden']) },
   width: { pattern: /^w-(?:auto|full|fit|min|max|1\/2|1\/3|2\/3|1\/4|3\/4)$/, values: new Set(['w-auto', 'w-full', 'w-fit', 'w-min', 'w-max', 'w-1/2', 'w-1/3', 'w-2/3', 'w-1/4', 'w-3/4']) },
-  maxWidth: { pattern: /^max-w-(?:none|sm|md|lg|xl|2xl|3xl|4xl|5xl|6xl|7xl)$/, values: new Set(['max-w-none', 'max-w-sm', 'max-w-md', 'max-w-lg', 'max-w-xl', 'max-w-2xl', 'max-w-3xl', 'max-w-4xl', 'max-w-5xl', 'max-w-6xl', 'max-w-7xl']) },
+  maxWidth: { pattern: /^max-w-(?:none|xs|sm|md|lg|xl|2xl|3xl|4xl|5xl|6xl|7xl)$/, values: new Set(['max-w-none', 'max-w-xs', 'max-w-sm', 'max-w-md', 'max-w-lg', 'max-w-xl', 'max-w-2xl', 'max-w-3xl', 'max-w-4xl', 'max-w-5xl', 'max-w-6xl', 'max-w-7xl']) },
   gap: { pattern: /^gap-(?:0|1|2|3|4|6|8|10|12|16)$/, values: new Set(['gap-0', 'gap-1', 'gap-2', 'gap-3', 'gap-4', 'gap-6', 'gap-8', 'gap-10', 'gap-12', 'gap-16']) },
   borderRadius: { pattern: /^rounded(?:-(?:none|sm|md|lg|xl|2xl|3xl|full))?$/, values: new Set(['rounded-none', 'rounded-sm', 'rounded', 'rounded-md', 'rounded-lg', 'rounded-xl', 'rounded-2xl', 'rounded-3xl', 'rounded-full']) },
   justifyContent: { pattern: /^justify-(?:start|end|center|between|around|evenly)$/, values: new Set(['justify-start', 'justify-center', 'justify-between', 'justify-end', 'justify-around', 'justify-evenly']) },
