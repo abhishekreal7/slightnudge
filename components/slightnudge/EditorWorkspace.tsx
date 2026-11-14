@@ -3587,7 +3587,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
         <svg
           key={overlayResetTick}
           className={reviewStyles.selectionSvg}
-          style={isOriented ? { inset: 0, width: '100%', height: '100%', overflow: 'visible' } : { inset: -2, width: 'calc(100% + 4px)', height: 'calc(100% + 4px)', overflow: 'visible' }}
+          style={{ inset: 0, width: '100%', height: '100%', overflow: 'visible' }}
         >
           {/* 1. Halo outline */}
           <path
@@ -3758,7 +3758,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
                 >
                   {isArc ? (
                     <span className={reviewStyles.handleHitArea} />
-                  ) : !isOriented && !isCorner && (chrome.variant === 'arc' || chrome.variant === 'capsule') ? (
+                  ) : !isOriented && !isCorner && (chrome.variant === 'arc' || chrome.variant === 'capsule' || chrome.variant === 'text') ? (
                     <span
                       className={`${reviewStyles.handleBar} ${
                         h.dir === 'n' || h.dir === 's' ? reviewStyles.handleBarH : reviewStyles.handleBarV

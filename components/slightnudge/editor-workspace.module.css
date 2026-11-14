@@ -656,12 +656,12 @@
 }
 
 .handleDot {
-  width: 8px;
-  height: 8px;
+  width: 9px;
+  height: 9px;
   background: #ffffff;
   border: 1.5px solid #0ccb8b;
-  border-radius: 2px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+  border-radius: 50%;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.14), 0 0 0 0.5px rgba(0, 0, 0, 0.06);
   transform: scale(calc(1 / var(--canvas-zoom, 1)));
   transform-origin: center center;
   transition: transform 80ms ease, box-shadow 80ms ease, background-color 80ms ease;
@@ -672,29 +672,31 @@
   background: #0ccb8b;
   border-color: #0ccb8b;
   box-shadow: 0 0 0 3px rgba(12, 203, 139, 0.25);
+  transform: scale(calc(1.15 / var(--canvas-zoom, 1)));
 }
 
 .resizeHandle[aria-pressed='true'] .handleDot {
   background: #089c69;
   border-color: #089c69;
   box-shadow: 0 0 0 4px rgba(12, 203, 139, 0.35);
+  transform: scale(calc(1.2 / var(--canvas-zoom, 1)));
 }
 
 .resizeHandle:focus-visible {
   outline: 2px solid #0ccb8b;
   outline-offset: 2px;
-  border-radius: 4px;
+  border-radius: 9999px;
 }
 
-/* 8 directions */
-.handleNw { top: 0; left: 0; cursor: nwse-resize; }
-.handleN  { top: 0; left: 50%; cursor: ns-resize; }
-.handleNe { top: 0; left: 100%; cursor: nesw-resize; }
-.handleE  { top: 50%; left: 100%; cursor: ew-resize; }
-.handleSe { top: 100%; left: 100%; cursor: nwse-resize; }
-.handleS  { top: 100%; left: 50%; cursor: ns-resize; }
-.handleSw { top: 100%; left: 0; cursor: nesw-resize; }
-.handleW  { top: 50%; left: 0; cursor: ew-resize; }
+/* 8 directions - centered precisely on the -2px outset outline stroke */
+.handleNw { top: -2px; left: -2px; cursor: nwse-resize; }
+.handleN  { top: -2px; left: 50%; cursor: ns-resize; }
+.handleNe { top: -2px; left: calc(100% + 2px); cursor: nesw-resize; }
+.handleE  { top: 50%; left: calc(100% + 2px); cursor: ew-resize; }
+.handleSe { top: calc(100% + 2px); left: calc(100% + 2px); cursor: nwse-resize; }
+.handleS  { top: calc(100% + 2px); left: 50%; cursor: ns-resize; }
+.handleSw { top: calc(100% + 2px); left: -2px; cursor: nesw-resize; }
+.handleW  { top: 50%; left: -2px; cursor: ew-resize; }
 
 /* Smart Snapping Guides (Disabled) */
 .smartGuideV,
@@ -705,9 +707,9 @@
 /* Selection Chrome v2 SVG and Element-Aware Chrome */
 .selectionSvg {
   position: absolute;
-  inset: -2px;
-  width: calc(100% + 4px);
-  height: calc(100% + 4px);
+  inset: 0;
+  width: 100%;
+  height: 100%;
   overflow: visible;
   pointer-events: none;
   z-index: 20;
@@ -771,33 +773,35 @@
   background: #ffffff;
   border: 1.5px solid #0ccb8b;
   border-radius: 9999px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.14), 0 0 0 0.5px rgba(0, 0, 0, 0.06);
   pointer-events: none;
   transform: scale(calc(1 / var(--canvas-zoom, 1)));
   transform-origin: center center;
-  transition: background 80ms ease, border-color 80ms ease, box-shadow 80ms ease;
+  transition: background 80ms ease, border-color 80ms ease, box-shadow 80ms ease, transform 80ms ease;
 }
 
 .handleBarH {
-  width: 18px;
-  height: 5px;
+  width: 20px;
+  height: 6px;
 }
 
 .handleBarV {
-  width: 5px;
-  height: 18px;
+  width: 6px;
+  height: 20px;
 }
 
 .resizeHandle:hover .handleBar {
   background: #0ccb8b;
   border-color: #0ccb8b;
   box-shadow: 0 0 0 3px rgba(12, 203, 139, 0.25);
+  transform: scale(calc(1.15 / var(--canvas-zoom, 1)));
 }
 
 .resizeHandle[aria-pressed='true'] .handleBar {
   background: #089c69;
   border-color: #089c69;
   box-shadow: 0 0 0 4px rgba(12, 203, 139, 0.35);
+  transform: scale(calc(1.2 / var(--canvas-zoom, 1)));
 }
 
 .radiusGrip {
