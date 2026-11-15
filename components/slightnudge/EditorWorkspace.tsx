@@ -2007,7 +2007,14 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
           const pStyle = parentEl.ownerDocument?.defaultView?.getComputedStyle(parentEl);
           const pPadX = (parseFloat(pStyle?.paddingLeft || '0') || 0) + (parseFloat(pStyle?.paddingRight || '0') || 0);
           if (parentEl.clientWidth > 0) {
-            maxAvailableWidth = Math.max(minAvailableWidth, parentEl.clientWidth - pPadX);
+            if (gesture.widthOnlyHeight) {
+              // For text elements, allow expanding to large Tailwind breakpoints (e.g. max-w-5xl 1024px, max-w-6xl 1152px)
+              // so headlines can stack into 2 lines across modern wide artboards without being artificially capped by parent padding.
+              const artboardWidth = parentEl.ownerDocument?.defaultView?.innerWidth || 1440;
+              maxAvailableWidth = Math.max(minAvailableWidth, Math.min(1280, artboardWidth));
+            } else {
+              maxAvailableWidth = Math.max(minAvailableWidth, parentEl.clientWidth - pPadX);
+            }
           }
         }
 
@@ -2459,10 +2466,21 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
           resetOverlayNode(gesture.key);
 
           // Optimistic update immediately
-          setElements(prev => ({
-            ...prev,
-            [gesture.key]: { ...prev[gesture.key], maxWidth: token },
-          }));
+          setElements(prev => {
+            const currentEl = prev[gesture.key];
+            if (!currentEl) return prev;
+            const updatedClasses = currentEl.classes
+              ? currentEl.classes.replace(/\bmax-w-(none|xs|sm|md|lg|xl|2xl|3xl|4xl|5xl|6xl|7xl)\b/, token)
+              : token;
+            return {
+              ...prev,
+              [gesture.key]: {
+                ...currentEl,
+                maxWidth: token,
+                classes: updatedClasses,
+              },
+            };
+          });
 
           // Background save via client-side queue (never blocking input)
           void enqueueFileOperation(
@@ -2810,18 +2828,24 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
       needsDraftReplay.current = true;
       setElements(frame.elements); setChildOrder(frame.order); setReview(frame.edit);
       draftRef.current = value; setDraftState(value);
+      operationRef.current = false; setRecoveryBooting(false);
       if (frame.edit) {
-        if (frame.edit.groupTransactionId) {
-          const group = await changeSetAPI('status', frame.edit.groupTransactionId, [], repositoryId);
-          if (group.success && ['saved', 'undone'].includes(group.state || '')) { setElements(rebaseDraftElements(frame.elements, frame.edit)); storeDraft(null); setReview(null); }
-          else { setUncertainApplyId(frame.edit.id); showToast(group.error || 'This change set needs recovery. Use Resume Save.'); }
-          return true;
-        }
-        if (Object.keys(draftHeads(frame.edit)).length > 1) return true;
-        const outcome = await checkApplyOutcomeAPI(frame.edit.id, repositoryId ? { repositoryId, sourcePath: editPath(frame.edit) } : {});
-        if (outcome.success) { setElements(rebaseDraftElements(frame.elements, frame.edit)); storeDraft(null); setReview(null); }
-        else if (outcome.code === 'SOURCE_CHANGED') showToast('Previous draft restored. Source was updated outside — click Save to re-sync or Discard.');
-        else if (outcome.code !== 'APPLY_NOT_APPLIED') showToast('Your draft is restored. The source needs checking before Save.');
+        const targetEdit = frame.edit;
+        void (async () => {
+          try {
+            if (targetEdit.groupTransactionId) {
+              const group = await changeSetAPI('status', targetEdit.groupTransactionId, [], repositoryId);
+              if (group.success && ['saved', 'undone'].includes(group.state || '')) { setElements(rebaseDraftElements(frame.elements, targetEdit)); storeDraft(null); setReview(null); }
+              else { setUncertainApplyId(targetEdit.id); showToast(group.error || 'This change set needs recovery. Use Resume Save.'); }
+              return;
+            }
+            if (Object.keys(draftHeads(targetEdit)).length > 1) return;
+            const outcome = await checkApplyOutcomeAPI(targetEdit.id, repositoryId ? { repositoryId, sourcePath: editPath(targetEdit) } : {});
+            if (outcome.success) { setElements(rebaseDraftElements(frame.elements, targetEdit)); storeDraft(null); setReview(null); }
+            else if (outcome.code === 'SOURCE_CHANGED') showToast('Previous draft restored. Source was updated outside — click Save to re-sync or Discard.');
+            else if (outcome.code !== 'APPLY_NOT_APPLIED') showToast('Your draft is restored. The source needs checking before Save.');
+          } catch {}
+        })();
       }
       return true;
     } catch (error) { setDraftStored(false); showToast(error instanceof Error ? error.message : 'Draft recovery is unavailable.'); return false; }
@@ -4353,7 +4377,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
                   <SourceProjectCanvas ref={sourceCanvas} repositoryId={repositoryId} localPageId={selectedPage.id} width={artboardWidth} windowMode={sourceWindowMode} continuousDraft={Boolean(repositoryId)} browseMode={browseMode} destinationMode={destinationMode}
                     onViewport={(width, fontSize) => { setActualViewportWidth(width); if (fontSize) setInitialMediaFontSize(fontSize); }}
                     onDestination={selection => { const key = destinationSource.current; if (!key) return; cancelDestination(); void triggerBackendPreview('reparent', { destination: { path: selection.path, line: selection.line, column: selection.column, tagName: selection.tagName, elementId: selection.elementId } }, key); }}
-                    blocked={busy || isApplying || recoveryBooting || recoveryChecking || reviewBlocking || Boolean(uncertainUndoId)}
+                    blocked={busy || isApplying || recoveryChecking || reviewBlocking || Boolean(uncertainUndoId)}
                     onNotice={showToast} onSelect={receiveSourceSelection} onLayers={receiveSourceLayers} onGeometry={receiveSourceGeometry}
                     onReady={() => { setSourceReady(true); needsDraftReplay.current = Boolean(draftRef.current); if (draftRef.current && !operationRef.current && !recoveryBooting && !recoveryChecking && !isApplying) void replaySourceDraft(reviewRef.current); }}
                     onClearSelection={() => { if (!operationRef.current && !blocksReview()) { cancelDestination(); sourceSelection.current = null; setSelectedLayerState(null); if (guideVRef.current) guideVRef.current.style.display = 'none'; if (guideHRef.current) guideHRef.current.style.display = 'none'; if (cursorTagRef.current) cursorTagRef.current.style.display = 'none'; } }}

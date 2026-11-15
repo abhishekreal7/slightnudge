@@ -216,7 +216,7 @@ export async function checkApplyOutcomeAPI(previewId: string, context: ApplyCont
   try {
     let token = await getClientSessionToken();
     const lookup = () => fetch('/api/slightnudge/apply/status', {
-      method: 'POST', cache: 'no-store', signal: AbortSignal.timeout(10000),
+      method: 'POST', cache: 'no-store', signal: AbortSignal.timeout(3000),
       headers: { 'Content-Type': 'application/json', 'x-slightnudge-token': token },
       body: JSON.stringify({ previewId, ...context }),
     });

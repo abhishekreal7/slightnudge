@@ -260,7 +260,13 @@ export const SourceProjectCanvas = forwardRef<SourceCanvasHandle, {
         frame.current?.contentWindow?.postMessage({ channel: 'slightnudge', session: session.current, type: 'bridge-ack' }, event.origin);
         if (acknowledgedSession.current === session.current && readyRef.current) return;
         acknowledgedSession.current = session.current;
-        if (!syncFailed.current) { readyRef.current = true; const finish = () => { setReady(true); setError(''); props.current.onReady?.(); }; if (windowMode) void command('set-mode', null, { edit: !modeRef.current }).then(finish).catch(cause => setError(cause.message)); else finish(); }
+        if (!syncFailed.current) {
+          readyRef.current = true;
+          setReady(true);
+          setError('');
+          props.current.onReady?.();
+          if (windowMode) void command('set-mode', null, { edit: !modeRef.current }).catch(cause => setError(cause.message));
+        }
         return;
       }
       if (message.type === 'source-route' || message.type === 'selection-cleared') { selected.current = null; setGeometry(null); props.current.onClearSelection(); return; }
