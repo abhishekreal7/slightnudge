@@ -1326,6 +1326,12 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
           ? 'left'
           : 'right';
 
+      if (formattingRef.current) {
+        formattingRef.current.style.left = `${best.left}px`;
+        formattingRef.current.style.top = `${best.top}px`;
+        formattingRef.current.style.visibility = visible ? 'visible' : 'hidden';
+      }
+
       setFormattingPosition(previous =>
         previous &&
           previous.left === best.left &&
@@ -1338,7 +1344,10 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
       );
     };
 
-    const schedule = () => { cancelAnimationFrame(animation); animation = requestAnimationFrame(update); };
+    const schedule = () => {
+      cancelAnimationFrame(animation);
+      update();
+    };
     update();
 
     window.addEventListener('scroll', schedule, true);

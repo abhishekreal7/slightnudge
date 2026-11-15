@@ -137,9 +137,7 @@ export const SourceProjectCanvas = forwardRef<SourceCanvasHandle, {
     const cd = frame.current.contentDocument;
     const mainCanvas = document.querySelector('main[data-editor-canvas]');
 
-    let scrollRaf = 0;
     const syncSelectionPosition = () => {
-      scrollRaf = 0;
       const doc = frame.current?.contentDocument;
       if (doc && selected.current) {
         const targetEl = findSourceElementInDocument(doc, selected.current);
@@ -159,9 +157,8 @@ export const SourceProjectCanvas = forwardRef<SourceCanvasHandle, {
 
     const onScroll = () => {
       isScrollingRef.current = true;
-      if (!scrollRaf) {
-        scrollRaf = requestAnimationFrame(syncSelectionPosition);
-      }
+      syncSelectionPosition();
+
       if (scrollSettleTimer.current) clearTimeout(scrollSettleTimer.current);
 
       scrollSettleTimer.current = setTimeout(() => {
@@ -204,9 +201,9 @@ export const SourceProjectCanvas = forwardRef<SourceCanvasHandle, {
     if (mainCanvas) {
       mainCanvas.addEventListener('scroll', onScroll, { passive: true });
     }
+    window.addEventListener('scroll', onScroll, { passive: true });
 
     return () => {
-      if (scrollRaf) cancelAnimationFrame(scrollRaf);
       try {
         cw?.removeEventListener('scroll', onScroll);
       } catch { }
@@ -216,6 +213,7 @@ export const SourceProjectCanvas = forwardRef<SourceCanvasHandle, {
       if (mainCanvas) {
         mainCanvas.removeEventListener('scroll', onScroll);
       }
+      window.removeEventListener('scroll', onScroll);
       if (scrollSettleTimer.current) clearTimeout(scrollSettleTimer.current);
     };
   }, [ready, url, documentRevision]);
