@@ -77,6 +77,14 @@ export function getBridgeClient(targetRepositoryId = '') {
       send('source-selection', marker, event.target);
     }, true);
 
+    const pathsMatch = (p1?: string | null, p2?: string | null): boolean => {
+      if (!p1 || !p2) return false;
+      if (p1 === p2) return true;
+      const n1 = p1.replace(/\\/g, '/').replace(/^\.?\//, '').toLowerCase();
+      const n2 = p2.replace(/\\/g, '/').replace(/^\.?\//, '').toLowerCase();
+      return n1 === n2 || n1.endsWith('/' + n2) || n2.endsWith('/' + n1);
+    };
+
     window.addEventListener('message', (event) => {
       if (event.origin !== parentOrigin || event.source !== window.parent) return;
       const message = event.data;
@@ -84,12 +92,12 @@ export function getBridgeClient(targetRepositoryId = '') {
         const reply = (success, reason = '') => window.parent.postMessage({ channel: 'slightnudge', session, type: 'edit-result', requestId: message.requestId, success, reason }, parentOrigin);
         const target = message.selection;
         if (message.operation === 'verify' && target && (typeof message.expectedClass === 'string' || typeof message.expectedText === 'string')) {
-          const matches = Array.from(document.querySelectorAll('[data-source-file]')).filter(element => element.getAttribute('data-source-file') === target.path && Number(element.getAttribute('data-source-line')) === target.line && Number(element.getAttribute('data-source-column')) === target.column);
+          const matches = Array.from(document.querySelectorAll('[data-source-file]')).filter(element => pathsMatch(element.getAttribute('data-source-file'), target.path) && Number(element.getAttribute('data-source-line')) === target.line && Number(element.getAttribute('data-source-column')) === target.column);
           reply(matches.length === 1 && (typeof message.expectedClass !== 'string' || matches[0].getAttribute('class') === message.expectedClass) && (typeof message.expectedText !== 'string' || matches[0].textContent === message.expectedText), 'The project is still rendering an older source revision.'); return;
         }
-        if (!selected?.isConnected || !target || target.path !== selected.dataset.sourceFile || target.line !== Number(selected.dataset.sourceLine) || target.column !== Number(selected.dataset.sourceColumn)) { reply(false, 'The selected element changed. Reload and select it again.'); return; }
+        if (!selected?.isConnected || !target || !pathsMatch(target.path, selected.dataset.sourceFile) || target.line !== Number(selected.dataset.sourceLine) || target.column !== Number(selected.dataset.sourceColumn)) { reply(false, 'The selected element changed. Reload and select it again.'); return; }
         if (message.operation !== 'discard') {
-          const instances = Array.from(document.querySelectorAll('[data-source-file]')).filter(element => element.getAttribute('data-source-file') === target.path && Number(element.getAttribute('data-source-line')) === target.line && Number(element.getAttribute('data-source-column')) === target.column);
+          const instances = Array.from(document.querySelectorAll('[data-source-file]')).filter(element => pathsMatch(element.getAttribute('data-source-file'), target.path) && Number(element.getAttribute('data-source-line')) === target.line && Number(element.getAttribute('data-source-column')) === target.column);
           if (instances.length !== 1) { reply(false, 'This source element appears more than once on the page. Editing shared instances is not supported yet. Nothing was changed.'); return; }
         }
         const intact = () => pending && pending.element === selected && selected.getAttribute('class') === pending.afterClass && (pending.kind !== 'text' || selected.innerHTML === pending.afterHTML) && selected.getAttribute('style') === pending.style;
@@ -125,10 +133,10 @@ export function getBridgeClient(targetRepositoryId = '') {
       }
       if (!selected || !message || message.channel !== 'slightnudge' || message.session !== session || message.type !== 'preview-change') return;
       const target = message.selection;
-      if (!target || target.path !== selected.dataset.sourceFile || Number(target.line) !== Number(selected.dataset.sourceLine) || Number(target.column) !== Number(selected.dataset.sourceColumn)) return;
+      if (!target || !pathsMatch(target.path, selected.dataset.sourceFile) || Number(target.line) !== Number(selected.dataset.sourceLine) || Number(target.column) !== Number(selected.dataset.sourceColumn)) return;
       if (!selected.isConnected) {
         selected = Array.from(document.querySelectorAll('[data-source-file]')).find((element) =>
-          element.getAttribute('data-source-file') === target.path && Number(element.getAttribute('data-source-line')) === Number(target.line) && Number(element.getAttribute('data-source-column')) === Number(target.column),
+          pathsMatch(element.getAttribute('data-source-file'), target.path) && Number(element.getAttribute('data-source-line')) === Number(target.line) && Number(element.getAttribute('data-source-column')) === Number(target.column),
         ) || null;
         if (!selected) return;
       }

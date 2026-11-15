@@ -986,6 +986,14 @@ export function composeCssTransformMatrix(input: CssTransformInput): Matrix2D {
   return result;
 }
 
+export function pathsMatch(p1: string | null | undefined, p2: string | null | undefined): boolean {
+  if (!p1 || !p2) return false;
+  if (p1 === p2) return true;
+  const n1 = p1.replace(/\\/g, '/').replace(/^\.?\//, '').toLowerCase();
+  const n2 = p2.replace(/\\/g, '/').replace(/^\.?\//, '').toLowerCase();
+  return n1 === n2 || n1.endsWith('/' + n2) || n2.endsWith('/' + n1);
+}
+
 /** Resolves a selected element in a same-origin iframe/document by `elementId` or `data-source-*` locator. */
 export function findSourceElementInDocument(
   doc: Document | null | undefined,
@@ -997,29 +1005,35 @@ export function findSourceElementInDocument(
     if (byId) return byId;
   }
   if (selection.path && typeof selection.line === 'number' && selection.line > 0) {
-    const candidates = Array.from(doc.querySelectorAll<HTMLElement>('[data-source-file]')).filter((el) => {
-      if (el.getAttribute('data-source-file') !== selection.path) return false;
+    const all = Array.from(doc.querySelectorAll<HTMLElement>('[data-source-file]'));
+    const fileLineMatches = all.filter((el) => {
+      if (!pathsMatch(el.getAttribute('data-source-file'), selection.path)) return false;
       if (Number(el.getAttribute('data-source-line')) !== selection.line) return false;
-      if (typeof selection.column === 'number' && selection.column > 0) {
-        const rawCol = el.getAttribute('data-source-column');
-        const col = rawCol ? Number(rawCol) : selection.elementId || el.id ? 1 : 0;
-        if (col !== selection.column) return false;
-      }
       return true;
     });
-    if (candidates.length === 1) return candidates[0];
-    if (candidates.length > 1) {
+
+    if (fileLineMatches.length === 1) return fileLineMatches[0];
+
+    if (fileLineMatches.length > 1) {
       if (selection.instance) {
-        const byCallsite = candidates.find(
+        const byCallsite = fileLineMatches.find(
           (el) => el.getAttribute('data-slightnudge-callsite') === selection.instance
         );
         if (byCallsite) return byCallsite;
       }
       if (selection.elementId) {
-        const byId = candidates.find((el) => el.id === selection.elementId);
+        const byId = fileLineMatches.find((el) => el.id === selection.elementId);
         if (byId) return byId;
       }
-      return candidates[0];
+      if (typeof selection.column === 'number' && selection.column > 0) {
+        const byCol = fileLineMatches.find((el) => {
+          const rawCol = el.getAttribute('data-source-column');
+          const col = rawCol ? Number(rawCol) : el.id ? 1 : 0;
+          return col === selection.column;
+        });
+        if (byCol) return byCol;
+      }
+      return fileLineMatches[0];
     }
   }
   return null;

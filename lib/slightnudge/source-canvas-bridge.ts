@@ -38,7 +38,14 @@ function sourceCanvasRuntime(continuous: boolean, repositoryId = '', protocol = 
   const locator = (element: HTMLElement) => ({ path: element.dataset.sourceFile || '', line: Number(element.dataset.sourceLine), column: Number(element.dataset.sourceColumn) || (element.id ? 1 : 0), elementId: element.id || undefined, instance: instanceTrace(element.dataset.slightnudgeCallsite) ? element.dataset.slightnudgeCallsite : undefined });
   const key = (element: HTMLElement) => { const value = locator(element); return (value.elementId ? `${value.path}#${value.elementId}` : `${value.path}:${value.line}:${value.column}:${element.tagName.toLowerCase()}`)+(value.instance?`@${value.instance}`:''); };
   const nodes = () => [...root.querySelectorAll<HTMLElement>('[data-source-file]')].filter(element => { const value = locator(element); return value.path && Number.isSafeInteger(value.line) && value.line > 0 && Number.isSafeInteger(value.column) && value.column > 0; });
-  const matches = (target: any) => nodes().filter(element => { const value = locator(element); return value.path === target?.path && (!target.instance || value.instance === target.instance) && (target.elementId ? value.elementId === target.elementId : value.line === Number(target.line) && value.column === Number(target.column)); });
+  const pathsMatch = (p1?: string | null, p2?: string | null): boolean => {
+    if (!p1 || !p2) return false;
+    if (p1 === p2) return true;
+    const n1 = p1.replace(/\\/g, '/').replace(/^\.?\//, '').toLowerCase();
+    const n2 = p2.replace(/\\/g, '/').replace(/^\.?\//, '').toLowerCase();
+    return n1 === n2 || n1.endsWith('/' + n2) || n2.endsWith('/' + n1);
+  };
+  const matches = (target: any) => nodes().filter(element => { const value = locator(element); return pathsMatch(value.path, target?.path) && (!target.instance || value.instance === target.instance) && (target.elementId ? value.elementId === target.elementId : value.line === Number(target.line) && value.column === Number(target.column)); });
   const waitForTargets = async (locations: any[]) => {
     if (!repositoryId || !continuous) return;
     // A client signal at the root does not cover independently hydrating

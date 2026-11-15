@@ -1657,7 +1657,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
         (typeof targetEl?.className === 'string' && /\b(mx-auto|m-auto)\b/.test(targetEl.className)) ||
         (targetEl && targetEl.ownerDocument?.defaultView?.getComputedStyle(targetEl).marginLeft === 'auto')
       ),
-      widthOnlyHeight: !isNonTrivialTransform && !/^(img|video|svg|canvas)$/i.test(renderedElement.tag || actualSelection?.tagName || ''),
+      widthOnlyHeight: !isNonTrivialTransform && (previousVariantRef.current[key] === 'text' || /^(h[1-6]|p|span|a|label|strong|em|b|i|small)$/i.test(renderedElement.tag || actualSelection?.tagName || '')),
       lockedAspect: aspectLockOverrides.current[key] ?? /^(img|video|svg|canvas)$/i.test(renderedElement.tag || actualSelection?.tagName || ''),
       latestPointer: { x: e.clientX, y: e.clientY, shiftKey: e.shiftKey, altKey: e.altKey, ctrlKey: e.ctrlKey || e.metaKey, metaKey: e.metaKey },
       rafPending: false,
@@ -2046,41 +2046,50 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
         gesture.nextLeft = res.left;
         gesture.nextTop = preserveAutoHeight ? gesture.startTop : res.top;
 
-        // Apply continuous width to target element immediately so text reflows smoothly in the iframe at 60fps
+        // Apply continuous dimensions to target element immediately so layout/text reflows smoothly in the iframe at 60fps
         if (gesture.targetEl && !gesture.outlineOnly) {
-          gesture.targetEl.style.maxWidth = `${roundValue(gesture.nextWidth, 'nearest', 1)}px`;
-          // If resizing horizontally (e or w handle) or non-aspect-locked elements, measure the actual rendered geometry as text wraps
-          if (gesture.handle === 'e' || gesture.handle === 'w' || gesture.widthOnlyHeight || !gesture.lockedAspect) {
-            const elBox = gesture.targetEl.getBoundingClientRect();
-            if (elBox && elBox.width > 0 && elBox.height > 0) {
-              const liveLeft = elBox.left;
-              const liveTop = elBox.top;
-              const liveW = elBox.width;
-              const liveH = elBox.height;
-              gesture.nextWidth = liveW;
-              gesture.nextHeight = liveH;
-              gesture.nextTop = liveTop;
-              gesture.nextLeft = liveLeft;
-              res = {
-                left: liveLeft,
-                top: liveTop,
-                width: liveW,
-                height: liveH,
-                right: liveLeft + liveW,
-                bottom: liveTop + liveH,
-              };
-              sourceCanvas.current?.updateSelectionRectDirect?.({
-                left: liveLeft,
-                top: liveTop,
-                width: liveW,
-                height: liveH,
-              });
+          if (gesture.widthOnlyHeight) {
+            gesture.targetEl.style.maxWidth = `${roundValue(gesture.nextWidth, 'nearest', 1)}px`;
+          } else {
+            if (gesture.handle === 'e' || gesture.handle === 'w') {
+              gesture.targetEl.style.maxWidth = `${roundValue(gesture.nextWidth, 'nearest', 1)}px`;
+            } else if (gesture.handle === 'n' || gesture.handle === 's') {
+              gesture.targetEl.style.height = `${roundValue(gesture.nextHeight, 'nearest', 1)}px`;
             } else {
-              const liveH = gesture.targetEl.offsetHeight;
-              if (liveH && liveH > 0) {
-                gesture.nextHeight = liveH;
-                res = { ...res, height: liveH };
-              }
+              gesture.targetEl.style.maxWidth = `${roundValue(gesture.nextWidth, 'nearest', 1)}px`;
+              gesture.targetEl.style.height = `${roundValue(gesture.nextHeight, 'nearest', 1)}px`;
+            }
+          }
+          // Always measure actual rendered geometry so selection box NEVER decouples or extends beyond element!
+          const elBox = gesture.targetEl.getBoundingClientRect();
+          if (elBox && elBox.width > 0 && elBox.height > 0) {
+            const liveLeft = elBox.left;
+            const liveTop = elBox.top;
+            const liveW = elBox.width;
+            const liveH = elBox.height;
+            gesture.nextWidth = liveW;
+            gesture.nextHeight = liveH;
+            gesture.nextTop = liveTop;
+            gesture.nextLeft = liveLeft;
+            res = {
+              left: liveLeft,
+              top: liveTop,
+              width: liveW,
+              height: liveH,
+              right: liveLeft + liveW,
+              bottom: liveTop + liveH,
+            };
+            sourceCanvas.current?.updateSelectionRectDirect?.({
+              left: liveLeft,
+              top: liveTop,
+              width: liveW,
+              height: liveH,
+            });
+          } else {
+            const liveH = gesture.targetEl.offsetHeight;
+            if (liveH && liveH > 0) {
+              gesture.nextHeight = liveH;
+              res = { ...res, height: liveH };
             }
           }
         } else if (sourceCanvas.current && gesture.moved && !gesture.outlineOnly) {
@@ -2258,16 +2267,29 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
         const snappedY = roundedPos.y;
         gesture.nextTranslation = { x: snappedX, y: snappedY };
 
-        if (overlayNode) {
-          overlayNode.style.transform = `translate3d(${snappedX - gesture.baseTranslation.x}px, ${snappedY - gesture.baseTranslation.y}px, 0)`;
-        }
-
         if (gesture.targetEl && !gesture.outlineOnly) {
           gesture.targetEl.style.translate = `${snappedX}px ${snappedY}px`;
-        } else if (sourceCanvas.current && gesture.moved && !gesture.outlineOnly) {
-          const selection = sourceSelections.current[gesture.key];
-          if (selection) {
-            void sourceCanvas.current.command('gesture', selection, { x: snappedX, y: snappedY });
+          const elBox = gesture.targetEl.getBoundingClientRect();
+          if (elBox && elBox.width > 0 && elBox.height > 0) {
+            sourceCanvas.current?.updateSelectionRectDirect?.({
+              left: elBox.left,
+              top: elBox.top,
+              width: elBox.width,
+              height: elBox.height,
+            });
+            if (overlayNode) {
+              overlayNode.style.transform = '';
+            }
+          }
+        } else {
+          if (overlayNode) {
+            overlayNode.style.transform = `translate3d(${snappedX - gesture.baseTranslation.x}px, ${snappedY - gesture.baseTranslation.y}px, 0)`;
+          }
+          if (sourceCanvas.current && gesture.moved && !gesture.outlineOnly) {
+            const selection = sourceSelections.current[gesture.key];
+            if (selection) {
+              void sourceCanvas.current.command('gesture', selection, { x: snappedX, y: snappedY });
+            }
           }
         }
 
@@ -2509,6 +2531,31 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
           if (overlayNode) {
             overlayNode.style.width = '100%';
             overlayNode.style.height = '100%';
+            overlayNode.style.transform = '';
+          }
+          if (gesture.targetEl) {
+            const elBox = gesture.targetEl.getBoundingClientRect();
+            if (elBox && elBox.width > 0 && elBox.height > 0) {
+              const updatedRect = {
+                left: elBox.left,
+                top: elBox.top,
+                width: elBox.width,
+                height: elBox.height,
+              };
+              sourceCanvas.current?.updateSelectionRect?.(updatedRect);
+              if (sourceSelections.current[gesture.key]) {
+                sourceSelections.current[gesture.key] = {
+                  ...sourceSelections.current[gesture.key],
+                  rect: updatedRect,
+                };
+              }
+              if (sourceSelection.current && sourceKey(sourceSelection.current) === gesture.key) {
+                sourceSelection.current = {
+                  ...sourceSelection.current,
+                  rect: updatedRect,
+                };
+              }
+            }
           }
           pendingDirectStyleRef.current[gesture.key] = {
             targetEl: gesture.targetEl,
@@ -2516,6 +2563,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
           };
           inFlightMoveRef.current[gesture.key] = gesture.nextTranslation;
           pendingOverlayResetKeyRef.current = gesture.key;
+          resetOverlayNode(gesture.key);
 
           void enqueueFileOperation(
             gesture.filePath,
