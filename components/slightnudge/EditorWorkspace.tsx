@@ -916,6 +916,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
     initialRadius?: number;
     maxRadius?: number;
     nextRadiusStep?: NamedRadiusStep;
+    isCentered?: boolean;
     latestPointer: { x: number; y: number; shiftKey: boolean; altKey: boolean; ctrlKey: boolean; metaKey?: boolean };
     rafPending: boolean;
     moved: boolean;
@@ -1612,6 +1613,13 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
       targetEl,
       initialTargetStyle,
       outlineOnly: outlineDrag,
+      isCentered: Boolean(
+        renderedElement.classes?.split(/\s+/).includes('mx-auto') ||
+        renderedElement.classes?.split(/\s+/).includes('m-auto') ||
+        actualSelection?.className?.split(/\s+/).includes('mx-auto') ||
+        actualSelection?.className?.split(/\s+/).includes('m-auto') ||
+        targetEl?.className?.includes?.('mx-auto')
+      ),
       widthOnlyHeight: !isNonTrivialTransform && !/^(img|video|svg|canvas)$/i.test(renderedElement.tag || actualSelection?.tagName || ''),
       lockedAspect: aspectLockOverrides.current[key] ?? /^(img|video|svg|canvas)$/i.test(renderedElement.tag || actualSelection?.tagName || ''),
       latestPointer: { x: e.clientX, y: e.clientY, shiftKey: e.shiftKey, altKey: e.altKey, ctrlKey: e.ctrlKey || e.metaKey, metaKey: e.metaKey },
@@ -1958,6 +1966,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
         const effectiveShift = gesture.lockedAspect ? !p.shiftKey : p.shiftKey;
         const session = gesture.snapSession ?? createDirectSnapSession(gesture.siblings);
         gesture.snapSession = session;
+        const fromCenter = p.altKey || Boolean(gesture.isCentered && (gesture.handle === 'e' || gesture.handle === 'w'));
 
         const solved = snapResizeInSession(
           session,
@@ -1974,7 +1983,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
             thresholdScreenPx: 4,
             zoom: gesture.zoom,
             disabled: p.ctrlKey || Boolean(gesture.isNonTrivialTransform),
-            fromCenter: p.altKey,
+            fromCenter,
             aspectRatio: effectiveShift,
             minWidth: 1,
             minHeight: 1,
@@ -1997,18 +2006,15 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
             if (elBox && elBox.width > 0 && elBox.height > 0) {
               const liveLeft = elBox.left;
               const liveTop = elBox.top;
-              const liveW = elBox.width;
               const liveH = elBox.height;
-              gesture.nextWidth = liveW;
               gesture.nextHeight = liveH;
-              gesture.nextLeft = liveLeft;
               gesture.nextTop = liveTop;
               res = {
-                left: liveLeft,
+                left: gesture.isCentered ? liveLeft : res.left,
                 top: liveTop,
-                width: liveW,
+                width: gesture.nextWidth,
                 height: liveH,
-                right: liveLeft + liveW,
+                right: (gesture.isCentered ? liveLeft : res.left) + gesture.nextWidth,
                 bottom: liveTop + liveH,
               };
             } else {
@@ -2395,7 +2401,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
                 );
               },
             }
-          ).catch(() => { });
+          ).catch((err) => { console.error('[Resize Queue Error]:', err); });
         } else {
           if (gesture.targetEl) {
             if (gesture.initialTargetStyle === null) gesture.targetEl.removeAttribute('style');
