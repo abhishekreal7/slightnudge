@@ -136,10 +136,9 @@ export const SourceProjectCanvas = forwardRef<SourceCanvasHandle, {
     const cd = frame.current.contentDocument;
     const mainCanvas = document.querySelector('main[data-editor-canvas]');
 
-    const onScroll = () => {
-      isScrollingRef.current = true;
-      if (scrollSettleTimer.current) clearTimeout(scrollSettleTimer.current);
-
+    let scrollRaf = 0;
+    const syncSelectionPosition = () => {
+      scrollRaf = 0;
       const doc = frame.current?.contentDocument;
       if (doc && selected.current) {
         const targetEl = findSourceElementInDocument(doc, selected.current);
@@ -155,6 +154,14 @@ export const SourceProjectCanvas = forwardRef<SourceCanvasHandle, {
           };
         }
       }
+    };
+
+    const onScroll = () => {
+      isScrollingRef.current = true;
+      if (!scrollRaf) {
+        scrollRaf = requestAnimationFrame(syncSelectionPosition);
+      }
+      if (scrollSettleTimer.current) clearTimeout(scrollSettleTimer.current);
 
       scrollSettleTimer.current = setTimeout(() => {
         isScrollingRef.current = false;
@@ -168,11 +175,23 @@ export const SourceProjectCanvas = forwardRef<SourceCanvasHandle, {
               rect: { top: r.top, left: r.left, width: r.width, height: r.height },
             };
             selected.current = updated;
-            setGeometry(updated);
+            setGeometry(prev => {
+              if (!prev) return updated;
+              if (
+                prev.key === updated.key &&
+                Math.abs(prev.rect.top - updated.rect.top) < 0.5 &&
+                Math.abs(prev.rect.left - updated.rect.left) < 0.5 &&
+                Math.abs(prev.rect.width - updated.rect.width) < 0.5 &&
+                Math.abs(prev.rect.height - updated.rect.height) < 0.5
+              ) {
+                return prev;
+              }
+              return updated;
+            });
             props.current.onGeometry?.(updated);
           }
         }
-      }, 100);
+      }, 150);
     };
 
     try {
@@ -186,6 +205,7 @@ export const SourceProjectCanvas = forwardRef<SourceCanvasHandle, {
     }
 
     return () => {
+      if (scrollRaf) cancelAnimationFrame(scrollRaf);
       try {
         cw?.removeEventListener('scroll', onScroll);
       } catch { }
@@ -255,7 +275,22 @@ export const SourceProjectCanvas = forwardRef<SourceCanvasHandle, {
         if (typeof window !== 'undefined' && (window as any).__slightnudge_gesture_active) return;
         if (isScrollingRef.current) return;
         const sanitized = { ...message.selection, transformChain: sanitizeTransformChain(message.selection.transformChain) };
-        selected.current = sanitized; setGeometry(sanitized); props.current.onGeometry?.(sanitized); return;
+        selected.current = sanitized;
+        setGeometry(prev => {
+          if (!prev) return sanitized;
+          if (
+            prev.key === sanitized.key &&
+            Math.abs(prev.rect.top - sanitized.rect.top) < 0.5 &&
+            Math.abs(prev.rect.left - sanitized.rect.left) < 0.5 &&
+            Math.abs(prev.rect.width - sanitized.rect.width) < 0.5 &&
+            Math.abs(prev.rect.height - sanitized.rect.height) < 0.5
+          ) {
+            return prev;
+          }
+          return sanitized;
+        });
+        props.current.onGeometry?.(sanitized);
+        return;
       }
       if (['text-draft', 'text-commit', 'text-cancel', 'text-request', 'save-request', 'shortcut'].includes(message.type)) { props.current.onText?.(message.type, message.selection, message.text ?? message.key, message.shift); return; }
       if (message.type === 'edit-result') {

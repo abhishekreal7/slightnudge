@@ -147,7 +147,13 @@ export function getBridgeClient(targetRepositoryId = '') {
       send('source-rect', selected);
     });
 
-    window.addEventListener('scroll', () => { if (selected) send('source-rect', selected); }, { passive: true });
+    let scrollAdapterTimer: any = null;
+    window.addEventListener('scroll', () => {
+      if (scrollAdapterTimer) clearTimeout(scrollAdapterTimer);
+      scrollAdapterTimer = setTimeout(() => {
+        if (selected) send('source-rect', selected);
+      }, 150);
+    }, { passive: true });
     window.addEventListener('resize', () => { if (selected) send('source-rect', selected); }, { passive: true });
     const ready = () => requestAnimationFrame(() => requestAnimationFrame(() => window.parent.postMessage({ channel: 'slightnudge', session, type: 'bridge-ready' }, parentOrigin)));
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', ready, { once: true }); else ready();

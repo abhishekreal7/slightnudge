@@ -968,6 +968,25 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
     if (pending.targetEl) {
       if (pending.initialStyle === null) pending.targetEl.removeAttribute('style');
       else pending.targetEl.setAttribute('style', pending.initialStyle);
+      if (pending.targetEl.isConnected) {
+        const r = pending.targetEl.getBoundingClientRect();
+        if (r && r.width > 0 && r.height > 0) {
+          const freshRect = { left: r.left, top: r.top, width: r.width, height: r.height };
+          sourceCanvas.current?.updateSelectionRect?.(freshRect);
+          if (sourceSelections.current[key]) {
+            sourceSelections.current[key] = {
+              ...sourceSelections.current[key],
+              rect: freshRect,
+            };
+          }
+          if (sourceSelection.current && sourceKey(sourceSelection.current) === key) {
+            sourceSelection.current = {
+              ...sourceSelection.current,
+              rect: freshRect,
+            };
+          }
+        }
+      }
     }
   }, []);
   const [formattingPosition, setFormattingPosition] = useState<{ left: number; top: number; visible: boolean; menuSide: 'above' | 'below'; menuAlign?: 'left' | 'right' } | null>(null);
@@ -1966,7 +1985,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
         const effectiveShift = gesture.lockedAspect ? !p.shiftKey : p.shiftKey;
         const session = gesture.snapSession ?? createDirectSnapSession(gesture.siblings);
         gesture.snapSession = session;
-        const fromCenter = p.altKey || Boolean(gesture.isCentered && (gesture.handle === 'e' || gesture.handle === 'w'));
+        const fromCenter = p.altKey || Boolean(gesture.isCentered && (gesture.handle ? ['e', 'w', 'ne', 'se', 'nw', 'sw'].includes(gesture.handle) : false));
 
         const solved = snapResizeInSession(
           session,
@@ -2009,6 +2028,9 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
               const liveH = elBox.height;
               gesture.nextHeight = liveH;
               gesture.nextTop = liveTop;
+              if (gesture.isCentered) {
+                gesture.nextLeft = liveLeft;
+              }
               res = {
                 left: gesture.isCentered ? liveLeft : res.left,
                 top: liveTop,
@@ -2089,8 +2111,11 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
           // Direct SVG outline & corner arc update
           const renderedElem = elements[gesture.key] || activeElement;
           const radii = parseBorderRadius(renderedElem.borderRadius, gesture.nextWidth, gesture.nextHeight);
+          const isTextDrag = previousVariantRef.current[gesture.key] === 'text' || gesture.widthOnlyHeight;
+          const padDragX = isTextDrag ? 4 : 2;
+          const padDragY = isTextDrag ? 6 : 2;
           if (haloEl && accentEl) {
-            const d = buildRoundedRectPath(-2, -2, gesture.nextWidth + 4, gesture.nextHeight + 4, {
+            const d = buildRoundedRectPath(-padDragX, -padDragY, gesture.nextWidth + padDragX * 2, gesture.nextHeight + padDragY * 2, {
               tl: radii.tl + (radii.tl > 0 ? 2 : 0),
               tr: radii.tr + (radii.tr > 0 ? 2 : 0),
               br: radii.br + (radii.br > 0 ? 2 : 0),
@@ -3685,7 +3710,10 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
         : null;
     const isOriented = Boolean(chromeGeom?.isNonTrivialTransform);
 
-    // SVG outline path offset 2px outside
+    // SVG outline path offset outside
+    const isTextSelection = chrome.variant === 'text';
+    const padX = isTextSelection ? 4 : 2;
+    const padY = isTextSelection ? 6 : 2;
     const outlinePath =
       chromeGeom && isOriented
         ? buildQuadOutlinePath(
@@ -3693,10 +3721,10 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
           2
         )
         : buildRoundedRectPath(
-          -2,
-          -2,
-          currentW + 4,
-          currentH + 4,
+          -padX,
+          -padY,
+          currentW + padX * 2,
+          currentH + padY * 2,
           {
             tl: chrome.outlineRadii.tl + (chrome.outlineRadii.tl > 0 ? 2 : 0),
             tr: chrome.outlineRadii.tr + (chrome.outlineRadii.tr > 0 ? 2 : 0),
