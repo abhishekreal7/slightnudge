@@ -61,6 +61,7 @@ export interface SourceCanvasHandle {
   getFrame?(): HTMLIFrameElement | null;
   getDocument?(): Document | null;
   updateSelectionRect?(rect: { left: number; top: number; width: number; height: number }): void;
+  updateSelectionRectDirect?(rect: { left?: number; top?: number; width?: number; height?: number }): void;
 }
 
 export const SourceProjectCanvas = forwardRef<SourceCanvasHandle, {
@@ -345,9 +346,23 @@ export const SourceProjectCanvas = forwardRef<SourceCanvasHandle, {
       }
     },
     updateSelectionRect: (rect: { left: number; top: number; width: number; height: number }) => {
+      if (selectionBoxRef.current) {
+        if (typeof rect.left === 'number') selectionBoxRef.current.style.left = `${rect.left}px`;
+        if (typeof rect.top === 'number') selectionBoxRef.current.style.top = `${rect.top}px`;
+        if (typeof rect.width === 'number') selectionBoxRef.current.style.width = `${rect.width}px`;
+        if (typeof rect.height === 'number') selectionBoxRef.current.style.height = `${rect.height}px`;
+      }
       setGeometry(prev => (prev ? { ...prev, rect: { ...prev.rect, ...rect } } : prev));
       if (selected.current) {
         selected.current = { ...selected.current, rect: { ...selected.current.rect, ...rect } };
+      }
+    },
+    updateSelectionRectDirect: (rect: { left?: number; top?: number; width?: number; height?: number }) => {
+      if (selectionBoxRef.current) {
+        if (typeof rect.left === 'number') selectionBoxRef.current.style.left = `${rect.left}px`;
+        if (typeof rect.top === 'number') selectionBoxRef.current.style.top = `${rect.top}px`;
+        if (typeof rect.width === 'number') selectionBoxRef.current.style.width = `${rect.width}px`;
+        if (typeof rect.height === 'number') selectionBoxRef.current.style.height = `${rect.height}px`;
       }
     },
     async reload(selection, expectedClass, expectedText, expectedBatch) {

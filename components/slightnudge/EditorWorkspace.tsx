@@ -1586,6 +1586,16 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
     const startLeft = isNonTrivialTransform ? 0 : (elRect ? elRect.left : wrapperLeft);
     const startTop = isNonTrivialTransform ? 0 : (elRect ? elRect.top : wrapperTop);
 
+    // Synchronize selection container immediately at pointerdown
+    if (!isNonTrivialTransform && elRect && sourceCanvas.current?.updateSelectionRectDirect) {
+      sourceCanvas.current.updateSelectionRectDirect({
+        left: startLeft,
+        top: startTop,
+        width: currentW,
+        height: currentH,
+      });
+    }
+
     try {
       e.currentTarget.focus({ preventScroll: true });
       e.currentTarget.setPointerCapture(e.pointerId);
@@ -1633,11 +1643,10 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
       initialTargetStyle,
       outlineOnly: outlineDrag,
       isCentered: Boolean(
-        renderedElement.classes?.split(/\s+/).includes('mx-auto') ||
-        renderedElement.classes?.split(/\s+/).includes('m-auto') ||
-        actualSelection?.className?.split(/\s+/).includes('mx-auto') ||
-        actualSelection?.className?.split(/\s+/).includes('m-auto') ||
-        targetEl?.className?.includes?.('mx-auto')
+        /\b(mx-auto|m-auto)\b/.test(renderedElement.classes || '') ||
+        /\b(mx-auto|m-auto)\b/.test(actualSelection?.className || '') ||
+        (typeof targetEl?.className === 'string' && /\b(mx-auto|m-auto)\b/.test(targetEl.className)) ||
+        (targetEl && targetEl.ownerDocument?.defaultView?.getComputedStyle(targetEl).marginLeft === 'auto')
       ),
       widthOnlyHeight: !isNonTrivialTransform && !/^(img|video|svg|canvas)$/i.test(renderedElement.tag || actualSelection?.tagName || ''),
       lockedAspect: aspectLockOverrides.current[key] ?? /^(img|video|svg|canvas)$/i.test(renderedElement.tag || actualSelection?.tagName || ''),
@@ -1982,6 +1991,17 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
           gesture.moved = true;
         }
 
+        let maxAvailableWidth = Infinity;
+        let minAvailableWidth = gesture.widthOnlyHeight ? 280 : 40;
+        const parentEl = gesture.targetEl?.parentElement;
+        if (parentEl) {
+          const pStyle = parentEl.ownerDocument?.defaultView?.getComputedStyle(parentEl);
+          const pPadX = (parseFloat(pStyle?.paddingLeft || '0') || 0) + (parseFloat(pStyle?.paddingRight || '0') || 0);
+          if (parentEl.clientWidth > 0) {
+            maxAvailableWidth = Math.max(minAvailableWidth, parentEl.clientWidth - pPadX);
+          }
+        }
+
         const effectiveShift = gesture.lockedAspect ? !p.shiftKey : p.shiftKey;
         const session = gesture.snapSession ?? createDirectSnapSession(gesture.siblings);
         gesture.snapSession = session;
@@ -2004,14 +2024,15 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
             disabled: p.ctrlKey || Boolean(gesture.isNonTrivialTransform),
             fromCenter,
             aspectRatio: effectiveShift,
-            minWidth: 1,
+            minWidth: minAvailableWidth,
+            maxWidth: maxAvailableWidth,
             minHeight: 1,
           }
         );
 
         let res = solved.resize.rect;
         const preserveAutoHeight = Boolean(gesture.widthOnlyHeight && !effectiveShift);
-        gesture.nextWidth = Math.max(1, res.width);
+        gesture.nextWidth = Math.min(maxAvailableWidth, Math.max(minAvailableWidth, res.width));
         gesture.nextHeight = preserveAutoHeight ? gesture.startHeight : Math.max(1, res.height);
         gesture.nextLeft = res.left;
         gesture.nextTop = preserveAutoHeight ? gesture.startTop : res.top;
@@ -2025,20 +2046,26 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
             if (elBox && elBox.width > 0 && elBox.height > 0) {
               const liveLeft = elBox.left;
               const liveTop = elBox.top;
+              const liveW = elBox.width;
               const liveH = elBox.height;
+              gesture.nextWidth = liveW;
               gesture.nextHeight = liveH;
               gesture.nextTop = liveTop;
-              if (gesture.isCentered) {
-                gesture.nextLeft = liveLeft;
-              }
+              gesture.nextLeft = liveLeft;
               res = {
-                left: gesture.isCentered ? liveLeft : res.left,
+                left: liveLeft,
                 top: liveTop,
-                width: gesture.nextWidth,
+                width: liveW,
                 height: liveH,
-                right: (gesture.isCentered ? liveLeft : res.left) + gesture.nextWidth,
+                right: liveLeft + liveW,
                 bottom: liveTop + liveH,
               };
+              sourceCanvas.current?.updateSelectionRectDirect?.({
+                left: liveLeft,
+                top: liveTop,
+                width: liveW,
+                height: liveH,
+              });
             } else {
               const liveH = gesture.targetEl.offsetHeight;
               if (liveH && liveH > 0) {
@@ -2097,23 +2124,34 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
           }
         } else {
           if (overlayNode) {
-            overlayNode.style.width = `${roundValue(gesture.nextWidth, 'nearest', 1)}px`;
-            overlayNode.style.height = `${roundValue(gesture.nextHeight, 'nearest', 1)}px`;
-            const dx = gesture.nextLeft - gesture.startLeft;
-            const dy = gesture.nextTop - gesture.startTop;
-            if (Math.abs(dx) > 0.1 || Math.abs(dy) > 0.1) {
-              overlayNode.style.transform = `translate3d(${roundValue(dx, 'nearest', 1)}px, ${roundValue(dy, 'nearest', 1)}px, 0)`;
-            } else {
+            if (gesture.targetEl) {
+              overlayNode.style.width = '100%';
+              overlayNode.style.height = '100%';
               overlayNode.style.transform = '';
+            } else {
+              overlayNode.style.width = `${roundValue(gesture.nextWidth, 'nearest', 1)}px`;
+              overlayNode.style.height = `${roundValue(gesture.nextHeight, 'nearest', 1)}px`;
+              const dx = gesture.nextLeft - gesture.startLeft;
+              const dy = gesture.nextTop - gesture.startTop;
+              if (Math.abs(dx) > 0.1 || Math.abs(dy) > 0.1) {
+                overlayNode.style.transform = `translate3d(${roundValue(dx, 'nearest', 1)}px, ${roundValue(dy, 'nearest', 1)}px, 0)`;
+              } else {
+                overlayNode.style.transform = '';
+              }
             }
           }
 
           // Direct SVG outline & corner arc update
           const renderedElem = elements[gesture.key] || activeElement;
           const radii = parseBorderRadius(renderedElem.borderRadius, gesture.nextWidth, gesture.nextHeight);
+          const fontSizePx = parseFloat(gesture.targetEl ? getComputedStyle(gesture.targetEl).fontSize : (sourceSelections.current[gesture.key]?.computed?.fontSize || '16')) || 16;
           const isTextDrag = previousVariantRef.current[gesture.key] === 'text' || gesture.widthOnlyHeight;
-          const padDragX = isTextDrag ? 4 : 2;
-          const padDragY = isTextDrag ? 6 : 2;
+          const padDragX = isTextDrag ? Math.max(4, Math.ceil(fontSizePx * 0.08)) : 2;
+          const padDragY = isTextDrag ? Math.max(6, Math.ceil(fontSizePx * 0.18)) : 2;
+          if (overlayNode) {
+            overlayNode.style.setProperty('--pad-x', `${padDragX}px`);
+            overlayNode.style.setProperty('--pad-y', `${padDragY}px`);
+          }
           if (haloEl && accentEl) {
             const d = buildRoundedRectPath(-padDragX, -padDragY, gesture.nextWidth + padDragX * 2, gesture.nextHeight + padDragY * 2, {
               tl: radii.tl + (radii.tl > 0 ? 2 : 0),
@@ -3712,8 +3750,9 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
 
     // SVG outline path offset outside
     const isTextSelection = chrome.variant === 'text';
-    const padX = isTextSelection ? 4 : 2;
-    const padY = isTextSelection ? 6 : 2;
+    const fontSizePx = parseFloat(selection.computed?.fontSize || '16') || 16;
+    const padX = isTextSelection ? Math.max(4, Math.ceil(fontSizePx * 0.08)) : 2;
+    const padY = isTextSelection ? Math.max(6, Math.ceil(fontSizePx * 0.18)) : 2;
     const outlinePath =
       chromeGeom && isOriented
         ? buildQuadOutlinePath(
@@ -3752,6 +3791,8 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
           height: '100%',
           fontSize: selection.computed.fontSize,
           textAlign: selection.computed.textAlign as React.CSSProperties['textAlign'],
+          ['--pad-x' as any]: `${padX}px`,
+          ['--pad-y' as any]: `${padY}px`,
         }}
       >
         {/* SVG Overlay layer with dual-stroke 1.5px accent over 1px white halo */}

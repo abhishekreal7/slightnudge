@@ -698,8 +698,8 @@
 .handleSw { top: calc(100% + 2px); left: -2px; cursor: nesw-resize; }
 .handleW  { top: 50%; left: -2px; cursor: ew-resize; }
 
-.sourceSelection[data-selection-variant="text"] .handleE { left: calc(100% + 4px); }
-.sourceSelection[data-selection-variant="text"] .handleW { left: -4px; }
+.sourceSelection[data-selection-variant="text"] .handleE { left: calc(100% + var(--pad-x, 4px)); }
+.sourceSelection[data-selection-variant="text"] .handleW { left: calc(-1 * var(--pad-x, 4px)); }
 
 /* Smart Snapping Guides (Disabled) */
 .smartGuideV,
