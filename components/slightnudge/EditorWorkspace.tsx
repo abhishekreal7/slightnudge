@@ -1031,8 +1031,13 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
   const receiveSourceGeometry = (selection: SourceSelection) => {
     const key = sourceKey(selection); sourceSelections.current[key] = selection;
     if (selectedLayer === key) sourceSelection.current = selection;
-    setElementDimensions(previous => ({ ...previous, [key]: { w: Math.round(selection.rect.width), h: Math.round(selection.rect.height) } }));
-    sourceCanvas.current?.updateSelectionRect?.(selection.rect);
+    const newW = Math.round(selection.rect.width);
+    const newH = Math.round(selection.rect.height);
+    setElementDimensions(previous => {
+      const prev = previous[key];
+      if (prev && prev.w === newW && prev.h === newH) return previous;
+      return { ...previous, [key]: { w: newW, h: newH } };
+    });
     if (pendingOverlayResetKeyRef.current === key) {
       setOverlayResetTick(tick => tick + 1);
     }
@@ -1607,7 +1612,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
       targetEl,
       initialTargetStyle,
       outlineOnly: outlineDrag,
-      widthOnlyHeight: !isNonTrivialTransform && /^(a|button|input|select)$/i.test(renderedElement.tag || actualSelection?.tagName || ''),
+      widthOnlyHeight: !isNonTrivialTransform && !/^(img|video|svg|canvas)$/i.test(renderedElement.tag || actualSelection?.tagName || ''),
       lockedAspect: aspectLockOverrides.current[key] ?? /^(img|video|svg|canvas)$/i.test(renderedElement.tag || actualSelection?.tagName || ''),
       latestPointer: { x: e.clientX, y: e.clientY, shiftKey: e.shiftKey, altKey: e.altKey, ctrlKey: e.ctrlKey || e.metaKey, metaKey: e.metaKey },
       rafPending: false,
@@ -1785,7 +1790,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
           showToast('This live-page operation is not yet visually verified. Nothing was changed.');
           return;
         }
-        const result = await previewEditAPI({
+        let result = await previewEditAPI({
           ...(usesDrafts ? { draft: true, parentPreviewId: fileHead?.id } : {}),
           ...(repositoryId ? { repositoryId, sourcePath: targetElem.filePath } : {}),
           kind,
@@ -1800,6 +1805,27 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
           ...payload,
           breakpoint: state,
         });
+
+        if (!result.success && fileHead?.id && (result.code === 'SOURCE_CHANGED' || result.error?.includes('source changed outside') || result.error?.includes('source changed after') || result.error?.includes('source changed while'))) {
+          result = await previewEditAPI({
+            ...(usesDrafts ? { draft: true } : {}),
+            ...(repositoryId ? { repositoryId, sourcePath: targetElem.filePath } : {}),
+            kind,
+            important: kind === 'style' && ['a', 'button'].includes(targetElem.tag) && ['textColor', 'backgroundColor'].includes(payload.property),
+            filePath: targetElem.filePath,
+            instance: definitionStyleKey === activeKey && ['style', 'text', 'nudge', 'move'].includes(kind) ? undefined : renderedElement.instance,
+            line: targetElem.line,
+            column: targetElem.column,
+            elementId: targetElem.id,
+            tagName: targetElem.tag.split('.')[0],
+            className: targetElem.classes,
+            ...payload,
+            breakpoint: state,
+          });
+          if (result.success) {
+            showToast('Draft re-baselined to current source.');
+          }
+        }
 
         if (result.responsiveScopes) setResponsiveScopes(result.responsiveScopes);
         if (result.success && result.changed === false) {
@@ -1965,8 +1991,8 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
         // Apply continuous width to target element immediately so text reflows smoothly in the iframe at 60fps
         if (gesture.targetEl && !gesture.outlineOnly) {
           gesture.targetEl.style.maxWidth = `${roundValue(gesture.nextWidth, 'nearest', 1)}px`;
-          // If resizing horizontally (e or w handle), measure the actual rendered geometry as text wraps
-          if (gesture.handle === 'e' || gesture.handle === 'w' || gesture.widthOnlyHeight) {
+          // If resizing horizontally (e or w handle) or non-aspect-locked elements, measure the actual rendered geometry as text wraps
+          if (gesture.handle === 'e' || gesture.handle === 'w' || gesture.widthOnlyHeight || !gesture.lockedAspect) {
             const elBox = gesture.targetEl.getBoundingClientRect();
             if (elBox && elBox.width > 0 && elBox.height > 0) {
               const liveLeft = elBox.left;
@@ -2668,6 +2694,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
         if (Object.keys(draftHeads(frame.edit)).length > 1) return true;
         const outcome = await checkApplyOutcomeAPI(frame.edit.id, repositoryId ? { repositoryId, sourcePath: editPath(frame.edit) } : {});
         if (outcome.success) { setElements(rebaseDraftElements(frame.elements, frame.edit)); storeDraft(null); setReview(null); }
+        else if (outcome.code === 'SOURCE_CHANGED') showToast('Previous draft restored. Source was updated outside — click Save to re-sync or Discard.');
         else if (outcome.code !== 'APPLY_NOT_APPLIED') showToast('Your draft is restored. The source needs checking before Save.');
       }
       return true;
@@ -2903,6 +2930,54 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
       } else if (result.code === 'SOURCE_CHANGED' || result.code === 'APPLY_ALREADY_UNDONE' || result.code === 'PREVIEW_EXPIRED') {
         finishOperationRecovery();
         setUncertainApplyId(null);
+        if (usesDrafts && edit && result.code === 'SOURCE_CHANGED') {
+          try {
+            const targetElem = edit.snapshot?.element;
+            if (targetElem) {
+              const rebaseKind = edit.sourceText ? 'text' : 'style';
+              const rebasePayload = edit.sourceText
+                ? { value: edit.newValue }
+                : (edit.newClassName && edit.oldClassName)
+                  ? { property: 'className', value: edit.newClassName }
+                  : { property: edit.summary?.split(' ')[0] || 'maxWidth', value: edit.newValue || edit.newClassName };
+
+              const freshPreview = await previewEditAPI({
+                draft: true,
+                kind: rebaseKind as any,
+                filePath: edit.filePath,
+                line: targetElem.line,
+                column: targetElem.column,
+                elementId: targetElem.id,
+                tagName: targetElem.tag?.split('.')[0],
+                className: targetElem.classes,
+                ...(repositoryId ? { repositoryId, sourcePath: editPath(edit) } : {}),
+                ...rebasePayload,
+              });
+
+              if (freshPreview.success && freshPreview.id) {
+                const freshId = freshPreview.id;
+                const retryApply = await applyEditAPI(freshId, context);
+                if (retryApply.success) {
+                  const updatedPending: PendingEdit = { ...edit, id: freshId, editId: retryApply.editId, layerKey: edit.layerKey || '' };
+                  appliedSnapshots.current.push(updatedPending);
+                  setReview(null);
+                  setElements(previous => rebaseDraftElements(previous, updatedPending));
+                  storeDraft(null);
+                  setReviewOpen(false);
+                  setSelectedLayerState(null);
+                  await sourceCanvas.current?.reload(undefined, undefined, undefined, freshPreview.renderPatches);
+                  finishOperationRecovery(true);
+                  showToast('Draft re-synced with latest source and saved successfully.');
+                  return;
+                }
+              }
+            }
+          } catch { /* Fallback to manual resolution */ }
+
+          setReviewOpen(true);
+          showToast(result.error || 'The source file changed outside this draft. Review changes or discard draft.');
+          return;
+        }
         if (usesDrafts && edit.draftBase) { showToast(result.error || 'Source changed. Your draft is preserved.'); return; }
         if (repositoryId) sourceCanvas.current?.reload();
         restoreSnapshot(edit);
@@ -3865,6 +3940,8 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
         saveLabel={uncertainApplyId ? pendingEdit?.groupTransactionId ? 'Resume Save' : 'Check save' : 'Save changes'}
         disabled={(!pendingEdit && draftText === activeElement.text) || busy || isApplying || moveArmed || isResizing || destinationMode}
         onSave={requestSave}
+        onDiscard={discardPendingEdit}
+        hasDraft={Boolean(pendingEdit)}
       />}
     </div>
   );

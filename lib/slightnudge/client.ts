@@ -87,6 +87,7 @@ export interface PreviewResult {
   draftClean?: boolean;
   success: boolean;
   id?: string;
+  code?: string;
   summary?: string;
   oldValue?: string;
   newValue?: string;
@@ -175,6 +176,7 @@ export async function previewEditAPI(params: PreviewParams): Promise<PreviewResu
         success: false,
         error: data.error || data.reason || 'Could not prepare this preview.',
         refusalReason: data.reason || data.error,
+        code: data.code,
         responsiveScopes: data.responsiveScopes,
         filePath: params.filePath,
       };

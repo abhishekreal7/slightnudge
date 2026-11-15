@@ -627,7 +627,14 @@ function sourceCanvasRuntime(continuous: boolean, repositoryId = '', protocol = 
     const initialFontSize = parseFloat(getComputedStyle(probe).fontSize); probe.remove();
     send('source-viewport', { width: innerWidth, height: innerHeight, initialFontSize });
   };
-  window.addEventListener('scroll', changed, { passive: true }); window.addEventListener('resize', () => { viewport(); catalog(); changed(); });
+  let scrollBridgeTimeout: any = null;
+  const onScrollBridge = () => {
+    if (scrollBridgeTimeout) clearTimeout(scrollBridgeTimeout);
+    scrollBridgeTimeout = setTimeout(() => {
+      geometry();
+    }, 100);
+  };
+  window.addEventListener('scroll', onScrollBridge, { passive: true }); window.addEventListener('resize', () => { viewport(); catalog(); changed(); });
   const observer = new ResizeObserver(changed); observer.observe(root);
   let route = location.pathname + location.search;
   const routes = new MutationObserver(() => { const next = location.pathname + location.search; if (next === route) return; route = next; selected = null; catalog(); send('source-route'); });

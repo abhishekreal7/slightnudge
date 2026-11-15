@@ -338,7 +338,12 @@ async function measuredPost(request: Request) {
 
     return NextResponse.json({ error: 'Choose a supported edit type.' }, { status: 400, headers: corsHeaders(request) });
   } catch (error) {
-    return NextResponse.json({ error: error instanceof Error ? error.message : 'Could not prepare this preview.' }, { status: 400, headers: corsHeaders(request) });
+    const message = error instanceof Error ? error.message : 'Could not prepare this preview.';
+    const isSourceChanged = message.includes('source changed outside') || message.includes('source changed while');
+    return NextResponse.json({
+      error: message,
+      code: isSourceChanged ? 'SOURCE_CHANGED' : undefined,
+    }, { status: 400, headers: corsHeaders(request) });
   }
 }
 

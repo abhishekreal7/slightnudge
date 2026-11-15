@@ -24,12 +24,36 @@ export function EditorDraftStatus({ status }: { status: string }) {
   </span>;
 }
 
-export function EditorDraftControls({ saveLabel, disabled, onSave }: {
-  saveLabel: string; disabled: boolean; onSave(): void;
+export function EditorDraftControls({ saveLabel, disabled, onSave, onDiscard, hasDraft }: {
+  saveLabel: string;
+  disabled: boolean;
+  onSave(): void;
+  onDiscard?(): void;
+  hasDraft?: boolean;
 }) {
-  return <div className={styles.draftControls} aria-label="Draft controls">
-    <button type="button" disabled={disabled} onMouseDown={event => event.preventDefault()} onClick={onSave} className={styles.draftSave}>{saveLabel}</button>
-  </div>;
+  return (
+    <div className={styles.draftControls} aria-label="Draft controls">
+      {hasDraft && onDiscard && (
+        <button
+          type="button"
+          onClick={onDiscard}
+          className="text-xs font-medium text-slate-500 hover:text-rose-600 px-2 py-1 rounded transition cursor-pointer"
+          title="Discard unsaved draft"
+        >
+          Discard
+        </button>
+      )}
+      <button
+        type="button"
+        disabled={disabled}
+        onMouseDown={event => event.preventDefault()}
+        onClick={onSave}
+        className={styles.draftSave}
+      >
+        {saveLabel}
+      </button>
+    </div>
+  );
 }
 
 export type EditorViewport = 'desktop' | 'tablet' | 'mobile';

@@ -9,6 +9,7 @@ import type { CanvasLayer, CanvasRenderPatch, SerializedTransformFrame } from '@
 import { SOURCE_CANVAS_PROTOCOL } from '@/lib/slightnudge/source-canvas-contract';
 import windowStyles from './source-window.module.css';
 import canvasStyles from './imported-canvas.module.css';
+import { findSourceElementInDocument } from './direct-manipulation-engine';
 
 export interface SourceSelection {
   renderPatches?: CanvasRenderPatch[];
@@ -94,6 +95,9 @@ export const SourceProjectCanvas = forwardRef<SourceCanvasHandle, {
   const session = useRef('');
   const documentUrl = useRef('');
   const selected = useRef<SourceSelection | null>(null);
+  const selectionBoxRef = useRef<HTMLDivElement>(null);
+  const isScrollingRef = useRef(false);
+  const scrollSettleTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const autoConnected = useRef(false);
   const modeRef = useRef(browseMode); modeRef.current = browseMode;
   const props = useRef({ blocked, onSelect, onNotice, onClearSelection, onLayers, onGeometry, onReady, onViewport, onText }); props.current = { blocked, onSelect, onNotice, onClearSelection, onLayers, onGeometry, onReady, onViewport, onText };
@@ -125,6 +129,75 @@ export const SourceProjectCanvas = forwardRef<SourceCanvasHandle, {
     void doc.fonts.ready.then(measure); measure();
     return () => { active = false; cancelAnimationFrame(animation); observer.disconnect(); changes.disconnect(); doc.removeEventListener('load', measure, true); doc.removeEventListener('wheel', wheel); doc.documentElement.style.overflow = oldOverflow; };
   }, [url, ready, repositoryId, windowMode, documentRevision]);
+
+  useEffect(() => {
+    if (!ready || !frame.current) return;
+    const cw = frame.current.contentWindow;
+    const cd = frame.current.contentDocument;
+    const mainCanvas = document.querySelector('main[data-editor-canvas]');
+
+    const onScroll = () => {
+      isScrollingRef.current = true;
+      if (scrollSettleTimer.current) clearTimeout(scrollSettleTimer.current);
+
+      const doc = frame.current?.contentDocument;
+      if (doc && selected.current) {
+        const targetEl = findSourceElementInDocument(doc, selected.current);
+        if (targetEl && targetEl.isConnected && selectionBoxRef.current) {
+          const r = targetEl.getBoundingClientRect();
+          selectionBoxRef.current.style.top = `${r.top}px`;
+          selectionBoxRef.current.style.left = `${r.left}px`;
+          selectionBoxRef.current.style.width = `${r.width}px`;
+          selectionBoxRef.current.style.height = `${r.height}px`;
+          selected.current = {
+            ...selected.current,
+            rect: { top: r.top, left: r.left, width: r.width, height: r.height },
+          };
+        }
+      }
+
+      scrollSettleTimer.current = setTimeout(() => {
+        isScrollingRef.current = false;
+        if (selected.current) {
+          const doc = frame.current?.contentDocument;
+          const targetEl = doc ? findSourceElementInDocument(doc, selected.current) : null;
+          if (targetEl && targetEl.isConnected) {
+            const r = targetEl.getBoundingClientRect();
+            const updated = {
+              ...selected.current,
+              rect: { top: r.top, left: r.left, width: r.width, height: r.height },
+            };
+            selected.current = updated;
+            setGeometry(updated);
+            props.current.onGeometry?.(updated);
+          }
+        }
+      }, 100);
+    };
+
+    try {
+      cw?.addEventListener('scroll', onScroll, { passive: true });
+    } catch { }
+    try {
+      cd?.addEventListener('scroll', onScroll, { passive: true });
+    } catch { }
+    if (mainCanvas) {
+      mainCanvas.addEventListener('scroll', onScroll, { passive: true });
+    }
+
+    return () => {
+      try {
+        cw?.removeEventListener('scroll', onScroll);
+      } catch { }
+      try {
+        cd?.removeEventListener('scroll', onScroll);
+      } catch { }
+      if (mainCanvas) {
+        mainCanvas.removeEventListener('scroll', onScroll);
+      }
+      if (scrollSettleTimer.current) clearTimeout(scrollSettleTimer.current);
+    };
+  }, [ready, url, documentRevision]);
   useEffect(() => {
     if (!repositoryId) {
       setPageHeight(720);
@@ -180,6 +253,7 @@ export const SourceProjectCanvas = forwardRef<SourceCanvasHandle, {
       if (message.type === 'selection-refused') { props.current.onNotice(typeof message.reason === 'string' ? message.reason : 'This source element cannot be selected uniquely.'); return; }
       if (message.type === 'source-rect' && message.selection?.rect) {
         if (typeof window !== 'undefined' && (window as any).__slightnudge_gesture_active) return;
+        if (isScrollingRef.current) return;
         const sanitized = { ...message.selection, transformChain: sanitizeTransformChain(message.selection.transformChain) };
         selected.current = sanitized; setGeometry(sanitized); props.current.onGeometry?.(sanitized); return;
       }
@@ -383,7 +457,7 @@ export const SourceProjectCanvas = forwardRef<SourceCanvasHandle, {
     {url && windowMode && ready && <p role="status" className={windowStyles.status}>Live source connected</p>}
     {url && <div data-selection-artboard className={windowMode ? windowStyles.artboard : 'relative mx-auto'} style={{ width, flexShrink: 0, maxWidth: width === '100%' ? '100%' : undefined }}>
       <iframe ref={frame} title="Actual project" src={url} onLoad={() => setDocumentRevision(value => value + 1)} scrolling={!windowMode ? 'no' : undefined} inert={!ready} tabIndex={ready ? 0 : -1} className="block w-full border-0 bg-white" style={{ height: windowMode ? '100dvh' : pageHeight, pointerEvents: ready ? 'auto' : 'none' }} />
-      {geometry && ready && renderSelection && <div className="absolute pointer-events-none" style={{ inset: 0, zIndex: 30, overflow: 'visible' }}><div style={{ position: 'absolute', top: geometry.rect.top, left: geometry.rect.left, width: geometry.rect.width, height: geometry.rect.height }}>{renderSelection(geometry)}</div></div>}
+      {geometry && ready && renderSelection && <div className="absolute pointer-events-none" style={{ inset: 0, zIndex: 30, overflow: 'visible' }}><div ref={selectionBoxRef} style={{ position: 'absolute', top: geometry.rect.top, left: geometry.rect.left, width: geometry.rect.width, height: geometry.rect.height }}>{renderSelection(geometry)}</div></div>}
       {destinationMode && destination && ready && <div className={windowStyles.destinationTarget} aria-label="Move destination preview" style={{ top: destination.rect.top, left: destination.rect.left, width: destination.rect.width, height: destination.rect.height }}><span>Move to end</span><i/></div>}
     </div>}
   </section>;
