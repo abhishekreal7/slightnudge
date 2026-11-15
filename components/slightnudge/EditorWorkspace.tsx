@@ -7,7 +7,7 @@ import { LeftToolDock, type LeftTool } from './LeftToolDock';
 import { RightToolDock, type DockTool } from './RightToolDock';
 
 
-import React, { useState, useEffect, useLayoutEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useLayoutEffect, useCallback, useMemo, useRef } from 'react';
 import { EditorSurface, type EditorMode } from './EditorSurface';
 import { EditorDraftControls, EditorDraftStatus, EditorHistoryControls, EditorViewportControls } from './EditorSessionControls';
 import { useWindowDock } from '@/components/slightnudge/useWindowDock';
@@ -608,6 +608,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
   const activeInlineInspection = useRef<Promise<{ safe: boolean; prop?: { key: string; property: string; owner?: import('@/lib/slightnudge/component-ownership').ComponentOwner; definition?: { filePath: string; line: number; column: number; instance?: string } }; error?: string }> | null>(null);
   const deferredInlineCommit = useRef<{ key: string; text: string } | null>(null);
   const queuedSelectionRef = useRef<string | null | undefined>(undefined);
+  const queuedNudgeRef = useRef<{ dir: 'up' | 'down' | 'left' | 'right'; step: number } | null>(null);
   const reviewNotice = repositoryId ? 'Apply or discard the current preview before making another change. Source has not been changed.' : 'Finishing the current edit…';
   const setSelectedLayer = (key: string | null) => {
     if (moveGesture.current) { showToast('Release the Move handle or press Escape to cancel.'); return; }
@@ -621,10 +622,26 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
     }
     if (operationRef.current && usesDrafts) { queuedSelectionRef.current = key; return; }
     if (operationRef.current || blocksReview() || undoRecoveryRef.current) { showToast(undoRecoveryRef.current ? 'Check Undo status before making another change.' : reviewNotice); return; }
+    if (!key) {
+      setSelectedLayerState(null);
+      sourceSelection.current = null;
+      void sourceCanvas.current?.command('select', null).catch(() => { });
+      return;
+    }
+    let target = sourceSelections.current[key];
+    if (!target) {
+      const found = sourceLayers.find(l => l.key === key);
+      if (found) {
+        sourceSelections.current[key] = found;
+        target = found;
+      }
+    }
     setSelectedLayerState(key);
-    if (key && sourceSelections.current[key]) {
-      sourceSelection.current = sourceSelections.current[key];
-      void sourceCanvas.current?.command('select', sourceSelection.current).catch(() => { });
+    if (target) {
+      sourceSelection.current = target;
+      setElements(prev => ({ ...prev, [key]: elementFromSource(target) }));
+      void sourceCanvas.current?.command('select', target).catch(() => { });
+      if (typeof prefetchTextInspection === 'function') prefetchTextInspection(target);
     }
   };
   const inspectorActive = true;
@@ -1970,6 +1987,11 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
           setSelectedLayerState(key);
           if (key && sourceSelections.current[key]) { sourceSelection.current = sourceSelections.current[key]; void sourceCanvas.current?.command('select', sourceSelections.current[key]).catch(() => { }); }
         }
+        if (queuedNudgeRef.current !== null) {
+          const nudge = queuedNudgeRef.current;
+          queuedNudgeRef.current = null;
+          nudgeTranslation(nudge.dir, nudge.step);
+        }
       }
     },
     [activeBreakpoint, activeVariant, activeElement, elements, selectedLayer, childOrder, repositoryId, usesDrafts, responsiveScopes, definitionStyleKey]
@@ -2752,7 +2774,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
     );
   };
 
-  // Cancel manipulation or clear selection on Escape key
+  // Cancel manipulation, navigate up hierarchy or clear selection on Escape key
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.target instanceof HTMLElement && e.target.closest('input, textarea, select, [contenteditable="true"]')) return;
@@ -2774,14 +2796,19 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
           setResizeHandle(null);
           setLiveWidth(null);
           setDimensionTooltip(null);
-        } else {
-          setSelectedLayer(null);
+        } else if (selectedLayer) {
+          const parentKey = sourceSelections.current[selectedLayer]?.parentKey || sourceLayers.find(l => l.key === selectedLayer)?.parentKey;
+          if (parentKey) {
+            setSelectedLayer(parentKey);
+          } else {
+            setSelectedLayer(null);
+          }
         }
       }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isDraggingMove, isResizing, windowMode, windowPanel, leftDockVisible, leftDockTool, rightDockVisible, rightDockTool]);
+  }, [isDraggingMove, isResizing, windowMode, windowPanel, leftDockVisible, leftDockTool, rightDockVisible, rightDockTool, selectedLayer, sourceLayers]);
 
   const restoreSnapshot = (edit: PendingEdit) => {
     inlineSessionRef.current = null;
@@ -3261,7 +3288,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
         if (e.defaultPrevented || e.target instanceof Element && e.target.closest('button, a, summary, [role="separator"], [role="menu"], [role="dialog"], [role="slider"], [role="tablist"]')) return;
         e.preventDefault();
         const dir = e.key === 'ArrowUp' ? 'up' : e.key === 'ArrowDown' ? 'down' : e.key === 'ArrowLeft' ? 'left' : 'right';
-        nudgeTranslation(dir);
+        nudgeTranslation(dir, e.shiftKey ? 16 : 4);
       }
     };
     window.addEventListener('keydown', handleKeyDown);
@@ -3464,7 +3491,26 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
     if (type === 'text-cancel' && selection) { cancelInlineText(sourceKey(selection)); return; }
     if (type === 'text-request' && selection) { sourceSelections.current[sourceKey(selection)] = selection; receiveSourceSelection(selection); beginInlineText(sourceKey(selection)); return; }
     if (type === 'save-request') { saveTextRef.current = null; setSaveRequested(true); return; }
-    if (type === 'shortcut') { if (text === 'Escape') { if (directDragRef.current) { cancelActiveDragRef.current?.(); return; } if (destinationSource.current) cancelDestination(); else if (windowMode && windowPanel) setWindowPanel(null); else setSelectedLayer(null); } else if (text?.toLowerCase() === 's') requestSave(); else if (text?.toLowerCase() === 'y' || shift) navigateDraft(1); else void handleUndo(); }
+    if (type === 'shortcut') {
+      if (text === 'Escape') {
+        if (directDragRef.current) { cancelActiveDragRef.current?.(); return; }
+        if (destinationSource.current) cancelDestination();
+        else if (windowMode && (windowPanel || rightDockTool !== null)) {
+          setWindowPanel(null);
+          setRightDockTool(null);
+        } else if (selectedLayer) {
+          const parentKey = sourceSelections.current[selectedLayer]?.parentKey || sourceLayers.find(l => l.key === selectedLayer)?.parentKey;
+          if (parentKey) setSelectedLayer(parentKey);
+          else setSelectedLayer(null);
+        }
+      } else if (text?.toLowerCase() === 's') requestSave();
+      else if (text?.toLowerCase() === 'y' || (text?.toLowerCase() === 'z' && shift)) navigateDraft(1);
+      else if (text?.toLowerCase() === 'z') void handleUndo();
+      else if (selectedLayer && ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(text || '')) {
+        const dir = text === 'ArrowUp' ? 'up' : text === 'ArrowDown' ? 'down' : text === 'ArrowLeft' ? 'left' : 'right';
+        nudgeTranslation(dir, shift ? 16 : 4);
+      }
+    }
   };
 
   const reorderSibling = (direction: 'earlier' | 'later') => {
@@ -3477,14 +3523,18 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
     void triggerBackendPreview('reorder', { targetIndex: all.findIndex(layer => layer.key === next.key) });
   };
 
-  const nudgeTranslation = (direction: 'up' | 'down' | 'left' | 'right') => {
+  const nudgeTranslation = (direction: 'up' | 'down' | 'left' | 'right', step = 4) => {
     if (!selectedLayer) return;
+    if (operationRef.current) {
+      queuedNudgeRef.current = { dir: direction, step };
+      return;
+    }
     if (!usesDrafts || !/^(h[1-6]|p|section|div|article|aside|header|footer|nav|main|a|button|img)$/.test(activeElement.tag) || activeVariant || activeBreakpoint) { showToast('To move an element, choose All sizes and the Default state.'); return; }
     try {
       const base = readTranslation(activeElement.classes);
       const next = vecAdd(base, {
-        x: direction === 'left' ? -4 : direction === 'right' ? 4 : 0,
-        y: direction === 'up' ? -4 : direction === 'down' ? 4 : 0,
+        x: direction === 'left' ? -step : direction === 'right' ? step : 0,
+        y: direction === 'up' ? -step : direction === 'down' ? step : 0,
       });
       void triggerBackendPreview('move', next);
     } catch (error) { showToast(error instanceof Error ? error.message : 'This element cannot be moved safely.'); }
@@ -4119,6 +4169,53 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
     {!!groupProgress.members?.length && <ul>{groupProgress.members.map(member => <li key={member.previewId}><span title={member.sourcePath || member.filePath}>{member.sourcePath || member.filePath}</span><small>{member.written ? 'Written' : 'Needs confirmation'}</small></li>)}</ul>}
   </section>;
 
+  const breadcrumbHierarchy = useMemo<CanvasLayer[]>(() => {
+    if (!selectedLayer || !sourceLayers.length) return [];
+    const layersByKey = new Map<string, CanvasLayer>(sourceLayers.map(l => [l.key, l]));
+    const chain: CanvasLayer[] = [];
+    let currentKey: string | undefined = selectedLayer;
+    const visited = new Set<string>();
+
+    while (currentKey && !visited.has(currentKey)) {
+      visited.add(currentKey);
+      const layer = layersByKey.get(currentKey);
+      if (layer) {
+        chain.unshift(layer);
+        currentKey = layer.parentKey;
+      } else {
+        break;
+      }
+    }
+    return chain;
+  }, [selectedLayer, sourceLayers]);
+
+  const getBreadcrumbLabel = (layer: CanvasLayer) => {
+    const friendly: Record<string, string> = {
+      main: 'Page',
+      section: 'Section',
+      nav: 'Navbar',
+      header: 'Header',
+      footer: 'Footer',
+      hero: 'Hero',
+      article: 'Article',
+      aside: 'Aside',
+      h1: 'H1',
+      h2: 'H2',
+      h3: 'H3',
+      h4: 'H4',
+      p: 'Paragraph',
+      a: 'Link',
+      button: 'Button',
+      img: 'Image',
+      form: 'Form',
+      div: 'Container',
+    };
+    if (layer.elementId) return `${friendly[layer.tagName] || layer.tagName}#${layer.elementId}`;
+    if (friendly[layer.name]) return friendly[layer.name];
+    if (layer.name && layer.name !== layer.tagName) return layer.name;
+    return friendly[layer.tagName] || layer.tagName;
+  };
+
   return (
     <>
       <style jsx global>{`
@@ -4385,37 +4482,6 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
                   />
                 </EditorSurface>
 
-                {/* Bottom Breadcrumb Bar */}
-                <div data-editor-breadcrumb className="w-full flex items-center justify-between text-[11px] text-slate-500 font-normal mt-4 px-2">
-                  <div className="flex items-center space-x-2">
-                    <div className="flex items-center space-x-1 hover:text-slate-800 cursor-pointer">
-                      <svg className="w-3 h-3 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <rect x="3" y="3" width="18" height="18" rx="3" />
-                      </svg>
-                      <span>Body</span>
-                    </div>
-                    <span className="text-slate-300">›</span>
-                    <div className="flex items-center space-x-1 text-slate-800 font-medium cursor-pointer">
-                      <svg className="w-3 h-3 text-[#059669]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <rect x="3" y="3" width="18" height="18" rx="3" />
-                      </svg>
-                      <span>{selectedLayer ? activeElement.name : 'Canvas'}</span>
-                    </div>
-                    {selectedLayer && (
-                      <>
-                        <span className="text-slate-300">›</span>
-                        <span className="text-slate-400 font-mono text-[10px]">{activeElement.tag}</span>
-                      </>
-                    )}
-                  </div>
-
-                  {/* Source Mapping Pill */}
-                  <div className="text-[10px] font-mono text-slate-400 flex items-center space-x-2">
-                    <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-                    <span>{repositoryId && !selectedLayer ? 'Waiting for live selection' : `${activeElement.filePath}:${activeElement.line}`}</span>
-                  </div>
-                </div>
-
                 {/* Transparent event shield during active drag */}
                 <div ref={eventShieldRef} className={reviewStyles.eventShield} style={{ display: 'none' }} />
 
@@ -4427,6 +4493,64 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
                 <div ref={cursorTagRef} className={reviewStyles.cursorTag} style={{ display: 'none' }} />
 
               </main>
+
+              {/* Bottom Fixed Breadcrumb Bar */}
+              <div data-editor-breadcrumb className="w-full flex items-center justify-between text-[11px] text-slate-500 font-normal px-4 py-2 bg-white/95 backdrop-blur-md border-t border-slate-200/80 z-20 select-none overflow-x-auto shrink-0 shadow-[0_-1px_3px_rgba(0,0,0,0.02)]">
+                <div className="flex items-center space-x-1.5 flex-nowrap">
+                  <button
+                    type="button"
+                    onClick={(e) => { e.stopPropagation(); setSelectedLayer(null); }}
+                    title="Canvas root · Click to deselect"
+                    className="flex items-center space-x-1 hover:text-slate-800 hover:bg-slate-100 px-1.5 py-0.5 rounded transition-colors cursor-pointer text-slate-500"
+                  >
+                    <svg className="w-3 h-3 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <rect x="3" y="3" width="18" height="18" rx="3" />
+                    </svg>
+                    <span>Canvas</span>
+                  </button>
+
+                  {breadcrumbHierarchy.length > 0 ? (
+                    breadcrumbHierarchy.map((layer, index) => {
+                      const isLast = index === breadcrumbHierarchy.length - 1;
+                      const label = getBreadcrumbLabel(layer);
+                      return (
+                        <React.Fragment key={layer.key}>
+                          <span className="text-slate-300">›</span>
+                          {isLast ? (
+                            <div className="flex items-center space-x-1 text-[#059669] bg-[#ECFDF5] border border-[#A7F3D0] px-2 py-0.5 rounded font-medium">
+                              <svg className="w-3 h-3 text-[#059669]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                <rect x="3" y="3" width="18" height="18" rx="3" />
+                              </svg>
+                              <span>{label}</span>
+                              <span className="text-[10px] text-[#059669]/70 font-mono">({layer.tagName})</span>
+                            </div>
+                          ) : (
+                            <button
+                              type="button"
+                              onClick={(e) => { e.stopPropagation(); setSelectedLayer(layer.key); }}
+                              title={`Select parent container <${layer.tagName}>`}
+                              className="flex items-center space-x-1 hover:text-slate-900 hover:bg-slate-100 px-1.5 py-0.5 rounded transition-colors cursor-pointer text-slate-600"
+                            >
+                              <span>{label}</span>
+                            </button>
+                          )}
+                        </React.Fragment>
+                      );
+                    })
+                  ) : (
+                    <>
+                      <span className="text-slate-300">›</span>
+                      <span className="text-slate-400 italic">No element selected</span>
+                    </>
+                  )}
+                </div>
+
+                {/* Source Mapping Pill */}
+                <div className="text-[10px] font-mono text-slate-400 flex items-center space-x-2 shrink-0">
+                  <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                  <span>{repositoryId && !selectedLayer ? 'Waiting for live selection' : `${activeElement.filePath}:${activeElement.line}`}</span>
+                </div>
+              </div>
               {!windowMode && <div className={reviewStyles.canvasFooter} role="region" aria-label="Canvas controls">
                 <button type="button" className={reviewStyles.panelToggle} aria-label={focusMode ? 'Restore sidebars' : 'Focus canvas'} aria-pressed={focusMode} title={focusMode ? 'Restore sidebars' : 'Focus canvas'} onClick={() => setFocusMode(value => !value)}><Columns2 size={15} /></button>
                 {<div className={reviewStyles.canvasViewTools} role="group" aria-label="Canvas navigation">
@@ -4483,7 +4607,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
                 onUpdateStyle={updateStyle}
                 onRequestSave={requestSave}
                 onDiscardDraft={() => void discardPendingEdit()}
-                onDeselect={() => setSelectedLayerState(null)}
+                onDeselect={() => setSelectedLayer(null)}
                 onSetActiveVariant={setActiveVariant}
                 onUndo={handleUndo}
                 onRedo={() => navigateDraft(1)}

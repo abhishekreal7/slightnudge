@@ -135,7 +135,7 @@
   pointer-events: none;
 }
 .windowShell .editorTopbar :is(button, a, input, select, textarea, [role='button']) { pointer-events: auto; }
-.windowShell .projectContext, .windowShell .projectsLink, .windowShell [data-editor-breadcrumb] { display: none; }
+.windowShell .projectContext, .windowShell .projectsLink { display: none; }
 .windowShell [data-editor-brand] { display: none; }
 .windowPanelHeader {
   display: flex;
@@ -516,7 +516,6 @@
 .classicShell [data-free-canvas] .sourceSelection { border-width: calc(1px / var(--canvas-zoom, 1)); }
 [data-canvas-stage] .moveControl { scale: calc(1 / var(--canvas-zoom, 1)); transform-origin: center center; }
 .classicShell [data-free-canvas] .edgeResizeHandle, .classicShell [data-free-canvas] .cornerResizeHandle { scale: calc(1 / var(--canvas-zoom, 1)); }
-.classicShell [data-editor-breadcrumb] { display: none; }
 .classicShell[data-inspector-collapsed='true'] [data-editor-panel='inspector'],
 .classicShell[data-focus-mode='true'] [data-editor-panel] { display: none; }
 .canvasFooter { display: flex; align-items: center; justify-content: center; align-self: center; box-sizing: border-box; width: max-content; max-width: calc(100% - 28px); gap: 8px; min-height: 44px; margin: 12px 14px 16px; padding: 6px 10px; flex-shrink: 0; border: 1px solid #e1e7e3; border-radius: 14px; background: #ffffffed; box-shadow: 0 4px 18px #223a2c0d, 0 1px 3px #223a2c06; backdrop-filter: blur(14px); }

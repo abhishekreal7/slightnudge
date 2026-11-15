@@ -381,6 +381,29 @@ function sourceCanvasRuntime(continuous: boolean, repositoryId = '', protocol = 
     return candidate && root.contains(candidate) && matches(locator(candidate)).length === 1 ? candidate : null;
   };
   let pointer: { x: number; y: number } | null = null, hoverFrame = 0, hoverSignature = '';
+  let hoverOverlay: HTMLDivElement | null = null;
+  const updateHoverOutline = (target: HTMLElement | null) => {
+    if (!inspectEnabled || destinationMode || editing || !target || target === selected || !root.contains(target)) {
+      if (hoverOverlay) hoverOverlay.style.display = 'none';
+      return;
+    }
+    const rect = target.getBoundingClientRect();
+    if (rect.width <= 0 || rect.height <= 0 || (target.tagName === 'MAIN' && !target.id && rect.height >= window.innerHeight * 0.9)) {
+      if (hoverOverlay) hoverOverlay.style.display = 'none';
+      return;
+    }
+    if (!hoverOverlay) {
+      hoverOverlay = document.createElement('div');
+      hoverOverlay.setAttribute('data-slightnudge-hover', '');
+      hoverOverlay.style.cssText = 'position:fixed;pointer-events:none;border:1px dashed rgba(16,185,129,0.55);border-radius:2px;z-index:999998;display:none;box-sizing:border-box;transition:all 40ms ease-out;';
+      document.documentElement.appendChild(hoverOverlay);
+    }
+    hoverOverlay.style.left = `${rect.left}px`;
+    hoverOverlay.style.top = `${rect.top}px`;
+    hoverOverlay.style.width = `${rect.width}px`;
+    hoverOverlay.style.height = `${rect.height}px`;
+    hoverOverlay.style.display = 'block';
+  };
   const hover = () => {
     hoverFrame = 0; if (!destinationMode || !pointer) return;
     const target = document.elementFromPoint(pointer.x, pointer.y), candidate = target ? destinationAt(target) : null;
@@ -388,7 +411,18 @@ function sourceCanvasRuntime(continuous: boolean, repositoryId = '', protocol = 
     if (signature !== hoverSignature) { hoverSignature = signature; send('destination-hover', { selection }); }
     if (pointer.y < 48 || pointer.y > innerHeight - 48) { window.scrollBy(0, pointer.y < 48 ? -10 : 10); hoverFrame = requestAnimationFrame(hover); }
   };
-  document.addEventListener('pointermove', event => { if (!destinationMode) return; pointer = { x: event.clientX, y: event.clientY }; if (!hoverFrame) hoverFrame = requestAnimationFrame(hover); }, { passive: true });
+  document.addEventListener('pointermove', event => {
+    if (destinationMode) {
+      if (hoverOverlay) hoverOverlay.style.display = 'none';
+      pointer = { x: event.clientX, y: event.clientY };
+      if (!hoverFrame) hoverFrame = requestAnimationFrame(hover);
+    } else if (inspectEnabled && !editing && event.target instanceof Element) {
+      const el = sourceElement(event.target);
+      updateHoverOutline(el);
+    }
+  }, { passive: true });
+  document.addEventListener('pointerleave', () => { updateHoverOutline(null); }, { passive: true });
+  window.addEventListener('scroll', () => { if (hoverOverlay && hoverOverlay.style.display !== 'none') hoverOverlay.style.display = 'none'; }, { passive: true });
   document.addEventListener('pointerdown',event=>{
     if(!inspectEnabled||destinationMode||!(event.target instanceof Element))return;
     const button=event.target.closest<HTMLButtonElement>('button[disabled][data-source-file]');
@@ -417,6 +451,7 @@ function sourceCanvasRuntime(continuous: boolean, repositoryId = '', protocol = 
     }
     if (editing === element) { if (/^(A|BUTTON)$/.test(element.tagName)) { event.preventDefault(); event.stopImmediatePropagation(); } return; }
     event.preventDefault(); event.stopImmediatePropagation();
+    updateHoverOutline(null);
     if (!continuous && pendingReview) return;
     if (matches(locator(element)).length !== 1) { send('selection-refused', { reason: 'This source element has several rendered instances. Select a unique element to edit safely.' }); return; }
     if (editing) finishText(); selected = element;
@@ -443,7 +478,12 @@ function sourceCanvasRuntime(continuous: boolean, repositoryId = '', protocol = 
     }
     if (!inspectEnabled || event.target instanceof Element && event.target.closest('input, textarea, select, [contenteditable="true"]')) return;
     if (event.key === 'Escape') { event.preventDefault(); send('shortcut', { key: 'Escape' }); return; }
-    if ((event.ctrlKey || event.metaKey) && ['s', 'z', 'y'].includes(event.key.toLowerCase())) { event.preventDefault(); send('shortcut', { key: event.key, shift: event.shiftKey }); }
+    if ((event.ctrlKey || event.metaKey) && ['s', 'z', 'y'].includes(event.key.toLowerCase())) { event.preventDefault(); send('shortcut', { key: event.key, shift: event.shiftKey }); return; }
+    if (selected && ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(event.key)) {
+      event.preventDefault();
+      send('shortcut', { key: event.key, shift: event.shiftKey });
+      return;
+    }
   }, true);
   window.addEventListener('message', async event => {
     if (event.source !== window.parent || event.origin !== origin || event.data?.channel !== 'slightnudge' || event.data.session !== session || !['source-edit', 'bridge-ack'].includes(event.data.type)) return;
@@ -452,7 +492,7 @@ function sourceCanvasRuntime(continuous: boolean, repositoryId = '', protocol = 
     const message = event.data;
     const reply = (success: boolean, reason = '', selection?: unknown) => send('edit-result', { requestId: message.requestId, success, reason, selection });
     try {
-      if (message.operation === 'set-mode') { if (editing) finishText(true); inspectEnabled = message.edit !== false; destinationMode = inspectEnabled && message.destination === true; document.documentElement.toggleAttribute('data-slightnudge-destination', destinationMode); hoverSignature = ''; if (!destinationMode) { cancelAnimationFrame(hoverFrame); hoverFrame = 0; send('destination-hover', { selection: null }); } (window as any).__slightnudge_inspect = inspectEnabled; if (!inspectEnabled) selected = null; reply(true); return; }
+      if (message.operation === 'set-mode') { if (editing) finishText(true); inspectEnabled = message.edit !== false; destinationMode = inspectEnabled && message.destination === true; document.documentElement.toggleAttribute('data-slightnudge-destination', destinationMode); hoverSignature = ''; updateHoverOutline(null); if (!destinationMode) { cancelAnimationFrame(hoverFrame); hoverFrame = 0; send('destination-hover', { selection: null }); } (window as any).__slightnudge_inspect = inspectEnabled; if (!inspectEnabled) selected = null; reply(true); return; }
       if (message.operation === 'catalog') { catalog(); reply(true); return; }
       if (message.operation === 'verify-document') {
         // Probe server HTML without hydrating it or touching the live draft.
@@ -577,11 +617,19 @@ function sourceCanvasRuntime(continuous: boolean, repositoryId = '', protocol = 
         });
         reply(true, '', selected ? { ...describe(selected), renderPatches: patches } : undefined); return;
       }
+      if (message.operation === 'select' && !message.selection) {
+        if (editing) finishText();
+        selected = null;
+        updateHoverOutline(null);
+        send('selection-cleared');
+        reply(true, '', null);
+        return;
+      }
       if (['preview', 'begin-text'].includes(message.operation)) await waitForTargets([message.selection]);
       const found = matches(message.selection); if (found.length !== 1) throw new Error('This source target is missing or appears more than once.');
       const element = found[0];
       if (message.operation === 'verify') { if (message.expectedClass !== undefined && !classMatches(element.getAttribute('class'), message.expectedClass) || message.expectedText !== undefined && readText(element) !== message.expectedText) throw new Error('The project is still rendering an older source revision.'); reply(true); return; }
-      if (message.operation === 'select') { selected = element; send('source-selection', { selection: describe(element) }); reply(true, '', describe(element)); return; }
+      if (message.operation === 'select') { selected = element; updateHoverOutline(null); send('source-selection', { selection: describe(element) }); reply(true, '', describe(element)); return; }
       if (message.operation === 'begin-text') {
         if (!continuous || element.children.length && !labelNode(element) || !/^(h[1-6]|p|span|label|a|button)$/.test(element.tagName.toLowerCase())) throw new Error('This element does not contain a single editable text value.');
         if (editing) finishText();

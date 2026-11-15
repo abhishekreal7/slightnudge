@@ -124,9 +124,31 @@ export function RightToolDock({
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.defaultPrevented || e.metaKey || e.ctrlKey || e.altKey) return;
+      if (e.target instanceof HTMLElement && e.target.closest('input, textarea, select, [contenteditable="true"]')) return;
+
       if (e.key === 'Escape' && activeTool !== null) {
         e.stopPropagation();
         setActiveTool(null);
+        return;
+      }
+
+      const key = e.key.toLowerCase();
+      const toolMap: Record<string, DockTool> = {
+        v: 'inspect',
+        l: 'layout',
+        s: 'spacing',
+        t: 'type',
+        c: 'colors',
+        r: 'borders',
+        b: 'borders',
+        e: 'effects',
+        h: 'states',
+      };
+
+      if (toolMap[key]) {
+        e.preventDefault();
+        toggleTool(toolMap[key]);
       }
     };
     window.addEventListener('keydown', handleKeyDown);
