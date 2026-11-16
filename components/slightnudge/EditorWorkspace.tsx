@@ -4427,35 +4427,42 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
     showRedo={usesDrafts} onHistory={() => setHistoryOpen(true)} onUndo={handleUndo} onRedo={() => navigateDraft(1)}
   />;
   const draftStatus = isApplying ? 'Saving…' : uncertainApplyId ? 'Check save status' : draftReplaying ? 'Restoring draft…' : busy ? 'Updating draft…' : selectedLayer && typeof activeElement.text === 'string' && draftText !== activeElement.text ? 'Editing text…' : draft ? (draftStored ? `Draft saved · ${draft.cursor} ${draft.cursor === 1 ? 'change' : 'changes'}${Object.keys(draftHeads(pendingEdit)).length > 1 ? ' · ' + Object.keys(draftHeads(pendingEdit)).length + ' files' : ''}` : 'Draft in memory') : 'All changes saved';
-  const renderDraftControls = () => (
-    <div className="flex items-center gap-2">
-      {saveQueueState.status === 'saving' && (
-        <span className={reviewStyles.saveBadgeSaving} aria-live="polite">
-          <LoaderCircle size={12} className="animate-spin text-emerald-500" />
-          <span>Saving…</span>
-        </span>
-      )}
-      {saveQueueState.status === 'saved' && (
-        <span className={reviewStyles.saveBadgeSaved} aria-live="polite">
-          <Check size={12} />
-          <span>Saved</span>
-        </span>
-      )}
-      {saveQueueState.status === 'error' && (
-        <span className={reviewStyles.saveBadgeError} role="alert">
-          <CircleAlert size={12} />
-          <span>{saveQueueState.message || 'Save error'}</span>
-        </span>
-      )}
-      {usesDrafts && <EditorDraftControls
-        saveLabel={uncertainApplyId ? pendingEdit?.groupTransactionId ? 'Resume Save' : 'Check save' : 'Save changes'}
-        disabled={(!pendingEdit && draftText === activeElement.text) || busy || isApplying || moveArmed || isResizing || destinationMode}
-        onSave={requestSave}
-        onDiscard={discardPendingEdit}
-        hasDraft={Boolean(pendingEdit)}
-      />}
-    </div>
-  );
+  const renderDraftControls = () => {
+    const isIdle = draftStatus === 'All changes saved';
+    const isTransient = draftStatus === 'Restoring draft…' || draftStatus === 'Updating draft…' || draftStatus === 'Saving…';
+
+    return (
+      <div className="flex items-center gap-2">
+        {!isIdle && (
+          <span
+            role="status"
+            aria-live="polite"
+            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-medium bg-emerald-50 text-emerald-800 border border-emerald-200/80 shrink-0"
+          >
+            {isTransient ? (
+              <LoaderCircle size={11} className="animate-spin text-emerald-600" />
+            ) : draftStatus.startsWith('Draft saved') ? (
+              <Check size={11} className="text-emerald-600" />
+            ) : null}
+            <span>{draftStatus}</span>
+          </span>
+        )}
+        {saveQueueState.status === 'error' && (
+          <span className={reviewStyles.saveBadgeError} role="alert">
+            <CircleAlert size={12} />
+            <span>{saveQueueState.message || 'Save error'}</span>
+          </span>
+        )}
+        {usesDrafts && <EditorDraftControls
+          saveLabel={uncertainApplyId ? pendingEdit?.groupTransactionId ? 'Resume Save' : 'Check save' : 'Save changes'}
+          disabled={(!pendingEdit && draftText === activeElement.text) || busy || isApplying || moveArmed || isResizing || destinationMode}
+          onSave={requestSave}
+          onDiscard={discardPendingEdit}
+          hasDraft={Boolean(pendingEdit)}
+        />}
+      </div>
+    );
+  };
   const renderCanvasControls = () => <EditorViewportControls
     viewport={breakpoint} requestedWidth={viewportWidth}
     disabled={busy || isApplying || isInlineEditing || isResizing || moveArmed || Boolean(liveMove)}
@@ -4854,7 +4861,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
                 </header>
               )}
 
-              {usesDrafts && <EditorDraftStatus status={draftStatus} />}
+              {(!windowMode && usesDrafts) && <EditorDraftStatus status={draftStatus} />}
 
               {/* Canvas Main Scroll Area */}
               <main
