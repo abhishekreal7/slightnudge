@@ -1491,6 +1491,8 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
     const frame = node?.closest('[data-selection-artboard]');
     if (!node || !frame) return;
 
+    node.style.willChange = 'transform';
+
     try {
       const base = inFlightMoveRef.current[layerKey] ?? readTranslation(elements[layerKey].classes);
       const targetElem = elements[layerKey] || activeElement;
@@ -1500,6 +1502,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
       // Check same-origin iframe target element
       const iframeDoc = sourceCanvas.current?.getDocument?.();
       const targetEl = findSourceElementInDocument(iframeDoc, actualSelection);
+      if (targetEl) targetEl.style.willChange = 'transform';
       const initialTargetStyle =
         pendingDirectStyleRef.current[layerKey]?.initialStyle ?? (targetEl?.getAttribute('style') || null);
 
@@ -1579,6 +1582,9 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
     // Check same-origin iframe target element
     const iframeDoc = sourceCanvas.current?.getDocument?.();
     const targetEl = findSourceElementInDocument(iframeDoc, actualSelection);
+    const node = elementRefs.current[key];
+    if (node) node.style.willChange = 'transform, width, height';
+    if (targetEl) targetEl.style.willChange = 'max-width, height';
     const initialTargetStyle =
       pendingDirectStyleRef.current[key]?.initialStyle ?? (targetEl?.getAttribute('style') || null);
 
@@ -2035,14 +2041,33 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
         if (parentEl) {
           const pStyle = parentEl.ownerDocument?.defaultView?.getComputedStyle(parentEl);
           const pPadX = (parseFloat(pStyle?.paddingLeft || '0') || 0) + (parseFloat(pStyle?.paddingRight || '0') || 0);
+          const isFlex = pStyle?.display === 'flex' || pStyle?.display === 'inline-flex';
+          const isRow = isFlex && (pStyle?.flexDirection === 'row' || pStyle?.flexDirection === 'row-reverse');
+          const isWrap = isFlex && (pStyle?.flexWrap === 'wrap' || pStyle?.flexWrap === 'wrap-reverse');
+
           if (parentEl.clientWidth > 0) {
-            if (gesture.widthOnlyHeight) {
-              // For text elements, allow expanding to large Tailwind breakpoints (e.g. max-w-5xl 1024px, max-w-6xl 1152px)
-              // so headlines can stack into 2 lines across modern wide artboards without being artificially capped by parent padding.
+            const innerParentWidth = Math.max(0, parentEl.clientWidth - pPadX);
+            if (isRow && !isWrap) {
+              // Flex row (horizontal auto-layout stack without wrap):
+              // Compute available width accounting for sibling items and gap
+              let siblingOccupiedWidth = 0;
+              const gap = parseFloat(pStyle?.gap || pStyle?.columnGap || '0') || 0;
+              let childCount = 0;
+              for (let i = 0; i < parentEl.children.length; i++) {
+                const child = parentEl.children[i] as HTMLElement;
+                if (child !== gesture.targetEl && child.nodeType === 1) {
+                  siblingOccupiedWidth += child.offsetWidth || 0;
+                  childCount++;
+                }
+              }
+              const totalGaps = childCount * gap;
+              maxAvailableWidth = Math.max(minAvailableWidth, innerParentWidth - siblingOccupiedWidth - totalGaps);
+            } else if (gesture.widthOnlyHeight) {
+              // For text elements: allow expanding cleanly up to the container's inner bounds
               const artboardWidth = parentEl.ownerDocument?.defaultView?.innerWidth || 1440;
-              maxAvailableWidth = Math.max(minAvailableWidth, Math.min(1280, artboardWidth));
+              maxAvailableWidth = Math.max(minAvailableWidth, Math.min(innerParentWidth || 1280, artboardWidth));
             } else {
-              maxAvailableWidth = Math.max(minAvailableWidth, parentEl.clientWidth - pPadX);
+              maxAvailableWidth = Math.max(minAvailableWidth, innerParentWidth);
             }
           }
         }
@@ -2131,7 +2156,8 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
         } else if (sourceCanvas.current && gesture.moved && !gesture.outlineOnly) {
           const selection = sourceSelections.current[gesture.key];
           if (selection) {
-            void sourceCanvas.current.command('gesture', selection, { maxWidth: roundValue(gesture.nextWidth, 'nearest', 1) });
+            sourceCanvas.current.sendGesture?.(selection, { maxWidth: roundValue(gesture.nextWidth, 'nearest', 1) }) ??
+              void sourceCanvas.current.command('gesture', selection, { maxWidth: roundValue(gesture.nextWidth, 'nearest', 1) });
           }
         }
 
@@ -2324,7 +2350,8 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
           if (sourceCanvas.current && gesture.moved && !gesture.outlineOnly) {
             const selection = sourceSelections.current[gesture.key];
             if (selection) {
-              void sourceCanvas.current.command('gesture', selection, { x: snappedX, y: snappedY });
+              sourceCanvas.current.sendGesture?.(selection, { x: snappedX, y: snappedY }) ??
+                void sourceCanvas.current.command('gesture', selection, { x: snappedX, y: snappedY });
             }
           }
         }
@@ -2388,6 +2415,12 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
 
     const cleanupVisuals = () => {
       cancelAnimationFrame(animationId);
+      const gesture = directDragRef.current;
+      if (gesture) {
+        const overlayNode = elementRefs.current[gesture.key];
+        if (overlayNode) overlayNode.style.willChange = '';
+        if (gesture.targetEl) gesture.targetEl.style.willChange = '';
+      }
       if (typeof window !== 'undefined') (window as any).__slightnudge_gesture_active = false;
       if (eventShieldRef.current) eventShieldRef.current.style.display = 'none';
       if (guideVRef.current) guideVRef.current.style.display = 'none';
@@ -3940,6 +3973,13 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
         aria-label="Selected source element"
         data-selection-variant={chrome.variant}
         data-selection-oriented={isOriented ? 'true' : undefined}
+        onDoubleClick={e => {
+          e.stopPropagation();
+          const tag = (renderedElem.tag || selection.tagName || '').toLowerCase();
+          if (isTextSelection || /^(h[1-6]|p|a|button|span|label|strong|em|small)$/i.test(tag)) {
+            beginInlineText(layerKey);
+          }
+        }}
         style={{
           width: '100%',
           height: '100%',
@@ -3947,6 +3987,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
           textAlign: selection.computed.textAlign as React.CSSProperties['textAlign'],
           ['--pad-x' as any]: `${padX}px`,
           ['--pad-y' as any]: `${padY}px`,
+          pointerEvents: isInlineEditing && inlineSessionRef.current === layerKey ? 'none' : undefined,
         }}
       >
         {/* SVG Overlay layer with dual-stroke 1.5px accent over 1px white halo */}

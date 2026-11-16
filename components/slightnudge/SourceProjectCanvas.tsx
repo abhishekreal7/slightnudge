@@ -57,6 +57,7 @@ function sanitizeTransformChain(raw: unknown): SerializedTransformFrame[] | unde
 export interface SourceCanvasHandle {
   openWindow(): void;
   command(operation: 'preview' | 'check' | 'discard' | 'verify' | 'verify-document' | 'restore' | 'select' | 'catalog' | 'gesture' | 'cancel-gesture' | 'begin-text' | 'cancel-text' | 'finish-text' | 'verify-batch' | 'set-mode', selection?: SourceSelection | null, extra?: Record<string, unknown>): Promise<SourceSelection | undefined>;
+  sendGesture?(selection?: SourceSelection | null, extra?: Record<string, unknown>): void;
   reload(selection?: SourceSelection, expectedClass?: string, expectedText?: string, expectedBatch?: CanvasRenderPatch[]): Promise<void>;
   getFrame?(): HTMLIFrameElement | null;
   getDocument?(): Document | null;
@@ -329,6 +330,12 @@ export const SourceProjectCanvas = forwardRef<SourceCanvasHandle, {
   }, []);
 
   const command: SourceCanvasHandle['command'] = (operation, selection, extra = {}) => {
+      if (operation === 'gesture') {
+        if (url && frame.current?.contentWindow) {
+          frame.current.contentWindow.postMessage({ channel: 'slightnudge', session: session.current, type: 'source-edit', operation, selection, ...extra }, new URL(url).origin);
+        }
+        return Promise.resolve(undefined);
+      }
       return new Promise<SourceSelection | undefined>((resolve, reject) => {
         if (!url || !frame.current?.contentWindow) { reject(new Error('Connect the project preview first.')); return; }
         const requestId = crypto.randomUUID();
@@ -340,6 +347,10 @@ export const SourceProjectCanvas = forwardRef<SourceCanvasHandle, {
     };
   useImperativeHandle(ref, () => ({
     command,
+    sendGesture: (selection, extra = {}) => {
+      if (!url || !frame.current?.contentWindow) return;
+      frame.current.contentWindow.postMessage({ channel: 'slightnudge', session: session.current, type: 'source-edit', operation: 'gesture', selection, ...extra }, new URL(url).origin);
+    },
     openWindow,
     getFrame: () => frame.current,
     getDocument: () => {
