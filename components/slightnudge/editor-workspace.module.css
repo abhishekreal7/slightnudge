@@ -743,6 +743,60 @@
   left: -2px;
 }
 
+/* Right Tool Dock Settings & Viewport Panel */
+.dockSettingsPanel {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.dockSettingsPanel [class*="canvasTools"] {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
+  gap: 12px !important;
+}
+.dockSettingsPanel [class*="viewportControl"] {
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) !important;
+  width: 100% !important;
+  height: 32px !important;
+  padding: 2px !important;
+  background: #ffffff !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+}
+.dockSettingsPanel [class*="viewportControl"] button {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 4px !important;
+  height: 26px !important;
+  padding: 0 4px !important;
+}
+.dockSettingsPanel [class*="viewportControl"] button span {
+  display: inline !important;
+  font-size: 10px !important;
+}
+.dockSettingsPanel [class*="controls"] {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
+  gap: 10px !important;
+}
+.dockSettingsPanel [class*="widthLabel"],
+.dockSettingsPanel [class*="scope"] {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  width: 100% !important;
+}
+.dockSettingsPanel [class*="width"] {
+  flex: 0 0 100px !important;
+}
+.dockSettingsPanel [class*="scope"] select {
+  flex: 0 0 130px !important;
+  max-width: 130px !important;
+}
+
 /* Selection Chrome v2 SVG and Element-Aware Chrome */
 .selectionSvg {
   position: absolute;

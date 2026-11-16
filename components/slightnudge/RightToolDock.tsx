@@ -15,6 +15,8 @@ import {
   Code2,
   History,
   Ruler,
+  Settings,
+  Sliders,
 } from 'lucide-react';
 import {
   LayoutMatrix,
@@ -36,6 +38,7 @@ export type DockTool =
   | 'states'
   | 'code'
   | 'drafts'
+  | 'settings'
   | null;
 
 export interface RightToolDockProps {
@@ -68,6 +71,7 @@ export interface RightToolDockProps {
   sourceLayers?: any[];
   overviewControls?: React.ReactNode;
   layoutExtraControls?: React.ReactNode;
+  canvasControls?: React.ReactNode;
   activeToolOverride?: DockTool | undefined;
   onActiveToolChange?: (tool: DockTool) => void;
   onUpdateStyle: (property: string, value: string) => void;
@@ -96,6 +100,7 @@ export function RightToolDock({
   activeBreakpoint,
   overviewControls,
   layoutExtraControls,
+  canvasControls,
   activeToolOverride,
   onActiveToolChange,
   onUpdateStyle,
@@ -116,7 +121,7 @@ export function RightToolDock({
   const prevSelectedRef = useRef(selectedLayer);
 
   useEffect(() => {
-    if (prevSelectedRef.current && !selectedLayer && activeTool !== null && activeTool !== 'drafts') {
+    if (prevSelectedRef.current && !selectedLayer && activeTool !== null && activeTool !== 'drafts' && activeTool !== 'settings') {
       setActiveTool(null);
     }
     prevSelectedRef.current = selectedLayer;
@@ -144,6 +149,7 @@ export function RightToolDock({
         b: 'borders',
         e: 'effects',
         h: 'states',
+        ',': 'settings',
       };
 
       if (toolMap[key]) {
@@ -417,6 +423,28 @@ export function RightToolDock({
               )}
             </div>
           )}
+
+          {/* Subtle separator */}
+          <div className="w-5 h-[1px] bg-[#E2E8E4] my-0.5" />
+
+          {/* 11. Canvas Settings & Viewport Controls */}
+          <div className="relative group flex items-center justify-center">
+            <button
+              type="button"
+              aria-label="Canvas settings and responsive viewport"
+              title="Canvas & Viewport Settings (,)"
+              onClick={() => toggleTool('settings')}
+              className={railBtnClass(activeTool === 'settings')}
+            >
+              <Settings size={18} strokeWidth={1.8} />
+            </button>
+            {showTooltips && (
+              <div className={tooltipClass}>
+                <span>Canvas & Viewport</span>
+                <kbd className={kbdClass}>,</kbd>
+              </div>
+            )}
+          </div>
         </div>
       </aside>
 
@@ -445,8 +473,9 @@ export function RightToolDock({
                 {activeTool === 'states' && 'Interactive States'}
                 {activeTool === 'code' && 'Source Code'}
                 {activeTool === 'drafts' && `Draft Changes (${draftCount})`}
+                {activeTool === 'settings' && 'Canvas & Viewport'}
               </span>
-              {selectedLayer && activeTool !== 'drafts' && (
+              {selectedLayer && activeTool !== 'drafts' && activeTool !== 'settings' && (
                 <span className="text-[10.5px] font-mono text-[#156948] bg-[#ECFDF5] px-2 py-0.5 rounded-[5px] border border-[#A7F3D0] font-medium tracking-tight truncate max-w-[90px]">
                   {tagLabel}
                 </span>
@@ -463,7 +492,7 @@ export function RightToolDock({
           </div>
 
           <div className="space-y-3">
-            {!selectedLayer && activeTool !== 'drafts' ? (
+            {!selectedLayer && activeTool !== 'drafts' && activeTool !== 'settings' ? (
               <div className="py-6 px-3 text-center text-[#64746C]">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="mx-auto mb-2 text-[#8E9C94]">
                   <path d="M12 19l7-7 3 3-7 7-3-3z" />
@@ -766,6 +795,20 @@ export function RightToolDock({
                       <Save size={13} />
                       <span>{isApplying ? 'Saving…' : 'Save all changes'}</span>
                     </button>
+                  </div>
+                )}
+
+                {activeTool === 'settings' && (
+                  <div className="space-y-3 dockSettingsPanel">
+                    <div className="p-3 bg-[#F8FAF9] rounded-[14px] border border-[#E2E8E4] space-y-3">
+                      <div className="flex items-center space-x-1.5 pb-2 border-b border-[#E8EEEA]">
+                        <Sliders size={13} className="text-[#1B835A]" />
+                        <span className="text-[12px] font-semibold text-[#1F2E25]">Viewport & Responsive</span>
+                      </div>
+                      <div className="space-y-3">
+                        {canvasControls}
+                      </div>
+                    </div>
                   </div>
                 )}
               </>

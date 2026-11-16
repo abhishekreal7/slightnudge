@@ -4743,7 +4743,6 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
                       </div>
                     </div>
                   )}
-                  {renderCanvasControls()}
                   <div className={reviewStyles.topbarActions}>{renderDraftControls()}</div>
                 </header>
               )}
@@ -4893,6 +4892,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
                 pendingEdit={pendingEdit}
                 sourceSelections={sourceSelections.current}
                 sourceLayers={sourceLayers}
+                canvasControls={renderCanvasControls()}
                 activeToolOverride={rightDockTool}
                 onActiveToolChange={setRightDockTool}
                 onUpdateStyle={updateStyle}
