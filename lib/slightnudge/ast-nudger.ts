@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs';
 import { perfSync } from './perf-stages';
 import { appearanceValue, gradientPattern, shadowPattern, parseGradient, parseShadow } from './appearance-values';
 import { isNextLink } from './link-identity';
@@ -1047,6 +1048,368 @@ export function reorderElement(options: ReorderOptions): ReorderResult {
   };
 }
 
+export interface DuplicateOptions {
+  filePath: string;
+  sourceText?: string;
+  line?: number;
+  column?: number;
+  elementId?: string;
+  tagName?: string;
+  className?: string;
+  dryRun?: boolean;
+}
+
+export interface DuplicateResult {
+  success: boolean;
+  refusedSafely: boolean;
+  reason?: string;
+  filePath: string;
+  line?: number;
+  updatedSource?: string;
+  originalSource?: string;
+}
+
+export function duplicateElement(options: DuplicateOptions): DuplicateResult {
+  const { filePath, line, column, elementId, dryRun = false } = options;
+  if (options.sourceText !== undefined && !dryRun) throw new Error('Draft source is read-only until Save.');
+  const project = perfSync('ast-project', () => new Project({ skipAddingFilesFromTsConfig: true }));
+  const sourceFile = options.sourceText !== undefined
+    ? perfSync('ast-parse', () => project.createSourceFile(filePath, options.sourceText, { overwrite: true }))
+    : perfSync('ast-parse', () => project.addSourceFileAtPath(filePath));
+
+  const elements = [
+    ...sourceFile.getDescendantsOfKind(SyntaxKind.JsxOpeningElement),
+    ...sourceFile.getDescendantsOfKind(SyntaxKind.JsxSelfClosingElement),
+  ];
+
+  let targetElement: JsxOpeningElement | JsxSelfClosingElement | undefined;
+  if (elementId) {
+    targetElement = elements.find((el) => {
+      const idAttr = el.getAttribute('id');
+      return idAttr && Node.isJsxAttribute(idAttr) && idAttr.getInitializer() && Node.isStringLiteral(idAttr.getInitializer()!) && (idAttr.getInitializer() as StringLiteral).getLiteralValue() === elementId;
+    });
+  }
+  if (!targetElement && line !== undefined) {
+    const matchingLine = elements.filter((el) => el.getStartLineNumber() === line);
+    if (matchingLine.length === 1) {
+      if (!options.tagName || matchingLine[0].getTagNameNode().getText().toLowerCase() === options.tagName.toLowerCase()) {
+        targetElement = matchingLine[0];
+      }
+    } else if (matchingLine.length > 1) {
+      if (column !== undefined && options.tagName) {
+        targetElement = matchingLine.find((el) => {
+          const pos = sourceFile.getLineAndColumnAtPos(el.getStart());
+          return pos.column === column && el.getTagNameNode().getText().toLowerCase() === options.tagName!.toLowerCase();
+        });
+      }
+    }
+  }
+
+  if (!targetElement) {
+    return { success: false, refusedSafely: true, reason: 'Target element could not be found.', filePath };
+  }
+
+  const targetLine = targetElement.getStartLineNumber();
+  if (isElementInsideLoop(targetElement)) {
+    return { success: false, refusedSafely: true, reason: 'This element repeats from a list, so one edit would change every copy. Nothing was changed.', filePath, line: targetLine };
+  }
+  if (isComponentUsedMultipleTimes(targetElement, project)) {
+    return { success: false, refusedSafely: true, reason: "can't edit this safely: component used in several places", filePath, line: targetLine };
+  }
+
+  const fullTargetNode = Node.isJsxOpeningElement(targetElement) ? targetElement.getParent() : targetElement;
+  if (!fullTargetNode) {
+    return { success: false, refusedSafely: true, reason: 'Could not resolve parent container for this element.', filePath };
+  }
+
+  const parentContainer = fullTargetNode.getParent();
+  if (!parentContainer || (!Node.isJsxElement(parentContainer) && !Node.isJsxFragment(parentContainer))) {
+    return { success: false, refusedSafely: true, reason: 'This element is at the root of a component and cannot be duplicated.', filePath };
+  }
+
+  const originalSource = sourceFile.getFullText();
+  let cloneText = fullTargetNode.getText();
+
+  // If clone has id attribute, rename it to avoid duplicate DOM id
+  const idAttr = targetElement.getAttribute('id');
+  if (idAttr && Node.isJsxAttribute(idAttr) && idAttr.getInitializer() && Node.isStringLiteral(idAttr.getInitializer()!)) {
+    const rawId = (idAttr.getInitializer() as StringLiteral).getLiteralValue();
+    const newId = `${rawId}-copy`;
+    cloneText = cloneText.replace(new RegExp(`id=(["'])${rawId}\\1`), `id=$1${newId}$1`);
+  }
+
+  const nodeStart = fullTargetNode.getStart();
+  const nodeEnd = fullTargetNode.getEnd();
+  const beforeStart = originalSource.slice(0, nodeStart);
+  const lastNewlinePos = Math.max(beforeStart.lastIndexOf('\n'), beforeStart.lastIndexOf('\r'));
+  const indent = lastNewlinePos !== -1 ? beforeStart.slice(lastNewlinePos + 1).match(/^[ \t]*/)?.[0] || '' : '';
+
+  const isCRLF = originalSource.includes('\r\n');
+  const newline = isCRLF ? '\r\n' : '\n';
+  const insertion = newline + indent + cloneText;
+  const updatedSource = originalSource.slice(0, nodeEnd) + insertion + originalSource.slice(nodeEnd);
+
+  const testProject = new Project({ useInMemoryFileSystem: true });
+  const testFile = testProject.createSourceFile('test.tsx', updatedSource);
+  const diagnostics = (testFile.compilerNode as unknown as { parseDiagnostics?: unknown[] }).parseDiagnostics;
+  if (diagnostics && diagnostics.length > 0) {
+    return { success: false, refusedSafely: true, reason: 'Duplicating this element would produce invalid JSX syntax.', filePath };
+  }
+
+  if (!dryRun) {
+    sourceFile.replaceWithText(updatedSource);
+    sourceFile.saveSync();
+  }
+
+  return {
+    success: true,
+    refusedSafely: false,
+    filePath,
+    line: targetLine,
+    updatedSource: dryRun ? updatedSource : undefined,
+    originalSource: dryRun ? originalSource : undefined,
+  };
+}
+
+export interface DeleteOptions {
+  filePath: string;
+  sourceText?: string;
+  line?: number;
+  column?: number;
+  elementId?: string;
+  tagName?: string;
+  className?: string;
+  dryRun?: boolean;
+}
+
+export interface DeleteResult {
+  success: boolean;
+  refusedSafely: boolean;
+  reason?: string;
+  filePath: string;
+  line?: number;
+  updatedSource?: string;
+  originalSource?: string;
+}
+
+export function deleteElement(options: DeleteOptions): DeleteResult {
+  const { filePath, line, column, elementId, dryRun = false } = options;
+  if (options.sourceText !== undefined && !dryRun) throw new Error('Draft source is read-only until Save.');
+  const project = perfSync('ast-project', () => new Project({ skipAddingFilesFromTsConfig: true }));
+  const sourceFile = options.sourceText !== undefined
+    ? perfSync('ast-parse', () => project.createSourceFile(filePath, options.sourceText, { overwrite: true }))
+    : perfSync('ast-parse', () => project.addSourceFileAtPath(filePath));
+
+  const elements = [
+    ...sourceFile.getDescendantsOfKind(SyntaxKind.JsxOpeningElement),
+    ...sourceFile.getDescendantsOfKind(SyntaxKind.JsxSelfClosingElement),
+  ];
+
+  let targetElement: JsxOpeningElement | JsxSelfClosingElement | undefined;
+  if (elementId) {
+    targetElement = elements.find((el) => {
+      const idAttr = el.getAttribute('id');
+      return idAttr && Node.isJsxAttribute(idAttr) && idAttr.getInitializer() && Node.isStringLiteral(idAttr.getInitializer()!) && (idAttr.getInitializer() as StringLiteral).getLiteralValue() === elementId;
+    });
+  }
+  if (!targetElement && line !== undefined) {
+    const matchingLine = elements.filter((el) => el.getStartLineNumber() === line);
+    if (matchingLine.length === 1) {
+      if (!options.tagName || matchingLine[0].getTagNameNode().getText().toLowerCase() === options.tagName.toLowerCase()) {
+        targetElement = matchingLine[0];
+      }
+    } else if (matchingLine.length > 1) {
+      if (column !== undefined && options.tagName) {
+        targetElement = matchingLine.find((el) => {
+          const pos = sourceFile.getLineAndColumnAtPos(el.getStart());
+          return pos.column === column && el.getTagNameNode().getText().toLowerCase() === options.tagName!.toLowerCase();
+        });
+      }
+    }
+  }
+
+  if (!targetElement) {
+    return { success: false, refusedSafely: true, reason: 'Target element could not be found.', filePath };
+  }
+
+  const targetLine = targetElement.getStartLineNumber();
+  if (isElementInsideLoop(targetElement)) {
+    return { success: false, refusedSafely: true, reason: 'This element repeats from a list, so one edit would change every copy. Nothing was changed.', filePath, line: targetLine };
+  }
+  if (isComponentUsedMultipleTimes(targetElement, project)) {
+    return { success: false, refusedSafely: true, reason: "can't edit this safely: component used in several places", filePath, line: targetLine };
+  }
+
+  const fullTargetNode = Node.isJsxOpeningElement(targetElement) ? targetElement.getParent() : targetElement;
+  if (!fullTargetNode) {
+    return { success: false, refusedSafely: true, reason: 'Could not resolve parent container for this element.', filePath };
+  }
+
+  const parentContainer = fullTargetNode.getParent();
+  if (!parentContainer || (!Node.isJsxElement(parentContainer) && !Node.isJsxFragment(parentContainer))) {
+    return { success: false, refusedSafely: true, reason: 'This element is at the root of a component and cannot be deleted.', filePath };
+  }
+
+  const originalSource = sourceFile.getFullText();
+  let deleteStart = fullTargetNode.getStart();
+  let deleteEnd = fullTargetNode.getEnd();
+
+  const before = originalSource.slice(0, deleteStart);
+  const lastNewline = Math.max(before.lastIndexOf('\n'), before.lastIndexOf('\r'));
+  const linePrefix = lastNewline === -1 ? before : before.slice(lastNewline + 1);
+  const isLeadingWhitespaceOnly = /^[ \t]*$/.test(linePrefix);
+
+  const after = originalSource.slice(deleteEnd);
+  const matchTrailingNewline = after.match(/^[ \t]*\r?\n/);
+
+  if (isLeadingWhitespaceOnly && matchTrailingNewline) {
+    deleteStart = lastNewline === -1 ? 0 : (before[lastNewline] === '\n' && before[lastNewline - 1] === '\r' ? lastNewline - 1 : lastNewline);
+    deleteEnd = deleteEnd + matchTrailingNewline[0].length;
+  }
+
+  const updatedSource = originalSource.slice(0, deleteStart) + originalSource.slice(deleteEnd);
+
+  const testProject = new Project({ useInMemoryFileSystem: true });
+  const testFile = testProject.createSourceFile('test.tsx', updatedSource);
+  const diagnostics = (testFile.compilerNode as unknown as { parseDiagnostics?: unknown[] }).parseDiagnostics;
+  if (diagnostics && diagnostics.length > 0) {
+    return { success: false, refusedSafely: true, reason: 'Deleting this element would produce invalid JSX syntax.', filePath };
+  }
+
+  if (!dryRun) {
+    sourceFile.replaceWithText(updatedSource);
+    sourceFile.saveSync();
+  }
+
+  return {
+    success: true,
+    refusedSafely: false,
+    filePath,
+    line: targetLine,
+    updatedSource: dryRun ? updatedSource : undefined,
+    originalSource: dryRun ? originalSource : undefined,
+  };
+}
+
+export interface WrapOptions {
+  filePath: string;
+  sourceText?: string;
+  line?: number;
+  column?: number;
+  elementId?: string;
+  tagName?: string;
+  containerTag?: string;
+  containerClassName?: string;
+  dryRun?: boolean;
+}
+
+export interface WrapResult {
+  success: boolean;
+  refusedSafely: boolean;
+  reason?: string;
+  filePath: string;
+  line?: number;
+  updatedSource?: string;
+  originalSource?: string;
+}
+
+export function wrapElement(options: WrapOptions): WrapResult {
+  const { filePath, line, column, elementId, containerTag = 'div', containerClassName = 'flex flex-col', dryRun = false } = options;
+  if (options.sourceText !== undefined && !dryRun) throw new Error('Draft source is read-only until Save.');
+  const project = perfSync('ast-project', () => new Project({ skipAddingFilesFromTsConfig: true }));
+  const sourceFile = options.sourceText !== undefined
+    ? perfSync('ast-parse', () => project.createSourceFile(filePath, options.sourceText, { overwrite: true }))
+    : perfSync('ast-parse', () => project.addSourceFileAtPath(filePath));
+
+  const elements = [
+    ...sourceFile.getDescendantsOfKind(SyntaxKind.JsxOpeningElement),
+    ...sourceFile.getDescendantsOfKind(SyntaxKind.JsxSelfClosingElement),
+  ];
+
+  let targetElement: JsxOpeningElement | JsxSelfClosingElement | undefined;
+  if (elementId) {
+    targetElement = elements.find((el) => {
+      const idAttr = el.getAttribute('id');
+      return idAttr && Node.isJsxAttribute(idAttr) && idAttr.getInitializer() && Node.isStringLiteral(idAttr.getInitializer()!) && (idAttr.getInitializer() as StringLiteral).getLiteralValue() === elementId;
+    });
+  }
+  if (!targetElement && line !== undefined) {
+    const matchingLine = elements.filter((el) => el.getStartLineNumber() === line);
+    if (matchingLine.length === 1) {
+      if (!options.tagName || matchingLine[0].getTagNameNode().getText().toLowerCase() === options.tagName.toLowerCase()) {
+        targetElement = matchingLine[0];
+      }
+    } else if (matchingLine.length > 1) {
+      if (column !== undefined && options.tagName) {
+        targetElement = matchingLine.find((el) => {
+          const pos = sourceFile.getLineAndColumnAtPos(el.getStart());
+          return pos.column === column && el.getTagNameNode().getText().toLowerCase() === options.tagName!.toLowerCase();
+        });
+      }
+    }
+  }
+
+  if (!targetElement) {
+    return { success: false, refusedSafely: true, reason: 'Target element could not be found.', filePath };
+  }
+
+  const targetLine = targetElement.getStartLineNumber();
+  if (isElementInsideLoop(targetElement)) {
+    return { success: false, refusedSafely: true, reason: 'This element repeats from a list, so one edit would change every copy. Nothing was changed.', filePath, line: targetLine };
+  }
+  if (isComponentUsedMultipleTimes(targetElement, project)) {
+    return { success: false, refusedSafely: true, reason: "can't edit this safely: component used in several places", filePath, line: targetLine };
+  }
+
+  const fullTargetNode = Node.isJsxOpeningElement(targetElement) ? targetElement.getParent() : targetElement;
+  if (!fullTargetNode) {
+    return { success: false, refusedSafely: true, reason: 'Could not resolve parent container for this element.', filePath };
+  }
+
+  const parentContainer = fullTargetNode.getParent();
+  if (!parentContainer || (!Node.isJsxElement(parentContainer) && !Node.isJsxFragment(parentContainer))) {
+    return { success: false, refusedSafely: true, reason: 'This element is at the root of a component and cannot be wrapped.', filePath };
+  }
+
+  const originalSource = sourceFile.getFullText();
+  const start = fullTargetNode.getStart();
+  const end = fullTargetNode.getEnd();
+
+  const isCRLF = originalSource.includes('\r\n');
+  const newline = isCRLF ? '\r\n' : '\n';
+  const beforeStart = originalSource.slice(0, start);
+  const lastNewlinePos = Math.max(beforeStart.lastIndexOf('\n'), beforeStart.lastIndexOf('\r'));
+  const indent = lastNewlinePos !== -1 ? beforeStart.slice(lastNewlinePos + 1).match(/^[ \t]*/)?.[0] || '' : '';
+  const childIndent = indent + '  ';
+
+  const innerText = fullTargetNode.getText();
+  const classAttr = containerClassName ? ` className="${containerClassName}"` : '';
+  const wrapped = `<${containerTag}${classAttr}>${newline}${childIndent}${innerText}${newline}${indent}</${containerTag}>`;
+
+  const updatedSource = originalSource.slice(0, start) + wrapped + originalSource.slice(end);
+
+  const testProject = new Project({ useInMemoryFileSystem: true });
+  const testFile = testProject.createSourceFile('test.tsx', updatedSource);
+  const diagnostics = (testFile.compilerNode as unknown as { parseDiagnostics?: unknown[] }).parseDiagnostics;
+  if (diagnostics && diagnostics.length > 0) {
+    return { success: false, refusedSafely: true, reason: 'Wrapping this element would produce invalid JSX syntax.', filePath };
+  }
+
+  if (!dryRun) {
+    sourceFile.replaceWithText(updatedSource);
+    sourceFile.saveSync();
+  }
+
+  return {
+    success: true,
+    refusedSafely: false,
+    filePath,
+    line: targetLine,
+    updatedSource: dryRun ? updatedSource : undefined,
+    originalSource: dryRun ? originalSource : undefined,
+  };
+}
+
 export function updateStaticImageSource(options: { filePath: string; line?: number; column?: number; elementId?: string; value: string; dryRun?: boolean }) {
   const { filePath, line, column, elementId, value, dryRun = false } = options;
   if (!/^\/slightnudge-assets\/[a-f0-9-]{36}\.(?:png|jpe?g|webp|gif)$/i.test(value)) throw new Error('Choose an image from the imported asset library.');
@@ -1173,7 +1536,7 @@ const editableUtilities: Record<EditableStyleProperty, { pattern: RegExp; values
 };
 
 /** Allowed variant and responsive prefixes */
-export const ALLOWED_UTILITY_VARIANTS = new Set(['', 'sm', 'md', 'lg', 'xl', '2xl', 'hover', 'focus', 'focus-visible', 'active']);
+export const ALLOWED_UTILITY_VARIANTS = new Set(['', 'sm', 'md', 'lg', 'xl', '2xl', 'hover', 'focus', 'focus-visible', 'active', 'dark']);
 
 /** Update one statically-defined Tailwind utility while preserving every other source token. */
 export function updateStaticTailwindClass(options: { sourceText?: string; filePath: string; line?: number; column?: number; elementId?: string; property: EditableStyleProperty; value: string; breakpoint?: string; verifiedResponsiveScope?: boolean; dryRun?: boolean; important?: boolean }) {
@@ -1181,14 +1544,20 @@ export function updateStaticTailwindClass(options: { sourceText?: string; filePa
   const rule = editableUtilities[property];
   if (!rule || !(rule.values.has(value) || appearanceValue(property,value)) || !ALLOWED_UTILITY_VARIANTS.has(breakpoint) && !(options.verifiedResponsiveScope && /^[a-z0-9][a-z0-9-]{0,31}$/i.test(breakpoint))) throw new Error('That style value or breakpoint is not supported.');
 
-  const inspected = inspectElement({ filePath, line, column, elementId, sourceText: options.sourceText });
+  const originalSource = options.sourceText ?? readFileSync(filePath, 'utf8');
+  // Parse without the BOM so source coordinates match the file-backed AST.
+  const bom = originalSource.startsWith('\uFEFF') ? '\uFEFF' : '';
+  const parseSource = originalSource.slice(bom.length);
+  const inspected = inspectElement({ filePath, line, column, elementId, sourceText: parseSource });
   if (!inspected.found || !inspected.safeToEdit || !inspected.className) {
     return { success: false as const, reason: inspected.reason || 'This element cannot be edited safely.' };
   }
 
   const project = perfSync('ast-project', () => new Project({ skipAddingFilesFromTsConfig: true }));
   if (options.sourceText !== undefined && !dryRun) throw new Error('Draft source is read-only until Save.');
-  const sourceFile = options.sourceText === undefined ? perfSync('ast-parse', () => project.addSourceFileAtPath(filePath)) : perfSync('ast-parse', () => project.createSourceFile(filePath, options.sourceText, { overwrite: true }));
+  const sourceFile = perfSync('ast-parse', () => dryRun
+    ? project.createSourceFile(filePath, parseSource, { overwrite: true })
+    : project.addSourceFileAtPath(filePath));
   const elements = [
     ...sourceFile.getDescendantsOfKind(SyntaxKind.JsxOpeningElement),
     ...sourceFile.getDescendantsOfKind(SyntaxKind.JsxSelfClosingElement),
@@ -1218,7 +1587,6 @@ export function updateStaticTailwindClass(options: { sourceText?: string; filePa
   if (!literal) return { success: false as const, reason: 'This element uses dynamic styles and cannot be edited safely.' };
 
   const original = literal.getLiteralValue();
-  const originalSource = sourceFile.getFullText();
   const prefix = breakpoint ? `${breakpoint}:` : '';
   const tokens = original.split(/\s+/).filter(Boolean);
   const baseUtility = (token: string) => token.slice(prefix.length).replace(/^!|!$/g, '');
@@ -1245,7 +1613,7 @@ export function updateStaticTailwindClass(options: { sourceText?: string; filePa
   else tokens.push(nextToken);
   const updated = oldToken === nextToken ? original : tokens.join(' ');
   if (updated !== original) literal.setLiteralValue(updated);
-  const updatedSource = sourceFile.getFullText();
+  const updatedSource = bom + sourceFile.getFullText();
   if (!dryRun) sourceFile.saveSync();
   return { success: true as const, oldClassName: original, newClassName: updated, oldToken, newToken, filePath, line: target.getStartLineNumber(), updatedSource: dryRun ? updatedSource : undefined, originalSource: dryRun ? originalSource : undefined };
 }

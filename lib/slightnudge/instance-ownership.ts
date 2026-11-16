@@ -1,6 +1,6 @@
 import path from 'node:path';
 import { Node, Project } from 'ts-morph';
-import { componentSourceHash as hash, instanceGraph as graph, instanceSymbols as symbols, instanceOpenings as openings, componentOverlayKey as key, type ComponentDependency } from './component-ownership';
+import { componentSourceHash as hash, instanceGraph as graph, instanceSymbols as symbols, instanceOpenings as openings, componentOverlayKey as key, type ComponentDependency } from './ownership-graph';
 import { isElementInsideLoop } from './ast-nudger';
 import { parseInstanceTrace, rebaseInstanceTrace } from './instance-trace';
 import { instanceProvider, instanceFieldValue, instanceFieldClass, validateInstanceValue } from './instance-props';

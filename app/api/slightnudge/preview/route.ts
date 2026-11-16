@@ -11,7 +11,7 @@ import { readFileSync } from 'node:fs';
 import { NextResponse } from 'next/server';
 import { lstat } from 'node:fs/promises';
 import path from 'node:path';
-import { nudgeElement, reorderElement, updateStaticImageSource, updateStaticJsxText, updateStaticTailwindClass, type EditableStyleProperty } from '@/lib/slightnudge/ast-nudger';
+import { nudgeElement, reorderElement, duplicateElement, deleteElement, wrapElement, updateStaticImageSource, updateStaticJsxText, updateStaticTailwindClass, type EditableStyleProperty } from '@/lib/slightnudge/ast-nudger';
 import { createPendingSourceEdit, discardPendingSourceEdit } from '@/lib/slightnudge/edit-history';
 import { resolveRepositoryRoot, resolveRepositorySourcePath, resolveWorkspaceSourcePath } from '@/lib/slightnudge/repository-store';
 import { corsHeaders, handleCorsPreflight } from '@/lib/slightnudge/cors';
@@ -110,6 +110,82 @@ async function measuredPost(request: Request) {
       };
       const preview = draft ? await draft.create(reorderPreview, false, result.sourceOrder) : createPendingSourceEdit(reorderPreview);
       return NextResponse.json(preview.changed ? { ...preview, success: true, targetIndex: body.targetIndex } : { success: true, changed: false, message: 'Element position is already unchanged.' });
+    }
+
+    if (body.kind === 'duplicate') {
+      const result = duplicateElement({
+        ...target,
+        tagName: target.tagName,
+        className: target.className,
+      });
+      if (!result.success || !result.updatedSource || !result.originalSource) {
+        return NextResponse.json({ error: result.reason || 'This element cannot be duplicated safely.' }, { status: 422 });
+      }
+      const duplicatePreview = {
+        filePath,
+        before: result.originalSource,
+        after: result.updatedSource,
+        summary: `duplicate element <${target.tagName || 'element'}>`,
+        oldValue: '',
+        newValue: '',
+        line: result.line,
+        previewType: 'reorder' as const,
+        repositoryId,
+        sourcePath,
+      };
+      const preview = draft ? await draft.create(duplicatePreview, false) : createPendingSourceEdit(duplicatePreview);
+      return NextResponse.json(preview.changed ? { ...preview, success: true } : { success: true, changed: false, message: 'Element duplicated.' });
+    }
+
+    if (body.kind === 'delete') {
+      const result = deleteElement({
+        ...target,
+        tagName: target.tagName,
+        className: target.className,
+      });
+      if (!result.success || !result.updatedSource || !result.originalSource) {
+        return NextResponse.json({ error: result.reason || 'This element cannot be deleted safely.' }, { status: 422 });
+      }
+      const deletePreview = {
+        filePath,
+        before: result.originalSource,
+        after: result.updatedSource,
+        summary: `delete element <${target.tagName || 'element'}>`,
+        oldValue: '',
+        newValue: '',
+        line: result.line,
+        previewType: 'reorder' as const,
+        repositoryId,
+        sourcePath,
+      };
+      const preview = draft ? await draft.create(deletePreview, false) : createPendingSourceEdit(deletePreview);
+      return NextResponse.json(preview.changed ? { ...preview, success: true } : { success: true, changed: false, message: 'Element deleted.' });
+    }
+
+    if (body.kind === 'wrap') {
+      const result = wrapElement({
+        ...target,
+        tagName: target.tagName,
+        containerTag: typeof body.containerTag === 'string' ? body.containerTag : 'div',
+        containerClassName: typeof body.containerClassName === 'string' ? body.containerClassName : 'flex flex-col',
+      });
+      if (!result.success || !result.updatedSource || !result.originalSource) {
+        return NextResponse.json({ error: result.reason || 'This element cannot be wrapped safely.' }, { status: 422 });
+      }
+      const wrapPreview = {
+        filePath,
+        before: result.originalSource,
+        after: result.updatedSource,
+        summary: `wrap element in <${body.containerTag || 'div'}>`,
+        oldValue: '',
+        newValue: '',
+        line: result.line,
+        previewType: 'reorder' as const,
+        repositoryId,
+        sourcePath,
+      };
+      const preview = draft ? await draft.create(wrapPreview, false) : createPendingSourceEdit(wrapPreview);
+      return NextResponse.json(preview.changed ? { ...preview, success: true } : { success: true, changed: false, message: 'Element wrapped in container.' });
     }
 
     if (body.kind === 'nudge' || body.kind === 'move') {
@@ -246,7 +322,7 @@ async function measuredPost(request: Request) {
       if (typeof body.property !== 'string' || !allowedProperties.has(body.property)) return NextResponse.json({ error: 'That style property is not supported.' }, { status: 400 });
       if (typeof body.value !== 'string') return NextResponse.json({ error: 'Choose a valid style value.' }, { status: 400 });
       const breakpoint = typeof body.breakpoint === 'string' ? body.breakpoint : '';
-      const interaction = ['', 'hover', 'focus', 'focus-visible', 'active'].includes(breakpoint);
+      const interaction = ['', 'hover', 'focus', 'focus-visible', 'active', 'dark'].includes(breakpoint);
       const responsiveScopes = interaction ? undefined : await getProjectResponsiveScopes(findProjectRoot(filePath));
       const responsiveScope = responsiveScopes?.find(scope => scope.name === breakpoint);
       if (body.breakpoint !== undefined && typeof body.breakpoint !== 'string' || !interaction && !responsiveScope) return NextResponse.json({ error: 'Choose a breakpoint supported by this project.', responsiveScopes }, { status: 400 });

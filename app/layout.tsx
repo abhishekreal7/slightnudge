@@ -36,10 +36,10 @@ export const metadata: Metadata = {
   },
 };
 
-const geist = Geist({ variable: '--font-geist-sans', subsets: ['latin'], display: 'swap' });
-const geistMono = Geist_Mono({ variable: '--font-geist-mono', subsets: ['latin'], display: 'swap' });
-const inter = Inter({ variable: '--font-inter', subsets: ['latin'], display: 'swap' });
-const manrope = Manrope({ variable: '--font-manrope', subsets: ['latin'], display: 'swap', preload: false });
+const geist = Geist({ variable: '--font-geist-sans', subsets: ['latin'], display: 'swap', fallback: ['ui-sans-serif', 'system-ui', 'sans-serif'] });
+const geistMono = Geist_Mono({ variable: '--font-geist-mono', subsets: ['latin'], display: 'swap', fallback: ['monospace'] });
+const inter = Inter({ variable: '--font-inter', subsets: ['latin'], display: 'swap', fallback: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'] });
+const manrope = Manrope({ variable: '--font-manrope', subsets: ['latin'], display: 'swap', preload: false, fallback: ['system-ui', 'sans-serif'] });
 
 export default async function RootLayout({
   children,

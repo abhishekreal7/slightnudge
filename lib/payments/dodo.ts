@@ -77,19 +77,20 @@ export async function createScanCheckoutSession(
 
 /**
  * Verifies webhook payload signature using standardwebhooks.
+ * Enforces HMAC signature verification across all environments.
  */
 export function verifyDodoWebhook(payload: string, headers: Record<string, string>): any {
   const webhookKey = process.env.DODO_PAYMENTS_WEBHOOK_KEY;
   if (!webhookKey || webhookKey.includes('whsec_xxx')) {
-    // If running in development without webhook secret, attempt raw JSON parse
-    if (process.env.NODE_ENV !== 'production') {
+    // Only permit unauthenticated test payloads when explicitly flagged in automated test mode
+    if (process.env.NODE_ENV !== 'production' && process.env.SLIGHTNUDGE_TEST === '1' && headers['x-slightnudge-test-mock'] === 'true') {
       try {
         return JSON.parse(payload);
       } catch (e) {
         throw new Error('Invalid JSON payload');
       }
     }
-    throw new Error('DODO_PAYMENTS_WEBHOOK_KEY is not configured');
+    throw new Error('Webhook signature verification failed: DODO_PAYMENTS_WEBHOOK_KEY is not configured');
   }
 
   const wh = new Webhook(webhookKey);

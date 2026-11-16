@@ -34,7 +34,23 @@ try {
   assert.equal((await preview({ kind: 'text', elementId: 'paragraph', value: 'Replaced' })).success, undefined);
   assert.equal((await preview({ kind: 'style', elementId: 'paragraph', property: 'fontSize', value: 'text-xl', important: true })).success, undefined);
   assert.equal(fs.readFileSync(file, 'utf8'), before);
-  console.log('PASS button source: static link/native labels preserve icons, attributes and markup; verified priority utilities replace cleanly; grouped Save/Undo; dynamic and ambiguous text refused');
+  for (const draft of [false, true]) {
+    const bomSource = Buffer.from('\uFEFF' + before);
+    const expected = Buffer.from('\uFEFF' + before.replace('className="text-sm"', 'className="text-xl"'));
+    fs.writeFileSync(file, bomSource);
+    const style = await preview({
+      kind: 'style', draft, line: 1, column: before.indexOf('<p id="paragraph"') + 1,
+      tagName: 'p', property: 'fontSize', value: 'text-xl',
+    });
+    assert.equal(style.success, true, style.error);
+    assert.deepEqual(fs.readFileSync(file), bomSource, 'Preview must leave source bytes intact');
+    const applied = await applyPendingSourceEdit(style.id);
+    assert.equal(applied.success, true, applied.error ?? 'Expected the BOM style edit to apply');
+    assert.deepEqual(fs.readFileSync(file), expected, 'Apply must preserve the BOM');
+    assert.equal(undoReviewedSourceEdit(style.id).success, true);
+    assert.deepEqual(fs.readFileSync(file), bomSource, 'Undo must restore the original bytes');
+  }
+  console.log('PASS button source: static link/native labels preserve icons, attributes and markup; verified priority utilities replace cleanly; grouped Save/Undo; dynamic and ambiguous text refused; BOM preserved through style Preview/Apply/Undo');
 } finally {
   process.chdir(previous); fs.unlinkSync(path.join(root, 'node_modules'));
   assert.ok(path.resolve(root).startsWith(path.resolve(os.tmpdir()) + path.sep) && path.basename(root).startsWith('sn-button-editing-'));

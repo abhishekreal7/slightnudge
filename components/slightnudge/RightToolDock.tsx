@@ -681,6 +681,7 @@ export function RightToolDock({
                         { id: 'hover', label: 'Hover' },
                         { id: 'focus-visible', label: 'Focus' },
                         { id: 'active', label: 'Pressed' },
+                        { id: 'dark', label: 'Dark' },
                       ].map((variant) => (
                         <button
                           key={variant.id}

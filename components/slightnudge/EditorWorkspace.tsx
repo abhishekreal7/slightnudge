@@ -1792,7 +1792,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
   latestElementsRef.current = elements;
   const triggerBackendPreview = useCallback(
     async (
-      kind: 'style' | 'text' | 'nudge' | 'reorder' | 'reparent' | 'move' | 'image' | 'action' | 'icon' | 'component',
+      kind: 'style' | 'text' | 'nudge' | 'reorder' | 'reparent' | 'move' | 'image' | 'action' | 'icon' | 'component' | 'duplicate' | 'delete' | 'wrap',
       payload: Record<string, any>,
       layerKeyOverride?: string,
       commitVisual?: () => void,
@@ -1804,7 +1804,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
         showToast(undoRecoveryRef.current ? 'Check Undo status before making another change.' : reviewNotice);
         return;
       }
-      if ((kind === 'reorder' || kind === 'reparent') && !usesDrafts) {
+      if ((kind === 'reorder' || kind === 'reparent' || kind === 'duplicate' || kind === 'delete' || kind === 'wrap') && !usesDrafts) {
         showToast('Open the editing window to arrange source elements.');
         return;
       }
@@ -1839,12 +1839,12 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
           return;
         }
         const state = kind === 'text' ? '' : typeof payload.breakpoint === 'string' ? payload.breakpoint : activeBreakpoint || activeVariant;
-        if (!['', 'hover', 'focus-visible', 'active'].includes(state) && !responsiveScopes.some(scope => scope.name === state)) {
+        if (!['', 'hover', 'focus', 'focus-visible', 'active', 'dark'].includes(state) && !responsiveScopes.some(scope => scope.name === state)) {
           showToast('This breakpoint cannot yet be previewed precisely. Nothing was changed.');
           return;
         }
         if (state && kind !== 'style') {
-          showToast('Text and spacing edits use the Default state. Select Default first.');
+          showToast('Text, spacing, and structural edits use the Default state. Select Default first.');
           return;
         }
         const importedScopeSupported = !state || usesDrafts && responsiveScopes.some(scope => scope.name === state);
@@ -1900,7 +1900,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
           return true;
         }
         if (result.success && (result.id || result.draftClean)) {
-          if (kind !== 'text' && kind !== 'image' && kind !== 'action' && kind !== 'icon' && kind !== 'component' && kind !== 'reorder' && kind !== 'reparent' && typeof result.newClassName !== 'string') {
+          if (kind !== 'text' && kind !== 'image' && kind !== 'action' && kind !== 'icon' && kind !== 'component' && kind !== 'reorder' && kind !== 'reparent' && kind !== 'duplicate' && kind !== 'delete' && kind !== 'wrap' && typeof result.newClassName !== 'string') {
             if (result.id) await discardEditAPI(result.id);
             showToast('The complete source styles could not be verified. Nothing was changed.');
             return;
@@ -1913,7 +1913,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
             if (!sourceCanvas.current || !actualSelection) throw new Error('Select the actual source element again.');
             if (kind !== 'text' && typeof result.oldClassName === 'string' && !sourceClassesMatch(actualSelection.className, result.oldClassName)) throw new Error('Rendered classes differ from the source. Select a stable source element.');
             beforeBridgePreview?.();
-            rendered = kind === 'image' || kind === 'action' || kind === 'icon' || kind === 'component' || (kind === 'reorder' || kind === 'reparent') && result.draftClean ? await sourceCanvas.current.command('restore', null, { patches: kind === 'image' || kind === 'action' || kind === 'icon' || kind === 'component' ? composedPatches : otherPatches }) : await sourceCanvas.current.command('preview', actualSelection, {
+            rendered = kind === 'image' || kind === 'action' || kind === 'icon' || kind === 'component' || (kind === 'reorder' || kind === 'reparent' || kind === 'duplicate' || kind === 'delete' || kind === 'wrap') && result.draftClean ? await sourceCanvas.current.command('restore', null, { patches: kind === 'image' || kind === 'action' || kind === 'icon' || kind === 'component' ? composedPatches : otherPatches }) : await sourceCanvas.current.command('preview', actualSelection, {
               kind, property: kind === 'nudge' ? (payload.direction === 'left' || payload.direction === 'right' ? 'marginLeft' : 'marginTop') : payload.property,
               utility: kind === 'nudge' || kind === 'style' ? result.newValue || payload.value : payload.value,
               value: kind === 'text' ? payload.value : result.newClassName,
@@ -1923,6 +1923,13 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
               responsiveMedia: result.responsiveMedia,
               patches: composedPatches,
             });
+            if (kind === 'duplicate' || kind === 'delete' || kind === 'wrap') {
+              if (kind === 'delete') {
+                setSelectedLayer(null);
+              }
+              showToast(result.message || (kind === 'duplicate' ? 'Element duplicated.' : kind === 'delete' ? 'Element deleted.' : 'Element wrapped in container.'));
+              try { await sourceCanvas.current.reload(); } catch {}
+            }
             if (usesDrafts && result.renderPatches) {
               const checked = await sourceCanvas.current.command('check', actualSelection, { patches: composedPatches });
               if (checked?.renderPatches) { const owned = result.renderPatches; result.renderPatches = checked.renderPatches.filter(patch => owned.some(candidate => candidate.before.path === patch.before.path && candidate.before.line === patch.before.line && candidate.before.column === patch.before.column && candidate.before.elementId === patch.before.elementId)); }
@@ -3282,6 +3289,19 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
       } else if ((e.metaKey || e.ctrlKey) && e.key === 'z') {
         e.preventDefault();
         handleUndo();
+      } else if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'd') {
+        e.preventDefault();
+        if (selectedLayer && !busy && !isApplying) {
+          void triggerBackendPreview('duplicate', {});
+        }
+      } else if ((e.key === 'Delete' || e.key === 'Backspace') && selectedLayer && !isInlineEditing && !busy && !isApplying) {
+        e.preventDefault();
+        void triggerBackendPreview('delete', {});
+      } else if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'g') {
+        e.preventDefault();
+        if (selectedLayer && !busy && !isApplying) {
+          void triggerBackendPreview('wrap', { containerTag: 'div', containerClassName: 'flex flex-col' });
+        }
       } else if (selectedLayer && ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
         // Controls own their arrow keys. The Move handle has its own handler;
         // navigating toolbar buttons or menus must never move source content.
@@ -3795,6 +3815,9 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
           </div>}
           <div className={reviewStyles.formatMenuFooter}>
             {usesDrafts && !activeVariant && !activeBreakpoint && <button type="button" disabled={locked} onClick={() => { if (!selectedLayer) return; destinationSource.current = selectedLayer; setDestinationMode(true); setShowQuickActions(false); }}><ArrowUpRight size={13} /><span>Move to…</span></button>}
+            <button type="button" disabled={locked} onClick={() => { setShowQuickActions(false); void triggerBackendPreview('duplicate', {}); }}><Copy size={13} /><span>Duplicate (Cmd+D)</span></button>
+            <button type="button" disabled={locked} onClick={() => { setShowQuickActions(false); void triggerBackendPreview('wrap', { containerTag: 'div', containerClassName: 'flex flex-col' }); }}><Layers2 size={13} /><span>Wrap in container (Cmd+G)</span></button>
+            <button type="button" disabled={locked} onClick={() => { setShowQuickActions(false); void triggerBackendPreview('delete', {}); }}><Trash2 size={13} /><span>Delete (Del)</span></button>
             <button type="button" onClick={async () => {
               try { await navigator.clipboard.writeText(activeElement.classes); showToast('Styles copied'); }
               catch { showToast('Could not copy styles. Check browser clipboard access.'); }
@@ -4092,6 +4115,10 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
                   role="slider"
                   aria-label={h.label}
                   title={h.title}
+                  aria-valuemin={1}
+                  aria-valuemax={2048}
+                  aria-valuenow={Math.round(boxW)}
+                  aria-valuetext={`${Math.round(boxW)} pixels wide`}
                   aria-pressed={isResizing && resizeHandle === h.dir}
                   className={`${reviewStyles.resizeHandle} ${h.styleClass} ${cursorClass}`}
                   style={customStyle}
@@ -4551,7 +4578,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
                   <span>{repositoryId && !selectedLayer ? 'Waiting for live selection' : `${activeElement.filePath}:${activeElement.line}`}</span>
                 </div>
               </div>
-              {!windowMode && <div className={reviewStyles.canvasFooter} role="region" aria-label="Canvas controls">
+              {(!windowMode || unified) && <div className={reviewStyles.canvasFooter} role="region" aria-label="Canvas controls">
                 <button type="button" className={reviewStyles.panelToggle} aria-label={focusMode ? 'Restore sidebars' : 'Focus canvas'} aria-pressed={focusMode} title={focusMode ? 'Restore sidebars' : 'Focus canvas'} onClick={() => setFocusMode(value => !value)}><Columns2 size={15} /></button>
                 {<div className={reviewStyles.canvasViewTools} role="group" aria-label="Canvas navigation">
                   <button type="button" aria-label="Select elements" title="Select elements" aria-pressed={!canvasPan} onClick={() => setCanvasPan(false)}><MousePointer2 size={16} /></button>
@@ -4836,6 +4863,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
                                 { id: 'hover', label: 'Hover' },
                                 { id: 'focus-visible', label: 'Focus' },
                                 { id: 'active', label: 'Pressed' },
+                                { id: 'dark', label: 'Dark' },
                               ].map((variant) => (
                                 <button
                                   key={variant.id}

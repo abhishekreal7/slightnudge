@@ -16,7 +16,7 @@
 .row:hover { background: #f1f4f2; }
 .row[data-selected='true'] { background: #e6f0ea; }
 .disclosure, .select { display: flex; align-items: center; border: 0; background: transparent; cursor: pointer; }
-.disclosure, .spacer { width: 17px; height: 28px; flex: 0 0 17px; justify-content: center; padding: 0; color: #9ba49e; }
+.disclosure, .spacer { width: 24px; height: 28px; flex: 0 0 24px; justify-content: center; padding: 0; color: #9ba49e; margin-right: 4px; }
 .disclosure svg { transition: transform 120ms ease; }
 .disclosure[aria-expanded='true'] svg { transform: rotate(90deg); }
 .disclosure:disabled { cursor: default; opacity: .45; }

@@ -42,8 +42,10 @@ export interface PreviewParams {
   parentPreviewId?: string;
   repositoryId?: string;
   sourcePath?: string;
-  kind: 'style' | 'text' | 'nudge' | 'reorder' | 'reparent' | 'image' | 'action' | 'icon' | 'component' | 'move';
+  kind: 'style' | 'text' | 'nudge' | 'reorder' | 'reparent' | 'image' | 'action' | 'icon' | 'component' | 'move' | 'duplicate' | 'delete' | 'wrap';
   destination?: { path: string; line: number; column: number; tagName?: string; elementId?: string };
+  containerTag?: string;
+  containerClassName?: string;
   x?: number;
   y?: number;
   filePath: string;
@@ -96,6 +98,7 @@ export interface PreviewResult {
   filePath: string;
   line?: number;
   changed?: boolean;
+  message?: string;
   error?: string;
   refusalReason?: string;
 }

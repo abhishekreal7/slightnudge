@@ -2,6 +2,7 @@ import {
   createScanCheckoutSession,
   handleDodoWebhookEvent,
   triggerAutomaticSystemRefund,
+  verifyDodoWebhook,
 } from '../lib/payments/dodo';
 import { getDatabaseRepository } from '../lib/db/client';
 
@@ -125,6 +126,21 @@ async function runPaymentsTest() {
   const refundedRun = await repo.getRun(previewRun.id);
   assert(refundedRun?.status === 'refunded', 'Run record marked as status="refunded"');
   assert(Boolean(refundedRun?.error?.includes('refunded')), 'Run error field explains automatic refund reason');
+
+  // 6. Webhook Signature Security Verification
+  console.log('\n--- 5. Webhook Signature Security Verification ---');
+  let rejectedUnauthenticated = false;
+  try {
+    verifyDodoWebhook('{"test":"payload"}', {});
+  } catch (err: any) {
+    rejectedUnauthenticated = true;
+  }
+  assert(rejectedUnauthenticated, 'Unauthenticated raw webhook payload without test header is rejected');
+
+  // Test mode mock bypass requires both SLIGHTNUDGE_TEST === '1' and x-slightnudge-test-mock header
+  process.env.SLIGHTNUDGE_TEST = '1';
+  const testPayload = verifyDodoWebhook('{"type":"test.event"}', { 'x-slightnudge-test-mock': 'true' });
+  assert(testPayload?.type === 'test.event', 'Test-mode mock webhook payload accepted with explicit test header');
 
   console.log('\n====================================================');
   console.log(`🎉 ALL ${passed}/${total} PAYMENTS TESTS PASSED!`);
