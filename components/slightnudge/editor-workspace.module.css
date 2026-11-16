@@ -1095,6 +1095,53 @@
 
 .canvasDraftStatus { position: fixed; z-index: 45; top: 16px; right: 16px; display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border: 1px solid rgba(20, 40, 29, 0.09); border-radius: 9999px; background: rgba(255, 255, 255, 0.92); backdrop-filter: blur(12px); color: #365242; font-size: 11px; font-weight: 500; box-shadow: 0 4px 16px rgba(18, 36, 26, 0.08); pointer-events: none; }
 .windowShell .canvasDraftStatus { display: none !important; }
+.windowShell .recoveryBootStatus { display: none !important; }
+.windowShell .status { display: none !important; }
+.windowShell .connected { display: none !important; }
+
+/* Move destination selection banner */
+.destinationBanner {
+  position: absolute;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 16px;
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  color: #065f46;
+  font-size: 12px;
+  font-weight: 500;
+}
+.destinationBanner button {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  border-radius: 6px;
+  background: #f1f5f9;
+  color: #475569;
+  font-size: 11px;
+  font-weight: 500;
+  border: 1px solid #e2e8f0;
+  cursor: pointer;
+  transition: all 120ms ease;
+}
+.destinationBanner button:hover {
+  background: #e2e8f0;
+  color: #1e293b;
+}
+.destinationBanner kbd {
+  font-family: monospace;
+  font-size: 10px;
+  color: #64748b;
+}
 
 /* The 13px hotspot sits between the marks, over the handle center. */
 .studioShell {

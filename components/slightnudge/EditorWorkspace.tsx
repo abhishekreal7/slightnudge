@@ -4802,9 +4802,14 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
                       </>
                     )}
 
-                    <div className="hidden lg:flex items-center space-x-1.5 text-[10px] font-mono text-slate-400 pl-2 shrink-0 border-l border-slate-200">
+                    <div className="hidden lg:flex items-center space-x-1.5 text-[10px] font-mono text-slate-500 pl-2 shrink-0 border-l border-slate-200" title={activeElement.filePath ? `${activeElement.filePath}:${activeElement.line}` : 'Live source connected'}>
                       <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                      <span className="truncate max-w-[160px]">{repositoryId && !selectedLayer ? 'Ready' : `${activeElement.filePath.split(/[\\/]/).pop()}:${activeElement.line}`}</span>
+                      <span className="truncate max-w-[160px] font-medium text-emerald-700">Live source connected</span>
+                      {selectedLayer && (
+                        <span className="text-slate-400 font-mono text-[9px] truncate max-w-[140px]">
+                          ({activeElement.filePath.split(/[\\/]/).pop()}:{activeElement.line})
+                        </span>
+                      )}
                     </div>
                   </div>
 

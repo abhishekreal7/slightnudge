@@ -504,7 +504,7 @@ export const SourceProjectCanvas = forwardRef<SourceCanvasHandle, {
     if (!window.open(target, `slightnudge-${repositoryId || 'local'}`, 'popup,width=1440,height=960')) props.current.onNotice('Allow pop-ups for SlightNudge to open your editing window.');
   }
 
-  const connection = repositoryId && <form onSubmit={connect} className={windowMode ? `${windowStyles.connection} ${url ? windowStyles.connected : ''}` : canvasStyles.form} onClick={event => event.stopPropagation()}>
+  const connection = repositoryId && (!url || !windowMode) && <form onSubmit={connect} className={windowMode ? `${windowStyles.connection} ${url ? windowStyles.connected : ''}` : canvasStyles.form} onClick={event => event.stopPropagation()}>
       {windowMode && !url && <><strong>Open your local preview</strong><p>Your site, with editing tools on top. Changes stay in your local project.</p></>}
       <label className="text-slate-500" htmlFor="source-preview-url">Project URL</label>
       <input id="source-preview-url" value={input} onChange={event => setInput(event.target.value)} disabled={blocked || loading || framework !== 'Next.js'} className="flex-1 rounded-md border border-slate-200 bg-white px-3 py-2" />
@@ -519,7 +519,6 @@ export const SourceProjectCanvas = forwardRef<SourceCanvasHandle, {
     </div>, connectionHost) : connection}
     {error && (windowMode || !repositoryId) && <p role="alert" className={windowMode ? windowStyles.error : 'text-xs text-red-700'}>{error}</p>}
     {(windowMode || !repositoryId || !connectionHost) && previewStatus}
-    {url && windowMode && ready && <p role="status" className={windowStyles.status}>Live source connected</p>}
     {url && <div data-selection-artboard className={windowMode ? windowStyles.artboard : 'relative mx-auto'} style={{ width, flexShrink: 0, maxWidth: width === '100%' ? '100%' : undefined }}>
       <iframe ref={frame} title="Actual project" src={url} onLoad={() => setDocumentRevision(value => value + 1)} scrolling={!windowMode ? 'no' : undefined} inert={!ready} tabIndex={ready ? 0 : -1} className="block w-full border-0 bg-white" style={{ height: windowMode ? '100dvh' : pageHeight, pointerEvents: ready ? 'auto' : 'none' }} />
       {geometry && ready && renderSelection && <div className="absolute pointer-events-none" style={{ inset: 0, zIndex: 30, overflow: 'visible' }}><div ref={selectionBoxRef} style={{ position: 'absolute', top: geometry.rect.top, left: geometry.rect.left, width: geometry.rect.width, height: geometry.rect.height }}>{renderSelection(geometry)}</div></div>}
