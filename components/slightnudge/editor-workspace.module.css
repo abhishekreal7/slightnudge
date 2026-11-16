@@ -599,16 +599,16 @@
 .resizeBar button:disabled, .resizeBar select:disabled { opacity: .45; cursor: default; }
 .resizeBar button:focus-visible, .resizeBar select:focus-visible { outline: 2px solid #729082; outline-offset: 2px; }
 
-.moveAnchor { position: absolute; bottom: calc(100% + 10px); left: 50%; transform: translateX(-50%); z-index: 55; }
+.moveAnchor { position: absolute; bottom: calc(100% + 5px); left: 50%; transform: translateX(-50%); z-index: 55; }
 .moveControl { position: relative; color: #405046; font-family: inherit; text-align: left; }
 .moveControl .moveTrigger {
-  position: relative; display: flex; align-items: center; justify-content: center; width: 27px; height: 27px; padding: 0;
-  border: 1px solid #0cb98a; border-radius: 5px; background: #0cbd8d; color: #fff;
-  font-size: 11px; font-weight: 500; box-shadow: 0 2px 6px #12674f16; cursor: grab; touch-action: none;
-  transition: background 120ms ease, border-color 120ms ease, box-shadow 120ms ease;
+  position: relative; display: flex; align-items: center; justify-content: center; width: 22px; height: 22px; padding: 0;
+  border: 1px solid rgba(16, 185, 129, 0.4); border-radius: 6px; background: #ffffff; color: #059669;
+  font-size: 11px; font-weight: 500; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08); cursor: grab; touch-action: none;
+  transition: background 120ms ease, border-color 120ms ease, box-shadow 120ms ease, color 120ms ease;
 }
-.moveControl .moveTrigger:hover, .moveControl .moveTrigger[aria-expanded='true'] { background: #08a97d; border-color: #08a97d; color: #fff; }
-.moveControl .moveTrigger[aria-pressed='true'] { cursor: grabbing; background: #079c74; }
+.moveControl .moveTrigger:hover, .moveControl .moveTrigger[aria-expanded='true'] { background: #ecfdf5; border-color: #059669; color: #047857; box-shadow: 0 2px 8px rgba(16, 185, 129, 0.2); }
+.moveControl .moveTrigger[aria-pressed='true'] { cursor: grabbing; background: #059669; color: #ffffff; }
 .moveAnchor .movePopover { left: 50%; margin-left: -105px; }
 .moveControl button:focus-visible { outline: 2px solid #568a6c; outline-offset: 3px; }
 .moveControl button:disabled { opacity: .45; cursor: default; }
@@ -688,12 +688,12 @@
 }
 
 .handleDot {
-  width: 9px;
-  height: 9px;
+  width: 8px;
+  height: 8px;
   background: #ffffff;
-  border: 1.5px solid #0ccb8b;
+  border: 1.5px solid #059669;
   border-radius: 50%;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.14), 0 0 0 0.5px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12);
   transform: scale(calc(1 / var(--canvas-zoom, 1)));
   transform-origin: center center;
   transition: transform 80ms ease, box-shadow 80ms ease, border-color 80ms ease;
@@ -702,16 +702,54 @@
 
 .resizeHandle:hover .handleDot {
   background: #ffffff;
-  border-color: #0ccb8b;
-  box-shadow: 0 0 0 3px rgba(12, 203, 139, 0.28), 0 1px 3px rgba(0, 0, 0, 0.14);
+  border-color: #059669;
+  box-shadow: 0 0 0 2.5px rgba(16, 185, 129, 0.28), 0 1px 2px rgba(0, 0, 0, 0.12);
   transform: scale(calc(1.15 / var(--canvas-zoom, 1)));
 }
 
 .resizeHandle[aria-pressed='true'] .handleDot {
   background: #ffffff;
-  border-color: #089c69;
-  box-shadow: 0 0 0 4.5px rgba(12, 203, 139, 0.38), 0 1px 3px rgba(0, 0, 0, 0.18);
+  border-color: #047857;
+  box-shadow: 0 0 0 3.5px rgba(16, 185, 129, 0.38), 0 1px 3px rgba(0, 0, 0, 0.18);
   transform: scale(calc(1.2 / var(--canvas-zoom, 1)));
+}
+
+/* Subtle edge resize pills (revealed smoothly on hover) */
+.handleEdge {
+  opacity: 0;
+  background: #ffffff;
+  border: 1.5px solid #059669;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12);
+  pointer-events: none;
+  transition: opacity 120ms ease, transform 80ms ease, box-shadow 80ms ease;
+  transform: scale(calc(1 / var(--canvas-zoom, 1)));
+  transform-origin: center center;
+}
+
+.handleN .handleEdge,
+.handleS .handleEdge {
+  width: 14px;
+  height: 4px;
+  border-radius: 9999px;
+}
+
+.handleW .handleEdge,
+.handleE .handleEdge {
+  width: 4px;
+  height: 14px;
+  border-radius: 9999px;
+}
+
+.sourceSelection:hover .handleEdge,
+.resizeHandle:hover .handleEdge,
+.resizeHandle[aria-pressed='true'] .handleEdge,
+.resizeHandle:focus-visible .handleEdge {
+  opacity: 1;
+}
+
+.resizeHandle:hover .handleEdge {
+  box-shadow: 0 0 0 2.5px rgba(16, 185, 129, 0.28);
+  border-color: #047857;
 }
 
 .resizeHandle:focus-visible {
@@ -912,15 +950,24 @@
   min-height: 20px;
   transform: translate(-50%, -50%);
   cursor: crosshair;
+  opacity: 0;
+  transition: opacity 120ms ease;
+}
+
+.sourceSelection:hover .radiusGrip,
+.radiusGrip:hover,
+.radiusGrip:focus-visible,
+.radiusGrip[aria-pressed='true'] {
+  opacity: 1;
 }
 
 .radiusGripDot {
-  width: 10px;
-  height: 10px;
+  width: 9px;
+  height: 9px;
   background: #ffffff;
-  border: 1.5px solid #0ccb8b;
+  border: 1.5px solid #059669;
   border-radius: 50%;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.18);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -932,17 +979,17 @@
 
 .radiusGripDot::after {
   content: '';
-  width: 4px;
-  height: 4px;
-  background: #0ccb8b;
+  width: 3px;
+  height: 3px;
+  background: #059669;
   border-radius: 50%;
   transition: background 80ms ease;
 }
 
 .radiusGrip:hover .radiusGripDot {
-  background: #0ccb8b;
-  border-color: #089c69;
-  box-shadow: 0 0 0 3px rgba(12, 203, 139, 0.25);
+  background: #059669;
+  border-color: #047857;
+  box-shadow: 0 0 0 2.5px rgba(16, 185, 129, 0.25);
 }
 
 .radiusGrip:hover .radiusGripDot::after {
@@ -950,9 +997,9 @@
 }
 
 .radiusGrip[aria-pressed='true'] .radiusGripDot {
-  background: #089c69;
-  border-color: #089c69;
-  box-shadow: 0 0 0 4px rgba(12, 203, 139, 0.35);
+  background: #047857;
+  border-color: #047857;
+  box-shadow: 0 0 0 3.5px rgba(16, 185, 129, 0.35);
 }
 
 .radiusGrip:focus-visible {

@@ -4398,7 +4398,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
                   aria-valuenow={Math.round(boxW)}
                   aria-valuetext={`${Math.round(boxW)} pixels wide`}
                   aria-pressed={isResizing && resizeHandle === h.dir}
-                  className={`${reviewStyles.resizeHandle} ${h.styleClass} ${cursorClass}`}
+                  className={`${reviewStyles.resizeHandle} ${h.styleClass} ${cursorClass} ${isCorner ? reviewStyles.handleCorner : reviewStyles.handleSide}`}
                   style={customStyle}
                   onPointerDown={e => startResize(h.dir, e)}
                   onKeyDown={resizeWithKeyboard}
@@ -4406,8 +4406,10 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
                 >
                   {isArc ? (
                     <span className={reviewStyles.handleHitArea} />
-                  ) : (
+                  ) : isCorner ? (
                     <span className={reviewStyles.handleDot} />
+                  ) : (
+                    <span className={reviewStyles.handleEdge} />
                   )}
                 </button>
               );
