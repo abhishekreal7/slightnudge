@@ -4340,6 +4340,9 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
               onClick={e => e.stopPropagation()}
             >
               <span className={reviewStyles.radiusGripDot} />
+              <span className={reviewStyles.radiusTooltip}>
+                {chrome.effectiveRadius > 0 ? `${Math.round(chrome.effectiveRadius)}px` : 'Radius'}
+              </span>
             </button>
           );
         })()}
