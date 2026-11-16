@@ -124,14 +124,13 @@
   height: auto;
   padding: 4px 10px;
   gap: 6px;
-  border: 1px solid #dfe5e1;
+  border: 1px solid rgba(0, 0, 0, 0.08);
   border-radius: 9999px;
-  background: rgba(255, 255, 255, 0.94);
+  background: #ffffff;
   backdrop-filter: blur(20px) saturate(160%);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.95),
-    0 14px 36px -6px rgba(18, 35, 26, 0.14),
-    0 4px 12px -2px rgba(18, 35, 26, 0.06);
+    0 10px 30px -4px rgba(0, 0, 0, 0.1),
+    0 4px 12px -2px rgba(0, 0, 0, 0.05);
   pointer-events: none;
 }
 .windowShell .editorTopbar :is(button, a, input, select, textarea, [role='button']) { pointer-events: auto; }
@@ -151,14 +150,14 @@
 .windowPanelHeader button:hover { background: #f1f5f2; color: #244734; }
 .windowActions { display: flex; align-items: center; gap: 4px; flex-shrink: 0; padding-right: 8px; border-right: 1px solid rgba(0, 0, 0, 0.08); }
 .windowActions > button, .windowActions > a, .windowLaunch { display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px; padding: 0; border: 0; border-radius: 8px; color: #64748b; background: transparent; cursor: pointer; transition: color 140ms ease, background 140ms ease; }
-.windowActions > button:hover, .windowActions > a:hover, .windowLaunch:hover { color: #0f172a; background: #f1f3f2; }
-.windowActions > button[aria-expanded='true'] { color: #0f172a; background: #e5e8e6; }
+.windowActions > button:hover, .windowActions > a:hover, .windowLaunch:hover { color: #0f172a; background: #f8fafc; }
+.windowActions > button[aria-expanded='true'] { color: #0f172a; background: #f1f5f9; }
 .windowActions > .dockGrip { width: 18px; cursor: grab; touch-action: none; color: #94a3b8; }
 .windowActions > .dockGrip:active { cursor: grabbing; }
-.interactionMode { display: flex; gap: 2px; height: 30px; box-sizing: border-box; align-items: center; padding: 2px; background: #f1f3f2; border: 1px solid rgba(0, 0, 0, 0.04); border-radius: 8px; margin: 0 4px; }
+.interactionMode { display: flex; gap: 2px; height: 30px; box-sizing: border-box; align-items: center; padding: 2px; background: #ffffff; border: 1px solid rgba(0, 0, 0, 0.08); border-radius: 8px; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03); margin: 0 4px; }
 .interactionMode button { border: 0; border-radius: 6px; height: 24px; padding: 0 10px; background: transparent; color: #64748b; font-size: 11px; font-weight: 500; cursor: pointer; transition: color 140ms ease, background 140ms ease, box-shadow 140ms ease; }
-.interactionMode button:hover:not([aria-pressed='true']):not(:disabled) { color: #0f172a; background: rgba(0, 0, 0, 0.03); }
-.interactionMode button[aria-pressed='true'] { color: #0f172a; background: #fff; font-weight: 600; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.07), 0 0 0 0.5px rgba(0, 0, 0, 0.04); }
+.interactionMode button:hover:not([aria-pressed='true']):not(:disabled) { color: #0f172a; background: #f8fafc; }
+.interactionMode button[aria-pressed='true'] { color: #ffffff; background: #0f172a; font-weight: 600; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12); }
 .windowShell .draftControls { border-right: 0; padding-right: 0; }
 @media(max-width: 760px) { .windowShell .viewportControl, .windowShell .draftControls [role='status'] { display: none; } .windowShell .editorTopbar { gap: 5px; } }
 @media(prefers-reduced-motion: reduce) { .windowShell [data-editor-panel] { animation: none; } }
@@ -470,15 +469,15 @@
 .contextSlash { color: #d0d8d2; font-size: 13px; font-weight: 400; }
 .pageName { min-width: 0; overflow: hidden; text-overflow: ellipsis; color: #8a948e; font-size: 10.5px; }
 .canvasTools { display: flex; align-items: center; gap: 8px; }
-.viewportControl { display: flex; align-items: center; gap: 2px; height: 30px; box-sizing: border-box; padding: 2px; background: #f1f3f2; border: 1px solid rgba(0, 0, 0, 0.04); border-radius: 8px; }
+.viewportControl { display: flex; align-items: center; gap: 2px; height: 30px; box-sizing: border-box; padding: 2px; background: #ffffff; border: 1px solid rgba(0, 0, 0, 0.08); border-radius: 8px; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03); }
 .viewportControl button, .historyTools button { display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; height: 24px; padding: 0 8px; gap: 5px; border: 1px solid transparent; border-radius: 6px; background: transparent; color: #64748b; font-size: 10.5px; font-weight: 500; cursor: pointer; transition: color 140ms ease, background 140ms ease, box-shadow 140ms ease; }
 .viewportControl button span { display: none; }
-.viewportControl button.activeViewport { background: #fff; border-color: transparent; color: #0f172a; font-weight: 600; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.07), 0 0 0 0.5px rgba(0, 0, 0, 0.04); }
+.viewportControl button.activeViewport { background: #0f172a; border-color: transparent; color: #ffffff; font-weight: 600; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12); }
 .viewportControl button.activeViewport span { display: inline; }
-.viewportControl button:hover:not(:disabled):not(.activeViewport) { color: #0f172a; background: rgba(0, 0, 0, 0.03); }
+.viewportControl button:hover:not(:disabled):not(.activeViewport) { color: #0f172a; background: #f8fafc; }
 .historyTools { display: flex; align-items: center; gap: 2px; padding-left: 8px; border-left: 1px solid rgba(0, 0, 0, 0.08); }
 .historyTools button { width: 30px; height: 30px; padding: 0; border-radius: 8px; color: #64748b; }
-.historyTools button:hover:not(:disabled) { color: #0f172a; background: #f1f3f2; }
+.historyTools button:hover:not(:disabled) { color: #0f172a; background: #f8fafc; }
 .viewportControl button:disabled, .historyTools button:disabled { opacity: .35; cursor: default; }
 .topbarActions { display: flex; align-items: center; gap: 10px; }
 .draftControls { display: flex; align-items: center; gap: 10px; white-space: nowrap; }

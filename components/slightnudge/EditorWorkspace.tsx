@@ -2649,14 +2649,34 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
             gesture.filePath,
             async () => {
               try {
-                const ok = await triggerBackendPreviewRef.current(
-                  'move',
-                  gesture.nextTranslation,
-                  gesture.key,
-                  undefined,
-                  true,
-                  () => restorePendingDirectStyle(gesture.key)
-                );
+                const computed = sourceSelections.current[gesture.key]?.computed;
+                const isOutOfFlow = computed?.position === 'absolute' || computed?.position === 'fixed';
+                let ok = false;
+                if (isOutOfFlow) {
+                  ok = Boolean(await triggerBackendPreviewRef.current(
+                    'move',
+                    gesture.nextTranslation,
+                    gesture.key,
+                    undefined,
+                    true,
+                    () => restorePendingDirectStyle(gesture.key)
+                  ));
+                } else {
+                  // Swap translate-y out for margin/gap in flow layout so elements push each other instead of overlapping!
+                  const deltaY = gesture.nextTranslation.y - gesture.baseTranslation.y;
+                  const deltaX = gesture.nextTranslation.x - gesture.baseTranslation.x;
+                  const useY = Math.abs(deltaY) >= Math.abs(deltaX);
+                  const direction = useY ? (deltaY > 0 ? 'down' : 'up') : (deltaX > 0 ? 'right' : 'left');
+                  const stepSize = Math.abs(useY ? deltaY : deltaX) >= 16 ? 'big' : 'normal';
+                  ok = Boolean(await triggerBackendPreviewRef.current(
+                    'nudge',
+                    { direction, stepSize },
+                    gesture.key,
+                    undefined,
+                    true,
+                    () => restorePendingDirectStyle(gesture.key)
+                  ));
+                }
                 if (!ok) throw new Error('Move preview refused');
                 return ok;
               } finally {
@@ -3583,14 +3603,23 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
       return;
     }
     if (!usesDrafts || !/^(h[1-6]|p|section|div|article|aside|header|footer|nav|main|a|button|img)$/.test(activeElement.tag) || activeVariant || activeBreakpoint) { showToast('To move an element, choose All sizes and the Default state.'); return; }
-    try {
-      const base = readTranslation(activeElement.classes);
-      const next = vecAdd(base, {
-        x: direction === 'left' ? -step : direction === 'right' ? step : 0,
-        y: direction === 'up' ? -step : direction === 'down' ? step : 0,
-      });
-      void triggerBackendPreview('move', next);
-    } catch (error) { showToast(error instanceof Error ? error.message : 'This element cannot be moved safely.'); }
+
+    const computed = selectedLayer ? sourceSelections.current[selectedLayer]?.computed : undefined;
+    const isOutOfFlow = computed?.position === 'absolute' || computed?.position === 'fixed';
+
+    if (isOutOfFlow) {
+      try {
+        const base = readTranslation(activeElement.classes);
+        const next = vecAdd(base, {
+          x: direction === 'left' ? -step : direction === 'right' ? step : 0,
+          y: direction === 'up' ? -step : direction === 'down' ? step : 0,
+        });
+        void triggerBackendPreview('move', next);
+      } catch (error) { showToast(error instanceof Error ? error.message : 'This element cannot be moved safely.'); }
+    } else {
+      // Swap translate-y out for margin/gap in flow layout so elements push each other instead of overlapping!
+      void triggerBackendPreview('nudge', { direction, stepSize: step >= 16 ? 'big' : 'normal' });
+    }
   };
 
   const stepFontSize = (delta: number) => {
@@ -3672,6 +3701,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
 
   // Contextual formatting controls share the inspector's neutral surfaces.
   const renderMoveControl = () => {
+    if (windowMode) return null; // In visual studio mode, position controls live cleanly in the Right Dock!
     const supported = usesDrafts && /^(h[1-6]|p|section|div|article|aside|header|footer|nav|main|a|button|img)$/.test(activeElement.tag) && !activeVariant && !activeBreakpoint;
     const disabled = busy || isApplying || isResizing || reviewBlocking || Boolean(uncertainUndoId) || !supported;
     return (
@@ -3707,6 +3737,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
   };
 
   const renderHUDBar = () => {
+    if (windowMode) return null; // In visual studio mode, all formatting and position tools live cleanly in the Right Dock!
     if (!selectedLayer || activeElement.tag === 'svg') return null;
     const locked = busy || isApplying || reviewBlocking || Boolean(uncertainUndoId) || destinationMode || viewportChanging || Boolean(activeBreakpoint) && scopeLoading;
     if (activeElement.instance && !editingDefinitionStyles) return createPortal(<div ref={formattingRef} role="toolbar" aria-label="Selection formatting" className={reviewStyles.floatingFormatting} data-menu-side={formattingPosition?.menuSide} data-menu-align={formattingPosition?.menuAlign} style={{ position: 'fixed', left: formattingPosition?.left || 0, top: formattingPosition?.top || 0, visibility: formattingPosition?.visible ? 'visible' : 'hidden' }} onClick={event => event.stopPropagation()}><div className={reviewStyles.formattingBar}>
@@ -4740,7 +4771,138 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
                   </div>
                 ) : undefined}
                 layoutExtraControls={selectedLayer ? (
-                  <div className="space-y-2.5 pt-2 border-t border-[#E7ECE9]">
+                  <div className="space-y-3 pt-3 border-t border-[#E7ECE9]">
+                    {/* Position & Flow Movement (Push without Overlapping) */}
+                    <div className="p-2.5 bg-[#F8FAF9] rounded-[10px] border border-[#E2E8E4] space-y-2.5">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center space-x-1.5">
+                          <Move size={13} className="text-[#1B835A]" />
+                          <span className="text-[11.5px] font-semibold text-[#1F2E25]">Position & Flow</span>
+                        </div>
+                        <span className="text-[10px] font-medium text-[#65766C] bg-white px-1.5 py-0.5 rounded border border-[#E2E8E4]">
+                          {selectedLayer && sourceSelections.current[selectedLayer]?.computed?.position === 'absolute' ? 'Absolute' : 'In Flow (Margin)'}
+                        </span>
+                      </div>
+
+                      {/* 4-Way Directional Movement Pad */}
+                      <div className="space-y-1.5">
+                        <div className="flex items-center justify-between text-[10.5px] text-[#65766C]">
+                          <span>Nudge flow position</span>
+                          <span className="text-[9.5px] text-[#84948B]">Push without overlap</span>
+                        </div>
+                        <div className="grid grid-cols-3 gap-1 max-w-[120px] mx-auto">
+                          <div />
+                          <button
+                            type="button"
+                            aria-label="Push up"
+                            title="Push up (ArrowUp) · Decreases top margin"
+                            disabled={busy || isApplying}
+                            onClick={() => nudgeTranslation('up', 4)}
+                            className="h-7 rounded-md bg-white border border-[#D5DED8] hover:bg-[#F0F4F2] hover:border-[#1B835A] flex items-center justify-center text-[#2A3B31] transition shadow-2xs active:scale-95 disabled:opacity-40 cursor-pointer"
+                          >
+                            <ArrowUp size={13} strokeWidth={2} />
+                          </button>
+                          <div />
+                          <button
+                            type="button"
+                            aria-label="Push left"
+                            title="Push left (ArrowLeft) · Decreases left margin"
+                            disabled={busy || isApplying}
+                            onClick={() => nudgeTranslation('left', 4)}
+                            className="h-7 rounded-md bg-white border border-[#D5DED8] hover:bg-[#F0F4F2] hover:border-[#1B835A] flex items-center justify-center text-[#2A3B31] transition shadow-2xs active:scale-95 disabled:opacity-40 cursor-pointer"
+                          >
+                            <ArrowLeft size={13} strokeWidth={2} />
+                          </button>
+                          <button
+                            type="button"
+                            aria-label="Push down"
+                            title="Push down (ArrowDown) · Increases top margin (pushes rest of page)"
+                            disabled={busy || isApplying}
+                            onClick={() => nudgeTranslation('down', 4)}
+                            className="h-7 rounded-md bg-white border border-[#D5DED8] hover:bg-[#F0F4F2] hover:border-[#1B835A] flex items-center justify-center text-[#2A3B31] transition shadow-2xs active:scale-95 disabled:opacity-40 cursor-pointer"
+                          >
+                            <ArrowDown size={13} strokeWidth={2} />
+                          </button>
+                          <button
+                            type="button"
+                            aria-label="Push right"
+                            title="Push right (ArrowRight) · Increases left margin"
+                            disabled={busy || isApplying}
+                            onClick={() => nudgeTranslation('right', 4)}
+                            className="h-7 rounded-md bg-white border border-[#D5DED8] hover:bg-[#F0F4F2] hover:border-[#1B835A] flex items-center justify-center text-[#2A3B31] transition shadow-2xs active:scale-95 disabled:opacity-40 cursor-pointer"
+                          >
+                            <ArrowRight size={13} strokeWidth={2} />
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Reorder in Flow */}
+                      <div className="pt-2 border-t border-[#E8EEEA] space-y-1.5">
+                        <span className="text-[10.5px] font-medium text-[#65766C] block">Flow Order</span>
+                        <div className="grid grid-cols-2 gap-1.5">
+                          <button
+                            type="button"
+                            aria-label="Move earlier in flow"
+                            title="Move earlier among siblings"
+                            disabled={busy || isApplying}
+                            onClick={() => reorderSibling('earlier')}
+                            className="h-7 rounded-md bg-white border border-[#D5DED8] hover:bg-[#F0F4F2] flex items-center justify-center space-x-1 text-[11px] font-medium text-[#2A3B31] transition shadow-2xs disabled:opacity-40 cursor-pointer"
+                          >
+                            <ArrowUp size={12} />
+                            <span>Earlier</span>
+                          </button>
+                          <button
+                            type="button"
+                            aria-label="Move later in flow"
+                            title="Move later among siblings"
+                            disabled={busy || isApplying}
+                            onClick={() => reorderSibling('later')}
+                            className="h-7 rounded-md bg-white border border-[#D5DED8] hover:bg-[#F0F4F2] flex items-center justify-center space-x-1 text-[11px] font-medium text-[#2A3B31] transition shadow-2xs disabled:opacity-40 cursor-pointer"
+                          >
+                            <ArrowDown size={12} />
+                            <span>Later</span>
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Structure Actions */}
+                      <div className="pt-2 border-t border-[#E8EEEA] space-y-1.5">
+                        <span className="text-[10.5px] font-medium text-[#65766C] block">Structure</span>
+                        <div className="grid grid-cols-3 gap-1">
+                          <button
+                            type="button"
+                            title="Duplicate element (Cmd+D)"
+                            disabled={busy || isApplying}
+                            onClick={() => void triggerBackendPreview('duplicate', {})}
+                            className="h-7 rounded-md bg-white border border-[#D5DED8] hover:bg-[#F0F4F2] flex items-center justify-center space-x-1 text-[10.5px] font-medium text-[#2A3B31] transition shadow-2xs disabled:opacity-40 cursor-pointer"
+                          >
+                            <Copy size={11} />
+                            <span>Copy</span>
+                          </button>
+                          <button
+                            type="button"
+                            title="Wrap in container (Cmd+G)"
+                            disabled={busy || isApplying}
+                            onClick={() => void triggerBackendPreview('wrap', { containerTag: 'div', containerClassName: 'flex flex-col' })}
+                            className="h-7 rounded-md bg-white border border-[#D5DED8] hover:bg-[#F0F4F2] flex items-center justify-center space-x-1 text-[10.5px] font-medium text-[#2A3B31] transition shadow-2xs disabled:opacity-40 cursor-pointer"
+                          >
+                            <Layers2 size={11} />
+                            <span>Wrap</span>
+                          </button>
+                          <button
+                            type="button"
+                            title="Delete element (Del)"
+                            disabled={busy || isApplying}
+                            onClick={() => void triggerBackendPreview('delete', {})}
+                            className="h-7 rounded-md bg-white border border-[#D5DED8] hover:bg-rose-50 hover:border-rose-300 hover:text-rose-700 flex items-center justify-center space-x-1 text-[10.5px] font-medium text-[#2A3B31] transition shadow-2xs disabled:opacity-40 cursor-pointer"
+                          >
+                            <Trash2 size={11} />
+                            <span>Del</span>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+
                     {!repositoryId && (
                       <div className={reviewStyles.resizeBar}>
                         <button
