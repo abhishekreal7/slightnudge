@@ -888,6 +888,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
   const cursorTagRef = useRef<HTMLDivElement | null>(null);
   const guideVRef = useRef<HTMLDivElement | null>(null);
   const guideHRef = useRef<HTMLDivElement | null>(null);
+  const dropIndicatorRef = useRef<HTMLDivElement | null>(null);
   const previousVariantRef = useRef<Record<string, SelectionVariant>>({});
   const aspectLockOverrides = useRef<Record<string, boolean>>({});
   const outlineHaloRef = useRef<Record<string, SVGPathElement | null>>({});
@@ -944,6 +945,14 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
     nextTranslation: Translation;
     token: string;
     lastClassEstimateTime: number;
+    reorderContext?: {
+      isOutOfFlow: boolean;
+      isFlexRow: boolean;
+      allSiblings: CanvasLayer[];
+      siblingsInOrder: CanvasLayer[];
+      selfIndex: number;
+      prospectiveDropIndex: number | null;
+    };
   } | null>(null);
   const cancelActiveDragRef = useRef<(() => void) | null>(null);
   const windowDock = useWindowDock(windowMode, () => Boolean(directDragRef.current), isResizing || isDraggingMove);
@@ -1526,6 +1535,35 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
         eventShieldRef.current.style.cursor = 'move';
       }
 
+      const computedPos = actualSelection?.computed?.position;
+      const isOutOfFlow = computedPos === 'absolute' || computedPos === 'fixed';
+      let reorderContext: {
+        isOutOfFlow: boolean;
+        isFlexRow: boolean;
+        allSiblings: CanvasLayer[];
+        siblingsInOrder: CanvasLayer[];
+        selfIndex: number;
+        prospectiveDropIndex: number | null;
+      } | undefined = undefined;
+
+      if (!isOutOfFlow && actualSelection?.parentKey) {
+        const allSiblings = sourceLayers.filter(layer => layer.parentKey === actualSelection.parentKey && layer.path === actualSelection.path);
+        const siblingsInOrder = allSiblings.filter(layer => (layer.computed.order || '0') === (actualSelection.computed.order || '0'));
+        const selfIndex = siblingsInOrder.findIndex(layer => layer.key === layerKey);
+        if (selfIndex !== -1 && siblingsInOrder.length > 1) {
+          const parentLayer = sourceLayers.find(layer => layer.key === actualSelection.parentKey);
+          const isFlexRow = actualSelection.computed.parentDisplay === 'flex' && (parentLayer?.computed?.flexDirection === 'row' || !parentLayer?.computed?.flexDirection);
+          reorderContext = {
+            isOutOfFlow: false,
+            isFlexRow,
+            allSiblings,
+            siblingsInOrder,
+            selfIndex,
+            prospectiveDropIndex: null,
+          };
+        }
+      }
+
       directDragRef.current = {
         type: 'move',
         pointerId: e.pointerId,
@@ -1557,6 +1595,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
         nextTranslation: base,
         token: '',
         lastClassEstimateTime: 0,
+        reorderContext,
       };
     } catch (error) {
       showToast(error instanceof Error ? error.message : 'This element cannot be moved safely.');
@@ -2360,7 +2399,93 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
         if (guideVRef.current) guideVRef.current.style.display = 'none';
         if (guideHRef.current) guideHRef.current.style.display = 'none';
 
-        if (cursorTagRef.current && gesture.moved) {
+        if (gesture.reorderContext && gesture.moved) {
+          const ctx = gesture.reorderContext;
+          const { siblingsInOrder, selfIndex, isFlexRow } = ctx;
+          const deltaMove = isFlexRow ? (snappedX - gesture.baseTranslation.x) : (snappedY - gesture.baseTranslation.y);
+
+          if (Math.abs(deltaMove) >= 12) {
+            const dragCenter = isFlexRow
+              ? (gesture.startLeft + snappedX - gesture.baseTranslation.x + gesture.startWidth / 2)
+              : (gesture.startTop + snappedY - gesture.baseTranslation.y + gesture.startHeight / 2);
+
+            let prospectiveIndex = selfIndex;
+            if (isFlexRow) {
+              for (let i = 0; i < siblingsInOrder.length; i++) {
+                if (i === selfIndex) continue;
+                const sib = siblingsInOrder[i];
+                if (!sib.rect) continue;
+                const sibMid = sib.rect.left + sib.rect.width / 2;
+                if (i < selfIndex && dragCenter < sibMid) {
+                  prospectiveIndex = Math.min(prospectiveIndex, i);
+                } else if (i > selfIndex && dragCenter > sibMid) {
+                  prospectiveIndex = Math.max(prospectiveIndex, i);
+                }
+              }
+            } else {
+              for (let i = 0; i < siblingsInOrder.length; i++) {
+                if (i === selfIndex) continue;
+                const sib = siblingsInOrder[i];
+                if (!sib.rect) continue;
+                const sibMid = sib.rect.top + sib.rect.height / 2;
+                if (i < selfIndex && dragCenter < sibMid) {
+                  prospectiveIndex = Math.min(prospectiveIndex, i);
+                } else if (i > selfIndex && dragCenter > sibMid) {
+                  prospectiveIndex = Math.max(prospectiveIndex, i);
+                }
+              }
+            }
+
+            ctx.prospectiveDropIndex = prospectiveIndex !== selfIndex ? prospectiveIndex : null;
+
+            if (dropIndicatorRef.current) {
+              if (ctx.prospectiveDropIndex !== null) {
+                const targetSib = siblingsInOrder[ctx.prospectiveDropIndex];
+                if (targetSib.rect) {
+                  const targetRect = targetSib.rect;
+                  const isInsertingBefore = ctx.prospectiveDropIndex <= selfIndex;
+                  const indicator = dropIndicatorRef.current;
+
+                  if (isFlexRow) {
+                    const insertX = isInsertingBefore ? targetRect.left - 2 : targetRect.left + targetRect.width - 2;
+                    const p1 = transformPoint(gesture.artboardToMain, { x: insertX, y: targetRect.top });
+                    const p2 = transformPoint(gesture.artboardToMain, { x: insertX, y: targetRect.top + targetRect.height });
+                    indicator.dataset.orientation = 'vertical';
+                    indicator.style.display = 'block';
+                    indicator.style.left = `${Math.round(p1.x)}px`;
+                    indicator.style.top = `${Math.round(Math.min(p1.y, p2.y))}px`;
+                    indicator.style.width = '3px';
+                    indicator.style.height = `${Math.round(Math.abs(p2.y - p1.y))}px`;
+                  } else {
+                    const insertY = isInsertingBefore ? targetRect.top - 3 : targetRect.top + targetRect.height - 3;
+                    const p1 = transformPoint(gesture.artboardToMain, { x: Math.min(targetRect.left, gesture.startLeft), y: insertY });
+                    const p2 = transformPoint(gesture.artboardToMain, { x: Math.max(targetRect.left + targetRect.width, gesture.startLeft + gesture.startWidth), y: insertY });
+                    indicator.dataset.orientation = 'horizontal';
+                    indicator.style.display = 'block';
+                    indicator.style.left = `${Math.round(Math.min(p1.x, p2.x))}px`;
+                    indicator.style.top = `${Math.round(p1.y)}px`;
+                    indicator.style.width = `${Math.round(Math.abs(p2.x - p1.x))}px`;
+                    indicator.style.height = '3px';
+                  }
+
+                  if (cursorTagRef.current) {
+                    const sibName = targetSib.name || targetSib.tagName;
+                    cursorTagRef.current.style.display = 'block';
+                    cursorTagRef.current.textContent = isInsertingBefore ? `Insert before "${sibName}"` : `Insert after "${sibName}"`;
+                    cursorTagRef.current.style.transform = `translate3d(${p.x + 14}px, ${p.y + 14}px, 0)`;
+                  }
+                }
+              } else {
+                dropIndicatorRef.current.style.display = 'none';
+              }
+            }
+          } else {
+            ctx.prospectiveDropIndex = null;
+            if (dropIndicatorRef.current) dropIndicatorRef.current.style.display = 'none';
+          }
+        }
+
+        if (cursorTagRef.current && gesture.moved && (!gesture.reorderContext || gesture.reorderContext.prospectiveDropIndex === null)) {
           cursorTagRef.current.style.display = 'block';
           cursorTagRef.current.textContent = `X: ${snappedX}px  Y: ${snappedY}px Snapped`;
           cursorTagRef.current.style.transform = `translate3d(${p.x + 14}px, ${p.y + 14}px, 0)`;
@@ -2425,6 +2550,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
       if (eventShieldRef.current) eventShieldRef.current.style.display = 'none';
       if (guideVRef.current) guideVRef.current.style.display = 'none';
       if (guideHRef.current) guideHRef.current.style.display = 'none';
+      if (dropIndicatorRef.current) dropIndicatorRef.current.style.display = 'none';
       if (cursorTagRef.current) cursorTagRef.current.style.display = 'none';
       for (const el of Object.values(outlineHaloRef.current)) {
         if (el) el.style.transition = '';
@@ -2594,6 +2720,69 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
         setMoveArmed(false);
         if (gesture.moved) {
           moveClickSuppressed.current = true;
+        }
+
+        if (dropIndicatorRef.current) dropIndicatorRef.current.style.display = 'none';
+
+        const reorderCtx = gesture.reorderContext;
+        const willReorder = gesture.moved && reorderCtx && reorderCtx.prospectiveDropIndex !== null && reorderCtx.prospectiveDropIndex !== reorderCtx.selfIndex;
+
+        if (willReorder) {
+          const targetSib = reorderCtx.siblingsInOrder[reorderCtx.prospectiveDropIndex!];
+          const targetIndex = reorderCtx.allSiblings.findIndex(layer => layer.key === targetSib.key);
+
+          if (targetIndex !== -1) {
+            if (overlayNode) {
+              overlayNode.style.width = '100%';
+              overlayNode.style.height = '100%';
+              overlayNode.style.transform = '';
+            }
+            pendingDirectStyleRef.current[gesture.key] = {
+              targetEl: gesture.targetEl,
+              initialStyle: gesture.initialTargetStyle,
+            };
+            pendingOverlayResetKeyRef.current = gesture.key;
+            resetOverlayNode(gesture.key);
+
+            void enqueueFileOperation(
+              gesture.filePath,
+              async () => {
+                try {
+                  const ok = Boolean(await triggerBackendPreviewRef.current(
+                    'reorder',
+                    { targetIndex },
+                    gesture.key,
+                    undefined,
+                    true,
+                    () => restorePendingDirectStyle(gesture.key)
+                  ));
+                  if (!ok) throw new Error('Reorder preview refused');
+                  return ok;
+                } finally {
+                  if (inFlightMoveRef.current[gesture.key] === gesture.nextTranslation) {
+                    delete inFlightMoveRef.current[gesture.key];
+                  }
+                }
+              },
+              {
+                onRollback: () => {
+                  restorePendingDirectStyle(gesture.key);
+                  if (!gesture.targetEl && sourceCanvas.current) {
+                    const selection = sourceSelections.current[gesture.key];
+                    if (selection) void sourceCanvas.current.command('cancel-gesture', selection);
+                  }
+                  if (inFlightMoveRef.current[gesture.key] === gesture.nextTranslation) {
+                    delete inFlightMoveRef.current[gesture.key];
+                  }
+                  if (pendingOverlayResetKeyRef.current === gesture.key) {
+                    pendingOverlayResetKeyRef.current = null;
+                  }
+                  resetOverlayNode(gesture.key);
+                },
+              }
+            ).catch(() => { });
+            return;
+          }
         }
 
         const changed = gesture.moved && (gesture.nextTranslation.x !== gesture.baseTranslation.x || gesture.nextTranslation.y !== gesture.baseTranslation.y);
@@ -4576,7 +4765,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
                     blocked={busy || isApplying || recoveryChecking || reviewBlocking || Boolean(uncertainUndoId)}
                     onNotice={showToast} onSelect={receiveSourceSelection} onLayers={receiveSourceLayers} onGeometry={receiveSourceGeometry}
                     onReady={() => { setSourceReady(true); needsDraftReplay.current = Boolean(draftRef.current); if (draftRef.current && !operationRef.current && !recoveryBooting && !recoveryChecking && !isApplying) void replaySourceDraft(reviewRef.current); }}
-                    onClearSelection={() => { if (!operationRef.current && !blocksReview()) { cancelDestination(); sourceSelection.current = null; setSelectedLayerState(null); if (guideVRef.current) guideVRef.current.style.display = 'none'; if (guideHRef.current) guideHRef.current.style.display = 'none'; if (cursorTagRef.current) cursorTagRef.current.style.display = 'none'; } }}
+                    onClearSelection={() => { if (!operationRef.current && !blocksReview()) { cancelDestination(); sourceSelection.current = null; setSelectedLayerState(null); if (guideVRef.current) guideVRef.current.style.display = 'none'; if (guideHRef.current) guideHRef.current.style.display = 'none'; if (dropIndicatorRef.current) dropIndicatorRef.current.style.display = 'none'; if (cursorTagRef.current) cursorTagRef.current.style.display = 'none'; } }}
                     onText={receiveSourceText} renderSelection={renderSourceSelection}
                   />
                 </EditorSurface>
@@ -4587,6 +4776,9 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
                 {/* Smart snapping guides */}
                 <div ref={guideVRef} className={reviewStyles.smartGuideV} style={{ display: 'none' }} />
                 <div ref={guideHRef} className={reviewStyles.smartGuideH} style={{ display: 'none' }} />
+
+                {/* Framer-grade spatial drop insertion indicator */}
+                <div ref={dropIndicatorRef} className={reviewStyles.dropInsertionIndicator} style={{ display: 'none' }} />
 
                 {/* Live W x H dimension tag next to cursor */}
                 <div ref={cursorTagRef} className={reviewStyles.cursorTag} style={{ display: 'none' }} />

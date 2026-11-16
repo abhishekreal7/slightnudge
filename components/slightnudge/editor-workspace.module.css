@@ -705,6 +705,44 @@
   display: none !important;
 }
 
+/* Framer/Figma-Grade Spatial Drop Insertion Indicator */
+.dropInsertionIndicator {
+  position: absolute;
+  pointer-events: none;
+  z-index: 100;
+  display: none;
+  background: #10b981;
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.65), 0 0 2px rgba(16, 185, 129, 0.9);
+  border-radius: 9999px;
+  transition: opacity 120ms ease;
+}
+.dropInsertionIndicator::before,
+.dropInsertionIndicator::after {
+  content: '';
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 6px rgba(16, 185, 129, 0.85);
+}
+.dropInsertionIndicator[data-orientation="horizontal"]::before {
+  left: -3px;
+  top: -2px;
+}
+.dropInsertionIndicator[data-orientation="horizontal"]::after {
+  right: -3px;
+  top: -2px;
+}
+.dropInsertionIndicator[data-orientation="vertical"]::before {
+  top: -3px;
+  left: -2px;
+}
+.dropInsertionIndicator[data-orientation="vertical"]::after {
+  bottom: -3px;
+  left: -2px;
+}
+
 /* Selection Chrome v2 SVG and Element-Aware Chrome */
 .selectionSvg {
   position: absolute;
