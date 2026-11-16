@@ -3890,7 +3890,6 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
 
   // Contextual formatting controls share the inspector's neutral surfaces.
   const renderMoveControl = () => {
-    if (windowMode) return null; // In visual studio mode, position controls live cleanly in the Right Dock!
     const supported = usesDrafts && /^(h[1-6]|p|section|div|article|aside|header|footer|nav|main|a|button|img)$/.test(activeElement.tag) && !activeVariant && !activeBreakpoint;
     const disabled = busy || isApplying || isResizing || reviewBlocking || Boolean(uncertainUndoId) || !supported;
     return (
@@ -3926,7 +3925,6 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
   };
 
   const renderHUDBar = () => {
-    if (windowMode) return null; // In visual studio mode, all formatting and position tools live cleanly in the Right Dock!
     if (!selectedLayer || activeElement.tag === 'svg') return null;
     const locked = busy || isApplying || reviewBlocking || Boolean(uncertainUndoId) || destinationMode || viewportChanging || Boolean(activeBreakpoint) && scopeLoading;
     if (activeElement.instance && !editingDefinitionStyles) return createPortal(<div ref={formattingRef} role="toolbar" aria-label="Selection formatting" className={reviewStyles.floatingFormatting} data-menu-side={formattingPosition?.menuSide} data-menu-align={formattingPosition?.menuAlign} style={{ position: 'fixed', left: formattingPosition?.left || 0, top: formattingPosition?.top || 0, visibility: formattingPosition?.visible ? 'visible' : 'hidden' }} onClick={event => event.stopPropagation()}><div className={reviewStyles.formattingBar}>
@@ -4229,14 +4227,12 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
             className={`${reviewStyles.outlineAccent} ${outlineDrag ? reviewStyles.outlineDashed : ''}`}
           />
 
-          {/* Corner arcs for arc or circle variant */}
+          {/* Corner arcs for circle variant (buttons use clean Figma-style handle dots) */}
           {!isOriented &&
-            (chrome.variant === 'arc' || chrome.variant === 'circle') &&
+            chrome.variant === 'circle' &&
             (['nw', 'ne', 'se', 'sw'] as const).map(corner => {
               if (!chrome.visibleHandles.includes(corner)) return null;
-              const arc = chrome.variant === 'circle'
-                ? buildCircleArcPath(corner, currentW, zoomVal)
-                : buildCornerArcPath(corner, currentW, currentH, chrome.outlineRadii, zoomVal);
+              const arc = buildCircleArcPath(corner, currentW, zoomVal);
               return (
                 <g key={`arc-group-${corner}`}>
                   <path
@@ -4331,7 +4327,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
             {ALL_8_HANDLES.map(h => {
               if (!chrome.visibleHandles.includes(h.dir)) return null;
               const isCorner = ['nw', 'ne', 'se', 'sw'].includes(h.dir);
-              const isArc = !isOriented && (chrome.variant === 'arc' || chrome.variant === 'circle') && isCorner;
+              const isArc = !isOriented && chrome.variant === 'circle' && isCorner;
 
               let customStyle: React.CSSProperties | undefined = undefined;
               const orientedPt = isOriented ? chromeGeom?.handleScreenPoints[h.dir] : undefined;
@@ -4344,9 +4340,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
                 };
               } else if (isArc) {
                 const corner = h.dir as 'nw' | 'ne' | 'se' | 'sw';
-                const arc = chrome.variant === 'circle'
-                  ? buildCircleArcPath(corner, currentW, zoomVal)
-                  : buildCornerArcPath(corner, currentW, currentH, chrome.outlineRadii, zoomVal);
+                const arc = buildCircleArcPath(corner, currentW, zoomVal);
                 customStyle = {
                   left: `${arc.center.x}px`,
                   top: `${arc.center.y}px`,
