@@ -4733,17 +4733,107 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
             {/* ======================================================== */}
             <div className={`${reviewStyles.editorColumn} flex-1 flex flex-col overflow-hidden bg-[#F8F9FA]`}>
               {windowMode && (
-                <header ref={windowDock.ref} style={windowMode ? windowDock.style : undefined} className={reviewStyles.editorTopbar} aria-label="Editor toolbar">
-                  {windowMode && (
-                    <div className={reviewStyles.windowActions}>
-                      <button type="button" aria-label="Move editing toolbar" title="Drag to move · Arrow keys to position · Home to reset" className={reviewStyles.dockGrip} {...windowDock.grip}><GripVertical size={15} /></button>
-                      <div role="group" aria-label="Page interaction" className={reviewStyles.interactionMode}>
-                        <button type="button" aria-pressed={!browseMode} onClick={() => setBrowseMode(false)}>Edit</button>
-                        <button type="button" aria-pressed={browseMode} disabled={busy || isApplying} onClick={() => { if (reviewRef.current || inlineSessionRef.current) { showToast('Save or discard your draft before browsing the page.'); return; } setSelectedLayerState(null); setBrowseMode(true); }}>Browse</button>
-                      </div>
+                <header className={`${reviewStyles.editorTopbar} flex items-center justify-between border-b border-[#E5E7EB] bg-white px-4 h-11 shrink-0 z-30 select-none shadow-[0_1px_2px_rgba(0,0,0,0.03)]`} aria-label="Editor toolbar">
+                  {/* Left: Framer-grade Breadcrumbs & Live Source Mapping */}
+                  <div className="flex items-center space-x-1.5 flex-nowrap overflow-x-auto min-w-0 pr-3">
+                    <button
+                      type="button"
+                      onClick={(e) => { e.stopPropagation(); setSelectedLayer(null); }}
+                      title="Canvas root · Click to deselect"
+                      className="flex items-center space-x-1 hover:text-slate-900 hover:bg-slate-100 px-1.5 py-1 rounded transition-colors cursor-pointer text-slate-500 font-medium text-[11px] shrink-0"
+                    >
+                      <Layers2 size={13} className="text-slate-400 shrink-0" />
+                      <span>Canvas</span>
+                    </button>
+
+                    {breadcrumbHierarchy.length > 0 ? (
+                      breadcrumbHierarchy.map((layer, index) => {
+                        const isLast = index === breadcrumbHierarchy.length - 1;
+                        const label = getBreadcrumbLabel(layer);
+                        return (
+                          <React.Fragment key={layer.key}>
+                            <span className="text-slate-300 text-xs shrink-0">›</span>
+                            {isLast ? (
+                              <div className="flex items-center space-x-1 text-[#059669] bg-[#ECFDF5] border border-[#A7F3D0] px-2 py-0.5 rounded text-[11px] font-medium shrink-0">
+                                <span>{label}</span>
+                                <span className="text-[10px] text-[#059669]/70 font-mono">({layer.tagName})</span>
+                              </div>
+                            ) : (
+                              <button
+                                type="button"
+                                onClick={(e) => { e.stopPropagation(); setSelectedLayer(layer.key); }}
+                                title={`Select parent container <${layer.tagName}>`}
+                                className="flex items-center space-x-1 hover:text-slate-900 hover:bg-slate-100 px-1.5 py-0.5 rounded transition-colors cursor-pointer text-slate-600 text-[11px] shrink-0"
+                              >
+                                <span>{label}</span>
+                              </button>
+                            )}
+                          </React.Fragment>
+                        );
+                      })
+                    ) : (
+                      <>
+                        <span className="text-slate-300 text-xs shrink-0">›</span>
+                        <span className="text-slate-400 italic text-[11px] shrink-0">Root</span>
+                      </>
+                    )}
+
+                    <div className="hidden lg:flex items-center space-x-1.5 text-[10px] font-mono text-slate-400 pl-2 shrink-0 border-l border-slate-200">
+                      <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                      <span className="truncate max-w-[160px]">{repositoryId && !selectedLayer ? 'Ready' : `${activeElement.filePath.split(/[\\/]/).pop()}:${activeElement.line}`}</span>
                     </div>
-                  )}
-                  <div className={reviewStyles.topbarActions}>{renderDraftControls()}</div>
+                  </div>
+
+                  {/* Center: Mode switcher + Zoom controls */}
+                  <div className="flex items-center gap-2 shrink-0">
+                    <div role="group" aria-label="Page interaction" className="flex items-center bg-slate-100 p-0.5 rounded-md border border-slate-200 text-xs">
+                      <button
+                        type="button"
+                        aria-pressed={!browseMode}
+                        onClick={() => setBrowseMode(false)}
+                        className={`px-3 py-1 rounded text-[11px] font-medium transition-all ${!browseMode ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-500 hover:text-slate-800'}`}
+                      >
+                        Edit
+                      </button>
+                      <button
+                        type="button"
+                        aria-pressed={browseMode}
+                        disabled={busy || isApplying}
+                        onClick={() => {
+                          if (reviewRef.current || inlineSessionRef.current) {
+                            showToast('Save or discard your draft before browsing the page.');
+                            return;
+                          }
+                          setSelectedLayerState(null);
+                          setBrowseMode(true);
+                        }}
+                        className={`px-3 py-1 rounded text-[11px] font-medium transition-all ${browseMode ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-500 hover:text-slate-800'}`}
+                      >
+                        Browse
+                      </button>
+                    </div>
+
+                    <div className="flex items-center bg-slate-100 rounded-md border border-slate-200 px-1.5 py-0.5 text-xs text-slate-600">
+                      <select
+                        aria-label="Canvas zoom"
+                        value={canvasZoom}
+                        disabled={busy || isApplying || isInlineEditing || isResizing || moveArmed || Boolean(liveMove)}
+                        onChange={event => setCanvasZoom(event.target.value === 'fit' ? 'fit' : Number(event.target.value))}
+                        className="bg-transparent text-[11px] font-medium text-slate-700 outline-none cursor-pointer py-0.5"
+                      >
+                        <option value="fit">Fit</option>
+                        {[0.5, 0.75, 1, 1.25, 1.5, 2].map(v => (
+                          <option key={v} value={v}>{Math.round(v * 100)}%</option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+
+                  {/* Right: History controls + Draft save/discard */}
+                  <div className="flex items-center gap-2 shrink-0">
+                    {renderHistoryControls()}
+                    {renderDraftControls()}
+                  </div>
                 </header>
               )}
 
@@ -4784,64 +4874,8 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
 
               </main>
 
-              {/* Bottom Fixed Breadcrumb Bar */}
-              <div data-editor-breadcrumb className="w-full flex items-center justify-between text-[11px] text-slate-500 font-normal px-4 py-2 bg-white/95 backdrop-blur-md border-t border-slate-200/80 z-20 select-none overflow-x-auto shrink-0 shadow-[0_-1px_3px_rgba(0,0,0,0.02)]">
-                <div className="flex items-center space-x-1.5 flex-nowrap">
-                  <button
-                    type="button"
-                    onClick={(e) => { e.stopPropagation(); setSelectedLayer(null); }}
-                    title="Canvas root · Click to deselect"
-                    className="flex items-center space-x-1 hover:text-slate-800 hover:bg-slate-100 px-1.5 py-0.5 rounded transition-colors cursor-pointer text-slate-500"
-                  >
-                    <svg className="w-3 h-3 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <rect x="3" y="3" width="18" height="18" rx="3" />
-                    </svg>
-                    <span>Canvas</span>
-                  </button>
-
-                  {breadcrumbHierarchy.length > 0 ? (
-                    breadcrumbHierarchy.map((layer, index) => {
-                      const isLast = index === breadcrumbHierarchy.length - 1;
-                      const label = getBreadcrumbLabel(layer);
-                      return (
-                        <React.Fragment key={layer.key}>
-                          <span className="text-slate-300">›</span>
-                          {isLast ? (
-                            <div className="flex items-center space-x-1 text-[#059669] bg-[#ECFDF5] border border-[#A7F3D0] px-2 py-0.5 rounded font-medium">
-                              <svg className="w-3 h-3 text-[#059669]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                <rect x="3" y="3" width="18" height="18" rx="3" />
-                              </svg>
-                              <span>{label}</span>
-                              <span className="text-[10px] text-[#059669]/70 font-mono">({layer.tagName})</span>
-                            </div>
-                          ) : (
-                            <button
-                              type="button"
-                              onClick={(e) => { e.stopPropagation(); setSelectedLayer(layer.key); }}
-                              title={`Select parent container <${layer.tagName}>`}
-                              className="flex items-center space-x-1 hover:text-slate-900 hover:bg-slate-100 px-1.5 py-0.5 rounded transition-colors cursor-pointer text-slate-600"
-                            >
-                              <span>{label}</span>
-                            </button>
-                          )}
-                        </React.Fragment>
-                      );
-                    })
-                  ) : (
-                    <>
-                      <span className="text-slate-300">›</span>
-                      <span className="text-slate-400 italic">No element selected</span>
-                    </>
-                  )}
-                </div>
-
-                {/* Source Mapping Pill */}
-                <div className="text-[10px] font-mono text-slate-400 flex items-center space-x-2 shrink-0">
-                  <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-                  <span>{repositoryId && !selectedLayer ? 'Waiting for live selection' : `${activeElement.filePath}:${activeElement.line}`}</span>
-                </div>
-              </div>
-              {(!windowMode || unified) && <div className={reviewStyles.canvasFooter} role="region" aria-label="Canvas controls">
+              {/* Legacy fallback canvas footer: ONLY for non-windowMode legacy fallback */}
+              {!windowMode && <div className={reviewStyles.canvasFooter} role="region" aria-label="Canvas controls">
                 <button type="button" className={reviewStyles.panelToggle} aria-label={focusMode ? 'Restore sidebars' : 'Focus canvas'} aria-pressed={focusMode} title={focusMode ? 'Restore sidebars' : 'Focus canvas'} onClick={() => setFocusMode(value => !value)}><Columns2 size={15} /></button>
                 {<div className={reviewStyles.canvasViewTools} role="group" aria-label="Canvas navigation">
                   <button type="button" aria-label="Select elements" title="Select elements" aria-pressed={!canvasPan} onClick={() => setCanvasPan(false)}><MousePointer2 size={16} /></button>

@@ -109,29 +109,31 @@
   }
 }
 .windowShell .editorTopbar {
-  position: fixed;
-  z-index: 90;
-  bottom: 16px;
-  top: auto;
-  left: 50%;
-  transform: translateX(-50%);
+  position: relative;
+  z-index: 30;
+  top: 0;
+  bottom: auto;
+  left: auto;
+  transform: none;
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
-  width: max-content;
-  max-width: calc(100vw - 32px);
+  justify-content: space-between;
+  width: 100%;
+  max-width: 100%;
+  height: 44px;
   min-height: 44px;
-  height: auto;
-  padding: 4px 10px;
-  gap: 6px;
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  border-radius: 9999px;
+  padding: 0 16px;
+  gap: 12px;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-bottom: 1px solid #E5E7EB;
+  border-radius: 0;
   background: #ffffff;
-  backdrop-filter: blur(20px) saturate(160%);
-  box-shadow:
-    0 10px 30px -4px rgba(0, 0, 0, 0.1),
-    0 4px 12px -2px rgba(0, 0, 0, 0.05);
-  pointer-events: none;
+  backdrop-filter: none;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+  pointer-events: auto;
+  flex-shrink: 0;
 }
 .windowShell .editorTopbar :is(button, a, input, select, textarea, [role='button']) { pointer-events: auto; }
 .windowShell .projectContext, .windowShell .projectsLink { display: none; }
@@ -1043,7 +1045,7 @@
 .outlineToggle[aria-pressed='true'] { background: #ecfdf5; border-color: rgba(16, 185, 129, 0.3); color: #047857; font-weight: 550; }
 .outlineToggle:disabled { opacity: 0.4; cursor: default; }
 
-.windowShell .editorTopbar { gap: 6px; padding-inline: 10px; min-height: 44px; padding-block: 4px; }
+.windowShell .editorTopbar { gap: 12px; }
 .windowShell .viewportControl button.activeViewport span { display: none; }
 .windowShell .viewportControl button { padding: 0 7px; }
 .windowShell .draftControls .draftSave { border-radius: 9999px; padding: 0 14px; }
