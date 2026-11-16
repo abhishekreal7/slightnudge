@@ -799,13 +799,13 @@ export function RightToolDock({
                 )}
 
                 {activeTool === 'settings' && (
-                  <div className="space-y-3 dockSettingsPanel">
-                    <div className="p-3 bg-[#F8FAF9] rounded-[14px] border border-[#E2E8E4] space-y-3">
+                  <div className="space-y-3 dockSettingsPanel w-full overflow-hidden">
+                    <div className="p-3 bg-[#F8FAF9] rounded-[14px] border border-[#E2E8E4] space-y-3 w-full overflow-hidden">
                       <div className="flex items-center space-x-1.5 pb-2 border-b border-[#E8EEEA]">
                         <Sliders size={13} className="text-[#1B835A]" />
                         <span className="text-[12px] font-semibold text-[#1F2E25]">Viewport & Responsive</span>
                       </div>
-                      <div className="space-y-3">
+                      <div className="w-full overflow-hidden">
                         {canvasControls}
                       </div>
                     </div>

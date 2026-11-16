@@ -447,17 +447,38 @@
 .formatSwatches button > span { display: block; width: 19px; height: 19px; border: 1px solid #233c3219; border-radius: 50%; }
 .formatSwatches button[aria-pressed='true'] { border-color: #759782; }
 .formatSwatches button .noFill { background: linear-gradient(135deg, transparent 45%, #d48b8b 47%, #d48b8b 52%, transparent 54%) !important; }
-.formatMenuFooter { display: flex; justify-content: space-between; gap: 8px; margin-top: 12px; padding-top: 10px; border-top: 1px solid #edf0ed; }
-.arrangeOptions { margin-top: 12px; padding-top: 12px; border-top: 1px solid #edf0ed; }
-.destinationBanner { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%); z-index: 110; display: flex; align-items: center; gap: 18px; padding: 10px 12px 10px 16px; border: 1px solid #dce8e0; border-radius: 10px; background: #fffffff5; box-shadow: 0 4px 20px #243e3212; color: #42614f; font-size: 12px; }
-.destinationBanner button { border: 0; background: #eff4f0; color: #52695b; padding: 6px 9px; border-radius: 5px; font-size: 11px; cursor: pointer; }
-.destinationBanner kbd { margin-left: 7px; color: #8c9a91; font-size: 10px; }
-.arrangeOptions > span { display: block; margin-bottom: 8px; color: #7b897e; font-size: 10px; }
-.arrangeOptions > div { display: flex; gap: 8px; }
-.arrangeOptions button { display: inline-flex; flex: 1; align-items: center; justify-content: center; gap: 6px; padding: 8px 6px; border: 1px solid #e5eae6; border-radius: 6px; background: #fff; color: #46584c; font-size: 11px; cursor: pointer; }
-.arrangeOptions button:hover:not(:disabled) { background: #f2f6f3; border-color: #cddbd1; }
-.arrangeOptions button:disabled { opacity: .4; cursor: default; }
-.formatMenuFooter button { display: inline-flex; align-items: center; gap: 7px; padding: 6px 5px; border: 0; border-radius: 4px; background: transparent; color: #7b897e; font-size: 10px; cursor: pointer; }
+.formatMenuFooter {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid #edf0ed;
+}
+.formatMenuFooter button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 6px 8px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: #334155;
+  font-size: 11px;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+  transition: background 120ms ease, color 120ms ease;
+}
+.formatMenuFooter button:hover:not(:disabled) {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+.formatMenuFooter button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
 .formatDetails button:hover:not(:disabled) { background: #f3f6f2; color: #3d6148; }
 .formatDetails button:disabled, .formatDetails select:disabled { opacity: .4; cursor: default; }
 .formatDetails button:focus-visible, .formatDetails select:focus-visible { outline: 2px solid #729082; outline-offset: 2px; }

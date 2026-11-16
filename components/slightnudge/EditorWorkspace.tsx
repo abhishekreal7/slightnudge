@@ -4065,16 +4065,34 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
             </div>
           </div>}
           <div className={reviewStyles.formatMenuFooter}>
-            {usesDrafts && !activeVariant && !activeBreakpoint && <button type="button" disabled={locked} onClick={() => { if (!selectedLayer) return; destinationSource.current = selectedLayer; setDestinationMode(true); setShowQuickActions(false); }}><ArrowUpRight size={13} /><span>Move to…</span></button>}
-            <button type="button" disabled={locked} onClick={() => { setShowQuickActions(false); void triggerBackendPreview('duplicate', {}); }}><Copy size={13} /><span>Duplicate (Cmd+D)</span></button>
-            <button type="button" disabled={locked} onClick={() => { setShowQuickActions(false); void triggerBackendPreview('wrap', { containerTag: 'div', containerClassName: 'flex flex-col' }); }}><Layers2 size={13} /><span>Wrap in container (Cmd+G)</span></button>
-            <button type="button" disabled={locked} onClick={() => { setShowQuickActions(false); void triggerBackendPreview('delete', {}); }}><Trash2 size={13} /><span>Delete (Del)</span></button>
+            {usesDrafts && !activeVariant && !activeBreakpoint && (
+              <button type="button" disabled={locked} onClick={() => { if (!selectedLayer) return; destinationSource.current = selectedLayer; setDestinationMode(true); setShowQuickActions(false); }}>
+                <span className="flex items-center gap-2"><ArrowUpRight size={13} className="text-slate-500" /><span>Move to…</span></span>
+              </button>
+            )}
+            <button type="button" disabled={locked} onClick={() => { setShowQuickActions(false); void triggerBackendPreview('duplicate', {}); }}>
+              <span className="flex items-center gap-2"><Copy size={13} className="text-slate-500" /><span>Duplicate</span></span>
+              <kbd className="text-[10px] text-slate-400 font-mono">Cmd+D</kbd>
+            </button>
+            <button type="button" disabled={locked} onClick={() => { setShowQuickActions(false); void triggerBackendPreview('wrap', { containerTag: 'div', containerClassName: 'flex flex-col' }); }}>
+              <span className="flex items-center gap-2"><Layers2 size={13} className="text-slate-500" /><span>Wrap in container</span></span>
+              <kbd className="text-[10px] text-slate-400 font-mono">Cmd+G</kbd>
+            </button>
+            <button type="button" disabled={locked} onClick={() => { setShowQuickActions(false); void triggerBackendPreview('delete', {}); }}>
+              <span className="flex items-center gap-2"><Trash2 size={13} className="text-rose-500" /><span>Delete</span></span>
+              <kbd className="text-[10px] text-slate-400 font-mono">Del</kbd>
+            </button>
             <button type="button" onClick={async () => {
               try { await navigator.clipboard.writeText(activeElement.classes); showToast('Styles copied'); }
               catch { showToast('Could not copy styles. Check browser clipboard access.'); }
               setShowQuickActions(false); formattingMoreRef.current?.focus();
-            }}><Copy size={13} /><span>Copy styles</span></button>
-            <button type="button" disabled={locked} onClick={() => { setSelectedLayer(null); setShowQuickActions(false); }}><X size={13} /><span>Deselect</span></button>
+            }}>
+              <span className="flex items-center gap-2"><Copy size={13} className="text-slate-500" /><span>Copy styles</span></span>
+            </button>
+            <button type="button" disabled={locked} onClick={() => { setSelectedLayer(null); setShowQuickActions(false); }}>
+              <span className="flex items-center gap-2"><X size={13} className="text-slate-500" /><span>Deselect</span></span>
+              <kbd className="text-[10px] text-slate-400 font-mono">Esc</kbd>
+            </button>
           </div>
         </div>}
       </div>
