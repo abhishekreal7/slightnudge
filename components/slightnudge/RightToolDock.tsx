@@ -175,10 +175,9 @@ export function RightToolDock({
   const colsVal = colsMatch ? colsMatch[0] : 'grid-cols-1';
 
   const railBtnClass = (active: boolean) =>
-    `w-[38px] h-[38px] rounded-full flex items-center justify-center transition-all cursor-pointer ${
-      active
-        ? 'bg-[#16845B] text-white shadow-[0_4px_12px_rgba(22,132,91,0.28)] scale-105 font-bold'
-        : 'text-[#5A6960] hover:text-[#14221B] hover:bg-[#EFF4F1] active:scale-95'
+    `w-[38px] h-[38px] rounded-full flex items-center justify-center transition-all cursor-pointer ${active
+      ? 'bg-[#16845B] text-white shadow-[0_4px_12px_rgba(22,132,91,0.28)] scale-105 font-bold'
+      : 'text-[#5A6960] hover:text-[#14221B] hover:bg-[#EFF4F1] active:scale-95'
     }`;
 
   const tooltipClass =
@@ -212,8 +211,8 @@ export function RightToolDock({
                 activeTool === 'inspect'
                   ? railBtnClass(true)
                   : selectedLayer
-                  ? 'w-[38px] h-[38px] rounded-full flex items-center justify-center text-[#16845B] bg-[#ECFDF5] hover:bg-[#D1FAE5] transition-all cursor-pointer'
-                  : railBtnClass(false)
+                    ? 'w-[38px] h-[38px] rounded-full flex items-center justify-center text-[#16845B] bg-[#ECFDF5] hover:bg-[#D1FAE5] transition-all cursor-pointer'
+                    : railBtnClass(false)
               }
             >
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -397,9 +396,8 @@ export function RightToolDock({
                   aria-label={`Review ${draftCount} staged changes`}
                   title={`Review ${draftCount} staged changes (⌘S)`}
                   onClick={() => toggleTool('drafts')}
-                  className={`w-[34px] h-[34px] rounded-full bg-gradient-to-b from-[#189466] to-[#11714D] text-white font-bold text-[13px] flex items-center justify-center shadow-[0_2px_10px_rgba(22,132,91,0.35)] hover:brightness-105 active:scale-95 transition-all cursor-pointer ${
-                    activeTool === 'drafts' ? 'ring-2 ring-[#16845B] ring-offset-2 ring-offset-white' : ''
-                  }`}
+                  className={`w-[34px] h-[34px] rounded-full bg-gradient-to-b from-[#189466] to-[#11714D] text-white font-bold text-[13px] flex items-center justify-center shadow-[0_2px_10px_rgba(22,132,91,0.35)] hover:brightness-105 active:scale-95 transition-all cursor-pointer ${activeTool === 'drafts' ? 'ring-2 ring-[#16845B] ring-offset-2 ring-offset-white' : ''
+                    }`}
                 >
                   {draftCount}
                 </button>
@@ -718,11 +716,10 @@ export function RightToolDock({
                           disabled={Boolean(activeBreakpoint) && Boolean(variant.id)}
                           onClick={() => onSetActiveVariant(variant.id)}
                           aria-pressed={activeVariant === variant.id}
-                          className={`h-[30px] rounded-[8px] text-[11.5px] font-medium tracking-[-0.015em] transition cursor-pointer flex items-center justify-center ${
-                            activeVariant === variant.id
+                          className={`h-[30px] rounded-[8px] text-[11.5px] font-medium tracking-[-0.015em] transition cursor-pointer flex items-center justify-center ${activeVariant === variant.id
                               ? 'bg-[#16845B] text-white font-semibold shadow-[0_2px_8px_rgba(22,132,91,0.24)]'
                               : 'bg-[#F5F7F6] text-[#35443C] hover:bg-[#EAEFEB] hover:text-[#14221B] border border-[#E2E7E4]'
-                          }`}
+                            }`}
                         >
                           {variant.label}
                         </button>
@@ -750,10 +747,10 @@ export function RightToolDock({
                       <div className="p-2.5 rounded-lg bg-[#F5F7F6] border border-[#E2E7E5] font-mono text-[10px] text-[#176849] leading-relaxed max-h-[260px] overflow-y-auto flex flex-wrap gap-1">
                         {activeElement.classes.trim()
                           ? activeElement.classes.trim().split(/\s+/).map((cls, i) => (
-                              <span key={`${cls}-${i}`} className="px-1.5 py-0.5 rounded bg-white border border-[#DCE3DF] text-[#156948]">
-                                {cls}
-                              </span>
-                            ))
+                            <span key={`${cls}-${i}`} className="px-1.5 py-0.5 rounded bg-white border border-[#DCE3DF] text-[#156948]">
+                              {cls}
+                            </span>
+                          ))
                           : <span className="text-[#8A978F]">No utility classes</span>}
                       </div>
                     </div>

@@ -4036,34 +4036,38 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
             <MoreHorizontal size={16} />
           </button>
         </div>
-        {showQuickActions && <div id="selection-formatting-details" role="dialog" aria-label="More formatting options"
-          data-formatting-details className={reviewStyles.formatDetails}>
-          <div className={reviewStyles.formatDetailsHeading}><span>{isTextElement ? 'Text options' : 'Element options'}</span>
-            <button type="button" aria-label="Close formatting options" onClick={() => { setShowQuickActions(false); formattingMoreRef.current?.focus(); }}><X size={13} /></button>
-          </div>
-          {isTextElement && <>
-            <div className={reviewStyles.formatOptionRow}><span>Style</span><div className={reviewStyles.formatButtonGroup}>
-              <button type="button" aria-label="Toggle italic" aria-pressed={isItalic} disabled={locked} onClick={toggleItalic}><i>I</i><span>Italic</span></button>
-              <button type="button" aria-label="Toggle underline" aria-pressed={isUnderline} disabled={locked} onClick={toggleUnderline}><u>U</u><span>Underline</span></button>
-            </div></div>
-          </>}
-          {colorSections.map(({ label, property, colors }) => (
-            <div className={reviewStyles.formatColorSection} key={label}>
-              <span>{label}</span><div className={reviewStyles.formatSwatches} role="group" aria-label={label}>
-                {colors.map(([name, value, color]) => <button type="button" key={value} disabled={locked}
-                  aria-label={`${label}: ${name}`} title={name} aria-pressed={tokens.includes(value)}
-                  onClick={() => updateStyle(property, value)}>
-                  <span style={{ background: color }} className={value === 'bg-transparent' ? reviewStyles.noFill : undefined} />
-                </button>)}
+        {showQuickActions && <div id="selection-formatting-details" role="dialog" aria-label="Quick actions"
+          data-formatting-details className={`${reviewStyles.formatDetails} ${windowMode ? reviewStyles.compactDetails : ''}`}>
+          {!windowMode && (
+            <>
+              <div className={reviewStyles.formatDetailsHeading}><span>{isTextElement ? 'Text options' : 'Element options'}</span>
+                <button type="button" aria-label="Close formatting options" onClick={() => { setShowQuickActions(false); formattingMoreRef.current?.focus(); }}><X size={13} /></button>
               </div>
-            </div>
-          ))}
-          {canArrange && <div className={reviewStyles.arrangeOptions} role="group" aria-label="Order in container">
-            <span>Order in container</span><div>
-              <button type="button" disabled={locked || siblingIndex === 0} onClick={() => { setShowQuickActions(false); reorderSibling('earlier'); }}><ArrowUp size={13} /><span>Move earlier</span></button>
-              <button type="button" disabled={locked || siblingIndex === siblings.length - 1} onClick={() => { setShowQuickActions(false); reorderSibling('later'); }}><ArrowDown size={13} /><span>Move later</span></button>
-            </div>
-          </div>}
+              {isTextElement && (
+                <div className={reviewStyles.formatOptionRow}><span>Style</span><div className={reviewStyles.formatButtonGroup}>
+                  <button type="button" aria-label="Toggle italic" aria-pressed={isItalic} disabled={locked} onClick={toggleItalic}><i>I</i><span>Italic</span></button>
+                  <button type="button" aria-label="Toggle underline" aria-pressed={isUnderline} disabled={locked} onClick={toggleUnderline}><u>U</u><span>Underline</span></button>
+                </div></div>
+              )}
+              {colorSections.map(({ label, property, colors }) => (
+                <div className={reviewStyles.formatColorSection} key={label}>
+                  <span>{label}</span><div className={reviewStyles.formatSwatches} role="group" aria-label={label}>
+                    {colors.map(([name, value, color]) => <button type="button" key={value} disabled={locked}
+                      aria-label={`${label}: ${name}`} title={name} aria-pressed={tokens.includes(value)}
+                      onClick={() => updateStyle(property, value)}>
+                      <span style={{ background: color }} className={value === 'bg-transparent' ? reviewStyles.noFill : undefined} />
+                    </button>)}
+                  </div>
+                </div>
+              ))}
+              {canArrange && <div className={reviewStyles.arrangeOptions} role="group" aria-label="Order in container">
+                <span>Order in container</span><div className="flex gap-2">
+                  <button type="button" disabled={locked || siblingIndex === 0} onClick={() => { setShowQuickActions(false); reorderSibling('earlier'); }}><ArrowUp size={13} /><span>Move earlier</span></button>
+                  <button type="button" disabled={locked || siblingIndex === siblings.length - 1} onClick={() => { setShowQuickActions(false); reorderSibling('later'); }}><ArrowDown size={13} /><span>Move later</span></button>
+                </div>
+              </div>}
+            </>
+          )}
           <div className={reviewStyles.formatMenuFooter}>
             {usesDrafts && !activeVariant && !activeBreakpoint && (
               <button type="button" disabled={locked} onClick={() => { if (!selectedLayer) return; destinationSource.current = selectedLayer; setDestinationMode(true); setShowQuickActions(false); }}>
@@ -4082,6 +4086,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
               <span className="flex items-center gap-2"><Trash2 size={13} className="text-rose-500" /><span>Delete</span></span>
               <kbd className="text-[10px] text-slate-400 font-mono">Del</kbd>
             </button>
+            <div className="my-1 border-t border-slate-100" />
             <button type="button" onClick={async () => {
               try { await navigator.clipboard.writeText(activeElement.classes); showToast('Styles copied'); }
               catch { showToast('Could not copy styles. Check browser clipboard access.'); }
@@ -4090,7 +4095,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
               <span className="flex items-center gap-2"><Copy size={13} className="text-slate-500" /><span>Copy styles</span></span>
             </button>
             <button type="button" disabled={locked} onClick={() => { setSelectedLayer(null); setShowQuickActions(false); }}>
-              <span className="flex items-center gap-2"><X size={13} className="text-slate-500" /><span>Deselect</span></span>
+              <span className="flex items-center gap-2"><X size={13} className="text-slate-400" /><span>Deselect</span></span>
               <kbd className="text-[10px] text-slate-400 font-mono">Esc</kbd>
             </button>
           </div>
