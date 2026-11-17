@@ -2606,6 +2606,7 @@ body:has(.sn-crawl-page) .sn-marketing-header .sn-marketing-cta {
   font-size: 11px !important;
 }
 
+.dockSettingsPanel [data-viewport-controls="true"],
 .dockSettingsPanel [class*="controls"] {
   display: flex !important;
   flex-direction: column !important;
@@ -2614,53 +2615,60 @@ body:has(.sn-crawl-page) .sn-marketing-header .sn-marketing-cta {
   width: 100% !important;
 }
 
-.dockSettingsPanel [class*="widthLabel"] {
+.dockSettingsPanel [data-control-row="width"],
+.dockSettingsPanel [data-control-row="scope"] {
   display: flex !important;
   align-items: center !important;
   justify-content: space-between !important;
   width: 100% !important;
+  height: auto !important;
+  min-height: 32px !important;
+  padding: 0 !important;
+  border: none !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
   font-size: 11px !important;
   color: #475569 !important;
 }
 
+.dockSettingsPanel [data-field-label="true"],
 .dockSettingsPanel [class*="fieldLabel"] {
   display: inline-block !important;
   font-size: 11px !important;
   font-weight: 500 !important;
   color: #475569 !important;
+  white-space: nowrap !important;
 }
 
-.dockSettingsPanel [class*="width"]:not([class*="widthLabel"]) {
+.dockSettingsPanel [data-input-group="width"] {
   display: flex !important;
   align-items: center !important;
+  justify-content: flex-end !important;
   gap: 4px !important;
+  width: 90px !important;
   height: 28px !important;
   padding: 0 8px !important;
   border: 1px solid #cbd5e1 !important;
   border-radius: 6px !important;
   background: #ffffff !important;
+  box-sizing: border-box !important;
 }
 
-.dockSettingsPanel [class*="width"]:not([class*="widthLabel"]) input {
+.dockSettingsPanel [data-input-group="width"] input {
   width: 48px !important;
+  text-align: right !important;
   font-size: 11px !important;
   font-weight: 500 !important;
   color: #0f172a !important;
   border: none !important;
   outline: none !important;
   background: transparent !important;
+  padding: 0 !important;
 }
 
-.dockSettingsPanel [class*="scope"] {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: space-between !important;
-  width: 100% !important;
-  font-size: 11px !important;
-  color: #475569 !important;
-}
-
-.dockSettingsPanel [class*="scope"] select {
+.dockSettingsPanel [data-input-group="scope"],
+.dockSettingsPanel select[data-input-group="scope"] {
   width: 130px !important;
   max-width: 130px !important;
   height: 28px !important;
@@ -2673,6 +2681,7 @@ body:has(.sn-crawl-page) .sn-marketing-header .sn-marketing-cta {
   color: #0f172a !important;
   outline: none !important;
   cursor: pointer !important;
+  box-sizing: border-box !important;
 }
 
 

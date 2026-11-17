@@ -970,6 +970,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
       node.style.width = '100%';
       node.style.height = '100%';
       node.style.transform = '';
+      node.style.willChange = '';
     }
     const keyHandles = handleButtonRefs.current[key];
     if (keyHandles) {
@@ -1511,7 +1512,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
       // Check same-origin iframe target element
       const iframeDoc = sourceCanvas.current?.getDocument?.();
       const targetEl = findSourceElementInDocument(iframeDoc, actualSelection);
-      if (targetEl) targetEl.style.willChange = 'transform';
+      if (targetEl) targetEl.style.willChange = 'translate, transform';
       const initialTargetStyle =
         pendingDirectStyleRef.current[layerKey]?.initialStyle ?? (targetEl?.getAttribute('style') || null);
 
@@ -2368,30 +2369,20 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
         const snappedY = roundedPos.y;
         gesture.nextTranslation = { x: snappedX, y: snappedY };
 
+        const dx = snappedX - gesture.baseTranslation.x;
+        const dy = snappedY - gesture.baseTranslation.y;
+
         if (gesture.targetEl && !gesture.outlineOnly) {
           gesture.targetEl.style.translate = `${snappedX}px ${snappedY}px`;
-          const elBox = gesture.targetEl.getBoundingClientRect();
-          if (elBox && elBox.width > 0 && elBox.height > 0) {
-            sourceCanvas.current?.updateSelectionRectDirect?.({
-              left: elBox.left,
-              top: elBox.top,
-              width: elBox.width,
-              height: elBox.height,
-            });
-            if (overlayNode) {
-              overlayNode.style.transform = '';
-            }
-          }
-        } else {
-          if (overlayNode) {
-            overlayNode.style.transform = `translate3d(${snappedX - gesture.baseTranslation.x}px, ${snappedY - gesture.baseTranslation.y}px, 0)`;
-          }
-          if (sourceCanvas.current && gesture.moved && !gesture.outlineOnly) {
-            const selection = sourceSelections.current[gesture.key];
-            if (selection) {
-              sourceCanvas.current.sendGesture?.(selection, { x: snappedX, y: snappedY }) ??
-                void sourceCanvas.current.command('gesture', selection, { x: snappedX, y: snappedY });
-            }
+        }
+        if (overlayNode) {
+          overlayNode.style.transform = `translate3d(${dx}px, ${dy}px, 0)`;
+        }
+        if (!gesture.targetEl && sourceCanvas.current && gesture.moved && !gesture.outlineOnly) {
+          const selection = sourceSelections.current[gesture.key];
+          if (selection) {
+            sourceCanvas.current.sendGesture?.(selection, { x: snappedX, y: snappedY }) ??
+              void sourceCanvas.current.command('gesture', selection, { x: snappedX, y: snappedY });
           }
         }
 
@@ -2704,6 +2695,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
           ).catch((err) => { console.error('[Resize Queue Error]:', err); });
         } else {
           if (gesture.targetEl) {
+            gesture.targetEl.style.willChange = '';
             if (gesture.initialTargetStyle === null) gesture.targetEl.removeAttribute('style');
             else gesture.targetEl.setAttribute('style', gesture.initialTargetStyle);
           } else if (gesture.moved && sourceCanvas.current) {
@@ -2732,6 +2724,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
           const targetIndex = reorderCtx.allSiblings.findIndex(layer => layer.key === targetSib.key);
 
           if (targetIndex !== -1) {
+            if (gesture.targetEl) gesture.targetEl.style.willChange = '';
             if (overlayNode) {
               overlayNode.style.width = '100%';
               overlayNode.style.height = '100%';
@@ -2803,6 +2796,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
             overlayNode.style.transform = '';
           }
           if (gesture.targetEl) {
+            gesture.targetEl.style.willChange = '';
             const elBox = gesture.targetEl.getBoundingClientRect();
             if (elBox && elBox.width > 0 && elBox.height > 0) {
               const updatedRect = {
@@ -2893,6 +2887,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
           ).catch(() => { });
         } else {
           if (gesture.targetEl) {
+            gesture.targetEl.style.willChange = '';
             if (gesture.initialTargetStyle === null) gesture.targetEl.removeAttribute('style');
             else gesture.targetEl.setAttribute('style', gesture.initialTargetStyle);
           } else if (gesture.moved && sourceCanvas.current) {
@@ -2917,6 +2912,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
           updateStyle('borderRadius', step.token);
         } else {
           if (gesture.targetEl) {
+            gesture.targetEl.style.willChange = '';
             if (gesture.initialTargetStyle === null) gesture.targetEl.removeAttribute('style');
             else gesture.targetEl.setAttribute('style', gesture.initialTargetStyle);
           }
