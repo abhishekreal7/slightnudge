@@ -861,7 +861,7 @@
   align-items: center !important;
   width: 100% !important;
 }
-.dockSettingsPanel [class*="width"] {
+.dockSettingsPanel [class*="width"]:not([class*="widthLabel"]) {
   flex: 0 0 100px !important;
 }
 .dockSettingsPanel [class*="scope"] select {

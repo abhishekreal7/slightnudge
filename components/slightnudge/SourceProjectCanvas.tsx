@@ -54,6 +54,19 @@ function sanitizeTransformChain(raw: unknown): SerializedTransformFrame[] | unde
   }
   return result.length > 0 ? result : undefined;
 }
+
+function getIframeArtboardOffset(frameEl: HTMLIFrameElement | null) {
+  if (!frameEl) return { offsetTop: 0, offsetLeft: 0 };
+  const artboardEl = frameEl.closest('[data-selection-artboard]') || frameEl.parentElement;
+  if (!artboardEl) return { offsetTop: 0, offsetLeft: 0 };
+  const artboardRect = artboardEl.getBoundingClientRect();
+  const iframeRect = frameEl.getBoundingClientRect();
+  return {
+    offsetTop: iframeRect.top - artboardRect.top,
+    offsetLeft: iframeRect.left - artboardRect.left,
+  };
+}
+
 export interface SourceCanvasHandle {
   openWindow(): void;
   command(operation: 'preview' | 'check' | 'discard' | 'verify' | 'verify-document' | 'restore' | 'select' | 'catalog' | 'gesture' | 'cancel-gesture' | 'begin-text' | 'cancel-text' | 'finish-text' | 'verify-batch' | 'set-mode', selection?: SourceSelection | null, extra?: Record<string, unknown>): Promise<SourceSelection | undefined>;
@@ -98,6 +111,7 @@ export const SourceProjectCanvas = forwardRef<SourceCanvasHandle, {
   const documentUrl = useRef('');
   const selected = useRef<SourceSelection | null>(null);
   const selectionBoxRef = useRef<HTMLDivElement>(null);
+  const syncSelectionRef = useRef<(() => void) | null>(null);
   const isScrollingRef = useRef(false);
   const scrollSettleTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const autoConnected = useRef(false);
@@ -118,6 +132,7 @@ export const SourceProjectCanvas = forwardRef<SourceCanvasHandle, {
         if (!active) return;
         const height = Math.max(240, Math.min(60000, Math.ceil(Math.max(root.scrollHeight, root.getBoundingClientRect().height))));
         setPageHeight(previous => Math.abs(previous - height) < 2 ? previous : height);
+        syncSelectionRef.current?.();
       });
     };
     const wheel = (event: WheelEvent) => {
@@ -144,17 +159,21 @@ export const SourceProjectCanvas = forwardRef<SourceCanvasHandle, {
         const targetEl = findSourceElementInDocument(doc, selected.current);
         if (targetEl && targetEl.isConnected && selectionBoxRef.current) {
           const r = targetEl.getBoundingClientRect();
-          selectionBoxRef.current.style.top = `${r.top}px`;
-          selectionBoxRef.current.style.left = `${r.left}px`;
+          const { offsetTop, offsetLeft } = getIframeArtboardOffset(frame.current);
+          const top = r.top + offsetTop;
+          const left = r.left + offsetLeft;
+          selectionBoxRef.current.style.top = `${top}px`;
+          selectionBoxRef.current.style.left = `${left}px`;
           selectionBoxRef.current.style.width = `${r.width}px`;
           selectionBoxRef.current.style.height = `${r.height}px`;
           selected.current = {
             ...selected.current,
-            rect: { top: r.top, left: r.left, width: r.width, height: r.height },
+            rect: { top, left, width: r.width, height: r.height },
           };
         }
       }
     };
+    syncSelectionRef.current = syncSelectionPosition;
 
     const onScroll = () => {
       isScrollingRef.current = true;
@@ -169,9 +188,12 @@ export const SourceProjectCanvas = forwardRef<SourceCanvasHandle, {
           const targetEl = doc ? findSourceElementInDocument(doc, selected.current) : null;
           if (targetEl && targetEl.isConnected) {
             const r = targetEl.getBoundingClientRect();
+            const { offsetTop, offsetLeft } = getIframeArtboardOffset(frame.current);
+            const top = r.top + offsetTop;
+            const left = r.left + offsetLeft;
             const updated = {
               ...selected.current,
-              rect: { top: r.top, left: r.left, width: r.width, height: r.height },
+              rect: { top, left, width: r.width, height: r.height },
             };
             selected.current = updated;
             setGeometry(prev => {
@@ -195,6 +217,7 @@ export const SourceProjectCanvas = forwardRef<SourceCanvasHandle, {
 
     try {
       cw?.addEventListener('scroll', onScroll, { passive: true });
+      cw?.addEventListener('resize', onScroll, { passive: true });
     } catch { }
     try {
       cd?.addEventListener('scroll', onScroll, { passive: true });
@@ -203,10 +226,13 @@ export const SourceProjectCanvas = forwardRef<SourceCanvasHandle, {
       mainCanvas.addEventListener('scroll', onScroll, { passive: true });
     }
     window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll, { passive: true });
 
     return () => {
+      syncSelectionRef.current = null;
       try {
         cw?.removeEventListener('scroll', onScroll);
+        cw?.removeEventListener('resize', onScroll);
       } catch { }
       try {
         cd?.removeEventListener('scroll', onScroll);
@@ -215,9 +241,14 @@ export const SourceProjectCanvas = forwardRef<SourceCanvasHandle, {
         mainCanvas.removeEventListener('scroll', onScroll);
       }
       window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
       if (scrollSettleTimer.current) clearTimeout(scrollSettleTimer.current);
     };
   }, [ready, url, documentRevision]);
+
+  useEffect(() => {
+    syncSelectionRef.current?.();
+  }, [width]);
   useEffect(() => {
     if (!repositoryId) {
       setPageHeight(720);
@@ -274,13 +305,32 @@ export const SourceProjectCanvas = forwardRef<SourceCanvasHandle, {
       if (message.type === 'source-viewport' && Number.isInteger(message.width) && message.width > 0 && message.width <= 20000) { props.current.onViewport?.(message.width, typeof message.initialFontSize === 'number' && message.initialFontSize > 0 && message.initialFontSize < 1024 ? message.initialFontSize : undefined); return; }
       if (message.type === 'source-navigating') { readyRef.current = false; setReady(false); selected.current = null; setGeometry(null); props.current.onClearSelection(); return; }
       if (message.type === 'source-tree' && Array.isArray(message.layers) && message.layers.length <= 1000) { props.current.onLayers?.(message.layers); return; }
-      if (message.type === 'destination-hover' && destinationRef.current) { setDestination(message.selection?.rect ? message.selection : null); return; }
+      if (message.type === 'destination-hover' && destinationRef.current) {
+        const { offsetTop, offsetLeft } = getIframeArtboardOffset(frame.current);
+        const adjusted = message.selection?.rect ? {
+          ...message.selection,
+          rect: {
+            ...message.selection.rect,
+            top: message.selection.rect.top + offsetTop,
+            left: message.selection.rect.left + offsetLeft,
+          },
+        } : null;
+        setDestination(adjusted);
+        return;
+      }
       if (message.type === 'destination-picked' && destinationRef.current && message.selection?.rect && typeof message.selection.path === 'string' && Number.isInteger(message.selection.line) && Number.isInteger(message.selection.column)) { destinationCallback.current?.(message.selection); return; }
       if (message.type === 'selection-refused') { props.current.onNotice(typeof message.reason === 'string' ? message.reason : 'This source element cannot be selected uniquely.'); return; }
       if (message.type === 'source-rect' && message.selection?.rect) {
         if (typeof window !== 'undefined' && (window as any).__slightnudge_gesture_active) return;
         if (isScrollingRef.current) return;
-        const sanitized = { ...message.selection, transformChain: sanitizeTransformChain(message.selection.transformChain) };
+        const { offsetTop, offsetLeft } = getIframeArtboardOffset(frame.current);
+        const adjustedRect = {
+          top: message.selection.rect.top + offsetTop,
+          left: message.selection.rect.left + offsetLeft,
+          width: message.selection.rect.width,
+          height: message.selection.rect.height,
+        };
+        const sanitized = { ...message.selection, rect: adjustedRect, transformChain: sanitizeTransformChain(message.selection.transformChain) };
         selected.current = sanitized;
         setGeometry(prev => {
           if (!prev) return sanitized;
@@ -304,7 +354,16 @@ export const SourceProjectCanvas = forwardRef<SourceCanvasHandle, {
         if (!request) return;
         clearTimeout(request.timer); requests.current.delete(message.requestId);
         if (message.success === true) {
-          const sel = message.selection?.rect ? { ...message.selection, transformChain: sanitizeTransformChain(message.selection.transformChain) } : message.selection;
+          const { offsetTop, offsetLeft } = getIframeArtboardOffset(frame.current);
+          const sel = message.selection?.rect ? {
+            ...message.selection,
+            rect: {
+              ...message.selection.rect,
+              top: message.selection.rect.top + offsetTop,
+              left: message.selection.rect.left + offsetLeft,
+            },
+            transformChain: sanitizeTransformChain(message.selection.transformChain),
+          } : message.selection;
           if (sel?.rect) {
             selected.current = sel;
             setGeometry(sel);
@@ -317,7 +376,14 @@ export const SourceProjectCanvas = forwardRef<SourceCanvasHandle, {
       const value = message.selection;
       if (!value || typeof value.path !== 'string' || value.path.length > 1000 || !Number.isSafeInteger(value.line) || value.line < 1 || !Number.isSafeInteger(value.column) || value.column < 1 || !value.computed || typeof value.className !== 'string' || typeof value.tagName !== 'string') return;
       if (value.tagName !== value.sourceTagName) { selected.current = null; props.current.onClearSelection(); props.current.onNotice('The clicked element has no exact source marker. Nothing was changed.'); return; }
-      const sanitized = { ...value, transformChain: sanitizeTransformChain(value.transformChain) };
+      const { offsetTop, offsetLeft } = getIframeArtboardOffset(frame.current);
+      const adjustedRect = value.rect ? {
+        top: value.rect.top + offsetTop,
+        left: value.rect.left + offsetLeft,
+        width: value.rect.width,
+        height: value.rect.height,
+      } : value.rect;
+      const sanitized = { ...value, rect: adjustedRect, transformChain: sanitizeTransformChain(value.transformChain) };
       selected.current = sanitized; setGeometry(sanitized); props.current.onSelect(sanitized);
     };
     window.addEventListener('message', receive);

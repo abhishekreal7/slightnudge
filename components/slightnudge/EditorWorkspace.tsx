@@ -4468,7 +4468,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
       </div>
     );
   };
-  const renderCanvasControls = () => <EditorViewportControls
+  const renderCanvasControls = (includeHistory = false) => <EditorViewportControls
     viewport={breakpoint} requestedWidth={viewportWidth}
     disabled={busy || isApplying || isInlineEditing || isResizing || moveArmed || Boolean(liveMove)}
     onViewport={(value, width) => { setBreakpoint(value); setViewportWidth(width); }}
@@ -4478,7 +4478,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
       onWidth: setViewportWidth,
       onScope: name => { setActiveBreakpoint(name); setActiveVariant(''); const scope = resolvedResponsiveScopes.find(item => item.name === name); if (scope) setViewportWidth(Math.ceil(scope.minWidth)); }
     }}
-  >{windowMode && renderHistoryControls()}</EditorViewportControls>;
+  >{includeHistory && renderHistoryControls()}</EditorViewportControls>;
 
   const renderGroupProgress = () => groupProgress && <section className={reviewStyles.groupProgress} aria-label="Change-set recovery">
     <strong>{groupProgress.state === 'undoing' ? 'Undo needs recovery' : 'Save needs recovery'}</strong>
@@ -4960,7 +4960,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
                 pendingEdit={pendingEdit}
                 sourceSelections={sourceSelections.current}
                 sourceLayers={sourceLayers}
-                canvasControls={renderCanvasControls()}
+                canvasControls={renderCanvasControls(false)}
                 activeToolOverride={rightDockTool}
                 onActiveToolChange={setRightDockTool}
                 onUpdateStyle={updateStyle}

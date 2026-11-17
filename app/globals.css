@@ -2630,7 +2630,7 @@ body:has(.sn-crawl-page) .sn-marketing-header .sn-marketing-cta {
   color: #475569 !important;
 }
 
-.dockSettingsPanel [class*="width"] {
+.dockSettingsPanel [class*="width"]:not([class*="widthLabel"]) {
   display: flex !important;
   align-items: center !important;
   gap: 4px !important;
@@ -2641,7 +2641,7 @@ body:has(.sn-crawl-page) .sn-marketing-header .sn-marketing-cta {
   background: #ffffff !important;
 }
 
-.dockSettingsPanel [class*="width"] input {
+.dockSettingsPanel [class*="width"]:not([class*="widthLabel"]) input {
   width: 48px !important;
   font-size: 11px !important;
   font-weight: 500 !important;
