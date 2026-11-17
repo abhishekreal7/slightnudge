@@ -7,9 +7,6 @@ const projectRoot = path.dirname(fileURLToPath(import.meta.url));
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   devIndicators: false,
-  experimental: {
-    agentUpgrade: 'security',
-  },
   webpack(config, { dev, isServer }) {
     if (dev) {
       config.plugins.push(new AtomicBuildManifestPlugin());
