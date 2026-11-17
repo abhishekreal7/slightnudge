@@ -982,7 +982,7 @@
   border: 0;
   background: transparent;
   touch-action: none;
-  pointer-events: auto;
+  pointer-events: none;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1001,6 +1001,7 @@
 .radiusGrip:focus-visible,
 .radiusGrip[aria-pressed='true'] {
   opacity: 1;
+  pointer-events: auto;
 }
 
 .radiusGripDot {

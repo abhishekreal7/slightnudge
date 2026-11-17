@@ -81,9 +81,10 @@ function sourceCanvasRuntime(continuous: boolean, repositoryId = '', protocol = 
   };
   const sourceElement = (target: Element) => {
     const icon = target.closest<HTMLElement>('svg[data-source-file]');
-    if (icon) return icon;
+    if (icon && !target.closest('button, a')) return icon;
     const button = target.closest<HTMLElement>('a[data-source-file],button[data-source-file]');
-    return button && (editing === button || labelNode(button)) && !target.closest('img') ? button : target.closest<HTMLElement>('[data-source-file]');
+    if (button && (editing === button || !target.closest('img'))) return button;
+    return target.closest<HTMLElement>('[data-source-file]');
   };
   const isIdentityCssTransform = (value: string) => !value || value === 'none' || value === 'matrix(1, 0, 0, 1, 0, 0)';
   const readTransformChain = (targetEl: HTMLElement) => {
@@ -423,16 +424,11 @@ function sourceCanvasRuntime(continuous: boolean, repositoryId = '', protocol = 
   }, { passive: true });
   document.addEventListener('pointerleave', () => { updateHoverOutline(null); }, { passive: true });
   window.addEventListener('scroll', () => { if (hoverOverlay && hoverOverlay.style.display !== 'none') hoverOverlay.style.display = 'none'; }, { passive: true });
-  document.addEventListener('pointerdown',event=>{
-    if(!inspectEnabled||destinationMode||!(event.target instanceof Element))return;
-    const button=event.target.closest<HTMLButtonElement>('button[disabled][data-source-file]');
-    if(!button||!root.contains(button)||matches(locator(button)).length!==1)return;
-    event.preventDefault();event.stopImmediatePropagation();if(editing)finishText();selected=button;send('source-selection',{selection:describe(button)});
-  },true);
-  document.addEventListener('click', event => {
-    if (!inspectEnabled) return;
-    if (!(event.target instanceof Element)) return;
-    if (destinationMode) { event.preventDefault(); event.stopImmediatePropagation(); const destination = destinationAt(event.target); if (destination) send('destination-picked', { selection: describe(destination) }); else send('selection-refused', { reason: 'Choose another layout container in the same source component. Escape cancels the move.' }); return; }
+  document.addEventListener('pointerdown', event => {
+    if (!inspectEnabled || destinationMode || !(event.target instanceof Element)) return;
+    if (event.button !== 0) return;
+    if (editing && (event.target === editingHost || editingHost?.contains(event.target))) return;
+
     const element = sourceElement(event.target);
     const isEmptyRootCanvas = Boolean(
       element &&
@@ -449,12 +445,67 @@ function sourceCanvasRuntime(continuous: boolean, repositoryId = '', protocol = 
       }
       return;
     }
-    if (editing === element) { if (/^(A|BUTTON)$/.test(element.tagName)) { event.preventDefault(); event.stopImmediatePropagation(); } return; }
-    event.preventDefault(); event.stopImmediatePropagation();
+    if (editing === element) {
+      if (/^(A|BUTTON)$/.test(element.tagName)) {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+      }
+      return;
+    }
+
+    if (element.tagName === 'A' || element.closest('a') || element.tagName === 'BUTTON' || element.closest('button')) {
+      event.preventDefault();
+    }
     updateHoverOutline(null);
     if (!continuous && pendingReview) return;
-    if (matches(locator(element)).length !== 1) { send('selection-refused', { reason: 'This source element has several rendered instances. Select a unique element to edit safely.' }); return; }
-    if (editing) finishText(); selected = element;
+    const loc = locator(element);
+    if (!loc.instance && matches(loc).length > 1) {
+      send('selection-refused', { reason: 'This source element has several rendered instances. Select a unique element to edit safely.' });
+      return;
+    }
+    if (editing) finishText();
+    selected = element;
+    send('source-selection', { selection: describe(element) });
+  }, true);
+  document.addEventListener('click', event => {
+    if (!inspectEnabled) return;
+    if (!(event.target instanceof Element)) return;
+    if (destinationMode) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      const destination = destinationAt(event.target);
+      if (destination) send('destination-picked', { selection: describe(destination) });
+      else send('selection-refused', { reason: 'Choose another layout container in the same source component. Escape cancels the move.' });
+      return;
+    }
+    const element = sourceElement(event.target);
+    const isEmptyRootCanvas = Boolean(
+      element &&
+        event.target === element &&
+        element.tagName === 'MAIN' &&
+        !element.id &&
+        element.getBoundingClientRect().height >= window.innerHeight * 0.9
+    );
+    if (!element || !root.contains(element) || isEmptyRootCanvas) {
+      if (!destinationMode && (continuous || !pendingReview) && selected) {
+        if (editing) finishText();
+        selected = null;
+        send('selection-cleared');
+      }
+      return;
+    }
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    if (selected === element) return;
+    updateHoverOutline(null);
+    if (!continuous && pendingReview) return;
+    const loc = locator(element);
+    if (!loc.instance && matches(loc).length > 1) {
+      send('selection-refused', { reason: 'This source element has several rendered instances. Select a unique element to edit safely.' });
+      return;
+    }
+    if (editing) finishText();
+    selected = element;
     send('source-selection', { selection: describe(element) });
   }, true);
   document.addEventListener('dblclick', event => { if (inspectEnabled && continuous && event.target instanceof Element) { const element = sourceElement(event.target); if (element && editing !== element && (!element.children.length || labelNode(element))) { selected = element; send('text-request', { selection: describe(element) }); } } }, true);
