@@ -483,11 +483,13 @@ export function selectionStyleFor(info: SelectionInfo): SelectionChromeStyle {
         ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'span', 'a', 'label', 'strong', 'em', 'b', 'i', 'small', 'sub', 'sup'].includes(tag.toLowerCase())));
 
   if (isTextElement) {
+    const handles: HandleDirection[] = ['nw', 'ne', 'se', 'sw'];
+    if (screenW >= 40) handles.push('w', 'e');
     return {
       variant: 'text',
       outlineRadii,
       effectiveRadius,
-      visibleHandles: ['w', 'e'], // Width-only resize handles
+      visibleHandles: handles,
       lockedAspect: false,
       minimumSizes: defaultMinSizes,
       radiusGrip: { visible: false, inset: 0, currentRadius: 0 },
@@ -556,11 +558,14 @@ export function selectionStyleFor(info: SelectionInfo): SelectionChromeStyle {
 
   // 7. Capsule check: radius >= 45% of shorter side and width != height
   if (currentRatio >= capsuleRatioThreshold && !isCircleProportions) {
+    const handles: HandleDirection[] = ['nw', 'ne', 'se', 'sw'];
+    if (screenW >= 40) handles.push('n', 's');
+    if (screenH >= 40) handles.push('w', 'e');
     return {
       variant: 'capsule',
       outlineRadii,
       effectiveRadius,
-      visibleHandles: ['n', 'e', 's', 'w'], // Capsule end handles + slim edge bars
+      visibleHandles: handles,
       lockedAspect: false,
       minimumSizes: defaultMinSizes,
       radiusGrip: {

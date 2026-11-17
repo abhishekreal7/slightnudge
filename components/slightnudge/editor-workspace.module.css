@@ -804,8 +804,14 @@
 .handleSw { top: calc(100% + 2px); left: -2px; cursor: nesw-resize; }
 .handleW  { top: 50%; left: -2px; cursor: ew-resize; }
 
-.sourceSelection[data-selection-variant="text"] .handleE { left: calc(100% + var(--pad-x, 4px)); }
-.sourceSelection[data-selection-variant="text"] .handleW { left: calc(-1 * var(--pad-x, 4px)); }
+.sourceSelection[data-selection-variant="text"] .handleNw { top: calc(-1 * var(--pad-y, 6px)); left: calc(-1 * var(--pad-x, 4px)); }
+.sourceSelection[data-selection-variant="text"] .handleNe { top: calc(-1 * var(--pad-y, 6px)); left: calc(100% + var(--pad-x, 4px)); }
+.sourceSelection[data-selection-variant="text"] .handleSe { top: calc(100% + var(--pad-y, 6px)); left: calc(100% + var(--pad-x, 4px)); }
+.sourceSelection[data-selection-variant="text"] .handleSw { top: calc(100% + var(--pad-y, 6px)); left: calc(-1 * var(--pad-x, 4px)); }
+.sourceSelection[data-selection-variant="text"] .handleN  { top: calc(-1 * var(--pad-y, 6px)); }
+.sourceSelection[data-selection-variant="text"] .handleS  { top: calc(100% + var(--pad-y, 6px)); }
+.sourceSelection[data-selection-variant="text"] .handleE  { left: calc(100% + var(--pad-x, 4px)); }
+.sourceSelection[data-selection-variant="text"] .handleW  { left: calc(-1 * var(--pad-x, 4px)); }
 
 /* Smart Snapping Guides (Disabled) */
 .smartGuideV,

@@ -176,20 +176,20 @@ describe('selectionStyleFor decision engine', () => {
       name: '26. wide pill button (9999px radius, 160x40)',
       input: { width: 160, height: 40, borderRadius: '9999px', tag: 'button', isControl: true },
       expectedVariant: 'capsule',
-      // Capsule handles on two ends (w, e) and slim bars on top/bottom (n, s)
-      expectedHandles: ['n', 'e', 's', 'w'],
+      // Capsule handles: 4 corners + slim edge bars on top/bottom/sides
+      expectedHandles: ['nw', 'ne', 'se', 'sw', 'n', 'e', 's', 'w'],
     },
     {
       name: '27. tall vertical pill badge (50% radius, 40x120)',
       input: { width: 40, height: 120, borderRadius: '50%', tag: 'div' },
       expectedVariant: 'capsule',
-      expectedHandles: ['n', 'e', 's', 'w'],
+      expectedHandles: ['nw', 'ne', 'se', 'sw', 'n', 'e', 's', 'w'],
     },
     {
       name: '28. capsule button with 20px radius on 40px height',
       input: { width: 140, height: 40, borderRadius: '20px', tag: 'button' },
       expectedVariant: 'capsule',
-      expectedHandles: ['n', 'e', 's', 'w'],
+      expectedHandles: ['nw', 'ne', 'se', 'sw', 'n', 'e', 's', 'w'],
     },
 
     // Circle variant (width within 2% of height and radius ~50%)
@@ -218,7 +218,7 @@ describe('selectionStyleFor decision engine', () => {
       name: '32. circle outside 2% dimension tolerance falls back to capsule',
       input: { width: 105, height: 100, borderRadius: '50px', tag: 'div' },
       expectedVariant: 'capsule',
-      expectedHandles: ['n', 'e', 's', 'w'],
+      expectedHandles: ['nw', 'ne', 'se', 'sw', 'n', 'e', 's', 'w'],
     },
 
     // Text variant (inline text, headings, paragraphs)
@@ -226,25 +226,25 @@ describe('selectionStyleFor decision engine', () => {
       name: '33. paragraph text element (width-only resize)',
       input: { width: 300, height: 80, tag: 'p', isText: true },
       expectedVariant: 'text',
-      expectedHandles: ['w', 'e'],
+      expectedHandles: ['nw', 'ne', 'se', 'sw', 'w', 'e'],
     },
     {
       name: '34. heading element h1 (width-only resize)',
       input: { width: 500, height: 60, tag: 'h1' },
       expectedVariant: 'text',
-      expectedHandles: ['w', 'e'],
+      expectedHandles: ['nw', 'ne', 'se', 'sw', 'w', 'e'],
     },
     {
       name: '35. inline span (width-only resize)',
       input: { width: 120, height: 24, tag: 'span', display: 'inline' },
       expectedVariant: 'text',
-      expectedHandles: ['w', 'e'],
+      expectedHandles: ['nw', 'ne', 'se', 'sw', 'w', 'e'],
     },
     {
       name: '36. role="heading" detected as text',
       input: { width: 400, height: 40, role: 'heading', tag: 'div' },
       expectedVariant: 'text',
-      expectedHandles: ['w', 'e'],
+      expectedHandles: ['nw', 'ne', 'se', 'sw', 'w', 'e'],
     },
 
     // Media variant (images, video, svg, canvas)
