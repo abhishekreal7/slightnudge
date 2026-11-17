@@ -458,6 +458,42 @@
 .formatSwatches button > span { display: block; width: 19px; height: 19px; border: 1px solid #233c3219; border-radius: 50%; }
 .formatSwatches button[aria-pressed='true'] { border-color: #759782; }
 .formatSwatches button .noFill { background: linear-gradient(135deg, transparent 45%, #d48b8b 47%, #d48b8b 52%, transparent 54%) !important; }
+.arrangeOptions {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid #edf0ed;
+}
+.arrangeOptions > span {
+  display: block;
+  margin-bottom: 6px;
+  color: #7b897e;
+  font-size: 10px;
+  font-weight: 500;
+}
+.arrangeOptions button {
+  display: inline-flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 6px 8px;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  background: #fff;
+  color: #334155;
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 120ms ease, border-color 120ms ease;
+}
+.arrangeOptions button:hover:not(:disabled) {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+}
+.arrangeOptions button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
 .formatMenuFooter {
   display: flex;
   flex-direction: column;
