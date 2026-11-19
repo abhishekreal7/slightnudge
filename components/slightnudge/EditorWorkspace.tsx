@@ -4434,22 +4434,31 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
 
     return (
       <div className="flex items-center gap-2">
-        {!isIdle && (
+        {!isIdle ? (
           <span
             role="status"
             aria-live="polite"
-            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-medium bg-emerald-50 text-emerald-800 border border-emerald-200/80 shrink-0"
+            className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-medium shrink-0 transition-colors ${
+              isTransient
+                ? 'bg-slate-100 text-slate-700 border border-slate-200'
+                : 'bg-emerald-50 text-emerald-800 border border-emerald-200/80'
+            }`}
           >
             {isTransient ? (
-              <LoaderCircle size={11} className="animate-spin text-emerald-600" />
+              <LoaderCircle size={11} className="animate-spin text-slate-500" />
             ) : draftStatus.startsWith('Draft saved') ? (
-              <Check size={11} className="text-emerald-600" />
+              <Check size={11} className="text-emerald-600 stroke-[2.5]" />
             ) : null}
             <span>{draftStatus}</span>
           </span>
+        ) : (
+          <span className="hidden xl:inline-flex items-center gap-1 text-[11px] font-medium text-slate-400 shrink-0">
+            <Check size={11} className="text-emerald-500 stroke-[2.5]" />
+            <span>Saved</span>
+          </span>
         )}
         {saveQueueState.status === 'error' && (
-          <span className={reviewStyles.saveBadgeError} role="alert">
+          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-medium bg-rose-50 text-rose-700 border border-rose-200 shrink-0" role="alert">
             <CircleAlert size={12} />
             <span>{saveQueueState.message || 'Save error'}</span>
           </span>
@@ -4758,17 +4767,20 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
             {/* ======================================================== */}
             <div className={`${reviewStyles.editorColumn} flex-1 flex flex-col overflow-hidden bg-[#F8F9FA]`}>
               {windowMode && (
-                <header className={`${reviewStyles.editorTopbar} flex items-center justify-between border-b border-[#E5E7EB] bg-white px-4 h-11 shrink-0 z-30 select-none shadow-[0_1px_2px_rgba(0,0,0,0.03)]`} aria-label="Editor toolbar">
+                <header className={`${reviewStyles.editorTopbar} flex items-center justify-between border-b border-slate-200/80 bg-white px-3.5 h-11 shrink-0 z-30 select-none shadow-[0_1px_2px_rgba(0,0,0,0.02)]`} aria-label="Editor toolbar">
                   {/* Left: Framer-grade Breadcrumbs & Live Source Mapping */}
-                  <div className="flex items-center space-x-1.5 flex-nowrap overflow-x-auto min-w-0 pr-3">
+                  <div className="flex items-center space-x-1 flex-nowrap overflow-x-auto min-w-0 pr-2">
+                    <div className="w-5 h-5 rounded-[6px] bg-emerald-600 text-white flex items-center justify-center shrink-0 shadow-xs mr-1">
+                      <LayoutGrid size={11} className="stroke-[2.2]" />
+                    </div>
+
                     <button
                       type="button"
                       onClick={(e) => { e.stopPropagation(); setSelectedLayer(null); }}
                       title="Canvas root · Click to deselect"
-                      className="flex items-center space-x-1 hover:text-slate-900 hover:bg-slate-100 px-1.5 py-1 rounded transition-colors cursor-pointer text-slate-500 font-medium text-[11px] shrink-0"
+                      className="text-[12px] font-semibold text-slate-700 hover:text-slate-900 px-1 py-0.5 rounded transition-colors cursor-pointer shrink-0"
                     >
-                      <Layers2 size={13} className="text-slate-400 shrink-0" />
-                      <span>Canvas</span>
+                      Canvas
                     </button>
 
                     {breadcrumbHierarchy.length > 0 ? (
@@ -4777,18 +4789,18 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
                         const label = getBreadcrumbLabel(layer);
                         return (
                           <React.Fragment key={layer.key}>
-                            <span className="text-slate-300 text-xs shrink-0">›</span>
+                            <ChevronRight size={12} className="text-slate-300 stroke-[2] shrink-0 mx-0.5" />
                             {isLast ? (
-                              <div className="flex items-center space-x-1 text-[#059669] bg-[#ECFDF5] border border-[#A7F3D0] px-2 py-0.5 rounded text-[11px] font-medium shrink-0">
+                              <div className="flex items-center space-x-1 text-emerald-800 bg-emerald-50 border border-emerald-200/80 px-2 py-0.5 rounded-[5px] text-[11px] font-semibold shrink-0">
                                 <span>{label}</span>
-                                <span className="text-[10px] text-[#059669]/70 font-mono">({layer.tagName})</span>
+                                <span className="text-[10px] text-emerald-600/70 font-mono font-normal">({layer.tagName})</span>
                               </div>
                             ) : (
                               <button
                                 type="button"
                                 onClick={(e) => { e.stopPropagation(); setSelectedLayer(layer.key); }}
                                 title={`Select parent container <${layer.tagName}>`}
-                                className="flex items-center space-x-1 hover:text-slate-900 hover:bg-slate-100 px-1.5 py-0.5 rounded transition-colors cursor-pointer text-slate-600 text-[11px] shrink-0"
+                                className="text-[11px] font-medium text-slate-500 hover:text-slate-800 px-1 py-0.5 rounded transition-colors cursor-pointer shrink-0"
                               >
                                 <span>{label}</span>
                               </button>
@@ -4796,34 +4808,37 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
                           </React.Fragment>
                         );
                       })
-                    ) : (
-                      <>
-                        <span className="text-slate-300 text-xs shrink-0">›</span>
-                        <span className="text-slate-400 italic text-[11px] shrink-0">Root</span>
-                      </>
-                    )}
+                    ) : null}
 
-                    <div className="hidden lg:flex items-center space-x-1.5 text-[10px] font-mono text-slate-500 pl-2 shrink-0 border-l border-slate-200" title={activeElement.filePath ? `${activeElement.filePath}:${activeElement.line}` : 'Live source connected'}>
-                      <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                      <span className="truncate max-w-[160px] font-medium text-emerald-700">Live source connected</span>
-                      {selectedLayer && (
-                        <span className="text-slate-400 font-mono text-[9px] truncate max-w-[140px]">
-                          ({activeElement.filePath.split(/[\\/]/).pop()}:{activeElement.line})
+                    <div className="hidden sm:flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-slate-100/80 border border-slate-200/60 text-[10.5px] font-medium text-slate-600 shrink-0 ml-1.5" title={activeElement.filePath ? `${activeElement.filePath}:${activeElement.line}` : 'Live source connected'}>
+                      <span className="relative flex h-1.5 w-1.5">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                        <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500"></span>
+                      </span>
+                      <span>Live</span>
+                      {selectedLayer && activeElement.filePath && (
+                        <span className="text-slate-400 font-mono text-[9.5px] pl-1 border-l border-slate-200/80 max-w-[130px] truncate">
+                          {activeElement.filePath.split(/[\\/]/).pop()}:{activeElement.line}
                         </span>
                       )}
                     </div>
                   </div>
 
                   {/* Center: Mode switcher + Zoom controls */}
-                  <div className="flex items-center gap-2 shrink-0">
-                    <div role="group" aria-label="Page interaction" className="flex items-center bg-slate-100 p-0.5 rounded-md border border-slate-200 text-xs">
+                  <div className="flex items-center gap-1.5 shrink-0">
+                    <div role="group" aria-label="Page interaction" className="inline-flex items-center h-7 p-0.5 rounded-[7px] bg-slate-100 border border-slate-200/70">
                       <button
                         type="button"
                         aria-pressed={!browseMode}
                         onClick={() => setBrowseMode(false)}
-                        className={`px-3 py-1 rounded text-[11px] font-medium transition-all ${!browseMode ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-500 hover:text-slate-800'}`}
+                        className={`h-6 px-2.5 rounded-[5px] text-[11px] font-medium transition-all flex items-center gap-1 cursor-pointer ${
+                          !browseMode
+                            ? 'bg-white text-slate-900 font-semibold shadow-[0_1px_2px_rgba(0,0,0,0.06)]'
+                            : 'text-slate-500 hover:text-slate-800 hover:bg-white/50'
+                        }`}
                       >
-                        Edit
+                        <MousePointer2 size={11} className="stroke-[2.2]" />
+                        <span>Edit</span>
                       </button>
                       <button
                         type="button"
@@ -4837,19 +4852,30 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
                           setSelectedLayerState(null);
                           setBrowseMode(true);
                         }}
-                        className={`px-3 py-1 rounded text-[11px] font-medium transition-all ${browseMode ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-500 hover:text-slate-800'}`}
+                        className={`h-6 px-2.5 rounded-[5px] text-[11px] font-medium transition-all flex items-center gap-1 cursor-pointer disabled:opacity-40 disabled:cursor-default ${
+                          browseMode
+                            ? 'bg-white text-slate-900 font-semibold shadow-[0_1px_2px_rgba(0,0,0,0.06)]'
+                            : 'text-slate-500 hover:text-slate-800 hover:bg-white/50'
+                        }`}
                       >
-                        Browse
+                        <Play size={10} className="stroke-[2.2] fill-current" />
+                        <span>Browse</span>
                       </button>
                     </div>
 
-                    <div className="flex items-center bg-slate-100 rounded-md border border-slate-200 px-1.5 py-0.5 text-xs text-slate-600">
+                    <div className="relative inline-flex items-center h-7 px-2 rounded-[7px] bg-slate-100 hover:bg-slate-200/60 border border-slate-200/70 text-[11px] font-medium text-slate-700 transition-colors cursor-pointer group">
+                      <span className="flex items-center gap-1.5 pointer-events-none">
+                        <span className="tabular-nums font-medium text-slate-800">
+                          {canvasZoom === 'fit' ? 'Fit' : `${Math.round((canvasZoom || 1) * 100)}%`}
+                        </span>
+                        <ChevronDown size={11} className="text-slate-400 stroke-[2] group-hover:text-slate-600 transition-colors" />
+                      </span>
                       <select
                         aria-label="Canvas zoom"
                         value={canvasZoom}
                         disabled={busy || isApplying || isInlineEditing || isResizing || moveArmed || Boolean(liveMove)}
                         onChange={event => setCanvasZoom(event.target.value === 'fit' ? 'fit' : Number(event.target.value))}
-                        className="bg-transparent text-[11px] font-medium text-slate-700 outline-none cursor-pointer py-0.5"
+                        className="absolute inset-0 opacity-0 cursor-pointer w-full h-full text-[11px]"
                       >
                         <option value="fit">Fit</option>
                         {[0.5, 0.75, 1, 1.25, 1.5, 2].map(v => (

@@ -9,11 +9,39 @@ export function EditorHistoryControls({ historyDisabled, undoDisabled, redoDisab
   historyDisabled: boolean; undoDisabled: boolean; redoDisabled: boolean; undoLabel: string; showRedo: boolean;
   onHistory(): void; onUndo(): void; onRedo(): void;
 }) {
-  return <div className={styles.historyTools} role="group" aria-label="Edit history">
-    <button type="button" aria-label="Change history" title="Change history" disabled={historyDisabled} onClick={onHistory}><History size={15} strokeWidth={1.7}/></button>
-    <button type="button" aria-label={undoLabel} title="Undo · Ctrl+Z" disabled={undoDisabled} onClick={onUndo}><Undo2 size={15} strokeWidth={1.7}/></button>
-    {showRedo && <button type="button" aria-label="Redo" title="Redo · Ctrl+Shift+Z" disabled={redoDisabled} onClick={onRedo}><Redo2 size={15} strokeWidth={1.7}/></button>}
-  </div>;
+  return (
+    <div className={styles.historyTools} role="group" aria-label="Edit history">
+      <button
+        type="button"
+        aria-label={undoLabel}
+        title="Undo · Ctrl+Z"
+        disabled={undoDisabled}
+        onClick={onUndo}
+      >
+        <Undo2 size={13} strokeWidth={2} />
+      </button>
+      {showRedo && (
+        <button
+          type="button"
+          aria-label="Redo"
+          title="Redo · Ctrl+Shift+Z"
+          disabled={redoDisabled}
+          onClick={onRedo}
+        >
+          <Redo2 size={13} strokeWidth={2} />
+        </button>
+      )}
+      <button
+        type="button"
+        aria-label="Change history"
+        title="Change history"
+        disabled={historyDisabled}
+        onClick={onHistory}
+      >
+        <History size={13} strokeWidth={2} />
+      </button>
+    </div>
+  );
 }
 
 export function EditorDraftStatus({ status }: { status: string }) {
@@ -37,7 +65,7 @@ export function EditorDraftControls({ saveLabel, disabled, onSave, onDiscard, ha
         <button
           type="button"
           onClick={onDiscard}
-          className="text-xs font-medium text-slate-500 hover:text-rose-600 px-2 py-1 rounded transition cursor-pointer"
+          className="h-7 px-2.5 rounded-[6px] text-[11px] font-medium text-slate-500 hover:text-rose-600 hover:bg-rose-50 border border-transparent hover:border-rose-200 transition-all cursor-pointer"
           title="Discard unsaved draft"
         >
           Discard

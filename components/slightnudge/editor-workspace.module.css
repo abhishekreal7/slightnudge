@@ -545,18 +545,72 @@
 .viewportControl button.activeViewport { background: #0f172a; border-color: transparent; color: #ffffff; font-weight: 600; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12); }
 .viewportControl button.activeViewport span { display: inline; }
 .viewportControl button:hover:not(:disabled):not(.activeViewport) { color: #0f172a; background: #f8fafc; }
-.historyTools { display: flex; align-items: center; gap: 2px; padding-left: 8px; border-left: 1px solid rgba(0, 0, 0, 0.08); }
-.historyTools button { width: 30px; height: 30px; padding: 0; border-radius: 8px; color: #64748b; }
-.historyTools button:hover:not(:disabled) { color: #0f172a; background: #f8fafc; }
+.historyTools {
+  display: inline-flex;
+  align-items: center;
+  gap: 1px;
+  height: 28px;
+  box-sizing: border-box;
+  padding: 2px;
+  border-radius: 7px;
+  background: #f1f5f9;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+.historyTools button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: none;
+  border-radius: 5px;
+  background: transparent;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 120ms ease;
+}
+.historyTools button:hover:not(:disabled) {
+  color: #0f172a;
+  background: #ffffff;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
 .viewportControl button:disabled, .historyTools button:disabled { opacity: .35; cursor: default; }
 .topbarActions { display: flex; align-items: center; gap: 10px; }
-.draftControls { display: flex; align-items: center; gap: 10px; white-space: nowrap; }
+.draftControls { display: flex; align-items: center; gap: 6px; white-space: nowrap; }
 .draftControls > span { display: flex; align-items: center; gap: 5px; color: #8a948e; font-size: 10px; font-variant-numeric: tabular-nums; }
 .draftControls > span svg { color: #82998b; flex-shrink: 0; }
-.draftControls button { display: inline-flex; align-items: center; justify-content: center; height: 30px; min-height: 30px; padding: 0 13px; border: 1px solid transparent; border-radius: 8px; font-size: 11px; cursor: pointer; transition: background 140ms ease, border-color 140ms ease, color 140ms ease, box-shadow 140ms ease; }
-.draftControls .draftSave { background: linear-gradient(180deg, #1f6b51 0%, #17543f 100%); border-color: #154d39; color: #fff; font-weight: 550; box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16), 0 1px 3px rgba(16, 48, 36, 0.22); }
-.draftControls .draftSave:hover:not(:disabled) { background: linear-gradient(180deg, #195b45 0%, #134634 100%); }
-.draftControls .draftSave:disabled { background: #f2f5f3; border-color: rgba(20, 40, 29, 0.07); color: #8c9a91; box-shadow: none; cursor: default; }
+.draftControls button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 28px;
+  min-height: 28px;
+  padding: 0 12px;
+  border: 1px solid transparent;
+  border-radius: 7px;
+  font-size: 11px;
+  font-weight: 550;
+  cursor: pointer;
+  transition: all 140ms ease;
+}
+.draftControls .draftSave {
+  background: #059669;
+  border-color: #047857;
+  color: #ffffff;
+  box-shadow: 0 1px 2px rgba(5, 150, 105, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+.draftControls .draftSave:hover:not(:disabled) {
+  background: #047857;
+  border-color: #065f46;
+}
+.draftControls .draftSave:disabled {
+  background: #f1f5f9;
+  border-color: #e2e8f0;
+  color: #94a3b8;
+  box-shadow: none;
+  cursor: default;
+}
 .projectsLink { display: inline-flex; align-items: center; gap: 5px; height: 28px; padding-left: 12px; border-left: 1px solid #e7ece8; color: #829087; font-size: 10px; white-space: nowrap; }
 .projectsLink:hover { color: #365a45; }
 .editorTopbar button:focus-visible, .projectsLink:focus-visible { outline: 2px solid #739b85; outline-offset: 3px; }
@@ -1194,7 +1248,7 @@
 .windowShell .editorTopbar { gap: 12px; }
 .windowShell .viewportControl button.activeViewport span { display: none; }
 .windowShell .viewportControl button { padding: 0 7px; }
-.windowShell .draftControls .draftSave { border-radius: 9999px; padding: 0 14px; }
+.windowShell .draftControls .draftSave { border-radius: 7px; padding: 0 12px; }
 @container editor-column (max-width: 1560px) { .windowShell .topbarActions .saveBadgeSaving, .windowShell .topbarActions .saveBadgeSaved { display: none; } }
 .windowShell .canvasTools, .windowShell .draftControls { gap: 6px; }
 .windowShell .interactionMode { margin-inline: 0; }
