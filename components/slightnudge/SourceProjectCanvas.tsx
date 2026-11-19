@@ -9,7 +9,8 @@ import type { CanvasLayer, CanvasRenderPatch, SerializedTransformFrame } from '@
 import { SOURCE_CANVAS_PROTOCOL } from '@/lib/slightnudge/source-canvas-contract';
 import windowStyles from './source-window.module.css';
 import canvasStyles from './imported-canvas.module.css';
-import { findSourceElementInDocument } from './direct-manipulation-engine';
+import { findSourceElementInDocument, getIframeArtboardOffset } from './direct-manipulation-engine';
+export { getIframeArtboardOffset };
 
 export interface SourceSelection {
   renderPatches?: CanvasRenderPatch[];
@@ -55,17 +56,6 @@ function sanitizeTransformChain(raw: unknown): SerializedTransformFrame[] | unde
   return result.length > 0 ? result : undefined;
 }
 
-function getIframeArtboardOffset(frameEl: HTMLIFrameElement | null) {
-  if (!frameEl) return { offsetTop: 0, offsetLeft: 0 };
-  const artboardEl = frameEl.closest('[data-selection-artboard]') || frameEl.parentElement;
-  if (!artboardEl) return { offsetTop: 0, offsetLeft: 0 };
-  const artboardRect = artboardEl.getBoundingClientRect();
-  const iframeRect = frameEl.getBoundingClientRect();
-  return {
-    offsetTop: iframeRect.top - artboardRect.top,
-    offsetLeft: iframeRect.left - artboardRect.left,
-  };
-}
 
 export interface SourceCanvasHandle {
   openWindow(): void;
@@ -76,6 +66,8 @@ export interface SourceCanvasHandle {
   getDocument?(): Document | null;
   updateSelectionRect?(rect: { left: number; top: number; width: number; height: number }): void;
   updateSelectionRectDirect?(rect: { left?: number; top?: number; width?: number; height?: number }): void;
+  updateSelectionTransform?(dx: number, dy: number): void;
+  measureNow?(): void;
 }
 
 export const SourceProjectCanvas = forwardRef<SourceCanvasHandle, {
@@ -112,6 +104,7 @@ export const SourceProjectCanvas = forwardRef<SourceCanvasHandle, {
   const selected = useRef<SourceSelection | null>(null);
   const selectionBoxRef = useRef<HTMLDivElement>(null);
   const syncSelectionRef = useRef<(() => void) | null>(null);
+  const measureRef = useRef<(() => void) | null>(null);
   const isScrollingRef = useRef(false);
   const scrollSettleTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const autoConnected = useRef(false);
@@ -127,9 +120,11 @@ export const SourceProjectCanvas = forwardRef<SourceCanvasHandle, {
     const oldOverflow = doc.documentElement.style.overflow;
     doc.documentElement.style.overflow = 'hidden';
     const measure = () => {
+      if (typeof window !== 'undefined' && (window as any).__slightnudge_gesture_active) return;
       cancelAnimationFrame(animation);
       animation = requestAnimationFrame(() => {
         if (!active) return;
+        if (typeof window !== 'undefined' && (window as any).__slightnudge_gesture_active) return;
         const height = Math.max(240, Math.min(60000, Math.ceil(Math.max(root.scrollHeight, root.getBoundingClientRect().height))));
         setPageHeight(previous => Math.abs(previous - height) < 2 ? previous : height);
         syncSelectionRef.current?.();
@@ -140,11 +135,12 @@ export const SourceProjectCanvas = forwardRef<SourceCanvasHandle, {
       const box = iframe.getBoundingClientRect(), scale = box.width / iframe.clientWidth;
       iframe.dispatchEvent(new CustomEvent('slightnudge:canvas-wheel', { bubbles: true, detail: { deltaX: event.deltaX, deltaY: event.deltaY, deltaMode: event.deltaMode, ctrlKey: event.ctrlKey, metaKey: event.metaKey, clientX: box.left + event.clientX * scale, clientY: box.top + event.clientY * scale } }));
     };
+    measureRef.current = measure;
     const observer = new ResizeObserver(measure); observer.observe(root);
     const changes = new MutationObserver(measure); changes.observe(root, { childList: true, subtree: true, characterData: true, attributes: true, attributeFilter: ['class', 'style'] });
     doc.addEventListener('load', measure, true); doc.addEventListener('wheel', wheel, { passive: false });
     void doc.fonts.ready.then(measure); measure();
-    return () => { active = false; cancelAnimationFrame(animation); observer.disconnect(); changes.disconnect(); doc.removeEventListener('load', measure, true); doc.removeEventListener('wheel', wheel); doc.documentElement.style.overflow = oldOverflow; };
+    return () => { measureRef.current = null; active = false; cancelAnimationFrame(animation); observer.disconnect(); changes.disconnect(); doc.removeEventListener('load', measure, true); doc.removeEventListener('wheel', wheel); doc.documentElement.style.overflow = oldOverflow; };
   }, [url, ready, repositoryId, windowMode, documentRevision]);
 
   useEffect(() => {
@@ -154,6 +150,7 @@ export const SourceProjectCanvas = forwardRef<SourceCanvasHandle, {
     const mainCanvas = document.querySelector('main[data-editor-canvas]');
 
     const syncSelectionPosition = () => {
+      if (typeof window !== 'undefined' && (window as any).__slightnudge_gesture_active) return;
       const doc = frame.current?.contentDocument;
       if (doc && selected.current) {
         const targetEl = findSourceElementInDocument(doc, selected.current);
@@ -176,6 +173,7 @@ export const SourceProjectCanvas = forwardRef<SourceCanvasHandle, {
     syncSelectionRef.current = syncSelectionPosition;
 
     const onScroll = () => {
+      if (typeof window !== 'undefined' && (window as any).__slightnudge_gesture_active) return;
       isScrollingRef.current = true;
       syncSelectionPosition();
 
@@ -446,6 +444,14 @@ export const SourceProjectCanvas = forwardRef<SourceCanvasHandle, {
         if (typeof rect.height === 'number') selectionBoxRef.current.style.height = `${rect.height}px`;
       }
     },
+    updateSelectionTransform: (dx: number, dy: number) => {
+      if (selectionBoxRef.current) {
+        selectionBoxRef.current.style.transform = (dx !== 0 || dy !== 0) ? `translate3d(${dx}px, ${dy}px, 0)` : '';
+      }
+    },
+    measureNow: () => {
+      measureRef.current?.();
+    },
     async reload(selection, expectedClass, expectedText, expectedBatch) {
       // Recovery can finish before this newly mounted window has connected.
       // There is no document to reload yet; release the operation so the
@@ -587,7 +593,7 @@ export const SourceProjectCanvas = forwardRef<SourceCanvasHandle, {
     {(windowMode || !repositoryId || !connectionHost) && previewStatus}
     {url && <div data-selection-artboard className={windowMode ? windowStyles.artboard : 'relative mx-auto'} style={{ width, flexShrink: 0, maxWidth: width === '100%' ? '100%' : undefined }}>
       <iframe ref={frame} title="Actual project" src={url} onLoad={() => setDocumentRevision(value => value + 1)} scrolling={!windowMode ? 'no' : undefined} inert={!ready} tabIndex={ready ? 0 : -1} className="block w-full border-0 bg-white" style={{ height: windowMode ? '100dvh' : pageHeight, pointerEvents: ready ? 'auto' : 'none' }} />
-      {geometry && ready && renderSelection && <div className="absolute pointer-events-none" style={{ inset: 0, zIndex: 30, overflow: 'visible' }}><div ref={selectionBoxRef} style={{ position: 'absolute', top: geometry.rect.top, left: geometry.rect.left, width: geometry.rect.width, height: geometry.rect.height }}>{renderSelection(geometry)}</div></div>}
+      {geometry && ready && renderSelection && <div className="absolute pointer-events-none" style={{ inset: 0, zIndex: 30, overflow: 'visible' }}><div ref={selectionBoxRef} style={{ position: 'absolute', top: geometry.rect.top, left: geometry.rect.left, width: geometry.rect.width, height: geometry.rect.height, willChange: 'transform' }}>{renderSelection(geometry)}</div></div>}
       {destinationMode && destination && ready && <div className={windowStyles.destinationTarget} aria-label="Move destination preview" style={{ top: destination.rect.top, left: destination.rect.left, width: destination.rect.width, height: destination.rect.height }}><span>Move to end</span><i/></div>}
     </div>}
   </section>;

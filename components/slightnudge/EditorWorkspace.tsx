@@ -16,7 +16,7 @@ import { createPortal } from 'react-dom';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import type { EditorView } from '@/lib/slightnudge/editor-route';
-import { SourceProjectCanvas, type SourceCanvasHandle, type SourceSelection } from '@/components/slightnudge/SourceProjectCanvas';
+import { SourceProjectCanvas, getIframeArtboardOffset, type SourceCanvasHandle, type SourceSelection } from '@/components/slightnudge/SourceProjectCanvas';
 import type { CanvasZoom } from './CanvasStage';
 import { SourceLayers } from '@/components/slightnudge/SourceLayers';
 import { LayoutControls } from '@/components/slightnudge/LayoutControls';
@@ -998,7 +998,8 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
       if (pending.targetEl.isConnected) {
         const r = pending.targetEl.getBoundingClientRect();
         if (r && r.width > 0 && r.height > 0) {
-          const freshRect = { left: r.left, top: r.top, width: r.width, height: r.height };
+          const { offsetTop, offsetLeft } = getIframeArtboardOffset(sourceCanvas.current?.getFrame?.() ?? null);
+          const freshRect = { left: r.left + offsetLeft, top: r.top + offsetTop, width: r.width, height: r.height };
           sourceCanvas.current?.updateSelectionRect?.(freshRect);
           if (sourceSelections.current[key]) {
             sourceSelections.current[key] = {
@@ -1501,6 +1502,7 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
     const frame = node?.closest('[data-selection-artboard]');
     if (!node || !frame) return;
 
+    node.style.setProperty('transition', 'none', 'important');
     node.style.willChange = 'transform';
 
     try {
@@ -1512,7 +1514,11 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
       // Check same-origin iframe target element
       const iframeDoc = sourceCanvas.current?.getDocument?.();
       const targetEl = findSourceElementInDocument(iframeDoc, actualSelection);
-      if (targetEl) targetEl.style.willChange = 'translate, transform';
+      if (targetEl) {
+        targetEl.style.setProperty('transition', 'none', 'important');
+        targetEl.style.willChange = 'translate, transform';
+      }
+      sourceCanvas.current?.updateSelectionTransform?.(0, 0);
       const initialTargetStyle =
         pendingDirectStyleRef.current[layerKey]?.initialStyle ?? (targetEl?.getAttribute('style') || null);
 
@@ -1623,8 +1629,14 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
     const iframeDoc = sourceCanvas.current?.getDocument?.();
     const targetEl = findSourceElementInDocument(iframeDoc, actualSelection);
     const node = elementRefs.current[key];
-    if (node) node.style.willChange = 'transform, width, height';
-    if (targetEl) targetEl.style.willChange = 'max-width, height';
+    if (node) {
+      node.style.setProperty('transition', 'none', 'important');
+      node.style.willChange = 'transform, width, height';
+    }
+    if (targetEl) {
+      targetEl.style.setProperty('transition', 'none', 'important');
+      targetEl.style.willChange = 'max-width, height';
+    }
     const initialTargetStyle =
       pendingDirectStyleRef.current[key]?.initialStyle ?? (targetEl?.getAttribute('style') || null);
 
@@ -1755,6 +1767,10 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
 
     const iframeDoc = sourceCanvas.current?.getDocument?.();
     const targetEl = findSourceElementInDocument(iframeDoc, actualSelection);
+    if (targetEl) {
+      targetEl.style.setProperty('transition', 'none', 'important');
+      targetEl.style.willChange = 'border-radius';
+    }
 
     const initialTargetStyle =
       pendingDirectStyleRef.current[key]?.initialStyle ?? (targetEl?.getAttribute('style') || null);
@@ -2375,7 +2391,9 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
         if (gesture.targetEl && !gesture.outlineOnly) {
           gesture.targetEl.style.translate = `${snappedX}px ${snappedY}px`;
         }
-        if (overlayNode) {
+        if (sourceCanvas.current?.updateSelectionTransform) {
+          sourceCanvas.current.updateSelectionTransform(dx, dy);
+        } else if (overlayNode) {
           overlayNode.style.transform = `translate3d(${dx}px, ${dy}px, 0)`;
         }
         if (!gesture.targetEl && sourceCanvas.current && gesture.moved && !gesture.outlineOnly) {
@@ -2534,10 +2552,19 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
       const gesture = directDragRef.current;
       if (gesture) {
         const overlayNode = elementRefs.current[gesture.key];
-        if (overlayNode) overlayNode.style.willChange = '';
-        if (gesture.targetEl) gesture.targetEl.style.willChange = '';
+        if (overlayNode) {
+          overlayNode.style.willChange = '';
+          overlayNode.style.removeProperty('transition');
+          overlayNode.style.transform = '';
+        }
+        if (gesture.targetEl) {
+          gesture.targetEl.style.willChange = '';
+          gesture.targetEl.style.removeProperty('transition');
+        }
+        sourceCanvas.current?.updateSelectionTransform?.(0, 0);
       }
       if (typeof window !== 'undefined') (window as any).__slightnudge_gesture_active = false;
+      sourceCanvas.current?.measureNow?.();
       if (eventShieldRef.current) eventShieldRef.current.style.display = 'none';
       if (guideVRef.current) guideVRef.current.style.display = 'none';
       if (guideHRef.current) guideHRef.current.style.display = 'none';
@@ -2616,9 +2643,10 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
             const elBox = gesture.targetEl.getBoundingClientRect();
 
             if (elBox && elBox.width > 0 && elBox.height > 0) {
+              const { offsetTop, offsetLeft } = getIframeArtboardOffset(sourceCanvas.current?.getFrame?.() ?? null);
               const updatedRect = {
-                left: elBox.left,
-                top: elBox.top,
+                left: elBox.left + offsetLeft,
+                top: elBox.top + offsetTop,
                 width: elBox.width,
                 height: elBox.height,
               };
@@ -2799,9 +2827,10 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
             gesture.targetEl.style.willChange = '';
             const elBox = gesture.targetEl.getBoundingClientRect();
             if (elBox && elBox.width > 0 && elBox.height > 0) {
+              const { offsetTop, offsetLeft } = getIframeArtboardOffset(sourceCanvas.current?.getFrame?.() ?? null);
               const updatedRect = {
-                left: elBox.left,
-                top: elBox.top,
+                left: elBox.left + offsetLeft,
+                top: elBox.top + offsetTop,
                 width: elBox.width,
                 height: elBox.height,
               };

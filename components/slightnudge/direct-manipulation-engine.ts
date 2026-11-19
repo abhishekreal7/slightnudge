@@ -994,6 +994,19 @@ export function pathsMatch(p1: string | null | undefined, p2: string | null | un
   return n1 === n2 || n1.endsWith('/' + n2) || n2.endsWith('/' + n1);
 }
 
+/** Computes viewport coordinate offset between iframe and its selection artboard wrapper */
+export function getIframeArtboardOffset(frameEl: HTMLIFrameElement | null) {
+  if (!frameEl) return { offsetTop: 0, offsetLeft: 0 };
+  const artboardEl = frameEl.closest?.('[data-selection-artboard]') || frameEl.parentElement;
+  if (!artboardEl) return { offsetTop: 0, offsetLeft: 0 };
+  const artboardRect = artboardEl.getBoundingClientRect();
+  const iframeRect = frameEl.getBoundingClientRect();
+  return {
+    offsetTop: iframeRect.top - artboardRect.top,
+    offsetLeft: iframeRect.left - artboardRect.left,
+  };
+}
+
 /** Resolves a selected element in a same-origin iframe/document by `elementId` or `data-source-*` locator. */
 export function findSourceElementInDocument(
   doc: Document | null | undefined,
