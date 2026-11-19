@@ -1044,20 +1044,20 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: calc(20px / var(--canvas-zoom, 1));
-  height: calc(20px / var(--canvas-zoom, 1));
-  min-width: 18px;
-  min-height: 18px;
+  width: calc(22px / var(--canvas-zoom, 1));
+  height: calc(22px / var(--canvas-zoom, 1));
+  min-width: 20px;
+  min-height: 20px;
   transform: translate(-50%, -50%);
   cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='22' viewBox='0 0 22 22'%3E%3Cpath d='M5 16V9a4 4 0 0 1 4-4h7' fill='none' stroke='%23059669' stroke-width='2' stroke-linecap='round'/%3E%3Cpath d='M13 2l3 3-3 3' fill='none' stroke='%23059669' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") 11 11, nwse-resize;
-  opacity: 0;
+  opacity: 0.92;
   outline: none;
   transition: opacity 120ms ease;
 }
 
-/* Subtle unobtrusive hint on card hover that never screams or blocks text */
+/* Crisp Figma-grade visibility when element is selected or hovered */
 .sourceSelection:hover .radiusGrip {
-  opacity: 0.28;
+  opacity: 1;
 }
 
 .radiusGrip:hover,
@@ -1067,27 +1067,27 @@
 }
 
 .radiusGripDot {
-  width: 7px;
-  height: 7px;
-  background: #ffffff;
+  width: 9px;
+  height: 9px;
+  background: #ffffff !important;
   border: 1.5px solid #059669;
   border-radius: 50%;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.28), 0 1.5px 3px rgba(0, 0, 0, 0.35);
   display: flex;
   align-items: center;
   justify-content: center;
   transform: scale(calc(1 / var(--canvas-zoom, 1)));
   transform-origin: center center;
-  transition: transform 80ms ease, box-shadow 80ms ease, background 80ms ease, border-color 80ms ease;
+  transition: transform 80ms ease, box-shadow 80ms ease, border-width 80ms ease;
   pointer-events: none;
 }
 
 .radiusGrip:hover .radiusGripDot,
 .radiusGrip[aria-pressed='true'] .radiusGripDot {
-  background: #059669;
-  border-color: #047857;
-  box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.3), 0 1px 2px rgba(0, 0, 0, 0.15);
-  transform: scale(calc(1.15 / var(--canvas-zoom, 1)));
+  background: #ffffff !important;
+  border: 2px solid #059669;
+  box-shadow: 0 0 0 2.5px rgba(16, 185, 129, 0.45), 0 0 0 1px rgba(0, 0, 0, 0.28), 0 2px 4px rgba(0, 0, 0, 0.35);
+  transform: scale(calc(1.25 / var(--canvas-zoom, 1)));
 }
 
 .radiusGrip:focus-visible {
@@ -1095,9 +1095,10 @@
 }
 
 .radiusGrip:focus-visible .radiusGripDot {
-  background: #059669;
-  border-color: #047857;
-  box-shadow: 0 0 0 2.5px rgba(16, 185, 129, 0.4), 0 1px 2px rgba(0, 0, 0, 0.15);
+  background: #ffffff !important;
+  border: 2px solid #059669;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.5), 0 0 0 1px rgba(0, 0, 0, 0.28), 0 2px 4px rgba(0, 0, 0, 0.35);
+  transform: scale(calc(1.25 / var(--canvas-zoom, 1)));
 }
 
 /* Figma-grade floating radius readout badge */

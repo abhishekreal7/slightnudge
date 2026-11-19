@@ -1778,6 +1778,16 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
     const initialR = Math.max(parsedRadii.tl, parsedRadii.tr, parsedRadii.br, parsedRadii.bl);
     const maxRadius = Math.min(currentW, currentH) / 2;
 
+    const { artboardToMain, elementToScreen, elementToArtboard } = captureGestureMatrices(
+      key,
+      targetEl,
+      zoom,
+      actualSelection?.transformChain
+    );
+    const isNonTrivialTransform = isAffineNonTrivial(elementToArtboard);
+    const wrapperLeft = actualSelection?.rect?.left || 0;
+    const wrapperTop = actualSelection?.rect?.top || 0;
+
     try {
       e.currentTarget.focus({ preventScroll: true });
       e.currentTarget.setPointerCapture(e.pointerId);
@@ -1806,6 +1816,10 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
       siblings: [],
       artboardToMain: IDENTITY_MATRIX,
       elementToScreen: IDENTITY_MATRIX,
+      elementToArtboard,
+      wrapperLeft,
+      wrapperTop,
+      isNonTrivialTransform,
       targetEl,
       initialTargetStyle,
       outlineOnly: outlineDrag,
@@ -1846,7 +1860,51 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
     }
 
     const nextStep = RADIUS_SCALE_STEPS[nextIdx];
-    updateStyle('borderRadius', nextStep.token);
+    const prevRadius = elements[key]?.borderRadius || 'rounded-none';
+    const targetElem = elements[key] || activeElement;
+
+    // Optimistically update elements state
+    setElements(prev => {
+      const el = prev[key];
+      if (!el) return prev;
+      let newClasses = el.classes.replace(/\brounded(-none|-sm|-md|-lg|-xl|-2xl|-3xl|-full)?\b/, '').replace(/\s+/g, ' ').trim();
+      if (nextStep.token && nextStep.token !== 'rounded-none') {
+        newClasses = `${newClasses} ${nextStep.token}`.trim();
+      }
+      return {
+        ...prev,
+        [key]: {
+          ...el,
+          borderRadius: nextStep.token,
+          classes: newClasses,
+        },
+      };
+    });
+
+    void enqueueFileOperation(
+      targetElem.filePath,
+      async () => {
+        return triggerBackendPreview(
+          'style',
+          {
+            property: 'borderRadius',
+            value: nextStep.token,
+            breakpoint: activeBreakpoint || activeVariant || '',
+          },
+          key,
+          undefined,
+          true
+        );
+      },
+      {
+        onRollback: () => {
+          setElements(prev =>
+            prev[key] ? { ...prev, [key]: { ...prev[key], borderRadius: prevRadius } } : prev
+          );
+          showToast('Could not save keyboard radius.');
+        },
+      }
+    );
   };
 
   // Backend Integration: Trigger Preview on Style/Text/Nudge/Reorder
@@ -2536,6 +2594,28 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
           accentEl.setAttribute('d', d);
         }
 
+        const gripBtn = radiusGripRef.current[gesture.key];
+        if (gripBtn) {
+          const gripInset = Math.max(10, Math.min(gesture.maxRadius || 50, targetRadiusPx + 6));
+          if (gesture.isNonTrivialTransform && gesture.elementToArtboard) {
+            const gripPt = transformPoint(gesture.elementToArtboard, {
+              x: gripInset,
+              y: gripInset,
+            });
+            const wrapperOffX = gesture.startLeft - (gesture.wrapperLeft ?? gesture.startLeft);
+            const wrapperOffY = gesture.startTop - (gesture.wrapperTop ?? gesture.startTop);
+            gripBtn.style.left = `${gripPt.x + wrapperOffX}px`;
+            gripBtn.style.top = `${gripPt.y + wrapperOffY}px`;
+          } else {
+            gripBtn.style.left = `${gripInset}px`;
+            gripBtn.style.top = `${gripInset}px`;
+          }
+          const tooltip = gripBtn.querySelector(`.${reviewStyles.radiusTooltip}`);
+          if (tooltip) {
+            tooltip.textContent = `${Math.round(targetRadiusPx)}px`;
+          }
+        }
+
         if (cursorTagRef.current && gesture.moved) {
           cursorTagRef.current.style.display = 'block';
           const tagText = p.altKey
@@ -2931,20 +3011,83 @@ export function EditorWorkspace({ mode, unified = false, view = 'full', projectI
           resetOverlayNode(gesture.key);
         }
       } else if (gesture.type === 'radius') {
-        resetOverlayNode(gesture.key);
         if (gesture.moved && gesture.nextRadiusStep) {
           const step = gesture.nextRadiusStep;
+          const prevRadius = elements[gesture.key]?.borderRadius || 'rounded-none';
+
           if (gesture.targetEl) {
-            if (gesture.initialTargetStyle === null) gesture.targetEl.removeAttribute('style');
-            else gesture.targetEl.setAttribute('style', gesture.initialTargetStyle);
+            gesture.targetEl.style.willChange = '';
           }
-          updateStyle('borderRadius', step.token);
+          pendingDirectStyleRef.current[gesture.key] = {
+            targetEl: gesture.targetEl,
+            initialStyle: gesture.initialTargetStyle,
+          };
+          pendingOverlayResetKeyRef.current = gesture.key;
+          resetOverlayNode(gesture.key);
+
+          // Optimistically update elements state with the new border radius token and classes
+          setElements(prev => {
+            const el = prev[gesture.key];
+            if (!el) return prev;
+            let newClasses = el.classes.replace(/\brounded(-none|-sm|-md|-lg|-xl|-2xl|-3xl|-full)?\b/, '').replace(/\s+/g, ' ').trim();
+            if (step.token && step.token !== 'rounded-none') {
+              newClasses = `${newClasses} ${step.token}`.trim();
+            }
+            return {
+              ...prev,
+              [gesture.key]: {
+                ...el,
+                borderRadius: step.token,
+                classes: newClasses,
+              },
+            };
+          });
+
+          // Non-blocking background save via enqueueFileOperation
+          void enqueueFileOperation(
+            gesture.filePath,
+            async () => {
+              const ok = Boolean(
+                await triggerBackendPreviewRef.current(
+                  'style',
+                  {
+                    property: 'borderRadius',
+                    value: step.token,
+                    breakpoint: activeBreakpoint || activeVariant || '',
+                  },
+                  gesture.key,
+                  undefined,
+                  true,
+                  () => restorePendingDirectStyle(gesture.key)
+                )
+              );
+              if (!ok) throw new Error('Radius preview refused');
+              return ok;
+            },
+            {
+              onRollback: () => {
+                restorePendingDirectStyle(gesture.key);
+                if (pendingOverlayResetKeyRef.current === gesture.key) {
+                  pendingOverlayResetKeyRef.current = null;
+                }
+                resetOverlayNode(gesture.key);
+                setElements(prev =>
+                  prev[gesture.key] ? { ...prev, [gesture.key]: { ...prev[gesture.key], borderRadius: prevRadius } } : prev
+                );
+                showToast('Could not save corner radius.');
+              },
+            }
+          ).catch((err) => { console.error('[Radius Queue Error]:', err); });
         } else {
           if (gesture.targetEl) {
             gesture.targetEl.style.willChange = '';
             if (gesture.initialTargetStyle === null) gesture.targetEl.removeAttribute('style');
             else gesture.targetEl.setAttribute('style', gesture.initialTargetStyle);
           }
+          if (pendingOverlayResetKeyRef.current === gesture.key) {
+            pendingOverlayResetKeyRef.current = null;
+          }
+          resetOverlayNode(gesture.key);
         }
       }
     };

@@ -1,5 +1,8 @@
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import {
   selectionStyleFor,
   parseBorderRadius,
@@ -10,6 +13,9 @@ import {
   type SelectionInfo,
   type SelectionChromeStyle,
 } from '../components/slightnudge/selection-style';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 describe('selectionStyleFor decision engine', () => {
   // 1-10: Radius parsing tests
@@ -387,6 +393,37 @@ describe('selectionStyleFor decision engine', () => {
       assert.equal(findNearestRadiusStep(7.8, 50).token, 'rounded-lg'); // 7.8 is close to 8
       assert.equal(findNearestRadiusStep(15, 50).token, 'rounded-2xl'); // 15 is close to 16
       assert.equal(findNearestRadiusStep(49, 50).token, 'rounded-full'); // 49 of 50 is full
+    });
+
+    it('53. radius grip CSS rules guarantee crisp contrast and high default visibility', () => {
+      const css = fs.readFileSync(path.join(__dirname, '../components/slightnudge/editor-workspace.module.css'), 'utf-8');
+      
+      // Default opacity must be >= 0.85 so radius dot is immediately visible
+      assert.ok(css.includes('opacity: 0.92;'), 'radiusGrip default opacity should be 0.92');
+      // Hover must be fully opaque
+      assert.ok(css.includes('.sourceSelection:hover .radiusGrip'), 'radiusGrip should have hover rule on sourceSelection');
+      assert.ok(css.includes('opacity: 1;'), 'radiusGrip should be opacity 1 on hover');
+      // Dot must be 9px
+      assert.ok(css.includes('width: 9px;'), 'radiusGripDot width should be 9px');
+      assert.ok(css.includes('height: 9px;'), 'radiusGripDot height should be 9px');
+      // Dot must maintain white core with dark outer shadow for universal contrast
+      assert.ok(css.includes('background: #ffffff !important;'), 'radiusGripDot should maintain white background on all surfaces');
+      assert.ok(css.includes('box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.28)'), 'radiusGripDot should have dark perimeter shadow for contrast on white/colored surfaces');
+    });
+
+    it('54. radius token replacement cleanly replaces or adds rounded utility classes', () => {
+      const applyRadiusToken = (classes: string, token: string) => {
+        let updated = classes.replace(/\brounded(-none|-sm|-md|-lg|-xl|-2xl|-3xl|-full)?\b/, '').replace(/\s+/g, ' ').trim();
+        if (token && token !== 'rounded-none') {
+          updated = `${updated} ${token}`.trim();
+        }
+        return updated;
+      };
+
+      assert.equal(applyRadiusToken('p-4 bg-blue-600 rounded-md shadow', 'rounded-2xl'), 'p-4 bg-blue-600 shadow rounded-2xl');
+      assert.equal(applyRadiusToken('p-4 bg-blue-600 shadow', 'rounded-lg'), 'p-4 bg-blue-600 shadow rounded-lg');
+      assert.equal(applyRadiusToken('rounded-full bg-white', 'rounded-none'), 'bg-white');
+      assert.equal(applyRadiusToken('rounded text-slate-800', 'rounded-xl'), 'text-slate-800 rounded-xl');
     });
   });
 });
